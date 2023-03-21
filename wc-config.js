@@ -170,6 +170,31 @@
   './src/es/components/', // baseUrl
   [
     {
+      selector: 'ks-a-',
+      url: 'atoms/',
+      separateFolder: true
+    },
+    {
+      selector: 'ks-c-',
+      url: 'controllers/',
+      separateFolder: true
+    },
+    {
+      selector: 'ks-m-',
+      url: 'molecules/',
+      separateFolder: true
+    },
+    {
+      selector: 'ks-o-',
+      url: 'organisms/',
+      separateFolder: true
+    },
+    {
+      selector: 'ks-p-',
+      url: 'pages/',
+      separateFolder: true
+    },
+    {
       selector: 'a-',
       url: 'web-components-toolbox/src/es/components/atoms/',
       separateFolder: true
