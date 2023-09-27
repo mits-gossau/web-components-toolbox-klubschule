@@ -1,1 +1,13 @@
-<p>Hello WebApi</p>
+<a-input
+    inputid="inputSearch"
+    placeholder="Suchen..."
+    submit-search="request-course-search"
+    search=""
+    type=search
+    any-key-listener
+    change-listener
+    delete-listener
+    answer-event-name="course-search"
+    active-detail-property-name="fetch:searchText"
+></a-input>
+<ks-m-course-list answer-event-name="course-search"></ks-m-course-list>
