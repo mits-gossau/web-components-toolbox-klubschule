@@ -56,8 +56,8 @@ export default class CourseSearch extends Shadow() {
               category: [],
               startdate:[]
             })
-          }).then(async response => {
-            if (response.status >= 200 && response.status <= 299) return {searchText: event.detail.value, ...await response.json()}
+          }).then(response => {
+            if (response.status >= 200 && response.status <= 299) return response.json()
             throw new Error(response.statusText)
           })
         },
