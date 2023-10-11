@@ -3,6 +3,7 @@
 # dependencies
 node_modules/*
 !node_modules/@migros/
+!node_modules/@migros/mdx-design-tokens/dist/miduca/light-rem.css
 /bower_components
 
 # IDEs and editors
