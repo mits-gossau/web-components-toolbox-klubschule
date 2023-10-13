@@ -24,6 +24,15 @@
  @import "./web-components-toolbox-migros-design-experience/src/css/comp.css";
 
 :root {
+  --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-100);
+  --background-color-tertiary-hover: var(--mdx-sys-color-brand-accent-5-100);
+  --color-secondary-disabled: var(--mdx-sys-color-brand-neutral-600);
+  --color-quaternary-hover: var(--mdx-sys-color-brand-neutral-950);
+  --color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-600);
+  --color-quaternary: var(--mdx-sys-color-brand-neutral-700);
+  --color-tertiary-hover: var(--mdx-sys-color-brand-accent-5-400);
+  --color-tertiary-disabled: var(--mdx-sys-color-brand-neutral-600);
+  --color-tertiary: var(--mdx-sys-color-brand-accent-5-600);
   --emotion-pictures-default-img-max-height: 50vh;
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);

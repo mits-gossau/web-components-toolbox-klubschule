@@ -1,0 +1,24 @@
+:host([namespace=button-primary-]) {
+  --button-primary-background-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-hover));
+  --button-primary-background-color: var(--color-${this.getAttribute('color')}, var(--color-secondary));
+  --button-primary-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+}
+:host([namespace=button-secondary-]) {
+  --button-secondary-background-color-disabled: transparent;
+  --button-secondary-border-color-disabled-custom: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-secondary-background-color-hover: var(--background-color-${this.getAttribute('color')}-hover, transparent);
+  --button-secondary-border-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-hover));
+  --button-secondary-border-color: var(--color-${this.getAttribute('color')}, var(--color-secondary));
+  --button-secondary-color-hover: var(--color);
+}
+:host([namespace=button-secondary-][color=color-quaternary]) {
+  --button-secondary-color: var(--color);
+}
+
+:host([namespace=button-primary-][justify-content]) {
+  --button-primary-justify-content: ${this.getAttribute('justify-content')};
+}
+
+:host([namespace=button-secondary-][justify-content]) {
+  --button-secondary-justify-content: ${this.getAttribute('justify-content')};
+}
