@@ -1,18 +1,49 @@
 :host([namespace=button-primary-]) {
+  --button-primary-background-color-active: var(--color-${this.getAttribute('color')}-active, var(--color-active));
   --button-primary-background-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-hover));
   --button-primary-background-color: var(--color-${this.getAttribute('color')}, var(--color-secondary));
-  --button-primary-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-primary-color-disabled: var(--background-color);
 }
+
 :host([namespace=button-secondary-]) {
+  --button-secondary-background-color-active: transparent;
   --button-secondary-background-color-disabled: transparent;
-  --button-secondary-border-color-disabled-custom: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
-  --button-secondary-background-color-hover: var(--background-color-${this.getAttribute('color')}-hover, transparent);
+  --button-secondary-background-color-hover: transparent;
+  --button-secondary-border-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
   --button-secondary-border-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-hover));
-  --button-secondary-border-color: var(--color-${this.getAttribute('color')}, var(--color-secondary));
-  --button-secondary-color-hover: var(--color);
+  --button-secondary-border-color: var(--border-color-${this.getAttribute('color')}, var(--color-${this.getAttribute('color')}, var(--color-secondary)));
+  --button-secondary-color-active: var(--color-${this.getAttribute('color')}-active, var(--color-secondary-active));
+  --button-secondary-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-secondary-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-secondary-hover));
+  --button-secondary-color: var(--color-${this.getAttribute('color')}, var(--color-secondary));
 }
-:host([namespace=button-secondary-][color=color-quaternary]) {
-  --button-secondary-color: var(--color);
+
+:host([namespace=button-tertiary-]) {
+  --button-tertiary-background-color-disabled: var(--background-color-${this.getAttribute('color')}-disabled, transparent);
+  --button-tertiary-background-color: var(--background-color-${this.getAttribute('color')}, transparent);
+  --button-tertiary-border-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-tertiary-border-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-hover));
+  --button-tertiary-border-color: var(--color-${this.getAttribute('color')}, var(--color-tertiary));
+  --button-tertiary-color-active: var(--color-${this.getAttribute('color')}-active, var(--color-tertiary-active));
+  --button-tertiary-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-tertiary-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-tertiary-hover));
+  --button-tertiary-color: var(--color-${this.getAttribute('color')}, var(--color-tertiary));
+}
+
+:host([namespace=button-quaternary-]) {
+  --button-quaternary-background-color-active: var(--button-quaternary-background-color-${this.getAttribute('color')}-active, transparent);
+  --button-quaternary-background-color-disabled: var(--background-color-${this.getAttribute('color')}-disabled, transparent);
+  --button-quaternary-background-color-hover: var(--button-quaternary-background-color-${this.getAttribute('color')}-hover, transparent);
+  --button-quaternary-background-color: var(--button-quaternary-background-color-${this.getAttribute('color')}, transparent);
+  --button-quaternary-border-color-active: transparent;
+  --button-quaternary-border-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-quaternary-border-color-hover: transparent;
+  --button-quaternary-border-color: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-quaternary-border-width-custom: var(--button-secondary-border-width-custom, 2px);
+  --button-quaternary-color-active: var(--color-${this.getAttribute('color')}-active, var(--color-quaternary-active));
+  --button-quaternary-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-quaternary-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-quaternary-hover));
+  --button-quaternary-color: var(--color-${this.getAttribute('color')}, var(--color-quaternary));
 }
 
 :host([namespace=button-primary-][justify-content]) {

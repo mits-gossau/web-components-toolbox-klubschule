@@ -5,7 +5,7 @@ import Button from '../../web-components-toolbox/src/es/components/atoms/button/
 
 /**
  * Creates an Button
- * https://www.figma.com/file/HrjrCOkZtYdODEUO6qrGij/%F0%9F%8E%A8-MGB-Klubschule%2FMiduca-Design?node-id=238%3A4391&mode=dev
+ * https://www.figma.com/file/PZlfqoBJ4RnR4rjpj38xai/Design-System-Core-%7C%C2%A0Klubschule-Master?type=design&node-id=6-4853&mode=design&t=nLXc9nA9gjQUslCi-0
  *
  * @export
  * @attribute {namespace} namespace
@@ -47,6 +47,38 @@ export default class KsButton extends Button {
           return this.fetchCSS([{
             // @ts-ignore
             path: `${this.importMetaUrl}./secondary-/secondary-.css`,
+            namespace: false,
+            replaces
+          },
+          {
+            // @ts-ignore
+            path: `${this.importMetaUrl}../../../../../../atoms/button/variant/variant.css`,
+            namespace: false,
+            replaces
+          }]).then(fetchCSSParams => {
+            // make template ${code} accessible aka. set the variables in the literal string
+            fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
+          })
+        case 'button-tertiary-':
+          return this.fetchCSS([{
+            // @ts-ignore
+            path: `${this.importMetaUrl}./tertiary-/tertiary-.css`,
+            namespace: false,
+            replaces
+          },
+          {
+            // @ts-ignore
+            path: `${this.importMetaUrl}../../../../../../atoms/button/variant/variant.css`,
+            namespace: false,
+            replaces
+          }]).then(fetchCSSParams => {
+            // make template ${code} accessible aka. set the variables in the literal string
+            fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
+          })
+        case 'button-quaternary-':
+          return this.fetchCSS([{
+            // @ts-ignore
+            path: `${this.importMetaUrl}./quaternary-/quaternary-.css`,
             namespace: false,
             replaces
           },
