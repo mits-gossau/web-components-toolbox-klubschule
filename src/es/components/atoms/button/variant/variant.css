@@ -49,7 +49,20 @@
 :host([namespace=button-primary-][justify-content]) {
   --button-primary-justify-content: ${this.getAttribute('justify-content')};
 }
-
 :host([namespace=button-secondary-][justify-content]) {
   --button-secondary-justify-content: ${this.getAttribute('justify-content')};
+}
+:host([namespace=button-tertiary-][justify-content]) {
+  --button-tertiary-justify-content: ${this.getAttribute('justify-content')};
+}
+:host([namespace=button-quaternary-][justify-content]) {
+  --button-quaternary-justify-content: ${this.getAttribute('justify-content')};
+}
+
+:host([namespace=button-primary-][filter]) button,
+:host([namespace=button-secondary-][filter]) button,
+:host([namespace=button-tertiary-][filter]) button,
+:host([namespace=button-quaternary-][filter]) button {
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
 }
