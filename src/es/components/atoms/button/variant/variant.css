@@ -11,6 +11,7 @@
   --button-secondary-background-color-hover: transparent;
   --button-secondary-border-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
   --button-secondary-border-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-hover));
+  --button-secondary-border-color-active: var(--button-secondary-border-color-hover);
   --button-secondary-border-color: var(--border-color-${this.getAttribute('color')}, var(--color-${this.getAttribute('color')}, var(--color-secondary)));
   --button-secondary-color-active: var(--color-${this.getAttribute('color')}-active, var(--color-secondary-active));
   --button-secondary-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
@@ -65,4 +66,20 @@
 :host([namespace=button-quaternary-][filter]) button {
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
+}
+
+:host([namespace=button-primary-][icon]) button,
+:host([namespace=button-secondary-][icon]) button,
+:host([namespace=button-tertiary-][icon]) button,
+:host([namespace=button-quaternary-][icon]) button {
+  --button-primary-icon-left-margin: 0;
+  --button-primary-icon-right-margin: 0;
+  --button-secondary-icon-left-margin: 0;
+  --button-secondary-icon-right-margin: 0;
+  --button-tertiary-icon-left-margin: 0;
+  --button-tertiary-icon-right-margin: 0;
+  --button-quaternary-icon-left-margin: 0;
+  --button-quaternary-icon-right-margin: 0;
+  border-radius: 50%;
+  padding: 0.75rem;
 }
