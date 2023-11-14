@@ -46,6 +46,8 @@
 }
 
 :root {
+  --k-gray-900: #262626;
+
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);
@@ -131,4 +133,12 @@
   --search-input-width-big:100%;
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
+  --search-input-color: var(--k-gray-900);
+  --search-input-placeholder-color: var(--m-gray-700);
+  --search-input-border-color: var(--m-gray-700);
+  --search-input-border-color-hover: var(--k-gray-900);
+  --search-input-background-color: var(--m-white);
+  --search-input-background-color-hover: var(--m-white);
+  --search-input-border-color-focus: var(--k-gray-900);
+  --search-input-background-color-focus: var(--m-white);
 }
