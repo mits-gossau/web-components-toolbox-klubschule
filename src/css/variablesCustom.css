@@ -120,6 +120,7 @@
   --font-family-bold: "Graphik Bold", HelveticaNowTextBold, HelveticaNowText, Helvetica, Arial, sans-serif;
   --font-family-secondary: "Graphik Medium", Avenir35Light, sans-serif;
   --font-family: "Graphik", HelveticaNowText, Helvetica, Arial, sans-serif;
+  --grid-4colums2rows-grid-gap-custom: 1rem 0.5rem;
   --header-default-a-logo-top-custom: calc(60.5px / 2 - 60px / 2);
   --header-default-a-logo-top-mobile-custom: -0.5em;
   --header-default-logo-width-custom: min(5em, 60px);
@@ -128,6 +129,14 @@
   --navigation-alnatura-a-link-line-height-mobile: 1.5;
   --navigation-alnatura-a-link-line-height: 1.5;
   --navigation-alnatura-line-height-mobile: 1.5;
+  --search-input-background-color-focus: var(--m-white);
+  --search-input-background-color-hover: var(--m-white);
+  --search-input-background-color: var(--m-white);
+  --search-input-border-color-focus: var(--mdx-base-color-grey-975);
+  --search-input-border-color-hover: var(--mdx-base-color-grey-975);
+  --search-input-border-color: var(--m-gray-700);
+  --search-input-color: var(--mdx-base-color-grey-975);
+  --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big:100%;
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
