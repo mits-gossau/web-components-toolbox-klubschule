@@ -1,0 +1,40 @@
+:host .m-tile--passed {
+    padding-bottom: 0;
+    border-color: var(--m-gray-400);
+}
+
+:host .m-tile--passed .m-tile__overlay {
+    display: block;
+}
+
+:host .m-tile__foot--passed {
+    display: none;
+    padding: 2em 1.5em;
+    border-top: 0.0625em solid var(--m-gray-400);
+}
+
+:host .m-tile--passed .m-tile__foot--passed {
+    display: flex;
+}
+
+:host .m-tile__passed-message {
+    font-size: 1.5em;
+    line-height: 1.625em;
+    font-weight: 500;   
+}
+
+@media only screen and (max-width: _max-width_) {
+    :host .m-tile__foot--passed {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    :host .m-tile__passed-message {
+        padding-bottom: 1em;
+    }
+
+    :host .m-tile__foot--passed .m-tile__foot-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

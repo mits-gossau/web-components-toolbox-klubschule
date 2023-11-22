@@ -14,7 +14,7 @@ export default class Tile extends Shadow() {
   connectedCallback () {
     // Define button type (default secondary)
     this.buttonType = this.getAttribute('buttonType') || 'secondary';
-    this.isPassed = this.getAttribute('isPassed') || false;
+    this.modifier = this.getAttribute('modifier') || '';
 
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
@@ -66,6 +66,10 @@ export default class Tile extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
         namespaceFallback: true
+      },
+      {
+        path: `${this.importMetaUrl}./default-/variations/passed-.css`, // apply namespace since it is specific and no fallback
+        namespace: false
       }
     ]
     switch (this.getAttribute('namespace')) {
@@ -85,8 +89,8 @@ export default class Tile extends Shadow() {
    */
   renderHTML () {
     let classNames = '';
-    if (this.isPassed == 'true') {
-      classNames = 'm-tile m-tile--passed';
+    if (this.modifier !== '') {
+      classNames = `m-tile m-tile--${this.modifier}`;
     } else {
       classNames = 'm-tile';
     }
@@ -97,11 +101,11 @@ export default class Tile extends Shadow() {
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
           <span class="m-tile__title">Title</span>
-          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="24px" class="icon-right"></a-icon-mdx>
+          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
         </div>
         <div class="m-tile__body">
           <a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx>
-          <span class="m-tile__content">Basel, Luzern, Thun, Zürich-Oerlikon +3</span>
+          <span class="m-tile__content">Ort, Straße 123</span>
           <ks-a-button badge namespace="button-secondary-" color="tertiary">
             <span>Blended</span>
           </ks-a-button>
@@ -111,12 +115,17 @@ export default class Tile extends Shadow() {
             <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx>
               <ks-a-button namespace="button-${this.buttonType}-" color="secondary">
               <span>Ortsauswahl</span>
-              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="16px" class="icon-right">
+              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
             </ks-a-button>
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
-              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Percent" size="1em"></a-icon-mdx>
+              <div class="m-tile__icon-box">
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Percent" size="1em"></a-icon-mdx>
+              </div>
+              <div class="m-tile__icon-box">
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Bell" size="1em"></a-icon-mdx>
+              </div>             
             </div>
             <span class="m-tile__price">ab <strong>Preis</strong> / Semester</span>
           </div>

@@ -1,6 +1,6 @@
 # Tile
 
-> Tile component with two variations (default and passed).
+> Tile component with two variations.
 
 - [JIRA](https://jira.migros.net/browse/MIDUWEB-106)
 - [Wiki](https://wiki.migros.net/display/MIDUWEB/4.4+Angebotskachel)
@@ -12,5 +12,9 @@
 
 ### Properties
 
-- `buttonType`: Defines the button type (primary or secondary). Default: `primary`
-- `passedTile`: Defines if tile is passed. Default: `false`
+- `buttonType`: Defines the button type:
+  - Allowed values: `primary`, `secondary`
+  - Default: `primary` (for default don't pass property to component)
+- `modifier`: Defines if tile is passed:
+  - Allowed values: `passed`
+  - Default: `''` (for default don't pass property to component)
