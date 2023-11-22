@@ -12,6 +12,10 @@ export default class Tile extends Shadow() {
   }
 
   connectedCallback () {
+    // Define button type (default secondary)
+    this.buttonType = this.getAttribute('buttonType') || 'secondary';
+    this.isPassed = this.getAttribute('isPassed') || false;
+
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
   }
@@ -80,14 +84,64 @@ export default class Tile extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
+    let classNames = '';
+    if (this.isPassed == 'true') {
+      classNames = 'm-tile m-tile--passed';
+    } else {
+      classNames = 'm-tile';
+    }
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
-      <ks-a-button badge namespace="button-secondary-" color="secondary">color="secondary"</ks-a-button>
+    <div class="${classNames}">
+      <div class="m-tile__wrap">
+        <div class="m-tile__overlay"></div>
+        <div class="m-tile__head">
+          <span class="m-tile__title">Title</span>
+          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="24px" class="icon-right"></a-icon-mdx>
+        </div>
+        <div class="m-tile__body">
+          <a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx>
+          <span class="m-tile__content">Basel, Luzern, Thun, Zürich-Oerlikon +3</span>
+          <ks-a-button badge namespace="button-secondary-" color="tertiary">
+            <span>Blended</span>
+          </ks-a-button>
+        </div>
+        <div class="m-tile__foot">
+          <div class="m-tile__foot-left">
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx>
+              <ks-a-button namespace="button-${this.buttonType}-" color="secondary">
+              <span>Ortsauswahl</span>
+              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="16px" class="icon-right">
+            </ks-a-button>
+          </div>
+          <div class="m-tile__foot-right">
+            <div class="m-tile__icons">
+              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Percent" size="1em"></a-icon-mdx>
+            </div>
+            <span class="m-tile__price">ab <strong>Preis</strong> / Semester</span>
+          </div>
+        </div>      
+      </div>
+      <div class="m-tile__foot m-tile__foot--passed">
+        <span class="m-tile__passed-message">Veranstaltung nicht mehr verfügbar!</span>
+        <div class="m-tile__foot-left">
+          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx>
+          <ks-a-button namespace="button-${this.buttonType}-" color="secondary">
+            <span>Alternativen</span>
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
+          </ks-a-button>
+        </div>
+      </div>
+    </div>
     `
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
         name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
       }
     ])
   }

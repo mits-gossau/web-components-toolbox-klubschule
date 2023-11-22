@@ -2,21 +2,16 @@
 <ul>
     <li><a href="#tile">tile</a></li>
 </ul>
-<h1 id="tile">Kachel</h1>
+<h1 id="tile">Tile</h1>
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Tile</h2>
+    <h2>Default</h2>
     <ks-m-tile namespace="tile-default-"></ks-m-tile>
 </section>
-<hr>
-<m-details namespace="details-default-">
-    <details>
-        <summary>
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
-        </summary>
-        <div>
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
-        </div>
-    </details>
-</m-details>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Secondary</h2>
+    <ks-m-tile namespace="tile-default-" buttonType="primary"></ks-m-tile>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Passed</h2>
+    <ks-m-tile namespace="tile-default-" buttonType="primary" isPassed="true"></ks-m-tile>
+</section>
