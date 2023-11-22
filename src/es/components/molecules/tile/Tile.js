@@ -126,7 +126,7 @@ export default class Tile extends Shadow() {
         <span class="m-tile__passed-message">Veranstaltung nicht mehr verfügbar!</span>
         <div class="m-tile__foot-left">
           <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx>
-          <ks-a-button namespace="button-${this.buttonType}-" color="secondary">
+          <ks-a-button namespace="button-secondary-" color="secondary">
             <span>Alternativen</span>
             <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
           </ks-a-button>
