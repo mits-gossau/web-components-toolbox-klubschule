@@ -15,7 +15,7 @@
     bottom: 0;
     height: 100%;
     width: 100%;
-    background-color: var(--m-white);
+    background-color: var(--m-gray-100);
     z-index: 1;
     opacity: 0.5;
     display: none;
