@@ -12,9 +12,9 @@
 
 ### Properties
 
-- `buttonType`: Defines the button type:
+- `buttonType`: Defines the button type (optional):
   - Allowed values: `primary`, `secondary`
-  - Default: `primary` (for default don't pass property to component)
-- `modifier`: Defines if tile is passed:
+  - Default: `primary`
+- `modifier`: Defines if tile is passed (optional):
   - Allowed values: `passed`
-  - Default: `''` (for default don't pass property to component)
+  - Default: `''`
