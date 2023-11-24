@@ -9,17 +9,17 @@
 /** 
  * mdx base files
  */
- @import "./web-components-toolbox-migros-design-experience/src/css/base.css";
+@import "./web-components-toolbox-migros-design-experience/src/css/base.css";
 
- /** 
-  * only import one mdx theme at a time for mapping it at sys.css and comp.css
-  */
- @import "../../node_modules/@migros/mdx-design-tokens/dist/miduca/light-rem.css";
- /*
- @import "../../node_modules/@migros/mdx-design-tokens/dist/showcase/light-rem.css";
- */
- @import "./web-components-toolbox-migros-design-experience/src/css/sys.css";
- @import "./web-components-toolbox-migros-design-experience/src/css/comp.css";
+/** 
+* only import one mdx theme at a time for mapping it at sys.css and comp.css
+* replace .klubschule--light with :root
+*/
+@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/03_component/brands/klubschule/light-rem.css";
+@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/02_system/brands/klubschule/light-rem.css";
+
+@import "./web-components-toolbox-migros-design-experience/src/css/comp.css";
+@import "./web-components-toolbox-migros-design-experience/src/css/sys.css";
 
 /* font tracking */
 /*@import url("https://cdn.fonts.net/t/1.css?apiType=css&projectid=b2e5ea60-e0d9-11ec-b713-06e2001461d0");*/
