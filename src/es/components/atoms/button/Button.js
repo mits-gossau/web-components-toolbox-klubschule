@@ -44,53 +44,53 @@ export default class KsButton extends Button {
           fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
         })
       case 'button-secondary-':
-          return this.fetchCSS([{
-            // @ts-ignore
-            path: `${this.importMetaUrl}./secondary-/secondary-.css`,
-            namespace: false,
-            replaces
-          },
-          {
-            // @ts-ignore
-            path: `${this.importMetaUrl}../../../../../../atoms/button/variant/variant.css`,
-            namespace: false,
-            replaces
-          }]).then(fetchCSSParams => {
-            // make template ${code} accessible aka. set the variables in the literal string
-            fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
-          })
-        case 'button-tertiary-':
-          return this.fetchCSS([{
-            // @ts-ignore
-            path: `${this.importMetaUrl}./tertiary-/tertiary-.css`,
-            namespace: false,
-            replaces
-          },
-          {
-            // @ts-ignore
-            path: `${this.importMetaUrl}../../../../../../atoms/button/variant/variant.css`,
-            namespace: false,
-            replaces
-          }]).then(fetchCSSParams => {
-            // make template ${code} accessible aka. set the variables in the literal string
-            fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
-          })
-        case 'button-quaternary-':
-          return this.fetchCSS([{
-            // @ts-ignore
-            path: `${this.importMetaUrl}./quaternary-/quaternary-.css`,
-            namespace: false,
-            replaces
-          },
-          {
-            // @ts-ignore
-            path: `${this.importMetaUrl}../../../../../../atoms/button/variant/variant.css`,
-            namespace: false,
-            replaces
-          }]).then(fetchCSSParams => {
-            // make template ${code} accessible aka. set the variables in the literal string
-            fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
-          })
+        return this.fetchCSS([{
+          // @ts-ignore
+          path: `${this.importMetaUrl}./secondary-/secondary-.css`,
+          namespace: false,
+          replaces
+        },
+        {
+          // @ts-ignore
+          path: `${this.importMetaUrl}../../../../../../atoms/button/variant/variant.css`,
+          namespace: false,
+          replaces
+        }]).then(fetchCSSParams => {
+          // make template ${code} accessible aka. set the variables in the literal string
+          fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
+        })
+      case 'button-tertiary-':
+        return this.fetchCSS([{
+          // @ts-ignore
+          path: `${this.importMetaUrl}./tertiary-/tertiary-.css`,
+          namespace: false,
+          replaces
+        },
+        {
+          // @ts-ignore
+          path: `${this.importMetaUrl}../../../../../../atoms/button/variant/variant.css`,
+          namespace: false,
+          replaces
+        }]).then(fetchCSSParams => {
+          // make template ${code} accessible aka. set the variables in the literal string
+          fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
+        })
+      case 'button-quaternary-':
+        return this.fetchCSS([{
+          // @ts-ignore
+          path: `${this.importMetaUrl}./quaternary-/quaternary-.css`,
+          namespace: false,
+          replaces
+        },
+        {
+          // @ts-ignore
+          path: `${this.importMetaUrl}../../../../../../atoms/button/variant/variant.css`,
+          namespace: false,
+          replaces
+        }]).then(fetchCSSParams => {
+          // make template ${code} accessible aka. set the variables in the literal string
+          fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
+        })
       default:
         return super.fetchTemplate()
     }

@@ -127,7 +127,7 @@ export default class CourseList extends Shadow() {
       this.html = `${this.getAttribute('no-courses-found-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}`
       return Promise.resolve()
     }
-    let courseListHeight = this.offsetHeight
+    const courseListHeight = this.offsetHeight
     this.html = ''
     const fetchModules = this.fetchModules([
       {

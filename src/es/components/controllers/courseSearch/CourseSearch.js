@@ -38,7 +38,7 @@ export default class CourseSearch extends Shadow() {
           fetch: fetch(this.getAttribute('endpoint'), {
             method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json'
             },
             signal: this.abortController.signal,
             body: JSON.stringify({
@@ -54,7 +54,7 @@ export default class CourseSearch extends Shadow() {
               days: [],
               times: [],
               category: [],
-              startdate:[]
+              startdate: []
             })
           }).then(response => {
             if (response.status >= 200 && response.status <= 299) return response.json()
@@ -82,17 +82,16 @@ export default class CourseSearch extends Shadow() {
 
   connectedCallback () {
     this.addEventListener(this.getAttribute('request-course-search') || 'request-course-search', this.requestListCourseSearchListener)
-    //this.addEventListener('request-href-' + (this.getAttribute('request-course-search') || 'request-course-search'), this.requestHrefEventListener)
-    //if (!this.hasAttribute('no-popstate')) self.addEventListener('popstate', this.updatePopState)
+    // this.addEventListener('request-href-' + (this.getAttribute('request-course-search') || 'request-course-search'), this.requestHrefEventListener)
+    // if (!this.hasAttribute('no-popstate')) self.addEventListener('popstate', this.updatePopState)
   }
 
   disconnectedCallback () {
     this.removeEventListener(this.getAttribute('request-course-search') || 'request-course-search', this.requestListCourseSearchListener)
-    //this.removeEventListener('request-href-' + (this.getAttribute('request-course-search') || 'request-course-search'), this.requestHrefEventListener)
-    //if (!this.hasAttribute('no-popstate')) self.removeEventListener('popstate', this.updatePopState)
+    // this.removeEventListener('request-href-' + (this.getAttribute('request-course-search') || 'request-course-search'), this.requestHrefEventListener)
+    // if (!this.hasAttribute('no-popstate')) self.removeEventListener('popstate', this.updatePopState)
   }
 
-  
   /**
    * Set tag and page in window.history
    * @param {string} tag
@@ -110,13 +109,11 @@ export default class CourseSearch extends Shadow() {
   }
   */
 
-
-
   /**
    * @param {CustomEvent} event
    * @param {false | string} [addToTitle = false]
    */
-  //TODO: Change title on history.pushState
+  // TODO: Change title on history.pushState
   /*
   setTitle (event, addToTitle = false) {
     let textContent
