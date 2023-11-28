@@ -92,3 +92,38 @@
 :host([namespace=button-quaternary-][badge]) button {
   border-radius: 2%;
 }
+
+:host([big]) button {
+  --button-primary-height: 3.75rem;
+  --button-primary-font-weight: 500;
+  --button-primary-font-size: 1.25rem;
+  --button-primary-icon-height: auto;
+  --button-primary-icon-width: var(--button-primary-icon-height);
+  --button-primary-icon-height-mobile: var(--button-primary-icon-height);
+  --button-primary-icon-width-mobile: var(--button-primary-icon-width);
+  --button-primary-icon-right-margin: 0 0 0 0.5rem;
+  --button-secondary-height: var(--button-primary-height);
+  --button-secondary-font-weight: var(--button-primary-font-weight);
+  --button-secondary-font-size: var(--button-primary-font-size);
+  --button-secondary-icon-height: var(--button-primary-icon-height);
+  --button-secondary-icon-width: var(--button-primary-icon-width);
+  --button-secondary-icon-height-mobile: var(--button-primary-icon-height-mobile);
+  --button-secondary-icon-width-mobile: var(--button-primary-icon-width-mobile);
+  --button-secondary-icon-right-margin: var(--button-primary-icon-right-margin);
+  --button-tertiary-height: var(--button-primary-height);
+  --button-tertiary-font-weight: var(--button-primary-font-weight);
+  --button-tertiary-font-size: var(--button-primary-font-size);
+  --button-tertiary-icon-height: var(--button-primary-icon-height);
+  --button-tertiary-icon-width: var(--button-primary-icon-width);
+  --button-tertiary-icon-height-mobile: var(--button-primary-icon-height-mobile);
+  --button-tertiary-icon-width-mobile: var(--button-primary-icon-width-mobile);
+  --button-tertiary-icon-right-margin: var(--button-primary-icon-right-margin);
+  --button-quaternary-height: var(--button-primary-height);
+  --button-quaternary-font-weight: var(--button-primary-font-weight);
+  --button-quaternary-font-size: var(--button-primary-font-size);
+  --button-quaternary-icon-height: var(--button-primary-icon-height);
+  --button-quaternary-icon-width: var(--button-primary-icon-width);
+  --button-quaternary-icon-height-mobile: var(--button-primary-icon-height-mobile);
+  --button-quaternary-icon-width-mobile: var(--button-primary-icon-width-mobile);
+  --button-quaternary-icon-right-margin: var(--button-primary-icon-right-margin);  
+}
