@@ -138,6 +138,7 @@
   --search-input-color: var(--mdx-base-color-grey-975);
   --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big:100%;
+  --search-label-font-size: 1.125rem;
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
 }
