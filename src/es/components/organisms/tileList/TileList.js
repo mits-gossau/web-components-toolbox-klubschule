@@ -129,12 +129,17 @@ export default class TileList extends Shadow() {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        justify-content: space-between;
       }
 
       :host ks-m-tile {
-        margin-right: 1.5em;
-        margin-bottom: 1.5em;
-        width: 30%
+        margin-right: 1em;
+        margin-bottom: 2em;
+        width: 32%
+      }
+
+      :host ks-m-tile:nth-child(3n) {
+        margin-right: 0;
       }
 
       :host ks-m-tile:last-child {
@@ -151,8 +156,12 @@ export default class TileList extends Shadow() {
 
       @media only screen and (min-width: 1025px) and (max-width: 1600px) {
         :host ks-m-tile {
-          width: 45%
-        }        
+          width: 49%
+        }
+
+        :host ks-m-tile:nth-child(2n) {
+          margin-right: 0;
+        }
       }
 
       @media only screen and (max-width: 1024px) {
