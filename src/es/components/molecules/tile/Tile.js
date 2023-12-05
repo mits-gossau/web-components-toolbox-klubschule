@@ -45,9 +45,159 @@ export default class Tile extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host {}
+      :host .m-tile {
+        background-color: var(--m-white);
+        border: 0.0625em solid var(--m-gray-700);
+      }
+
+      :host .m-tile__wrap {
+        position: relative;
+      }
+    
+      :host .m-tile__overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 100%;
+          width: 100%;
+          background-color: var(--overlay-background-color, gray);
+          z-index: 1;
+          opacity: 0.5;
+          display: none;
+      }
+
+      :host .m-tile__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5em;
+        padding-bottom: 0.75em;
+      }
+
+      :host .m-tile__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5em;
+        padding-bottom: 0.75em;
+      }
+      
+      :host .m-tile__title {
+          font-size: 1.5em;
+          line-height: 1.625em;
+          font-weight: 500;
+      }
+      
+      :host .m-tile__body {
+          display: flex;
+          align-items: center;
+          padding: 1.5em;
+          padding-bottom: 2em;
+      }
+      
+      :host .m-tile__content {
+          font-size: 1em;
+          line-height: 1.25em;
+          font-weight: 400;
+          padding: 0 0.5em;
+      }
+      
+      :host .m-tile__foot {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1.5em;
+      }
+
+      :host .m-tile__foot--passed {
+        display: var(--passed-display, none);
+      }
+      
+      :host .m-tile__foot-left {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+      }
+      
+      :host .m-tile__foot-right {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+      }
+      
+      :host .m-tile__price {
+          font-size: 0.875em;
+          line-height: 0.9375em;
+          font-weight: 500;
+          padding-left: 0.75em;
+      }
+      
+      :host .m-tile__price strong {
+          font-family: 'Graphik';
+          font-size: 1.5em;
+          line-height: 1.625em;
+          font-weight: 500;    
+      }
+      
+      :host a-icon-mdx {
+          --icon-mdx-ks-color: var(--icon-color-blue);
+      }
+      
+      :host a-icon-mdx + ks-a-button {
+          margin-left: 0.5em;
+      }
+      
+      :host .m-tile__icons {
+          display: flex;
+          align-items: center;
+      }
+      
+      :host .m-tile__icon-box {
+          background-color: var(--icon-color-blue);
+          border-radius:  0.1875em;
+          height: var(--icon-box-dimension);
+          width: var(--icon-box-dimension);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+      
+      :host .m-tile__icon-box + .m-tile__icon-box {
+          margin-left: 0.5em;
+      }
+      
+      :host .m-tile__icon-box a-icon-mdx {
+          --icon-mdx-ks-color: var(--m-white);
+      }
+
       @media only screen and (max-width: _max-width_) {
-        :host {}
+        :host .m-tile {
+            padding: 0.5em 0;
+        }
+
+        :host .m-tile__title {
+            font-size: 1.25em;
+            line-height: 1.375em;
+        }
+
+        :host .m-tile__content {
+            font-size: 0.875em;
+            line-height: 1.125em;
+        }
+
+        :host .m-tile__price strong {
+            font-size: 1.125em;
+            line-height: 1.25em;
+            padding-top: 0.75em;
+            padding-left: 0;
+        }
+
+        :host .m-tile__foot-right {
+            flex-direction: column;
+            align-items: flex-end;
+        }
       }
     `
     return this.fetchTemplate()
@@ -66,16 +216,26 @@ export default class Tile extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
         namespaceFallback: true
-      },
-      {
-        path: `${this.importMetaUrl}./default-/variations/passed-.css`, // apply namespace since it is specific and no fallback
-        namespace: false
       }
     ]
     switch (this.getAttribute('namespace')) {
       case 'tile-default-':
+        return this.fetchCSS([
+          {
+          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+          namespace: false
+        }, ...styles])
+      case 'tile-passed-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+          namespace: false,
+          replaces: [{
+            pattern: '--tile-default-',
+            flags: 'g',
+            replacement: '--tile-passed-'
+          }]
+        },{
+          path: `${this.importMetaUrl}./passed-/passed-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }, ...styles])
       default:
@@ -88,15 +248,9 @@ export default class Tile extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
-    let classNames = '';
-    if (this.modifier !== '') {
-      classNames = `m-tile m-tile--${this.modifier}`;
-    } else {
-      classNames = 'm-tile';
-    }
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
-    <div class="${classNames}">
+    <div class="m-tile">
       <div class="m-tile__wrap">
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">

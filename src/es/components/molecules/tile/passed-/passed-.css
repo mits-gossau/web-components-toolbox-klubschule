@@ -1,3 +1,7 @@
+:host {
+    --tile-passed-overlay-background-color: var(--m-gray-100);
+    --tile-passed-display: flex;
+}
 :host .m-tile--passed {
     padding-bottom: 0;
     border-color: var(--m-gray-400);
