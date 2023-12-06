@@ -23,11 +23,15 @@
 
 <section>
     <m-dialog
-    namespace="dialog-default-"
-    autofocus
+        namespace="dialog-top-slide-in-"
+        
     >
-        <p>Content here</p>
-        <button id="close">close</button>
-        <a-input id="show-modal" inputid="show-modal" placeholder="Label" icon-name="Location" icon-size="1.25em" search="?q=" type="search">Angebote in Ihrer Nähe finden</a-input>
+        <div class="container">
+            <a-input inputid="location-search" placeholder="Ihr Standort?" icon-name="Location" icon-size="1.25em" search="?q=" type="search" autofocus></a-input>
+            <svg id="close" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 8L8 24M8 8L24 24" stroke="#333333" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search="?q=" type="search">Angebote in Ihrer Nähe finden</a-input>
     </m-dialog>
 </section>
