@@ -15,6 +15,7 @@
 * only import one mdx theme at a time for mapping it at sys.css and comp.css
 * replace .klubschule--light with :root
 */
+@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/03_component/brands/migros/light-rem.css";
 @import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/03_component/brands/klubschule/light-rem.css";
 @import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/02_system/brands/klubschule/light-rem.css";
 
