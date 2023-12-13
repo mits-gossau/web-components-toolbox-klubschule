@@ -142,7 +142,7 @@
   --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big: 100%;
   --search-label-font-size: 1rem;
-  --search-label-line-height: 1.33333;
+  --search-label-line-height: 1.3333333333333;
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
 }
