@@ -177,6 +177,10 @@ export default class Tile extends Shadow() {
           color: var(--icon-box-color);
       }
 
+      :host .m-tile__passed-message {
+        font-size: 1.5em;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host .m-tile {
             padding: 0.5em 0;
