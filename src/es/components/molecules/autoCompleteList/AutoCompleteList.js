@@ -64,10 +64,9 @@ export default class AutoCompleteList extends Shadow() {
           {
             path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
             namespace: false
-          },
+          }
         ])
       default:
-        return
     }
   }
 
