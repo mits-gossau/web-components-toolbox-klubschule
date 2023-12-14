@@ -30,6 +30,7 @@ export default class AutoCompleteList extends Shadow() {
             margin-bottom: 2rem;
         }
         :host > ul > li {
+            cursor: pointer;
             font-size: 0.8888888888rem;
             padding: 0.5rem 0;
         }
@@ -45,6 +46,9 @@ export default class AutoCompleteList extends Shadow() {
         }
         :host > ul > li.icon-search::before {
             content: url("data:image/svg+xml,%3Csvg%20width=%2217%22%20height=%2217%22%20viewBox=%220%200%2017%2017%22%20fill=%22none%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d=%22M14.5%2014.5002L11.6%2011.6002M13.1667%207.83358C13.1667%2010.7791%2010.7789%2013.1669%207.83333%2013.1669C4.88781%2013.1669%202.5%2010.7791%202.5%207.83358C2.5%204.88806%204.88781%202.50024%207.83333%202.50024C10.7789%202.50024%2013.1667%204.88806%2013.1667%207.83358Z%22%20stroke=%22%23333333%22%20stroke-width=%221.5%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22/%3E%3C/svg%3E");
+        }
+        :host > ul > li.icon-current-location::before {
+            content: url("data:image/svg+xml,%3Csvg%20width=%2216%22%20height=%2217%22%20viewBox=%220%200%2016%2017%22%20fill=%22none%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cellipse%20cx=%228.00069%22%20cy=%228.38061%22%20rx=%225.17647%22%20ry=%225.25374%22%20stroke=%22black%22/%3E%3Cellipse%20cx=%228.00138%22%20cy=%228.38057%22%20rx=%222.35294%22%20ry=%222.38806%22%20stroke=%22black%22/%3E%3Cline%20y1=%228.11942%22%20x2=%222.82353%22%20y2=%228.11942%22%20stroke=%22black%22/%3E%3Cline%20x1=%2213.1758%22%20y1=%228.11942%22%20x2=%2215.9993%22%20y2=%228.11942%22%20stroke=%22black%22/%3E%3Cline%20x1=%227.90039%22%20y1=%2216.5001%22%20x2=%227.90039%22%20y2=%2213.6344%22%20stroke=%22black%22/%3E%3Cline%20x1=%227.90039%22%20y1=%223.36568%22%20x2=%227.90039%22%20y2=%220.500004%22%20stroke=%22black%22/%3E%3C/svg%3E");
         }
         @media only screen and (max-width: _max-width_) {
             :host {}
