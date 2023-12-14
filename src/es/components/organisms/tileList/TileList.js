@@ -260,12 +260,12 @@ export default class TileList extends Shadow() {
           </div>
         </div>
         <div class="o-tile-list__tiles">
-          <ks-m-tile></ks-m-tile>
-          <ks-m-tile></ks-m-tile>
-          <ks-m-tile></ks-m-tile>
-          <ks-m-tile></ks-m-tile>
-          <ks-m-tile></ks-m-tile>
-          <ks-m-tile></ks-m-tile>
+          <ks-m-tile namespace="tile-default-"></ks-m-tile>
+          <ks-m-tile namespace="tile-default-"></ks-m-tile>
+          <ks-m-tile namespace="tile-default-"></ks-m-tile>
+          <ks-m-tile namespace="tile-default-"></ks-m-tile>
+          <ks-m-tile namespace="tile-default-"></ks-m-tile>
+          <ks-m-tile namespace="tile-default-"></ks-m-tile>
         </div>
         <div class="o-tile-list__foot">
           <ks-a-button namespace="button-secondary-" color="secondary">

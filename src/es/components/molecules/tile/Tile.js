@@ -46,8 +46,8 @@ export default class Tile extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host .m-tile {
-        background-color: var(--m-white);
-        border: 0.0625em solid var(--m-gray-700);
+        background-color: var(--background-color);
+        border: 0.0625em solid var(--border-color);
       }
 
       :host .m-tile__wrap {
@@ -62,10 +62,10 @@ export default class Tile extends Shadow() {
           bottom: 0;
           height: 100%;
           width: 100%;
-          background-color: var(--overlay-background-color, gray);
+          background-color: var(--overlay-background-color);
           z-index: 1;
           opacity: 0.5;
-          display: none;
+          display: var(--overlay-display);
       }
 
       :host .m-tile__head {
@@ -105,14 +105,18 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__foot {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1.5em;
+          display: var(--foot-display);
+          justify-content: var(--foot-justify-content);
+          align-items: var(--foot-align-items);
+          padding: var(--foot-padding);
       }
 
-      :host .m-tile__foot--passed {
-        display: var(--passed-display, none);
+      :host .m-tile__foot-passed {
+        display: var(--foot-passed-display);
+        justify-content: var(--foot-passed-justify-content);
+        align-items: var(--foot-passed-align-items);
+        padding: var(--foot-passed-padding);
+        border-top: var(--foot-passed-border-top);
       }
       
       :host .m-tile__foot-left {
@@ -143,7 +147,7 @@ export default class Tile extends Shadow() {
       }
       
       :host a-icon-mdx {
-          --icon-mdx-ks-color: var(--icon-color-blue);
+          color: var(--icon-color);
       }
       
       :host a-icon-mdx + ks-a-button {
@@ -156,7 +160,7 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__icon-box {
-          background-color: var(--icon-color-blue);
+          background-color: var(--icon-color);
           border-radius:  0.1875em;
           height: var(--icon-box-dimension);
           width: var(--icon-box-dimension);
@@ -170,7 +174,7 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__icon-box a-icon-mdx {
-          --icon-mdx-ks-color: var(--m-white);
+          color: var(--icon-box-color);
       }
 
       @media only screen and (max-width: _max-width_) {
@@ -286,7 +290,7 @@ export default class Tile extends Shadow() {
           </div>
         </div>      
       </div>
-      <div class="m-tile__foot m-tile__foot--passed">
+      <div class="m-tile__foot-passed">
         <span class="m-tile__passed-message">Veranstaltung nicht mehr verfügbar!</span>
         <div class="m-tile__foot-left">
           <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx>
