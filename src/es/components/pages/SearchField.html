@@ -33,41 +33,14 @@
             </svg>
         </div>
         <div class="container">
-            <ul class="results-list">
-                <style>
-                    :host ul.results-list {
-                        list-style: none;
-                        padding: 0;
-                        margin: 0;
-                        margin-top: 1.3333333333rem;
-                        margin-left: 1.25rem;
-                        margin-bottom: 2rem;
-                    }
-                    .results-list li {
-                        font-size: 0.8888888888rem;
-                        padding: 0.5rem 0;
-                    }
-                    .results-list li strong {
-                        font-family: var(--font-family-secondary);
-                        font-weight: 500;
-                    }
-                    .results-list li::before {
-                        content: url("data:image/svg+xml,%3Csvg%20width=%2217%22%20height=%2217%22%20viewBox=%220%200%2017%2017%22%20fill=%22none%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d=%22M3.83398%208.50041H13.1673M13.1673%208.50041L8.50065%203.83374M13.1673%208.50041L8.50065%2013.1671%22%20stroke=%22%23333333%22%20stroke-width=%221.5%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22/%3E%3C/svg%3E");
-                        margin-right: 0.5rem;
-                        position: relative;
-                        top: 2px;
-                    }
-                    .results-list li.icon-search::before {
-                        content: url("data:image/svg+xml,%3Csvg%20width=%2217%22%20height=%2217%22%20viewBox=%220%200%2017%2017%22%20fill=%22none%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d=%22M14.5%2014.5002L11.6%2011.6002M13.1667%207.83358C13.1667%2010.7791%2010.7789%2013.1669%207.83333%2013.1669C4.88781%2013.1669%202.5%2010.7791%202.5%207.83358C2.5%204.88806%204.88781%202.50024%207.83333%202.50024C10.7789%202.50024%2013.1667%204.88806%2013.1667%207.83358Z%22%20stroke=%22%23333333%22%20stroke-width=%221.5%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22/%3E%3C/svg%3E");
-                    }
-                </style>
+            <ks-m-auto-complete-list>
                 <li class="icon-search">Deutsch</li>
                 <li class="icon-search">Deutsch<strong>schweiz</strong></li>
                 <li class="icon-search">Bedeutungsnuancen</li>
                 <li>Deutsch <strong>Niveau A1</strong></li>
                 <li>Deutsch <strong>Niveau A2</strong></li>
                 <li>Deutsch <strong>Niveau B</strong></li>
-            </ul>
+              </ks-m-auto-complete-list>
         </div>
         <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search="?q=" type="search">Angebote in Ihrer Nähe finden</a-input>
     </m-dialog>
