@@ -110,8 +110,8 @@ export default class TileList extends Shadow() {
       :host .o-tile-list__icon-box {
         background-color: var(--icon-color-blue);
         border-radius:  0.1875em;
-        height: var(--icon-box-dimension);
-        width: var(--icon-box-dimension);
+        height: 1.625em;
+        width: 1.625em;
         display: flex;
         justify-content: center;
         align-items: center;
