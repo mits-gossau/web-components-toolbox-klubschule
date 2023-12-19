@@ -21,7 +21,7 @@ export default class KsButton extends Button {
     if (!this.hasAttribute('color') && !this.hasAttribute('justify-content')) return super.fetchTemplate()
     const replaces = this.buttonTagName === 'a'
       ? [{
-          pattern: '([^-]{1})button',
+          pattern: '([^-=]{1})button',
           flags: 'g',
           replacement: '$1a'
         }]
