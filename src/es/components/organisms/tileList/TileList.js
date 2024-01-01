@@ -14,9 +14,22 @@ export default class TileList extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+
+    this.toggleDetails();
   }
 
   disconnectedCallback () {}
+
+  /**
+   * Toggle details
+   */
+  toggleDetails() {
+    const toggle = this.root.querySelector('.o-tile-list__bottom-left');
+    toggle.addEventListener('click', () => {
+      const details = this.root.querySelector('.o-tile-list__details');
+      details.classList.toggle('o-tile-list__details--expanded')
+    });
+  }
 
   /**
    * evaluates if a render is necessary
@@ -79,7 +92,15 @@ export default class TileList extends Shadow() {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin-bottom: 3.5em;
+      }
+
+      :host .o-tile-list__details {
+        height: 0;
+        overflow: hidden;
+      }
+
+      :host .o-tile-list__details--expanded {
+        height: auto;
       }
 
       :host .o-tile-list__bottom-right {
@@ -130,6 +151,7 @@ export default class TileList extends Shadow() {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-between;
+        padding-top: 3.5em;
       }
 
       :host ks-m-tile {
@@ -259,19 +281,21 @@ export default class TileList extends Shadow() {
             </div>          
           </div>
         </div>
-        <div class="o-tile-list__tiles">
-          <ks-m-tile namespace="tile-default-"></ks-m-tile>
-          <ks-m-tile namespace="tile-default-"></ks-m-tile>
-          <ks-m-tile namespace="tile-default-"></ks-m-tile>
-          <ks-m-tile namespace="tile-default-"></ks-m-tile>
-          <ks-m-tile namespace="tile-default-"></ks-m-tile>
-          <ks-m-tile namespace="tile-default-"></ks-m-tile>
-        </div>
-        <div class="o-tile-list__foot">
-          <ks-a-button namespace="button-secondary-" color="secondary">
-            <span>Weitere Standorte</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-          </ks-a-button>
+        <div class="o-tile-list__details">
+          <div class="o-tile-list__tiles">
+            <ks-m-tile namespace="tile-default-"></ks-m-tile>
+            <ks-m-tile namespace="tile-default-"></ks-m-tile>
+            <ks-m-tile namespace="tile-default-"></ks-m-tile>
+            <ks-m-tile namespace="tile-default-"></ks-m-tile>
+            <ks-m-tile namespace="tile-default-"></ks-m-tile>
+            <ks-m-tile namespace="tile-default-"></ks-m-tile>
+          </div>
+          <div class="o-tile-list__foot">
+            <ks-a-button namespace="button-secondary-" color="secondary">
+              <span>Weitere Standorte</span>
+              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+            </ks-a-button>
+          </div>        
         </div>
     </div>
     `

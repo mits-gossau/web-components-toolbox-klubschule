@@ -12,10 +12,6 @@ export default class Tile extends Shadow() {
   }
 
   connectedCallback () {
-    // Define button type (default secondary)
-    this.buttonType = this.getAttribute('buttonType') || 'secondary';
-    this.modifier = this.getAttribute('modifier') || '';
-
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
   }
@@ -276,7 +272,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx>
-              <ks-a-button namespace="button-${this.buttonType}-" color="secondary">
+              <ks-a-button namespace="button-secondary-" color="secondary">
               <span>Ortsauswahl</span>
               <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
             </ks-a-button>
