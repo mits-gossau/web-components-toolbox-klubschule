@@ -27,20 +27,22 @@
         
     >
         <div class="container">
-            <a-input inputid="location-search" placeholder="Ihr Standort?" icon-name="Location" icon-size="1.25em" search="?q=" type="search" autofocus></a-input>
-            <svg id="close" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M24 8L8 24M8 8L24 24" stroke="#333333" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <a-input inputid="location-search" placeholder="Ihr Standort?" icon-name="Location" icon-size="1.5em" search="?q=" type="search" autofocus></a-input>
+            <svg id="close" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M28 12L12 28M12 12L28 28" stroke="#333333" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </div>
         <div class="container">
             <ks-m-auto-complete-list>
-                <li class="icon-current-location">Aktueller Standort</li>
-                <li class="icon-search">Deutsch</li>
-                <li class="icon-search">Deutsch<strong>schweiz</strong></li>
-                <li class="icon-search">Bedeutungsnuancen</li>
-                <li>Deutsch <strong>Niveau A1</strong></li>
-                <li>Deutsch <strong>Niveau A2</strong></li>
-                <li>Deutsch <strong>Niveau B</strong></li>
+                <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Aktueller Standort</li>
+                <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs Zürich</li>
+                <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs</li>
+                <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Deutsch</li>
+                <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Deutsch<strong>schweiz</strong></li>
+                <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Bedeutungsnuancen</li>
+                <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau A1</strong></li>
+                <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau A2</strong></li>
+                <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau B</strong></li>
             </ks-m-auto-complete-list>
         </div>
         <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search="?q=" type="search">Angebote in Ihrer Nähe finden</a-input>

@@ -140,6 +140,7 @@
   --search-input-border-color-hover: var(--mdx-base-color-grey-975);
   --search-input-border-color: var(--m-gray-700);
   --search-input-color: var(--mdx-base-color-grey-975);
+  --search-input-padding: 0.5em 1em;
   --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big: 100%;
   --search-label-font-size: var(--font-size);
