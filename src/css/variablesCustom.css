@@ -129,6 +129,7 @@
   --header-default-logo-width-custom: min(5em, 60px);
   --hr-border-width: 0 0 2px;
   --hr-secondary-opacity: 1;
+  --label-letter-spacing: 0;
   --navigation-alnatura-a-link-line-height-mobile: 1.5;
   --navigation-alnatura-a-link-line-height: 1.5;
   --navigation-alnatura-line-height-mobile: 1.5;
@@ -141,7 +142,7 @@
   --search-input-color: var(--mdx-base-color-grey-975);
   --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big: 100%;
-  --search-label-font-size: 1rem;
+  --search-label-font-size: var(--font-size);
   --search-label-line-height: 1.3333333333333;
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
