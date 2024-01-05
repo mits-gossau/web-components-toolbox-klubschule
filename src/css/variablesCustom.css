@@ -46,6 +46,12 @@
 	font-display: swap;
 }
 
+/* main body structure */
+:where(body){
+  max-width: 1920px;
+  margin: 0 auto !important;
+}
+
 :root {
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
@@ -114,6 +120,8 @@
   --color-tertiary-disabled: var(--color-disabled);
   --color-tertiary-hover: var(--mdx-sys-color-brand-neutral-600);
   --color-tertiary: var(--mdx-sys-color-brand-neutral-950);
+  --main-padding: 1rem;
+  --content-width: 100%;
   --emotion-pictures-default-img-max-height: 50vh;
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
