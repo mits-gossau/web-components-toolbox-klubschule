@@ -77,7 +77,7 @@ export default class AutoCompleteList extends Shadow() {
     `
 
     Array.from(this.root.children).forEach(node => {
-      this.list.appendChild(node)
+      if (node.tagName !== 'UL') this.list.appendChild(node)
     })
   }
 
