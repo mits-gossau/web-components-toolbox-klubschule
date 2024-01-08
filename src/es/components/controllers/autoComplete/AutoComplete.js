@@ -28,6 +28,16 @@ export default class AutoComplete extends Shadow() {
 
     this.abortController = null
     this.requestAutoCompleteListener = event => {
+      return this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {
+        detail: {
+          fetch: Promise.resolve({list: ['hello', 'world']})
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+
+
       const token = event.detail.value
       if (!token) return
       if (this.abortController) this.abortController.abort()
