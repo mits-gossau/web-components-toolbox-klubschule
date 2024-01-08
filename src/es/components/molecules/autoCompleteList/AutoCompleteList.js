@@ -4,19 +4,33 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class AutoCompleteList extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.autoCompleteListener = event => this.renderHTML(event.detail.fetch)
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    this.renderHTML()
+    if (this.shouldRenderHTML()) this.renderHTML()
+    document.body.addEventListener('auto-complete', this.autoCompleteListener)
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    document.body.removeEventListener('auto-complete', this.autoCompleteListener)
+  }
 
   shouldRenderCSS () {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
+  }
+
+  /**
+   * evaluates if a render is necessary
+   *
+   * @return {boolean}
+   */
+  shouldRenderHTML () {
+    return !this.list
   }
 
   renderCSS () {
@@ -71,13 +85,24 @@ export default class AutoCompleteList extends Shadow() {
     }
   }
 
-  renderHTML () {
-    this.html = /* html */ `
-        <ul></ul>
-    `
-
-    Array.from(this.root.children).forEach(node => {
-      this.list.appendChild(node)
+  renderHTML (fetch) {
+    this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      }
+    ]).then(children => {
+      if (fetch) {
+        this.list.innerHTML = ''
+        fetch.then(data => (this.list.innerHTML = data.items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> ${curr.term}</li>`, '')))
+      } else {
+        this.html = /* html */ `
+            <ul></ul>
+        `
+        Array.from(this.root.children).forEach(node => {
+          if (node.tagName === 'LI') this.list.appendChild(node)
+        })
+      }
     })
   }
 
