@@ -94,7 +94,7 @@ export default class AutoCompleteList extends Shadow() {
     ]).then(children => {
       if (fetch) {
         this.list.innerHTML = ''
-        fetch.then(data => (this.list.innerHTML = data.list.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> ${curr}</li>`, '')))
+        fetch.then(data => (this.list.innerHTML = data.items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> ${curr.term}</li>`, '')))
       } else {
         this.html = /* html */ `
             <ul></ul>

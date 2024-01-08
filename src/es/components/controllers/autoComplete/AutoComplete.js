@@ -30,7 +30,55 @@ export default class AutoComplete extends Shadow() {
     this.requestAutoCompleteListener = event => {
       return this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {
         detail: {
-          fetch: Promise.resolve({list: ['hello', 'world']})
+          // TYP 1 ist Kurs, TYP 2 ist Sparte
+          fetch: Promise.resolve({
+            "total": 10,
+            "success": true,
+            "searchText": "englisch",
+            "items": [
+                {
+                    "term": "englisch",
+                    "typ": 1
+                },
+                {
+                    "term": "englisch   privatunterricht  wann und wo sie wolle",
+                    "typ": 1
+                },
+                {
+                    "term": "englisch a1 ganz entspannt",
+                    "typ": 1
+                },
+                {
+                    "term": "englisch anfanger innen",
+                    "typ": 1
+                },
+                {
+                    "term": "englisch anfanger innen   onlinekurs",
+                    "typ": 1
+                },
+                {
+                    "term": "Englisch Business",
+                    "typ": 2
+                },
+                {
+                    "term": "Englisch Diplome",
+                    "typ": 2
+                },
+                {
+                    "term": "Englisch Konversation",
+                    "typ": 2
+                },
+                {
+                    "term": "Englisch Konversation B1",
+                    "typ": 2
+                },
+                {
+                    "term": "Englisch Konversation B2",
+                    "typ": 2
+                }
+            ],
+            "cms": []
+        })
         },
         bubbles: true,
         cancelable: true,
