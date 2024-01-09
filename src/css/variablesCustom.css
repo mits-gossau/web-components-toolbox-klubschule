@@ -120,7 +120,6 @@
   --color-tertiary-disabled: var(--color-disabled);
   --color-tertiary-hover: var(--mdx-sys-color-brand-neutral-600);
   --color-tertiary: var(--mdx-sys-color-brand-neutral-950);
-  --content-width: 100%;
   --emotion-pictures-default-img-max-height: 50vh;
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
