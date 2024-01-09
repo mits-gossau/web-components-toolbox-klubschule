@@ -131,12 +131,12 @@
   --font-family: "Graphik", HelveticaNowText, Helvetica, Arial, sans-serif;
   --font-size-mobile: min(16px, 6vw);
   --font-size: max(18px, 0.6vw);
-  --grid-1column-align-center-padding-custom: 64px 24px;
+  --grid-1column-align-center-padding-custom: 4rem 1.5rem;
   --grid-1column-align-center-padding-mobile-custom: 3rem 0;
-  --grid-2columns-content-section-padding-custom: 64px 24px;
-  --grid-2columns-content-section-padding-mobile-custom: 48px 0;
-  --grid-2columns-content-section-first-column-padding-custom: 64px 72px;
-  --grid-2columns-content-section-second-column-padding-mobile-custom: 0;
+  --grid-2columns-content-section-padding-custom: 4rem 1.5rem;
+  --grid-2columns-content-section-padding-mobile-custom: 3rem 0;
+  --grid-2columns-content-section-first-column-padding-custom: 4rem 4.5rem;
+  --grid-2columns-content-section-second-column-padding-mobile-custom: 0 0 3rem 0;
   --grid-2columns2rows-justify-content-custom: space-evenly;
   --grid-432-auto-colums-auto-rows-grid-gap-custom: 1rem 0.5rem;
   --header-default-a-logo-top-custom: calc(60.5px / 2 - 60px / 2);
