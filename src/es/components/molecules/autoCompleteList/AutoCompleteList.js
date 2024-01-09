@@ -85,6 +85,12 @@ export default class AutoCompleteList extends Shadow() {
     }
   }
 
+  /**
+   *
+   *
+   * @param {Promise<import("../../controllers/autoComplete/AutoComplete.js").fetchAutoCompleteEventDetail>} fetch
+   * @return {void}
+   */
   renderHTML (fetch) {
     this.fetchModules([
       {
@@ -94,7 +100,11 @@ export default class AutoCompleteList extends Shadow() {
     ]).then(children => {
       if (fetch) {
         this.list.innerHTML = ''
-        fetch.then(data => (this.list.innerHTML = data.items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> ${curr.term}</li>`, '')))
+        fetch.then(
+          (/**
+            * @type {{total: number,success: boolean, searchText: string, items: import("../../controllers/autoComplete/AutoComplete.js").Item[], cms: []}}
+            */
+           {total, success, searchText, items, cms}) => (this.list.innerHTML = items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> ${curr.term}</li>`, '')))
       } else {
         this.html = /* html */ `
             <ul></ul>

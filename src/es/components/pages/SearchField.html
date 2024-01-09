@@ -1,8 +1,8 @@
 <style>
-    :host > main > h1 {
+    :host > main h1 {
         margin-bottom: 2rem;
     }
-    :host > main > section {
+    :host > main section {
         background-color: #f5f5f5;
         padding: 2rem;
         margin-top: 0;
@@ -18,16 +18,44 @@
     <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
     <a-input inputid="searchField" placeholder="Label" icon-name="Location" icon-size="1.25em" search="?q=" type="search">Angebote in Ihrer Nähe finden</a-input>
 </section>
+<ks-c-auto-complete mock>
+    <h1 id="secondary">Search Field (auto complete)</h1>
 
-<h1 id="secondary">Search Field (auto complete)</h1>
-
-<section>
-    <ks-c-auto-complete>
+    <section>
         <m-dialog
             namespace="dialog-top-slide-in-"
         >
             <div class="container">
-                <a-input inputid="location-search" placeholder="Ihr Standort?" icon-name="Location" icon-size="1.5em" search submit-search="request-auto-complete" any-key-listener type="search" autofocus></a-input>
+                <a-input inputid="location-search" autofocus placeholder="Ihr Standort?" icon-name="Search" icon-size="1.5em" search submit-search="request-auto-complete" any-key-listener type="search" autofocus></a-input>
+                <div id="close">
+                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                </div>
+            </div>
+            <div class="container">
+                <ks-m-auto-complete-list>
+                    <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Aktueller Standort</li>
+                    <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs Zürich</li>
+                    <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs</li>
+                    <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Deutsch</li>
+                    <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Deutsch<strong>schweiz</strong></li>
+                    <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Bedeutungsnuancen</li>
+                    <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau A1</strong></li>
+                    <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau A2</strong></li>
+                    <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau B</strong></li>
+                </ks-m-auto-complete-list>
+            </div>
+            <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Search" icon-size="1.25em" search type="search">Suche</a-input>
+        </m-dialog>
+    </section>
+
+    <h1 id="secondary">Search Field (auto complete)</h1>
+
+    <section>
+        <m-dialog
+            namespace="dialog-top-slide-in-"
+        >
+            <div class="container">
+                <a-input inputid="location-search" autofocus placeholder="Ihr Standort?" icon-name="Location" icon-size="1.5em" search submit-search="request-auto-complete" any-key-listener type="search" autofocus></a-input>
                 <div id="close">
                     <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                 </div>
@@ -47,5 +75,5 @@
             </div>
             <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search">Angebote in Ihrer Nähe finden</a-input>
         </m-dialog>
-    </ks-c-auto-complete>
-</section>
+    </section>
+</ks-c-auto-complete>

@@ -1,4 +1,18 @@
 // @ts-check
+
+/** @typedef {{
+  term: string,
+  typ: 1|2 // TYP 1 ist Kurs, TYP 2 ist Sparte
+}} Item */
+
+/** @typedef {{
+  total: number,
+  success: boolean,
+  searchText: string,
+  items: Item[],
+  cms: []
+}} fetchAutoCompleteEventDetail */
+
 /* global fetch */
 /* global AbortController */
 /* global location */
@@ -28,71 +42,15 @@ export default class AutoComplete extends Shadow() {
 
     this.abortController = null
     this.requestAutoCompleteListener = event => {
-      return this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {
-        detail: {
-          // TYP 1 ist Kurs, TYP 2 ist Sparte
-          fetch: Promise.resolve({
-            "total": 10,
-            "success": true,
-            "searchText": "englisch",
-            "items": [
-                {
-                    "term": "englisch",
-                    "typ": 1
-                },
-                {
-                    "term": "englisch   privatunterricht  wann und wo sie wolle",
-                    "typ": 1
-                },
-                {
-                    "term": "englisch a1 ganz entspannt",
-                    "typ": 1
-                },
-                {
-                    "term": "englisch anfanger innen",
-                    "typ": 1
-                },
-                {
-                    "term": "englisch anfanger innen   onlinekurs",
-                    "typ": 1
-                },
-                {
-                    "term": "Englisch Business",
-                    "typ": 2
-                },
-                {
-                    "term": "Englisch Diplome",
-                    "typ": 2
-                },
-                {
-                    "term": "Englisch Konversation",
-                    "typ": 2
-                },
-                {
-                    "term": "Englisch Konversation B1",
-                    "typ": 2
-                },
-                {
-                    "term": "Englisch Konversation B2",
-                    "typ": 2
-                }
-            ],
-            "cms": []
-        })
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
-
-
+      if (this.hasAttribute('mock')) return this.dispatchMock()
       const token = event.detail.value
-      if (!token) return
+      if (!token || token.length < 3) return
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
       this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {
         detail: {
-          fetch: fetch(`${this.getAttribute('endpoint') || 'http://miducawebappdev.azurewebsites.net/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
+          /** @type {Promise<fetchAutoCompleteEventDetail>} */
+          fetch: fetch(`${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
             method: 'GET',
             signal: this.abortController.signal,
           }).then(response => {
@@ -113,5 +71,64 @@ export default class AutoComplete extends Shadow() {
 
   disconnectedCallback () {
     this.removeEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete', this.requestAutoCompleteListener)
+  }
+
+  dispatchMock () {
+    return this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {
+      detail: {
+        /** @type {Promise<fetchAutoCompleteEventDetail>} */
+        fetch: Promise.resolve({
+          'total': 10,
+          'success': true,
+          'searchText': 'englisch',
+          'items': [
+              {
+                  'term': 'englisch',
+                  'typ': 1
+              },
+              {
+                  'term': 'englisch   privatunterricht  wann und wo sie wolle',
+                  'typ': 1
+              },
+              {
+                  'term': 'englisch a1 ganz entspannt',
+                  'typ': 1
+              },
+              {
+                  'term': 'englisch anfanger innen',
+                  'typ': 1
+              },
+              {
+                  'term': 'englisch anfanger innen   onlinekurs',
+                  'typ': 1
+              },
+              {
+                  'term': 'Englisch Business',
+                  'typ': 2
+              },
+              {
+                  'term': 'Englisch Diplome',
+                  'typ': 2
+              },
+              {
+                  'term': 'Englisch Konversation',
+                  'typ': 2
+              },
+              {
+                  'term': 'Englisch Konversation B1',
+                  'typ': 2
+              },
+              {
+                  'term': 'Englisch Konversation B2',
+                  'typ': 2
+              }
+          ],
+          'cms': []
+      })
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
   }
 }
