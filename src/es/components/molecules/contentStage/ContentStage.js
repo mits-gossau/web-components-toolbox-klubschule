@@ -25,7 +25,27 @@ export default class ContentStage extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
-        :host {}
+        :host {
+            background-color:#0053A6; 
+            margin: 0; 
+            width: 100%;
+        }
+        :host section > div {
+            display: contents; 
+            color: white; 
+            height: auto; 
+            margin: 3rem 1rem 2rem calc(4rem/3);
+        }
+        :host h1 {
+            color: white; 
+            line-height: 1.5; 
+            font-size: calc(8em/3);
+            margin-top: 1rem; 
+            margin-bottom: 32px; 
+        }
+        :host p {
+            font-size: calc(10em/9);
+        }
     `
     return this.fetchTemplate()
   }
@@ -44,16 +64,14 @@ export default class ContentStage extends Shadow() {
   }
 
   renderHTML () {
-    this.html = ''
-
-    
+    // this.html = ''
 
     this.html = /* html */ `
-        <o-grid namespace="grid-2colums2rows-" first-container-vertical first-column-with="66%" style="background-color:#0053A6; margin: 0; width: 100%;">
+        <o-grid namespace="grid-2colums2rows-" first-container-vertical first-column-with="66%">
             <section>
-                <div style="display: contents; color: white; height: auto; margin: 3rem 1rem 2rem calc(4rem/3);">
-                    <h1 style="color: white; line-height: 1.5; margin-top: 1rem; margin-bottom: 32px; font-size: calc(8em/3);">${this.title}</h1>
-                    <p style="font-size: calc(10em/9);">${this.subtitle}</p>
+                <div has-background>
+                    <h1>${this.title}</h1>
+                    <p>${this.subtitle}</p>
                 </div>
                 <aside>
                     <div slot="image" style="background-image:url('${this.imageSrc}'); background-position: center center; background-size: cover; height:100%; min-height: 280px;"></div>
