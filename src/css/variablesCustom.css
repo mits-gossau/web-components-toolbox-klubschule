@@ -46,15 +46,10 @@
 	font-display: swap;
 }
 
-/* main body structure */
-:where(body){
-  max-width: 1920px;
-  margin: 0 auto !important;
-}
-
 :root {
-  --any-content-width: 100%;
-  --any-content-spacing: 0;
+  --any-content-spacing-mobile: var(--any-content-spacing);
+  --any-content-spacing: 4rem;
+  --any-content-width: min(1920px, 87%);
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);
@@ -133,9 +128,9 @@
   --font-size: max(18px, 0.6vw);
   --grid-1column-align-center-padding-custom: 4rem 1.5rem;
   --grid-1column-align-center-padding-mobile-custom: 3rem 0;
+  --grid-2columns-content-section-first-column-padding-custom: 4rem 4.5rem;
   --grid-2columns-content-section-padding-custom: 4rem 1.5rem;
   --grid-2columns-content-section-padding-mobile-custom: 3rem 0;
-  --grid-2columns-content-section-first-column-padding-custom: 4rem 4.5rem;
   --grid-2columns-content-section-second-column-padding-mobile-custom: 0 0 3rem 0;
   --grid-2columns2rows-justify-content-custom: space-evenly;
   --grid-432-auto-colums-auto-rows-grid-gap-custom: 1rem 0.5rem;
@@ -143,20 +138,17 @@
   --header-default-a-logo-top-mobile-custom: -0.5em;
   --header-default-a-menu-icon-background-color-custom: var(--color);
   --header-default-background-color-custom: white;
-  --header-default-content-width: 100%;
-  --header-default-logo-width-custom: min(5em, 100px);
-  --header-default-margin-custom: 0 0 1.5rem 0;
-  --header-default-padding: 0 0 0 1.5rem;
+  --header-default-content-width: var(--any-content-width);
+  --header-default-logo-width-custom: min(5em, 60px);
+  --header-default-margin-custom: 0;
+  --header-default-padding: 0;
   --hr-border-width: 0 0 2px;
   --hr-secondary-opacity: 1;
   --label-letter-spacing: 0;
-  --logo-default-img-margin: 0 0 0 1.5rem;
   --navigation-alnatura-a-link-line-height-mobile: 1.5;
   --navigation-alnatura-a-link-line-height: 1.5;
   --navigation-alnatura-color-custom: var(--color);
   --navigation-alnatura-line-height-mobile: 1.5;
-  --navigation-alnatura-search-li-padding-custom: 0 1.5rem 0 0;
-  --search-justify-content-custom: flex-end;
   --search-input-background-color-focus: var(--m-white);
   --search-input-background-color-hover: var(--m-white);
   --search-input-background-color: var(--m-white);
@@ -167,6 +159,7 @@
   --search-input-padding: 0.5em 1em;
   --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big: 100%;
+  --search-justify-content-custom: flex-end;
   --search-label-font-size: var(--font-size);
   --search-label-line-height: calc(4/3);
   --tag-filter-horizontal-gap: 0.5em;
