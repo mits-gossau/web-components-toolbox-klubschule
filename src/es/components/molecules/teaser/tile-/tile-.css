@@ -1,0 +1,76 @@
+/* temp css reset */
+:host 
+:host a,
+:host button,
+:host h5,
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-decoration: none;
+  appearance: none;
+  background: none;
+
+  -webkit-font-smoothing: antialiased;
+} 
+
+:host figure {
+  display: block;
+  background: #fff;
+  border-style: solid;
+  border-color: #737373;
+  border-width: 1px;
+  width: 400px; /* tbd */
+  color: #262626;
+}
+
+:host figure:hover {
+  background: var(--color-${this.getAttribute('color')}, black);
+  color: white;
+}
+
+:host figure:hover span:first-child {
+  color: white;
+}
+
+:host figcaption {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 14.875rem;
+  position: relative;
+}
+
+/* fixme: shouldnt be first child as the teaser can also be used without pretitle */
+:host span:first-child {
+  color: var(--color-${this.getAttribute('color')}, black);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.125rem;
+}
+:host h5 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 110%;
+}
+:host p {
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 130%;
+  min-height: 5rem;
+}
+:host span {
+  font-size: 1rem;
+  line-height: 110%;
+  font-weight: 500;
+}
+
+@media only screen and (max-width: _max-width_) {
+  /* todo */
+}
