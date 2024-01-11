@@ -176,4 +176,8 @@
   --search-label-line-height: calc(4/3);
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
+  --footer-default-footer-width: var(--any-content-width);
+  --footer-default-footer-margin: 0 auto;
+  --footer-default-footer-width-mobile: 100%;
+  --footer-default-footer-margin-mobile: 0;
 }
