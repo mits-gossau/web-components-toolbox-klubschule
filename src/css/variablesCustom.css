@@ -139,11 +139,11 @@
   --header-default-a-menu-icon-background-color-custom: var(--color);
   --header-default-background-color-custom: white;
   --header-default-content-width: var(--any-content-width);
-  --header-default-logo-width-custom: 100px;
-  --header-default-height-mobile-custom: 60px;
+  --header-default-logo-width-custom: 6.25rem;
+  --header-default-height-mobile-custom: 3.75rem;
   --logo-default-height-mobile-custom: var(--header-default-height-mobile-custom);
   --logo-default-width-mobile-custom: var(--logo-default-height-mobile-custom);
-  --header-default-height-custom: 100px;
+  --header-default-height-custom: 6.25rem;
   --header-default-margin-custom: 0 0 1rem 0;
   --header-default-padding: 0;
   --hr-border-width: 0 0 2px;

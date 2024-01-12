@@ -1,9 +1,14 @@
 <!-- 2-spaltige Bühne -->
-<o-grid namespace="grid-2columns-content-stage-" first-container-vertical first-column-with="66%" background-color="#0053A6" image-src="https://picsum.photos/480/280">
+<o-grid namespace="grid-2columns-content-stage-" first-container-vertical first-column-with="66%"
+    background-color="#0053A6" image-src="https://picsum.photos/480/280">
     <section>
         <div>
             <h1>ContentPage (B&uuml;hne) Lorem Ipsum dolor bis zur zweiten Zeile</h1>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+                magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
         </div>
         <aside>
             <div class="aside-image"></div>
@@ -15,8 +20,14 @@
 <o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border>
     <section>
         <div>
-            <p class="intro">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <p class="intro">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+                magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
         </div>
         <aside>
             <h3>Weiterführende Links</h3>
@@ -33,10 +44,106 @@
 
 <!-- 1-spaltiger Content -->
 <o-grid namespace="grid-1column-align-center-" column-with="66%">
+    <style>
+        h1, h2, h3, h4, h5, h6 {
+            --theme-color: #F4001B;
+            --grid-1column-align-center-h2-color: var(--theme-color);
+            --grid-1column-align-center-h3-color: var(--theme-color);
+        }
+
+    </style>
     <section>
         <div>
             <h1>ContentPage (H&uuml;lle)</h1>
-            <p>Lorem Ipsum dolor ...</p>
+            <h2>Heading H2 ohne Border</h2>
+            <h2 class="title-border">Titel H2 mit Border</h2>
+            <h3>Titel H3 ohne Border</h3>
+            <h3 class="title-border">Titel H3 mit Border</h3>
+            <hr />
+            <p>Normaler Text ohne irgendwelche Formatierungen. Normaler Text ohne irgendwelche Formatierungen. Normaler
+                Text ohne irgendwelche Formatierungen. Normaler Text ohne irgendwelche Formatierungen. Normaler Text
+                ohne irgendwelche Formatierungen.&nbsp;</p>
+            <p>Normaler Text ohne irgendwelche Formatierungen. Normaler Text ohne irgendwelche Formatierungen.&nbsp;</p>
+            <p><em>Text kursiv Text kursivText kursivText kursivText kursivText kursivText kursiv.</em>&nbsp;</p>
+            <p><strong>Text bold - Text bold - Text bold - Text bold - Text bold - Text bold - Text bold</strong></p>
+            <p><span style="text-decoration: underline;">text ist unterstrichen</span></p>
+            <!-- Lists -->
+            <ul>
+                <li>liste 1</li>
+                <li>liste 2</li>
+                <li>liste 3</li>
+            </ul>
+            <ul style="list-style-type: circle;">
+                <li>liste 1</li>
+                <li>liste 2&nbsp;</li>
+                <li>liste 3</li>
+            </ul>
+            <ul style="list-style-type: square;">
+                <li>liste 1</li>
+                <li>liste 2</li>
+                <li>liste 3</li>
+            </ul>
+            <ol>
+                <li>number 1</li>
+                <li>number 2</li>
+                <li>number 3</li>
+            </ol>
+            <ol style="list-style-type: upper-alpha;">
+                <li>holdrio</li>
+                <li>holdrio</li>
+                <li>holdrio</li>
+            </ol>
+            <!-- Table 1 -->
+            <table border="1" height="66" style="border-collapse: collapse; width: 99.3724%;">
+                <tbody>
+                    <tr>
+                        <td style="width: 33.3333%;">tabelle normal</td>
+                        <td style="width: 33.3333%;">slslj</td>
+                        <td style="width: 33.3333%;">ljsdjlk</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33.3333%;">lkdsljks</td>
+                        <td style="width: 33.3333%;">ldsljksdf</td>
+                        <td style="width: 33.3333%;">lklksd</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33.3333%;">lsdjlks</td>
+                        <td style="width: 33.3333%;">lljksd</td>
+                        <td style="width: 33.3333%;">lljkss</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>&nbsp;</p>
+            <!-- Table 2 -->
+            <table border="1" style="border-collapse: collapse; width: 100%; height: 54px;">
+                <thead>
+                    <tr style="background-color: rgb(149, 165, 166); height: 18px;">
+                        <td style="width: 19.3286%; height: 18px;">sdsds</td>
+                        <td style="width: 19.3286%; height: 18px;">sdsd</td>
+                        <td style="width: 19.3286%; height: 18px;">sdfsd</td>
+                        <td style="width: 19.3286%; height: 18px;">sadf</td>
+                        <td style="width: 19.3384%; height: 18px;">sd</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="height: 18px;">
+                        <td style="width: 19.3286%; height: 18px;">dssd</td>
+                        <td style="width: 19.3286%; height: 18px;">ssdf</td>
+                        <td style="width: 19.3286%; height: 18px;">ssdf</td>
+                        <td style="width: 19.3286%; height: 18px;">asddf</td>
+                        <td style="width: 19.3384%; height: 18px;">ad</td>
+                    </tr>
+                    <tr style="height: 18px;">
+                        <td style="width: 19.3286%; height: 18px;">addsf</td>
+                        <td style="width: 19.3286%; height: 18px;">dssd</td>
+                        <td style="width: 19.3286%; height: 18px;">sadsf</td>
+                        <td style="width: 19.3286%; height: 18px;">sdfds</td>
+                        <td style="width: 19.3384%; height: 18px;">dssd</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>&nbsp;</p>
+            <p>ich bin ein <a href="/" title="Klubschule">Link </a>und so wiiter</p>
         </div>
     </section>
 </o-grid>
