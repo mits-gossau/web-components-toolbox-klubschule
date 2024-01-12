@@ -1,37 +1,42 @@
-/* temp css reset */
-:host 
-:host a,
-:host button,
-:host h5,
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border: none;
-  text-decoration: none;
-  appearance: none;
-  background: none;
+:host figure {
+  --color: #262626;
+  --transition: color .3s ease-out , background-color .3s ease-out !important;
 
-  -webkit-font-smoothing: antialiased;
-} 
+  --picture-teaser-transition: transform .5s ease-out; 
+}
+
+:host a-picture {
+  display: block;
+  overflow: hidden;
+}
+
+:host figure:hover {
+  --color: white;
+
+  --picture-teaser-transform: scale(1.05, 1.05);
+}
+
+:host * {
+  box-sizing: border-box;
+  margin: 0 !important;
+}
 
 :host figure {
   display: block;
-  background: #fff;
+  background: white;
   border-style: solid;
   border-color: #737373;
   border-width: 1px;
-  width: 400px; /* tbd */
-  color: #262626;
+  color: var(--color);
+}
+
+:host figcaption > * {
+  width: 100%;
 }
 
 :host figure:hover {
   background: var(--color-${this.getAttribute('color')}, black);
-  color: white;
-}
-
-:host figure:hover span:first-child {
-  color: white;
+  color: white !important;
 }
 
 :host figcaption {
@@ -39,38 +44,68 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  align-items: flex-start;
-  justify-content: flex-start;
-  align-self: stretch;
   flex-shrink: 0;
   height: 14.875rem;
-  position: relative;
+  width: 100%;
 }
 
 /* fixme: shouldnt be first child as the teaser can also be used without pretitle */
-:host span:first-child {
+:host strong:first-child {
+  display: block;
+  font-family: var(--font-family-bold);
   color: var(--color-${this.getAttribute('color')}, black);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.125rem;
+  transition: var(--transition);
 }
-:host h5 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 110%;
+:host figure:hover strong:first-child {
+  color: white;
+}
+
+:host h5,
+:host h4,
+:host h3,
+:host h2,
+:host h1 {
+  color: inherit !important;
+  transition: var(--transition);
+  /* font-family: var(--font-family-secondary) !important; */
+  /* font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 110%; */
 }
 :host p {
   font-size: 1.125rem;
   font-weight: 400;
   line-height: 130%;
   min-height: 5rem;
+  transition: var(--transition);
 }
 :host span {
+  display: flex;
+  gap: 0.25rem;
+  font-family: var(--font-family-secondary);
   font-size: 1rem;
   line-height: 110%;
   font-weight: 500;
+  transition: var(--transition);
 }
 
+/* :host span:after {
+  content: '';
+  display: inline-block;
+  margin-left: 0.25rem;
+  margin-bottom: -0.1em;
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.33337 8.00004H12.6667M12.6667 8.00004L8.00004 3.33337M12.6667 8.00004L8.00004 12.6667" stroke="%23333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>');
+  mask: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.33337 8.00004H12.6667M12.6667 8.00004L8.00004 3.33337M12.6667 8.00004L8.00004 12.6667" stroke="%23333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>');
+} */
+
 @media only screen and (max-width: _max-width_) {
-  /* todo */
+  :host figcaption {
+    padding: 1rem .5rem;
+  }
 }

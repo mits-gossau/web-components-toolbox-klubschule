@@ -13,35 +13,49 @@ import Teaser from '../../web-components-toolbox/src/es/components/molecules/tea
  * @type {CustomElementConstructor}
  */
 export default class KsTeaser extends Teaser {
+  constructor (options = {}, ...args) {
+    super({
+      importMetaUrl: import.meta.url,
+      ...options
+    }, ...args)
+  }
+
   /**
    * fetches the template
    *
    * @return {Promise<void>}
    */
   fetchTemplate () {
-    /* TODO add reset styles */
-    // const styles = [
-    //     {
-    //         path: `${this.importMetaUrl}../../../../css/reset.css`, // no variables for this reason no namespace
-    //         namespace: false
-    //     },
-    // ]
-
     switch (this.getAttribute('namespace')) {
       case 'teaser-tile-':
-        return this.fetchCSS([{
-          // @ts-ignore
-          path: `${this.importMetaUrl}../../../../../../molecules/teaser/tile-/tile-.css`,
-          namespace: false
-          // ...styles
-        }
-        ]).then(fetchCSSParams => {
-          // make template ${code} accessible aka. set the variables in the literal string
-          fetchCSSParams[0].styleNode.textContent = eval('`' + fetchCSSParams[0].style + '`')// eslint-disable-line no-eval
-        })
+        return this.fetchNamespaceTemplate('tile-/tile-.css')
       default:
         return super.fetchTemplate()
     }
+  }
+
+  /**
+   * fetches the actual teaser namespace template
+   *
+   * @return {Promise<void>}
+   */
+  fetchNamespaceTemplate (relativePath) {
+    const styles = [
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`,
+        namespace: false
+      }
+    ]
+
+    return this.fetchCSS([{
+      // @ts-ignore
+      path: `${this.importMetaUrl}${relativePath}`,
+      namespace: false
+    }, ...styles
+    ]).then(fetchCSSParams => {
+      // make template ${code} accessible aka. set the variables in the literal string
+      fetchCSSParams[0].styleNode.textContent = eval('`' + fetchCSSParams[0].style + '`')// eslint-disable-line no-eval
+    })
   }
 
   /**
