@@ -173,6 +173,15 @@ export default class Heading extends Shadow() {
         margin: var(--h6-margin);
         padding: var(--h6-padding);
       }
+      /* border top */
+      :host([border-top]) [border-top]::before {
+        background-color: var(--h-border-top-color, var(--mdx-base-color-klubschule-red-600));
+        content: '';
+        display: block;
+        margin-bottom: var(--h-border-margin-bottom, 16px);
+        height: var(--h-border-top-height, 4px);
+        width: var(--h-border-top-width, 32px);
+      }
       @media only screen and (max-width: _max-width_) {
         :host {
           --h1-font-size-mobile: calc(64rem / 16); /* 64px */
