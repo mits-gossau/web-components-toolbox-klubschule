@@ -180,4 +180,13 @@
   --footer-default-footer-margin: 0 auto;
   --footer-default-footer-width-mobile: 100%;
   --footer-default-footer-margin-mobile: 0;
+
+  /*--h-color: var(--mdx-base-color-grey-975);
+  --h-font-family: var(--font-family);
+  --h-font-size: 96px;
+  --h-font-weight: 500;
+  --h-line-height: 1;
+  --h-margin: 0;
+  --h-padding: 0;*/
+
 }
