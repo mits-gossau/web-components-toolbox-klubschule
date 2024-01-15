@@ -54,6 +54,10 @@ export default class TileList extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
+      :host {
+        width: 80%;
+      }
+
       :host .o-tile-list {
         background-color: var(--m-white);
         border: 0.0625em solid var(--m-gray-700);
