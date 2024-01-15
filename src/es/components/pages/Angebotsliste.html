@@ -1,11 +1,37 @@
 <section>
     <style>
+        :host .tile-search {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 3em;
+        }
+
+        :host span {
+            font-size: 1.125em;
+            line-height: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        :host input {
+            width: 50%;
+            border: 0.0625em solid var(--m-gray-700);
+            border-radius: 2em;
+            padding: 0.875em 1.5em;
+            font-size: 1.125em;
+            line-height: 1.5em;
+            color: var(--m-gray-600);
+        }
+
         :host ks-a-button,
         :host m-double-button {
             margin-right: 0.5em;
             margin-bottom: 1em;
         }
     </style>
+    <div class="tile-search">
+        <span>Angebote in Ihrer Nähe finden</span>
+        <input type="text" placeholder="Ihr Standort">
+    </div>
     <ks-a-button filter namespace="button-primary-" color="secondary">
         <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
     </ks-a-button>
@@ -48,9 +74,20 @@
         <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
     </ks-a-button>
 </section>
+
 <div class="spacer"></div>
+
 <ks-o-tile-list></ks-o-tile-list>
 <ks-o-tile-list></ks-o-tile-list>
 <ks-o-tile-list></ks-o-tile-list>
 <ks-o-tile-list></ks-o-tile-list>
 <ks-o-tile-list></ks-o-tile-list>
+
+<div class="spacer"></div>
+
+<ks-a-button namespace="button-primary-" color="secondary">
+    <span>Weitere Angebote</span>
+    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+</ks-a-button>
+
+<div class="spacer"></div>

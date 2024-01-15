@@ -27,7 +27,7 @@ export default class TileList extends Shadow() {
     const toggle = this.root.querySelector('.o-tile-list__bottom-left');
     toggle.addEventListener('click', () => {
       const details = this.root.querySelector('.o-tile-list__details');
-      details.classList.toggle('o-tile-list__details--expanded')
+      details.classList.toggle('o-tile-list__details--expanded');
     });
   }
 
@@ -269,7 +269,7 @@ export default class TileList extends Shadow() {
             <div class="o-tile-list__bottom-left">
               <ks-a-button namespace="button-quaternary-" color="secondary">
                 <span>Ortsauswahl</span>
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-right">
               </ks-a-button>
             </div>
             <div class="o-tile-list__bottom-right">
