@@ -5,9 +5,9 @@ export default class ContentStage extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.title = this.querySelector('h1').innerText;
-    this.subtitle = this.querySelector('p').innerText;
-    this.imageSrc = this.getAttribute('image-src');
+    this.title = this.querySelector('h1').innerText
+    this.subtitle = this.querySelector('p').innerText
+    this.imageSrc = this.getAttribute('image-src')
   }
 
   connectedCallback () {

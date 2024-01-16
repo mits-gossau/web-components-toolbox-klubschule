@@ -15,19 +15,19 @@ export default class Heading extends Shadow() {
     this.color = this.getAttribute('color') || 'var(--mdx-base-color-grey-975)'
 
     this.heading = document.createElement(this.tag)
-    this.styleAs ? this.heading.setAttribute('class', this.styleAs) : null
-    //this.heading.setAttribute('style', `color: ${this.color}`)
+    if (this.styleAs) this.heading.setAttribute('class', this.styleAs)
+    // this.heading.setAttribute('style', `color: ${this.color}`)
 
     // copy attributes to heading
-    for(const attrib of this.attributes) {
-        if (attrib.name !== 'tag' && attrib.name !== 'style-as' && attrib.name !== 'color') {
-            this.heading.setAttribute(attrib.name, attrib.value);
-        }
+    for (const attrib of this.attributes) {
+      if (attrib.name !== 'tag' && attrib.name !== 'style-as' && attrib.name !== 'color') {
+        this.heading.setAttribute(attrib.name, attrib.value)
+      }
     }
 
     // copy children to heading
-    while (this.firstChild) { 
-        this.heading.appendChild(this.firstChild); 
+    while (this.firstChild) {
+      this.heading.appendChild(this.firstChild)
     }
   }
 
@@ -247,5 +247,4 @@ export default class Heading extends Shadow() {
   renderHTML () {
     this.html = this.heading
   }
-
 }

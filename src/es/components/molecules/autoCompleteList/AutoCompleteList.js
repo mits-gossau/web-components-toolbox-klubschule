@@ -103,7 +103,7 @@ export default class AutoCompleteList extends Shadow() {
           (/**
             * @type {{total: number,success: boolean, searchText: string, items: import("../../controllers/autoComplete/AutoComplete.js").Item[], cms: []}}
             */
-          {total, success, searchText, items, cms}) => {
+            { total, success, searchText, items, cms }) => {
             if (total === 0) return
             this.list.innerHTML = items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="${curr.typ === 1
               ? 'Search'

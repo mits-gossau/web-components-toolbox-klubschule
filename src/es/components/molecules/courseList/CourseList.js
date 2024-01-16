@@ -2,8 +2,6 @@
 
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
-/* global CustomEvent */
-
 export default class CourseList extends Shadow() {
   /**
    * @param options
@@ -127,7 +125,6 @@ export default class CourseList extends Shadow() {
       this.html = `${this.getAttribute('no-courses-found-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}`
       return Promise.resolve()
     }
-    const courseListHeight = this.offsetHeight
     this.html = ''
     const fetchModules = this.fetchModules([
       {
@@ -137,6 +134,7 @@ export default class CourseList extends Shadow() {
     ])
 
     // TODO: Loading behavior
+    // const courseListHeight = this.offsetHeight
     // // @ts-ignore
     // if (courseData === 'loading') {
     //   this.html = '<a-loading z-index="1"></a-loading>'
