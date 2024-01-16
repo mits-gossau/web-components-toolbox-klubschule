@@ -18,7 +18,7 @@
     <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
     <a-input inputid="searchField" placeholder="Label" icon-name="Location" icon-size="1.25em" search="?q=" type="search">Angebote in Ihrer Nähe finden</a-input>
 </section>
-<ks-c-auto-complete mock>
+<ks-c-auto-complete endpoint="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search">
     <h1 id="secondary">Search Field (auto complete)</h1>
 
     <section>
@@ -33,6 +33,7 @@
             </div>
             <div class="container">
                 <ks-m-auto-complete-list>
+                    <!-- This would be initially rendered Autocomplete Lists, leave empty if none -->
                     <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Aktueller Standort</li>
                     <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs Zürich</li>
                     <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs</li>

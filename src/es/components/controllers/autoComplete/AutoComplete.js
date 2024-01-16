@@ -42,9 +42,9 @@ export default class AutoComplete extends Shadow() {
 
     this.abortController = null
     this.requestAutoCompleteListener = event => {
-      if (this.hasAttribute('mock')) return this.dispatchMock()
       const token = event.detail.value
       if (!token || token.length < 3) return
+      if (this.hasAttribute('mock')) return this.dispatchMock()
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
       this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {

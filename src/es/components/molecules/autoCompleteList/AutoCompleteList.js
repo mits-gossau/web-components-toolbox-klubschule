@@ -88,10 +88,10 @@ export default class AutoCompleteList extends Shadow() {
   /**
    *
    *
-   * @param {Promise<import("../../controllers/autoComplete/AutoComplete.js").fetchAutoCompleteEventDetail>} fetch
+   * @param {Promise<import("../../controllers/autoComplete/AutoComplete.js").fetchAutoCompleteEventDetail>|null} [fetch=null]
    * @return {void}
    */
-  renderHTML (fetch) {
+  renderHTML (fetch = null) {
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
@@ -99,12 +99,14 @@ export default class AutoCompleteList extends Shadow() {
       }
     ]).then(children => {
       if (fetch) {
-        this.list.innerHTML = ''
         fetch.then(
           (/**
             * @type {{total: number,success: boolean, searchText: string, items: import("../../controllers/autoComplete/AutoComplete.js").Item[], cms: []}}
             */
-           {total, success, searchText, items, cms}) => (this.list.innerHTML = items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> ${curr.term}</li>`, '')))
+          {total, success, searchText, items, cms}) => {
+            if (total === 0) return
+            this.list.innerHTML = items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> ${curr.term}</li>`, '')
+          })
       } else {
         this.html = /* html */ `
             <ul></ul>
