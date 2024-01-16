@@ -181,12 +181,13 @@
   --footer-default-footer-width-mobile: 100%;
   --footer-default-footer-margin-mobile: 0;
 
+  /* Headlines */
   --h-color: var(--mdx-base-color-grey-975);
   --h-font-family: var(--font-family);
   --h-font-size: calc(16rem / 3); /* 96px */
   --h-font-weight: 500;
   --h-line-height: 1;
-  --h-margin: 0;
+  --h-margin: calc(64rem / 16) 0 calc(32rem / 18) 0;
   --h-padding: 0;
 
   --h1-font-size: calc(96rem / 18); /* 96px */
@@ -238,6 +239,9 @@
   --h5-margin: var(--h-margin);
   --h6-margin: var(--h-margin);
 
+  --h2-margin-mobile: calc(64rem / 16) 0 calc(24rem / 16) 0;
+  --h3-margin-mobile: calc(64rem / 16) 0 calc(24rem / 16) 0;
+
   --h1-padding: var(--h-padding);
   --h2-padding: var(--h-padding);
   --h3-padding: var(--h-padding);
@@ -245,4 +249,20 @@
   --h5-padding: var(--h-padding);
   --h6-padding: var(--h-padding);
 
+  /* Tables */
+  --table-border-collapse: collapse;
+  --table-border-spacing: 0;
+  --table-max-width: 100%;
+  --table-word-break: normal;
+  --table-margin: 0;
+  --table-text-align: left;
+  --table-width: 100%;
+  --table-border: 0;
+  --table-vertical-align: top;
+  --table-padding: var(--mdx-sys-spacing-fix-s);
+  --table-padding-right: 1em;
+  --table-white-space: normal;
+  --table-thead-tr-background-color: var(--mdx-base-color-klubschule-creme-600);
+  --table-odd-background-color: var(--mdx-base-color-grey-0);
+  --table-even-background-color: var(--mdx-base-color-klubschule-creme-400);
 }
