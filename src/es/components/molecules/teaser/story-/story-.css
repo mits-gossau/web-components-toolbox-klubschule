@@ -5,31 +5,18 @@
 }
 
 :host figure:hover {
-  --color: white;
+  --color: var(--color-${this.getAttribute('color')}, black);
   --picture-teaser-transform: scale(1.05, 1.05);
 }
 
-:host figure {
-  display: block;
-  background: white;
-  border-style: solid;
-  border-color: #737373;
-  border-width: 1px;
-  color: var(--color);
-}
-
 :host figure:hover {
-  background: var(--color-${this.getAttribute('color')}, black);
-  color: white !important;
+  color: var(--color-${this.getAttribute('color')}, black);
 }
 
 :host figcaption {
-  padding: 1.5rem;
-  height: 14.875rem;
-}
-
-:host figure:hover figcaption > strong:first-child {
-  color: white;
+  order: 2;
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
 }
 
 @media only screen and (max-width: _max-width_) {
