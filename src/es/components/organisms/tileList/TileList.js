@@ -269,7 +269,7 @@ export default class TileList extends Shadow() {
             <div class="o-tile-list__bottom-left">
               <ks-a-button namespace="button-quaternary-" color="secondary">
                 <span>Ortsauswahl</span>
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-right">
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ChevronDown" size="1em" class="icon-right">
               </ks-a-button>
             </div>
             <div class="o-tile-list__bottom-right">

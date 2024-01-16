@@ -142,4 +142,23 @@
   --title-border-display: none;
   --icon-color-blue: #0053A6;
   --content-width: 90%;
+
+  --search-input-tiles-search-input-border-color: var(--m-gray-700);
+  --search-input-tiles-search-input-padding: 0.875em 1.5em;
+  --search-input-tiles-search-input-border-radius: 2em;
+  --search-input-tiles-input-color: var(--m-gray-600);
+  --search-input-tiles-input-font-size: 1.125em;
+  --search-input-tiles-icon-color: var(--icon-color-blue);
+  /*
+  --search-input-tiles-search-input-width-big: 50%;
+  --search-input-tiles-input-right: 32em;
+  --search-input-tiles-content-spacing-mobile: 17em;
+  */
+
+  --button-secondary-filter-color: #0053A6;
+  --button-secondary-filter-background-color-hover: transparent;
+  --button-secondary-filter-padding: 0;
+
+  --button-primary-icon-right-margin: 0;
+  --button-primary-label-margin: 0 0.25em 0 0;
 }

@@ -10,197 +10,20 @@
         margin-top: 1em;
     }
 </style>
-<h1 id="primary">namespace="button-primary-"</h1>
+<h1 id="primary">Badge with icon</h1>
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>color="secondary" aka. Figma (Button Primary Color)</h2>
-    <!--
-    <h2>Button Primary - Color Default (--color & --color-hover, etc.)</h2>
-    <ks-a-button badge namespace="button-primary-">color="secondary"</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" class="active">active</ks-a-button>
+    <h2>Default</h2>
+    <ks-m-badge text="Default"></ks-m-badge>
     <hr>
-    -->
-    <ks-a-button badge namespace="button-primary-" color="secondary">color="secondary"</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="secondary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="secondary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="tertiary" aka. Figma (Button Neutral Color)</h2>
-    <ks-a-button badge namespace="button-primary-" color="tertiary">color="tertiary"</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="tertiary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="tertiary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="quaternary" quaternary aka. Figma (Button Accent 01 Color)</h2>
-    <ks-a-button badge namespace="button-primary-" color="quaternary">color="quaternary"</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="quaternary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="quaternary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="quinary" Quinary aka. Figma (Button Accent 02 Color)</h2>
-    <ks-a-button badge namespace="button-primary-" color="quinary">color="quinary"</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="quinary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="quinary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="senary" Quinary aka. Figma (Button Accent 03 Color)</h2>
-    <ks-a-button badge namespace="button-primary-" color="senary">color="senary"</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="senary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="senary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="septenary" Quinary aka. Figma (Button Accent 04 Color)</h2>
-    <ks-a-button badge namespace="button-primary-" color="septenary">color="septenary"</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="septenary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-primary-" color="septenary" class="active">active</ks-a-button>
-    <hr>
-    <h2>with icon -> color="secondary" aka. Figma (Button Primary Color)</h2>
-    <div style="display: flex; gap: 0.25em; flex-wrap: wrap;">
-        <ks-a-button badge namespace="button-primary-" color="secondary">
-            <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>icon left
-        </ks-a-button>
-        <ks-a-button badge namespace="button-primary-" color="secondary">
-            <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>icon on both sides<a-icon-mdx icon-name="Heart" size="1em"  class="icon-right"></a-icon-mdx>
-        </ks-a-button>
-        <ks-a-button badge namespace="button-primary-" color="secondary">
-            icon right<a-icon-mdx icon-name="Heart" size="1em" class="icon-right"></a-icon-mdx>
-        </ks-a-button>
-    </div>
-    <hr>
+    <h2>Primary</h2>
+    <ks-m-badge text="Primary" type="primary"></ks-m-badge>
 </section>
 
-<h1 id="secondary">namespace="button-secondary-"</h1>
+<h1 id="primary">Badge icon-only</h1>
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>color="secondary" Secondary aka. Figma (Button Primary Color)</h2>
-    <ks-a-button badge namespace="button-secondary-" color="secondary">color="secondary"</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="secondary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="secondary" class="active">active</ks-a-button>
+    <h2>Default</h2>
+    <ks-m-badge></ks-m-badge>
     <hr>
-    <h2>color="tertiary" Tertiary aka. Figma (Button Neutral Color)</h2>
-    <ks-a-button badge namespace="button-secondary-" color="tertiary">color="tertiary"</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="tertiary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="tertiary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="quaternary" Quaternary aka. Figma (Button Accent 01 Color)</h2>
-    <ks-a-button badge namespace="button-secondary-" color="quaternary">color="quaternary"</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="quaternary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="quaternary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="quinary" Quinary aka. Figma (Button Accent 02 Color)</h2>
-    <ks-a-button badge namespace="button-secondary-" color="quinary">color="quinary"</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="quinary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="quinary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="senary" Quinary aka. Figma (Button Accent 03 Color)</h2>
-    <ks-a-button badge namespace="button-secondary-" color="senary">color="senary"</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="senary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="senary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="septenary" Quinary aka. Figma (Button Accent 04 Color)</h2>
-    <ks-a-button badge namespace="button-secondary-" color="septenary">color="septenary"</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="septenary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-secondary-" color="septenary" class="active">active</ks-a-button>
-    <hr>
-    <h2>with icon -> color="secondary" aka. Figma (Button Primary Color)</h2>
-    <div style="display: flex; gap: 0.25em; flex-wrap: wrap;">
-        <ks-a-button badge namespace="button-secondary-" color="secondary">
-            <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>icon left
-        </ks-a-button>
-        <ks-a-button badge namespace="button-secondary-" color="secondary">
-            <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>icon on both sides<a-icon-mdx icon-name="Heart" size="1em"  class="icon-right"></a-icon-mdx>
-        </ks-a-button>
-        <ks-a-button badge namespace="button-secondary-" color="secondary">
-            icon right<a-icon-mdx icon-name="Heart" size="1em" class="icon-right"></a-icon-mdx>
-        </ks-a-button>
-    </div>
-    <hr>
-</section>
-
-<h1 id="tertiary">namespace="button-tertiary-"</h1>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>color="secondary" Secondary aka. Figma (Button Primary Color)</h2>
-    <ks-a-button badge namespace="button-tertiary-" color="secondary">color="tertiary"</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="secondary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="secondary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="tertiary" Tertiary aka. Figma (Button Neutral Color)</h2>
-    <ks-a-button badge namespace="button-tertiary-" color="tertiary">color="tertiary"</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="tertiary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="tertiary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="quaternary" Quaternary aka. Figma (Button Accent 01 Color)</h2>
-    <ks-a-button badge namespace="button-tertiary-" color="quaternary">color="quaternary"</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="quaternary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="quaternary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="quinary" Quinary aka. Figma (Button Accent 02 Color)</h2>
-    <ks-a-button badge namespace="button-tertiary-" color="quinary">color="quinary"</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="quinary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="quinary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="senary" Quinary aka. Figma (Button Accent 03 Color)</h2>
-    <ks-a-button badge namespace="button-tertiary-" color="senary">color="senary"</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="senary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="senary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="septenary" Quinary aka. Figma (Button Accent 04 Color)</h2>
-    <ks-a-button badge namespace="button-tertiary-" color="septenary">color="septenary"</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="septenary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-tertiary-" color="septenary" class="active">active</ks-a-button>
-    <hr>
-    <h2>with icon -> color="secondary" aka. Figma (Button Primary Color)</h2>
-    <div style="display: flex; gap: 0.25em; flex-wrap: wrap;">
-        <ks-a-button badge namespace="button-tertiary-" color="secondary">
-            <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>icon left
-        </ks-a-button>
-        <ks-a-button badge namespace="button-tertiary-" color="secondary">
-            <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>icon on both sides<a-icon-mdx icon-name="Heart" size="1em"  class="icon-right"></a-icon-mdx>
-        </ks-a-button>
-        <ks-a-button badge namespace="button-tertiary-" color="secondary">
-            icon right<a-icon-mdx icon-name="Heart" size="1em" class="icon-right"></a-icon-mdx>
-        </ks-a-button>
-    </div>
-    <hr>
-</section>
-
-<h1 id="quaternary">namespace="button-quaternary-"</h1>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>color="secondary" Secondary aka. Figma (Button Primary Color)</h2>
-    <ks-a-button badge namespace="button-quaternary-" color="secondary">color="quaternary"</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="secondary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="secondary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="tertiary" Tertiary aka. Figma (Button Neutral Color)</h2>
-    <ks-a-button badge namespace="button-quaternary-" color="tertiary">color="tertiary"</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="tertiary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="tertiary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="quaternary" Quaternary aka. Figma (Button Accent 01 Color)</h2>
-    <ks-a-button badge namespace="button-quaternary-" color="quaternary">color="quaternary"</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="quaternary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="quaternary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="quinary" Quinary aka. Figma (Button Accent 02 Color)</h2>
-    <ks-a-button badge namespace="button-quaternary-" color="quinary">color="quinary"</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="quinary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="quinary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="senary" Quinary aka. Figma (Button Accent 03 Color)</h2>
-    <ks-a-button badge namespace="button-quaternary-" color="senary">color="senary"</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="senary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="senary" class="active">active</ks-a-button>
-    <hr>
-    <h2>color="septenary" Quinary aka. Figma (Button Accent 04 Color)</h2>
-    <ks-a-button badge namespace="button-quaternary-" color="septenary">color="septenary"</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="septenary" disabled>disabled</ks-a-button>
-    <ks-a-button badge namespace="button-quaternary-" color="septenary" class="active">active</ks-a-button>
-    <hr>
-    <h2>with icon -> color="secondary" aka. Figma (Button Primary Color)</h2>
-    <div style="display: flex; gap: 0.25em; flex-wrap: wrap;">
-        <ks-a-button badge namespace="button-quaternary-" color="secondary">
-            <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>icon left
-        </ks-a-button>
-        <ks-a-button badge namespace="button-quaternary-" color="secondary">
-            <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>icon on both sides<a-icon-mdx icon-name="Heart" size="1em"  class="icon-right"></a-icon-mdx>
-        </ks-a-button>
-        <ks-a-button badge namespace="button-quaternary-" color="secondary">
-            icon right<a-icon-mdx icon-name="Heart" size="1em" class="icon-right"></a-icon-mdx>
-        </ks-a-button>
-    </div>
-    <hr>
+    <h2>Primary</h2>
+    <ks-m-badge type="primary"></ks-m-badge>
 </section>

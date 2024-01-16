@@ -1,85 +1,33 @@
 <section>
-    <style>
-        :host .tile-search {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 3em;
-        }
-
-        :host span {
-            font-size: 1.125em;
-            line-height: 1.5em;
-            margin-bottom: 1em;
-        }
-
-        :host input {
-            width: 50%;
-            border: 0.0625em solid var(--m-gray-700);
-            border-radius: 2em;
-            padding: 0.875em 1.5em;
-            font-size: 1.125em;
-            line-height: 1.5em;
-            color: var(--m-gray-600);
-        }
-
-        :host ks-a-button,
-        :host m-double-button {
-            margin-right: 0.5em;
-            margin-bottom: 1em;
-        }
-    </style>
-    <div class="tile-search">
-        <span>Angebote in Ihrer Nähe finden</span>
-        <input type="text" placeholder="Ihr Standort">
-    </div>
-    <ks-a-button filter namespace="button-primary-" color="secondary">
-        <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
-    </ks-a-button>
-    <m-double-button namespace="double-button-default-" width="100%">
-        <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
-            <span part="label1">Niveau A2/A2+</span>
-            <span part="label2" dynamic></span>
-        </ks-a-button>
-        <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
-            <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-        </ks-a-button>
-    </m-double-button>
-    <m-double-button namespace="double-button-default-" width="100%">
-        <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
-            <span part="label1">Label</span>
-            <span part="label2" dynamic></span>
-        </ks-a-button>
-        <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
-            <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-        </ks-a-button>
-    </m-double-button>
-    <ks-a-button namespace="button-secondary-" color="tertiary">
-        <span>Wochentag & Tageszeit</span>
-        <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-    </ks-a-button>
-    <ks-a-button namespace="button-secondary-" color="tertiary">
-        <span>Kategorien</span>
-        <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-    </ks-a-button>
-    <ks-a-button namespace="button-secondary-" color="tertiary">
-        <span>Label</span>
-        <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-    </ks-a-button>
-    <ks-a-button namespace="button-secondary-" color="tertiary">
-        <span>Label</span>
-        <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-    </ks-a-button>
-    <ks-a-button namespace="button-secondary-" color="tertiary">
-        <span>Label</span>
-        <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-    </ks-a-button>
+    <ks-m-tiles-filter namespace="tile-filter-default-"></ks-m-tiles-filter>
 </section>
 
 <div class="spacer"></div>
 
 <ks-o-tile-list></ks-o-tile-list>
+
+<div class="spacer"></div>
+
+<h1>Angebote in der Nähe von Buchs ZH</h1>
+
+<section>
+    <style>
+        :host .sort-button {
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+    <div class="sort-button">
+        <ks-a-button namespace="button-secondary-filter-" color="tertiary">
+            <span>Relevanz</span>
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ChevronDown" size="1em" class="icon-down">
+        </ks-a-button>
+    </div>
+</section>
+
 <ks-o-tile-list></ks-o-tile-list>
 <ks-o-tile-list></ks-o-tile-list>
+<ks-m-troublemaker></ks-m-troublemaker>
 <ks-o-tile-list></ks-o-tile-list>
 <ks-o-tile-list></ks-o-tile-list>
 
