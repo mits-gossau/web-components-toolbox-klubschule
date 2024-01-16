@@ -105,7 +105,11 @@ export default class AutoCompleteList extends Shadow() {
             */
           {total, success, searchText, items, cms}) => {
             if (total === 0) return
-            this.list.innerHTML = items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> ${curr.term}</li>`, '')
+            this.list.innerHTML = items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="${curr.typ === 1
+              ? 'Search'
+              : curr.typ === 2
+                ? 'ArrowRight'
+                : 'Location'}" size="1em"></a-icon-mdx> ${curr.term}</li>`, '')
           })
       } else {
         this.html = /* html */ `
