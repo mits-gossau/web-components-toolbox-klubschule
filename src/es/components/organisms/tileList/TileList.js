@@ -24,8 +24,17 @@ export default class TileList extends Shadow() {
    * Toggle details
    */
   toggleDetails() {
+    const icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]');
+
     const toggle = this.root.querySelector('.o-tile-list__bottom-left');
     toggle.addEventListener('click', () => {
+
+      if (icon.getAttribute('icon-name') == 'ChevronDown') {
+        icon.setAttribute('icon-name', 'ChevronUp');
+      } else {
+        icon.setAttribute('icon-name', 'ChevronDown');
+      }
+
       const details = this.root.querySelector('.o-tile-list__details');
       details.classList.toggle('o-tile-list__details--expanded');
     });
