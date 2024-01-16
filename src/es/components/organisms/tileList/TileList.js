@@ -25,8 +25,8 @@ export default class TileList extends Shadow() {
    */
   toggleDetails() {
     const icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]');
-
     const toggle = this.root.querySelector('.o-tile-list__bottom-left');
+
     toggle.addEventListener('click', () => {
 
       if (icon.getAttribute('icon-name') == 'ChevronDown') {
