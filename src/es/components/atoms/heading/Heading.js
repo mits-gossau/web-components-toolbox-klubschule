@@ -70,12 +70,12 @@ export default class Heading extends Shadow() {
         --h-margin: 0;
         --h-padding: 0;
 
-        --h1-font-size: calc(96rem / 18); /* 96px */
-        --h2-font-size: calc(76rem / 18); /* 76px */
-        --h3-font-size: calc(48rem / 18); /* 48px */
-        --h4-font-size: calc(36rem / 18); /* 36px */
-        --h5-font-size: calc(32rem / 18); /* 32px */
-        --h6-font-size: calc(24rem / 18); /* 24px */
+        --display1-font-size: calc(96rem / 18); /* 96px */
+        --display2-font-size: calc(76rem / 18); /* 76px */
+        --display3-font-size: calc(48rem / 18); /* 48px */
+        --h1-font-size: calc(36rem / 18); /* 36px */
+        --h2-font-size: calc(32rem / 18); /* 32px */
+        --h3-font-size: calc(24rem / 18); /* 24px */
 
         --h1-color: var(--h-color);
         --h2-color: var(--h-color);
@@ -173,6 +173,16 @@ export default class Heading extends Shadow() {
         margin: var(--h6-margin);
         padding: var(--h6-padding);
       }
+      /* display */
+      :host([display-1]) [display-1] {
+        font-size: var(--display1-font-size);
+      }
+      :host([display-2]) [display-2] {
+        font-size: var(--display2-font-size);
+      }
+      :host([display-3]) [display-3] {
+        font-size: var(--display3-font-size);
+      }
       /* border top */
       :host([border-top]) [border-top]::before {
         background-color: var(--h-border-top-color, var(--mdx-base-color-klubschule-red-600));
@@ -184,12 +194,12 @@ export default class Heading extends Shadow() {
       }
       @media only screen and (max-width: _max-width_) {
         :host {
-          --h1-font-size-mobile: calc(64rem / 16); /* 64px */
-          --h2-font-size-mobile: calc(32rem / 16); /* 32px */
-          --h3-font-size-mobile: calc(28rem / 16); /* 28px */
-          --h4-font-size-mobile: calc(28rem / 16); /* 28px */
-          --h5-font-size-mobile: calc(24rem / 16); /* 24px */
-          --h6-font-size-mobile: calc(20rem / 16); /* 20px */
+          --display1-font-size-mobile: calc(64rem / 16); /* 64px */
+          --display2-font-size-mobile: calc(32rem / 16); /* 32px */
+          --display3-font-size-mobile: calc(28rem / 16); /* 28px */
+          --h1-font-size-mobile: calc(28rem / 16); /* 28px */
+          --h2-font-size-mobile: calc(24rem / 16); /* 24px */
+          --h3-font-size-mobile: calc(20rem / 16); /* 20px */
         }
         :host .h1 {
           font-size: var(--h1-font-size-mobile);
@@ -208,6 +218,16 @@ export default class Heading extends Shadow() {
         }
         :host .h6 {
           font-size: var(--h6-font-size-mobile);
+        }
+        /* display */
+        :host([display-1]) [display-1] {
+          font-size: var(--display1-font-size-mobile);
+        }
+        :host([display-2]) [display-2] {
+          font-size: var(--display2-font-size-mobile);
+        }
+        :host([display-3]) [display-3] {
+          font-size: var(--display3-font-size-mobile);
         }
       }
     `
