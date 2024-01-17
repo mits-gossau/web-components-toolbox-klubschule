@@ -233,6 +233,10 @@
       selector: 'third-party-',
       url: 'web-components-toolbox/src/es/components/thirdParty/',
       separateFolder: true
+    },
+    {
+      selector: 'mdx-component',
+      url: './src/css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js'
     }
   ] // directories
   // ↑↑↑ adjustable ↑↑↑

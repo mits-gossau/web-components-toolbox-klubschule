@@ -1,0 +1,31 @@
+<code><a href="https://mdx-web-components.migros.net" target="_blank">https://mdx-web-components.migros.net</a></code>
+<!-- https://mdx-web-components.migros.net/ -->
+<h2>Button</h2>
+<div>
+  <mdx-component>
+    <mdx-button>
+      <span>Label</span>
+    </mdx-button>
+  </mdx-component>
+</div>
+<hr>
+<h2>Checkbox</h2>
+<div>
+  <!-- Note: The mdx-test-component node is purely for test purposes see more at: src/es/components/tests/MdxTestComponent.js -->
+  <!-- it supplies two buttons to dispatch events on which the mdx-component node will listen, in this example it checks the checkbox by simply setting attributes -->
+  <!-- it also logs events and mutation to console -->
+    <mdx-component
+        click-event-name="mdx-component-click-event"
+        mutation-callback-event-name="mdx-component-mutation-event"
+        listener-event-name="mdx-set-attribute"
+        listener-detail-property-name="attributes"
+    >
+        <mdx-checkbox
+        label="Label"
+        error="Error"
+        >
+        <span slot="description">Checkbox Description</span>
+        </mdx-checkbox>
+    </mdx-component>
+</div>
+<code>check console log!</code>

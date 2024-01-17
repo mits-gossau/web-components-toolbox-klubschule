@@ -9,17 +9,18 @@
 /** 
  * mdx base files
  */
- @import "./web-components-toolbox-migros-design-experience/src/css/base.css";
+@import "./web-components-toolbox-migros-design-experience/src/css/base.css";
 
- /** 
-  * only import one mdx theme at a time for mapping it at sys.css and comp.css
-  */
- @import "../../node_modules/@migros/mdx-design-tokens/dist/miduca/light-rem.css";
- /*
- @import "../../node_modules/@migros/mdx-design-tokens/dist/showcase/light-rem.css";
- */
- @import "./web-components-toolbox-migros-design-experience/src/css/sys.css";
- @import "./web-components-toolbox-migros-design-experience/src/css/comp.css";
+/** 
+* only import one mdx theme at a time for mapping it at sys.css and comp.css
+* replace .klubschule--light with :root
+*/
+@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/03_component/brands/migros/light-rem.css";
+@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/03_component/brands/klubschule/light-rem.css";
+@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/02_system/brands/klubschule/light-rem.css";
+
+@import "./web-components-toolbox-migros-design-experience/src/css/comp.css";
+@import "./web-components-toolbox-migros-design-experience/src/css/sys.css";
 
 /* font tracking */
 /*@import url("https://cdn.fonts.net/t/1.css?apiType=css&projectid=b2e5ea60-e0d9-11ec-b713-06e2001461d0");*/
@@ -46,6 +47,9 @@
 }
 
 :root {
+  --any-content-spacing-mobile: var(--any-content-spacing);
+  --any-content-spacing: 4rem;
+  --any-content-width: min(1920px, 87%);
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);
@@ -120,24 +124,56 @@
   --font-family-bold: "Graphik Bold", HelveticaNowTextBold, HelveticaNowText, Helvetica, Arial, sans-serif;
   --font-family-secondary: "Graphik Medium", Avenir35Light, sans-serif;
   --font-family: "Graphik", HelveticaNowText, Helvetica, Arial, sans-serif;
-  --grid-4colums2rows-grid-gap-custom: 1rem 0.5rem;
+  --font-size-mobile: min(16px, 6vw);
+  --font-size: max(18px, 0.6vw);
+  --grid-1column-align-center-padding-custom: 4rem 1.5rem;
+  --grid-1column-align-center-padding-mobile-custom: 3rem 0;
+  --grid-2columns-content-section-first-column-padding-custom: 4rem 4.5rem;
+  --grid-2columns-content-section-padding-custom: 4rem 1.5rem;
+  --grid-2columns-content-section-padding-mobile-custom: 3rem 0;
+  --grid-2columns-content-section-second-column-padding-mobile-custom: 0 0 3rem 0;
+  --grid-2columns2rows-justify-content-custom: space-evenly;
+  --grid-432-auto-colums-auto-rows-grid-gap-custom: 1rem 0.5rem;
   --header-default-a-logo-top-custom: calc(60.5px / 2 - 60px / 2);
   --header-default-a-logo-top-mobile-custom: -0.5em;
-  --header-default-logo-width-custom: min(5em, 60px);
+  --header-default-a-menu-icon-background-color-custom: var(--color);
+  --header-default-background-color-custom: white;
+  --header-default-content-width: var(--any-content-width);
+  --header-default-logo-width-custom: calc(100rem/18);
+  --header-default-height-mobile-custom: 3.75rem;
+  --logo-default-height-mobile-custom: var(--header-default-height-mobile-custom);
+  --logo-default-width-mobile-custom: var(--logo-default-height-mobile-custom);
+  --header-default-height-custom: calc(100rem/18);
+  --header-default-margin-custom: 0 0 1rem 0;
+  --header-default-padding: 0;
   --hr-border-width: 0 0 2px;
   --hr-secondary-opacity: 1;
+  --label-letter-spacing: 0;
+  --menu-color-custom: white;
+  --navigation-alnatura-section-margin-top-desktop: 49px;
+  --navigation-alnatura-a-link-font-weight: 500;
+  --navigation-alnatura-font-family-custom: var(--font-family);
+  --navigation-alnatura-color-active-custom: var(--color-secondary);
   --navigation-alnatura-a-link-line-height-mobile: 1.5;
   --navigation-alnatura-a-link-line-height: 1.5;
+  --navigation-alnatura-color-custom: var(--color);
   --navigation-alnatura-line-height-mobile: 1.5;
+  --navigation-alnatura-search-justify-content: flex-end;
+  --navigation-alnatura-color-mobile-custom: var(--color);
+  --login-width: var(--any-content-width);
   --search-input-background-color-focus: var(--m-white);
   --search-input-background-color-hover: var(--m-white);
   --search-input-background-color: var(--m-white);
   --search-input-border-color-focus: var(--mdx-base-color-grey-975);
   --search-input-border-color-hover: var(--mdx-base-color-grey-975);
-  --search-input-border-color: var(--m-gray-700);
+  --search-input-border-color-custom: var(--m-gray-700);
   --search-input-color: var(--mdx-base-color-grey-975);
+  --search-input-padding: 0.5em 1em;
   --search-input-placeholder-color: var(--m-gray-700);
-  --search-input-width-big:100%;
+  --search-input-width-big: 100%;
+  --search-justify-content-custom: flex-end;
+  --search-label-font-size: var(--font-size);
+  --search-label-line-height: calc(4/3);
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
   --icon-color-blue: #0053A6;
@@ -156,4 +192,99 @@
 
   --button-primary-icon-right-margin: 0;
   --button-primary-label-margin: 0 0.25em 0 0;
+  --footer-default-footer-width: var(--any-content-width);
+  --footer-default-footer-margin: 0 auto;
+  --footer-default-footer-width-mobile: 100%;
+  --footer-default-footer-margin-mobile: 0;
+  --p-margin: 0 0 calc(16rem/18) 0; /* 16px */
+  --ul-margin: 0 0 calc(16rem/18) calc(24rem/18);
+  --ul-li-padding-left: calc(4rem/18);
+  --h-hyphens: auto;
+
+  /* Headlines */
+  --h-color: var(--mdx-base-color-grey-975);
+  --h-font-family: var(--font-family);
+  --h-font-size: calc(16rem / 3); /* 96px */
+  --h-font-weight: 500;
+  --h-line-height: 1;
+  --h-margin: calc(64rem / 16) 0 calc(32rem / 18) 0;
+  --h-padding: 0;
+
+  --display1-font-size: calc(96rem / 18); /* 96px */
+  --display2-font-size: calc(76rem / 18); /* 76px */
+  --display3-font-size: calc(48rem / 18); /* 48px */
+
+  --h1-font-size: calc(36rem / 18); /* 36px */
+  --h2-font-size: calc(32rem / 18); /* 32px */
+  --h3-font-size: calc(24rem / 18); /* 24px */
+
+  --display1-font-size-mobile: calc(64rem / 16); /* 64px */
+  --display2-font-size-mobile: calc(32rem / 16); /* 32px */
+  --display3-font-size-mobile: calc(28rem / 16); /* 28px */
+
+  --h1-font-size-mobile: calc(28rem / 16); /* 28px */
+  --h2-font-size-mobile: calc(24rem / 16); /* 24px */
+  --h3-font-size-mobile: calc(20rem / 16); /* 20px */
+
+  --h1-color: var(--h-color);
+  --h2-color: var(--h-color);
+  --h3-color: var(--h-color);
+  --h4-color: var(--h-color);
+  --h5-color: var(--h-color);
+  --h6-color: var(--h-color);
+
+  --h1-font-family: var(--h-font-family);
+  --h2-font-family: var(--h-font-family);
+  --h3-font-family: var(--h-font-family);
+  --h4-font-family: var(--h-font-family);
+  --h5-font-family: var(--h-font-family);
+  --h6-font-family: var(--h-font-family);
+
+  --h1-font-weight: var(--h-font-weight);
+  --h2-font-weight: var(--h-font-weight);
+  --h3-font-weight: var(--h-font-weight);
+  --h4-font-weight: var(--h-font-weight);
+  --h5-font-weight: var(--h-font-weight);
+  --h6-font-weight: var(--h-font-weight);
+
+  --h1-line-height: var(--h-line-height);
+  --h2-line-height: var(--h-line-height);
+  --h3-line-height: var(--h-line-height);
+  --h4-line-height: var(--h-line-height);
+  --h5-line-height: var(--h-line-height);
+  --h6-line-height: var(--h-line-height);
+
+  --h1-margin: var(--h-margin);
+  --h2-margin: var(--h-margin);
+  --h3-margin: var(--h-margin);
+  --h4-margin: var(--h-margin);
+  --h5-margin: var(--h-margin);
+  --h6-margin: var(--h-margin);
+
+  --h2-margin-mobile: calc(64rem / 16) 0 calc(24rem / 16) 0;
+  --h3-margin-mobile: calc(64rem / 16) 0 calc(24rem / 16) 0;
+
+  --h1-padding: var(--h-padding);
+  --h2-padding: var(--h-padding);
+  --h3-padding: var(--h-padding);
+  --h4-padding: var(--h-padding);
+  --h5-padding: var(--h-padding);
+  --h6-padding: var(--h-padding);
+
+  /* Tables */
+  --table-border-collapse: collapse;
+  --table-border-spacing: 0;
+  --table-max-width: 100%;
+  --table-word-break: normal;
+  --table-margin: 0;
+  --table-text-align: left;
+  --table-width: 100%;
+  --table-border: 0;
+  --table-vertical-align: top;
+  --table-padding: var(--mdx-sys-spacing-fix-s);
+  --table-padding-right: 1em;
+  --table-white-space: normal;
+  --table-thead-tr-background-color: var(--mdx-base-color-klubschule-creme-600);
+  --table-odd-background-color: var(--mdx-base-color-grey-0);
+  --table-even-background-color: var(--mdx-base-color-klubschule-creme-400);
 }
