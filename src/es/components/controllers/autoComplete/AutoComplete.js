@@ -15,11 +15,7 @@
 
 /* global fetch */
 /* global AbortController */
-/* global location */
-/* global sessionStorage */
 /* global CustomEvent */
-/* global history */
-/* global self */
 
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
@@ -42,9 +38,9 @@ export default class AutoComplete extends Shadow() {
 
     this.abortController = null
     this.requestAutoCompleteListener = event => {
-      if (this.hasAttribute('mock')) return this.dispatchMock()
       const token = event.detail.value
       if (!token || token.length < 3) return
+      if (this.hasAttribute('mock')) return this.dispatchMock()
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
       this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {
@@ -52,7 +48,7 @@ export default class AutoComplete extends Shadow() {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
           fetch: fetch(`${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
             method: 'GET',
-            signal: this.abortController.signal,
+            signal: this.abortController.signal
           }).then(response => {
             if (response.status >= 200 && response.status <= 299) return response.json()
             throw new Error(response.statusText)
@@ -78,53 +74,53 @@ export default class AutoComplete extends Shadow() {
       detail: {
         /** @type {Promise<fetchAutoCompleteEventDetail>} */
         fetch: Promise.resolve({
-          'total': 10,
-          'success': true,
-          'searchText': 'englisch',
-          'items': [
-              {
-                  'term': 'englisch',
-                  'typ': 1
-              },
-              {
-                  'term': 'englisch   privatunterricht  wann und wo sie wolle',
-                  'typ': 1
-              },
-              {
-                  'term': 'englisch a1 ganz entspannt',
-                  'typ': 1
-              },
-              {
-                  'term': 'englisch anfanger innen',
-                  'typ': 1
-              },
-              {
-                  'term': 'englisch anfanger innen   onlinekurs',
-                  'typ': 1
-              },
-              {
-                  'term': 'Englisch Business',
-                  'typ': 2
-              },
-              {
-                  'term': 'Englisch Diplome',
-                  'typ': 2
-              },
-              {
-                  'term': 'Englisch Konversation',
-                  'typ': 2
-              },
-              {
-                  'term': 'Englisch Konversation B1',
-                  'typ': 2
-              },
-              {
-                  'term': 'Englisch Konversation B2',
-                  'typ': 2
-              }
+          total: 10,
+          success: true,
+          searchText: 'englisch',
+          items: [
+            {
+              term: 'englisch',
+              typ: 1
+            },
+            {
+              term: 'englisch   privatunterricht  wann und wo sie wolle',
+              typ: 1
+            },
+            {
+              term: 'englisch a1 ganz entspannt',
+              typ: 1
+            },
+            {
+              term: 'englisch anfanger innen',
+              typ: 1
+            },
+            {
+              term: 'englisch anfanger innen   onlinekurs',
+              typ: 1
+            },
+            {
+              term: 'Englisch Business',
+              typ: 2
+            },
+            {
+              term: 'Englisch Diplome',
+              typ: 2
+            },
+            {
+              term: 'Englisch Konversation',
+              typ: 2
+            },
+            {
+              term: 'Englisch Konversation B1',
+              typ: 2
+            },
+            {
+              term: 'Englisch Konversation B2',
+              typ: 2
+            }
           ],
-          'cms': []
-      })
+          cms: []
+        })
       },
       bubbles: true,
       cancelable: true,

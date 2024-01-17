@@ -1,8 +1,6 @@
 // @ts-check
 import Button from '../../web-components-toolbox/src/es/components/atoms/button/Button.js'
 
-/* global CustomEvent */
-
 /**
  * Creates an Button
  * https://www.figma.com/file/PZlfqoBJ4RnR4rjpj38xai/Design-System-Core-%7C%C2%A0Klubschule-Master?type=design&node-id=6-4853&mode=design&t=nLXc9nA9gjQUslCi-0

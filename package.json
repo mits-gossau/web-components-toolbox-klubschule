@@ -18,7 +18,8 @@
   },
   "standard": {
     "ignore": [
-      "/src/es/components/web-components-toolbox/"
+      "/src/es/components/web-components-toolbox/",
+      "/src/css/web-components-toolbox-migros-design-experience/"
     ]
   }
 }
