@@ -67,7 +67,7 @@ export default class KsTeaser extends Teaser {
    * @return {Promise<void>}
    */
   renderCSS () {
-    this.setCss(/* css */`
+    this.css = /* css */`
         :host * {
           box-sizing: border-box;
           margin: 0 !important;
@@ -98,26 +98,25 @@ export default class KsTeaser extends Teaser {
 
         :host figcaption > strong:first-child {
           display: block;
-          font-family: var(--font-family-bold);
           color: var(--color-${this.getAttribute('color')}, black);
-          font-family: var(--mdx-sys-font-fix-title4-font-family);
-          font-size: var(--mdx-sys-font-fix-title4-font-size);
-          font-weight: var(--mdx-sys-font-fix-title4-font-weight);
-          line-height: var(--mdx-sys-font-fix-title4-line-height);
+          font-family: var(--pretitle-font-family);
+          font-size: var(--pretitle-font-size);
+          font-weight: var(--pretitle-font-weight);
+          line-height: var(--pretitle-line-height);
           transition: var(--transition);
         }
 
-        :host h5,
-        :host h4,
-        :host h3,
-        :host h2,
-        :host h1 {
+        :host figcaption h5,
+        :host figcaption h4,
+        :host figcaption h3,
+        :host figcaption h2,
+        :host figcaption h1 {
           color: inherit !important;
           transition: var(--transition);
-          font-family: var(--mdx-sys-font-flex-large-headline3-font-family) !important;
-          font-size: var(--mdx-sys-font-flex-large-headline3-font-size) !important;
-          font-weight: var(--mdx-sys-font-flex-large-headline3-font-weight) !important;
-          line-height: var(--mdx-sys-font-flex-large-headline3-line-height) !important;
+          font-family: var(--headline-font-family) !important;
+          font-size: var(--headline-font-size) !important;
+          font-weight: var(--headline-font-weight) !important;
+          line-height: var(--headline-line-height) !important;
         }
 
         :host p {
@@ -131,13 +130,13 @@ export default class KsTeaser extends Teaser {
         :host span {
           display: flex;
           gap: 0.25rem;
-          font-family: var(--font-family-secondary);
-          font-size: 1rem;
-          line-height: 110%;
-          font-weight: 500;
+          font-family: var(--cta-font-family) !important;
+          font-size: var(--cta-font-size) !important;
+          font-weight: var(--cta-font-weight) !important;
+          line-height: var(--cta-line-height) !important;
           transition: var(--transition);
         }
-    `, this.cssSelector, '') // unsetting namespace
+    `
 
     return this.fetchTemplate()
   }

@@ -1,26 +1,52 @@
+:host {
+  /* css vars that are passed to children */
+  --picture-teaser-transition: transform .5s ease-out;
+  --color: #262626;
+
+  /* component css vars */
+  --teaser-tile-color: #262626;
+  --teaser-tile-color-${this.getAttribute('color')}: --color-${this.getAttribute('color')};
+  --teaser-tile-transition: color .3s ease-out , background-color .3s ease-out !important;
+  
+  --teaser-tile-pretitle-font-family: var(--title4-font-family);
+  --teaser-tile-pretitle-font-size: var(--title4-font-size);
+  --teaser-tile-pretitle-font-weight: var(--title4-font-weight);
+  --teaser-tile-pretitle-line-height: var(--title4-line-height);
+
+  --teaser-tile-headline-font-family: var(--h3-font-family);
+  --teaser-tile-headline-font-size: var(--h3-font-size);
+  --teaser-tile-headline-font-weight: var(--h3-font-weight);
+  --teaser-tile-headline-line-height: var(--h3-line-height);
+
+  --teaser-tile-cta-font-family: var(--label2-font-family);
+  --teaser-tile-cta-font-size: var(--label2-font-size);
+  --teaser-tile-cta-font-weight: var(--label2-font-weight);
+  --teaser-tile-cta-line-height: var(--label2-line-height);
+}
+
 :host figure {
   --color: #262626;
-  --transition: color .3s ease-out , background-color .3s ease-out !important;
+  --teaser-tile-transition: color .3s ease-out , background-color .3s ease-out !important;
   --picture-teaser-transition: transform .5s ease-out; 
 }
 
 :host figure:hover {
-  --color: white;
+  --color: white; /* TODO: apply correct token */
   --picture-teaser-transform: scale(1.05, 1.05);
 }
 
 :host figure {
   display: block;
-  background: white;
+  background: white; /* TODO: apply correct token */
   border-style: solid;
-  border-color: #737373;
+  border-color: #737373; /* TODO: apply correct token */
   border-width: 1px;
   color: var(--color);
 }
 
 :host figure:hover {
   background: var(--color-${this.getAttribute('color')}, black);
-  color: white !important;
+  color: white !important; /* TODO: apply correct token */
 }
 
 :host figcaption {

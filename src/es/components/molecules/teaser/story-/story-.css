@@ -1,7 +1,27 @@
 :host figure {
+  /* css vars that are passed to children */
+  --picture-teaser-transition: transform .5s ease-out;
   --color: #262626;
-  --transition: color .3s ease-out , background-color .3s ease-out !important;
-  --picture-teaser-transition: transform .5s ease-out; 
+
+  /* component css vars */
+  --teaser-story-color: #262626;
+  --teaser-story-color-${this.getAttribute('color')}: --color-${this.getAttribute('color')};
+  --teaser-story-transition: color .3s ease-out , background-color .3s ease-out !important;
+  
+  --teaser-story-pretitle-font-family: var(--title4-font-family);
+  --teaser-story-pretitle-font-size:var(--title4-font-size);
+  --teaser-story-pretitle-font-weight:var(--title4-font-weight);
+  --teaser-story-pretitle-line-height:var(--title4-line-height);
+
+  --teaser-story-headline-font-family: var(--h3-font-family);
+  --teaser-story-headline-font-size: var(--h3-font-size);
+  --teaser-story-headline-font-weight: var(--h3-font-weight);
+  --teaser-story-headline-line-height: var(--h3-line-height);
+
+  --teaser-story-cta-font-family: var(--label2-font-family);
+  --teaser-story-cta-font-size: var(--label2-font-size);
+  --teaser-story-cta-font-weight: var(--label2-font-weight);
+  --teaser-story-cta-line-height: var(--label2-line-height);
 }
 
 :host figure:hover {
