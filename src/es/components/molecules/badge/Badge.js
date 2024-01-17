@@ -69,17 +69,24 @@ export default class Badge extends Shadow() {
       :host .m-badge__tooltip {
         display: none;
         position: absolute;
-        top: 3em;
+        top: 3.5em;
         padding: 1em;
-        background-color: #222222;
-        color: #ffffff;
+        background-color: #ffffff;
+        color: var(--m-black);
         border-radius: 0.2em;
-        box-shadow: 0.3125em 0.3125em 0.625em 0em var(--m-gray-700);
+        box-shadow: 0em 0em 0.75em 0em #3333331A;
         z-index: 10;
       }
 
       :host .m-badge__tooltip-open {
-        display: block;
+        display: flex;
+        flex-direction: column;
+      }
+
+      :host .m-badge__icon {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1.5em;
       }
 
       :host .m-badge__tooltip::before {
@@ -90,11 +97,11 @@ export default class Badge extends Shadow() {
         height: 0;
         position: absolute;
     
-        border-left: 0.625em solid transparent;
-        border-right: 0.625em solid transparent;
-        border-bottom: 0.625em solid #222222;
+        border-left: 1.25em solid transparent;
+        border-right: 1.25em solid transparent;
+        border-bottom: 1.25em solid #ffffff;
 
-        top: -0.5em;
+        top: -1em;
         left: 0.5em;
       }
 
@@ -152,7 +159,12 @@ export default class Badge extends Shadow() {
             }
             <a-icon-mdx icon-name="Scan_2" size="1em" class="icon-right"></a-icon-mdx>
         </ks-a-button>
-        <div class="m-badge__tooltip">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
+        <div class="m-badge__tooltip">
+          <div class="m-badge__icon">
+            <a-icon-mdx icon-name="x" size="1.5em" class="icon-right"></a-icon-mdx>
+          </div>
+          <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+        </div>
     </div>
     `
     return this.fetchModules([
