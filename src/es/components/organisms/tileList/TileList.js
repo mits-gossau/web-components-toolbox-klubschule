@@ -235,24 +235,6 @@ export default class TileList extends Shadow() {
         }
       }
     `
-    return this.fetchTemplate()
-  }
-
-  /**
-   * fetches the template
-   */
-  fetchTemplate () {
-    /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
-    const styles = [
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
-        namespace: false
-      },
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
-        namespaceFallback: true
-      }
-    ]
   }
 
   /**
