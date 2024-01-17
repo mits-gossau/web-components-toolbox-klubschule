@@ -77,17 +77,17 @@ export default class LinkList extends Shadow() {
                 path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
                 namespace: false
             }])
-        case 'link-list-extended-':
+        case 'link-list-download-':
             return this.fetchCSS([{
                 path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
                 namespace: false,
                 replaces: [{
                 pattern: '--link-list-default-',
                 flags: 'g',
-                replacement: '--link-list-extended-'
+                replacement: '--link-list-download-'
                 }]
             },{
-                path: `${this.importMetaUrl}./extended-/extended-.css`, // apply namespace since it is specific and no fallback
+                path: `${this.importMetaUrl}./download-/download-.css`, // apply namespace since it is specific and no fallback
                 namespace: false
             }])
     }
