@@ -10,11 +10,7 @@
 
 [Examples](../../pages/Tile.html) of all variations
 
-### Properties
+### Namespace
 
-- `buttonType`: Defines the button type (optional):
-  - Allowed values: `primary`, `secondary`
-  - Default: `primary`
-- `modifier`: Defines if tile is passed (optional):
-  - Allowed values: `passed`
-  - Default: `''`
+- `tile-default-`: Defines the default variation:
+- `tile-passed-`: Defines the passed variation
