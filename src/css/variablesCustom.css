@@ -22,6 +22,10 @@
 @import "./web-components-toolbox-migros-design-experience/src/css/comp.css";
 @import "./web-components-toolbox-migros-design-experience/src/css/sys.css";
 
+/* For some edge cases design tokens from figma need to be fixed/overwritten */
+/* In the long term, this should be fixed with Figma & Tokens Studio in the main MDX Repo */
+@import "./temporaryMDXTokenFixes.css";
+
 /* font tracking */
 /*@import url("https://cdn.fonts.net/t/1.css?apiType=css&projectid=b2e5ea60-e0d9-11ec-b713-06e2001461d0");*/
 @font-face{
@@ -32,14 +36,14 @@
 	font-display: swap;
 }
 @font-face{
-	font-family:"Graphik Bold";
+	font-family:"Graphik";
   src:url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Bold.woff2") format("woff2"),url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Bold.woff") format("woff");
   font-weight: 700;
 	font-style: normal;
 	font-display: swap;
 }
 @font-face{
-	font-family:"Graphik Medium";
+	font-family:"Graphik";
 	src:url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Medium.woff2") format("woff2"),url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Medium.woff") format("woff");
   font-weight: 500;
 	font-style: normal;
@@ -121,8 +125,8 @@
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-title-img-max-height: var(--emotion-pictures-default-img-max-height);
-  --font-family-bold: "Graphik Bold", HelveticaNowTextBold, HelveticaNowText, Helvetica, Arial, sans-serif;
-  --font-family-secondary: "Graphik Medium", Avenir35Light, sans-serif;
+  --font-family-bold: "Graphik", HelveticaNowTextBold, HelveticaNowText, Helvetica, Arial, sans-serif;
+  --font-family-secondary: "Graphik", Avenir35Light, sans-serif;
   --font-family: "Graphik", HelveticaNowText, Helvetica, Arial, sans-serif;
   --font-size-mobile: min(16px, 6vw);
   --font-size: max(18px, 0.6vw);
