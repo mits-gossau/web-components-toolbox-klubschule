@@ -1,0 +1,8 @@
+:host {
+    --link-list-default-list-style: none;
+    --link-list-default-margin: 0;
+    --link-list-default-padding: 0;
+    --link-list-default-width: 100%;
+    --link-list-default-margin-right: 0;
+    --link-list-default-border-color: var(--m-gray-600);
+}
