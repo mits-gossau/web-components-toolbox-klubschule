@@ -1,0 +1,9 @@
+:host {
+    --tile-passed-foot-passed-display: flex;
+    --tile-passed-foot-passed-justify-content: space-between;
+    --tile-passed-foot-passed-align-items: center;
+    --tile-passed-foot-passed-padding: 2em 1.5em;
+    --tile-passed-foot-passed-border-top: 1px solid var(--m-gray-300);
+    --tile-passed-overlay-display: block;
+    --tile-passed-overlay-background-color: var(--m-gray-100);
+}

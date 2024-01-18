@@ -90,6 +90,8 @@
 :host([namespace=button-secondary-][badge]) button,
 :host([namespace=button-tertiary-][badge]) button,
 :host([namespace=button-quaternary-][badge]) button {
+  padding: 0.5em;
+  pointer-events: none;
   border-radius: 2%;
 }
 
