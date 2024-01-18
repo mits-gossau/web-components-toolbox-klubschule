@@ -183,6 +183,7 @@
   --p-margin: 0 0 calc(16rem/18) 0; /* 16px */
   --ul-margin: 0 0 calc(16rem/18) calc(24rem/18);
   --ul-li-padding-left: calc(4rem/18);
+  /* --grid-2columns-content-section-ul-margin-mobile: 0; */
   --h-hyphens: auto;
 
   /* Headlines */
