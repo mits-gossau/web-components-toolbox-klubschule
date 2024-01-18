@@ -15,29 +15,27 @@ export default class TileList extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.toggleDetails();
-  }
+    /**
+     * Toggle details
+     */
+    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]');
+    this.toggle = this.root.querySelector('.o-tile-list__bottom-left');
 
-  disconnectedCallback () {}
+    this.toggle.addEventListener('click', () => {
 
-  /**
-   * Toggle details
-   */
-  toggleDetails() {
-    const icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]');
-    const toggle = this.root.querySelector('.o-tile-list__bottom-left');
-
-    toggle.addEventListener('click', () => {
-
-      if (icon.getAttribute('icon-name') == 'ChevronDown') {
-        icon.setAttribute('icon-name', 'ChevronUp');
+      if (this.icon.getAttribute('icon-name') == 'ChevronDown') {
+        this.icon.setAttribute('icon-name', 'ChevronUp');
       } else {
-        icon.setAttribute('icon-name', 'ChevronDown');
+        this.icon.setAttribute('icon-name', 'ChevronDown');
       }
 
-      const details = this.root.querySelector('.o-tile-list__details');
-      details.classList.toggle('o-tile-list__details--expanded');
+      this.details = this.root.querySelector('.o-tile-list__details');
+      this.details.classList.toggle('o-tile-list__details--expanded');
     });
+  }
+
+  disconnectedCallback () {
+    this.toggle.removeEventListener('click');
   }
 
   /**
