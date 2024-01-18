@@ -4,6 +4,10 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Checkbox extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.clickEventListener = event => {
+      this.input.checked = !this.input.checked;
+    }
   }
 
   connectedCallback () {
@@ -15,13 +19,11 @@ export default class Checkbox extends Shadow() {
     /**
      * Handle checked on box
      */
-    this.box.addEventListener('click', () => {
-        this.input.checked = !this.input.checked;
-    });
+    this.box.addEventListener('click', this.clickEventListener);
   }
 
   disconnectedCallback () {
-    this.box.removeEventListener('click');
+    this.box.removeEventListener('click', this.clickEventListener);
   }
 
   shouldRenderCSS () {
