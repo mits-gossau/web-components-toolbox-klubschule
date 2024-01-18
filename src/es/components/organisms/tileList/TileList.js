@@ -9,6 +9,18 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class TileList extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.clickEventListener = event => {
+
+      if (this.icon.getAttribute('icon-name') == 'ChevronDown') {
+        this.icon.setAttribute('icon-name', 'ChevronUp');
+      } else {
+        this.icon.setAttribute('icon-name', 'ChevronDown');
+      }
+
+      this.details = this.root.querySelector('.o-tile-list__details');
+      this.details.classList.toggle('o-tile-list__details--expanded');
+    }
   }
 
   connectedCallback () {
@@ -21,21 +33,11 @@ export default class TileList extends Shadow() {
     this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]');
     this.toggle = this.root.querySelector('.o-tile-list__bottom-left');
 
-    this.toggle.addEventListener('click', () => {
-
-      if (this.icon.getAttribute('icon-name') == 'ChevronDown') {
-        this.icon.setAttribute('icon-name', 'ChevronUp');
-      } else {
-        this.icon.setAttribute('icon-name', 'ChevronDown');
-      }
-
-      this.details = this.root.querySelector('.o-tile-list__details');
-      this.details.classList.toggle('o-tile-list__details--expanded');
-    });
+    this.toggle.addEventListener('click', this.clickEventListener);
   }
 
   disconnectedCallback () {
-    this.toggle.removeEventListener('click');
+    this.toggle.removeEventListener('click', this.clickEventListener);
   }
 
   /**
