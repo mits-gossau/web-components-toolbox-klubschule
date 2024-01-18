@@ -43,6 +43,11 @@ export default class Checkbox extends Shadow() {
             align-items: center;            
         }
 
+        :host .wrap.disabled {
+          pointer-events: none;
+          opacity: 0.2;
+        }
+
         :host .wrap:hover,
         :host label:hover {
             cursor: pointer;
