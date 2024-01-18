@@ -1,0 +1,5 @@
+:host {
+    --checkbox-default-border-color: var(--m-gray-700);
+    --checkbox-default-box-background-color: var(--m-white);
+    --checkbox-default-color: #0053A6;
+}
