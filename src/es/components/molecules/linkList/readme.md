@@ -3,6 +3,7 @@
 > link-list component with two item variations
 
 - [JIRA](https://jira.migros.net/browse/MIDUWEB-147)
+- [Example](../../pages/LinkList.html)
 
 ## API
 
