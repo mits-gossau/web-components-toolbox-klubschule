@@ -26,6 +26,11 @@ export default class NavLevelItem extends Shadow() {
           align-items: center;
           padding: 0.75em;
           cursor: pointer;
+          transition: background-color 0.3s ease-in-out;
+        }
+
+        :host(:hover) {
+          background-color: #E0F0FF;
         }
 
         :host(:hover) span {
