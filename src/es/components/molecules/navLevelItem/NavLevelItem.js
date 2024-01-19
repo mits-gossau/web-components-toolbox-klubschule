@@ -26,6 +26,7 @@ export default class NavLevelItem extends Shadow() {
           align-items: center;
           padding: 0.75em;
           cursor: pointer;
+          background-color: var(--background-color);
           transition: background-color 0.3s ease-in-out;
         }
 
@@ -45,6 +46,7 @@ export default class NavLevelItem extends Shadow() {
         :host span {
           display: inline-block;
           color: #262626;
+          color: var(--color);
           font-size: 1.125em;
           line-height: 1.125em;
           font-weight: 400;
@@ -57,5 +59,35 @@ export default class NavLevelItem extends Shadow() {
           margin-top: 0.25em;
         }
     `
+
+    return this.fetchTemplate()
   }
+
+  /**
+   * fetches the template
+   */
+    fetchTemplate () {
+      /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
+      switch (this.getAttribute('namespace')) {
+          case 'nav-level-item-default-':
+              return this.fetchCSS([
+                  {
+                  path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+                  namespace: false
+              }])
+          case 'nav-level-item-active-':
+              return this.fetchCSS([{
+                  path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+                  namespace: false,
+                  replaces: [{
+                  pattern: '--nav-level-item-default-',
+                  flags: 'g',
+                  replacement: '--nav-level-item-active-'
+                  }]
+              },{
+                  path: `${this.importMetaUrl}./active-/active-.css`, // apply namespace since it is specific and no fallback
+                  namespace: false
+              }])
+      }
+    }
 }
