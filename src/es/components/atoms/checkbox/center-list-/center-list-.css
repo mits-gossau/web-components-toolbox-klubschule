@@ -1,6 +1,6 @@
 :host {
-    --center-list-border-color: var(--mdx-base-color-grey-700);
+    --center-list-border-color: var(--m-grey-700);
     --center-list-box-background-color: var(--m-white);
-    --center-list-color: var(--mdx-base-color-klubschule-blue-600);
+    --center-list-color: var(--color-secondary);
     --center-list-label-padding: calc(14rem/18) 0;
 }

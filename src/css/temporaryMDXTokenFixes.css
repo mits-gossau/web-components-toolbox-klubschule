@@ -133,4 +133,7 @@
     --mdx-sys-font-flex-2xlarge-headline3-text-case: var(--mdx-sys-font-flex-large-headline3-text-case);
     --mdx-sys-font-flex-2xlarge-headline3-text-decoration: var(--mdx-sys-font-flex-large-headline3-text-decoration);
     --mdx-sys-font-flex-2xlarge-headline3: var(--mdx-sys-font-flex-large-headline3);
+
+    /* component fixes */
+    /* --mdx-comp-checkbox-border-width-default: 0; */
 }
