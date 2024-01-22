@@ -42,7 +42,7 @@ export default class Checkbox extends Shadow() {
             display: flex;
             flex-direction: row-reverse;
             justify-content: flex-start;
-            align-items: center;            
+            align-items: center;  
         }
 
         :host .wrap.disabled {
@@ -59,6 +59,7 @@ export default class Checkbox extends Shadow() {
             font-size: 1em;
             line-height: 1.25em;
             font-weight: 400;
+            padding: var(--label-padding, 0);   
         }
 
         :host input[type='checkbox'] {
@@ -77,6 +78,7 @@ export default class Checkbox extends Shadow() {
         :host .box {
             background-color: var(--box-background-color);
             border: 0.0625em solid var(--border-color);
+            border-radius: var(--border-radius, 0);
             height: 1.25em;
             width: 1.25em;
             margin-right: 0.75em;
@@ -99,6 +101,12 @@ export default class Checkbox extends Shadow() {
             return this.fetchCSS([
                 {
                 path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+                namespace: false
+            }])
+        case 'center-list-':
+            return this.fetchCSS([
+                {
+                path: `${this.importMetaUrl}./center-list-/center-list-.css`,
                 namespace: false
             }])
     }
