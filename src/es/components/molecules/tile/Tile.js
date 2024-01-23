@@ -253,50 +253,59 @@ export default class Tile extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
+    const warnMandatory = 'data attribute requires: '
+    const data = Tile.parseAttribute(this.getAttribute('data'))
+    if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="m-tile">
       <div class="m-tile__wrap">
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
-          <span class="m-tile__title">Title</span>
-          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
+          <span class="m-tile__title">${data.title || warnMandatory + 'title'}</span>
+          ${data.iconTooltip ? '<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>' : ''}
         </div>
         <div class="m-tile__body">
-          <a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx>
-          <span class="m-tile__content">Ort, Straße 123</span>
-          <ks-a-button badge namespace="button-secondary-" color="tertiary">
-            <span>Blended</span>
-          </ks-a-button>
+          ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
+          <span class="m-tile__content">${data.location?.name || warnMandatory + 'location'}</span>
+          ${data.location?.badge
+            ? /* html */`
+              <ks-a-button badge namespace="button-secondary-" color="tertiary">
+                <span>${data.location.badge}</span>
+              </ks-a-button>
+            `
+            : ''
+          }
         </div>
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx>
-              <ks-a-button namespace="button-secondary-" color="secondary">
-              <span>Ortsauswahl</span>
-              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
+            <!-- Trash Icon is pre-placed for wishlist -->
+            <!-- <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx> -->
+            <ks-a-button namespace="button-secondary-" color="secondary">
+              <span>${data.button.text || warnMandatory + 'button.text'}</span>
+              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
             </ks-a-button>
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
-              <div class="m-tile__icon-box">
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Percent" size="1em"></a-icon-mdx>
-              </div>
-              <div class="m-tile__icon-box">
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Bell" size="1em"></a-icon-mdx>
-              </div>             
+              ${data.icons.reduce((acc, icon) => acc + /* html */`
+                <div class="m-tile__icon-box">
+                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                </div>
+              `, '')}           
             </div>
-            <span class="m-tile__price">ab <strong>Preis</strong> / Semester</span>
+            <span class="m-tile__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per  : ''}</span>
           </div>
         </div>      
       </div>
       <div class="m-tile__foot-passed">
-        <span class="m-tile__passed-message">Veranstaltung nicht mehr verfügbar!</span>
+        <span class="m-tile__passed-message">${data.passed?.title || warnMandatory + 'passed.title'}</span>
         <div class="m-tile__foot-left">
-          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx>
+          <!-- Trash Icon is pre-placed for wishlist -->
+          <!-- <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx> -->
           <ks-a-button namespace="button-secondary-" color="secondary">
-            <span>Alternativen</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
+            <span>${data.passed?.button.text || warnMandatory + 'passed.button.text'}</span>
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.passed?.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
           </ks-a-button>
         </div>
       </div>
