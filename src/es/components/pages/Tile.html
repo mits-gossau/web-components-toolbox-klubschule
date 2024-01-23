@@ -5,9 +5,70 @@
 <h1 id="tile">Tile</h1>
 <section style="background-color: #f5ebeb; padding: 1em;">
     <h2>Default</h2>
-    <ks-m-tile namespace="tile-default-"></ks-m-tile>
+    <ks-m-tile namespace="tile-default-" data="{
+        'title': 'Title',
+        'iconTooltip': '',
+        'location': {
+            'iconName': 'Location',
+            'name': 'Ort, Straße 123',
+            'badge': 'Blended'
+        },
+        'button': {
+            'text': 'Ortsauswahl',
+            'iconName': 'ArrowRight'
+        },
+        'icons': [
+            {
+                'name': 'Percent',
+                'iconTooltip': ''
+            },
+            {
+                'name': 'Bell',
+                'iconTooltip': ''
+            }
+        ],
+        'price': {
+            'from': 'ab',
+            'amount': 'Price',
+            'per': 'Semester'
+        }
+    }"></ks-m-tile>
 </section>
 <section style="background-color: #f5ebeb; padding: 1em;">
     <h2>Passed</h2>
-    <ks-m-tile namespace="tile-passed-"></ks-m-tile>
+    <ks-m-tile namespace="tile-passed-" data="{
+        'title': 'Title',
+        'iconTooltip': '',
+        'location': {
+            'iconName': 'Location',
+            'name': 'Ort, Straße 123',
+            'badge': 'Blended'
+        },
+        'button': {
+            'text': 'Ortsauswahl',
+            'iconName': 'ArrowRight'
+        },
+        'icons': [
+            {
+                'name': 'Percent',
+                'iconTooltip': ''
+            },
+            {
+                'name': 'Bell',
+                'iconTooltip': ''
+            }
+        ],
+        'price': {
+            'from': 'ab',
+            'amount': 'Price',
+            'per': 'Semester'
+        },
+        'passed': {
+            'title': 'Veranstaltung nicht mehr verfügbar!',
+            'button': {
+                'text': 'Alternativen',
+                'iconName': 'ArrowRight'
+            }
+        }
+    }"></ks-m-tile>
 </section>

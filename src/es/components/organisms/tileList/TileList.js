@@ -242,55 +242,62 @@ export default class TileList extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
+    const warnMandatory = 'data attribute requires: '
+    const data = TileList.parseAttribute(this.getAttribute('data'))
+    if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="o-tile-list">
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
-            <span class="o-tile-list__title">Title</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>            
+            <span class="o-tile-list__title">${data.title || warnMandatory + 'title'}</span>
+            ${data.iconTooltip ? '<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>' : ''}          
           </div>
           <div class="o-tile-list__middle">
-            <span class="o-tile-list__places">Basel, Luzern, Thun, Zürich-Oerlikon +3</span>
-            <ks-a-button badge namespace="button-secondary-" color="tertiary">
-              <span>Blended</span>
-            </ks-a-button>
+            <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
+            ${data.location?.badge
+              ? /* html */`
+                <ks-a-button badge namespace="button-secondary-" color="tertiary">
+                  <span>${data.location.badge}</span>
+                </ks-a-button>
+              `
+              : ''
+            }
           </div>
           <div class="o-tile-list__bottom">
             <div class="o-tile-list__bottom-left">
-              <ks-a-button namespace="button-quaternary-" color="secondary">
-                <span>Ortsauswahl</span>
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ChevronDown" size="1em" class="icon-right">
+              <ks-a-button namespace="button-secondary-" color="secondary">
+                <span>${data.button.text || warnMandatory + 'button.text'}</span>
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
               </ks-a-button>
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
+              ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="o-tile-list__icon-box">
-                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Percent" size="1em"></a-icon-mdx>
+                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
                 </div>
-                <div class="o-tile-list__icon-box">
-                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Bell" size="1em"></a-icon-mdx>
-                </div>             
+              `, '')}           
               </div>
-              <span class="o-tile-list__price">ab <strong>Preis</strong> / Semester</span>
+              <span class="o-tile-list__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per  : ''}</span>
             </div>          
           </div>
         </div>
         <div class="o-tile-list__details">
           <div class="o-tile-list__tiles">
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
-            <ks-m-tile namespace="tile-default-"></ks-m-tile>
+            ${data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '')}
           </div>
-          <div class="o-tile-list__foot">
-            <ks-a-button namespace="button-secondary-" color="secondary">
-              <span>Weitere Standorte</span>
-              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-            </ks-a-button>
-          </div>        
+          ${data.buttonMore
+            ? /* html */`
+              <div class="o-tile-list__foot">
+                <ks-a-button namespace="button-secondary-" color="secondary">
+                  <span>${data.buttonMore.text || warnMandatory + 'buttonMore.text'}</span>
+                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.buttonMore.iconName || 'ArrowRight'}" size="1em" class="icon-right">
+                </ks-a-button>
+              </div> 
+            `
+            : ''
+          }      
         </div>
     </div>
     `
