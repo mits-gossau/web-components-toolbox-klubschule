@@ -27,12 +27,37 @@ export default class CenterFilterList extends Shadow() {
         super({ importMetaUrl: import.meta.url, ...options }, ...args)
     }
 
-
     connectedCallback() {
+      if (this.shouldRenderCSS()) this.renderCSS()
       this.renderHTML()
     }
 
     disconnectedCallback () {}
+
+    shouldRenderCSS () {
+      return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    }
+
+    renderCSS () {
+      return this.fetchTemplate()
+    }
+
+    fetchTemplate () {
+      const styles = [
+        {
+          path: `${this.importMetaUrl}../../../../es/components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
+          namespace: false
+        },
+        {
+          path: `${this.importMetaUrl}../../../../es/components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+          namespaceFallback: true
+        }
+      ]
+      switch (this.getAttribute('namespace')) {
+        default:
+          return this.fetchCSS(styles)
+      }
+    }
 
     renderHTML () {
       const lang = this.getAttribute('lang') || "DE";
