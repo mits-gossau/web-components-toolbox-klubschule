@@ -125,11 +125,11 @@
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-title-img-max-height: var(--emotion-pictures-default-img-max-height);
-  --font-family-bold: "Graphik", HelveticaNowTextBold, HelveticaNowText, Helvetica, Arial, sans-serif;
-  --font-family-secondary: "Graphik", Avenir35Light, sans-serif;
-  --font-family: "Graphik", HelveticaNowText, Helvetica, Arial, sans-serif;
-  --font-size-mobile: min(16px, 6vw);
-  --font-size: max(18px, 0.6vw);
+  --font-family-bold: "Graphik", Helvetica, Arial, sans-serif;
+  --font-family-secondary: "Graphik", Helvetica, Arial, sans-serif;
+  --font-family: "Graphik", Helvetica, Arial, sans-serif;
+  --font-size-mobile: 16px; /* base rem size for mobile and desktop need to be 16px */
+  --font-size: 16px;
   --grid-1column-align-center-padding-custom: 4rem 1.5rem;
   --grid-1column-align-center-padding-mobile-custom: 3rem 0;
   --grid-2columns-content-section-first-column-padding-custom: 4rem 4.5rem;
