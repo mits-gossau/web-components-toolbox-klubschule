@@ -1,19 +1,36 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
-import centers from './centers.json' assert { type: "json" };
+// import centers from './mock/centers.json' assert { type: "json" };
 
+/**
+* CenterFilterList is the filter factory listening to the WithFacet controller
+*
+* @export
+* @class CenterFilterList
+* @type {CustomElementConstructor}
+*/
 export default class CenterFilterList extends Shadow() {
     constructor (options = {}, ...args) {
         super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+        this.centersEventListener = event => this.renderHTML(event.detail.fetch)
     }
 
     connectedCallback() {
       if (this.shouldRenderCSS()) this.renderCSS()
-      this.renderHTML()
+      document.body.addEventListener('centers', this.centersEventListener)
+      this.dispatchEvent(new CustomEvent('request-centers',
+      {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
     }
 
-    disconnectedCallback () {}
+    disconnectedCallback () {
+      document.body.removeEventListener('centers', this.centersEventListener)
+    }
 
     shouldRenderCSS () {
       return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
@@ -45,50 +62,53 @@ export default class CenterFilterList extends Shadow() {
       }
     }
 
-    renderHTML () {
-      const lang = this.getAttribute('lang') || "de";
+    renderHTML (fetch) {
+      fetch.then(centers => {
 
-      const resetParagraph = document.createElement('p')
-      const resetLink = document.createElement('a')
-      const resetText = this.getAttribute('reset-text') || "zurücksetzen";
-      resetLink.appendChild(document.createTextNode(resetText))
-      resetParagraph.appendChild(resetLink)
-      resetParagraph.classList.add('reset-link')
-
-      const centerFilter = document.createElement('div')
-      centerFilter.appendChild(resetParagraph)
-
-      this.fetchModules([{
-          path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
-          name: 'mdx-component'
-      }])
-
-      Object.keys(centers[lang]).forEach(region => {
-        // label
-        const label = document.createElement('label')
-        label.classList.add('headline')
-        label.textContent = region
-        centerFilter.appendChild(label)
-
-        centers[lang][region].forEach(city => {
-          // checkbox
-          const checkbox = document.createElement('mdx-checkbox')
-          checkbox.setAttribute('variant', "no-border")
-          checkbox.setAttribute('label', city)
-
-          const component = document.createElement('mdx-component')
-
-          component.setAttribute('click-event-name', "mdx-component-click-event")
-          component.setAttribute('mutation-callback-event-name', "mdx-component-mutation-event")
-          component.setAttribute('listener-event-name', "mdx-set-attribute")
-          component.setAttribute('listener-detail-property-name', "attributes")
-
-          component.appendChild(checkbox)
-
-          centerFilter.appendChild(component)
+        const lang = this.getAttribute('lang') || document.documentElement.getAttribute('lang')
+  
+        const resetParagraph = document.createElement('p')
+        const resetLink = document.createElement('a')
+        const resetText = this.getAttribute('reset-text') || "zurücksetzen";
+        resetLink.appendChild(document.createTextNode(resetText))
+        resetParagraph.appendChild(resetLink)
+        resetParagraph.classList.add('reset-link')
+  
+        const centerFilter = document.createElement('div')
+        centerFilter.appendChild(resetParagraph)
+  
+        this.fetchModules([{
+            path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+            name: 'mdx-component'
+        }])
+  
+        Object.keys(centers[lang]).forEach(region => {
+          // label
+          const label = document.createElement('label')
+          label.classList.add('headline')
+          label.textContent = region
+          centerFilter.appendChild(label)
+  
+          centers[lang][region].forEach(city => {
+            // checkbox
+            const checkbox = document.createElement('mdx-checkbox')
+            checkbox.setAttribute('variant', "no-border")
+            checkbox.setAttribute('label', city)
+  
+            const component = document.createElement('mdx-component')
+  
+            component.setAttribute('click-event-name', "mdx-component-click-event")
+            component.setAttribute('mutation-callback-event-name', "mdx-component-mutation-event")
+            component.setAttribute('listener-event-name', "mdx-set-attribute")
+            component.setAttribute('listener-detail-property-name', "attributes")
+  
+            component.appendChild(checkbox)
+  
+            centerFilter.appendChild(component)
+          })
         })
+  
+        this.html = centerFilter
       })
-
-      this.html = centerFilter
     }
   }
