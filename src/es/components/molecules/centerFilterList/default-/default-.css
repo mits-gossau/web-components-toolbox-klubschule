@@ -8,3 +8,21 @@
     margin-top: calc(40rem/18); 
     margin-bottom: calc(24rem/18); 
 }
+:host .reset-link {
+    text-align: right;
+}
+:host .reset-link a {
+    text-decoration: none;
+}
+:host .reset-link a::after {
+    content: url("data:image/svg+xml,%3Csvg%20width=%2216%22%20height=%2216%22%20viewBox=%220%200%2016%2016%22%20fill=%22none%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg%20clip-path=%22url(%23clip0_7105_23238)%22%3E%3Cpath%20d=%22M0.666016%202.66667V6.66667M0.666016%206.66667H4.66602M0.666016%206.66667L3.75935%203.76001C4.67996%202.84095%205.87432%202.24599%207.16247%202.06475C8.45062%201.88352%209.76278%202.12583%2010.9012%202.75518C12.0397%203.38454%2012.9428%204.36684%2013.4744%205.55407C14.0061%206.74131%2014.1375%208.06917%2013.8488%209.33758C13.5602%2010.606%2012.8671%2011.7462%2011.8741%2012.5865C10.8811%2013.4268%209.64185%2013.9216%208.34316%2013.9963C7.04447%2014.0711%205.75667%2013.7217%204.67379%2013.0009C3.59091%2012.2801%202.77161%2011.2269%202.33935%2010%22%20stroke=%22%230053A6%22%20stroke-width=%221.5%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22/%3E%3C/g%3E%3Cdefs%3E%3CclipPath%20id=%22clip0_7105_23238%22%3E%3Crect%20width=%2216%22%20height=%2216%22%20fill=%22white%22/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
+    color: var(--mdx-comp-link-color-default);
+    font: var(--mdx-sys-font-fix-label2);
+    display: inline-block;
+    height: calc(16rem/18);
+    width: calc(16rem/18);
+    margin-left: calc(5rem/18);
+    margin-right: calc(8rem/18);
+    position: relative;
+    top: calc(2rem/18);
+}
