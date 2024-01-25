@@ -1,0 +1,31 @@
+<m-simple-form
+  load-form-styles
+  namespace="simple-form-default-"
+  endpoint="/api/test"
+  method="POST"
+  schema="{
+    'username': 'string',
+    'rememberMe': true,
+    'mdxCheckbox': ''
+  }"
+>
+    <form>
+      <h2 id="response"></h2>
+      <div>
+        <label validation-message="Username ist ungültig" for="username">Username</label>
+        <input id="username" type="text" required="" value="" name="username" placeholder="Username hier eingeben..."  autocomplete="off" />
+      </div>
+      <div>
+        <mdx-component mode="false">
+          <mdx-checkbox required label="MDX-Checkbox-Label" id="mdxCheckbox" name="mdxCheckbox" required>
+            <span slot="description">Checkbox Description</span>
+          </mdx-checkbox>
+        </mdx-component>
+      </div>
+      <div class="inline">
+        <label for="rememberMe">Remember me!</label>
+        <input id="rememberMe" required name="rememberMe" type="checkbox" />
+      </div>
+      <input type="submit" value="Submit" />
+    </form>
+</m-simple-form>
