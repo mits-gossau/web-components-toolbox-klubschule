@@ -128,7 +128,7 @@
   --font-family-bold: "Graphik", Helvetica, Arial, sans-serif;
   --font-family-secondary: "Graphik", Helvetica, Arial, sans-serif;
   --font-family: "Graphik", Helvetica, Arial, sans-serif;
-  --font-size-mobile: 16px; /* base rem size for mobile and desktop need to be 16px */
+  --font-size-mobile: min(16px, 6vw); /* base rem size for mobile and desktop need to be 16px */
   --font-size: 16px;
   --grid-1column-align-center-padding-custom: 4rem 1.5rem;
   --grid-1column-align-center-padding-mobile-custom: 3rem 0;
