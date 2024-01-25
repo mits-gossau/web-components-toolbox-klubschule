@@ -1,27 +1,27 @@
 :host figure {
   /* css vars that are passed to children */
   --picture-teaser-transition: transform .5s ease-out;
-  --color: var(--color-neutral-bold4);
+  --color: var(--mdx-sys-color-neutral-bold4);
 
   /* component css vars */
   --teaser-story-color: var(--color);
   --teaser-story-color-${this.getAttribute('color')}: var(--color-${this.getAttribute('color')});
   --teaser-story-transition: color .3s ease-out , background-color .3s ease-out !important;
   
-  --teaser-story-pretitle-font-family: var(--font-fix-title4-font-family);
-  --teaser-story-pretitle-font-size:var(--font-fix-title4-font-size);
-  --teaser-story-pretitle-font-weight:var(--font-fix-title4-font-weight);
-  --teaser-story-pretitle-line-height:var(--font-fix-title4-line-height);
+  --teaser-story-pretitle-font-family: var(--mdx-sys-font-fix-title4-font-family);
+  --teaser-story-pretitle-font-size:var(--mdx-sys-font-fix-title4-font-size);
+  --teaser-story-pretitle-font-weight:var(--mdx-sys-font-fix-title4-font-weight);
+  --teaser-story-pretitle-line-height:var(--mdx-sys-font-fix-title4-line-height);
 
   --teaser-story-headline-font-family: var(--h3-font-family);
   --teaser-story-headline-font-size: var(--h3-font-size);
   --teaser-story-headline-font-weight: var(--h3-font-weight);
   --teaser-story-headline-line-height: var(--h3-line-height);
 
-  --teaser-story-cta-font-family: var(--font-fix-label2-font-family);
-  --teaser-story-cta-font-size: var(--font-fix-label2-font-size);
-  --teaser-story-cta-font-weight: var(--font-fix-label2-font-weight);
-  --teaser-story-cta-line-height: var(--font-fix-label2-line-height);
+  --teaser-story-cta-font-family: var(--mdx-sys-font-fix-label2-font-family);
+  --teaser-story-cta-font-size: var(--mdx-sys-font-fix-label2-font-size);
+  --teaser-story-cta-font-weight: var(--mdx-sys-font-fix-label2-font-weight);
+  --teaser-story-cta-line-height: var(--mdx-sys-font-fix-label2-line-height);
 }
 
 :host figure:hover {

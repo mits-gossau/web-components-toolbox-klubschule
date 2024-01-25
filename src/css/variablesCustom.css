@@ -200,11 +200,43 @@
   --footer-default-footer-margin: 0 auto;
   --footer-default-footer-width-mobile: 100%;
   --footer-default-footer-margin-mobile: 0;
-  --p-margin: 0 auto calc(16rem/18); /* 16px */
-  --ul-margin: 0 auto calc(16rem/18);
+  
+  --h-hyphens: auto;
+
+  /* list styles */
+  --ol-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
+  --ul-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
   --ul-padding-left: 1.33333em;
   --ul-li-padding-left: calc(4rem/18);
-  --h-hyphens: auto;
+  /* more list styles available for override in style.css - skipped for now */
+
+  /* paragraph */
+  --p-font-family: var(--mdx-sys-font-flex-body3-font-family);
+  --p-font-size: var(--mdx-sys-font-flex-body3-font-size);
+  --p-line-height: var(--mdx-sys-font-flex-body3-line-height);
+  --p-font-weight: var(--mdx-sys-font-flex-body3-font-weight);
+  --p-margin: 0 auto var(--mdx-sys-spacing-flex-s);
+
+  /* links */
+  --a-color: var(--mdx-comp-link-color-default);
+  --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
+  --a-font-size: 1em;
+  --a-text-decoration: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+  --a-color-hover: var(--mdx-comp-link-color-hover);
+  --a-text-decoration-hover: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+
+  /* hr */
+  --hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-bold1);
+  --hr-opacity: 1;
+  --hr-border-width: 1px;
+  --hr-margin: var(--mdx-sys-spacing-flex-s) auto;
+
+  --hr-secondary-border-bottom: 1px solid var(--mdx-sys-color-neutral-subtle4);
+  --hr-secondary-border-width: 1px;
+  --hr-secondary-opacity: 1;
+  --hr-secondary-margin: var(--mdx-sys-spacing-flex-xs) auto;
+
+  /* wofür ist das??? :host *.bg-color, :host *.bg-color-hover { */
 
   /* Tables */
   --table-th-font-weight: 500;

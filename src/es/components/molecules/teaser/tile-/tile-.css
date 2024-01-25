@@ -8,20 +8,20 @@
   --teaser-tile-color-${this.getAttribute('color')}: var(--color-${this.getAttribute('color')});
   --teaser-tile-transition: color .3s ease-out , background-color .3s ease-out !important;
   
-  --teaser-tile-pretitle-font-family: var(--font-fix-title4-font-family);
-  --teaser-tile-pretitle-font-size: var(--font-fix-title4-font-size);
-  --teaser-tile-pretitle-font-weight: var(--font-fix-title4-font-weight);
-  --teaser-tile-pretitle-line-height: var(--font-fix-title4-line-height);
+  --teaser-tile-pretitle-font-family: var(--mdx-sys-font-fix-title4-font-family);
+  --teaser-tile-pretitle-font-size: var(--mdx-sys-font-fix-title4-font-size);
+  --teaser-tile-pretitle-font-weight: var(--mdx-sys-font-fix-title4-font-weight);
+  --teaser-tile-pretitle-line-height: var(--mdx-sys-font-fix-title4-line-height);
 
   --teaser-tile-headline-font-family: var(--h3-font-family);
   --teaser-tile-headline-font-size: var(--h3-font-size);
   --teaser-tile-headline-font-weight: var(--h3-font-weight);
   --teaser-tile-headline-line-height: var(--h3-line-height);
 
-  --teaser-tile-cta-font-family: var(--font-fix-label2-font-family);
-  --teaser-tile-cta-font-size: var(--font-fix-label2-font-size);
-  --teaser-tile-cta-font-weight: var(--font-fix-label2-font-weight);
-  --teaser-tile-cta-line-height: var(--font-fix-label2-line-height);
+  --teaser-tile-cta-font-family: var(--mdx-sys-font-fix-label2-font-family);
+  --teaser-tile-cta-font-size: var(--mdx-sys-font-fix-label2-font-size);
+  --teaser-tile-cta-font-weight: var(--mdx-sys-font-fix-label2-font-weight);
+  --teaser-tile-cta-line-height: var(--mdx-sys-font-fix-label2-line-height);
 }
 
 :host figure {
@@ -29,15 +29,15 @@
   --picture-teaser-transition: transform .5s ease-out;
   
   display: block;
-  background: var(--color-neutral-on-default);
+  background: var(--mdx-sys-color-neutral-on-default);
   border-style: solid;
-  border-color: var(--color-neutral-bold1);
+  border-color: var(--mdx-sys-color-neutral-bold1);
   border-width: 1px;
   color: var(--color);
 }
 
 :host figure:hover {
-  --color: var(--color-neutral-on-default);
+  --color: var(--mdx-sys-color-neutral-on-default);
   --picture-teaser-transform: scale(1.05, 1.05);
 
   background: var(--color-${this.getAttribute('color')}, black);
@@ -49,7 +49,7 @@
 }
 
 :host figure:hover figcaption > strong:first-child {
-  color: white;
+  color: var(--color);
 }
 
 @media only screen and (max-width: _max-width_) {
