@@ -90,7 +90,7 @@ export default class Sort extends Shadow() {
       }
 
       :host .m-sort__item:hover {
-        background-color: var(--m-gray-100);
+        background-color: #F5F5F5;
       }
 
       :host .m-sort__item-active {

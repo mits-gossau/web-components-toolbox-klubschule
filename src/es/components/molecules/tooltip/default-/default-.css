@@ -1,0 +1,4 @@
+:host {
+    --tooltip-default-top: 2em;
+    --tooltip-default-left: -1em;
+}
