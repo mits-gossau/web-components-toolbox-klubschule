@@ -180,7 +180,7 @@
   --search-label-line-height: calc(4/3);
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
-  --icon-color-blue: #0053A6;
+  --icon-color-blue: var(--mdx-sys-color-primary-default);
   --content-width: 80%;
 
   --search-input-tiles-search-input-border-color: var(--m-gray-700);
@@ -190,7 +190,7 @@
   --search-input-tiles-input-font-size: 1.125em;
   --search-input-tiles-icon-color: var(--icon-color-blue);
 
-  --button-secondary-filter-color: #0053A6;
+  --button-secondary-filter-color: var(--mdx-sys-color-primary-default);
   --button-secondary-filter-background-color-hover: transparent;
   --button-secondary-filter-padding: 0;
 
@@ -208,7 +208,6 @@
   --ul-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
   --ul-padding-left: 1.33333em;
   --ul-li-padding-left: calc(4rem/18);
-  /* more list styles available for override in style.css - skipped for now */
 
   /* paragraph */
   --p-font-family: var(--mdx-sys-font-flex-body3-font-family);
@@ -236,8 +235,6 @@
   --hr-secondary-opacity: 1;
   --hr-secondary-margin: var(--mdx-sys-spacing-flex-xs) auto;
 
-  /* wofür ist das??? :host *.bg-color, :host *.bg-color-hover { */
-
   /* Tables */
   --table-th-font-weight: 500;
   --table-thead-display: table;
@@ -257,8 +254,8 @@
   --table-odd-background-color: var(--mdx-base-color-grey-0);
   --table-even-background-color: var(--mdx-base-color-klubschule-creme-400);
 
-  --icon-link-list-color: #0053A6;
-  --icon-link-list-color-hover: #0053A6;
+  --icon-link-list-color: var(--mdx-sys-color-primary-default);
+  --icon-link-list-color-hover: var(--mdx-sys-color-primary-default);
 }
 
 .class-name {
