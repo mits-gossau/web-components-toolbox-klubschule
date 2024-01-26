@@ -4,27 +4,52 @@
   endpoint="/api/test"
   method="POST"
   schema="{
-    'username': 'string',
-    'rememberMe': true,
-    'mdxCheckbox': ''
+    'mdxCheckbox': '',
+    'mdxInput': '',
+    'mdxRadio': []
   }"
 >
     <form>
       <h2 id="response"></h2>
-      <div>
-        <label validation-message="Username ist ungültig" for="username">Username</label>
-        <input id="username" type="text" required="" value="" name="username" placeholder="Username hier eingeben..."  autocomplete="off" />
-      </div>
+      <!-- mdx-select has no select node inside the component and is for that useless -->
+      <!--
+      <mdx-component mode="false">
+        <mdx-select text="Option auswählen" id="mdxSelect" hint="This is a hint" label="Label" selected-item="item-1">
+          <mdx-flyout>
+            <mdx-flyout-item item="item-1" label="Item 1"></mdx-flyout-item>
+            <mdx-flyout-item item="item-2" label="Item 2"></mdx-flyout-item>
+            <mdx-flyout-item item="item-3" label="Item 3"></mdx-flyout-item>
+            <mdx-flyout-item item="item-4" label="Item 4"></mdx-flyout-item>
+          </mdx-flyout>
+        </mdx-select>
+      </mdx-component>
+      -->
       <div>
         <mdx-component mode="false">
-          <mdx-checkbox required label="MDX-Checkbox-Label" id="mdxCheckbox" name="mdxCheckbox" required>
+          <mdx-checkbox required label="MDX-Checkbox-Label" id="mdxCheckbox" name="mdxCheckbox" required error="Hello dude">
             <span slot="description">Checkbox Description</span>
           </mdx-checkbox>
         </mdx-component>
       </div>
-      <div class="inline">
-        <label for="rememberMe">Remember me!</label>
-        <input id="rememberMe" required name="rememberMe" type="checkbox" />
+      <div>
+        <mdx-component mode="false">
+          <mdx-input id="mdxInput" name="mdxInput" placeholder="Input Box" label="input label"></mdx-input>
+        </mdx-component>
+      </div>
+      <div>
+        <mdx-component mode="false">
+          <!-- throw the mdx component into a template, in case the tag name would trigger wc-config to try to load something else -->
+          <template>
+            <mdx-radio-button label="Label" id="mdxRadio1" name="mdxRadio" value="mdxRadio-1" variant="border"><span slot="description">Radio Button Description</span></mdx-radio-button>
+          </template>
+        </mdx-component>
+        <mdx-component mode="false">
+          <!-- throw the mdx component into a template, in case the tag name would trigger wc-config to try to load something else -->
+          <template>
+            <mdx-radio-button label="Label" id="mdxRadio2" name="mdxRadio" value="mdxRadio-2" variant="border"><span slot="description">Radio Button Description</span></mdx-radio-button>
+            <mdx-radio-button label="Label" id="mdxRadio3" name="mdxRadio" value="mdxRadio-3" variant="border"><span slot="description">Radio Button Description</span></mdx-radio-button>
+          </template>
+        </mdx-component>
       </div>
       <input type="submit" value="Submit" />
     </form>
