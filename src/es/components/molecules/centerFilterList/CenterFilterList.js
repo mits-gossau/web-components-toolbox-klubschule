@@ -70,11 +70,13 @@ export default class CenterFilterList extends Shadow() {
         console.log({lang})
   
         const resetParagraph = document.createElement('p')
-        const resetLink = document.createElement('a')
-        const resetText = this.getAttribute('reset-text') || "zurücksetzen";
-        resetLink.appendChild(document.createTextNode(resetText))
-        resetParagraph.appendChild(resetLink)
-        resetParagraph.classList.add('reset-link')
+        const resetText = this.getAttribute('reset-text');
+        if (resetText) {
+          const resetLink = document.createElement('a')
+          resetLink.appendChild(document.createTextNode(resetText))
+          resetParagraph.appendChild(resetLink)
+          resetParagraph.classList.add('reset-link')
+        }
   
         const centerFilter = document.createElement('div')
         centerFilter.appendChild(resetParagraph)
