@@ -1,4 +1,5 @@
 :host {
+    --picture-teaser-transition: transform .5s ease-out;
     --teaser-text-image-headline-font-family: var(--mdx-sys-font-flex-large-headline2-font-family);
     --teaser-text-image-headline-font-size: var(--mdx-sys-font-flex-large-headline2-font-size);
     --teaser-text-image-headline-font-weight: var(--mdx-sys-font-flex-large-headline2-font-weight);
@@ -8,11 +9,25 @@
     gap: var(--mdx-sys-spacing-fix-2xl);
 }
 
+:host(:hover) {
+    --picture-teaser-transform: scale(1.1);
+}
+
+:host(:hover) h1,
+:host(:hover) h2,
+:host(:hover) h3,
+:host(:hover) h4 {
+    color: var(--mdx-sys-color-primary-bold1) !important;
+}
+
 :host > * {
     flex: 1;
 }
 
-:host h1, h2, h3, h4 {
+:host h1, 
+:host h2,
+:host h3,
+:host h4 {
     margin-bottom: var(--mdx-sys-spacing-fix-m) !important;
 }
 

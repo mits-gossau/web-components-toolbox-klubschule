@@ -54,6 +54,7 @@
   --any-content-spacing-mobile: var(--any-content-spacing);
   --any-content-spacing: 4rem;
   --any-content-width: min(1920px, 87%);
+  --a-wrapper-margin: 0;
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);

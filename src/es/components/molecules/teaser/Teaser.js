@@ -78,7 +78,7 @@ export default class KsTeaser extends Teaser {
         :host a-picture {
           display: block;
           overflow: hidden;
-          ${ (this.namespace === 'teaser-text-image-' && this.getAttribute('image-position') === 'right') ? 'order: 2;' : '' }
+          ${ (this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : '' }
         }
 
         :host figure {
