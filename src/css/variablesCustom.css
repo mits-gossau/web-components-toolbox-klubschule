@@ -125,11 +125,11 @@
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-title-img-max-height: var(--emotion-pictures-default-img-max-height);
-  --font-family-bold: "Graphik", HelveticaNowTextBold, HelveticaNowText, Helvetica, Arial, sans-serif;
-  --font-family-secondary: "Graphik", Avenir35Light, sans-serif;
-  --font-family: "Graphik", HelveticaNowText, Helvetica, Arial, sans-serif;
-  --font-size-mobile: min(16px, 6vw);
-  --font-size: max(18px, 0.6vw);
+  --font-family-bold: "Graphik", Helvetica, Arial, sans-serif;
+  --font-family-secondary: "Graphik", Helvetica, Arial, sans-serif;
+  --font-family: "Graphik", Helvetica, Arial, sans-serif;
+  --font-size-mobile: min(16px, 6vw); /* base rem size for mobile and desktop need to be 16px */
+  --font-size: 16px;
   --grid-1column-align-center-padding-custom: 4rem 1.5rem;
   --grid-1column-align-center-padding-mobile-custom: 3rem 0;
   --grid-2columns-content-section-first-column-padding-custom: 4rem 4.5rem;
@@ -180,7 +180,7 @@
   --search-label-line-height: calc(4/3);
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
-  --icon-color-blue: #0053A6;
+  --icon-color-blue: var(--mdx-sys-color-primary-default);
   --content-width: 80%;
 
   --search-input-tiles-search-input-border-color: var(--m-gray-700);
@@ -190,7 +190,7 @@
   --search-input-tiles-input-font-size: 1.125em;
   --search-input-tiles-icon-color: var(--icon-color-blue);
 
-  --button-secondary-filter-color: #0053A6;
+  --button-secondary-filter-color: var(--mdx-sys-color-primary-default);
   --button-secondary-filter-background-color-hover: transparent;
   --button-secondary-filter-padding: 0;
 
@@ -200,11 +200,40 @@
   --footer-default-footer-margin: 0 auto;
   --footer-default-footer-width-mobile: 100%;
   --footer-default-footer-margin-mobile: 0;
-  --p-margin: 0 auto calc(16rem/18); /* 16px */
-  --ul-margin: 0 auto calc(16rem/18);
+  
+  --h-hyphens: auto;
+
+  /* list styles */
+  --ol-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
+  --ul-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
   --ul-padding-left: 1.33333em;
   --ul-li-padding-left: calc(4rem/18);
-  --h-hyphens: auto;
+
+  /* paragraph */
+  --p-font-family: var(--mdx-sys-font-flex-body3-font-family);
+  --p-font-size: var(--mdx-sys-font-flex-body3-font-size);
+  --p-line-height: var(--mdx-sys-font-flex-body3-line-height);
+  --p-font-weight: var(--mdx-sys-font-flex-body3-font-weight);
+  --p-margin: 0 auto var(--mdx-sys-spacing-flex-s);
+
+  /* links */
+  --a-color: var(--mdx-comp-link-color-default);
+  --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
+  --a-font-size: 1em;
+  --a-text-decoration: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+  --a-color-hover: var(--mdx-comp-link-color-hover);
+  --a-text-decoration-hover: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+
+  /* hr */
+  --hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-bold1);
+  --hr-opacity: 1;
+  --hr-border-width: 1px;
+  --hr-margin: var(--mdx-sys-spacing-flex-s) auto;
+
+  --hr-secondary-border-bottom: 1px solid var(--mdx-sys-color-neutral-subtle4);
+  --hr-secondary-border-width: 1px;
+  --hr-secondary-opacity: 1;
+  --hr-secondary-margin: var(--mdx-sys-spacing-flex-xs) auto;
 
   /* Tables */
   --table-th-font-weight: 500;
@@ -225,8 +254,8 @@
   --table-odd-background-color: var(--mdx-base-color-grey-0);
   --table-even-background-color: var(--mdx-base-color-klubschule-creme-400);
 
-  --icon-link-list-color: #0053A6;
-  --icon-link-list-color-hover: #0053A6;
+  --icon-link-list-color: var(--mdx-sys-color-primary-default);
+  --icon-link-list-color-hover: var(--mdx-sys-color-primary-default);
 }
 
 .class-name {
