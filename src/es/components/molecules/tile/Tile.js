@@ -103,8 +103,10 @@ export default class Tile extends Shadow() {
       :host .m-tile__foot {
           display: var(--foot-display);
           justify-content: var(--foot-justify-content);
+          flex-wrap: wrap;
           align-items: var(--foot-align-items);
           padding: var(--foot-padding);
+          gap: 1em;
       }
 
       :host .m-tile__foot-passed {
@@ -125,7 +127,6 @@ export default class Tile extends Shadow() {
           display: flex;
           flex-direction: row;
           align-items: center;
-          padding-left: 1em;
       }
       
       :host .m-tile__price {
