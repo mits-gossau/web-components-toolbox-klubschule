@@ -111,7 +111,50 @@ export default class TileFactory extends Shadow() {
         this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}</span>`
         return
       }
-      // TODO: Tile List for multiple locations
+      // TODO: Tile List for multiple locations?
+      // TODO: @Tile analog DoubleButton.js (getHiddenLabelsCounter) for Locations which are more than 5? Length?
+      // TODO: Missing visual props
+      // TODO: Missing json props
+      /*
+      {
+          "key": "qg-i-IwBm0S_K5Z8d5xM",
+          "typ": "D",
+          "id": "10053",
+          "centerid": "1019",
+          "gebaeudeid": "1401",
+          "ortid": "136",
+          "parentkey": "D_10053",
+          "title": "1001 Nacht - Orientalische Küche mit Noretta Keller",
+          "titleesc": "1001 nacht   orientalische kuche mit noretta keller",
+          "dateBegin": "2024-02-05",
+          "dateEnd": "2024-02-05",
+          "location": "",
+          "locations": [
+              "Wetzikon"
+          ],
+          "days": [
+              "Mo"
+          ],
+          "timeBegin": "18:00",
+          "timeEnd": "21:20",
+          "price": 116.0,
+          "lessons": 0.0,
+          "state": 0,
+          "stateDesc": "1 Veranstaltungen",
+          "permission": false,
+          "cantonshare": false,
+          "cantonshareprice": 0,
+          "abnormal": false,
+          "diploma": 0,
+          "cat_code": 0,
+          "score": 1,
+          "link_url": "https://miducawebappdev.azurewebsites.net/angebote/kurse/kurs/1001-nacht---orientalische-kuche-mit-noretta-keller--D_10053_1019",
+          "atyp": [
+              "E"
+          ],
+          "count": 1
+      }
+      */
       this.html = data.courses.reduce((acc, course) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="{
         'title': '${course.title}',
         'iconTooltip': '',
