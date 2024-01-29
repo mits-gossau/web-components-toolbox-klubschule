@@ -18,6 +18,23 @@ export default class KsTeaser extends Teaser {
       importMetaUrl: import.meta.url,
       ...options
     }, ...args)
+
+    if (this.getAttribute('namespace') === 'teaser-text-image-') {
+      const btn = this.root.querySelector('ks-a-button')
+      this.mouseoverListener = event => {
+        if (btn) btn.classList.add('hover')
+      }
+      this.mouseoutListener = event => {
+        if (btn) btn.classList.remove('hover')
+      }
+    }
+  }
+
+  connectedCallback () {
+    super.connectedCallback();
+
+    this.addEventListener('mouseover', this.mouseoverListener)
+    this.addEventListener('mouseout', this.mouseoutListener)
   }
 
   /**
