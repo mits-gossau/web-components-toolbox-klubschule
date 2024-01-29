@@ -10,7 +10,7 @@
 
   /* component css vars */
   --teaser-story-color: #262626;
-  --teaser-story-color-${this.getAttribute('color')}: --color-${this.getAttribute('color')};
+  --teaser-story-color-${this.getAttribute('color')}: var(--color-${this.getAttribute('color')});
   --teaser-story-transition: color .3s ease-out , background-color .3s ease-out !important;
   
   --teaser-story-pretitle-font-family: var(--title4-font-family);
