@@ -64,10 +64,7 @@ export default class CenterFilterList extends Shadow() {
 
     renderHTML (fetch) {
       fetch.then(centers => {
-        console.log(centers)
-
         const lang = this.getAttribute('lang') || document.documentElement.getAttribute('lang')
-        console.log({lang})
   
         const resetParagraph = document.createElement('p')
         const resetText = this.getAttribute('reset-text');
@@ -86,9 +83,7 @@ export default class CenterFilterList extends Shadow() {
             name: 'mdx-component'
         }])
   
-        console.log("centers.lang", centers[lang])
         Object.keys(centers[lang]).forEach(region => {
-          console.log(region)
           // label
           const label = document.createElement('label')
           label.classList.add('headline')
