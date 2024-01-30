@@ -51,9 +51,10 @@
 }
 
 :root {
+  --a-emotion-pictures-margin-top-first-child: auto;
   --any-content-spacing-mobile: var(--any-content-spacing);
   --any-content-spacing: 4rem;
-  --any-content-width: min(1920px, 87%);
+  --any-content-width: calc(min(100%, var(--body-max-width)) - var(--mdx-sys-spacing-flex-large-xs) * 2);
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);
@@ -72,6 +73,8 @@
   --background-color-tertiary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-tertiary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-tertiary: var(--mdx-sys-color-brand-neutral-0);
+  --body-max-width: 1920px;
+  --body-margin: 0 auto;
   --button-quaternary-background-color-quaternary-active: var(--mdx-sys-color-brand-accent-1-100);
   --button-quaternary-background-color-quaternary-disabled: var(--mdx-sys-color-brand-accent-1-100);
   --button-quaternary-background-color-quaternary-hover: var(--mdx-sys-color-brand-accent-1-100);
@@ -164,7 +167,7 @@
   --navigation-alnatura-line-height-mobile: 1.5;
   --navigation-alnatura-search-justify-content: flex-end;
   --navigation-alnatura-color-mobile-custom: var(--color);
-  --login-width: var(--any-content-width);
+  --login-width: var(--header-default-content-width);
   --search-input-background-color-focus: var(--m-white);
   --search-input-background-color-hover: var(--m-white);
   --search-input-background-color: var(--m-white);
@@ -196,7 +199,7 @@
 
   --button-primary-icon-right-margin: 0;
   --button-primary-label-margin: 0 0.25em 0 0;
-  --footer-default-footer-width: var(--any-content-width);
+  --footer-default-footer-width: 100%;
   --footer-default-footer-margin: 0 auto;
   --footer-default-footer-width-mobile: 100%;
   --footer-default-footer-margin-mobile: 0;
