@@ -226,7 +226,7 @@ export default class KsFooter extends Footer {
         toTheTopButton.setAttribute("color", "secondary")
 
         const icon = document.createElement("a-icon-mdx")
-        icon.setAttribute("icon-name", "arrowUp")
+        icon.setAttribute("icon-name", "ArrowUp")
         icon.setAttribute("size", "1rem")
 
         toTheTopButton.appendChild(icon)
