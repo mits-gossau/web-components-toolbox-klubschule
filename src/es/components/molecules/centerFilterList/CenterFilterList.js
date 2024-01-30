@@ -1,10 +1,8 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
-// import centers from './mock/centers.json' assert { type: "json" };
-
 /**
-* CenterFilterList is the filter factory listening to the WithFacet controller
+* CenterFilterList is the filter factory listening to the Centers controller
 *
 * @export
 * @class CenterFilterList
