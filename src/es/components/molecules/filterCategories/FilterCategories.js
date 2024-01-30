@@ -76,7 +76,8 @@ export default class FilterCategories extends Shadow() {
         const filterData = response.filters
         filterData.sort((a, b) => a.sort - b.sort);
 
-        const nav = document.createElement('nav')
+        const mainNav = document.createElement('nav')
+        mainNav.setAttribute('class', 'main-level')
 
         filterData.forEach(filterItem => {
             console.log(filterItem.label);
@@ -85,24 +86,27 @@ export default class FilterCategories extends Shadow() {
                         <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
                     </ks-m-nav-level-item>`
 
-            nav.innerHTML += navLevelItem
+            mainNav.innerHTML += navLevelItem
+
+            const subNav = document.createElement('nav')
+            subNav.setAttribute('class', 'sub-level')
             
             if (filterItem.children && filterItem.children.length > 0) {
                 filterItem.children.forEach(child => {
                     console.log("  -", child.label);
+                    const navLevelItem = /* html */ `<ks-m-nav-level-item namespace="nav-level-item-default-">
+                        <span class="text">${child.label}</span>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                    </ks-m-nav-level-item>`
+
+                    subNav.innerHTML += navLevelItem
                 });
+
+                mainNav.appendChild(subNav)
             }
         });
-
-
-        const lang = this.getAttribute('lang') || document.documentElement.getAttribute('lang')
   
-       
-        
-  
-        
-  
-        this.html = nav
+        this.html = mainNav
       })
     }
   }
