@@ -71,38 +71,71 @@ export default class FilterCategories extends Shadow() {
         }, {
           path: `${this.importMetaUrl}../navLevelItem/NavLevelItem.js`,
           name: 'ks-m-nav-level-item'
+        }, {
+          path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+          name: 'm-dialog'
         }])
 
         const filterData = response.filters
-        filterData.sort((a, b) => a.sort - b.sort);
+        // filterData.sort((a, b) => a.sort - b.sort);
 
-        const mainNav = document.createElement('nav')
+        const mainNav = document.createElement('div')
         mainNav.setAttribute('class', 'main-level')
 
+
         filterData.forEach(filterItem => {
-            console.log(filterItem.label);
-            const navLevelItem = /* html */ `<ks-m-nav-level-item namespace="nav-level-item-default-">
+            const navItemLabel = document.createElement('label')
+            navItemLabel.setAttribute('for', filterItem.label.toLowerCase())
+            const navLevelItem = /* html */ `<ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
                         <span class="text">${filterItem.label}</span>
                         <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
                     </ks-m-nav-level-item>`
+            navItemLabel.innerHTML += navLevelItem
+            const navItemCheckbox = document.createElement('input')
+            navItemCheckbox.setAttribute('type', 'checkbox')
+            navItemCheckbox.setAttribute('id', filterItem.label.toLowerCase())
+            navItemCheckbox.setAttribute('name', filterItem.label.toLowerCase())
+            navItemCheckbox.setAttribute('class', 'menu-checkbox')
 
-            mainNav.innerHTML += navLevelItem
+            navItemLabel.append(navItemCheckbox)
+            // mainNav.append(navItemLabel)
+                    
 
-            const subNav = document.createElement('nav')
+            // navListItem.innerHTML += navLevelItem
+
+            // const subDialog = document.createElement('m-dialog')
+            // subDialog.setAttribute('namespace', 'dialog-left-slide-in-')
+            // const subDialog = /*html*/ `<m-dialog namespace="dialog-left-slide-in-"></m-dialog>`
+            // subDialog.innerHtml += navItemLabel
+            
+            const subNav = document.createElement('div') 
             subNav.setAttribute('class', 'sub-level')
             
+
             if (filterItem.children && filterItem.children.length > 0) {
                 filterItem.children.forEach(child => {
                     console.log("  -", child.label);
-                    const navLevelItem = /* html */ `<ks-m-nav-level-item namespace="nav-level-item-default-">
-                        <span class="text">${child.label}</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-                    </ks-m-nav-level-item>`
 
-                    subNav.innerHTML += navLevelItem
+                    // checkbox
+                    const checkbox = document.createElement('mdx-checkbox')
+                    checkbox.setAttribute('variant', "no-border")
+                    checkbox.setAttribute('label', child.label)
+          
+                    const component = document.createElement('mdx-component')
+          
+                    component.setAttribute('click-event-name', "mdx-component-click-event")
+                    component.setAttribute('mutation-callback-event-name', "mdx-component-mutation-event")
+                    component.setAttribute('listener-event-name', "mdx-set-attribute")
+                    component.setAttribute('listener-detail-property-name', "attributes")
+          
+                    component.appendChild(checkbox)
+
+                    subNav.appendChild(component)
                 });
 
-                mainNav.appendChild(subNav)
+                
+                navItemLabel.append(subNav)
+                mainNav.append(navItemLabel)
             }
         });
   
