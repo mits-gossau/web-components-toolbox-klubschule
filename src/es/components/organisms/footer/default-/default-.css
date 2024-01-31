@@ -13,6 +13,7 @@
     --footer-default-legal-background-color: var(--mdx-sys-color-accent-6-subtle1);
     --footer-default-content-accordion-typography: var(--mdx-sys-font-fix-label2);
     --footer-default-content-accordion-color: var(--mdx-sys-color-neutral-bold4);
+    --footer-default-content-accordion-item-spacing: var(--mdx-sys-spacing-fix-3xs);
     --footer-default-social-headline-color: var(--mdx-sys-color-accent-6-on-subtle);
     --footer-default-social-headline-typography: var(--mdx-sys-font-flex-large-headline3);
     --footer-default-social-body-color: var(--mdx-sys-color-neutral-default);
@@ -40,12 +41,11 @@
     --footer-default-h4-font-weight: var(--footer-default-social-headline-typography);
     --footer-default-headline-font-sizes: var(--footer-default-social-headline-typography);
     --footer-default-icon-spacing: var(--footer-default-legal-spacing-vertical);
-    --footer-default-list-item-spacing: 20px;
     --footer-default-gap-mobile-custom: 0;
     --footer-default-wrapper-last-contains-details-margin-top: 0;
     --footer-default-h4-margin-mobile: var(--footer-default-legal-spacing-vertical);
     --footer-default-content-width-mobile: 100%;
-    
+
     --picture-store-logo-img-height: min(35px, 10vw);
     --picture-store-logo-img-height-mobile: min(35px, 10vw);
     --picture-store-logo-img-margin-mobile: 0;

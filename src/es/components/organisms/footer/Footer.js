@@ -188,7 +188,7 @@ export default class KsFooter extends Footer {
                     padding: 12px 0;
                 }
                 :host footer>div:last-child .footer-links > .has-copyright > li:last-child {
-                    margin-top: 20px;
+                    margin-top: var(--content-accordion-item-spacing);
                 }
                 :host footer>div:last-child .footer-links > ul > li {
                     margin-left: 51px;
@@ -265,7 +265,7 @@ export default class KsFooter extends Footer {
                 margin-bottom: var(--footer-default-legal-links);
             }
             :host .footer-links-row li:not(:last-child) {
-                margin-bottom: var(--footer-default-list-item-spacing);
+                margin-bottom: var(--footer-default-content-accordion-item-spacing);
             }
             `, undefined, false))
 
@@ -281,6 +281,9 @@ export default class KsFooter extends Footer {
             --details-default-icon-right-icon-width-mobile: var(--footer-default-content-spacing);
             --details-default-icon-right-summary-child-color: var(--details-default-icon-right-svg-color)
             --details-default-icon-right-svg-color: rgba(0, 83, 166, 1) !important;
+        }
+        :host .footer-links-row li:not(:last-child) {
+            margin-bottom: var(--footer-default-content-accordion-item-spacing);
         }
     `
   }
