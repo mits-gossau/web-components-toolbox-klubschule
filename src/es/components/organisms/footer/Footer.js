@@ -92,8 +92,6 @@ export default class KsFooter extends Footer {
             :host footer>div:first-child>.footer-links>div:first-child>*:first-child {
                 color: var(--social-headline-color);
                 font: var(--social-headline-typography);
-                font-size: var(--headline-font-sizes);
-                font-weight: var(--h4-font-weight);
             }
             :host footer>div:first-child .footer-links>div:last-child {
                 margin: 64px 0 0 0;
@@ -264,9 +262,6 @@ export default class KsFooter extends Footer {
                 font: var(--footer-default-content-accordion-typography);
                 margin-bottom: var(--footer-default-legal-links);
             }
-            :host .footer-links-row li:not(:last-child) {
-                margin-bottom: var(--footer-default-content-accordion-item-spacing);
-            }
             `, undefined, false))
 
         return wrappers
@@ -279,11 +274,9 @@ export default class KsFooter extends Footer {
         :host {
             --details-default-icon-right-font-weight-strong: normal;
             --details-default-icon-right-icon-width-mobile: var(--footer-default-content-spacing);
-            --details-default-icon-right-summary-child-color: var(--details-default-icon-right-svg-color)
-            --details-default-icon-right-svg-color: rgba(0, 83, 166, 1) !important;
         }
         :host .footer-links-row li:not(:last-child) {
-            margin-bottom: var(--footer-default-content-accordion-item-spacing);
+            margin-bottom: var(--footer-default-list-item-spacing);
         }
     `
   }

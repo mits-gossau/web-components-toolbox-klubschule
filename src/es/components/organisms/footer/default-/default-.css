@@ -41,6 +41,7 @@
     --footer-default-h4-font-weight: var(--footer-default-social-headline-typography);
     --footer-default-headline-font-sizes: var(--footer-default-social-headline-typography);
     --footer-default-icon-spacing: var(--footer-default-legal-spacing-vertical);
+    --footer-default-list-item-spacing: 1.25rem;
     --footer-default-gap-mobile-custom: 0;
     --footer-default-wrapper-last-contains-details-margin-top: 0;
     --footer-default-h4-margin-mobile: var(--footer-default-legal-spacing-vertical);
