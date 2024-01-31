@@ -62,6 +62,7 @@ export default class Tooltip extends Shadow() {
       :host {
         position: relative;
         cursor: pointer;
+        z-index: 10;
       }
 
       :host .tooltip {
@@ -73,6 +74,8 @@ export default class Tooltip extends Shadow() {
         position: absolute;
         top: var(--top);
         left: var(--left);
+        right: var(--right);
+        bottom: var(--bottom);
       }
 
       :host .tooltip::before {
@@ -87,8 +90,10 @@ export default class Tooltip extends Shadow() {
         border-right: 1.25em solid transparent;
         border-bottom: 1.25em solid #ffffff;
 
-        top: -1em;
-        left: 0.5em;
+        top: var(--before-top);
+        left: var(--before-left);
+        right: var(--before-right);
+        bottom: var(--before-bottom);
       }
 
       :host .tooltip-open {
@@ -102,8 +107,19 @@ export default class Tooltip extends Shadow() {
       }
 
       @media only screen and (max-width: _max-width_) {
-        :host {
+        :host .tooltip {
+          position: fixed;
+          z-index: 1000;
+          height: 18.75em;
+          width: 100%;
+          top: auto;
+          bottom: 0;
+          left: 0;
+          right: 0;
+        }
 
+        :host .tooltip::before {
+          display: none;
         }
       }
     `
@@ -132,6 +148,19 @@ export default class Tooltip extends Shadow() {
             path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
             namespace: false
           }, ...styles])
+      case 'tooltip-right-':
+        return this.fetchCSS([{
+          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+          namespace: false,
+          replaces: [{
+            pattern: '--tooltip-default-',
+            flags: 'g',
+            replacement: '--tooltip-right-'
+          }]
+        },{
+          path: `${this.importMetaUrl}./right-/right-.css`, // apply namespace since it is specific and no fallback
+          namespace: false
+        }, ...styles])
     }
   }
 

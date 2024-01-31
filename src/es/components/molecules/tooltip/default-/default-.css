@@ -1,4 +1,11 @@
 :host {
     --tooltip-default-top: 2em;
     --tooltip-default-left: -1em;
+    --tooltip-default-right: auto;
+    --tooltip-default-bottom: auto;
+
+    --tooltip-default-before-top: -1em;
+    --tooltip-default-before-left: 0.5em;
+    --tooltip-default-before-right: auto;
+    --tooltip-default-before-bottom: auto;
 }
