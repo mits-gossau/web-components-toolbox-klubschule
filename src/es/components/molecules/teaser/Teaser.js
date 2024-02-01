@@ -44,8 +44,8 @@ export default class KsTeaser extends Teaser {
    */
   fetchTemplate () {
     switch (this.getAttribute('namespace')) {
-      case 'teaser-tile-':
-        return this.fetchNamespaceTemplate(['tile-/tile-.css'])
+      case 'teaser-tile-content-':
+        return this.fetchNamespaceTemplate(['tile-content-/tile-content-.css'])
       case 'teaser-story-':
         return this.fetchNamespaceTemplate(['story-/story-.css'])
       case 'teaser-text-image-':
@@ -98,13 +98,15 @@ export default class KsTeaser extends Teaser {
           ${ (this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : '' }
         }
 
-        :host figure {
+        :host figure,
+        :host article {
           display: flex;
           flex-direction: column;
           color: var(--color);
         }
 
-        :host figcaption {
+        :host figcaption,
+        :host article > div {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
@@ -112,11 +114,13 @@ export default class KsTeaser extends Teaser {
           width: 100%;
         }
 
-        :host figcaption > * {
+        :host figcaption > *,
+        :host article > div > *  {
           width: 100%;
         }
 
-        :host figcaption > strong:first-child {
+        :host figcaption > strong:first-child,
+        :host article > div > strong:first-child {
           display: block;
           color: var(--color-${this.getAttribute('color')}, black);
           font-family: var(--pretitle-font-family);
