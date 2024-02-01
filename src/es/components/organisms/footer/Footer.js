@@ -89,6 +89,9 @@ export default class KsFooter extends Footer {
             :host footer>div:first-child>.footer-links>div>* {
                 text-align: center;
             }
+            :host footer>div:first-child>.footer-links>div {
+                width: 100%;
+            }
             :host footer>div:first-child>.footer-links>div:first-child>*:first-child {
                 color: var(--social-headline-color);
                 font: var(--social-headline-typography);
