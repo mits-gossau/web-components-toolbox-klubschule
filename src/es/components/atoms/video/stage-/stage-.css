@@ -1,0 +1,7 @@
+:host {
+    --video-stage-wrapper-padding: var(--mdx-sys-spacing-flex-2xlarge-l);
+    --video-stage-wrapper-inner-spacing: var(--mdx-sys-spacing-fix-m);
+    --video-stage-divider-color: var(--mdx-sys-color-accent-1-default);
+    --video-stage-copy-typography: var(--mdx-sys-font-fix-body1);
+    --video-stage-copy-spacing: var(--mdx-sys-spacing-fix-2xs);
+ }

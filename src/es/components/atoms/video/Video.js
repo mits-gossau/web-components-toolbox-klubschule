@@ -77,9 +77,9 @@ export default class KsVideo extends Video {
             // make template ${code} accessible aka. set the variables in the literal string
             fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
           })
-      case 'video-fullwidth-':
+      case 'video-stage-':
         return this.fetchCSS([{
-          path: `${this.importMetaUrl}/fullwidth-/fullwidth-.css`, // apply namespace since it is specific and no fallback
+          path: `${this.importMetaUrl}/stage-/stage-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }, ...styles], false)
           .then(fetchCSSParams => {
