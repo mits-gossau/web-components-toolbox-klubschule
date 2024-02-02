@@ -19,7 +19,6 @@ export default class KsVideo extends Video {
     super.renderCSS();
     this.css = /* css */ `
       :host {
-        padding: var(--wrapper-padding);
         width: 100%;
       }
       :host,
@@ -27,8 +26,8 @@ export default class KsVideo extends Video {
         display: block;
       }
       :host span {
-        width: 40px;
-        height: 4px;
+        width: var(--divider-width);
+        height: var(--divider-height);
         background-color: var(--divider-color);
         margin: var(--wrapper-inner-spacing) 0 var(--copy-spacing);
       }
@@ -42,7 +41,7 @@ export default class KsVideo extends Video {
       }
       @media only screen and (max-width: '_max-width_'}) {
         :host span {
-          width: 36px;
+          width: calc(var(--divider-width) - var(--divider-height));
         }
       }
 
