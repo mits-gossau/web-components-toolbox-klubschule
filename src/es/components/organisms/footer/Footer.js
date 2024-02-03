@@ -89,6 +89,9 @@ export default class KsFooter extends Footer {
             :host footer>div:first-child>.footer-links>div>* {
                 text-align: center;
             }
+            :host footer>div:first-child>.footer-links>div {
+                width: 100%;
+            }
             :host footer>div:first-child>.footer-links>div:first-child>*:first-child {
                 color: var(--social-headline-color);
                 font: var(--social-headline-typography);
@@ -122,14 +125,17 @@ export default class KsFooter extends Footer {
             :host footer>div:first-child>div.invert>div>ul>li>a {
                 color: var(--social-body-color)
             }
+            :host footer>div:first-child>div.invert>o-wrapper,
+            :host footer>div:first-child>div.invert>o-wrapper+div {
+                width: 100%;
+            }
             :host footer>div:first-child>div.invert>o-wrapper+div>ul {
-                border-top: 1px solid var(--border-color);
+                border-top: 1px solid var(--legal-links-border);
                 display: flex;
                 flex-direction: row;
                 margin-top: var(--content-spacing-mobile);
                 margin-bottom: 0;
-                padding-top: var(--legal-links);
-                padding-bottom: var(--legal-links);
+                padding: var(--legal-links) 0;
             }
             :host footer>div:last-child {
                 padding: var(--content-spacing) var(--legal-flex-spacing-vertical);
