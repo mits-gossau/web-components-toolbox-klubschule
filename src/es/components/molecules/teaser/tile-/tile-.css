@@ -1,3 +1,8 @@
+:host * {
+  box-sizing: border-box;
+  margin: 0 !important;
+}
+
 :host {
   /* css vars that are passed to children */
   --picture-teaser-transition: transform .5s ease-out;
