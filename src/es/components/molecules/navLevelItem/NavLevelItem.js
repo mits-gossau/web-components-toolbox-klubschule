@@ -47,9 +47,9 @@ export default class NavLevelItem extends Shadow() {
           display: inline-block;
           color: #262626;
           color: var(--color);
-          font-size: 1.125em;
+          font-size: var(--font-size, 1.125em);
           line-height: 1.125em;
-          font-weight: 400;
+          font-weight: var(--font-weight, 400);
           transition: color 0.3s ease-in-out;
         }
 
