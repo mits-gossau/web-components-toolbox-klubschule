@@ -74,25 +74,15 @@ export default class FilterCategories extends Shadow() {
         name: 'm-dialog'
       }]).then(() => {
         fetch.then(response => {
-          console.log(response.filters)
-          console.log(response.courses)
-
           const filterData = response.filters
+          // Backend should give us the data sorted, but in case it doesn't, we can sort it here
           // filterData.sort((a, b) => a.sort - b.sort);
-
-          
 
           filterData.forEach((filterItem, i) => {
               let subNav = ''
-              console.log('this.mainNav', this.mainNav)
-              console.log(filterItem.label)
-
               if (filterItem.children && filterItem.children.length > 0) {
                   filterItem.children.forEach(child => {
-                      console.log("  -", child.label);
-
                       const checked = child.selected ? 'checked' : ''
-
                       const component = /* html */`
                         <mdx-component mutation-callback-event-name="request-with-facet">
                           <mdx-checkbox ${checked} variant="no-border" label="${child.label}"></mdx-checkbox>
@@ -102,13 +92,8 @@ export default class FilterCategories extends Shadow() {
                   });
               }
 
-              console.log('subNav', subNav)
-
               if(this.mainNav.children[i]?.getAttribute('id') === filterItem.id) {
-                console.log("request", filterItem.id)
-
-                // TODO: find .sub-level
-                this.mainNav.children[i].querySelector('.sub-level').innerHTML = subNav
+                this.mainNav.children[i].root.querySelector('.sub-level').innerHTML = subNav
               } else {
                 const navLevelItem = /* html */ `
                   <m-dialog id="${filterItem.id}" namespace="dialog-left-slide-in-without-background-">
