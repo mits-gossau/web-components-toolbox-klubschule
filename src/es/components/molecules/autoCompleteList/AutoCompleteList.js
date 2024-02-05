@@ -38,7 +38,7 @@ export default class AutoCompleteList extends Shadow() {
         :host {
           padding-top: 1em;
         }
-        
+
         :host div {
           display: flex;
         }
@@ -57,7 +57,7 @@ export default class AutoCompleteList extends Shadow() {
 
         :host ul li:hover {
           cursor: pointer;
-          color: #0053A6; 
+          color: var(--mdx-base-color-klubschule-blue-600); 
         }
 
         :host ul li + li {
@@ -65,7 +65,7 @@ export default class AutoCompleteList extends Shadow() {
         }
 
         :host a-icon-mdx {
-          --icon-mdx-ks-color-hover: #333333;
+          --icon-mdx-ks-color-hover: var(--mdx-base-color-grey-950);
         }
 
         :host a-icon-mdx + span {
@@ -95,7 +95,7 @@ export default class AutoCompleteList extends Shadow() {
         }
 
         :host .list li:hover .text {
-          color: #333333;
+          color: var(--mdx-base-color-grey-950);;
         }
 
         :host .list li div {
@@ -129,12 +129,12 @@ export default class AutoCompleteList extends Shadow() {
           font-size: 1.125em;
           line-height: 1.25em;
           font-weight: 500;
-          color: #0053A6;
+          color: var(--mdx-base-color-klubschule-blue-600); ;
         }
 
         :host a a-icon-mdx {
           margin-left: 0.25em;
-          color: #0053A6;
+          color: var(--mdx-base-color-klubschule-blue-600); ;
         }
 
         :host .list + a {
