@@ -61,92 +61,85 @@ export default class FilterCategories extends Shadow() {
     }
 
     renderHTML (fetch) {
-      fetch.then(response => {
-        console.log(response.filters)
-        console.log(response.courses)
+      this.fetchModules([{
+          path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+          name: 'mdx-component'
+      }, {
+        path: `${this.importMetaUrl}../navLevelItem/NavLevelItem.js`,
+        name: 'ks-m-nav-level-item'
+      }, {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+        name: 'm-dialog'
+      }]).then(() => {
+        fetch.then(response => {
+          console.log(response.filters)
+          console.log(response.courses)
 
-        this.fetchModules([{
-            path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
-            name: 'mdx-component'
-        }, {
-        //   path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-web-components/dist/mdx-web-components/mdx-web-components.esm.js`,
-        //   name: 'mdx-checkbox'
-        // }, {
-          path: `${this.importMetaUrl}../navLevelItem/NavLevelItem.js`,
-          name: 'ks-m-nav-level-item'
-        }, {
-          path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
-          name: 'm-dialog'
-        }])
+          const filterData = response.filters
+          // filterData.sort((a, b) => a.sort - b.sort);
 
-        const filterData = response.filters
-        // filterData.sort((a, b) => a.sort - b.sort);
+          const mainNav = document.createElement('div')
+          mainNav.setAttribute('class', 'main-level')
 
-        const mainNav = document.createElement('div')
-        mainNav.setAttribute('class', 'main-level')
+          filterData.forEach(filterItem => {
+              let subNav = ''
+              console.log('mainNav', mainNav)
+              console.log(filterItem.label)
 
-        filterData.forEach(filterItem => {
-            const subNav = document.createElement('div') 
-            subNav.setAttribute('class', 'sub-level')
-            console.log('mainNav', mainNav)
-            console.log('subNav', subNav)
-            console.log(filterItem.label)
-            const subNavHtml = document.createElement('div')
-            subNavHtml.appendChild(subNav)
-            console.log('subNavHtml', subNavHtml.outerHTML)
+              if (filterItem.children && filterItem.children.length > 0) {
+                  filterItem.children.forEach(child => {
+                      console.log("  -", child.label);
 
-            const navLevelItem = /* html */ `
-              <m-dialog namespace="dialog-left-slide-in-">
-                <div class="container dialog-header" tabindex="0">
-                  <div id="back">
-                    <a-icon-mdx icon-name="ChevronLeft" size="2em" ></a-icon-mdx>
+                      const component = /* html */`
+                        <mdx-component 
+                          click-event-name="mdx-component-click-event" 
+                          mutation-callback-event-name="mdx-component-mutation-event" 
+                          listener-event-name="mdx-set-attribute" 
+                          listener-detail-property-name="attributes"
+                        >
+                          <mdx-checkbox variant="no-border" label="${child.label}"></mdx-checkbox>
+                        </mdx-component>
+                      `
+                      subNav += component
+                  });
+              }
+
+              console.log('subNav', subNav)
+
+              const navLevelItem = /* html */ `
+                <m-dialog namespace="dialog-left-slide-in-without-background-">
+                  <div class="container dialog-header" tabindex="0">
+                    <div id="close-back">
+                      <a-icon-mdx icon-name="ChevronLeft" size="2em" ></a-icon-mdx>
+                    </div>
+                    <h3>${filterItem.label}</h3>
+                    <div id="close">
+                      <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                    </div>
                   </div>
-                  <h3>${filterItem.label}</h3>
-                  <div id="close">
-                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                  <div class="container dialog-content">
+                    <div class="sub-level">
+                      ${subNav}
+                    </div>       
                   </div>
-                </div>
-                <div class="container dialog-content">
-                  <div>
-                    ${subNavHtml.innerHTML}
-                  </div>       
-                </div>
-                <div class="container dialog-footer">
-                  <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
-                  <a-button namespace="button-primary-">Angebote anzeigen</a-button>
-                </div>
-                <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
-                  <span class="text">${filterItem.label}</span>
-                  <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-                </ks-m-nav-level-item>
-              </m-dialog>
-            `
+                  <div class="container dialog-footer">
+                    <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+                    <a-button namespace="button-primary-">Angebote anzeigen</a-button>
+                  </div>
+                  <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
+                    <span class="text">${filterItem.label}</span>
+                    <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                  </ks-m-nav-level-item>
+                </m-dialog>
+              ` 
 
-            const navLevelItemDiv = document.createElement('div') 
-            navLevelItemDiv.innerHTML = navLevelItem
-            mainNav.appendChild(navLevelItemDiv)
-
-            if (filterItem.children && filterItem.children.length > 0) {
-                filterItem.children.forEach(child => {
-                    console.log("  -", child.label);
-
-                    const component = document.createElement('mdx-component')
-                    component.setAttribute('click-event-name', "mdx-component-click-event")
-                    component.setAttribute('mutation-callback-event-name', "mdx-component-mutation-event")
-                    component.setAttribute('listener-event-name', "mdx-set-attribute")
-                    component.setAttribute('listener-detail-property-name', "attributes")
-
-                    const checkbox = document.createElement('mdx-checkbox')
-                    checkbox.setAttribute('variant', "no-border")
-                    checkbox.setAttribute('label', child.label)
-          
-                    component.appendChild(checkbox)
-                    subNav.appendChild(component)
-                });
-            }
-        });
-  
-        this.html = mainNav
+              const navLevelItemDiv = document.createElement('div') 
+              navLevelItemDiv.innerHTML = navLevelItem.trim()
+              mainNav.appendChild(navLevelItemDiv)
+          });
+    
+          this.html = mainNav
+        })
       })
     }
   }
