@@ -18,22 +18,15 @@ export default class Tooltip extends Shadow() {
 
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.toggleTooltip();
+    this.tooltip = this.root.querySelector('.tooltip');
+
+    this.root.addEventListener('click', () => {
+      this.tooltip.classList.toggle('tooltip-open');
+    });
   }
 
   disconnectedCallback () {
     this.root.removeEventListener('click');
-  }
-
-    /**
-   * Toggle tooltip
-   */
-  toggleTooltip() {
-    const tooltip = this.root.querySelector('.tooltip');
-
-    this.root.addEventListener('click', () => {
-      tooltip.classList.toggle('tooltip-open');
-    });
   }
 
   /**
@@ -51,7 +44,7 @@ export default class Tooltip extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.tooltip
+    return !this.hasTooltip
   }
 
   /**
@@ -68,7 +61,7 @@ export default class Tooltip extends Shadow() {
       :host .tooltip {
         display: none;
         background-color: white;
-        box-shadow: 0px 0px 12px 0px #3333331A;
+        box-shadow: 0px 0px 12px 0px rgba(51, 51, 51, 0.1);
         padding: 1em;
         width: 23em;
         position: absolute;
@@ -88,7 +81,7 @@ export default class Tooltip extends Shadow() {
     
         border-left: 1.25em solid transparent;
         border-right: 1.25em solid transparent;
-        border-bottom: 1.25em solid #ffffff;
+        border-bottom: 1.25em solid #FFFFFF;
 
         top: var(--before-top);
         left: var(--before-left);
@@ -131,25 +124,15 @@ export default class Tooltip extends Shadow() {
    */
   fetchTemplate () {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
-    const styles = [
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
-        namespace: false
-      },
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
-        namespaceFallback: true
-      }
-    ]
     switch (this.getAttribute('namespace')) {
       case 'tooltip-default-':
-        return this.fetchCSS([
+        return this.fetchCSS(
           {
             path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
             namespace: false
-          }, ...styles])
+          })
       case 'tooltip-right-':
-        return this.fetchCSS([{
+        return this.fetchCSS({
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false,
           replaces: [{
@@ -160,7 +143,7 @@ export default class Tooltip extends Shadow() {
         },{
           path: `${this.importMetaUrl}./right-/right-.css`, // apply namespace since it is specific and no fallback
           namespace: false
-        }, ...styles])
+        })
     }
   }
 
@@ -186,5 +169,9 @@ export default class Tooltip extends Shadow() {
         name: 'a-icon-mdx'
       }
     ])
+  }
+
+  get hasTooltip () {
+    return this.root.querySelector('.tooltip')
   }
 }

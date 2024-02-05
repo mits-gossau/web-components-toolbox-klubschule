@@ -227,6 +227,8 @@
 
   --icon-link-list-color: #0053A6;
   --icon-link-list-color-hover: #0053A6;
+
+  --box-shadow-color: rgba(51, 51, 51, 0.1);
 }
 
 .class-name {
