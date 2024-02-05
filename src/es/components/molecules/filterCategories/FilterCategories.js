@@ -13,6 +13,8 @@ export default class FilterCategories extends Shadow() {
         super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
         this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
+
+        this.html = this.mainNav
     }
 
     connectedCallback() {
@@ -78,26 +80,22 @@ export default class FilterCategories extends Shadow() {
           const filterData = response.filters
           // filterData.sort((a, b) => a.sort - b.sort);
 
-          const mainNav = document.createElement('div')
-          mainNav.setAttribute('class', 'main-level')
+          
 
-          filterData.forEach(filterItem => {
+          filterData.forEach((filterItem, i) => {
               let subNav = ''
-              console.log('mainNav', mainNav)
+              console.log('this.mainNav', this.mainNav)
               console.log(filterItem.label)
 
               if (filterItem.children && filterItem.children.length > 0) {
                   filterItem.children.forEach(child => {
                       console.log("  -", child.label);
 
+                      const checked = child.selected ? 'checked' : ''
+
                       const component = /* html */`
-                        <mdx-component 
-                          click-event-name="mdx-component-click-event" 
-                          mutation-callback-event-name="mdx-component-mutation-event" 
-                          listener-event-name="mdx-set-attribute" 
-                          listener-detail-property-name="attributes"
-                        >
-                          <mdx-checkbox variant="no-border" label="${child.label}"></mdx-checkbox>
+                        <mdx-component mutation-callback-event-name="request-with-facet">
+                          <mdx-checkbox ${checked} variant="no-border" label="${child.label}"></mdx-checkbox>
                         </mdx-component>
                       `
                       subNav += component
@@ -106,40 +104,51 @@ export default class FilterCategories extends Shadow() {
 
               console.log('subNav', subNav)
 
-              const navLevelItem = /* html */ `
-                <m-dialog namespace="dialog-left-slide-in-without-background-">
-                  <div class="container dialog-header" tabindex="0">
-                    <div id="close-back">
-                      <a-icon-mdx icon-name="ChevronLeft" size="2em" ></a-icon-mdx>
-                    </div>
-                    <h3>${filterItem.label}</h3>
-                    <div id="close">
-                      <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                    </div>
-                  </div>
-                  <div class="container dialog-content">
-                    <div class="sub-level">
-                      ${subNav}
-                    </div>       
-                  </div>
-                  <div class="container dialog-footer">
-                    <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
-                    <a-button namespace="button-primary-">Angebote anzeigen</a-button>
-                  </div>
-                  <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
-                    <span class="text">${filterItem.label}</span>
-                    <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-                  </ks-m-nav-level-item>
-                </m-dialog>
-              ` 
+              if(this.mainNav.children[i]?.getAttribute('id') === filterItem.id) {
+                console.log("request", filterItem.id)
 
-              const navLevelItemDiv = document.createElement('div') 
-              navLevelItemDiv.innerHTML = navLevelItem.trim()
-              mainNav.appendChild(navLevelItemDiv)
+                // TODO: find .sub-level
+                this.mainNav.children[i].querySelector('.sub-level').innerHTML = subNav
+              } else {
+                const navLevelItem = /* html */ `
+                  <m-dialog id="${filterItem.id}" namespace="dialog-left-slide-in-without-background-">
+                    <div class="container dialog-header" tabindex="0">
+                      <div id="close-back">
+                        <a-icon-mdx icon-name="ChevronLeft" size="2em" ></a-icon-mdx>
+                      </div>
+                      <h3>${filterItem.label}</h3>
+                      <div id="close">
+                        <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                      </div>
+                    </div>
+                    <div class="container dialog-content">
+                      <div class="sub-level">
+                        ${subNav}
+                      </div>       
+                    </div>
+                    <div class="container dialog-footer">
+                      <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+                      <a-button namespace="button-primary-">Angebote anzeigen</a-button>
+                    </div>
+                    <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
+                      <span class="text">${filterItem.label}</span>
+                      <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                    </ks-m-nav-level-item>
+                  </m-dialog>
+                `
+                const div = document.createElement('div')
+                div.innerHTML = navLevelItem
+                this.mainNav.appendChild(div.children[0])
+              }
           });
-    
-          this.html = mainNav
         })
       })
+    }
+
+    get mainNav () {
+      if (this.root.querySelector('.main-level')) return this.root.querySelector('.main-level')
+      const mainNav = document.createElement('div')
+      mainNav.setAttribute('class', 'main-level')
+      return mainNav
     }
   }
