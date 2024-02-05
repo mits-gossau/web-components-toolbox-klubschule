@@ -82,10 +82,11 @@ export default class FilterCategories extends Shadow() {
               let subNav = ''
               if (filterItem.children && filterItem.children.length > 0) {
                   filterItem.children.forEach(child => {
+                      const count = child.count ? `(${child.count})` : ''
                       const checked = child.selected ? 'checked' : ''
                       const component = /* html */`
                         <mdx-component mutation-callback-event-name="request-with-facet">
-                          <mdx-checkbox ${checked} variant="no-border" label="${child.label}"></mdx-checkbox>
+                          <mdx-checkbox ${checked} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
                         </mdx-component>
                       `
                       subNav += component
