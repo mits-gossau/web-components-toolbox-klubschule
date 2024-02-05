@@ -26,7 +26,7 @@
                     "label": "Infoveranstaltung",
                     "id": "1",
                     "count": 113,
-                    "selected": false,
+                    "selected": true,
                     "hasChilds": false,
                     "eTag": null
                 },
