@@ -35,6 +35,10 @@ export default class AutoCompleteList extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
+        :host {
+          padding-top: 1em;
+        }
+        
         :host div {
           display: flex;
         }
