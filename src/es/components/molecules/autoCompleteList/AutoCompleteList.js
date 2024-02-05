@@ -37,6 +37,7 @@ export default class AutoCompleteList extends Shadow() {
     this.css = /* css */ `
         :host {
           padding-top: 1em;
+          padding-left: 1em;
         }
 
         :host div {
