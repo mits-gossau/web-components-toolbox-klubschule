@@ -35,39 +35,122 @@ export default class AutoCompleteList extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
-        :host > ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            margin-top: 1.3333333333rem;
-            margin-bottom: 2rem;
+        :host div {
+          display: flex;
         }
-        :host > ul > li {
-            color: var(--color);
-            cursor: pointer;
-            font-size: 0.8888888888rem;
-            padding: 0.4em 1em;
+
+        :host ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          width: 50%;
         }
-        :host > ul > li:hover {
-            background-color: var(--color-hover);
-            color: var(--background-color);
+
+        :host ul li {
+          display: flex;
+          align-items: center;
         }
-        :host > ul > li strong {
-            font-family: var(--font-family-secondary);
-            font-weight: 500;
+
+        :host ul li:hover {
+          cursor: pointer;
+          color: #0053A6; 
         }
-        :host > ul > li > a-icon-mdx {
-            color: inherit;
-            display: inline-block;
-            margin-right: 0.5rem;
-            position: relative;
-            top: 2px;            
+
+        :host ul li + li {
+          margin-top: 1em;
         }
-        :host > ul > li > a-icon-mdx::part(svg) {
-          transition: none;
-          will-change: unset;
+
+        :host a-icon-mdx {
+          --icon-mdx-ks-color-hover: #333333;
         }
-        
+
+        :host a-icon-mdx + span {
+          margin-left: 1em;
+        }
+
+        :host span {
+          font-size: 1em;
+          line-height: 1.25em;
+        }
+
+        :host .content {
+          display: flex;
+          flex-direction: column;
+          width: 50%;
+        }
+
+        :host .heading {
+          font-size: 0.875em;
+          line-height: 1em;
+          font-weight: 500;
+          margin-bottom: 1em;
+        }
+
+        :host .list {
+          width: 100%;
+        }
+
+        :host .list li:hover .text {
+          color: #333333;
+        }
+
+        :host .list li div {
+          display: flex;
+          flex-direction: column;
+        }
+
+        :host a-picture + div {
+          margin-left: 1em;
+        }
+
+        :host .title {
+          font-size: 1em;
+          line-height: 1.125em;
+          font-weight: 500;
+        }
+
+        :host .text {
+          font-size: 1em;
+          line-height: 1.25em;
+        }
+
+        :host .title + .text {
+          margin-top: 0.25em;
+        }
+
+        :host a {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          font-size: 1.125em;
+          line-height: 1.25em;
+          font-weight: 500;
+          color: #0053A6;
+        }
+
+        :host a a-icon-mdx {
+          margin-left: 0.25em;
+          color: #0053A6;
+        }
+
+        :host .list + a {
+          margin-top: 1em;
+        }
+
+        @media only screen and (max-width: _max-width_) {
+          :host div {
+            flex-direction: column;
+          }
+
+          :host ul,
+          :host .content {
+            width: 100%;
+          }
+
+          :host ul + .content {
+            margin-top: 3em;
+          }
+        }
     `
     return this.fetchTemplate()
   }
