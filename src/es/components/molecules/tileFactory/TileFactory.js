@@ -111,10 +111,14 @@ export default class TileFactory extends Shadow() {
         this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}</span>`
         return
       }
-      // TODO: Tile List for multiple locations?
+      // TODO: Tile List for multiple locations... property on couse called: "tiles" = course.tiles
+      // TODO: fix undefined on blended and "ab"
+      // TODO: fix template.html miduweb remove none used controller
       // TODO: @Tile analog DoubleButton.js (getHiddenLabelsCounter) for Locations which are more than 5? Length?
       // TODO: Missing visual props
-      // TODO: Missing json props
+      // TODO: fuenf veranstalltungen (stateDesc) anstatt ortsauswahl
+      // TODO: tooltip ausblenden (make it work)
+      // TODO: falls vorausgefuellt keinen call an api
       /*
       {
           "key": "qg-i-IwBm0S_K5Z8d5xM",
@@ -157,30 +161,30 @@ export default class TileFactory extends Shadow() {
       */
       this.html = data.courses.reduce((acc, course) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="{
         'title': '${course.title}',
-        'iconTooltip': '',
+        'iconTooltip': 'to be defined',
         'location': {
           'iconName': 'Location',
           'name': '${course.locations.join(', ')}',
-          'badge': 'Blended'
+          'badge': '${course.eTyp}'
         },
         'button': {
-          'text': 'Ortsauswahl',
+          'text': '${course.stateDesc}',
           'iconName': 'ArrowRight'
         },
         'icons': [
           {
             'name': 'Percent',
-            'iconTooltip': ''
+            'iconTooltip': 'gonna be extended'
           },
           {
             'name': 'Bell',
-            'iconTooltip': ''
+            'iconTooltip': 'gonna be extended'
           }
         ],
         'price': {
-          'from': 'ab',
+          'from': '${course.pricetyp}',
           'amount': '${course.price}',
-          'per': 'Semester'
+          'per': 'gonna be extended'
         }
       }"></ks-m-tile>`, '<section>') + '</section>'
     }).catch(error => {
