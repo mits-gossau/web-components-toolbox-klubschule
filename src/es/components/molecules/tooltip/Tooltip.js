@@ -56,6 +56,8 @@ export default class Tooltip extends Shadow() {
         position: relative;
         cursor: pointer;
         z-index: 10;
+        display: flex;
+        align-items: center;
       }
 
       :host .tooltip {
@@ -109,10 +111,16 @@ export default class Tooltip extends Shadow() {
           bottom: 0;
           left: 0;
           right: 0;
+          padding: 0;
         }
 
         :host .tooltip::before {
           display: none;
+        }
+
+        :host .close,
+        :host .text {
+          padding: 1em 1em 0 1em;
         }
       }
     `
@@ -132,7 +140,7 @@ export default class Tooltip extends Shadow() {
             namespace: false
           })
       case 'tooltip-right-':
-        return this.fetchCSS({
+        return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false,
           replaces: [{
@@ -143,7 +151,7 @@ export default class Tooltip extends Shadow() {
         },{
           path: `${this.importMetaUrl}./right-/right-.css`, // apply namespace since it is specific and no fallback
           namespace: false
-        })
+        }])
     }
   }
 

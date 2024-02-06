@@ -229,6 +229,9 @@
   --icon-link-list-color-hover: #0053A6;
 
   --box-shadow-color: rgba(51, 51, 51, 0.1);
+
+  --icon-mdx-ks-tile-color: var(--mdx-base-color-klubschule-blue-600);
+  --icon-mdx-ks-badge-color: var(--mdx-base-color-grey-0);
 }
 
 .class-name {
