@@ -263,7 +263,7 @@
 
   --details-default-icon-right-border-top-custom: none;
   --details-default-icon-right-border-bottom: 0.0625em solid var(--mdx-base-color-grey-700);
-  --details-default-icon-right-border-bottom-last: 0.0625em solid var(--mdx-base-color-grey-700);
+  --details-default-icon-right-border-bottom-last-custom: 0.0625em solid var(--mdx-base-color-grey-700);
   --details-default-icon-right-border-color-custom: var(--mdx-base-color-grey-700);
   --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
   --details-default-icon-right-h4-font-size: 1em;
