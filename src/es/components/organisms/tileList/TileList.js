@@ -12,10 +12,12 @@ export default class TileList extends Shadow() {
 
     this.clickEventListener = event => {
 
-      if (this.icon.getAttribute('icon-name') == 'ChevronDown') {
-        this.icon.setAttribute('icon-name', 'ChevronUp');
-      } else {
-        this.icon.setAttribute('icon-name', 'ChevronDown');
+      if (this.icon) {
+        if (this.icon.getAttribute('icon-name') == 'ChevronDown') {
+          this.icon.setAttribute('icon-name', 'ChevronUp');
+        } else {
+          this.icon.setAttribute('icon-name', 'ChevronDown');
+        }
       }
 
       this.details = this.root.querySelector('.o-tile-list__details');

@@ -61,25 +61,14 @@ export default class TileFactory extends Shadow() {
   * @return {Promise<void>}
   */
   fetchTemplate () {
-    /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
-    const styles = [
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
-        namespace: false
-      },
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
-        namespaceFallback: false
-      }
-    ]
     switch (this.getAttribute('namespace')) {
       case 'course-list-default-':
       return this.fetchCSS([{
         path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
         namespace: false
-      }, ...styles])
+      }])
       default:
-      return this.fetchCSS(styles)
+      return Promise.resolve()
     }
   }
   
@@ -103,6 +92,10 @@ export default class TileFactory extends Shadow() {
         {
           path: `${this.importMetaUrl}../tile/Tile.js`,
           name: 'ks-m-tile'
+        },
+        {
+          path: `${this.importMetaUrl}../../organisms/tileList/TileList.js`,
+          name: 'ks-o-tile-list'
         }
       ])
     ]).then(([data]) => {
@@ -111,86 +104,57 @@ export default class TileFactory extends Shadow() {
         this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}</span>`
         return
       }
-      // TODO: Tile List for multiple locations... property on couse called: "tiles" = course.tiles
-      // TODO: fix undefined on blended and "ab"
-      // TODO: fix template.html miduweb remove none used controller
-      // TODO: @Tile analog DoubleButton.js (getHiddenLabelsCounter) for Locations which are more than 5? Length?
-      // TODO: Missing visual props
-      // TODO: fuenf veranstalltungen (stateDesc) anstatt ortsauswahl
-      // TODO: tooltip ausblenden (make it work)
-      // TODO: falls vorausgefuellt keinen call an api
-      /*
-      {
-          "key": "qg-i-IwBm0S_K5Z8d5xM",
-          "typ": "D",
-          "id": "10053",
-          "centerid": "1019",
-          "gebaeudeid": "1401",
-          "ortid": "136",
-          "parentkey": "D_10053",
-          "title": "1001 Nacht - Orientalische Küche mit Noretta Keller",
-          "titleesc": "1001 nacht   orientalische kuche mit noretta keller",
-          "dateBegin": "2024-02-05",
-          "dateEnd": "2024-02-05",
-          "location": "",
-          "locations": [
-              "Wetzikon"
-          ],
-          "days": [
-              "Mo"
-          ],
-          "timeBegin": "18:00",
-          "timeEnd": "21:20",
-          "price": 116.0,
-          "lessons": 0.0,
-          "state": 0,
-          "stateDesc": "1 Veranstaltungen",
-          "permission": false,
-          "cantonshare": false,
-          "cantonshareprice": 0,
-          "abnormal": false,
-          "diploma": 0,
-          "cat_code": 0,
-          "score": 1,
-          "link_url": "https://miducawebappdev.azurewebsites.net/angebote/kurse/kurs/1001-nacht---orientalische-kuche-mit-noretta-keller--D_10053_1019",
-          "atyp": [
-              "E"
-          ],
-          "count": 1
-      }
-      */
-      this.html = data.courses.reduce((acc, course) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="{
-        'title': '${course.title}',
-        'iconTooltip': 'to be defined',
-        'location': {
-          'iconName': 'Location',
-          'name': '${course.locations.join(', ')}',
-          'badge': '${course.eTyp}'
-        },
-        'button': {
-          'text': '${course.stateDesc}',
-          'iconName': 'ArrowRight'
-        },
-        'icons': [
-          {
-            'name': 'Percent',
-            'iconTooltip': 'gonna be extended'
+      this.html = data.courses.reduce((acc, course) => acc + (course.children?.length
+        ? /* html */`<ks-o-tile-list data="{
+          ${this.fillGeneralTileInfo(course)},
+          'buttonMore': {
+            'text': 'Weitere Standorte',
+            'iconName': 'ArrowDownRight'
           },
-          {
-            'name': 'Bell',
-            'iconTooltip': 'gonna be extended'
-          }
-        ],
-        'price': {
-          'from': '${course.pricetyp}',
-          'amount': '${course.price}',
-          'per': 'gonna be extended'
-        }
-      }"></ks-m-tile>`, '<section>') + '</section>'
+          'tiles': [${course.children.reduce((acc, child, i, arr) => acc + `
+            {
+              ${this.fillGeneralTileInfo(child)}
+            }${i === arr.length - 1 ? '' : ','}
+          `, '')}
+          ]
+        }"></ks-o-tile-list>`
+        : /* html */`<ks-m-tile namespace="tile-default-" data="{
+          ${this.fillGeneralTileInfo(course)}
+        }"></ks-m-tile>`), '<section>') + '</section>'
     }).catch(error => {
       this.html = ''
       this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}<br>${error}</span>`
     })
-    
+  }
+
+  fillGeneralTileInfo (course) {
+    return `
+      'title': '${course.title}',
+      'iconTooltip': 'to be defined',
+      'location': {
+        'iconName': 'Location',
+        'name': '${course.locations.join(', ')}',
+        'badge': '${course.eTyp}'
+      },
+      'button': {
+        'text': '${course.stateDesc}',
+        'iconName': 'ArrowRight'
+      },
+      'icons': [
+        {
+          'name': 'Percent',
+          'iconTooltip': 'gonna be extended'
+        },
+        {
+          'name': 'Bell',
+          'iconTooltip': 'gonna be extended'
+        }
+      ],
+      'price': {
+        'from': '${course.pricetyp}',
+        'amount': '${course.price}',
+        'per': 'gonna be extended'
+      }
+    `
   }
 }

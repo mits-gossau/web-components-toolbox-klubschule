@@ -1194,7 +1194,122 @@
             "atyp": [
                 "E"
             ],
-            "count": 1
+            "count": 1,
+            "children": [
+                {
+                    "key": "nw6c-IwBm0S_K5Z8BZgq",
+                    "typ": "6A",
+                    "id": "10365",
+                    "centerid": "1016",
+                    "gebaeudeid": "11016",
+                    "ortid": "135",
+                    "parentkey": "6A_10365",
+                    "title": "6-Wochen-Programm (Zeitabo+3 Coachings)",
+                    "titleesc": "6 wochen programm  zeitabopllp3 coachings",
+                    "dateBegin": "2022-10-15",
+                    "location": "",
+                    "locations": [
+                        "St. Gallen",
+                        "Winterthur"
+                    ],
+                    "days": [],
+                    "timeBegin": "00:00",
+                    "timeEnd": "00:00",
+                    "price": 390.0,
+                    "lessons": 0.0,
+                    "state": 0,
+                    "stateDesc": "Details",
+                    "permission": false,
+                    "cantonshare": false,
+                    "cantonshareprice": 0,
+                    "abnormal": false,
+                    "diploma": 0,
+                    "cat_code": 0,
+                    "score": 1,
+                    "link_url": "https://miducawebappdev.azurewebsites.net/angebote/kurse/kurs/6-wochen-programm--zeitabopllp3-coachings--6A_10365_1016",
+                    "atyp": [
+                        "6A"
+                    ],
+                    "count": 2
+                },
+                {
+                    "key": "NRCm-IwBm0S_K5Z86xeN",
+                    "typ": "D",
+                    "id": "94336",
+                    "centerid": "2676",
+                    "gebaeudeid": "278",
+                    "ortid": "117",
+                    "parentkey": "D_94336",
+                    "title": "[ec] word base",
+                    "titleesc": "ec  word base",
+                    "dateBegin": "2024-05-14",
+                    "dateEnd": "2024-06-11",
+                    "location": "",
+                    "locations": [
+                        "Neuchâtel"
+                    ],
+                    "days": [
+                        "Mo"
+                    ],
+                    "timeBegin": "08:00",
+                    "timeEnd": "12:00",
+                    "price": 600.0,
+                    "lessons": 0.0,
+                    "state": 0,
+                    "stateDesc": "1 Veranstaltungen",
+                    "permission": false,
+                    "cantonshare": false,
+                    "cantonshareprice": 0,
+                    "abnormal": false,
+                    "diploma": 0,
+                    "cat_code": 3,
+                    "score": 1,
+                    "link_url": "https://miducawebappdev.azurewebsites.net/angebote/kurse/kurs/ec--word-base--D_94336_2676",
+                    "atyp": [
+                        "E"
+                    ],
+                    "count": 1
+                },
+                {
+                    "key": "fw6c-IwBm0S_K5Z8BZkq",
+                    "typ": "6A",
+                    "id": "10411",
+                    "centerid": "2658",
+                    "gebaeudeid": "12658",
+                    "ortid": "120",
+                    "parentkey": "6A_10411",
+                    "title": "Aare - Wertabo 300 (temporär 2023)",
+                    "titleesc": "aare   wertabo 300  temporar 2023",
+                    "dateBegin": "2023-05-16",
+                    "location": "",
+                    "locations": [
+                        "Aarau",
+                        "Baden",
+                        "Bern",
+                        "Olten",
+                        "Thun"
+                    ],
+                    "days": [],
+                    "timeBegin": "00:00",
+                    "timeEnd": "00:00",
+                    "price": 300.0,
+                    "lessons": 0.0,
+                    "state": 0,
+                    "stateDesc": "Details",
+                    "permission": false,
+                    "cantonshare": false,
+                    "cantonshareprice": 0,
+                    "abnormal": false,
+                    "diploma": 0,
+                    "cat_code": 0,
+                    "score": 1,
+                    "link_url": "https://miducawebappdev.azurewebsites.net/angebote/kurse/kurs/aare---wertabo-300--temporar-2023--6A_10411_2658",
+                    "atyp": [
+                        "6A"
+                    ],
+                    "count": 5
+                }
+            ]
         },
         {
             "key": "nw6c-IwBm0S_K5Z8BZgq",
