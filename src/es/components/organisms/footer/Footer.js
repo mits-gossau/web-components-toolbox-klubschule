@@ -43,7 +43,7 @@ export default class KsFooter extends Footer {
      * @return {Promise<void>}
      */
     renderCSS () {
-        super.renderCSS()
+        const result = super.renderCSS()
         this.css = /* css */`
             :host {
                 display: flex;
@@ -204,7 +204,8 @@ export default class KsFooter extends Footer {
                 }
             }
         `
-        return this.fetchTemplate()
+        // return this.fetchTemplate() // dont fetch a second time, since super.renderCSS already calls fetchTemplate
+        return result
     }
 
     renderHTML() {
