@@ -1,0 +1,43 @@
+<code><a href="https://www.figma.com/file/HrjrCOkZtYdODEUO6qrGij/%F0%9F%8E%A8-MGB-Klubschule%2FMiduca-Design?node-id=2008%3A52807&mode=dev" target="_blank">Figma</a></code>
+<ks-c-with-facet mock>
+    <!-- o-body-style is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
+    <o-body-style>
+        <a-input
+            inputid="inputSearch"
+            placeholder="Suchen..."
+            submit-search="request-with-facet"
+            search=""
+            type=search
+            any-key-listener
+            change-listener
+            delete-listener
+            answer-event-name="with-facet"
+            active-detail-property-name="fetch:searchText"
+        ></a-input>
+        <o-grid namespace="grid-432-auto-colums-auto-rows-">
+            <ks-a-button namespace="button-primary-" color="septenary">Filter</ks-a-button>
+            <m-double-button namespace="double-button-default-" width="100%">
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                    <span part="label1">Abend</span>
+                    <span part="label2" dynamic></span>
+                </ks-a-button>
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                    <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                </ks-a-button>
+            </m-double-button>
+            <m-double-button namespace="double-button-default-" width="100%">
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                    <span part="label1">Mo, Di, Fr</span>
+                    <span part="label2" dynamic></span>
+                </ks-a-button>
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                    <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                </ks-a-button>
+            </m-double-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary" justify-content="flex-start">Wochentag & Tageszeit</ks-a-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary" justify-content="flex-start">Lernlevel</ks-a-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary" justify-content="flex-start">Kategorien</ks-a-button>
+        </o-grid>
+        <ks-m-tile-factory></ks-m-tile-factory>
+    </o-body-style>
+</ks-c-with-facet>
