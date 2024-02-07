@@ -51,9 +51,11 @@
 }
 
 :root {
+  --a-emotion-pictures-margin-top-first-child: auto;
   --any-content-spacing-mobile: var(--any-content-spacing);
-  --any-content-spacing: 4rem;
-  --any-content-width: min(1920px, 87%);
+  --any-content-spacing: var(--mdx-sys-spacing-flex-l);
+  --any-content-width: calc(min(100%, var(--body-max-width)) - var(--mdx-sys-spacing-flex-large-xs) * 2);
+  --a-wrapper-margin: 0;
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);
@@ -72,6 +74,8 @@
   --background-color-tertiary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-tertiary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-tertiary: var(--mdx-sys-color-brand-neutral-0);
+  --body-max-width: 1920px;
+  --body-margin: 0 auto;
   --button-quaternary-background-color-quaternary-active: var(--mdx-sys-color-brand-accent-1-100);
   --button-quaternary-background-color-quaternary-disabled: var(--mdx-sys-color-brand-accent-1-100);
   --button-quaternary-background-color-quaternary-hover: var(--mdx-sys-color-brand-accent-1-100);
@@ -164,7 +168,7 @@
   --navigation-alnatura-line-height-mobile: 1.5;
   --navigation-alnatura-search-justify-content: flex-end;
   --navigation-alnatura-color-mobile-custom: var(--color);
-  --login-width: var(--any-content-width);
+  --login-width: var(--header-default-content-width);
   --search-input-background-color-focus: var(--m-white);
   --search-input-background-color-hover: var(--m-white);
   --search-input-background-color: var(--m-white);
@@ -196,7 +200,7 @@
 
   --button-primary-icon-right-margin: 0;
   --button-primary-label-margin: 0 0.25em 0 0;
-  --footer-default-footer-width: var(--any-content-width);
+  --footer-default-footer-width: 100%;
   --footer-default-footer-margin: 0 auto;
   --footer-default-footer-width-mobile: 100%;
   --footer-default-footer-margin-mobile: 0;
@@ -254,8 +258,23 @@
   --table-odd-background-color: var(--mdx-base-color-grey-0);
   --table-even-background-color: var(--mdx-base-color-klubschule-creme-400);
 
+  --icon-link-list-color: #0053A6;
+  --icon-link-list-color-hover: #0053A6;
+
+  --box-shadow-color: rgba(51, 51, 51, 0.1);
+
+  --icon-mdx-ks-tile-color: var(--mdx-base-color-klubschule-blue-600);
+  --icon-mdx-ks-badge-color: var(--mdx-base-color-grey-0);
   --icon-link-list-color: var(--mdx-sys-color-primary-default);
   --icon-link-list-color-hover: var(--mdx-sys-color-primary-default);
+
+  --details-default-icon-right-border-top-custom: none;
+  --details-default-icon-right-border-bottom: 0.0625em solid var(--mdx-base-color-grey-700);
+  --details-default-icon-right-border-bottom-last-custom: 0.0625em solid var(--mdx-base-color-grey-700);
+  --details-default-icon-right-border-color-custom: var(--mdx-base-color-grey-700);
+  --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
+  --details-default-icon-right-h4-font-size: 1em;
+  --details-default-icon-right-h4-line-height: 1.125em;
 }
 
 .class-name {

@@ -18,6 +18,23 @@ export default class KsTeaser extends Teaser {
       importMetaUrl: import.meta.url,
       ...options
     }, ...args)
+
+    if (this.getAttribute('namespace') === 'teaser-text-image-') {
+      const btn = this.root.querySelector('ks-a-button')
+      this.mouseoverListener = event => {
+        if (btn) btn.classList.add('hover')
+      }
+      this.mouseoutListener = event => {
+        if (btn) btn.classList.remove('hover')
+      }
+    }
+  }
+
+  connectedCallback () {
+    super.connectedCallback();
+
+    this.addEventListener('mouseover', this.mouseoverListener)
+    this.addEventListener('mouseout', this.mouseoutListener)
   }
 
   /**
@@ -27,10 +44,12 @@ export default class KsTeaser extends Teaser {
    */
   fetchTemplate () {
     switch (this.getAttribute('namespace')) {
-      case 'teaser-tile-':
-        return this.fetchNamespaceTemplate(['tile-/tile-.css'])
+      case 'teaser-tile-content-':
+        return this.fetchNamespaceTemplate(['tile-content-/tile-content-.css'])
       case 'teaser-story-':
         return this.fetchNamespaceTemplate(['story-/story-.css'])
+      case 'teaser-text-image-':
+        return this.fetchNamespaceTemplate(['text-image-/text-image-.css'])
       default:
         return super.fetchTemplate()
     }
@@ -70,21 +89,24 @@ export default class KsTeaser extends Teaser {
     this.css = /* css */`
         :host * {
           box-sizing: border-box;
-          margin: 0 !important;
+          margin: 0;
         }
 
         :host a-picture {
           display: block;
           overflow: hidden;
+          ${ (this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : '' }
         }
 
-        :host figure {
+        :host figure,
+        :host article {
           display: flex;
           flex-direction: column;
           color: var(--color);
         }
 
-        :host figcaption {
+        :host figcaption,
+        :host article > div {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
@@ -92,11 +114,13 @@ export default class KsTeaser extends Teaser {
           width: 100%;
         }
 
-        :host figcaption > * {
+        :host figcaption > *,
+        :host article > div > *  {
           width: 100%;
         }
 
-        :host figcaption > strong:first-child {
+        :host figcaption > strong:first-child,
+        :host article > div > strong:first-child {
           display: block;
           color: var(--color-${this.getAttribute('color')}, black);
           font-family: var(--pretitle-font-family);
@@ -106,11 +130,11 @@ export default class KsTeaser extends Teaser {
           transition: var(--transition);
         }
 
-        :host figcaption h5,
-        :host figcaption h4,
-        :host figcaption h3,
-        :host figcaption h2,
-        :host figcaption h1 {
+        :host h5,
+        :host h4,
+        :host h3,
+        :host h2,
+        :host h1 {
           color: inherit !important;
           transition: var(--transition);
           font-family: var(--headline-font-family) !important;

@@ -264,7 +264,13 @@ export default class Tile extends Shadow() {
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
           <span class="m-tile__title">${data.title || warnMandatory + 'title'}</span>
-          ${data.iconTooltip ? '<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>' : ''}
+          ${data.iconTooltip ? `
+              <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
+                <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
+              </ks-m-tooltip>
+            `
+            : ''
+          }
         </div>
         <div class="m-tile__body">
           ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
@@ -291,7 +297,9 @@ export default class Tile extends Shadow() {
             <div class="m-tile__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="m-tile__icon-box">
-                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.iconTooltip}">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                  </ks-m-tooltip>
                 </div>
               `, '')}           
             </div>
@@ -316,6 +324,10 @@ export default class Tile extends Shadow() {
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
         name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
+        name: 'ks-m-tooltip'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,

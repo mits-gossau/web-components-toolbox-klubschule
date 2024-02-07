@@ -1,0 +1,73 @@
+:host * {
+  box-sizing: border-box;
+  margin: 0 !important;
+}
+
+:host {
+  /* css vars that are passed to children */
+  --picture-teaser-transition: transform .5s ease-out;
+  --color: var(--color-neutral-bold4);
+
+  /* component css vars */
+  --teaser-tile-content-color: var(--color);
+  --teaser-tile-content-color-${this.getAttribute('color')}: var(--color-${this.getAttribute('color')});
+  --teaser-tile-content-transition: color .3s ease-out , background-color .3s ease-out !important;
+  
+  --teaser-tile-content-pretitle-font-family: var(--mdx-sys-font-fix-title4-font-family);
+  --teaser-tile-content-pretitle-font-size: var(--mdx-sys-font-fix-title4-font-size);
+  --teaser-tile-content-pretitle-font-weight: var(--mdx-sys-font-fix-title4-font-weight);
+  --teaser-tile-content-pretitle-line-height: var(--mdx-sys-font-fix-title4-line-height);
+
+  --teaser-tile-content-headline-font-family: var(--h3-font-family);
+  --teaser-tile-content-headline-font-size: var(--h3-font-size);
+  --teaser-tile-content-headline-font-weight: var(--h3-font-weight);
+  --teaser-tile-content-headline-line-height: var(--h3-line-height);
+
+  --teaser-tile-content-cta-font-family: var(--mdx-sys-font-fix-label2-font-family);
+  --teaser-tile-content-cta-font-size: var(--mdx-sys-font-fix-label2-font-size);
+  --teaser-tile-content-cta-font-weight: var(--mdx-sys-font-fix-label2-font-weight);
+  --teaser-tile-content-cta-line-height: var(--mdx-sys-font-fix-label2-line-height);
+}
+
+:host figure,
+:host article {
+  --teaser-tile-content-transition: color .3s ease-out , background-color .3s ease-out !important;
+  --picture-teaser-transition: transform .5s ease-out;
+  
+  display: block;
+  background: var(--mdx-sys-color-neutral-on-default);
+  border-style: solid;
+  border-color: var(--mdx-sys-color-neutral-bold1);
+  border-width: 1px;
+  color: var(--color);
+}
+
+:host figure:hover,
+:host article:hover {
+  --color: var(--mdx-sys-color-neutral-on-default);
+  --picture-teaser-transform: scale(1.05, 1.05);
+
+  background: var(--color-${this.getAttribute('color')}, black);
+}
+
+:host figcaption,
+:host article > div {
+  padding: 1.5rem;
+  min-height: 14.875rem;
+}
+
+:host figure:hover figcaption > strong:first-child,
+:host article:hover > div > strong:first-child {
+  color: var(--color);
+}
+
+:host p {
+  flex: 1;
+}
+
+@media only screen and (max-width: _max-width_) {
+  :host figcaption,
+  :host article > div {
+    padding: 1rem .5rem;
+  }
+}

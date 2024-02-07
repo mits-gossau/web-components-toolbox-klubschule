@@ -68,9 +68,9 @@ export default class Sort extends Shadow() {
         display: none;
         position: absolute;
         top: 2em;
-        background-color: #ffffff;
+        background-color: #FFFFFF;
         border-radius: 0.5em;
-        box-shadow: 0em 0em 0.75em 0em #3333331A;
+        box-shadow: 0em 0em 0.75em 0em rgba(51, 51, 51, 0.1);
         z-index: 10;
       }
 
@@ -90,7 +90,7 @@ export default class Sort extends Shadow() {
       }
 
       :host .m-sort__item:hover {
-        background-color: var(--m-gray-100);
+        background-color: var(--mdx-base-color-grey-100);
       }
 
       :host .m-sort__item-active {
