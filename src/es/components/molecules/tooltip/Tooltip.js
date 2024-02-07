@@ -164,7 +164,7 @@ export default class Tooltip extends Shadow() {
     this.html = /* HTML */`
       <div class="tooltip">
         <div class="close">
-          <a-icon-mdx icon-name="x" size="1.5em" class="icon-right"></a-icon-mdx>
+          <a-icon-mdx icon-name="X" size="1.5em" class="icon-right"></a-icon-mdx>
         </div>
         <p class="text">
           ${this.text}
