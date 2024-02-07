@@ -1,7 +1,7 @@
 <o-body-style background-color-prop="#F7F4F1">
     <section>
         <ks-m-tiles-filter namespace="tile-filter-default-">
-            <div class="m-tile-filter">
+            <!-- <div class="m-tile-filter">
                 <div class="m-tile-filter__search">
                   <a-input inputid="searchField" placeholder="Label" icon-name="Location" icon-size="1.25em" search="?q=" type="search">Angebote in Ihrer Nähe finden</a-input>
                 </div>
@@ -48,7 +48,43 @@
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
                 </ks-a-button>
                 </div>
-            </div>
+            </div> -->
+            <a-input
+            inputid="inputSearch"
+            placeholder="Suchen..."
+            submit-search="request-with-facet"
+            search=""
+            type=search
+            any-key-listener
+            change-listener
+            delete-listener
+            answer-event-name="with-facet"
+            active-detail-property-name="fetch:searchText"
+        ></a-input>
+        <o-grid namespace="grid-432-auto-colums-auto-rows-">
+            <ks-a-button namespace="button-primary-" color="septenary">Filter</ks-a-button>
+            <m-double-button namespace="double-button-default-" width="100%">
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                    <span part="label1">Abend</span>
+                    <span part="label2" dynamic></span>
+                </ks-a-button>
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                    <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                </ks-a-button>
+            </m-double-button>
+            <m-double-button namespace="double-button-default-" width="100%">
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                    <span part="label1">Mo, Di, Fr</span>
+                    <span part="label2" dynamic></span>
+                </ks-a-button>
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                    <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                </ks-a-button>
+            </m-double-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary" justify-content="flex-start">Wochentag & Tageszeit</ks-a-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary" justify-content="flex-start">Lernlevel</ks-a-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary" justify-content="flex-start">Kategorien</ks-a-button>
+        </o-grid>
         </ks-m-tiles-filter>
     </section>
 
