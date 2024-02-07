@@ -1,14 +1,33 @@
 :host {
-    --picture-default-wrapper-inner-spacing: var(--mdx-sys-spacing-fix-s);
-    --picture-default-divider-color: var(--mdx-sys-color-accent-1-default);
-    --picture-default-divider-width: var(--mdx-sys-sizing-fix-3xl);
-    --picture-default-divider-height: var(--mdx-sys-sizing-fix-2xs);
-    --picture-default-copy-typography: var(--mdx-sys-font-fix-body1);
-    --picture-default-copy-spacing: var(--mdx-sys-spacing-fix-2xs);
+   --picture-default-wrapper-inner-spacing: var(--mdx-sys-spacing-fix-s);
+   --picture-default-divider-color: var(--mdx-sys-color-accent-1-default);
+   --picture-default-divider-width: var(--mdx-sys-sizing-fix-3xl);
+   --picture-default-divider-height: var(--mdx-sys-sizing-fix-2xs);
+   --picture-default-copy-typography: var(--mdx-sys-font-fix-body1);
+   --picture-default-copy-spacing: var(--mdx-sys-spacing-fix-2xs);
 
-    --picture-default-img-max-height: none;
- }
+   --picture-default-img-max-height: none;
+}
 
- :host([open]) {
-    --picture-default-img-max-height: 75vh;
- }
+:host([open]) {
+   --picture-default-img-max-height: 75vh;
+}
+
+:host([open-modal]) > button.close-btn.adjusted {
+   position: absolute;
+   width: 3.25rem;
+   height: 3.25rem;
+   background: var(--mdx-sys-color-neutral-on-default, white);
+   padding: var(--mdx-comp-button-tertiary-large-padding-vertical-default, 1rem);
+   color: var(--mdx-sys-color-neutral-bold3);
+   right: var(--mdx-sys-spacing-fix-m);
+   bottom: var(--mdx-sys-spacing-fix-m);
+}
+
+@media screen and (max-width: _max-width_) {
+   :host([open-modal]) > button.close-btn.adjusted {
+      width: 2rem;
+      height: 2rem;
+      padding: var(--mdx-comp-button-tertiary-small-padding-vertical-default, 1rem);
+   }
+}
