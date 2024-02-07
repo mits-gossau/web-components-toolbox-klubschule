@@ -197,11 +197,13 @@ export default class AutoCompleteList extends Shadow() {
               ? 'Search'
               : curr.typ === 2
                 ? 'ArrowRight'
-                : 'Location'}" size="1em"></a-icon-mdx> ${curr.term}</li>`, '')
+                : 'Location'}" size="1em"></a-icon-mdx><span>${curr.term}</span></li>`, '')
           })
       } else {
         this.html = /* html */ `
-            <ul></ul>
+            <div>
+              <ul></ul>
+            </div>  
         `
         Array.from(this.root.children).forEach(node => {
           if (node.tagName === 'LI') this.list.appendChild(node)
