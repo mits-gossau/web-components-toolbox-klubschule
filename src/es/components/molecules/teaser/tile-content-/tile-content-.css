@@ -10,8 +10,6 @@
   --color: var(--color-neutral-bold4);
 
   /* component css vars */
-  --teaser-tile-content-color: var(--color);
-  --teaser-tile-content-color-${this.getAttribute('color')}: var(--color-${this.getAttribute('color')});
   --teaser-tile-content-transition: color .3s ease-out , background-color .3s ease-out !important;
   
   --teaser-tile-content-pretitle-font-family: var(--mdx-sys-font-fix-title4-font-family);
@@ -28,6 +26,28 @@
   --teaser-tile-content-cta-font-size: var(--mdx-sys-font-fix-label2-font-size);
   --teaser-tile-content-cta-font-weight: var(--mdx-sys-font-fix-label2-font-weight);
   --teaser-tile-content-cta-line-height: var(--mdx-sys-font-fix-label2-line-height);
+
+  /* css vars for inverse variant */
+  --pretitle-color: var(--color-${this.getAttribute('color')});
+  --pretitle-color-hover: var(--mdx-sys-color-neutral-on-default);
+  --text-color: var(--color-neutral-bold4);
+  --text-color-hover: var(--mdx-sys-color-neutral-on-default);
+  --background-color: var(--mdx-sys-color-neutral-on-default);
+  --background-color-hover: var(--color-${this.getAttribute('color')}, black);
+
+  /* css vars that are passed to children */
+  --picture-teaser-transition: transform .5s ease-out;
+  --color: var(--text-color);
+}
+
+:host([inverse]) {
+  /* css vars for inverse variant */
+  --pretitle-color: var(--mdx-sys-color-neutral-on-default);
+  --pretitle-color-hover: var(--color-${this.getAttribute('color')});
+  --text-color: var(--mdx-sys-color-neutral-on-default);
+  --text-color-hover: var(--color-neutral-bold4);
+  --background-color: var(--color-${this.getAttribute('color')}, black);
+  --background-color-hover: var(--mdx-sys-color-neutral-on-default);
 }
 
 :host figure,
@@ -41,14 +61,16 @@
   border-color: var(--mdx-sys-color-neutral-bold1);
   border-width: 1px;
   color: var(--color);
+
+  background: var(--background-color);
 }
 
 :host figure:hover,
 :host article:hover {
-  --color: var(--mdx-sys-color-neutral-on-default);
+  --color: var(--text-color-hover);
   --picture-teaser-transform: scale(1.05, 1.05);
 
-  background: var(--color-${this.getAttribute('color')}, black);
+  background: var(--background-color-hover);
 }
 
 :host figcaption,
@@ -57,9 +79,14 @@
   min-height: 14.875rem;
 }
 
+:host figure figcaption > strong:first-child,
+:host article > div > strong:first-child {
+  color: var(--pretitle-color);
+}
+
 :host figure:hover figcaption > strong:first-child,
 :host article:hover > div > strong:first-child {
-  color: var(--color);
+  color: var(--pretitle-color-hover);
 }
 
 :host p {

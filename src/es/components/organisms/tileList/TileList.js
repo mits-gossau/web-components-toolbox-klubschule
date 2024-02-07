@@ -12,10 +12,12 @@ export default class TileList extends Shadow() {
 
     this.clickEventListener = event => {
 
-      if (this.icon.getAttribute('icon-name') == 'ChevronDown') {
-        this.icon.setAttribute('icon-name', 'ChevronUp');
-      } else {
-        this.icon.setAttribute('icon-name', 'ChevronDown');
+      if (this.icon) {
+        if (this.icon.getAttribute('icon-name') == 'ChevronDown') {
+          this.icon.setAttribute('icon-name', 'ChevronUp');
+        } else {
+          this.icon.setAttribute('icon-name', 'ChevronDown');
+        }
       }
 
       this.details = this.root.querySelector('.o-tile-list__details');
@@ -24,8 +26,11 @@ export default class TileList extends Shadow() {
   }
 
   connectedCallback () {
-    if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
+    this.hidden = true
+    const showPromises = []
+    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+    Promise.all(showPromises).then(() => (this.hidden = false))
 
     /**
      * Toggle details
@@ -235,6 +240,7 @@ export default class TileList extends Shadow() {
         }
       }
     `
+    return Promise.resolve()
   }
 
   /**
@@ -309,6 +315,10 @@ export default class TileList extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/tile/Tile.js`,
         name: 'ks-m-tile'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
+        name: 'ks-m-tooltip'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
