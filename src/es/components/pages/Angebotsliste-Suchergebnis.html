@@ -4,8 +4,33 @@
         <ks-m-tiles-filter namespace="tile-filter-default-">
             <div class="m-tile-filter">
                 <div class="m-tile-filter__search">
-                  <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
-                  <a-input inputid="searchField" placeholder="Label" icon-name="Location" icon-size="1.25em" search="?q=" type="search"></a-input>
+                    <m-dialog namespace="dialog-top-slide-in-">
+                        <div class="container">
+                            <a-input inputid="offer-search" placeholder="Ihr Angebot?" icon-name="Search" icon-size="1.5em" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>
+                            <div id="close">
+                                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                            </div>
+                        </div>
+                        <div class="container">
+                            
+                        </div>
+                        <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Angebot" icon-name="search" icon-size="1.25em" search type="search"></a-input>
+                    </m-dialog>
+                    <m-dialog namespace="dialog-top-slide-in-">
+                        <div class="container">
+                            <a-input inputid="location-search" placeholder="Ihr Standort?" icon-name="Location" icon-size="1.5em" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>
+                            <div id="close">
+                                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                            </div>
+                        </div>
+                        <div class="container">
+                            
+                        </div>
+                        <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search"></a-input>
+                    </m-dialog>
+
+                  <!-- <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
+                  <a-input inputid="searchField" placeholder="Label" icon-name="Location" icon-size="1.25em" search="?q=" type="search"></a-input> -->
                 </div>
                 <div class="m-tile-filter__buttons">
                 <ks-a-button filter namespace="button-primary-" color="secondary">

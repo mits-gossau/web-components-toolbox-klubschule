@@ -35,6 +35,11 @@ export default class TilesFilter extends Shadow() {
         display: flex;
         flex-direction: row;
         margin-bottom: 3em;
+        gap: 3em;
+      }
+
+      :host .m-tile-filter__search > * {
+        width: 100%;
       }
 
       :host a-input[inputid="searchField"] {
