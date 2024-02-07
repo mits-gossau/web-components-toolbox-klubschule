@@ -1,5 +1,7 @@
 :host {
     --picture-teaser-transition: transform .5s ease-out;
+    --picture-teaser-img-object-fit: cover;
+
     --teaser-text-image-headline-font-family: var(--mdx-sys-font-flex-large-headline2-font-family);
     --teaser-text-image-headline-font-size: var(--mdx-sys-font-flex-large-headline2-font-size);
     --teaser-text-image-headline-font-weight: var(--mdx-sys-font-flex-large-headline2-font-weight);
