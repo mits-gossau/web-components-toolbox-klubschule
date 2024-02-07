@@ -32,10 +32,6 @@ export default class KsFooter extends Footer {
                 path: `${this.importMetaUrl}../../../../../../organisms/footer/default-/default-.css`, // apply namespace since it is specific and no fallback
                 namespace: false
             }, ...styles], false)
-            .then(fetchCSSParams => {
-                // make template ${code} accessible aka. set the variables in the literal string
-                fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
-            })
         default:
             return this.fetchCSS(styles)
         } 
@@ -222,24 +218,24 @@ export default class KsFooter extends Footer {
               path: `${this.importMetaUrl}../../../../../../atoms/button/Button.js`,
               name: 'ks-a-button'
             }
-        ])
-        // Add toTheTop Button
-        const toTheTopButton = document.createElement("ks-a-button")
-        toTheTopButton.setAttribute("icon", true)
-        toTheTopButton.setAttribute("namespace", "button-primary-")
-        toTheTopButton.setAttribute("color", "secondary")
-
-        const icon = document.createElement("a-icon-mdx")
-        icon.setAttribute("icon-name", "ArrowUp")
-        icon.setAttribute("size", "1rem")
-
-        toTheTopButton.appendChild(icon)
-        toTheTopButton.addEventListener("click", () => window.scrollTo(0, 0))
-
-        this.root.appendChild(toTheTopButton)
-        // Overwrite ordering by super footer.js
-        const copyrightTag = this.root.querySelector(".copyright")
-        copyrightTag && copyrightTag.classList.remove('copyright')
+        ]).then(([iconMdx, button]) => {
+            // Add toTheTop Button
+            const toTheTopButton = new button.constructorClass({ namespace: 'button-primary-' })
+            toTheTopButton.setAttribute("icon", true)
+            toTheTopButton.setAttribute("color", "secondary")
+    
+            const icon = new iconMdx.constructorClass()
+            icon.setAttribute("icon-name", "ArrowUp")
+            icon.setAttribute("size", "1rem")
+    
+            toTheTopButton.root.appendChild(icon)
+            toTheTopButton.addEventListener("click", () => window.scrollTo(0, 0))
+    
+            this.root.appendChild(toTheTopButton)
+            // Overwrite ordering by super footer.js
+            const copyrightTag = this.root.querySelector(".copyright")
+            copyrightTag && copyrightTag.classList.remove('copyright')
+        })
     }
 
     /**
