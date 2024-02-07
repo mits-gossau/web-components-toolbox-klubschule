@@ -1,10 +1,8 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
-// import centers from './mock/centers.json' assert { type: "json" };
-
 /**
-* CenterFilterList is the filter factory listening to the WithFacet controller
+* CenterFilterList is the filter factory listening to the Centers controller
 *
 * @export
 * @class CenterFilterList
@@ -64,17 +62,16 @@ export default class CenterFilterList extends Shadow() {
 
     renderHTML (fetch) {
       fetch.then(centers => {
-        console.log(centers)
-
         const lang = this.getAttribute('lang') || document.documentElement.getAttribute('lang')
-        console.log({lang})
   
         const resetParagraph = document.createElement('p')
-        const resetLink = document.createElement('a')
-        const resetText = this.getAttribute('reset-text') || "zurücksetzen";
-        resetLink.appendChild(document.createTextNode(resetText))
-        resetParagraph.appendChild(resetLink)
-        resetParagraph.classList.add('reset-link')
+        const resetText = this.getAttribute('reset-text');
+        if (resetText) {
+          const resetLink = document.createElement('a')
+          resetLink.appendChild(document.createTextNode(resetText))
+          resetParagraph.appendChild(resetLink)
+          resetParagraph.classList.add('reset-link')
+        }
   
         const centerFilter = document.createElement('div')
         centerFilter.appendChild(resetParagraph)
@@ -84,9 +81,7 @@ export default class CenterFilterList extends Shadow() {
             name: 'mdx-component'
         }])
   
-        console.log("centers.lang", centers[lang])
         Object.keys(centers[lang]).forEach(region => {
-          console.log(region)
           // label
           const label = document.createElement('label')
           label.classList.add('headline')

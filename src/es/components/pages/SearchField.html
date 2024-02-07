@@ -26,36 +26,6 @@
             namespace="dialog-top-slide-in-"
         >
             <div class="container">
-                <a-input inputid="location-search" autofocus placeholder="Ihr Standort?" icon-name="Search" icon-size="1.5em" search submit-search="request-auto-complete" any-key-listener type="search" autofocus></a-input>
-                <div id="close">
-                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                </div>
-            </div>
-            <div class="container">
-                <ks-m-auto-complete-list>
-                    <!-- This would be initially rendered Autocomplete Lists, leave empty if none -->
-                    <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Aktueller Standort</li>
-                    <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs Zürich</li>
-                    <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs</li>
-                    <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Deutsch</li>
-                    <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Deutsch<strong>schweiz</strong></li>
-                    <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Bedeutungsnuancen</li>
-                    <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau A1</strong></li>
-                    <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau A2</strong></li>
-                    <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau B</strong></li>
-                </ks-m-auto-complete-list>
-            </div>
-            <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Search" icon-size="1.25em" search type="search">Suche</a-input>
-        </m-dialog>
-    </section>
-
-    <h1 id="secondary">Search Field (auto complete)</h1>
-
-    <section>
-        <m-dialog
-            namespace="dialog-top-slide-in-"
-        >
-            <div class="container">
                 <a-input inputid="location-search" autofocus placeholder="Ihr Standort?" icon-name="Location" icon-size="1.5em" search submit-search="request-auto-complete" any-key-listener type="search" autofocus></a-input>
                 <div id="close">
                     <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
@@ -63,15 +33,66 @@
             </div>
             <div class="container">
                 <ks-m-auto-complete-list>
-                    <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Aktueller Standort</li>
-                    <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs Zürich</li>
-                    <li><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> Buchs</li>
-                    <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Deutsch</li>
-                    <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Deutsch<strong>schweiz</strong></li>
-                    <li><a-icon-mdx icon-name="Search" size="1em"></a-icon-mdx> Bedeutungsnuancen</li>
-                    <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau A1</strong></li>
-                    <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau A2</strong></li>
-                    <li><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx> Deutsch <strong>Niveau B</strong></li>
+                    <div>
+                      <ul>
+                        <li>
+                          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Search" size="1em"></a-icon-mdx>
+                          <span>Deutsch</span>
+                        </li>
+                        <li>
+                          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Search" size="1em"></a-icon-mdx>
+                          <span>Deutschschweiz</span>
+                        </li>
+                        <li>
+                          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Search" size="1em"></a-icon-mdx>
+                          <span>Bedeutungsnuancen</span>
+                        </li>
+                        <li>
+                          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em"></a-icon-mdx>
+                          <span>Deutsch Niveau A1</span>
+                        </li>
+                        <li>
+                          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em"></a-icon-mdx>
+                          <span>Deutsch Niveau A2</span>
+                        </li>
+                      </ul>
+                      <div class="content">
+                        <span class="heading">Weitere Inhalte</span>
+                        <ul class="list">
+                          <li>
+                            <a-picture picture-load defaultSource="http://via.placeholder.com/200x200" alt="more content"></a-picture>
+                            <div>
+                              <span class="title">Lorem Ipsum Headline</span>
+                              <span class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                            </div>
+                          </li>
+                          <li>
+                            <div>
+                              <span class="title">Lorem Ipsum Headline</span>
+                              <span class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                            </div>
+                          </li>
+                          <li>
+                            <a-picture picture-load defaultSource="http://via.placeholder.com/200x200" alt="more content"></a-picture>
+                            <div>
+                              <span class="title">Lorem Ipsum Headline</span>
+                              <span class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                            </div>
+                          </li>
+                          <li>
+                            <a-picture picture-load defaultSource="http://via.placeholder.com/200x200" alt="more content"></a-picture>
+                            <div>
+                              <span class="title">Lorem Ipsum Headline</span>
+                              <span class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                            </div>
+                          </li>
+                        </ul>
+                        <a href="#">
+                          Link Text
+                          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em"></a-icon-mdx>
+                        </a>
+                      </div>
+                    </div>
                 </ks-m-auto-complete-list>
             </div>
             <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search">Angebote in Ihrer Nähe finden</a-input>

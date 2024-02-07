@@ -1,52 +1,51 @@
+:host * {
+  box-sizing: border-box;
+  margin: 0 !important;
+}
+
 :host {
   /* css vars that are passed to children */
   --picture-teaser-transition: transform .5s ease-out;
-  --color: #262626;
+  --color: var(--color-neutral-bold4);
 
   /* component css vars */
-  --teaser-tile-color: #262626;
-  --teaser-tile-color-${this.getAttribute('color')}: --color-${this.getAttribute('color')};
+  --teaser-tile-color: var(--color);
+  --teaser-tile-color-${this.getAttribute('color')}: var(--color-${this.getAttribute('color')});
   --teaser-tile-transition: color .3s ease-out , background-color .3s ease-out !important;
   
-  --teaser-tile-pretitle-font-family: var(--title4-font-family);
-  --teaser-tile-pretitle-font-size: var(--title4-font-size);
-  --teaser-tile-pretitle-font-weight: var(--title4-font-weight);
-  --teaser-tile-pretitle-line-height: var(--title4-line-height);
+  --teaser-tile-pretitle-font-family: var(--mdx-sys-font-fix-title4-font-family);
+  --teaser-tile-pretitle-font-size: var(--mdx-sys-font-fix-title4-font-size);
+  --teaser-tile-pretitle-font-weight: var(--mdx-sys-font-fix-title4-font-weight);
+  --teaser-tile-pretitle-line-height: var(--mdx-sys-font-fix-title4-line-height);
 
   --teaser-tile-headline-font-family: var(--h3-font-family);
   --teaser-tile-headline-font-size: var(--h3-font-size);
   --teaser-tile-headline-font-weight: var(--h3-font-weight);
   --teaser-tile-headline-line-height: var(--h3-line-height);
 
-  --teaser-tile-cta-font-family: var(--label2-font-family);
-  --teaser-tile-cta-font-size: var(--label2-font-size);
-  --teaser-tile-cta-font-weight: var(--label2-font-weight);
-  --teaser-tile-cta-line-height: var(--label2-line-height);
+  --teaser-tile-cta-font-family: var(--mdx-sys-font-fix-label2-font-family);
+  --teaser-tile-cta-font-size: var(--mdx-sys-font-fix-label2-font-size);
+  --teaser-tile-cta-font-weight: var(--mdx-sys-font-fix-label2-font-weight);
+  --teaser-tile-cta-line-height: var(--mdx-sys-font-fix-label2-line-height);
 }
 
 :host figure {
-  --color: #262626;
   --teaser-tile-transition: color .3s ease-out , background-color .3s ease-out !important;
-  --picture-teaser-transition: transform .5s ease-out; 
-}
-
-:host figure:hover {
-  --color: white; /* TODO: apply correct token */
-  --picture-teaser-transform: scale(1.05, 1.05);
-}
-
-:host figure {
+  --picture-teaser-transition: transform .5s ease-out;
+  
   display: block;
-  background: white; /* TODO: apply correct token */
+  background: var(--mdx-sys-color-neutral-on-default);
   border-style: solid;
-  border-color: #737373; /* TODO: apply correct token */
+  border-color: var(--mdx-sys-color-neutral-bold1);
   border-width: 1px;
   color: var(--color);
 }
 
 :host figure:hover {
+  --color: var(--mdx-sys-color-neutral-on-default);
+  --picture-teaser-transform: scale(1.05, 1.05);
+
   background: var(--color-${this.getAttribute('color')}, black);
-  color: white !important; /* TODO: apply correct token */
 }
 
 :host figcaption {
@@ -55,7 +54,7 @@
 }
 
 :host figure:hover figcaption > strong:first-child {
-  color: white;
+  color: var(--color);
 }
 
 @media only screen and (max-width: _max-width_) {

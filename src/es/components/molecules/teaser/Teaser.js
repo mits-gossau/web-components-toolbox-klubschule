@@ -18,6 +18,23 @@ export default class KsTeaser extends Teaser {
       importMetaUrl: import.meta.url,
       ...options
     }, ...args)
+
+    if (this.getAttribute('namespace') === 'teaser-text-image-') {
+      const btn = this.root.querySelector('ks-a-button')
+      this.mouseoverListener = event => {
+        if (btn) btn.classList.add('hover')
+      }
+      this.mouseoutListener = event => {
+        if (btn) btn.classList.remove('hover')
+      }
+    }
+  }
+
+  connectedCallback () {
+    super.connectedCallback();
+
+    this.addEventListener('mouseover', this.mouseoverListener)
+    this.addEventListener('mouseout', this.mouseoutListener)
   }
 
   /**
@@ -31,6 +48,8 @@ export default class KsTeaser extends Teaser {
         return this.fetchNamespaceTemplate(['tile-/tile-.css'])
       case 'teaser-story-':
         return this.fetchNamespaceTemplate(['story-/story-.css'])
+      case 'teaser-text-image-':
+        return this.fetchNamespaceTemplate(['text-image-/text-image-.css'])
       default:
         return super.fetchTemplate()
     }
@@ -70,12 +89,13 @@ export default class KsTeaser extends Teaser {
     this.css = /* css */`
         :host * {
           box-sizing: border-box;
-          margin: 0 !important;
+          margin: 0;
         }
 
         :host a-picture {
           display: block;
           overflow: hidden;
+          ${ (this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : '' }
         }
 
         :host figure {
@@ -106,11 +126,11 @@ export default class KsTeaser extends Teaser {
           transition: var(--transition);
         }
 
-        :host figcaption h5,
-        :host figcaption h4,
-        :host figcaption h3,
-        :host figcaption h2,
-        :host figcaption h1 {
+        :host h5,
+        :host h4,
+        :host h3,
+        :host h2,
+        :host h1 {
           color: inherit !important;
           transition: var(--transition);
           font-family: var(--headline-font-family) !important;

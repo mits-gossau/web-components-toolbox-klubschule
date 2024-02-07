@@ -51,9 +51,11 @@
 }
 
 :root {
+  --a-emotion-pictures-margin-top-first-child: auto;
   --any-content-spacing-mobile: var(--any-content-spacing);
-  --any-content-spacing: 4rem;
-  --any-content-width: min(1920px, 87%);
+  --any-content-spacing: var(--mdx-sys-spacing-flex-l);
+  --any-content-width: calc(min(100%, var(--body-max-width)) - var(--mdx-sys-spacing-flex-large-xs) * 2);
+  --a-wrapper-margin: 0;
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);
@@ -72,6 +74,8 @@
   --background-color-tertiary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-tertiary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-tertiary: var(--mdx-sys-color-brand-neutral-0);
+  --body-max-width: 1920px;
+  --body-margin: 0 auto;
   --button-quaternary-background-color-quaternary-active: var(--mdx-sys-color-brand-accent-1-100);
   --button-quaternary-background-color-quaternary-disabled: var(--mdx-sys-color-brand-accent-1-100);
   --button-quaternary-background-color-quaternary-hover: var(--mdx-sys-color-brand-accent-1-100);
@@ -125,11 +129,11 @@
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-title-img-max-height: var(--emotion-pictures-default-img-max-height);
-  --font-family-bold: "Graphik", HelveticaNowTextBold, HelveticaNowText, Helvetica, Arial, sans-serif;
-  --font-family-secondary: "Graphik", Avenir35Light, sans-serif;
-  --font-family: "Graphik", HelveticaNowText, Helvetica, Arial, sans-serif;
-  --font-size-mobile: min(16px, 6vw);
-  --font-size: max(18px, 0.6vw);
+  --font-family-bold: "Graphik", Helvetica, Arial, sans-serif;
+  --font-family-secondary: "Graphik", Helvetica, Arial, sans-serif;
+  --font-family: "Graphik", Helvetica, Arial, sans-serif;
+  --font-size-mobile: min(16px, 6vw); /* base rem size for mobile and desktop need to be 16px */
+  --font-size: 16px;
   --grid-1column-align-center-padding-custom: 4rem 1.5rem;
   --grid-1column-align-center-padding-mobile-custom: 3rem 0;
   --grid-2columns-content-section-first-column-padding-custom: 4rem 4.5rem;
@@ -164,7 +168,7 @@
   --navigation-alnatura-line-height-mobile: 1.5;
   --navigation-alnatura-search-justify-content: flex-end;
   --navigation-alnatura-color-mobile-custom: var(--color);
-  --login-width: var(--any-content-width);
+  --login-width: var(--header-default-content-width);
   --search-input-background-color-focus: var(--m-white);
   --search-input-background-color-hover: var(--m-white);
   --search-input-background-color: var(--m-white);
@@ -180,7 +184,7 @@
   --search-label-line-height: calc(4/3);
   --tag-filter-horizontal-gap: 0.5em;
   --title-border-display: none;
-  --icon-color-blue: #0053A6;
+  --icon-color-blue: var(--mdx-sys-color-primary-default);
   --content-width: 80%;
 
   --search-input-tiles-search-input-border-color: var(--m-gray-700);
@@ -190,21 +194,50 @@
   --search-input-tiles-input-font-size: 1.125em;
   --search-input-tiles-icon-color: var(--icon-color-blue);
 
-  --button-secondary-filter-color: #0053A6;
+  --button-secondary-filter-color: var(--mdx-sys-color-primary-default);
   --button-secondary-filter-background-color-hover: transparent;
   --button-secondary-filter-padding: 0;
 
   --button-primary-icon-right-margin: 0;
   --button-primary-label-margin: 0 0.25em 0 0;
-  --footer-default-footer-width: var(--any-content-width);
+  --footer-default-footer-width: 100%;
   --footer-default-footer-margin: 0 auto;
   --footer-default-footer-width-mobile: 100%;
   --footer-default-footer-margin-mobile: 0;
-  --p-margin: 0 auto calc(16rem/18); /* 16px */
-  --ul-margin: 0 auto calc(16rem/18);
+  
+  --h-hyphens: auto;
+
+  /* list styles */
+  --ol-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
+  --ul-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
   --ul-padding-left: 1.33333em;
   --ul-li-padding-left: calc(4rem/18);
-  --h-hyphens: auto;
+
+  /* paragraph */
+  --p-font-family: var(--mdx-sys-font-flex-body3-font-family);
+  --p-font-size: var(--mdx-sys-font-flex-body3-font-size);
+  --p-line-height: var(--mdx-sys-font-flex-body3-line-height);
+  --p-font-weight: var(--mdx-sys-font-flex-body3-font-weight);
+  --p-margin: 0 auto var(--mdx-sys-spacing-flex-s);
+
+  /* links */
+  --a-color: var(--mdx-comp-link-color-default);
+  --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
+  --a-font-size: 1em;
+  --a-text-decoration: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+  --a-color-hover: var(--mdx-comp-link-color-hover);
+  --a-text-decoration-hover: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+
+  /* hr */
+  --hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-bold1);
+  --hr-opacity: 1;
+  --hr-border-width: 1px;
+  --hr-margin: var(--mdx-sys-spacing-flex-s) auto;
+
+  --hr-secondary-border-bottom: 1px solid var(--mdx-sys-color-neutral-subtle4);
+  --hr-secondary-border-width: 1px;
+  --hr-secondary-opacity: 1;
+  --hr-secondary-margin: var(--mdx-sys-spacing-flex-xs) auto;
 
   /* Tables */
   --table-th-font-weight: 500;
@@ -232,6 +265,16 @@
 
   --icon-mdx-ks-tile-color: var(--mdx-base-color-klubschule-blue-600);
   --icon-mdx-ks-badge-color: var(--mdx-base-color-grey-0);
+  --icon-link-list-color: var(--mdx-sys-color-primary-default);
+  --icon-link-list-color-hover: var(--mdx-sys-color-primary-default);
+
+  --details-default-icon-right-border-top-custom: none;
+  --details-default-icon-right-border-bottom: 0.0625em solid var(--mdx-base-color-grey-700);
+  --details-default-icon-right-border-bottom-last-custom: 0.0625em solid var(--mdx-base-color-grey-700);
+  --details-default-icon-right-border-color-custom: var(--mdx-base-color-grey-700);
+  --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
+  --details-default-icon-right-h4-font-size: 1em;
+  --details-default-icon-right-h4-line-height: 1.125em;
 }
 
 .class-name {
