@@ -6,6 +6,7 @@
 :host {
   /* css vars that are passed to children */
   --picture-teaser-transition: transform .5s ease-out;
+  --picture-teaser-img-object-fit: cover;
   --color: var(--color-neutral-bold4);
 
   /* component css vars */
