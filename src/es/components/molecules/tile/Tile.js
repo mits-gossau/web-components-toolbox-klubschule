@@ -44,10 +44,12 @@ export default class Tile extends Shadow() {
       :host .m-tile {
         background-color: var(--background-color);
         border: 0.0625em solid var(--border-color);
+        height: 100%;
       }
 
       :host .m-tile__wrap {
         position: relative;
+        height: 100%;
       }
     
       :host .m-tile__overlay {
@@ -273,8 +275,13 @@ export default class Tile extends Shadow() {
           }
         </div>
         <div class="m-tile__body">
-          ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
-          <span class="m-tile__content">${data.location?.name || warnMandatory + 'location'}</span>
+          ${data.location?.name
+            ? /* html */`
+            ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
+            <span class="m-tile__content">${data.location?.name || warnMandatory + 'location'}</span>
+            `
+            : ''
+          }
           ${data.location?.badge
             ? /* html */`
               <ks-a-button badge namespace="button-secondary-" color="tertiary">
