@@ -68,10 +68,6 @@ export default class TileList extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host {
-        width: 80%;
-      }
-
       :host .o-tile-list {
         background-color: var(--m-white);
         border: 0.0625em solid var(--m-gray-700);
@@ -175,7 +171,7 @@ export default class TileList extends Shadow() {
       :host ks-m-tile {
         margin-right: 1em;
         margin-bottom: 2em;
-        width: 32%
+        width: 32%;
       }
 
       :host ks-m-tile:nth-child(3n) {
@@ -250,6 +246,7 @@ export default class TileList extends Shadow() {
   renderHTML () {
     const warnMandatory = 'data attribute requires: '
     const data = TileList.parseAttribute(this.getAttribute('data'))
+    console.log(data);
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
@@ -257,10 +254,19 @@ export default class TileList extends Shadow() {
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
             <span class="o-tile-list__title">${data.title || warnMandatory + 'title'}</span>
-            ${data.iconTooltip ? '<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>' : ''}          
+            ${data.iconTooltip ? `
+            <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
+              <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
+            </ks-m-tooltip>
+              ` : ''}          
           </div>
           <div class="o-tile-list__middle">
-            <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
+            ${data.location?.name
+              ? /* html */`
+              <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
+              `
+              : ''
+            }
             ${data.location?.badge
               ? /* html */`
                 <ks-a-button badge namespace="button-secondary-" color="tertiary">
@@ -272,16 +278,18 @@ export default class TileList extends Shadow() {
           </div>
           <div class="o-tile-list__bottom">
             <div class="o-tile-list__bottom-left">
-              <ks-a-button namespace="button-secondary-" color="secondary">
+              <ks-a-button namespace="button-quaternary-" color="secondary">
                 <span>${data.button.text || warnMandatory + 'button.text'}</span>
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ChevronDown" size="1em" class="icon-right">
               </ks-a-button>
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="o-tile-list__icon-box">
-                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.iconTooltip}">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                  </ks-m-tooltip>
                 </div>
               `, '')}           
               </div>

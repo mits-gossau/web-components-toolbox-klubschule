@@ -130,11 +130,11 @@ export default class TileFactory extends Shadow() {
   fillGeneralTileInfo (course) {
     return `
       'title': '${course.title}',
-      'iconTooltip': 'to be defined',
+      'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text',
       'location': {
         'iconName': 'Location',
-        'name': '${course.locations.join(', ')}',
-        'badge': '${course.eTyp}'
+        'name': '${course.locations ? course.locations.join(', ') : ''}',
+        'badge': '${course.eTyp ? course.eTyp : ''}'
       },
       'button': {
         'text': '${course.stateDesc}',
@@ -143,17 +143,17 @@ export default class TileFactory extends Shadow() {
       'icons': [
         {
           'name': 'Percent',
-          'iconTooltip': 'gonna be extended'
+          'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text'
         },
         {
           'name': 'Bell',
-          'iconTooltip': 'gonna be extended'
+          'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text'
         }
       ],
       'price': {
         'from': '${course.pricetyp}',
         'amount': '${course.price}',
-        'per': 'gonna be extended'
+        'per': 'Semester'
       }
     `
   }
