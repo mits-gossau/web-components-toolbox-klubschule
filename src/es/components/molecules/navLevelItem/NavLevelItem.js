@@ -27,6 +27,8 @@ export default class NavLevelItem extends Shadow() {
           padding: 0.75em;
           cursor: pointer;
           background-color: var(--background-color);
+          height: var(--height, auto);
+          margin: var(--margin, 0);
           transition: background-color 0.3s ease-in-out;
         }
 
