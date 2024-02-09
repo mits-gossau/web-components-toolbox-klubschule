@@ -6,7 +6,7 @@ import Picture from '../../web-components-toolbox/src/es/components/atoms/pictur
 * @type {CustomElementConstructor}
 */
 export default class KsPicture extends Picture {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
@@ -16,19 +16,19 @@ export default class KsPicture extends Picture {
    * @return {void}
    */
   renderHTML () {
-    super.renderHTML();
+    super.renderHTML()
 
     if (this.hasAttribute('open-modal')) {
       this.closeBtn.innerHTML = /* HTML */`
         <a-icon-mdx icon-name="Maximize" size="2rem" icon-size="24x24"></a-icon-mdx>
-      `;
+      `
     }
-    
+
     // if (this.getAttribute('caption')) {
     //     this.html = /* HTML */`
     //       ${
-    //         this.hasAttribute('show-caption-line') 
-    //           ? /* HTML */`<span class="picture__line"></span>` 
+    //         this.hasAttribute('show-caption-line')
+    //           ? /* HTML */`<span class="picture__line"></span>`
     //           : ''
     //       }
     //       <p class="picture__caption">
@@ -49,8 +49,8 @@ export default class KsPicture extends Picture {
    *
    * @return {Promise<void>}
    */
-  renderCSS() {
-    super.renderCSS();
+  renderCSS () {
+    super.renderCSS()
     // this.css = /* css */ `
     //   :host {
     //     width: 100%;
@@ -92,7 +92,7 @@ export default class KsPicture extends Picture {
    *
    * @return {Promise<void>}
    */
-  fetchTemplate() {
+  fetchTemplate () {
     const styles = [
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
@@ -103,7 +103,7 @@ export default class KsPicture extends Picture {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
         namespaceFallback: true,
         maxWidth: this.getMobileBreakpoint({})
-      },
+      }
     ]
     switch (this.getAttribute('namespace')) {
       case 'picture-default-':

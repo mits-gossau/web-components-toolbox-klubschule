@@ -1,11 +1,4 @@
 :host {
-   --picture-default-wrapper-inner-spacing: var(--mdx-sys-spacing-fix-s);
-   --picture-default-divider-color: var(--mdx-sys-color-accent-1-default);
-   --picture-default-divider-width: var(--mdx-sys-sizing-fix-3xl);
-   --picture-default-divider-height: var(--mdx-sys-sizing-fix-2xs);
-   --picture-default-copy-typography: var(--mdx-sys-font-fix-body1);
-   --picture-default-copy-spacing: var(--mdx-sys-spacing-fix-2xs);
-
    --picture-default-img-max-height: none;
 }
 
