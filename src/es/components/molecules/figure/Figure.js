@@ -93,12 +93,14 @@ export default class KsFigure extends Shadow(HTMLElement) {
       }
 
       @media only screen and (max-width: _max-width_) {
+        /* pulling the picture slightly (8px) out of the container on mobile with negative margin to match the design */
+        :host ks-a-picture {
+          margin-left: calc(var(--mdx-sys-spacing-fix-2xs) * -1);
+          margin-right: calc(var(--mdx-sys-spacing-fix-2xs) * -1);
+        }
         :host figcaption::before {
           width: calc(var(--divider-width) - var(--divider-height));
         }
-        :host figcaption {
-            padding: 0 var(--mdx-sys-spacing-fix-2xs);
-          }
       }
 
     `
