@@ -277,6 +277,7 @@
   --details-default-icon-right-h4-line-height: 1.125em;
 
   /* content stage */
+  --grid-2columns-content-stage-stage-content-margin-custom: 3rem 6rem 2rem 1.5rem; 
   --grid-2columns-content-stage-a-color: white;
   --grid-2columns-content-stage-address-font-custom: var(--mdx-sys-font-flex-large-body3);
   --grid-2columns-content-stage-address-gap-custom: 0.5em;
