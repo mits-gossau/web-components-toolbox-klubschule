@@ -1,0 +1,75 @@
+:host {
+    --picture-teaser-transition: transform .5s ease-out;
+    --picture-teaser-img-object-fit: cover;
+
+    --button-tertiary-margin: 0;
+
+    --teaser-fullwidth-headline-font-family: var(--mdx-sys-font-flex-large-headline2-font-family);
+    --teaser-fullwidth-headline-font-size: var(--mdx-sys-font-flex-large-headline2-font-size);
+    --teaser-fullwidth-headline-font-weight: var(--mdx-sys-font-flex-large-headline2-font-weight);
+    --teaser-fullwidth-headline-line-height: var(--mdx-sys-font-flex-large-headline2-line-height);
+
+    display: block;
+    position: relative;
+}
+
+:host(:hover) {
+    --picture-teaser-transform: scale(1.1);
+}
+
+:host > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: absolute;
+    width: 25%;
+    min-width: 21rem;
+    aspect-ratio: 1;
+    bottom: var(--mdx-sys-spacing-fix-m);
+    padding: var(--mdx-sys-spacing-fix-2xl) var(--mdx-sys-spacing-fix-m);
+    color: white;
+    background: var(--color-${this.getAttribute('color')});
+}
+
+:host > div > * {
+    margin: 0 !important;
+}
+
+:host([text-position=left]) > div {
+    left: var(--mdx-sys-spacing-fix-m);
+}
+
+:host([text-position=right]) > div {
+    right: var(--mdx-sys-spacing-fix-m);
+}
+
+:host h1, 
+:host h2,
+:host h3,
+:host h4 {
+    margin-bottom: var(--mdx-sys-spacing-fix-m) !important;
+}
+
+:host p {
+    font-family: var(--mdx-sys-font-flex-body3-font-family);
+    font-size: var(--mdx-sys-font-flex-body3-font-size);
+    font-weight: var(--mdx-sys-font-flex-body3-font-weight);
+    line-height: var(--mdx-sys-font-flex-body3-line-height);
+    letter-spacing: var(--mdx-sys-font-flex-body3-letter-spacing);
+    margin-bottom: var(--mdx-sys-spacing-fix-l) !important;
+    min-height: unset;
+    flex: 1;
+}
+
+@media only screen and (max-width: _max-width_ ) {
+    :host {
+        display: flex;
+        flex-direction: column;
+    }
+
+    :host > div {
+        position: static;
+        width: 100%;
+        aspect-ratio: unset;
+    }
+}
