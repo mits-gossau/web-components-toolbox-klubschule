@@ -1,7 +1,4 @@
 :host {
-    --picture-teaser-transition: transform .5s ease-out;
-    --picture-teaser-img-object-fit: cover;
-
     --button-tertiary-margin: 0;
 
     --teaser-fullwidth-headline-font-family: var(--mdx-sys-font-flex-large-headline2-font-family);
@@ -11,6 +8,17 @@
 
     display: block;
     position: relative;
+    margin-left: calc(var(--mdx-sys-spacing-fix-m) * -1);
+    margin-right: calc(var(--mdx-sys-spacing-fix-m) * -1);
+    overflow: hidden;
+
+    container: teaser / inline-size;
+}
+
+a-picture {
+    --picture-teaser-transition: transform .5s ease-out;
+    --picture-teaser-img-object-fit: cover;
+    --picture-teaser-aspect-ratio: 2 / 1;
 }
 
 :host(:hover) {
@@ -23,8 +31,9 @@
     justify-content: flex-start;
     position: absolute;
     width: 25%;
-    min-width: 21rem;
+    min-width: 25rem;
     aspect-ratio: 1;
+    max-height: calc(100% - var(--mdx-sys-spacing-fix-m) * 2);
     bottom: var(--mdx-sys-spacing-fix-m);
     padding: var(--mdx-sys-spacing-fix-2xl) var(--mdx-sys-spacing-fix-m);
     color: white;
@@ -61,15 +70,28 @@
     flex: 1;
 }
 
-@media only screen and (max-width: _max-width_ ) {
+@container teaser (max-width: 900px) {
+    a-picture {
+        --picture-teaser-aspect-ratio: 4 / 3;
+    }
+}
+
+@container teaser (max-width: 700px) {
+    a-picture {
+        --picture-teaser-aspect-ratio: 2 / 1;
+    }
+
     :host {
         display: flex;
         flex-direction: column;
+        margin-left: calc(var(--mdx-sys-spacing-fix-s) * -1);
+        margin-right: calc(var(--mdx-sys-spacing-fix-s) * -1);
     }
 
     :host > div {
         position: static;
         width: 100%;
         aspect-ratio: unset;
+        padding: var(--mdx-sys-spacing-fix-m) var(--mdx-sys-spacing-fix-s) var(--mdx-sys-spacing-fix-l);
     }
 }
