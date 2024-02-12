@@ -275,6 +275,22 @@
   --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
   --details-default-icon-right-h4-font-size: 1em;
   --details-default-icon-right-h4-line-height: 1.125em;
+
+  /* content stage */
+  --grid-2columns-content-stage-stage-content-margin-custom: 3rem 6rem 2rem 1.5rem; 
+  --grid-2columns-content-stage-stage-content-margin-mobile-custom: 1rem 1rem 3rem 1rem; 
+  --grid-2columns-content-stage-text-color-custom: var(--mdx-base-color-grey-975);
+  --grid-2columns-content-stage-a-color: white;
+  --grid-2columns-content-stage-address-font-custom: var(--mdx-sys-font-flex-large-body3);
+  --grid-2columns-content-stage-address-gap-custom: 0.5em;
+  --grid-2columns-content-stage-aside-image-padding-custom: var(--mdx-sys-spacing-flex-large-xs);
+  --grid-2columns-content-stage-label-border-custom: 1px solid white;
+  --grid-2columns-content-stage-label-border-radius-custom: 0.1875em;
+  --grid-2columns-content-stage-label-font-custom: var(--mdx-sys-font-fix-body2);
+  --grid-2columns-content-stage-label-margin-left-custom: 0.25em;
+  --grid-2columns-content-stage-label-padding-custom: 0.25em 0.5em;
+  --grid-2columns-content-stage-paragraph-font-custom: var(--mdx-sys-font-flex-large-body2);
+  --grid-2columns-content-stage-topline-font-custom: var(--mdx-sys-font-fix-label1);
 }
 
 .class-name {
