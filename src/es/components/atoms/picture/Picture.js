@@ -19,72 +19,18 @@ export default class KsPicture extends Picture {
     super.renderHTML()
 
     if (this.hasAttribute('open-modal')) {
+      /* this.closeBtn is actually open modal button in this case */
       this.closeBtn.innerHTML = /* HTML */`
         <a-icon-mdx icon-name="Maximize" size="2rem" icon-size="24x24"></a-icon-mdx>
       `
     }
 
-    // if (this.getAttribute('caption')) {
-    //     this.html = /* HTML */`
-    //       ${
-    //         this.hasAttribute('show-caption-line')
-    //           ? /* HTML */`<span class="picture__line"></span>`
-    //           : ''
-    //       }
-    //       <p class="picture__caption">
-    //         ${this.getAttribute('caption')}
-    //       </p>
-    //     `;
-    // }
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
       }
     ])
-  }
-
-  /**
-   * renders the css
-   *
-   * @return {Promise<void>}
-   */
-  renderCSS () {
-    super.renderCSS()
-    // this.css = /* css */ `
-    //   :host {
-    //     width: 100%;
-    //   }
-    //   :host,
-    //   :host > *:not(style) {
-    //     display: block;
-    //   }
-
-    //   :host picture {
-    //     margin-bottom: var(--wrapper-inner-spacing)
-    //   }
-
-    //   :host .picture__line {
-    //     width: var(--divider-width);
-    //     height: var(--divider-height);
-    //     background-color: var(--divider-color);
-    //     margin: var(--wrapper-inner-spacing) 0 var(--copy-spacing);
-    //   }
-    //   :host .picture__caption {
-    //     font: var(--copy-typography) !important;
-    //     margin: var(--copy-spacing) 0 0 !important;
-    //   }
-    //   :host([open]) .picture__caption {
-    //     color: white;
-    //   }
-
-    //   @media only screen and (max-width: _max-width_) {
-    //     :host .picture__line {
-    //       width: calc(var(--divider-width) - var(--divider-height));
-    //     }
-    //   }
-
-    // `
   }
 
   /**
