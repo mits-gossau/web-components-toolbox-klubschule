@@ -19,7 +19,7 @@ export default class KsTeaser extends Teaser {
       ...options
     }, ...args)
 
-    if (this.getAttribute('namespace') === 'teaser-text-image-') {
+    if (this.getAttribute('namespace') === 'teaser-text-image-' || this.getAttribute('namespace') === 'teaser-fullwidth-') {
       const btn = this.root.querySelector('ks-a-button')
       this.mouseoverListener = event => {
         if (btn) btn.classList.add('hover')
@@ -50,6 +50,8 @@ export default class KsTeaser extends Teaser {
         return this.fetchNamespaceTemplate(['story-/story-.css'])
       case 'teaser-text-image-':
         return this.fetchNamespaceTemplate(['text-image-/text-image-.css'])
+      case 'teaser-fullwidth-':
+        return this.fetchNamespaceTemplate(['fullwidth-/fullwidth-.css'])
       default:
         return super.fetchTemplate()
     }
