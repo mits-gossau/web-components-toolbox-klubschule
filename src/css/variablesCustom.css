@@ -278,6 +278,8 @@
 
   /* content stage */
   --grid-2columns-content-stage-stage-content-margin-custom: 3rem 6rem 2rem 1.5rem; 
+  --grid-2columns-content-stage-stage-content-margin-mobile-custom: 1rem 1rem 3rem 1rem; 
+  --grid-2columns-content-stage-text-color-custom: var(--mdx-base-color-grey-975);
   --grid-2columns-content-stage-a-color: white;
   --grid-2columns-content-stage-address-font-custom: var(--mdx-sys-font-flex-large-body3);
   --grid-2columns-content-stage-address-gap-custom: 0.5em;
