@@ -132,7 +132,7 @@
   --font-family-bold: "Graphik", Helvetica, Arial, sans-serif;
   --font-family-secondary: "Graphik", Helvetica, Arial, sans-serif;
   --font-family: "Graphik", Helvetica, Arial, sans-serif;
-  --font-size-mobile: min(16px, 6vw); /* base rem size for mobile and desktop need to be 16px */
+  --font-size-mobile: min(16px, 4.3vw); /* base rem size for mobile and desktop need to be 16px */
   --font-size: 16px;
   --grid-1column-align-center-padding-custom: 4rem 1.5rem;
   --grid-1column-align-center-padding-mobile-custom: 3rem 0;
@@ -258,8 +258,23 @@
   --table-odd-background-color: var(--mdx-base-color-grey-0);
   --table-even-background-color: var(--mdx-base-color-klubschule-creme-400);
 
+  --icon-link-list-color: #0053A6;
+  --icon-link-list-color-hover: #0053A6;
+
+  --box-shadow-color: rgba(51, 51, 51, 0.1);
+
+  --icon-mdx-ks-tile-color: var(--mdx-base-color-klubschule-blue-600);
+  --icon-mdx-ks-badge-color: var(--mdx-base-color-grey-0);
   --icon-link-list-color: var(--mdx-sys-color-primary-default);
   --icon-link-list-color-hover: var(--mdx-sys-color-primary-default);
+
+  --details-default-icon-right-border-top-custom: none;
+  --details-default-icon-right-border-bottom: 0.0625em solid var(--mdx-base-color-grey-700);
+  --details-default-icon-right-border-bottom-last-custom: 0.0625em solid var(--mdx-base-color-grey-700);
+  --details-default-icon-right-border-color-custom: var(--mdx-base-color-grey-700);
+  --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
+  --details-default-icon-right-h4-font-size: 1em;
+  --details-default-icon-right-h4-line-height: 1.125em;
 }
 
 .class-name {

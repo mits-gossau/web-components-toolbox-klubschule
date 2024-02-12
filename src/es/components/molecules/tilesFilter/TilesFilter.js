@@ -13,7 +13,6 @@ export default class TilesFilter extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
   }
 
   disconnectedCallback () {}
@@ -28,23 +27,27 @@ export default class TilesFilter extends Shadow() {
   }
 
   /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
-  shouldRenderHTML () {
-    return !this.badge
-  }
-
-  /**
    * renders the css
    */
   renderCSS () {
     this.css = /* css */`
       :host .m-tile-filter__search {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         margin-bottom: 3em;
+        gap: 3em;
+      }
+
+      :host .m-tile-filter__search > * {
+        width: 100%;
+      }
+
+      :host a-input[inputid="searchField"] {
+        width: 50%;
+      }
+
+      :host a-input[inputid="searchField"] + a-input[inputid="searchField"] {
+        margin-left: 3em;
       }
 
       :host .m-tile-filter__title {
@@ -67,7 +70,17 @@ export default class TilesFilter extends Shadow() {
       }
 
       @media only screen and (max-width: _max-width_) {
-        :host {
+        :host .m-tile-filter__search {
+          flex-direction: column;
+        }
+
+        :host a-input[inputid="searchField"] {
+          width: 100%;
+        }
+
+        :host a-input[inputid="searchField"] + a-input[inputid="searchField"] {
+          margin-left: 0;
+          margin-top: 2em
         }
       }
     `
@@ -99,82 +112,5 @@ export default class TilesFilter extends Shadow() {
       default:
         return this.fetchCSS(styles)
     }
-  }
-
-  /**
-   * Render HTML
-   * @returns Promise<void>
-   */
-  renderHTML () {
-    // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
-    this.html = /* HTML */`
-    <div class="m-tile-filter">
-        <div class="m-tile-filter__search">
-          <span class="m-tile-filter__title">Angebote in Ihrer Nähe finden</span>
-          <a-input namespace="search-input-tiles-" inputid="searchField" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search="?q=" type="search"></a-input>
-        </div>
-        <div class="m-tile-filter__buttons">
-        <ks-a-button filter namespace="button-primary-" color="secondary">
-            <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
-        </ks-a-button>
-        <m-double-button namespace="double-button-default-" width="100%">
-            <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
-                <span part="label1">Niveau A2/A2+</span>
-                <span part="label2" dynamic></span>
-            </ks-a-button>
-            <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
-                <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-            </ks-a-button>
-        </m-double-button>
-        <m-double-button namespace="double-button-default-" width="100%">
-            <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
-                <span part="label1">Label</span>
-                <span part="label2" dynamic></span>
-            </ks-a-button>
-            <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
-                <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-            </ks-a-button>
-        </m-double-button>
-        <ks-a-button namespace="button-secondary-" color="tertiary">
-            <span>Wochentag & Tageszeit</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-        </ks-a-button>
-        <ks-a-button namespace="button-secondary-" color="tertiary">
-            <span>Kategorien</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-        </ks-a-button>
-        <ks-a-button namespace="button-secondary-" color="tertiary">
-            <span>Label</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-        </ks-a-button>
-        <ks-a-button namespace="button-secondary-" color="tertiary">
-            <span>Label</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-        </ks-a-button>
-        <ks-a-button namespace="button-secondary-" color="tertiary">
-            <span>Label</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
-        </ks-a-button>
-        </div>
-    </div>
-    `
-    return this.fetchModules([
-      {
-        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
-        name: 'ks-a-button'
-      },
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-        name: 'a-icon-mdx'
-      },
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/input/Input.js`,
-        name: 'a-input'
-      },     
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/doubleButton/DoubleButton.js`,
-        name: 'm-double-button'
-      }
-    ])
   }
 }

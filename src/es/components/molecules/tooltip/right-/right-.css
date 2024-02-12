@@ -1,0 +1,7 @@
+:host {
+    --tooltip-right-left: unset;
+    --tooltip-right-right: -1em;
+
+    --tooltip-right-before-left: unset;
+    --tooltip-right-before-right: 0.5em;
+}

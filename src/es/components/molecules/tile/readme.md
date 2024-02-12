@@ -12,5 +12,5 @@
 
 ### Namespace
 
-- `tile-default-`: Defines the default variation:
+- `tile-default-`: Defines the default variation
 - `tile-passed-`: Defines the passed variation
