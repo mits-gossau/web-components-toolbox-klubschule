@@ -1,0 +1,26 @@
+:host {
+   --picture-default-img-max-height: none;
+}
+
+:host([open]) {
+   --picture-default-img-max-height: 75vh;
+}
+
+:host([open-modal]) > button.close-btn.adjusted {
+   position: absolute;
+   width: 3.25rem;
+   height: 3.25rem;
+   background: var(--mdx-sys-color-neutral-on-default, white);
+   padding: var(--mdx-comp-button-tertiary-large-padding-vertical-default, 1rem);
+   color: var(--mdx-sys-color-neutral-bold3);
+   right: var(--mdx-sys-spacing-fix-m);
+   bottom: var(--mdx-sys-spacing-fix-m);
+}
+
+@media screen and (max-width: _max-width_) {
+   :host([open-modal]) > button.close-btn.adjusted {
+      width: 2rem;
+      height: 2rem;
+      padding: var(--mdx-comp-button-tertiary-small-padding-vertical-default, 1rem);
+   }
+}
