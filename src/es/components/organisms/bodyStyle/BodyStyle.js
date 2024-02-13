@@ -18,6 +18,9 @@ export default class KsBodyStyle extends BodyStyle {
    * @return {void}
    */
   renderCSS() {
+    // add '.ks-o-body-style__last-child' class to the last child that is not style/script to be able to select it with css
+    this.addClassToLastChild();
+
     super.renderCSS()
     this.css = /* CSS */`
         :host {
@@ -46,7 +49,7 @@ export default class KsBodyStyle extends BodyStyle {
             margin-top: 0 !important;
         }
         :host:last-child,
-        :host > *:not([style]):last-child {
+        :host > .ks-o-body-style__last-child {
             margin-bottom: 0 !important;
         }
 
@@ -70,5 +73,21 @@ export default class KsBodyStyle extends BodyStyle {
             }
         }
     `;
+  }
+
+  addClassToLastChild() {
+    const children = this.root.children
+    let lastChild = null
+
+    Array.from(children).forEach(child => {
+        if (child.tagName !== 'STYLE' && child.tagName !== 'SCRIPT') {
+            lastChild = child;
+        }
+    })
+
+    if (lastChild) {
+        // @ts-ignore
+        lastChild.classList.add('ks-o-body-style__last-child')
+    }
   }
 }
