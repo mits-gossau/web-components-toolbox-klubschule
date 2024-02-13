@@ -19,6 +19,7 @@ a-picture {
     --picture-teaser-transition: transform .5s ease-out;
     --picture-teaser-img-object-fit: cover;
     --picture-teaser-aspect-ratio: 2 / 1;
+    --picture-teaser-img-max-height: none;
 }
 
 :host(:hover) {
@@ -68,6 +69,12 @@ a-picture {
     margin-bottom: var(--mdx-sys-spacing-fix-l) !important;
     min-height: unset;
     flex: 1;
+}
+
+@container teaser (max-width: 1100px) {
+    a-picture {
+        --picture-teaser-aspect-ratio: 16 / 9;
+    }
 }
 
 @container teaser (max-width: 900px) {
