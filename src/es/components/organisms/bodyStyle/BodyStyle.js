@@ -70,6 +70,5 @@ export default class KsBodyStyle extends BodyStyle {
             }
         }
     `;
-    if (!this.hasAttribute('no-style-css')) this.importStyles()
   }
 }
