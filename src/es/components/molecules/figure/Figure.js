@@ -40,12 +40,18 @@ export default class KsFigure extends Shadow(HTMLElement) {
    * @return {void}
    */
   renderHTML () {
+    // take an existing figure or create one
+    this.figure = this.root.querySelector('figure') || document.createElement('figure')
+
     // Wrap children in a figure
-    this.root.innerHTML = /* HTML */`
-        <figure>
-            ${this.root.innerHTML}
-        </figure>
-    `;
+    Array.from(this.root.children).forEach(node => {
+      if (node.tagName !== 'STYLE' && node.tagName !== 'FIGURE') this.figure.appendChild(node)
+    })
+
+    if (!this.root.contains(this.figure)) {
+      // append figure element to html
+      this.html = this.figure
+    }
   }
 
   /**

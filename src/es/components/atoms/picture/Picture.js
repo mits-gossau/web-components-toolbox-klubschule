@@ -39,30 +39,14 @@ export default class KsPicture extends Picture {
    * @return {Promise<void>}
    */
   fetchTemplate () {
-    const styles = [
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
-        namespace: false,
-        maxWidth: this.getMobileBreakpoint({})
-      },
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
-        namespaceFallback: true,
-        maxWidth: this.getMobileBreakpoint({})
-      }
-    ]
     switch (this.getAttribute('namespace')) {
       case 'picture-default-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}/default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
-        }, ...styles], false)
-          .then(fetchCSSParams => {
-            // make template ${code} accessible aka. set the variables in the literal string
-            fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
-          })
+        }], false)
       default:
-        return this.fetchCSS(styles)
+        return super.fetchTemplate()
     }
   }
 }
