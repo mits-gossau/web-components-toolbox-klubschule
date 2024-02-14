@@ -38,10 +38,12 @@ export default class KsTeaser extends Teaser {
     this.addEventListener('mouseover', this.mouseoverListener)
     this.addEventListener('mouseout', this.mouseoutListener)
 
-    if (this.getMedia() === 'desktop') {
-      this.btn.setAttribute('big', true)
-    } else {
-      this.btn.removeAttribute('big')
+    if (this.btn){
+      if (this.getMedia() === 'desktop') {
+        this.btn.setAttribute('big', true)
+      } else {
+        this.btn.removeAttribute('big')
+      }
     }
   }
 
