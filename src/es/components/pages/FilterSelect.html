@@ -1,0 +1,57 @@
+<ks-c-with-facet mock>
+    <section>
+        <m-dialog
+            namespace="dialog-left-slide-in-"
+        >
+            <div class="container dialog-header" tabindex="0">
+                <div id="back">
+                    &nbsp;
+                </div>
+                <h3>Filter</h3>
+                <div id="close">
+                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                </div>
+            </div>
+            <div class="container dialog-content">
+                <p class="reset-link"><a>Alles zur&uuml;cksetzen <a-icon-mdx icon-name="RotateLeft" size="1em"></a-icon-mdx></a></p>
+                <a-input 
+                    inputid="location-search" 
+                    width="100%" 
+                    placeholder="Angebot suchen" 
+                    icon-name="Search" 
+                    icon-size="calc(20rem/18)" 
+                    search 
+                    submit-search="request-auto-complete" 
+                    any-key-listener type="search"
+                ></a-input>
+                <div>
+                    <ks-m-filter-categories 
+                        namespace="filter-default-" 
+                        lang="de" 
+                        translation-key-close="Schliessen" 
+                        translation-key-cta="Angebote anzeigen"
+                    ></ks-m-filter-categories>
+                </div>       
+            </div>
+            <div class="container dialog-footer">
+                <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+                <a-button namespace="button-primary-">Angebote anzeigen</a-button>
+            </div>
+            <o-grid namespace="grid-432-auto-colums-auto-rows-" id="show-modal">
+                <ks-a-button namespace="button-primary-" color="secondary">
+                    <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
+                </ks-a-button>
+                <m-double-button namespace="double-button-default-" width="100%">
+                    <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                        <span part="label1">Label</span>
+                        <span part="label2" dynamic></span>
+                    </ks-a-button>
+                    <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                        <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                    </ks-a-button>
+                </m-double-button>
+                <ks-a-button namespace="button-secondary-" color="tertiary" justify-content="flex-start">Label</ks-a-button>
+            </o-grid>
+        </m-dialog>
+    </section>
+</ks-c-with-facet>
