@@ -24,7 +24,7 @@ export default class NavLevelItem extends Shadow() {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 0.75em;
+          padding: var(--padding, 0.75em);
           cursor: pointer;
           background-color: var(--background-color);
           height: var(--height, auto);
