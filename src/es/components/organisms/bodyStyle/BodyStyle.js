@@ -10,6 +10,9 @@ import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/
  * @export
  * @class KsBodyStyle
  * @type {CustomElementConstructor}
+ * @attribute {
+ *      variant=default|narrow|full
+ * }
  */
 export default class KsBodyStyle extends BodyStyle {
   /**
