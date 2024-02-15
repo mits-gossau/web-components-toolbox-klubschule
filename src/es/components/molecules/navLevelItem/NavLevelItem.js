@@ -33,7 +33,7 @@ export default class NavLevelItem extends Shadow() {
         }
 
         :host(:hover) {
-          background-color: #E0F0FF;
+          background-color: var(--hover-background-color, #E0F0FF);
         }
 
         :host(:hover) span {
