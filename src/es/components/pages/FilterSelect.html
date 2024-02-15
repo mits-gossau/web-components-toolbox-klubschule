@@ -37,21 +37,7 @@
                 <a-button namespace="button-primary-">Angebote anzeigen</a-button>
             </div>
             <!-- filter buttons -->
-            <o-grid namespace="grid-432-auto-colums-auto-rows-" id="show-modal">
-                <ks-a-button namespace="button-primary-" color="secondary">
-                    <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
-                </ks-a-button>
-                <m-double-button namespace="double-button-default-" width="100%">
-                    <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
-                        <span part="label1">Label</span>
-                        <span part="label2" dynamic></span>
-                    </ks-a-button>
-                    <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
-                        <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-                    </ks-a-button>
-                </m-double-button>
-                <ks-a-button namespace="button-secondary-" color="tertiary" justify-content="flex-start">Label</ks-a-button>
-            </o-grid>
+            <ks-m-filter-select id="show-modal"></ks-m-filter-select>
         </m-dialog>
     </section>
 </ks-c-with-facet>

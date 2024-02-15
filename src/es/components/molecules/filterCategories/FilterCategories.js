@@ -63,17 +63,22 @@ export default class FilterCategories extends Shadow() {
     }
 
     renderHTML (fetch) {
-      this.fetchModules([{
-          path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
-          name: 'mdx-component'
-      }, {
-        path: `${this.importMetaUrl}../navLevelItem/NavLevelItem.js`,
-        name: 'ks-m-nav-level-item'
-      }, {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
-        name: 'm-dialog'
-      }]).then(() => {
-        fetch.then(response => {
+      Promise.all([
+        fetch,
+        this.fetchModules([
+          {
+              path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+              name: 'mdx-component'
+          }, {
+            path: `${this.importMetaUrl}../navLevelItem/NavLevelItem.js`,
+            name: 'ks-m-nav-level-item'
+          }, {
+            path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+            name: 'm-dialog'
+          }
+        ])
+      ]).then(([response]) => {
+          console.log('response', fetch, response);
           const filterData = response.filters
           // Backend should give us the data sorted, but in case it doesn't, we can sort it here
           // filterData.sort((a, b) => a.sort - b.sort);
@@ -128,7 +133,6 @@ export default class FilterCategories extends Shadow() {
                 this.mainNav.appendChild(div.children[0])
               }
           });
-        })
       })
     }
 

@@ -36,25 +36,32 @@ export default class WithFacet extends Shadow() {
       ...options
     }, ...args)
     
+    const withFacetCache = new Map()
+
     this.abortController = null
     this.requestWithFacetListener = (event) => {
-      console.log('request-with-facet', event.detail)
+      // console.log('request-with-facet', event.detail)
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
-      console.log("request rerender")
-      if (this.abortController) this.abortController.abort()
-      this.abortController = new AbortController()
+      const url = this.hasAttribute('mock')
+        ? `${this.importMetaUrl}./mock/default.json`
+        : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/coursesearch/withfacet'}`
+
       this.dispatchEvent(new CustomEvent('with-facet', {
         detail: {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
-          fetch: fetch(this.hasAttribute('mock')
-            ? `${this.importMetaUrl}./mock/default.json`
-            : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/coursesearch/withfacet'}`, {
-          method: 'GET',
-          signal: this.abortController.signal
-        }).then(response => {
-          if (response.status >= 200 && response.status <= 299) return response.json()
-          throw new Error(response.statusText)
-        })
+          fetch: withFacetCache.has(url)
+           ? withFacetCache.get(url)
+           // TODO: withFacetCache key must include all variants as well as future payloads
+           // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
+           : withFacetCache.set(url, fetch(url, {
+              method: 'GET'
+            }).then(response => {
+              if (response.status >= 200 && response.status <= 299) {
+                // console.log('response', response.status, response.statusText, response)
+                return response.json()
+              }
+              throw new Error(response.statusText)
+            })).get(url)
       },
         bubbles: true,
         cancelable: true,
