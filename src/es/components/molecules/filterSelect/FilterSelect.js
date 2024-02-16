@@ -94,7 +94,15 @@ export default class filterSelect extends Shadow() {
                             <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
                         </ks-a-button>
                     </m-double-button>
-                    <ks-a-button namespace="button-secondary-" color="tertiary" justify-content="flex-start">Label</ks-a-button>
+                    <m-double-button namespace="double-button-default-" width="100%">
+                        <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                            <span part="label1">Label</span>
+                            <span part="label2" dynamic></span>
+                        </ks-a-button>
+                        <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                            <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                        </ks-a-button>
+                    </m-double-button>
                 </o-grid>
             `
 
