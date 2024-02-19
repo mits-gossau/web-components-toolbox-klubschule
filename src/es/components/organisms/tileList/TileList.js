@@ -11,17 +11,16 @@ export default class TileList extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
-
       if (this.icon) {
         if (this.icon.getAttribute('icon-name') == 'ChevronDown') {
-          this.icon.setAttribute('icon-name', 'ChevronUp');
+          this.icon.setAttribute('icon-name', 'ChevronUp')
         } else {
-          this.icon.setAttribute('icon-name', 'ChevronDown');
+          this.icon.setAttribute('icon-name', 'ChevronDown')
         }
       }
 
-      this.details = this.root.querySelector('.o-tile-list__details');
-      this.details.classList.toggle('o-tile-list__details--expanded');
+      this.details = this.root.querySelector('.o-tile-list__details')
+      this.details.classList.toggle('o-tile-list__details--expanded')
     }
   }
 
@@ -35,14 +34,14 @@ export default class TileList extends Shadow() {
     /**
      * Toggle details
      */
-    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]');
-    this.toggle = this.root.querySelector('.o-tile-list__bottom-left');
+    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
+    this.toggle = this.root.querySelector('.o-tile-list__bottom-left')
 
-    this.toggle.addEventListener('click', this.clickEventListener);
+    this.toggle.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
-    this.toggle.removeEventListener('click', this.clickEventListener);
+    this.toggle.removeEventListener('click', this.clickEventListener)
   }
 
   /**
@@ -246,7 +245,7 @@ export default class TileList extends Shadow() {
   renderHTML () {
     const warnMandatory = 'data attribute requires: '
     const data = TileList.parseAttribute(this.getAttribute('data'))
-    console.log(data);
+    console.log(data)
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
@@ -254,11 +253,13 @@ export default class TileList extends Shadow() {
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
             <span class="o-tile-list__title">${data.title || warnMandatory + 'title'}</span>
-            ${data.iconTooltip ? `
+            ${data.iconTooltip
+? `
             <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
               <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
             </ks-m-tooltip>
-              ` : ''}          
+              `
+: ''}          
           </div>
           <div class="o-tile-list__middle">
             ${data.location?.name
@@ -293,7 +294,7 @@ export default class TileList extends Shadow() {
                 </div>
               `, '')}           
               </div>
-              <span class="o-tile-list__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per  : ''}</span>
+              <span class="o-tile-list__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
             </div>          
           </div>
         </div>

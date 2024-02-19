@@ -31,7 +31,7 @@ export default class KsTeaser extends Teaser {
   }
 
   connectedCallback () {
-    super.connectedCallback();
+    super.connectedCallback()
 
     this.addEventListener('mouseover', this.mouseoverListener)
     this.addEventListener('mouseout', this.mouseoutListener)
@@ -95,7 +95,7 @@ export default class KsTeaser extends Teaser {
         :host a-picture {
           display: block;
           overflow: hidden;
-          ${ (this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : '' }
+          ${(this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : ''}
         }
 
         :host figure,

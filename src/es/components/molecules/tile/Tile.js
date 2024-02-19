@@ -230,9 +230,9 @@ export default class Tile extends Shadow() {
       case 'tile-default-':
         return this.fetchCSS([
           {
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-          namespace: false
-        }, ...styles])
+            path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false
+          }, ...styles])
       case 'tile-passed-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
@@ -242,7 +242,7 @@ export default class Tile extends Shadow() {
             flags: 'g',
             replacement: '--tile-passed-'
           }]
-        },{
+        }, {
           path: `${this.importMetaUrl}./passed-/passed-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }, ...styles])
@@ -266,7 +266,8 @@ export default class Tile extends Shadow() {
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
           <span class="m-tile__title">${data.title || warnMandatory + 'title'}</span>
-          ${data.iconTooltip ? `
+          ${data.iconTooltip
+? `
               <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
                 <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
               </ks-m-tooltip>
@@ -310,7 +311,7 @@ export default class Tile extends Shadow() {
                 </div>
               `, '')}           
             </div>
-            <span class="m-tile__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per  : ''}</span>
+            <span class="m-tile__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
           </div>
         </div>      
       </div>

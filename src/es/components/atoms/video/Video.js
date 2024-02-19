@@ -6,7 +6,7 @@ import Video from '../../web-components-toolbox/src/es/components/atoms/video/Vi
 * @type {CustomElementConstructor}
 */
 export default class KsVideo extends Video {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
@@ -15,8 +15,8 @@ export default class KsVideo extends Video {
    *
    * @return {Promise<void>}
    */
-  renderCSS() {
-    super.renderCSS();
+  renderCSS () {
+    super.renderCSS()
     this.css = /* css */ `
       :host {
         width: 100%;
@@ -53,7 +53,7 @@ export default class KsVideo extends Video {
    *
    * @return {Promise<void>}
    */
-  fetchTemplate() {
+  fetchTemplate () {
     const styles = [
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
@@ -64,7 +64,7 @@ export default class KsVideo extends Video {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
         namespaceFallback: true,
         maxWidth: this.getMobileBreakpoint({})
-      },
+      }
     ]
     switch (this.getAttribute('namespace')) {
       case 'video-default-':

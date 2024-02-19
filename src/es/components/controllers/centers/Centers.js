@@ -35,7 +35,7 @@ export default class Centers extends Shadow() {
       mode: 'false',
       ...options
     }, ...args)
-    
+
     this.abortController = null
     this.requestCentersListener = () => {
       if (this.abortController) this.abortController.abort()
@@ -46,13 +46,13 @@ export default class Centers extends Shadow() {
           fetch: fetch(this.hasAttribute('mock')
             ? `${this.importMetaUrl}./mock/centers.json`
             : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/Region'}`, {
-          method: 'GET',
-          signal: this.abortController.signal
-        }).then(response => {
-          if (response.status >= 200 && response.status <= 299) return response.json()
-          throw new Error(response.statusText)
-        })
-      },
+            method: 'GET',
+            signal: this.abortController.signal
+          }).then(response => {
+            if (response.status >= 200 && response.status <= 299) return response.json()
+            throw new Error(response.statusText)
+          })
+        },
         bubbles: true,
         cancelable: true,
         composed: true

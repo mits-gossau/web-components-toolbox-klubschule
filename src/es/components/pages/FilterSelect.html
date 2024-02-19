@@ -37,7 +37,12 @@
                 <a-button namespace="button-primary-">Angebote anzeigen</a-button>
             </div>
             <!-- filter buttons -->
-            <ks-m-filter-select id="show-modal"></ks-m-filter-select>
+            <o-grid namespace="grid-432-auto-colums-auto-rows-" id="show-modal">
+                <ks-a-button namespace="button-primary-" color="secondary">
+                    <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
+                </ks-a-button>
+                <ks-m-filter-select></ks-m-filter-select>
+            </o-grid>
         </m-dialog>
     </section>
 </ks-c-with-facet>

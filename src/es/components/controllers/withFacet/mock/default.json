@@ -34,7 +34,7 @@
                     "label": "Schnupperkurs",
                     "id": "2",
                     "count": 21,
-                    "selected": false,
+                    "selected": true,
                     "hasChilds": false,
                     "eTag": null
                 },
@@ -123,7 +123,7 @@
                     "id": "1",
                     "typ": "value",
                     "urlpara": "Mo",
-                    "selected": false,
+                    "selected": true,
                     "sort": 1,
                     "hasChilds": false,
                     "partitionKey": "dev",

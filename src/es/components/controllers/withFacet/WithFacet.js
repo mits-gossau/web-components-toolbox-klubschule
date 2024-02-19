@@ -35,7 +35,7 @@ export default class WithFacet extends Shadow() {
       mode: 'false',
       ...options
     }, ...args)
-    
+
     const withFacetCache = new Map()
 
     this.abortController = null
@@ -50,10 +50,10 @@ export default class WithFacet extends Shadow() {
         detail: {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
           fetch: withFacetCache.has(url)
-           ? withFacetCache.get(url)
-           // TODO: withFacetCache key must include all variants as well as future payloads
-           // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
-           : withFacetCache.set(url, fetch(url, {
+            ? withFacetCache.get(url)
+          // TODO: withFacetCache key must include all variants as well as future payloads
+          // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
+            : withFacetCache.set(url, fetch(url, {
               method: 'GET'
             }).then(response => {
               if (response.status >= 200 && response.status <= 299) {
@@ -62,7 +62,7 @@ export default class WithFacet extends Shadow() {
               }
               throw new Error(response.statusText)
             })).get(url)
-      },
+        },
         bubbles: true,
         cancelable: true,
         composed: true

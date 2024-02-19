@@ -106,9 +106,9 @@ export default class TilesFilter extends Shadow() {
       case 'tile-default-':
         return this.fetchCSS([
           {
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-          namespace: false
-        }, ...styles])
+            path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false
+          }, ...styles])
       default:
         return this.fetchCSS(styles)
     }

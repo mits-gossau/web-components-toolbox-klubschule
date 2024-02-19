@@ -14,12 +14,12 @@ export default class Badge extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 
-    this.text = this.getAttribute('text') || null;
-    this.type = this.getAttribute('type') || 'default';
+    this.text = this.getAttribute('text') || null
+    this.type = this.getAttribute('type') || 'default'
 
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.toggleTooltip();
+    this.toggleTooltip()
   }
 
   disconnectedCallback () {}
@@ -27,12 +27,12 @@ export default class Badge extends Shadow() {
   /**
    * Toggle tooltip
    */
-  toggleTooltip() {
-    const toggle = this.root.querySelector('.m-badge');
+  toggleTooltip () {
+    const toggle = this.root.querySelector('.m-badge')
     toggle.addEventListener('click', () => {
-      const tooltip = this.root.querySelector('.m-badge__tooltip');
-      tooltip.classList.toggle('m-badge__tooltip-open');
-    });
+      const tooltip = this.root.querySelector('.m-badge__tooltip')
+      tooltip.classList.toggle('m-badge__tooltip-open')
+    })
   }
 
   /**
@@ -133,9 +133,9 @@ export default class Badge extends Shadow() {
       case 'badge-default-':
         return this.fetchCSS([
           {
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-          namespace: false
-        }, ...styles])
+            path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false
+          }, ...styles])
       default:
         return this.fetchCSS(styles)
     }
