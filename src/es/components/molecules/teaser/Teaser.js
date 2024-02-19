@@ -19,13 +19,15 @@ export default class KsTeaser extends Teaser {
       ...options
     }, ...args)
 
-    if (this.getAttribute('namespace') === 'teaser-text-image-') {
-      const btn = this.root.querySelector('ks-a-button')
+    this.btn = this.root.querySelector('ks-a-button')
+
+    if (this.getAttribute('namespace') === 'teaser-text-image-' || this.getAttribute('namespace') === 'teaser-fullwidth-') {
+      
       this.mouseoverListener = event => {
-        if (btn) btn.classList.add('hover')
+        if (this.btn) this.btn.classList.add('hover')
       }
       this.mouseoutListener = event => {
-        if (btn) btn.classList.remove('hover')
+        if (this.btn) this.btn.classList.remove('hover')
       }
     }
   }
@@ -35,6 +37,14 @@ export default class KsTeaser extends Teaser {
 
     this.addEventListener('mouseover', this.mouseoverListener)
     this.addEventListener('mouseout', this.mouseoutListener)
+
+    if (this.btn){
+      if (this.getMedia() === 'desktop') {
+        this.btn.setAttribute('big', true)
+      } else {
+        this.btn.removeAttribute('big')
+      }
+    }
   }
 
   /**
@@ -50,6 +60,8 @@ export default class KsTeaser extends Teaser {
         return this.fetchNamespaceTemplate(['story-/story-.css'])
       case 'teaser-text-image-':
         return this.fetchNamespaceTemplate(['text-image-/text-image-.css'])
+      case 'teaser-fullwidth-':
+        return this.fetchNamespaceTemplate(['fullwidth-/fullwidth-.css'])
       default:
         return super.fetchTemplate()
     }
@@ -163,5 +175,9 @@ export default class KsTeaser extends Teaser {
     `
 
     return this.fetchTemplate()
+  }
+
+  getMedia () {
+    return self.matchMedia(`(min-width: calc(${this.mobileBreakpoint} + 1px))`).matches ? 'desktop' : 'mobile'
   }
 }

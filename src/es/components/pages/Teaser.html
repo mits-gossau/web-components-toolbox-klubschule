@@ -1,4 +1,4 @@
-<o-body-style>
+<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem">
     <h2>Teaser Tile Content</h2>
     <o-grid namespace="grid-12er-">
         <div col-sm="12" col-lg="4">
@@ -150,7 +150,7 @@
         </div>
     </o-grid>
 </o-body-style>
-<o-body-style>
+<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem">
     <h2>Teaser Tile Content Inverse</h2>
     <o-grid namespace="grid-12er-">
         <div col-sm="12" col-lg="4">
@@ -240,7 +240,7 @@
         </div>
     </o-grid>
 </o-body-style>
-<o-body-style background-color="var(--mdx-sys-color-accent-6-subtle1)">
+<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem" background-color="var(--mdx-sys-color-accent-6-subtle1)">
     <h2>Teaser Story</h2>
     <o-grid namespace="grid-12er-" gap="1rem">
         <ks-m-teaser col-sm="12" col-lg="4" namespace=teaser-story- color="secondary">
@@ -315,7 +315,7 @@
         </ks-m-teaser>
     </o-grid>
 </o-body-style>
-<o-body-style>
+<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem">
     <h2>Teaser Text Image (Text Position Left)</h2>
     <ks-m-teaser namespace=teaser-text-image- color="secondary" text-position="left" href="#">
         <a-picture 
@@ -331,7 +331,7 @@
         </div>
     </ks-m-teaser>
 </o-body-style>
-<o-body-style background-color="var(--mdx-sys-color-accent-6-subtle1)">
+<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem" background-color="var(--mdx-sys-color-accent-6-subtle1)">
     <h2>Teaser Text Image (Text Position Right)</h2>
     <ks-m-teaser namespace=teaser-text-image- color="secondary" text-position="right" href="#">
         <a-picture 
@@ -346,4 +346,112 @@
             <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
         </div>
     </ks-m-teaser>
+</o-body-style>
+<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem">
+    <br />
+    <h2>Fullwidth Teaser (Text Position Right)</h2>
+    <br />
+    <ks-m-teaser namespace=teaser-fullwidth- color="secondary" text-position="right" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-tertiary-" color="secondary">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <br />
+    <br />
+    <h2>Fullwidth Teaser (Text Position Left)</h2>
+    <br />
+    <ks-m-teaser namespace=teaser-fullwidth- color="quaternary" text-position="left" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-tertiary-" color="quaternary">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <br />
+    <br />
+    <h2>Fullwidth Teaser (Very Long Text Example, crop text length earlier)</h2>
+    <br />
+    <ks-m-teaser namespace=teaser-fullwidth- color="quaternary" text-position="left" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-tertiary-" color="quaternary">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <br />
+    <br />
+    <h2>Fullwidth Teaser Brand Adjustment IBAW (Color tbd)</h2>
+    <br />
+    <ks-m-teaser namespace=teaser-fullwidth- color="quaternary" brand="ibaw" text-position="left" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-tertiary-" color="quaternary">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <br />
+    <ks-m-teaser namespace=teaser-fullwidth- color="quaternary" brand="ibaw" text-position="right" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-tertiary-" color="quaternary">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <br />
+    <br />
+    <h2>Fullwidth Teaser Brand Adjustment Pro (Color tbd)</h2>
+    <br />
+    <ks-m-teaser namespace=teaser-fullwidth- color="quaternary" brand="pro" text-position="left" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>            
+            <ks-a-button big namespace="button-tertiary-" color="quaternary">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <br />
+    <ks-m-teaser namespace=teaser-fullwidth- color="quaternary" brand="pro" text-position="right" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>            
+            <ks-a-button big namespace="button-tertiary-" color="quaternary">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <br />
 </o-body-style>
