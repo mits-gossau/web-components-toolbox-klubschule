@@ -24,4 +24,6 @@
 
     color: white;
     background: var(--color-${this.getAttribute('color')});
+
+    min-height: 100%;
 }
