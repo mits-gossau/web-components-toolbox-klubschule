@@ -13,16 +13,32 @@
         variant=full
     </div>
 </ks-o-body-style>
-<ks-o-body-style background="var(--mdx-sys-color-accent-6-subtle1)" variant="default">
+<hr>
+<ks-o-body-style any-content-width-var="33.333%" any-content-width-mobile-var="33.333%">
+    <div style="background: lightblue; padding: .5rem">
+        no variant set & <br />
+        set width via <code>any-content-width-var="33.333%"</code>
+    </div>
+</ks-o-body-style>
+<hr>
+<ks-o-body-style variant="default">
     <div style="background: lightblue; padding: .5rem">
         variant=default
     </div>
-    <ks-o-body-style background="var(--mdx-sys-color-accent-6-subtle1)" variant="full">
+    <ks-o-body-style variant="default" background="var(--mdx-sys-color-accent-6-subtle1)">
         <div style="background: lightblue; padding: .5rem">
-            nested variant=full
+            nested variant=default
         </div>
     </ks-o-body-style>
     <div style="background: lightblue; padding: .5rem">
         ...
     </div>
 </ks-o-body-style>
+<hr>
+<h1>Only visible on mobile (resize window to check):</h1>
+<ks-o-body-style variant="default" display="none" display-mobile="block">
+    <div style="background: lightblue; padding: .5rem">
+        display=none, display-mobile=block
+    </div>
+</ks-o-body-style>
+<hr>

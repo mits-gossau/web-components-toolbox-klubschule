@@ -20,15 +20,15 @@ export default class KsBodyStyle extends BodyStyle {
    *
    * @return {void}
    */
-  renderCSS() {
-    // add '.ks-o-body-style__last-child' class to the last child that is not style/script to be able to select it with css
-    this.addClassToLastChild();
-
+  renderCSS () {
     super.renderCSS()
+
+    // add '.ks-o-body-style__last-child' class to the last child that is not style/script to be able to select it with css
+    this.addClassToLastChild()
     this.css = /* CSS */`
         :host {
-            /* had to reset display here because it was set to display inline-block in parent class */
-            display: block !important;
+            /* had to reset display here because it was set to display inline-block !important in parent class */
+            display: ${this.getAttribute('display') || 'block'} !important;
         }
         :host > * {
             margin-left: auto;
@@ -36,7 +36,6 @@ export default class KsBodyStyle extends BodyStyle {
             max-width: 100%;
         }
 
-        :host > *,
         :host([variant=default]) > * {
             width: 86.666%;
         }
@@ -56,15 +55,15 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: 0 !important;
         }
 
-        /* with background use paddings and erase margins */
-        :host {
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-            padding-top: var(--mdx-sys-spacing-flex-m) !important;
-            padding-bottom: var(--mdx-sys-spacing-flex-m) !important;
-        }
-
         @media screen and (max-width: _max-width_) {
+
+            ${(this.hasAttribute('display-mobile'))
+                /* had to reset display here because it was set to display inline-block !important in parent class */
+                ? `:host {
+                        display: ${this.getAttribute('display-mobile')} !important;
+                    }`
+                : ''}
+
             :host([variant=default]) > * {
                 width: calc(100% - 2rem);
             }
