@@ -53,7 +53,7 @@
 :root {
   --a-emotion-pictures-margin-top-first-child: auto;
   --any-content-spacing-mobile: var(--any-content-spacing);
-  --any-content-spacing: var(--mdx-sys-spacing-flex-l);
+  --any-content-spacing: var(--mdx-sys-spacing-flex-2xs);
   --any-content-width: calc(min(100%, var(--body-max-width)) - var(--mdx-sys-spacing-flex-large-xs) * 2);
   --a-wrapper-margin: 0;
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
@@ -206,6 +206,10 @@
   --footer-default-footer-margin-mobile: 0;
   
   --h-hyphens: auto;
+
+  /* spacers */
+  --spacer-margin: 0;
+  --spacer-one-height: ;
 
   /* list styles */
   --ol-margin: 0 auto var(--mdx-sys-spacing-flex-xs);

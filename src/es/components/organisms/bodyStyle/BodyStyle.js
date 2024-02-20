@@ -48,11 +48,24 @@ export default class KsBodyStyle extends BodyStyle {
 
         :host:first-child,
         :host > *:first-child {
-            margin-top: 0 !important;
+            margin-top: var(--mdx-sys-spacing-flex-m);
         }
         :host:last-child,
         :host > .ks-o-body-style__last-child {
-            margin-bottom: 0 !important;
+            margin-bottom: var(--mdx-sys-spacing-flex-m);
+        }
+
+        :host([has-background]) {
+            padding-top: var(--mdx-sys-spacing-flex-m);
+            padding-bottom: var(--mdx-sys-spacing-flex-m);
+        }
+
+        :host([has-background]) > *:first-child {
+            margin-top: 0;
+        }
+
+        :host([has-background]) > .ks-o-body-style__last-child {
+            margin-bottom: 0;
         }
 
         @media screen and (max-width: _max-width_) {
