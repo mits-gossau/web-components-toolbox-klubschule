@@ -22,7 +22,6 @@ export default class KsTeaser extends Teaser {
     this.btn = this.root.querySelector('ks-a-button')
 
     if (this.getAttribute('namespace') === 'teaser-text-image-' || this.getAttribute('namespace') === 'teaser-fullwidth-') {
-      
       this.mouseoverListener = event => {
         if (this.btn) this.btn.classList.add('hover')
       }
@@ -33,12 +32,12 @@ export default class KsTeaser extends Teaser {
   }
 
   connectedCallback () {
-    super.connectedCallback();
+    super.connectedCallback()
 
     this.addEventListener('mouseover', this.mouseoverListener)
     this.addEventListener('mouseout', this.mouseoutListener)
 
-    if (this.btn){
+    if (this.btn) {
       if (this.getMedia() === 'desktop') {
         this.btn.setAttribute('big', true)
       } else {
@@ -62,6 +61,8 @@ export default class KsTeaser extends Teaser {
         return this.fetchNamespaceTemplate(['text-image-/text-image-.css'])
       case 'teaser-fullwidth-':
         return this.fetchNamespaceTemplate(['fullwidth-/fullwidth-.css'])
+      case 'teaser-link-box-':
+        return this.fetchNamespaceTemplate(['link-box-/link-box-.css'])
       default:
         return super.fetchTemplate()
     }
@@ -107,7 +108,7 @@ export default class KsTeaser extends Teaser {
         :host a-picture {
           display: block;
           overflow: hidden;
-          ${ (this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : '' }
+          ${(this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : ''}
         }
 
         :host figure,
