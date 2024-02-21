@@ -1,0 +1,29 @@
+:host * {
+    margin: 0 !important; /* Doesn't need margins: uses gap */
+}
+
+:host {
+    --color: white;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--mdx-sys-spacing-fix-2xs);
+    padding: var(--mdx-sys-spacing-fix-2xs);
+
+    --teaser-link-box-headline-font-family: var(--mdx-sys-font-fix-label2-font-family);
+    --teaser-link-box-headline-font-size: var(--mdx-sys-font-fix-label2-font-size);
+    --teaser-link-box-headline-font-weight: var(--mdx-sys-font-fix-label2-font-weight);
+    --teaser-link-box-headline-line-height: var(--mdx-sys-font-fix-label2-line-height);
+
+    font-family: var(--teaser-link-box-headline-font-family);
+    font-size: var(--teaser-link-box-headline-font-size);
+    font-weight: var(--teaser-link-box-headline-font-weight);
+    line-height: var(--teaser-link-box-headline-line-height);
+
+    letter-spacing: var(--mdx-sys-font-fix-label2-letter-spacing);
+
+    color: white;
+    background: var(--color-${this.getAttribute('color')});
+
+    min-height: 100%;
+}
