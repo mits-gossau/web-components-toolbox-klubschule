@@ -65,6 +65,7 @@ export default class Tab extends Shadow() {
           display: flex;
           margin: 0;
           padding: 0;
+          overflow-x: auto;
         }
 
         :host ul li + li {
@@ -95,6 +96,11 @@ export default class Tab extends Shadow() {
           display: block;
         }
 
+        @media only screen and (max-width: _max-width_) {
+          :host div[tab-content-target] {
+            padding: 3em 0 4em;
+          }
+        }
     `
     return this.fetchTemplate()
   }
