@@ -35,6 +35,11 @@ export default class filterSelect extends Shadow() {
   }
 
   renderCSS () {
+    this.css = /* css */`
+      :host {
+        display: contents;
+      }
+    `
     return this.fetchTemplate()
   }
 
@@ -82,14 +87,13 @@ export default class filterSelect extends Shadow() {
             let childItems = ''
             filterItem.children.forEach(child => {
               if (child.selected) {
-                console.log('selected', filterItem.label, child.label)
                 childItems += child.label + ', '
               }
             })
 
             const doubleButton = /* html */`
               <m-double-button namespace="double-button-default-" width="100%">
-                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="dialog-open-first-level,dialog-open-${filterItem.id}" click-no-toggle-active>
                   <span part="label1">${filterItem.label}: ${childItems.slice(0, -2)/* remove last comma and space */}</span>
                   <span part="label2" dynamic></span>
                 </ks-a-button>
@@ -102,18 +106,11 @@ export default class filterSelect extends Shadow() {
             div.innerHTML = doubleButton
 
             if (childItems.length > 0) {
-              console.log(div.children[0])
-
-              // append div innerHTML to filterSelect
-              this.filterSelect.appendChild(div.children[0])
-              
-              console.log('this.filterSelect', this.filterSelect)
+              this.html = div.children[0]
             }
           }
         })
       })
-    
-      this.html = this.filterSelect
     })
   }
 

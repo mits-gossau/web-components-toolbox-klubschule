@@ -1,6 +1,6 @@
 <ks-c-with-facet mock>
     <section>
-        <m-dialog namespace="dialog-left-slide-in-">
+        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
             <!-- overlayer -->
             <div class="container dialog-header" tabindex="0">
                 <div id="back">
@@ -36,13 +36,13 @@
                 <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
                 <a-button namespace="button-primary-">Angebote anzeigen</a-button>
             </div>
-            <!-- filter buttons -->
-            <o-grid namespace="grid-432-auto-colums-auto-rows-" id="show-modal">
-                <ks-a-button namespace="button-primary-" color="secondary">
-                    <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
-                </ks-a-button>
-                <ks-m-filter-select></ks-m-filter-select>
-            </o-grid>
         </m-dialog>
+        <!-- filter buttons -->
+        <o-grid namespace="grid-432-auto-colums-auto-rows-">
+            <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
+                <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
+            </ks-a-button>
+            <ks-m-filter-select></ks-m-filter-select>
+        </o-grid>
     </section>
 </ks-c-with-facet>

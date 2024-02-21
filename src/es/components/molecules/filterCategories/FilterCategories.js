@@ -102,14 +102,16 @@ export default class FilterCategories extends Shadow() {
           this.mainNav.children[i].root.querySelector('.sub-level').innerHTML = subNav
         } else {
           const navLevelItem = /* html */ `
-            <m-dialog id="${filterItem.id}" namespace="dialog-left-slide-in-without-background-">
+            <m-dialog id="${filterItem.id}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
               <div class="container dialog-header" tabindex="0">
                 <div id="close-back">
-                  <a-icon-mdx icon-name="ChevronLeft" size="2em" ></a-icon-mdx>
+                  <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
                 </div>
                 <h3>${filterItem.label}</h3>
                 <div id="close">
-                  <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                  <a-button request-event-name="backdrop-clicked">
+                    <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+                  </a-button>
                 </div>
               </div>
               <div class="container dialog-content">
@@ -118,7 +120,7 @@ export default class FilterCategories extends Shadow() {
                 </div>       
               </div>
               <div class="container dialog-footer">
-                <a-button id="close" namespace="button-secondary-" no-pointer-events>${this.getAttribute('translation-key-close')}</a-button>
+                <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
                 <a-button namespace="button-primary-">${this.getAttribute('translation-key-cta')}</a-button>
               </div>
               <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
