@@ -68,6 +68,21 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: 0;
         }
 
+        /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */
+        :host > [debug-ruler] {
+            position: absolute;
+            inset: 0;
+            margin: auto;
+        }
+        :host > [debug-ruler]::before {
+            content: '';
+            display: block;
+            height: calc(100% + 40px);
+            margin: -20px auto;
+            border-left: 1px solid red;
+            border-right: 1px solid red;
+        }
+
         @media screen and (max-width: _max-width_) {
 
             ${(this.hasAttribute('display-mobile'))
@@ -85,6 +100,11 @@ export default class KsBodyStyle extends BodyStyle {
             }
             :host([variant=full]) > * {
                 width: 100%;
+            }
+
+            /* expections for the width */
+            :host([variant=default]) > .extended-container-mobile {
+                width: calc(100% - 1rem);
             }
         }
     `;

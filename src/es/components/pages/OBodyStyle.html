@@ -1,3 +1,5 @@
+<h2>Body Style</h2>
+<hr>
 <ks-o-body-style variant="default">
     <div style="background: lightblue; padding: .5rem">
         variant=default
@@ -35,10 +37,21 @@
     </div>
 </ks-o-body-style>
 <hr>
-<h1>Only visible on mobile (resize window to check):</h1>
+<h2>Only visible on mobile (resize window to check):</h2>
 <ks-o-body-style variant="default" display="none" display-mobile="block">
     <div style="background: lightblue; padding: .5rem">
         display=none, display-mobile=block
     </div>
 </ks-o-body-style>
 <hr>
+<h2>Extended width on mobile</h2>
+<!-- do not use debug ruler in production! -->
+<ks-o-body-style variant="default" position="relative" >
+    <div debug-ruler></div>
+    <div class="extended-container-mobile">
+        <div style="background: lightblue; padding: .5rem">
+            class=extended-container-mobile <br />
+            <span style="opacity: .5">(resize window to check, add this class to direct child of ks-o-body-style)</span>
+        </div>
+    </div>
+</ks-o-body-style>
