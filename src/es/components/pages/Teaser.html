@@ -379,7 +379,7 @@
     <ks-m-teaser namespace=teaser-fullwidth- color="quaternary" text-position="left" href="#">
         <a-picture 
             namespace="picture-teaser-" 
-            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            picture-load defaultSource="https://via.placeholder.com/1600x800"
             alt="randomized image">
         </a-picture>
         <div>
@@ -395,7 +395,7 @@
     <ks-m-teaser namespace=teaser-fullwidth- color="quaternary" text-position="left" href="#">
         <a-picture 
             namespace="picture-teaser-" 
-            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            picture-load defaultSource="https://via.placeholder.com/1600x800"
             alt="randomized image">
         </a-picture>
         <div>
@@ -465,11 +465,10 @@
     <br />
 </o-body-style>
 
-<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem">
-    <br />
-    <h2 id="teaser-link-box">Link Box</h2>
-    <div>
-        <o-grid namespace="grid-12er-" gap=".5rem" style="display: block; margin: 0 calc(var(--mdx-sys-spacing-fix-2xs) * -1)">
+<ks-o-body-style variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
+    <ks-a-heading tag="h2" section-title>Link Boxen</ks-a-heading>
+    <div class="extended-container-mobile">
+        <o-grid namespace="grid-12er-" gap=".5rem">
             <div col-sm="4" col-md="4" col-lg="4">
                 <ks-m-teaser namespace=teaser-link-box- color="quinary" href="#">
                     <h3>Linktext</h3>
@@ -508,4 +507,4 @@
             </div>
         </o-grid>
     </div>
-</o-body-style>
+</ks-o-body-style>

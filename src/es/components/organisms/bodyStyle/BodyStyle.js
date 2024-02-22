@@ -29,6 +29,7 @@ export default class KsBodyStyle extends BodyStyle {
         :host {
             /* had to reset display here because it was set to display inline-block !important in parent class */
             display: ${this.getAttribute('display') || 'block'} !important;
+            position: relative;
         }
         :host > * {
             margin-left: auto;
@@ -68,11 +69,16 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: 0;
         }
 
+        :host([variant=default]) > [namespace="teaser-fullwidth-"] {
+            width: calc(86.666% + var(--mdx-sys-spacing-fix-m) * 2);
+        }
+
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */
         :host > [debug-ruler] {
             position: absolute;
             inset: 0;
             margin: auto;
+            z-index: 2;
         }
         :host > [debug-ruler]::before {
             content: '';
@@ -106,11 +112,16 @@ export default class KsBodyStyle extends BodyStyle {
             :host([variant=default]) > .extended-container-mobile {
                 width: calc(100% - 1rem);
             }
-        }
-    `;
+
+            :host > [namespace="teaser-fullwidth-"] {
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+    `
   }
 
-  addClassToLastChild() {
+  addClassToLastChild () {
     const children = this.root.children
     let lastChild = null
 

@@ -127,13 +127,7 @@ export default class Heading extends Shadow() {
         --h3-padding: var(--h-padding);
       }
       :host .h1 {
-        font-size: var(--h1-font-size);
-        color: var(--h-color);
-        font-family: var(--h1-font-family);
-        font-weight: var(--h1-font-weight);
-        line-height: var(--h1-line-height);
-        margin: var(--h1-margin);
-        padding: var(--h1-padding);
+        
       }
       :host .h2 {
         font-size: var(--h2-font-size);
@@ -163,6 +157,27 @@ export default class Heading extends Shadow() {
       :host([display-3]) [display-3] {
         font-size: var(--display3-font-size);
       }
+
+      /* section-title */
+      :host([section-title]) [section-title] {
+        font-size: var(--h1-font-size);
+        color: var(--h-color);
+        font-family: var(--h1-font-family);
+        font-weight: var(--h1-font-weight);
+        line-height: var(--h1-line-height);
+        padding: var(--h1-padding);
+        margin-top: 0; /* the section should always be the first child in the section */
+        margin-bottom: var(--mdx-sys-spacing-flex-s);
+      }
+      :host([section-title]) [section-title]::before {
+        content: '';
+        display: block;
+        width: var(--mdx-sys-sizing-fix-3xl);
+        height: var(--mdx-sys-sizing-fix-2xs);
+        background: var(--mdx-sys-color-accent-1-default);
+        margin-bottom: var(--mdx-sys-spacing-fix-s);
+      }
+
       /* border top */
       :host([border-top]) [border-top]::before {
         background-color: var(--h-border-top-color, var(--mdx-sys-color-accent-1-default));
@@ -171,6 +186,12 @@ export default class Heading extends Shadow() {
         margin-bottom: var(--h-border-margin-bottom, 16px);
         height: var(--h-border-top-height, 4px);
         width: var(--h-border-top-width, 32px);
+      }
+
+      @media only screen and (max-width: _max-width_) {
+        :host([section-title]) [section-title]::before {
+          width: var(--mdx-sys-sizing-fix-2xl);
+        }
       }
     `
     return this.fetchTemplate()
