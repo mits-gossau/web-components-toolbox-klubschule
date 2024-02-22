@@ -1,5 +1,5 @@
 // @ts-check
-import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js';
+import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js'
 
 /* global location */
 /* global self */
@@ -107,22 +107,22 @@ export default class KsBodyStyle extends BodyStyle {
                 width: calc(100% - 1rem);
             }
         }
-    `;
+    `
   }
 
-  addClassToLastChild() {
+  addClassToLastChild () {
     const children = this.root.children
     let lastChild = null
 
     Array.from(children).forEach(child => {
-        if (child.tagName !== 'STYLE' && child.tagName !== 'SCRIPT') {
-            lastChild = child;
-        }
+      if (child.tagName !== 'STYLE' && child.tagName !== 'SCRIPT') {
+        lastChild = child
+      }
     })
 
     if (lastChild) {
-        // @ts-ignore
-        lastChild.classList.add('ks-o-body-style__last-child')
+      // @ts-ignore
+      lastChild.classList.add('ks-o-body-style__last-child')
     }
   }
 }

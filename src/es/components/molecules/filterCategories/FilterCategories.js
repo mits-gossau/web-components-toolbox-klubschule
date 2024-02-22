@@ -104,15 +104,13 @@ export default class FilterCategories extends Shadow() {
           const navLevelItem = /* html */ `
             <m-dialog id="${filterItem.id}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
               <div class="container dialog-header" tabindex="0">
-                <div id="close-back">
+                <a-button id="close-back">
                   <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
-                </div>
+                </a-button>
                 <h3>${filterItem.label}</h3>
-                <div id="close">
-                  <a-button request-event-name="backdrop-clicked">
-                    <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
-                  </a-button>
-                </div>
+                <a-button request-event-name="backdrop-clicked" id="close">
+                  <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+                </a-button>
               </div>
               <div class="container dialog-content">
                 <div class="sub-level">
