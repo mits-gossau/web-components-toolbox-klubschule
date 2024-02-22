@@ -63,18 +63,7 @@ export default class CenterFilterList extends Shadow() {
   renderHTML (fetch) {
     fetch.then(centers => {
       const lang = this.getAttribute('lang') || document.documentElement.getAttribute('lang')
-
-      const resetParagraph = document.createElement('p')
-      const resetText = this.getAttribute('reset-text')
-      if (resetText) {
-        const resetLink = document.createElement('a')
-        resetLink.appendChild(document.createTextNode(resetText))
-        resetParagraph.appendChild(resetLink)
-        resetParagraph.classList.add('reset-link')
-      }
-
       const centerFilter = document.createElement('div')
-      centerFilter.appendChild(resetParagraph)
 
       this.fetchModules([{
         path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,

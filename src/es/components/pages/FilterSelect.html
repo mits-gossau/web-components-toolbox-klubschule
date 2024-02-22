@@ -12,18 +12,18 @@
                 </div>
             </div>
             <div class="container dialog-content">
-                <p class="reset-link"><a>Alles zur&uuml;cksetzen <a-icon-mdx icon-name="RotateLeft" size="1em"></a-icon-mdx></a></p>
-                <a-input 
-                    inputid="location-search" 
-                    width="100%" 
-                    placeholder="Angebot suchen" 
-                    icon-name="Search" 
-                    icon-size="calc(20rem/18)" 
-                    search 
-                    submit-search="request-auto-complete" 
-                    any-key-listener type="search"
-                ></a-input>
-                <div>
+                <p class="reset-link"><a-button namespace="button-tertiary-">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx></a-button></p>
+                <div class="sub-content">
+                    <a-input 
+                        inputid="location-search" 
+                        width="100%" 
+                        placeholder="Angebot suchen" 
+                        icon-name="Search" 
+                        icon-size="calc(20rem/18)" 
+                        search 
+                        submit-search="request-auto-complete" 
+                        any-key-listener type="search"
+                    ></a-input>
                     <ks-m-filter-categories 
                         namespace="filter-default-" 
                         lang="de" 
@@ -31,7 +31,7 @@
                         translation-key-cta="Angebote anzeigen"
                         translation-key-reset="zur&uuml;cksetzen"
                     ></ks-m-filter-categories>
-                </div>       
+                </div>    
             </div>
             <div class="container dialog-footer">
                 <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>

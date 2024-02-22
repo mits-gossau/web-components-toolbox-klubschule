@@ -101,7 +101,7 @@ export default class FilterCategories extends Shadow() {
         let resetButton = ''
         if (this.hasAttribute('translation-key-reset')) {
           resetButton = /* html */`
-            <p class="reset-link"><a-button>${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx></a-button></p>
+            <p class="reset-link"><a-button namespace="button-tertiary-">${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx></a-button></p>
           `
         }
 
