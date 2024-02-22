@@ -52,6 +52,7 @@
 
 :root {
   --color:#262626;
+  --scrollbar-gutter: stable;
   --any-content-spacing-mobile: var(--any-content-spacing);
   --any-content-spacing: 4rem;
   --any-content-width: min(1920px, 87%);
@@ -155,18 +156,18 @@
   --hr-secondary-opacity: 1;
   --label-letter-spacing: 0;
   --menu-color-custom: white;
-  --navigation-klubschule-section-margin-top-desktop: 0;
-  --navigation-klubschule-a-link-font-weight: 500;
-  --navigation-klubschule-font-family-custom: var(--font-family);
-  --navigation-klubschule-color-active-custom: var(--color-secondary);
-  --navigation-klubschule-a-link-line-height-mobile: 1.5;
-  --navigation-klubschule-a-link-line-height: 1.5;
-  --navigation-klubschule-a-link-padding-y-custom: 0;
-  --navigation-klubschule-a-link-padding-x-custom: 0.4rem;
-  --navigation-klubschule-color-custom: var(--color);
-  --navigation-klubschule-line-height-mobile: 1.5;
-  --navigation-klubschule-search-justify-content: flex-end;
-  --navigation-klubschule-color-mobile-custom: var(--color);
+  --multi-level-navigation-default-section-margin-top-desktop: 0;
+  --multi-level-navigation-default-a-link-font-weight: 500;
+  --multi-level-navigation-default-font-family-custom: var(--font-family);
+  --multi-level-navigation-default-color-active-custom: var(--color-secondary);
+  --multi-level-navigation-default-a-link-line-height-mobile: 1.5;
+  --multi-level-navigation-default-a-link-line-height: 1.5;
+  --multi-level-navigation-default-a-link-padding-y-custom: 0;
+  --multi-level-navigation-default-a-link-padding-x-custom: 0.4rem;
+  --multi-level-navigation-default-color-custom: var(--color);
+  --multi-level-navigation-default-line-height-mobile: 1.5;
+  --multi-level-navigation-default-search-justify-content: flex-end;
+  --multi-level-navigation-default-color-mobile-custom: var(--color);
   --login-width: var(--any-content-width);
   --search-input-background-color-focus: var(--m-white);
   --search-input-background-color-hover: var(--m-white);
