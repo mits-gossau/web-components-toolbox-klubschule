@@ -5,13 +5,13 @@ export default class Tab extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.clickEventListener = (tab) => {
+    this.clickEventListener = event => {
       this.tabActive.classList.remove('active');
       this.contentActive.classList.remove('show');
 
-      tab.classList.add('active');
-      this.tabActive = tab;
-      this.tabActiveId = tab.getAttribute('tab-target');
+      event.target.classList.add('active');
+      this.tabActive = event.target;
+      this.tabActiveId = event.target.getAttribute('tab-target');
       this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`);
       this.contentActive.classList.add('show');      
     }
@@ -29,7 +29,7 @@ export default class Tab extends Shadow() {
 
     // Handle changing active tabs
     this.tabs.forEach(tab => {
-      tab.addEventListener('click', () => this.clickEventListener(tab));
+      tab.addEventListener('click', this.clickEventListener);
     });
   }
 
