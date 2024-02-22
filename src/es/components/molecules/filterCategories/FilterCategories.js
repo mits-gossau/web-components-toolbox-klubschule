@@ -98,6 +98,13 @@ export default class FilterCategories extends Shadow() {
           })
         }
 
+        let resetButton = ''
+        if (this.hasAttribute('translation-key-reset')) {
+          resetButton = /* html */`
+            <p class="reset-link"><a>${this.getAttribute('translation-key-reset')} <a-icon-mdx icon-name="RotateLeft" size="1em"></a-icon-mdx></a></p>
+          `
+        }
+
         if (this.mainNav.children[i]?.getAttribute('id') === filterItem.id) {
           this.mainNav.children[i].root.querySelector('.sub-level').innerHTML = subNav
         } else {
@@ -113,6 +120,7 @@ export default class FilterCategories extends Shadow() {
                 </a-button>
               </div>
               <div class="container dialog-content">
+                ${this.hasAttribute('translation-key-reset') ? resetButton : ''}
                 <div class="sub-level">
                   ${subNav}
                 </div>       
