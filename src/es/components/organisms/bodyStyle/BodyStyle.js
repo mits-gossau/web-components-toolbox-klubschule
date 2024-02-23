@@ -47,18 +47,22 @@ export default class KsBodyStyle extends BodyStyle {
             width: 100%;
         }
 
+        /* adding more space to the first child */
         :host:first-child,
-        :host > *:first-child {
-            margin-top: var(--mdx-sys-spacing-flex-m);
+        :host > *:first-child,
+        :host > [wrapper]:first-child {
+            margin-top: var(--mdx-sys-spacing-flex-l);
         }
+        /* adding more space to the last (visible) child */
         :host:last-child,
-        :host > .ks-o-body-style__last-child {
-            margin-bottom: var(--mdx-sys-spacing-flex-m);
+        :host > .ks-o-body-style__last-child,
+        :host > [wrapper].ks-o-body-style__last-child {
+            margin-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
         :host([has-background]) {
-            padding-top: var(--mdx-sys-spacing-flex-m);
-            padding-bottom: var(--mdx-sys-spacing-flex-m);
+            padding-top: var(--mdx-sys-spacing-flex-l);
+            padding-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
         :host([has-background]) > *:first-child {
@@ -109,7 +113,8 @@ export default class KsBodyStyle extends BodyStyle {
             }
 
             /* expections for the width */
-            :host([variant=default]) > .extended-container-mobile {
+            :host([variant=default]) > .extended-container-mobile,
+            :host([variant=default]) > [namespace=teaser-text-image-] {
                 width: calc(100% - 1rem);
             }
 
