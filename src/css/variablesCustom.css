@@ -299,6 +299,8 @@
   /* carousel */
   --carousel-two-default-nav-margin-mobile-custom: var(--content-spacing-mobile) 0 0;
   --carousel-two-default-nav-margin-custom: var(--content-spacing) 0 0;
+  --carousel-two-default-nav-opacity: 1;
+  --carousel-two-default-nav-transform-hover: none;
 }
 
 .class-name {
