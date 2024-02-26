@@ -134,6 +134,44 @@
     --mdx-sys-font-flex-2xlarge-headline3-text-decoration: var(--mdx-sys-font-flex-large-headline3-text-decoration);
     --mdx-sys-font-flex-2xlarge-headline3: var(--mdx-sys-font-flex-large-headline3);
 
+    --mdx-sys-font-flex-xlarge-body3-font-family: var(--mdx-sys-font-flex-large-body3-font-family);
+    --mdx-sys-font-flex-xlarge-body3-font-weight: var(--mdx-sys-font-flex-large-body3-font-weight);
+    --mdx-sys-font-flex-xlarge-body3-line-height: var(--mdx-sys-font-flex-large-body3-line-height);
+    --mdx-sys-font-flex-xlarge-body3-font-size: var(--mdx-sys-font-flex-large-body3-font-size);
+    --mdx-sys-font-flex-xlarge-body3-letter-spacing: var(--mdx-sys-font-flex-large-body3-letter-spacing);
+    --mdx-sys-font-flex-xlarge-body3-paragraph-spacing: var(--mdx-sys-font-flex-large-body3-paragraph-spacing);
+    --mdx-sys-font-flex-xlarge-body3-text-case: var(--mdx-sys-font-flex-large-body3-text-case);
+    --mdx-sys-font-flex-xlarge-body3-text-decoration: var(--mdx-sys-font-flex-large-body3-text-decoration);
+    --mdx-sys-font-flex-xlarge-body3: var(--mdx-sys-font-flex-large-body3);
+    --mdx-sys-font-flex-2xlarge-body3-font-family: var(--mdx-sys-font-flex-large-body3-font-family);
+    --mdx-sys-font-flex-2xlarge-body3-font-weight: var(--mdx-sys-font-flex-large-body3-font-weight);
+    --mdx-sys-font-flex-2xlarge-body3-line-height: var(--mdx-sys-font-flex-large-body3-line-height);
+    --mdx-sys-font-flex-2xlarge-body3-font-size: var(--mdx-sys-font-flex-large-body3-font-size);
+    --mdx-sys-font-flex-2xlarge-body3-letter-spacing: var(--mdx-sys-font-flex-large-body3-letter-spacing);
+    --mdx-sys-font-flex-2xlarge-body3-paragraph-spacing: var(--mdx-sys-font-flex-large-body3-paragraph-spacing);
+    --mdx-sys-font-flex-2xlarge-body3-text-case: var(--mdx-sys-font-flex-large-body3-text-case);
+    --mdx-sys-font-flex-2xlarge-body3-text-decoration: var(--mdx-sys-font-flex-large-body3-text-decoration);
+    --mdx-sys-font-flex-2xlarge-body3: var(--mdx-sys-font-flex-large-body3);
+
+    --mdx-sys-font-flex-xlarge-body3-font-family: var(--mdx-sys-font-flex-large-body3-font-family);
+    --mdx-sys-font-flex-xlarge-body3-font-weight: var(--mdx-sys-font-flex-large-body3-font-weight);
+    --mdx-sys-font-flex-xlarge-body3-line-height: var(--mdx-sys-font-flex-large-body3-line-height);
+    --mdx-sys-font-flex-xlarge-body3-font-size: var(--mdx-sys-font-flex-large-body3-font-size);
+    --mdx-sys-font-flex-xlarge-body3-letter-spacing: var(--mdx-sys-font-flex-large-body3-letter-spacing);
+    --mdx-sys-font-flex-xlarge-body3-paragraph-spacing: var(--mdx-sys-font-flex-large-body3-paragraph-spacing);
+    --mdx-sys-font-flex-xlarge-body3-text-case: var(--mdx-sys-font-flex-large-body3-text-case);
+    --mdx-sys-font-flex-xlarge-body3-text-decoration: var(--mdx-sys-font-flex-large-body3-text-decoration);
+    --mdx-sys-font-flex-xlarge-body3: var(--mdx-sys-font-flex-large-body3);
+    --mdx-sys-font-flex-2xlarge-body3-font-family: var(--mdx-sys-font-flex-large-body3-font-family);
+    --mdx-sys-font-flex-2xlarge-body3-font-weight: var(--mdx-sys-font-flex-large-body3-font-weight);
+    --mdx-sys-font-flex-2xlarge-body3-line-height: var(--mdx-sys-font-flex-large-body3-line-height);
+    --mdx-sys-font-flex-2xlarge-body3-font-size: var(--mdx-sys-font-flex-large-body3-font-size);
+    --mdx-sys-font-flex-2xlarge-body3-letter-spacing: var(--mdx-sys-font-flex-large-body3-letter-spacing);
+    --mdx-sys-font-flex-2xlarge-body3-paragraph-spacing: var(--mdx-sys-font-flex-large-body3-paragraph-spacing);
+    --mdx-sys-font-flex-2xlarge-body3-text-case: var(--mdx-sys-font-flex-large-body3-text-case);
+    --mdx-sys-font-flex-2xlarge-body3-text-decoration: var(--mdx-sys-font-flex-large-body3-text-decoration);
+    --mdx-sys-font-flex-2xlarge-body3: var(--mdx-sys-font-flex-large-body3);
+
     /* component fixes */
     /* --mdx-comp-checkbox-border-width-default: 0; */
 }

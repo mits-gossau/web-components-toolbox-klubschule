@@ -37,7 +37,10 @@ export default class WithFacet extends Shadow() {
     }, ...args)
     
     this.abortController = null
-    this.requestWithFacetListener = () => {
+    this.requestWithFacetListener = (event) => {
+      console.log('request-with-facet', event.detail)
+      if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
+      console.log("request rerender")
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
       this.dispatchEvent(new CustomEvent('with-facet', {

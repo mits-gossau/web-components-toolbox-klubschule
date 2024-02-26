@@ -44,10 +44,12 @@ export default class Tile extends Shadow() {
       :host .m-tile {
         background-color: var(--background-color);
         border: 0.0625em solid var(--border-color);
+        height: 100%;
       }
 
       :host .m-tile__wrap {
         position: relative;
+        height: 100%;
       }
     
       :host .m-tile__overlay {
@@ -103,8 +105,10 @@ export default class Tile extends Shadow() {
       :host .m-tile__foot {
           display: var(--foot-display);
           justify-content: var(--foot-justify-content);
+          flex-wrap: wrap;
           align-items: var(--foot-align-items);
           padding: var(--foot-padding);
+          gap: 1em;
       }
 
       :host .m-tile__foot-passed {
@@ -125,7 +129,6 @@ export default class Tile extends Shadow() {
           display: flex;
           flex-direction: row;
           align-items: center;
-          padding-left: 1em;
       }
       
       :host .m-tile__price {
@@ -263,11 +266,22 @@ export default class Tile extends Shadow() {
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
           <span class="m-tile__title">${data.title || warnMandatory + 'title'}</span>
-          ${data.iconTooltip ? '<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>' : ''}
+          ${data.iconTooltip ? `
+              <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
+                <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
+              </ks-m-tooltip>
+            `
+            : ''
+          }
         </div>
         <div class="m-tile__body">
-          ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
-          <span class="m-tile__content">${data.location?.name || warnMandatory + 'location'}</span>
+          ${data.location?.name
+            ? /* html */`
+            ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
+            <span class="m-tile__content">${data.location?.name || warnMandatory + 'location'}</span>
+            `
+            : ''
+          }
           ${data.location?.badge
             ? /* html */`
               <ks-a-button badge namespace="button-secondary-" color="tertiary">
@@ -290,7 +304,9 @@ export default class Tile extends Shadow() {
             <div class="m-tile__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="m-tile__icon-box">
-                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.iconTooltip}">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                  </ks-m-tooltip>
                 </div>
               `, '')}           
             </div>
@@ -315,6 +331,10 @@ export default class Tile extends Shadow() {
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
         name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
+        name: 'ks-m-tooltip'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,

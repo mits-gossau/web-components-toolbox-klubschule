@@ -1,32 +1,83 @@
-<o-body-style background-color-prop="#F7F4F1">
-    <section>
-        <ks-m-tiles-filter namespace="tile-filter-default-"></ks-m-tiles-filter>
-    </section>
-
-    <div class="spacer"></div>
-
-    <ks-o-tile-list></ks-o-tile-list>
-
-    <div class="spacer"></div>
-
-    <h1>Angebote in der Nähe von Buchs ZH</h1>
-
-    <section>
-        <ks-m-sort namespace="sort-right-"></ks-m-sort>
-    </section>
-
-    <ks-o-tile-list></ks-o-tile-list>
-    <ks-o-tile-list></ks-o-tile-list>
-    <ks-m-troublemaker></ks-m-troublemaker>
-    <ks-o-tile-list></ks-o-tile-list>
-    <ks-o-tile-list></ks-o-tile-list>
-
-    <div class="spacer"></div>
-
-    <ks-a-button namespace="button-primary-" color="secondary">
-        <span>Weitere Angebote</span>
-        <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-    </ks-a-button>
-
-    <div class="spacer"></div>
-</o-body-style>
+<ks-c-with-facet mock>
+    <!-- o-body-style is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
+    <o-body-style background-color-prop="#F7F4F1">
+        <o-grid namespace="grid-12er-">
+            <div col-lg="6" col-md="6" col-sm="12">
+                <m-dialog namespace="dialog-top-slide-in-">
+                    <div class="container">
+                        <a-input
+                        inputid="inputSearch"
+                        placeholder="Suchen..."
+                        submit-search="request-with-facet"
+                        search=""
+                        type=search
+                        any-key-listener
+                        change-listener
+                        delete-listener
+                        answer-event-name="with-facet"
+                        active-detail-property-name="fetch:searchText"
+                        >
+                            <label for="inputSearch">Angebote in der Nähe finden</label>
+                        </a-input>                            
+                        <div id="close">
+                            <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                        </div>
+                    </div>
+                    <div class="container"></div>
+                    <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Angebot" icon-name="search" icon-size="1.25em" search type="search"></a-input>
+                </m-dialog>
+            </div>
+        </o-grid>
+        <o-grid namespace="grid-432-auto-colums-auto-rows-">
+            <ks-a-button filter namespace="button-primary-" color="secondary">
+                <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
+            </ks-a-button>
+            <m-double-button namespace="double-button-default-" width="100%">
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                    <span part="label1">Niveau A2/A2+</span>
+                    <span part="label2" dynamic></span>
+                </ks-a-button>
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                    <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                </ks-a-button>
+            </m-double-button>
+            <m-double-button namespace="double-button-default-" width="100%">
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                    <span part="label1">Label</span>
+                    <span part="label2" dynamic></span>
+                </ks-a-button>
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                    <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                </ks-a-button>
+            </m-double-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary">
+                <span>Wochentag & Tageszeit</span>
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+            </ks-a-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary">
+                <span>Kategorien</span>
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+            </ks-a-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary">
+                <span>Label</span>
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+            </ks-a-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary">
+                <span>Label</span>
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+            </ks-a-button>
+            <ks-a-button namespace="button-secondary-" color="tertiary">
+                <span>Label</span>
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+            </ks-a-button>
+        </o-grid>
+        <section>
+            <ks-m-sort namespace="sort-right-"></ks-m-sort>
+        </section>
+        <ks-m-tile-factory></ks-m-tile-factory>
+        <ks-a-button namespace="button-primary-" color="secondary">
+            <span>Weitere Angebote</span>
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+        </ks-a-button>
+    </o-body-style>
+</ks-c-with-facet>

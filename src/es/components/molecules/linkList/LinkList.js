@@ -27,7 +27,7 @@ export default class LinkList extends Shadow() {
             width: var(--width);
         }
 
-        :host li {
+        :host li a {
             display: flex;
             justify-content: space-between;
             align-items: center;
