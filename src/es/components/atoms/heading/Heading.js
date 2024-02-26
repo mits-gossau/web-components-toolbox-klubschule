@@ -160,7 +160,6 @@ export default class Heading extends Shadow() {
         font-family: var(--display1-font-family);
         font-weight: var(--display1-font-weight);
         line-height: var(--display1-line-height);
-        margin: var(--display1-margin);
         padding: var(--display1-padding);
       }
       :host([display-2]) [display-2] {
@@ -169,7 +168,6 @@ export default class Heading extends Shadow() {
         font-family: var(--display2-font-family);
         font-weight: var(--display2-font-weight);
         line-height: var(--display2-line-height);
-        margin: var(--display2-margin);
         padding: var(--display2-padding);
       }
       :host([display-3]) [display-3] {
@@ -178,7 +176,6 @@ export default class Heading extends Shadow() {
         font-family: var(--display3-font-family);
         font-weight: var(--display3-font-weight);
         line-height: var(--display3-line-height);
-        margin: var(--display3-margin);
         padding: var(--display3-padding);
       }
 
