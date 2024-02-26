@@ -295,6 +295,10 @@
   --grid-2columns-content-stage-label-padding-custom: 0.25em 0.5em;
   --grid-2columns-content-stage-paragraph-font-custom: var(--mdx-sys-font-flex-large-body2);
   --grid-2columns-content-stage-topline-font-custom: var(--mdx-sys-font-fix-label1);
+
+  /* carousel */
+  --carousel-two-default-nav-margin-mobile-custom: var(--content-spacing-mobile) 0 0;
+  --carousel-two-default-nav-margin-custom: var(--content-spacing) 0 0;
 }
 
 .class-name {
