@@ -156,12 +156,30 @@ export default class Heading extends Shadow() {
       /* display */
       :host([display-1]) [display-1] {
         font-size: var(--display1-font-size);
+        color: var(--h-color);
+        font-family: var(--display1-font-family);
+        font-weight: var(--display1-font-weight);
+        line-height: var(--display1-line-height);
+        margin: var(--display1-margin);
+        padding: var(--display1-padding);
       }
       :host([display-2]) [display-2] {
         font-size: var(--display2-font-size);
+        color: var(--h-color);
+        font-family: var(--display2-font-family);
+        font-weight: var(--display2-font-weight);
+        line-height: var(--display2-line-height);
+        margin: var(--display2-margin);
+        padding: var(--display2-padding);
       }
       :host([display-3]) [display-3] {
         font-size: var(--display3-font-size);
+        color: var(--h-color);
+        font-family: var(--display3-font-family);
+        font-weight: var(--display3-font-weight);
+        line-height: var(--display3-line-height);
+        margin: var(--display3-margin);
+        padding: var(--display3-padding);
       }
 
       /* border top */
@@ -172,6 +190,10 @@ export default class Heading extends Shadow() {
         margin-bottom: var(--h-border-margin-bottom, var(--mdx-sys-spacing-fix-s));
         height: var(--h-border-top-height, var(--mdx-sys-sizing-fix-2xs));
         width: var(--h-border-top-width, var(--mdx-sys-sizing-fix-3xl));
+      }
+
+      :host(:first-child) > * {
+        margin-top: inherit;
       }
 
       @media only screen and (max-width: _max-width_) {
