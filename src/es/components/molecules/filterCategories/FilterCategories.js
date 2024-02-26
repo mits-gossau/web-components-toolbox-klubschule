@@ -127,7 +127,7 @@ export default class FilterCategories extends Shadow() {
               </div>
               <div class="container dialog-footer">
                 <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
-                <a-button namespace="button-primary-">${this.getAttribute('translation-key-cta')}</a-button>
+                <a-button id="close" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-cta')}</a-button>
               </div>
               <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
                 <span class="text">${filterItem.label}</span>
