@@ -29,6 +29,7 @@ export default class KsBodyStyle extends BodyStyle {
         :host {
             /* had to reset display here because it was set to display inline-block !important in parent class */
             display: ${this.getAttribute('display') || 'block'} !important;
+            position: relative;
         }
         :host > * {
             margin-left: auto;
@@ -46,18 +47,22 @@ export default class KsBodyStyle extends BodyStyle {
             width: 100%;
         }
 
+        /* adding more space to the first child */
         :host:first-child,
-        :host > *:first-child {
-            margin-top: var(--mdx-sys-spacing-flex-m);
+        :host > *:first-child,
+        :host > [wrapper]:first-child {
+            margin-top: var(--mdx-sys-spacing-flex-l);
         }
+        /* adding more space to the last (visible) child */
         :host:last-child,
-        :host > .ks-o-body-style__last-child {
-            margin-bottom: var(--mdx-sys-spacing-flex-m);
+        :host > .ks-o-body-style__last-child,
+        :host > [wrapper].ks-o-body-style__last-child {
+            margin-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
         :host([has-background]) {
-            padding-top: var(--mdx-sys-spacing-flex-m);
-            padding-bottom: var(--mdx-sys-spacing-flex-m);
+            padding-top: var(--mdx-sys-spacing-flex-l);
+            padding-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
         :host([has-background]) > *:first-child {
@@ -68,11 +73,16 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: 0;
         }
 
+        :host([variant=default]) > [namespace="teaser-fullwidth-"] {
+            width: calc(86.666% + var(--mdx-sys-spacing-fix-m) * 2);
+        }
+
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */
         :host > [debug-ruler] {
             position: absolute;
             inset: 0;
             margin: auto;
+            z-index: 2;
         }
         :host > [debug-ruler]::before {
             content: '';
@@ -103,14 +113,20 @@ export default class KsBodyStyle extends BodyStyle {
             }
 
             /* expections for the width */
-            :host([variant=default]) > .extended-container-mobile {
+            :host([variant=default]) > .extended-container-mobile,
+            :host([variant=default]) > [namespace=teaser-text-image-] {
                 width: calc(100% - 1rem);
             }
-        }
-    `;
+
+            :host > [namespace="teaser-fullwidth-"] {
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+    `
   }
 
-  addClassToLastChild() {
+  addClassToLastChild () {
     const children = this.root.children
     let lastChild = null
 
