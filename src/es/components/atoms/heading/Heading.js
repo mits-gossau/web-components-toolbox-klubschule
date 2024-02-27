@@ -62,7 +62,7 @@ export default class Heading extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        --h-color: ${this.getAttribute('color')};
+        ${this.getAttribute('color') ? '--h-color: ' + this.getAttribute('color') + ';' : ''};
         --h-margin: var(--mdx-sys-spacing-flex-s) 0;
         --h-padding: 0;
 
