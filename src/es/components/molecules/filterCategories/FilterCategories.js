@@ -78,23 +78,36 @@ export default class FilterCategories extends Shadow() {
         }
       ])
     ]).then(([response]) => {
+      console.log('response', response)
       const filterData = response.filters
       // Backend should give us the data sorted, but in case it doesn't, we can sort it here
       // filterData.sort((a, b) => a.sort - b.sort);
 
+      let numberOfOffers = 0
+
       filterData.forEach((filterItem, i) => {
-        let subNav = ''
+        let subNav = []
         if (filterItem.children && filterItem.children.length > 0) {
           filterItem.children.forEach(child => {
             const count = child.count ? `(${child.count})` : ''
-            const disabled = child.count === 0 ? 'disabled' : ''
+            const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
             const checked = child.selected ? 'checked' : ''
-            const component = /* html */`
+            const visible = child.visible ? 'visible' : ''
+            const div = document.createElement('div')
+            div.innerHTML = /* html */`
               <mdx-component mutation-callback-event-name="request-with-facet">
-                <mdx-checkbox ${checked} ${disabled} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
+                <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
               </mdx-component>
             `
-            subNav += component
+            // @ts-ignore
+            div.children[0].filterItem = filterItem
+            subNav.push(div.children[0])
+
+            if (child.selected && child.count > 0) {
+              console.log('child', child)
+              numberOfOffers += child.count
+              console.log('numberOfOffers', numberOfOffers)
+            }
           })
         }
 
@@ -106,8 +119,12 @@ export default class FilterCategories extends Shadow() {
         }
 
         if (this.mainNav.children[i]?.getAttribute('id') === filterItem.id) {
-          this.mainNav.children[i].root.querySelector('.sub-level').innerHTML = subNav
+          const targetNode = this.mainNav.children[i].root.querySelector('.sub-level')
+          targetNode.innerHTML = ''
+          subNav.forEach(node => targetNode.appendChild(node))
         } else {
+          if (filterItem.visible === false || filterItem.children.length === 0) return
+
           const navLevelItem = /* html */ `
             <m-dialog id="${filterItem.id}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
               <div class="container dialog-header" tabindex="0">
@@ -121,9 +138,7 @@ export default class FilterCategories extends Shadow() {
               </div>
               <div class="dialog-content">
                 ${this.hasAttribute('translation-key-reset') ? resetButton : ''}
-                <div class="sub-level ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}">
-                  ${subNav}
-                </div>       
+                <div class="sub-level ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
               </div>
               <div class="container dialog-footer">
                 <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
@@ -136,7 +151,11 @@ export default class FilterCategories extends Shadow() {
             </m-dialog>
           `
           const div = document.createElement('div')
+ 
           div.innerHTML = navLevelItem
+          // @ts-ignore
+          const targetNode = div.children[0].root.querySelector('.sub-level')
+          subNav.forEach(node => targetNode.appendChild(node))
           this.mainNav.appendChild(div.children[0])
         }
       })
