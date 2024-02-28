@@ -35,8 +35,9 @@ export default class Facts extends Shadow() {
         }
 
         :host .facts {
-          display: flex;
-          flex-direction: row;
+          display: grid;
+          grid-template-columns: 33.33% 33.33% 33.33%;
+          column-gap: 1.5rem;
         }
 
         :host h2 + .facts {
@@ -55,10 +56,6 @@ export default class Facts extends Shadow() {
           justify-content: center;
           padding: 3rem 0.5rem;
           width: 16.75rem;
-        }
-
-        :host .fact + .fact {
-          margin-left: 1.5rem;
         }
         
         :host .fact div + div {
@@ -90,20 +87,18 @@ export default class Facts extends Shadow() {
           }
 
           :host .facts {
-            justify-content: space-between;
-            flex-wrap: wrap;
+            grid-template-columns: repeat(auto-fit, minmax(50%, 50%));
+            column-gap: 0.5rem;
+            row-gap: 0.5rem;
+            width: 100%;
           }
 
-          :host .fact:first-child,
-          :host .fact:nth-child(2n) {
-            margin-top: 0;
-            width: 44%;
+          :host .fact {
+            width: auto;
           }
 
           :host .fact:last-child {
-            margin-top: 0.5rem;
-            margin-left: 0;
-            width: 100%
+            grid-column: span 2;
           }
         }
     `
