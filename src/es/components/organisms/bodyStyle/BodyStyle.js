@@ -40,8 +40,14 @@ export default class KsBodyStyle extends BodyStyle {
         :host([variant=default]) > * {
             width: 86.666%;
         }
+        :host([variant=default]) > [wider] {
+            width: calc(100% - 2rem);
+        }
         :host([variant=narrow]) > * {
             width: 57.222%;
+        }
+        :host([variant=narrow]) > [wider] {
+            width: 86.666%;
         }
         :host([variant=full]) > * {
             width: 100%;
