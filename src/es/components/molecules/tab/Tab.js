@@ -47,12 +47,22 @@ export default class Tab extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
+        :host {
+          --any-content-width: 100%;
+          --any-content-width-mobile: 100%;
+        }
+
         :host ul {
           list-style: none;
           display: flex;
           margin: 0;
           padding: 0;
           overflow-x: auto;
+        }
+
+        :host ul.tab-search-result {
+          width: 80%;
+          margin: 0 auto;
         }
 
         :host ul li + li {
@@ -81,6 +91,7 @@ export default class Tab extends Shadow() {
 
         :host div[tab-content-target].show {
           display: block;
+          background-color: var(--mdx-base-color-klubschule-creme-400);
         }
 
         @media only screen and (max-width: _max-width_) {
