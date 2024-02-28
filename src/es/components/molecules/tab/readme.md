@@ -2,7 +2,7 @@
 
 > Generic tab component
 
-- [JIRA](https://jira.migros.net/browse/MIDUWEB-378)
+- [JIRA](https://jira.migros.net/browse/MIDUWEB-167)
 - [Example](../../pages/Tab.html)
 
 ## Usage
