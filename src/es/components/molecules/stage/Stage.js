@@ -40,12 +40,7 @@ export default class Stage extends Shadow() {
    * renders the css
    */
   renderCSS () {
-    this.css = /* css */`
-      :host {}
-      @media only screen and (max-width: _max-width_) {
-        :host {}
-      }
-    `
+    this.css = /* css */``
     return this.fetchTemplate()
   }
 

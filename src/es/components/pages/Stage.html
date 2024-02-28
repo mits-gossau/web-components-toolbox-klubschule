@@ -6,11 +6,38 @@
 
 <ks-m-stage 
     namespace="stage-default-" 
-    style="background-image: url(https://images.unsplash.com/photo-1708959978694-74618342f2a7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)"
 >
+    <a-picture
+        picture-load 
+        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A" 
+        alt="randomized image">
+    </a-picture>
     <p class="topline">
-        <a href="" alt=""><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx> <span>Back Link</span></a>
+        <a href="" alt=""><a-icon-mdx icon-name="ArrowLeft" size="1em" icon-size='24x24'></a-icon-mdx> <span>Back Link</span></a>
     </p>
+    <ks-a-heading tag="h1" display-2>
+        Das ist eine Stage mit einer etwas längeren Headline.
+    </ks-a-heading>
+    <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
+</ks-m-stage>
+
+<br />
+<br />
+
+<ks-a-heading tag="h2">
+    (Default) Stage ohne Back Link
+</ks-a-heading>
+<br />
+<br />
+
+<ks-m-stage 
+    namespace="stage-default-"
+>
+    <a-picture
+        picture-load 
+        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A" 
+        alt="randomized image">
+    </a-picture>
     <ks-a-heading tag="h1" display-2>
         Das ist eine Stage
     </ks-a-heading>
@@ -19,6 +46,32 @@
 
 <br />
 <br />
+
+<ks-a-heading tag="h2">
+    (Default) Stage Anpassung Brand Pro
+</ks-a-heading>
+<br />
+<br />
+
+<ks-m-stage 
+    namespace="stage-default-"
+    brand="pro"
+>
+    <a-picture
+        picture-load 
+        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A" 
+        alt="randomized image">
+    </a-picture>
+    <ks-a-heading tag="h1" display-2>
+        Das ist eine Stage
+    </ks-a-heading>
+    <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
+</ks-m-stage>
+
+<br />
+<br />
+
+
 <ks-a-heading tag="h2">
     Title Stage
 </ks-a-heading>
@@ -27,14 +80,14 @@
 
 <ks-m-stage namespace="stage-title-">
     <p class="topline">
-        <a href="" alt=""><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx> <span>Back Link</span></a>
+        <a href="" alt=""><a-icon-mdx icon-name="ArrowLeft" size="1em" icon-size='24x24'></a-icon-mdx> <span>Back Link</span></a>
     </p>
-    <ks-a-heading tag="h1" display-3 border-top centered>
+    <ks-a-heading tag="h1" display-3>
         Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
     </ks-a-heading>
     <a-picture
         picture-load 
-        defaultSource="https://images.unsplash.com/photo-1708959978694-74618342f2a7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A" 
         alt="randomized image">
     </a-picture>
 </ks-m-stage>
