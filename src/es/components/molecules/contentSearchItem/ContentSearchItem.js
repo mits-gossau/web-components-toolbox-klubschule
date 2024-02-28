@@ -31,12 +31,17 @@ export default class ContentSearchItem extends Shadow() {
           color: var(--mdx-base-color-grey-950);
         }
 
+        :host a div  {
+          width: 80%;
+        }
+
         :host a:hover h3 {
           color: var(--mdx-base-color-klubschule-blue-600);
         }
 
         :host div + a-picture {
           margin-left: 1rem;
+          width: 20%;
         }
 
         :host h3 {
