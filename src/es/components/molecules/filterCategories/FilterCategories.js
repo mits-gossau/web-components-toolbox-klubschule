@@ -86,7 +86,7 @@ export default class FilterCategories extends Shadow() {
       let numberOfOffers = 0
 
       filterData.forEach((filterItem, i) => {
-        let subNav = []
+        const subNav = []
         if (filterItem.children && filterItem.children.length > 0) {
           filterItem.children.forEach(child => {
             const count = child.count ? `(${child.count})` : ''
@@ -151,7 +151,7 @@ export default class FilterCategories extends Shadow() {
             </m-dialog>
           `
           const div = document.createElement('div')
- 
+
           div.innerHTML = navLevelItem
           // @ts-ignore
           const targetNode = div.children[0].root.querySelector('.sub-level')

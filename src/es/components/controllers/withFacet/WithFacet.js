@@ -38,7 +38,7 @@ export default class WithFacet extends Shadow() {
     const withFacetCache = new Map()
 
     const numberOfOffers = 0
-    
+
     this.abortController = null
     this.isMocked = this.hasAttribute('mock')
     this.requestWithFacetListener = (event) => {
@@ -69,11 +69,11 @@ export default class WithFacet extends Shadow() {
       const url = this.isMocked
         ? `${this.importMetaUrl}./mock/default.json`
         : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
-      
+
       let requestInit = {}
       if (this.isMocked) {
-        requestInit = { 
-          method: 'GET' 
+        requestInit = {
+          method: 'GET'
         }
       } else {
         requestInit = {
@@ -81,13 +81,11 @@ export default class WithFacet extends Shadow() {
           headers: {
             'Content-Type': 'application/json'
           },
-          mode: "cors",
-          body: request, 
+          mode: 'cors',
+          body: request
         }
       }
 
-      
-      
       this.dispatchEvent(new CustomEvent('with-facet', {
         detail: {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
@@ -98,7 +96,6 @@ export default class WithFacet extends Shadow() {
             : withFacetCache.set(url, fetch(url, requestInit).then(response => {
               console.log('response', response)
               if (response.status >= 200 && response.status <= 299) {
-
                 // Promise.resolve(response.json()).then(data => {
                 //   console.log('data', data)
                 // })
