@@ -57,6 +57,11 @@ export default class Facts extends Shadow() {
           padding: 3rem 0.5rem;
           width: 16.75rem;
         }
+
+        :host a.fact {
+          color: var(--mdx-base-color-grey-975);
+          text-decoration: none;
+        }
         
         :host .fact div + div {
           margin-top: 3rem;
