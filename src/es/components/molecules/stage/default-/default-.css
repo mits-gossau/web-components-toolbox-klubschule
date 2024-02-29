@@ -1,0 +1,30 @@
+:host {
+    --color: white;
+    --h-color: white;
+    --h-text-align: center;
+
+    --stage-default-color: white;
+
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+
+    background-size: cover;
+    background-position: center;
+    width: 100% !important;
+    aspect-ratio: 21/9;
+    padding: var(--mdx-sys-spacing-flex-m) var(--mdx-sys-spacing-flex-xs);
+}
+
+:host a-input {
+    width: 100%;
+    max-width: calc(528/16 * 1rem);
+}
+
+:host > .topline {
+    margin-top: 0 !important;
+    margin-bottom: auto !important;
+    width: 100%;
+    text-align: left;
+}
