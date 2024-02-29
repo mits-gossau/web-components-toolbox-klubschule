@@ -301,6 +301,7 @@
   --carousel-two-default-nav-margin-custom: var(--content-spacing) 0 0;
   --carousel-two-default-nav-opacity: 1;
   --carousel-two-default-nav-transform-hover: none;
+  --carousel-two-default-p-margin: auto;
 }
 
 .class-name {
