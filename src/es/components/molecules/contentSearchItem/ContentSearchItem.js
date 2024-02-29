@@ -32,7 +32,7 @@ export default class ContentSearchItem extends Shadow() {
         }
 
         :host a div  {
-          width: 80%;
+          width: 43.75rem;
         }
 
         :host a:hover h3 {
@@ -41,7 +41,6 @@ export default class ContentSearchItem extends Shadow() {
 
         :host div + a-picture {
           margin-left: 1rem;
-          width: 20%;
         }
 
         :host h3 {
@@ -67,6 +66,10 @@ export default class ContentSearchItem extends Shadow() {
         }
 
         @media only screen and (max-width: _max-width_) {
+          :host a div {
+            width: 15.625rem;
+          }
+          
           :host h3 {
             line-height: 1.25rem;
           }
