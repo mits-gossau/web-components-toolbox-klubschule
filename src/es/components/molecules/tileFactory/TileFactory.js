@@ -9,30 +9,30 @@ export default class TileFactory extends Shadow() {
   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    
+
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
   }
-  
+
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('with-facet', this.withFacetEventNameListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
-    {
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }
+      {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }
     ))
   }
-  
+
   disconnectedCallback () {
     document.body.removeEventListener('with-facet', this.withFacetEventNameListener)
   }
-  
+
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
-  
+
   /**
   * renders css
   *
@@ -54,7 +54,7 @@ export default class TileFactory extends Shadow() {
     `
     return this.fetchTemplate()
   }
-  
+
   /**
   * fetches the template
   *
@@ -63,15 +63,15 @@ export default class TileFactory extends Shadow() {
   fetchTemplate () {
     switch (this.getAttribute('namespace')) {
       case 'course-list-default-':
-      return this.fetchCSS([{
-        path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-        namespace: false
-      }])
+        return this.fetchCSS([{
+          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+          namespace: false
+        }])
       default:
-      return Promise.resolve()
+        return Promise.resolve()
     }
   }
-  
+
   /**
   * renderHTML
   * @param {any} fetch - An array of course fetch objects.

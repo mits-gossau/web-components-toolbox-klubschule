@@ -71,25 +71,25 @@ export default class LinkList extends Shadow() {
   fetchTemplate () {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     switch (this.getAttribute('namespace')) {
-        case 'link-list-default-':
-            return this.fetchCSS([
-                {
-                path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-                namespace: false
-            }])
-        case 'link-list-download-':
-            return this.fetchCSS([{
-                path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-                namespace: false,
-                replaces: [{
-                pattern: '--link-list-default-',
-                flags: 'g',
-                replacement: '--link-list-download-'
-                }]
-            },{
-                path: `${this.importMetaUrl}./download-/download-.css`, // apply namespace since it is specific and no fallback
-                namespace: false
-            }])
+      case 'link-list-default-':
+        return this.fetchCSS([
+          {
+            path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false
+          }])
+      case 'link-list-download-':
+        return this.fetchCSS([{
+          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+          namespace: false,
+          replaces: [{
+            pattern: '--link-list-default-',
+            flags: 'g',
+            replacement: '--link-list-download-'
+          }]
+        }, {
+          path: `${this.importMetaUrl}./download-/download-.css`, // apply namespace since it is specific and no fallback
+          namespace: false
+        }])
     }
   }
 }

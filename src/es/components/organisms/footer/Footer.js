@@ -1,50 +1,49 @@
 import Footer from '../../web-components-toolbox/src/es/components/organisms/footer/Footer.js'
 
 export default class KsFooter extends Footer {
-    constructor (options = {}, ...args) {
-        super({
-            ...options
-        }, ...args)
-    }
+  constructor (options = {}, ...args) {
+    super({
+      ...options
+    }, ...args)
+  }
 
-
-    /**
+  /**
      * fetches the template
      *
      * @return {Promise<void>}
      */
-    fetchTemplate () {  
-        const styles = [
-            {
-              path: `${this.importMetaUrl}../../../../css/reset.css`, // no variables for this reason no namespace
-              namespace: false,
-              maxWidth: this.getMobileBreakpoint({})
-            },
-            {
-              path: `${this.importMetaUrl}../../../../css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
-              namespaceFallback: true,
-              maxWidth: this.getMobileBreakpoint({})
-            },
-          ]
-        switch (this.getAttribute('namespace')) {
-        case 'footer-default-':
-            return this.fetchCSS([{
-                path: `${this.importMetaUrl}../../../../../../organisms/footer/default-/default-.css`, // apply namespace since it is specific and no fallback
-                namespace: false
-            }, ...styles], false)
-        default:
-            return this.fetchCSS(styles)
-        } 
+  fetchTemplate () {
+    const styles = [
+      {
+        path: `${this.importMetaUrl}../../../../css/reset.css`, // no variables for this reason no namespace
+        namespace: false,
+        maxWidth: this.getMobileBreakpoint({})
+      },
+      {
+        path: `${this.importMetaUrl}../../../../css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+        namespaceFallback: true,
+        maxWidth: this.getMobileBreakpoint({})
+      }
+    ]
+    switch (this.getAttribute('namespace')) {
+      case 'footer-default-':
+        return this.fetchCSS([{
+          path: `${this.importMetaUrl}../../../../../../organisms/footer/default-/default-.css`, // apply namespace since it is specific and no fallback
+          namespace: false
+        }, ...styles], false)
+      default:
+        return this.fetchCSS(styles)
     }
-    
-    /**
+  }
+
+  /**
      * renders the m-Teaser css
      *
      * @return {Promise<void>}
      */
-    renderCSS () {
-        const result = super.renderCSS()
-        this.css = /* css */`
+  renderCSS () {
+    const result = super.renderCSS()
+    this.css = /* css */`
             :host {
                 display: flex;
                 flex-direction: column-reverse;
@@ -204,49 +203,49 @@ export default class KsFooter extends Footer {
                 }
             }
         `
-        // return this.fetchTemplate() // dont fetch a second time, since super.renderCSS already calls fetchTemplate
-        return result
-    }
+    // return this.fetchTemplate() // dont fetch a second time, since super.renderCSS already calls fetchTemplate
+    return result
+  }
 
-    renderHTML() {
-        super.renderHTML()
-        this.fetchModules([
-            {
-              path: `${this.importMetaUrl}../../atoms/iconMdx/IconMdx.js`,
-              name: 'a-icon-mdx'
-            },
-            {
-              path: `${this.importMetaUrl}../../../../../../atoms/button/Button.js`,
-              name: 'ks-a-button'
-            }
-        ]).then(([iconMdx, button]) => {
-            // Add toTheTop Button
-            const toTheTopButton = new button.constructorClass({ namespace: 'button-primary-' })
-            toTheTopButton.setAttribute("icon", true)
-            toTheTopButton.setAttribute("color", "secondary")
-    
-            const icon = new iconMdx.constructorClass()
-            icon.setAttribute("icon-name", "ArrowUp")
-            icon.setAttribute("size", "1rem")
-    
-            toTheTopButton.root.appendChild(icon)
-            toTheTopButton.addEventListener("click", () => window.scrollTo(0, 0))
-    
-            this.root.appendChild(toTheTopButton)
-            // Overwrite ordering by super footer.js
-            const copyrightTag = this.root.querySelector(".copyright")
-            copyrightTag && copyrightTag.classList.remove('copyright')
-        })
-    }
+  renderHTML () {
+    super.renderHTML()
+    this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../../../atoms/button/Button.js`,
+        name: 'ks-a-button'
+      }
+    ]).then(([iconMdx, button]) => {
+      // Add toTheTop Button
+      const toTheTopButton = new button.constructorClass({ namespace: 'button-primary-' })
+      toTheTopButton.setAttribute('icon', true)
+      toTheTopButton.setAttribute('color', 'secondary')
 
-    /**
+      const icon = new iconMdx.constructorClass()
+      icon.setAttribute('icon-name', 'ArrowUp')
+      icon.setAttribute('size', '1rem')
+
+      toTheTopButton.root.appendChild(icon)
+      toTheTopButton.addEventListener('click', () => window.scrollTo(0, 0))
+
+      this.root.appendChild(toTheTopButton)
+      // Overwrite ordering by super footer.js
+      const copyrightTag = this.root.querySelector('.copyright')
+      copyrightTag && copyrightTag.classList.remove('copyright')
+    })
+  }
+
+  /**
      * should actually be done with the template for o-wrapper namespace="footer-default-" but this has already been done within the razor template, this fix should work without any razor adjustments
      *
      * @param {HTMLElement[] & any} wrappers
      * @returns {HTMLElement[]}
      */
-    injectCssIntoWrappers (wrappers) {
-        wrappers.forEach(wrapper => wrapper.setCss(/* css */`
+  injectCssIntoWrappers (wrappers) {
+    wrappers.forEach(wrapper => wrapper.setCss(/* css */`
             ${this.injectCssIntoWrapperAndDetails()}
             :host m-details {
                 --details-default-icon-right-border-bottom-last: var(--footer-default-border-width) solid;
@@ -267,8 +266,8 @@ export default class KsFooter extends Footer {
             }
             `, undefined, false))
 
-        return wrappers
-    }
+    return wrappers
+  }
 
   injectCssIntoWrapperAndDetails () {
     return /* css */ `

@@ -6,14 +6,14 @@ export default class Tab extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
-      this.tabActive.classList.remove('active');
-      this.contentActive.classList.remove('show');
+      this.tabActive.classList.remove('active')
+      this.contentActive.classList.remove('show')
 
-      event.target.classList.add('active');
-      this.tabActive = event.target;
-      this.tabActiveId = event.target.getAttribute('tab-target');
-      this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`);
-      this.contentActive.classList.add('show');      
+      event.target.classList.add('active')
+      this.tabActive = event.target
+      this.tabActiveId = event.target.getAttribute('tab-target')
+      this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`)
+      this.contentActive.classList.add('show')
     }
   }
 
@@ -21,22 +21,22 @@ export default class Tab extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
 
     // Show content of default active tab
-    this.tabs = this.root.querySelectorAll('button');
-    this.tabActive = this.root.querySelector('button.active');
-    this.tabActiveId = this.tabActive.getAttribute('tab-target');
-    this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`);
-    this.contentActive.classList.add('show');
+    this.tabs = this.root.querySelectorAll('button')
+    this.tabActive = this.root.querySelector('button.active')
+    this.tabActiveId = this.tabActive.getAttribute('tab-target')
+    this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`)
+    this.contentActive.classList.add('show')
 
     // Handle changing active tabs
     this.tabs.forEach(tab => {
-      tab.addEventListener('click', this.clickEventListener);
-    });
+      tab.addEventListener('click', this.clickEventListener)
+    })
   }
 
   disconnectedCallback () {
     this.tabs.forEach(tab => {
-      tab.removeEventListener('click', this.clickEventListener);
-    });
+      tab.removeEventListener('click', this.clickEventListener)
+    })
   }
 
   shouldRenderCSS () {

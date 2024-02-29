@@ -1,8 +1,7 @@
 <ks-c-with-facet mock>
     <section>
-        <m-dialog
-            namespace="dialog-left-slide-in-"
-        >
+        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
+            <!-- overlayer -->
             <div class="container dialog-header" tabindex="0">
                 <div id="back">
                     &nbsp;
@@ -13,7 +12,7 @@
                 </div>
             </div>
             <div class="container dialog-content">
-                <p class="reset-link"><a-button namespace="button-tertiary-">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx></a-button></p>
+                <p class="reset-link"><a-button namespace="button-transparent-">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx></a-button></p>
                 <div class="sub-content">
                     <a-input 
                         inputid="location-search" 
@@ -30,14 +29,21 @@
                         lang="de" 
                         translation-key-close="Schliessen" 
                         translation-key-cta="Angebote anzeigen"
+                        translation-key-reset="zur&uuml;cksetzen"
                     ></ks-m-filter-categories>
-                </div>
+                </div>    
             </div>
             <div class="container dialog-footer">
                 <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
-                <a-button namespace="button-primary-">Angebote anzeigen</a-button>
+                <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events>Angebote anzeigen</a-button>
             </div>
-            <a-button namespace="button-primary-" id="show-modal" no-pointer-events>&Ouml;ffne Filter</a-button>
         </m-dialog>
+        <!-- filter buttons -->
+        <o-grid namespace="grid-432-auto-colums-auto-rows-">
+            <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
+                <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
+            </ks-a-button>
+            <ks-m-filter-select></ks-m-filter-select>
+        </o-grid>
     </section>
 </ks-c-with-facet>
