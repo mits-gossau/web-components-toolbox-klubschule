@@ -62,8 +62,8 @@ export default class Heading extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        --h-color: ${this.getAttribute('color')};
-        --h-margin: var(--mdx-sys-spacing-flex-s) 0;
+        ${this.getAttribute('color') ? `--h-color: ${this.getAttribute('color')};` : ''};
+        --h-margin: var(--h-margin-custom, var(--mdx-sys-spacing-flex-s) 0);
         --h-padding: 0;
 
         --display1-font-weight: var(--mdx-sys-font-flex-display1-font-weight);
@@ -188,9 +188,15 @@ export default class Heading extends Shadow() {
         height: var(--h-border-top-height, var(--mdx-sys-sizing-fix-2xs));
         width: var(--h-border-top-width, var(--mdx-sys-sizing-fix-3xl));
       }
-
+      
       :host(:first-child) > * {
         margin-top: inherit;
+      }
+
+      :host([border-top][centered]) > [border-top][centered] {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       @media only screen and (max-width: _max-width_) {
