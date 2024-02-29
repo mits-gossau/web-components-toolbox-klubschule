@@ -52,6 +52,8 @@
 
 :root {
   --a-emotion-pictures-margin-top-first-child: auto;
+  --color:#262626;
+  --scrollbar-gutter: stable;
   --any-content-spacing-mobile: var(--any-content-spacing);
   --any-content-spacing: var(--mdx-sys-spacing-flex-2xs);
   --any-content-width: calc(min(100%, var(--body-max-width)) - var(--mdx-sys-spacing-flex-large-xs) * 2);
@@ -142,32 +144,22 @@
   --grid-2columns-content-section-second-column-padding-mobile-custom: 0 0 3rem 0;
   --grid-2columns2rows-justify-content-custom: space-evenly;
   --grid-432-auto-colums-auto-rows-grid-gap-custom: 1rem 0.5rem;
-  --header-default-a-logo-top-custom: calc(60.5px / 2 - 60px / 2);
-  --header-default-a-logo-top-mobile-custom: -0.5em;
-  --header-default-a-menu-icon-background-color-custom: var(--color);
-  --header-default-background-color-custom: white;
-  --header-default-content-width: var(--any-content-width);
-  --header-default-logo-width-custom: calc(100rem/18);
-  --header-default-height-mobile-custom: 3.75rem;
-  --logo-default-height-mobile-custom: var(--header-default-height-mobile-custom);
+  --header-nav-right-a-logo-top-custom: calc(60.5px / 2 - 60px / 2);
+  --header-nav-right-a-logo-top-mobile-custom: -0.5em;
+  --header-nav-right-a-menu-icon-background-color-custom: var(--color);
+  --header-nav-right-background-color-custom: white;
+  --header-nav-right-content-width: var(--any-content-width);
+  --header-nav-right-logo-width-custom: calc(100rem/18);
+  --header-nav-right-height-mobile-custom: 3.75rem;
+  --logo-default-height-mobile-custom: var(--header-nav-right-height-mobile-custom);
   --logo-default-width-mobile-custom: var(--logo-default-height-mobile-custom);
-  --header-default-height-custom: calc(100rem/18);
-  --header-default-margin-custom: 0 0 1rem 0;
-  --header-default-padding: 0;
+  --header-nav-right-height-custom: calc(100rem/18);
+  --header-nav-right-margin-custom: 0 0 1rem 0;
+  --header-nav-right-padding: 0;
   --hr-border-width: 0 0 2px;
   --hr-secondary-opacity: 1;
   --label-letter-spacing: 0;
   --menu-color-custom: white;
-  --navigation-alnatura-section-margin-top-desktop: 49px;
-  --navigation-alnatura-a-link-font-weight: 500;
-  --navigation-alnatura-font-family-custom: var(--font-family);
-  --navigation-alnatura-color-active-custom: var(--color-secondary);
-  --navigation-alnatura-a-link-line-height-mobile: 1.5;
-  --navigation-alnatura-a-link-line-height: 1.5;
-  --navigation-alnatura-color-custom: var(--color);
-  --navigation-alnatura-line-height-mobile: 1.5;
-  --navigation-alnatura-search-justify-content: flex-end;
-  --navigation-alnatura-color-mobile-custom: var(--color);
   --login-width: var(--header-default-content-width);
   --search-input-background-color-focus: var(--m-white);
   --search-input-background-color-hover: var(--m-white);
@@ -186,6 +178,7 @@
   --title-border-display: none;
   --icon-color-blue: var(--mdx-sys-color-primary-default);
   --content-width: 80%;
+  --body-no-scroll-overflow: visible;
 
   --search-input-tiles-search-input-border-color: var(--m-gray-700);
   --search-input-tiles-search-input-padding: 0.875em 1.5em;

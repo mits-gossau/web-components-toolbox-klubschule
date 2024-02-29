@@ -3,7 +3,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 
 export default class NavLevelItem extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ keepCloneOutsideShadowRoot: true, importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
   connectedCallback () {
@@ -24,18 +24,20 @@ export default class NavLevelItem extends Shadow() {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 0.75em;
+          padding: var(--padding, 0.75em);
           cursor: pointer;
           background-color: var(--background-color);
+          height: var(--height, auto);
+          margin: var(--margin, 0);
           transition: background-color 0.3s ease-in-out;
         }
 
         :host(:hover) {
-          background-color: #E0F0FF;
+          background-color: var(--hover-background-color, #E0F0FF);
         }
 
         :host(:hover) span {
-          color: #0053A6;
+          color: var(--hover-color,  #0053A6);
         }
 
         :host .wrap {
@@ -47,9 +49,9 @@ export default class NavLevelItem extends Shadow() {
           display: inline-block;
           color: #262626;
           color: var(--color);
-          font-size: 1.125em;
+          font-size: var(--font-size, 1.125em);
           line-height: 1.125em;
-          font-weight: 400;
+          font-weight: var(--font-weight, 400);
           transition: color 0.3s ease-in-out;
         }
 
