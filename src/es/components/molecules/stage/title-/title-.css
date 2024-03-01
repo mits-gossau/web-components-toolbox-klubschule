@@ -6,9 +6,6 @@
 :host {
     --h-text-align: center;
     --h-margin-custom: 0;
-    --h-border-top-height: .5rem;
-    --h-border-top-width: 4rem;
-    --h-border-margin-bottom: var(--mdx-sys-spacing-flex-xs);
 
     display: flex !important;
     flex-direction: column;
@@ -17,6 +14,10 @@
     gap: 0;
 
     width: 100% !important;
+}
+
+:host a {
+    font: var(--mdx-sys-font-fix-label1);
 }
 
 :host a-picture {
@@ -42,6 +43,16 @@
 
 :host > .topline {
     padding-top: var(--mdx-sys-spacing-flex-m);
+    margin-top: 0 !important;
+    margin-bottom: var(--mdx-sys-spacing-flex-m) !important;
+    width: 100%;
+    text-align: left;
+}
+
+:host a {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
 }
 
 :host > ks-a-heading {
@@ -49,16 +60,24 @@
     max-width: calc(64rem + 2 * var(--mdx-sys-spacing-flex-xs));
 }
 
-:host > .topline {
-    margin-top: 0 !important;
-    margin-bottom: var(--mdx-sys-spacing-flex-m) !important;
-    width: 100%;
-    text-align: left;
+:host > ks-a-heading::before {
+    content: '';
+    display: block;
+    height: .5rem;
+    width: 4rem;
+    margin: 0 auto var(--mdx-sys-spacing-flex-xs);
+    background: var(--mdx-sys-color-accent-1-default);
 }
 
 @media screen and (max-width: _max-width_) {
-    :host {
-        --h-border-top-height: .25rem;
-        --h-border-top-width: 2rem;
+    :host a-picture {
+        --aspect-ratio: 4/3;
+    }
+
+    :host > ks-a-heading::before {
+        content: '';
+        display: block;
+        height: .25rem;
+        width: 2rem;
     }
 }
