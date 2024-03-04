@@ -40,7 +40,7 @@ export default class Stage extends Shadow() {
    * renders the css
    */
   renderCSS () {
-    this.css = /* css */``
+    this.css = /* css */''
     return this.fetchTemplate()
   }
 
