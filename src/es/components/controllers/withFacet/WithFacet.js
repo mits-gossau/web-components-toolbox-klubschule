@@ -42,7 +42,7 @@ export default class WithFacet extends Shadow() {
         this.abortController = null
         this.isMocked = this.hasAttribute('mock')
         this.requestWithFacetListener = (event) => {
-            if (event.detail ? .mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
+            if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
             const request = `{"MandantId":111, "filters": [
               ${event.detail?.wrapper.filterItem
                 ? `{
@@ -66,7 +66,7 @@ export default class WithFacet extends Shadow() {
             ]}`
 
             // @ts-ignore
-            console.log(request, self.data = event.detail ? .wrapper.filterItem)
+            console.log(request, self.data = event.detail?.wrapper.filterItem)
             const url = this.isMocked ?
                 `${this.importMetaUrl}./mock/default.json` :
                 `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
