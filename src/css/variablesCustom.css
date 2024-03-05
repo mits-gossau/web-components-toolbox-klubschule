@@ -53,7 +53,8 @@
 :root {
   --a-emotion-pictures-margin-top-first-child: auto;
   --color:#262626;
-  --scrollbar-gutter: stable;
+  --scrollbar-gutter-desktop: stable;
+  --scrollbar-gutter-mobile: auto;
   --any-content-spacing-mobile: var(--any-content-spacing);
   --any-content-spacing: var(--mdx-sys-spacing-flex-2xs);
   --any-content-width: calc(min(100%, var(--body-max-width)) - var(--mdx-sys-spacing-flex-large-xs) * 2);
