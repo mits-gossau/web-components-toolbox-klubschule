@@ -82,9 +82,8 @@ export default class FilterCategories extends Shadow() {
       const filterData = response.filters
       // Backend should give us the data sorted, but in case it doesn't, we can sort it here
       // filterData.sort((a, b) => a.sort - b.sort);
-
       let numberOfOffers = 0
-      
+
       filterData.forEach((filterItem, i) => {
         let childItems = ''
         const subNav = []
@@ -118,7 +117,7 @@ export default class FilterCategories extends Shadow() {
         let resetButton = ''
         if (this.hasAttribute('translation-key-reset')) {
           resetButton = /* html */`
-            <p class="reset-link"><a-button namespace="button-tertiary-">${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx></a-button></p>
+            <p class="reset-link"><a-button namespace="button-transparent-">${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx></a-button></p>
           `
         }
 
@@ -146,7 +145,7 @@ export default class FilterCategories extends Shadow() {
               </div>
               <div class="container dialog-footer">
                 <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
-                <a-button id="close" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-cta')}</a-button>
+                <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${numberOfOffers > 0 ? `(${numberOfOffers}) ` : ''}${this.getAttribute('translation-key-cta')}</a-button>
               </div>
               <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
                 <div class="wrap">

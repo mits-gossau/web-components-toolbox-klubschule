@@ -37,7 +37,7 @@ export default class WithFacet extends Shadow() {
         }, ...args)
         const withFacetCache = new Map()
 
-        const numberOfOffers = 0
+        const numberOfOffers = 123
 
         this.abortController = null
         this.isMocked = this.hasAttribute('mock')
@@ -116,7 +116,7 @@ export default class WithFacet extends Shadow() {
         const numberOfOffersElement = this.root.querySelector('.button-show-all-offers')
         console.log('numberOfOffersElement', numberOfOffersElement)
         if (numberOfOffers > 0 && numberOfOffersElement) {
-            console.log(numberOfOffersElement.innerHTML)
+            console.log('numberOfOffersElement.innerHTML', numberOfOffersElement.innerHTML)
             numberOfOffersElement.innerHTML = `(${numberOfOffers}) ` + numberOfOffersElement.innerHTML
         }
     }
