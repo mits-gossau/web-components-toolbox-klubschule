@@ -33,13 +33,6 @@ export default class LinkList extends Shadow() {
             text-align: center;
             justify-content: center;
         }
-
-        :host li a {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 0.0625em solid var(--border-color);
-        }
     `
     return this.fetchTemplate()
   }
