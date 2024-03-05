@@ -200,7 +200,7 @@ export default class Heading extends Shadow() {
         height: 0.703em;
         margin-left: 0.25em;
         background-size: contain;
-        background-image: url("data:image/svg+xml,%3Csvg width='23' height='26' viewBox='0 0 23 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.71109 26L9.12688 0H13.5269L5.11108 26H0.71109Z' fill='%2300A2AD'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.61163 26L18.0274 0H22.4274L14.0116 26H9.61163Z' fill='black'/%3E%3C/svg%3E%0A");
+        background-image: var(--ibaw-title-brand-shape);
       }
 
       :host(:first-child) > * {
