@@ -84,11 +84,15 @@ export default class FilterCategories extends Shadow() {
       // filterData.sort((a, b) => a.sort - b.sort);
 
       let numberOfOffers = 0
-
+      
       filterData.forEach((filterItem, i) => {
+        let childItems = ''
         const subNav = []
-        if (filterItem.children && filterItem.children.length > 0) {
+        if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
           filterItem.children.forEach(child => {
+            if (child.selected) {
+              childItems += child.label + ', '
+            }
             const count = child.count ? `(${child.count})` : ''
             const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
             const checked = child.selected ? 'checked' : ''
@@ -145,7 +149,10 @@ export default class FilterCategories extends Shadow() {
                 <a-button id="close" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-cta')}</a-button>
               </div>
               <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
-                <span class="text">${filterItem.label}</span>
+                <div class="wrap">
+                  <span class="text">${filterItem.label}</span>
+                  <span class="additional">${childItems.slice(0, -2)}</span>
+                </div>
                 <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
               </ks-m-nav-level-item>
             </m-dialog>
