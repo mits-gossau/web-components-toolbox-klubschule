@@ -94,7 +94,7 @@ export default class filterSelect extends Shadow() {
             const doubleButton = /* html */`
               <m-double-button namespace="double-button-default-" width="100%">
                 <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="dialog-open-first-level,dialog-open-${filterItem.id}" click-no-toggle-active>
-                  <span part="label1">${filterItem.label}: ${childItems.slice(0, -2)/* remove last comma and space */}</span>
+                  <span part="label1">${childItems.slice(0, -2)/* remove last comma and space */}</span>
                   <span part="label2" dynamic></span>
                 </ks-a-button>
                 <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">

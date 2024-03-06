@@ -78,7 +78,7 @@ export default class FilterCategories extends Shadow() {
         }
       ])
     ]).then(([response]) => {
-      console.log('response', response)
+      console.log('response (FilterCategories.js)', response)
       const filterData = response.filters
       // Backend should give us the data sorted, but in case it doesn't, we can sort it here
       // filterData.sort((a, b) => a.sort - b.sort);
@@ -107,9 +107,7 @@ export default class FilterCategories extends Shadow() {
             subNav.push(div.children[0])
 
             if (child.selected && child.count > 0) {
-              console.log('child', child)
               numberOfOffers += child.count
-              console.log('numberOfOffers', numberOfOffers)
             }
           })
         }

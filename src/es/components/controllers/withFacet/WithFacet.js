@@ -37,12 +37,13 @@ export default class WithFacet extends Shadow() {
         }, ...args)
         const withFacetCache = new Map()
 
-        const numberOfOffers = 123
+        this.numberOfOffers = 0
 
         this.abortController = null
         this.isMocked = this.hasAttribute('mock')
         this.requestWithFacetListener = (event) => {
             if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
+
             const request = `{"MandantId":111, "filters": [
               ${event.detail?.wrapper.filterItem
                 ? `{
@@ -96,12 +97,8 @@ export default class WithFacet extends Shadow() {
                         // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
                         :
                         withFacetCache.set(url, fetch(url, requestInit).then(response => {
-                            console.log('response', response)
                             if (response.status >= 200 && response.status <= 299) {
-                                // Promise.resolve(response.json()).then(data => {
-                                //   console.log('data', data)
-                                // })
-
+                                console.log('response (WithFacet.js)', response)
                                 return response.json()
                             }
                             throw new Error(response.statusText)
@@ -113,12 +110,7 @@ export default class WithFacet extends Shadow() {
             }))
         }
 
-        const numberOfOffersElement = this.root.querySelector('.button-show-all-offers')
-        console.log('numberOfOffersElement', numberOfOffersElement)
-        if (numberOfOffers > 0 && numberOfOffersElement) {
-            console.log('numberOfOffersElement.innerHTML', numberOfOffersElement.innerHTML)
-            numberOfOffersElement.innerHTML = `(${numberOfOffers}) ` + numberOfOffersElement.innerHTML
-        }
+        
     }
 
     connectedCallback() {
