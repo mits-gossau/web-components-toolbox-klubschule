@@ -16,6 +16,7 @@ export default class NumberOfOffersButton extends Button {
 
     disconnectedCallback () {
         super.disconnectedCallback()
+        document.body.removeEventListener('with-facet', this.withFacetEventListener)
     }
 
     withFacetEventListener = async event => {
