@@ -4,7 +4,7 @@
     --sort-default-title-font-weight: 500;
     --sort-default-title-padding: 0 0.5rem 0 0;
     --login-default-button-font-color: var(--color);
-    --login-default-button-padding: 0.5rem;
+    --login-default-button-padding: 0.35rem 0.5rem;
     --login-default-button-border-radius: 0.5rem;
     --login-default-button-border-width: 2px;
     --login-default-button-border-color: #E0E0E0;
@@ -13,9 +13,11 @@
     --button-secondary-filter-border-radius: 0.5rem;
     --button-secondary-filter-color: var(--color);
     --button-secondary-filter-font-size: 0.9rem;
-    --button-secondary-filter-padding: 0.25rem 0.3rem 0.25rem 0.5rem;
+    --button-secondary-filter-padding: 0.1rem 0.3rem 0.1rem 0.5rem;
     --button-secondary-filter-font-weight: 500;
     --icon-mdx-ks-svg-size: 2rem;
+    --dialog-top-slide-in-a-margin: 0;
+    --dialog-top-slide-in-a-display: flex;
 }
 :host > a {
     --login-default-font-weight-strong: 500;
