@@ -114,8 +114,23 @@ export default class Login extends Prototype() {
         width: var(--login-width, max(calc(_max-width_ - var(--content-spacing) * 2), 55%)); /* Environment.js mobileBreakpoint must correspond to the calc 1200px */
       }
       :host .font-size-tiny {
+        font-family: var(--button-font-family, inherit);
         font-size: calc(0.75 * var(--p-font-size-mobile, var(--p-font-size, 1em)));
         line-height: var(--line-height-mobile, var(--line-height, normal));
+        padding: var(--button-padding, 0 0 0 0);
+        border-radius: var(--button-border-radius, 0.5em);
+        border: var(--button-border-width, 0px) solid var(--button-border-color, transparent);
+        color: var(--button-font-color);
+      }
+      :host .font-size-tiny:before {
+        border-right: 2px solid var(--button-border-color);
+        height: 1rem;
+        width: 1.3rem;
+        margin-top: -2px;
+      }
+      :host .font-size-tiny:hover{
+        background-color: inherit;
+        color: inherit;
       }
       :host > a {
         color: var(--color);
@@ -141,6 +156,9 @@ export default class Login extends Prototype() {
         :host .font-size-tiny {
           font-size: calc(0.75 * var(--p-font-size-mobile, var(--p-font-size, 1em)));
           line-height: var(--line-height-mobile, var(--line-height, normal));
+          padding: 0;
+          /*border-radius: var(--button-border-radius, 0.5em);*/
+          border: none;
         }
         :host > div div[open] {
           top: 0 !important;

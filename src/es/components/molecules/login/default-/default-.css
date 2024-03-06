@@ -1,11 +1,35 @@
 :host {
     --transition: none;
+    --sort-default-hover-color: #F5F5F5;
+    --sort-default-title-font-weight: 500;
+    --sort-default-title-padding: 0 0.5rem 0 0;
+    --login-default-button-font-color: var(--color);
+    --login-default-button-padding: 0.5rem;
+    --login-default-button-border-radius: 0.5rem;
+    --login-default-button-border-width: 2px;
+    --login-default-button-border-color: #E0E0E0;
+    --button-secondary-filter-border-width: 2px;
+    --button-secondary-filter-border-color: #E0E0E0;
+    --button-secondary-filter-border-radius: 0.5rem;
+    --button-secondary-filter-color: var(--color);
+    --button-secondary-filter-font-size: 0.9rem;
+    --button-secondary-filter-padding: 0.25rem 0.3rem 0.25rem 0.5rem;
+    --button-secondary-filter-font-weight: 500;
+    --icon-mdx-ks-svg-size: 2rem;
 }
 :host > a {
     --login-default-font-weight-strong: 500;
     font-size: 0.9rem;
     display: flex;
     position: relative;
+}
+
+:host ks-m-sort {
+    --sort-default-item-min-width: 10rem;
+}
+
+:host > a:hover {
+    text-decoration: underline;
 }
 
 :host > a > .active-notification {
@@ -29,6 +53,10 @@
     top: 1px;
 }
 
+:host > div > div {
+    --login-default-p-font-size: 1.2rem;
+}
+
 @media only screen and (max-width: _max-width_) {
     :host {
         gap: 1rem;
@@ -39,5 +67,5 @@
    :host > div > div > button {
     min-width: auto;
     padding-left: 0;
-}
+   }
 }
