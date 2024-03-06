@@ -255,6 +255,7 @@
   --table-thead-tr-background-color: var(--mdx-base-color-klubschule-creme-600);
   --table-odd-background-color: var(--mdx-base-color-grey-0);
   --table-even-background-color: var(--mdx-base-color-klubschule-creme-400);
+  --table-padding-right-last-child: var(--table-padding);
 
   --icon-link-list-color: #0053A6;
   --icon-link-list-color-hover: #0053A6;
