@@ -157,7 +157,6 @@ export default class Login extends Prototype() {
           font-size: calc(0.75 * var(--p-font-size-mobile, var(--p-font-size, 1em)));
           line-height: var(--line-height-mobile, var(--line-height, normal));
           padding: 0;
-          /*border-radius: var(--button-border-radius, 0.5em);*/
           border: none;
         }
         :host > div div[open] {
