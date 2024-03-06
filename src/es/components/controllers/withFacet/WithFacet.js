@@ -44,7 +44,7 @@ export default class WithFacet extends Shadow() {
         this.requestWithFacetListener = (event) => {
             if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-            const request = `{"MandantId":111, "filters": [
+            const request = `{"MandantId":${this.getAttribute('mandant-id')}, "filters": [
               ${event.detail?.wrapper.filterItem
                 ? `{
                   "id": ${event.detail?.wrapper.filterItem.id},
@@ -67,7 +67,7 @@ export default class WithFacet extends Shadow() {
             ]}`
 
             // @ts-ignore
-            console.log(request, self.data = event.detail?.wrapper.filterItem)
+            console.log('request (WithFacet.js)', request, self.data = event.detail?.wrapper.filterItem)
             const url = this.isMocked ?
                 `${this.importMetaUrl}./mock/default.json` :
                 `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
@@ -91,26 +91,37 @@ export default class WithFacet extends Shadow() {
             this.dispatchEvent(new CustomEvent('with-facet', {
                 detail: {
                     /** @type {Promise<fetchAutoCompleteEventDetail>} */
-                    fetch: withFacetCache.has(url) ?
-                        withFacetCache.get(url)
+                    fetch: withFacetCache.has(request) ?
+                        withFacetCache.get(request)
                         // TODO: withFacetCache key must include all variants as well as future payloads
                         // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
                         :
-                        withFacetCache.set(url, fetch(url, requestInit).then(response => {
+                        withFacetCache.set(request, fetch(url, requestInit).then(response => {
                             if (response.status >= 200 && response.status <= 299) {
                                 console.log('response (WithFacet.js)', response)
                                 return response.json()
                             }
                             throw new Error(response.statusText)
-                        })).get(url)
+                        }).then(json => {
+                            const filterData = json.filters
+                            let numberOfOffers = 0
+                            filterData.forEach((filterItem, i) => {
+                                if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+                                    filterItem.children.forEach(child => {
+                                        if (child.selected && child.count > 0) {
+                                            numberOfOffers += child.count
+                                        }
+                                    })
+                                }
+                            })
+                            return {...json, numberOfOffers}
+                        })).get(request)
                 },
                 bubbles: true,
                 cancelable: true,
                 composed: true
             }))
         }
-
-        
     }
 
     connectedCallback() {

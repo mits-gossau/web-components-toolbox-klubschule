@@ -42,7 +42,7 @@
             "label": "Lehrgang / Kurzlehrgang",
             "id": "3",
             "count": 51,
-            "selected": false,
+            "selected": true,
             "hasChilds": false,
             "eTag": null
         },
