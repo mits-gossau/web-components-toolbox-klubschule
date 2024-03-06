@@ -1,126 +1,142 @@
-<!-- only for demo -->
-<style>img { background: green; }</style>
-
 <!-- stage with title -->
-<div style="width: 100%; margin: 0">
-    <ks-m-stage namespace="stage-title-">
-        <p class="topline">
-            <a href="/de/entdecken/" alt=""><a-icon-mdx icon-name="ArrowLeft" size="1em" icon-size='24x24'></a-icon-mdx>
-                <span>stories</span></a>
-        </p>
-        <ks-a-heading tag="h1" display-3 centered>
-            asd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
-        </ks-a-heading> <a-picture picture-load namespace="picture-cover-" alt="Photoandy"
-            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
-        </a-picture>
-    </ks-m-stage>
-</div>
+<ks-m-stage namespace="stage-title-">
+    <p class="topline">
+        <a href="/de/entdecken/" alt=""><a-icon-mdx icon-name="ArrowLeft" size="1em" icon-size='24x24'></a-icon-mdx>
+            <span>stories</span></a>
+    </p>
+    <ks-a-heading tag="h1" display-3 centered>
+        asd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+    </ks-a-heading> <a-picture picture-load namespace="picture-cover-" alt="Photoandy"
+        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
+    </a-picture>
+</ks-m-stage>
 <!-- /stage with title -->
 
 <!-- two columns section -->
-<div style="width: 100%; margin: 0">
-    <o-grid namespace="grid-2columns-content-section-" first-container-vertical="" first-column-with="66%"
-        with-border="">
-        <div>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-                et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-                rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-                magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            <ks-a-heading tag="h2">title</ks-a-heading>
-            <p><strong>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-                    et justo duo dolores et ea rebum. </strong></p>
-            <p>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-                rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            <div style="margin-bottom: 2rem">
-                <m-details namespace="details-default-icon-right-">
-                        <details>
-                            <summary>
-                                <h4>accordion 1</h4>
-                            </summary>
+<o-grid namespace="grid-2columns-content-section-" first-container-vertical="" first-column-with="66%"
+    with-border="" width="100%">
+    <!-- TODO: add margins etc. -->
+    <ks-o-body-style content-width-var="100%" no-margin-y>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+            et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+            dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+            magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <ks-a-heading tag="h2">title</ks-a-heading>
+        <p><strong>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                et justo duo dolores et ea rebum. </strong></p>
+        <p>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+            dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <div class="margin-y-m">
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 1</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <ks-a-heading tag="h3">test title</ks-a-heading>
                             <div>
-                                <style>
-                                    :host details summary~* {
-                                        --details-default-color-secondary: var(--color-hover);
-                                    }
-                                </style>
-                                <ks-a-heading tag="h3">test title</ks-a-heading>
-                                <div>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                                        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-                                        voluptua.</p>
-                                </div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
                             </div>
-                        </details>
-                </m-details>
-                <m-details namespace="details-default-icon-right-">
-                        <details>
-                            <summary>
-                                <h4>accordion 2</h4>
-                            </summary>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 2</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
                             <div>
-                                <style>
-                                    :host details summary~* {
-                                        --details-default-color-secondary: var(--color-hover);
-                                    }
-                                </style>
-                                <div>
-                                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                                        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-                                        voluptua.</p>
-                                </div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
                             </div>
-                        </details>
-                </m-details>
-                <m-details namespace="details-default-icon-right-">
-                        <details>
-                            <summary>
-                                <h4>accordion 3</h4>
-                            </summary>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 3</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
                             <div>
-                                <style>
-                                    :host details summary~* {
-                                        --details-default-color-secondary: var(--color-hover);
-                                    }
-                                </style>
-                                <div>
-                                    <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
-                                        target="_self">
-                                        <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
-                                            tabindex="0"> </a-icon-mdx>
-                                        <span id="label">btn</span>
-                                    </ks-a-button>
-                                </div>
+                                <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
+                                    target="_self">
+                                    <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
+                                        tabindex="0"> </a-icon-mdx>
+                                    <span id="label">btn</span>
+                                </ks-a-button>
                             </div>
-                        </details>
-                </m-details>
-            </div>
-            <ks-m-figure>
-                <ks-a-picture picture-load namespace="picture-default-"
-                    defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
-                    open-modal open-modal-mobile></ks-a-picture>
-                <figcaption>test</figcaption>
-            </ks-m-figure>
-            <ks-a-video namespace="video-default-">
-                <iframe src="https://www.youtube.com/embed/Mq0TiSppMOU?rel=0" title="video beschreibung" width="560"
-                    height="315" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-                <span></span>
-                <p>video beschreibung</p>
-            </ks-a-video>
+                        </div>
+                    </details>
+            </m-details>
         </div>
+        <ks-m-figure>
+            <ks-a-picture picture-load namespace="picture-default-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                open-modal open-modal-mobile></ks-a-picture>
+            <figcaption>test</figcaption>
+        </ks-m-figure>
+        <ks-a-video namespace="video-default-">
+            <iframe src="https://www.youtube.com/embed/Mq0TiSppMOU?rel=0" title="video beschreibung" width="560"
+                height="315" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+            <span></span>
+            <p>video beschreibung</p>
+        </ks-a-video>
+    </ks-o-body-style>
+    <aside>
+        <ks-a-heading tag="h2" style-as="h3">unter-navigation</ks-a-heading>
         <div>
-            <aside>
-                <h2>unter-navigation</h2>
-            </aside>
+            <ks-m-link-list namespace="link-list-default-">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <span>Label</span>
+                            <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span>Label</span>
+                            <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span>Label</span>
+                            <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                        </a>
+                    </li>
+                </ul>
+            </ks-m-link-list>
         </div>
-    </o-grid>
-</div>
+    </aside>
+</o-grid>
 <!-- /two columns section -->
 
 <!-- flexible content -->
@@ -245,12 +261,10 @@
                     justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
                     ipsum dolor sit amet.</p>
         </div>
-        <div>
-            <ks-m-figure>
-                <ks-a-picture picture-load namespace="picture-default-"
-                    defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"></ks-a-picture>
-            </ks-m-figure>
-        </div>
+        <ks-m-figure>
+            <ks-a-picture picture-load namespace="picture-default-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"></ks-a-picture>
+        </ks-m-figure>
         <div>
             <ks-a-button namespace="button-primary-" href="/de/" color="secondary" target="_self">
                 <span id="label">btn label</span>
