@@ -25,7 +25,7 @@ export default class KsBodyStyle extends BodyStyle {
   renderCSS () {
     super.renderCSS()
 
-    // add '.ks-o-body-style__last-child' class to the last child that is not style/script to be able to select it with css
+    // add '.ks-o-body-section__last-child' class to the last child that is not style/script to be able to select it with css
     this.addClassToLastChild()
     this.css = /* CSS */`
         :host {
@@ -63,8 +63,8 @@ export default class KsBodyStyle extends BodyStyle {
         }
         /* adding more space to the last (visible) child */
         :host:last-child,
-        :host > .ks-o-body-style__last-child,
-        :host > [wrapper].ks-o-body-style__last-child {
+        :host > .ks-o-body-section__last-child,
+        :host > [wrapper].ks-o-body-section__last-child {
             margin-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
@@ -78,8 +78,8 @@ export default class KsBodyStyle extends BodyStyle {
             margin-top: 0;
         }
 
-        :host([no-margin-y]) > .ks-o-body-style__last-child,
-        :host([has-background]) > .ks-o-body-style__last-child {
+        :host([no-margin-y]) > .ks-o-body-section__last-child,
+        :host([has-background]) > .ks-o-body-section__last-child {
             margin-bottom: 0;
         }
 
@@ -156,7 +156,7 @@ export default class KsBodyStyle extends BodyStyle {
 
     if (lastChild) {
       // @ts-ignore
-      lastChild.classList.add('ks-o-body-style__last-child')
+      lastChild.classList.add('ks-o-body-section__last-child')
     }
   }
 }

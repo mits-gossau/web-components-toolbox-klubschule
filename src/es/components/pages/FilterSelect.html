@@ -1,4 +1,4 @@
-<ks-c-with-facet mock>
+<ks-c-with-facet mandant-id="111">
     <section>
         <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
             <!-- overlayer -->
@@ -23,7 +23,7 @@
             </div>
             <div class="container dialog-footer">
                 <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
-                <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events>Angebote</a-button>
+                <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
             </div>
         </m-dialog>
         <!-- filter buttons -->

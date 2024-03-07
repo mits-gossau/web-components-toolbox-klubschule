@@ -25,7 +25,7 @@
     --footer-default-gap: var(--footer-default-gap-custom, var(--content-spacing));
     --footer-default-invert-a-color-hover: var(--footer-default-invert-a-color-hover-custom, var(--color-hover));
     --footer-default-invert-background-color: var(--mdx-sys-color-accent-6-subtle2);
-    --footer-default-invert-color-hover: var(--footer-default-content-accordion-color);
+    --footer-default-invert-color-hover: var(--color-hover);
     --footer-default-invert-color: var(--footer-default-content-accordion-color);
     --footer-default-invert-orange-a-color-hover: var(--footer-default-invert-orange-a-color-hover-custom, var(--color-hover));
     --footer-default-invert-orange-a-color: var(--footer-default-invert-orange-a-color-custom, var(--footer-default-invert-color));
@@ -52,5 +52,8 @@
     --picture-store-logo-img-margin-mobile: 0;
     --picture-store-logo-img-margin: 0;
     --button-secondary-width: 100%;
+}
+:host > footer > div .invert {
+    --details-default-icon-right-svg-color-custom: var(--color-secondary);
 }
 
