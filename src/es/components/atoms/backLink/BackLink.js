@@ -104,8 +104,8 @@ export default class BackLink extends Shadow() {
     }])
 
     this.html = /* html */`
-      <a href="${this.getAttribute('href')}" class="back-link">
-        <a-icon-mdx icon-name="ArrowLeft" size="1em" rotate="0" class="icon-left"></a-icon-mdx>
+      <a href="${this.getAttribute('href')}" alt="${this.getAttribute('alt')}" class="back-link">
+        <a-icon-mdx icon-name="${this.getAttribute('icon') || 'ArrowLeft'}" size="1em" rotate="0" class="icon-left"></a-icon-mdx>
         <slot></slot>
       </a>
     `
