@@ -83,7 +83,8 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: 0;
         }
 
-        :host([variant=default]) > [namespace="teaser-fullwidth-"] {
+        :host([variant=default]) > [namespace="teaser-fullwidth-"],
+        :host([variant=narrow]) > [namespace="teaser-fullwidth-"] {
             width: calc(86.666% + var(--mdx-sys-spacing-fix-m) * 2);
         }
 
