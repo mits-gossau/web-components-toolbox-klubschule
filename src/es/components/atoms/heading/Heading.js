@@ -188,6 +188,17 @@ export default class Heading extends Shadow() {
         height: var(--h-border-top-height, var(--mdx-sys-sizing-fix-2xs));
         width: var(--h-border-top-width, var(--mdx-sys-sizing-fix-3xl));
       }
+
+      :host([display-1][border-top]) [border-top]::before,
+      :host([display-2][border-top]) [border-top]::before,
+      :host([display-3][border-top]) [border-top]::before {
+        content: '';
+        display: block;
+        height: .5rem;
+        width: 4rem;
+        margin: 0 auto var(--mdx-sys-spacing-flex-xs);
+        background: var(--mdx-sys-color-accent-1-default);
+      }
       
       :host(:first-child) > * {
         margin-top: inherit;
@@ -202,6 +213,15 @@ export default class Heading extends Shadow() {
       @media only screen and (max-width: _max-width_) {
         :host([border-top]) [border-top]::before {
           width: var(--h-border-top-width, var(--mdx-sys-sizing-fix-2xl));
+        }
+
+        :host([display-1][border-top]) [border-top]::before,
+        :host([display-2][border-top]) [border-top]::before,
+        :host([display-3][border-top]) [border-top]::before {
+          content: '';
+          display: block;
+          height: .25rem;
+          width: 2rem;
         }
       }
     `
