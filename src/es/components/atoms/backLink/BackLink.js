@@ -50,6 +50,7 @@ export default class BackLink extends Shadow() {
         align-items: center;
         text-decoration: none;
         color: var(--mdx-sys-color-neutral-bold4);
+        gap: var(--a-back-link-gap, 0.2em);
       }
       :host .back-link:hover {
         color: var(--a-color);
@@ -57,13 +58,10 @@ export default class BackLink extends Shadow() {
       :host a-icon-mdx {
         display: inline-block;
         position: relative;
-        top: 2px;
+        top: var(--a-back-link-icon-top, 0.1em);
       }
       :host .back-link:hover a-icon-mdx {
-        fill: var(--a-color);
-      }
-      @media only screen and (max-width: _max-width_) {
-        :host {}
+        color: var(--a-color);
       }
     `
     return this.fetchTemplate()
