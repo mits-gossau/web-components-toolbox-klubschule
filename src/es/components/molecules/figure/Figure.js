@@ -79,20 +79,21 @@ export default class KsFigure extends Shadow(HTMLElement) {
 
       :host figure {
         margin: 0;
+        width: 100%;
       }
 
       /* line before caption */
       :host figcaption::before {
         content: "";
-        display: block;
+        display: ${this.getAttribute("with-line") !== null ? "block" : "none"};
         width: var(--divider-width);
         height: var(--divider-height);
         background-color: var(--divider-color);
-        margin: var(--wrapper-inner-spacing) 0 var(--copy-spacing);
+        margin: 0 0 var(--copy-spacing);
       }
       :host figcaption {
         font: var(--copy-typography) !important;
-        margin: var(--copy-spacing) 0 0 !important;
+        margin: var(--wrapper-inner-spacing) 0 0 !important;
       }
       :host([open]) figcaption {
         color: white;
@@ -100,6 +101,9 @@ export default class KsFigure extends Shadow(HTMLElement) {
 
       @media only screen and (max-width: _max-width_) {
         /* pulling the picture slightly (8px) out of the container on mobile with negative margin to match the design */
+        :host a-picture {
+          display: block;
+        }
         :host ks-a-picture {
           margin-left: calc(var(--mdx-sys-spacing-fix-2xs) * -1);
           margin-right: calc(var(--mdx-sys-spacing-fix-2xs) * -1);
