@@ -44,27 +44,30 @@ export default class WithFacet extends Shadow() {
         this.requestWithFacetListener = (event) => {
             if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-            const request = `{"MandantId":${this.getAttribute('mandant-id')}, "filters": [
-              ${event.detail?.wrapper.filterItem
-                ? `{
-                  "id": ${event.detail?.wrapper.filterItem.id},
-                  "disabled": ${event.detail?.wrapper.filterItem.disabled},
-                  "visible": ${event.detail?.wrapper.filterItem.visible},
-                  "children": [
-                    ${event.detail?.wrapper.filterItem.children.map(child => `{
-                      "label": ${child.label},
-                      "id": ${child.id},
-                      ${child.count ? `"count": ${child.count},` : ''}
-                      "urlpara": ${child.urlpara},
-                      "selected": ${child.selected},
-                      "hasChilds": ${child.hasChilds},
-                    }`)}
+
+            const request = `{
+                "filter": [
+                    ${event.detail?.wrapper.filterItem
+                        ? `{
+                            "children": [
+                                ${event.detail?.wrapper.filterItem.children.map(child => `{
+                                    ${child.count ? `"count": ${child.count},` : ''}
+                                    "hasChilds": ${child.hasChilds},
+                                    "id": "${child.id}",
+                                    "label": "${child.label}",
+                                    "selected": ${child.selected},
+                                    "urlpara": "${child.urlpara}"
+                                }`)}
+                            ],
+                            "disabled": ${event.detail?.wrapper.filterItem.disabled},
+                            "id": "${event.detail?.wrapper.filterItem.id}",
+                            "visible": ${event.detail?.wrapper.filterItem.visible}
+                        }`
+                        : ''
                     }
-                  ]
-                }`
-                : ''
-              }
-            ]}`
+                ],
+                "mandantId":${this.getAttribute('mandant-id')}
+            }`
 
             // @ts-ignore
             console.log('request (WithFacet.js)', request, self.data = event.detail?.wrapper.filterItem)
