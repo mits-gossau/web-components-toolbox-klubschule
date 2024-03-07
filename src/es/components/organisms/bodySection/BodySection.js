@@ -94,6 +94,11 @@ export default class KsBodyStyle extends BodyStyle {
             margin-top: var(--mdx-sys-spacing-flex-m);
             margin-bottom: var(--mdx-sys-spacing-flex-m);
         }
+        :host > a[namespace="teaser-fullwidth-"][wrapper],
+        :host > a[namespace="teaser-text-image-"][wrapper] {
+            margin-top: var(--mdx-sys-spacing-flex-m);
+            margin-bottom: var(--mdx-sys-spacing-flex-m);
+        }
 
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */
         :host > [debug-ruler] {
