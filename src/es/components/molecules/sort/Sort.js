@@ -15,7 +15,7 @@ export default class Sort extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.toggleTooltip();
+    this.toggleTooltip()
   }
 
   disconnectedCallback () {}
@@ -23,12 +23,12 @@ export default class Sort extends Shadow() {
   /**
    * Toggle tooltip
    */
-  toggleTooltip() {
-    const toggle = this.root.querySelector('.m-sort');
+  toggleTooltip () {
+    const toggle = this.root.querySelector('.m-sort')
     toggle.addEventListener('click', () => {
-      const tooltip = this.root.querySelector('.m-sort__tooltip');
-      tooltip.classList.toggle('m-sort__tooltip-open');
-    });
+      const tooltip = this.root.querySelector('.m-sort__tooltip')
+      tooltip.classList.toggle('m-sort__tooltip-open')
+    })
   }
 
   /**
@@ -68,9 +68,9 @@ export default class Sort extends Shadow() {
         display: none;
         position: absolute;
         top: 2em;
-        background-color: #ffffff;
+        background-color: #FFFFFF;
         border-radius: 0.5em;
-        box-shadow: 0em 0em 0.75em 0em #3333331A;
+        box-shadow: 0em 0em 0.75em 0em rgba(51, 51, 51, 0.1);
         z-index: 10;
       }
 
@@ -90,7 +90,7 @@ export default class Sort extends Shadow() {
       }
 
       :host .m-sort__item:hover {
-        background-color: var(--m-gray-100);
+        background-color: var(--mdx-base-color-grey-100);
       }
 
       :host .m-sort__item-active {
@@ -129,9 +129,9 @@ export default class Sort extends Shadow() {
       case 'sort-default-':
         return this.fetchCSS([
           {
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-          namespace: false
-        }, ...styles])
+            path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false
+          }, ...styles])
       case 'sort-right-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
@@ -141,7 +141,7 @@ export default class Sort extends Shadow() {
             flags: 'g',
             replacement: '--sort-right-'
           }]
-        },{
+        }, {
           path: `${this.importMetaUrl}./right-/right-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }, ...styles])

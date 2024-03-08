@@ -1,0 +1,59 @@
+:host {
+    --footer-default-content-spacing-mobile: var(--mdx-sys-spacing-fix-3xl);
+    --footer-default-content-spacing: var(--mdx-sys-spacing-fix-s);
+    --footer-default-content-spacing-mobile-vertical: var(--mdx-sys-spacing-fix-2xs);
+    --footer-default-border-color: var(--mdx-sys-color-neutral-bold1);
+    --footer-default-border-width: var(--mdx-sys-border-width-default);
+    --footer-default-wrapper-spacing: var(--mdx-sys-spacing-fix-2xl);
+    --footer-default-legal-spacing-vertical: var(--mdx-sys-spacing-flex-small-s);
+    --footer-default-legal-links-border: var(--mdx-sys-color-neutral-subtle4);
+    --footer-default-legal-flex-spacing-vertical: var(--mdx-sys-spacing-flex-large-xs);
+    --footer-default-legal-font: var(--mdx-sys-font-fix-body3);
+    --footer-default-legal-link-color: var(--mdx-base-color-orange-600);
+    --footer-default-legal-background-color: var(--mdx-sys-color-accent-6-subtle1);
+    --footer-default-content-accordion-typography: var(--mdx-sys-font-fix-label2);
+    --footer-default-content-accordion-color: var(--mdx-sys-color-neutral-bold4);
+    --footer-default-content-accordion-item-spacing: var(--mdx-sys-spacing-fix-3xs);
+    --footer-default-social-headline-color: var(--mdx-sys-color-accent-6-on-subtle);
+    --footer-default-social-headline-typography: var(--mdx-sys-font-flex-large-headline3);
+    --footer-default-social-body-color: var(--mdx-sys-color-neutral-default);
+    --footer-default-social-body-typography: var(--mdx-sys-font-fix-body2);
+    --footer-default-social-button-spacing: var(--mdx-sys-spacing-fix-2xs);
+    --footer-default-legal-links: var(--mdx-sys-spacing-flex-large-s);
+    --footer-default-a-font-size: var(--mdx-sys-font-flex-large-custom1-font-size);
+
+    --footer-default-gap: var(--footer-default-gap-custom, var(--content-spacing));
+    --footer-default-invert-a-color-hover: var(--footer-default-invert-a-color-hover-custom, var(--color-hover));
+    --footer-default-invert-background-color: var(--mdx-sys-color-accent-6-subtle2);
+    --footer-default-invert-color-hover: var(--color-hover);
+    --footer-default-invert-color: var(--footer-default-content-accordion-color);
+    --footer-default-invert-orange-a-color-hover: var(--footer-default-invert-orange-a-color-hover-custom, var(--color-hover));
+    --footer-default-invert-orange-a-color: var(--footer-default-invert-orange-a-color-custom, var(--footer-default-invert-color));
+    --footer-default-invert-orange-background-color: var(--footer-default-invert-orange-background-color-custom, var(--footer-default-invert-background-color));
+    --footer-default-invert-orange-color: var(--footer-default-invert-orange-color-custom, var(--footer-default-invert-color));
+    --footer-default-invert-svg-color-hover: var(--footer-default-invert-svg-color-hover-custom, var(--color-hover));
+    --footer-default-invert-svg-color: var(--footer-default-content-accordion-color);
+    --footer-default-wrapper-last-contains-details-margin-bottom: 0;
+    --footer-default-footer-width: 100%;
+    --footer-default-h4-font-size: var(--footer-default-a-font-size);
+    --footer-default-button-secondary-font-size: var(--footer-default-a-font-size);
+    --button-secondary-font-size: var(--footer-default-a-font-size);
+    --footer-default-h4-font-weight: var(--footer-default-social-headline-typography);
+    --footer-default-headline-font-sizes: var(--footer-default-social-headline-typography);
+    --footer-default-icon-spacing: var(--footer-default-legal-spacing-vertical);
+    --footer-default-list-item-spacing: 1.25rem;
+    --footer-default-gap-mobile-custom: 0;
+    --footer-default-wrapper-last-contains-details-margin-top: 0;
+    --footer-default-h4-margin-mobile: var(--footer-default-legal-spacing-vertical);
+    --footer-default-content-width-mobile: 100%;
+
+    --picture-store-logo-img-height: min(35px, 10vw);
+    --picture-store-logo-img-height-mobile: min(35px, 10vw);
+    --picture-store-logo-img-margin-mobile: 0;
+    --picture-store-logo-img-margin: 0;
+    --button-secondary-width: 100%;
+}
+:host > footer > div .invert {
+    --details-default-icon-right-svg-color-custom: var(--color-secondary);
+}
+

@@ -6,24 +6,24 @@ export default class Checkbox extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
-      this.input.checked = !this.input.checked;
+      this.input.checked = !this.input.checked
     }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 
-    this.box = this.root.querySelector('.box');
-    this.input = this.root.querySelector('input[type="checkbox"]');
+    this.box = this.root.querySelector('.box')
+    this.input = this.root.querySelector('input[type="checkbox"]')
 
     /**
      * Handle checked on box
      */
-    this.box.addEventListener('click', this.clickEventListener);
+    this.box.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
-    this.box.removeEventListener('click', this.clickEventListener);
+    this.box.removeEventListener('click', this.clickEventListener)
   }
 
   shouldRenderCSS () {
@@ -97,18 +97,18 @@ export default class Checkbox extends Shadow() {
   fetchTemplate () {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     switch (this.getAttribute('namespace')) {
-        case 'checkbox-default-':
-            return this.fetchCSS([
-                {
-                path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-                namespace: false
-            }])
-        case 'center-list-':
-            return this.fetchCSS([
-                {
-                path: `${this.importMetaUrl}./center-list-/center-list-.css`,
-                namespace: false
-            }])
+      case 'checkbox-default-':
+        return this.fetchCSS([
+          {
+            path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false
+          }])
+      case 'center-list-':
+        return this.fetchCSS([
+          {
+            path: `${this.importMetaUrl}./center-list-/center-list-.css`,
+            namespace: false
+          }])
     }
   }
 }

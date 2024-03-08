@@ -62,8 +62,8 @@ export default class Heading extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        --h-color: ${this.getAttribute('color')};
-        --h-margin: var(--mdx-sys-spacing-flex-s) 0;
+        ${this.getAttribute('color') ? `--h-color: ${this.getAttribute('color')};` : ''};
+        --h-margin: var(--h-margin-custom, var(--mdx-sys-spacing-flex-s) 0);
         --h-padding: 0;
 
         --display1-font-weight: var(--mdx-sys-font-flex-display1-font-weight);
@@ -156,21 +156,53 @@ export default class Heading extends Shadow() {
       /* display */
       :host([display-1]) [display-1] {
         font-size: var(--display1-font-size);
+        color: var(--h-color);
+        font-family: var(--display1-font-family);
+        font-weight: var(--display1-font-weight);
+        line-height: var(--display1-line-height);
+        padding: var(--display1-padding);
       }
       :host([display-2]) [display-2] {
         font-size: var(--display2-font-size);
+        color: var(--h-color);
+        font-family: var(--display2-font-family);
+        font-weight: var(--display2-font-weight);
+        line-height: var(--display2-line-height);
+        padding: var(--display2-padding);
       }
       :host([display-3]) [display-3] {
         font-size: var(--display3-font-size);
+        color: var(--h-color);
+        font-family: var(--display3-font-family);
+        font-weight: var(--display3-font-weight);
+        line-height: var(--display3-line-height);
+        padding: var(--display3-padding);
       }
+
       /* border top */
       :host([border-top]) [border-top]::before {
         background-color: var(--h-border-top-color, var(--mdx-sys-color-accent-1-default));
         content: '';
         display: block;
-        margin-bottom: var(--h-border-margin-bottom, 16px);
-        height: var(--h-border-top-height, 4px);
-        width: var(--h-border-top-width, 32px);
+        margin-bottom: var(--h-border-margin-bottom, var(--mdx-sys-spacing-fix-s));
+        height: var(--h-border-top-height, var(--mdx-sys-sizing-fix-2xs));
+        width: var(--h-border-top-width, var(--mdx-sys-sizing-fix-3xl));
+      }
+      
+      :host(:first-child) > * {
+        margin-top: inherit;
+      }
+
+      :host([border-top][centered]) > [border-top][centered] {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @media only screen and (max-width: _max-width_) {
+        :host([border-top]) [border-top]::before {
+          width: var(--h-border-top-width, var(--mdx-sys-sizing-fix-2xl));
+        }
       }
     `
     return this.fetchTemplate()

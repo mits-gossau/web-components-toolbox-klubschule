@@ -1,0 +1,58 @@
+<h2>Body Section</h2>
+<a href="https://www.figma.com/file/PZlfqoBJ4RnR4rjpj38xai/Design-System-Core-%7C%C2%A0Klubschule-Master?type=design&node-id=827%3A233748&mode=design&t=ENlD0pPtZEgyQQUR-1" target="_blank">Figma</a>
+<hr>
+<ks-o-body-section variant="default">
+    <div style="background: lightblue; padding: .5rem">
+        variant=default
+    </div>
+</ks-o-body-section>
+<ks-o-body-section variant="narrow">
+    <div style="background: lightblue; padding: .5rem">
+        variant=narrow
+    </div>
+</ks-o-body-section>
+<ks-o-body-section variant="full">
+    <div style="background: lightblue; padding: .5rem">
+        variant=full
+    </div>
+</ks-o-body-section>
+<hr>
+<ks-o-body-section any-content-width-var="33.333%" any-content-width-mobile-var="33.333%">
+    <div style="background: lightblue; padding: .5rem">
+        no variant set & <br />
+        set width via <code>any-content-width-var="33.333%"</code>
+    </div>
+</ks-o-body-section>
+<hr>
+<ks-o-body-section variant="default">
+    <div style="background: lightblue; padding: .5rem">
+        variant=default
+    </div>
+    <ks-o-body-section variant="default" background="var(--mdx-sys-color-accent-6-subtle1)" has-background>
+        <div style="background: lightblue; padding: .5rem">
+            nested variant=default
+        </div>
+    </ks-o-body-section>
+    <div style="background: lightblue; padding: .5rem">
+        ...
+    </div>
+</ks-o-body-section>
+<hr>
+<h2>Only visible on mobile (resize window to check):</h2>
+<ks-o-body-section variant="default" display="none" display-mobile="block">
+    <div style="background: lightblue; padding: .5rem">
+        display=none, display-mobile=block
+    </div>
+</ks-o-body-section>
+<hr>
+<h2>Extended width on mobile</h2>
+<!-- do not use debug ruler in production! -->
+<ks-o-body-section variant="default" position="relative" >
+    <div debug-ruler></div>
+    <div class="extended-container-mobile">
+        <div style="background: lightblue; padding: .5rem">
+            class=extended-container-mobile <br />
+            <span style="opacity: .5">(resize window to check, add this class to direct child of ks-o-body-section)</span>
+        </div>
+    </div>
+</ks-o-body-section>
