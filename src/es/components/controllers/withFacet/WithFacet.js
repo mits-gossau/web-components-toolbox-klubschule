@@ -44,7 +44,6 @@ export default class WithFacet extends Shadow() {
         this.requestWithFacetListener = (event) => {
             if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-
             const request = `{
                 "filter": [
                     ${event.detail?.wrapper.filterItem
@@ -55,7 +54,7 @@ export default class WithFacet extends Shadow() {
                                     "hasChilds": ${child.hasChilds},
                                     "id": "${child.id}",
                                     "label": "${child.label}",
-                                    "selected": ${child.selected},
+                                    "selected": ${child.label.trim() === event.detail?.target.label.trim() ? true : child.selected},
                                     "urlpara": "${child.urlpara}"
                                 }`)}
                             ],
