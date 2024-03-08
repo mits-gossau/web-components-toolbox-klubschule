@@ -1,0 +1,8 @@
+:host {
+    --img-max-height: 75px;
+}
+
+:host([centered]) {
+    text-align: center;
+    --h-text-align: center;
+}
