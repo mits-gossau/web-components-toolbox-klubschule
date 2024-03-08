@@ -34,25 +34,8 @@
     text-decoration: underline;
 }
 
-:host > a > .active-notification {
-    position: relative;
-}
-
 :host .only-desktop{
      display: flex;
-}
-
-:host > a > .active-notification::after{
-    content: '';
-    display: block;
-    height: .4rem;
-    width: .4rem;
-    background: red;
-    border-radius: 50%;
-    position: absolute;
-    outline: solid 2px white;
-    right: -2px;
-    top: 1px;
 }
 
 :host > div > div {
