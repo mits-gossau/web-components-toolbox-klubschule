@@ -9,6 +9,8 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Sort extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.closeEventListener = event => this.root.querySelector('.m-sort__tooltip-open').classList.remove('m-sort__tooltip-open')
   }
 
   connectedCallback () {
@@ -16,9 +18,12 @@ export default class Sort extends Shadow() {
     if (this.shouldRenderHTML()) this.renderHTML()
 
     this.toggleTooltip()
+    if (this.getAttribute('close-event-name')) document.body.addEventListener(this.getAttribute('close-event-name'), this.closeEventListener)
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    if (this.getAttribute('close-event-name')) document.body.removeEventListener(this.getAttribute('close-event-name'), this.closeEventListener)
+  }
 
   /**
    * Toggle tooltip
