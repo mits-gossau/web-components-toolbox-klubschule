@@ -200,6 +200,20 @@ export default class Heading extends Shadow() {
         background: var(--mdx-sys-color-accent-1-default);
       }
       
+      :host([border-top][brand=ibaw]) [border-top]::before {
+        content: unset;
+      }
+
+      :host([border-top][brand=ibaw]) [border-top]::after {
+        content: '';
+        display: inline-block;
+        width: 0.622em;
+        height: 0.703em;
+        margin-left: 0.25em;
+        background-size: contain;
+        background-image: var(--ibaw-title-brand-shape);
+      }
+
       :host(:first-child) > * {
         margin-top: inherit;
       }
