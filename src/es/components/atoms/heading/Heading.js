@@ -188,7 +188,21 @@ export default class Heading extends Shadow() {
         height: var(--h-border-top-height, var(--mdx-sys-sizing-fix-2xs));
         width: var(--h-border-top-width, var(--mdx-sys-sizing-fix-3xl));
       }
-      
+
+      :host([border-top][brand=ibaw]) [border-top]::before {
+        content: unset;
+      }
+
+      :host([border-top][brand=ibaw]) [border-top]::after {
+        content: '';
+        display: inline-block;
+        width: 0.622em;
+        height: 0.703em;
+        margin-left: 0.25em;
+        background-size: contain;
+        background-image: var(--ibaw-title-brand-shape);
+      }
+
       :host(:first-child) > * {
         margin-top: inherit;
       }
