@@ -92,8 +92,8 @@ export default class KsFigure extends Shadow(HTMLElement) {
         margin: 0 0 var(--copy-spacing);
       }
       :host figcaption {
-        font: var(--copy-typography) !important;
-        margin: var(--wrapper-inner-spacing) 0 0 !important;
+        font: var(--copy-typography);
+        margin: var(--wrapper-inner-spacing) 0 0;
       }
       :host([open]) figcaption {
         color: white;
@@ -104,9 +104,9 @@ export default class KsFigure extends Shadow(HTMLElement) {
         :host a-picture {
           display: block;
         }
-        :host ks-a-picture {
-          margin-left: calc(var(--mdx-sys-spacing-fix-2xs) * -1);
-          margin-right: calc(var(--mdx-sys-spacing-fix-2xs) * -1);
+        :host figcaption {
+          margin: var(--any-content-spacing-mobile, var(--content-spacing-mobile, var(--content-spacing, unset))) auto;
+          width: var(--any-content-width-mobile, var(--content-width-mobile, calc(100% - var(--content-spacing-mobile, var(--content-spacing)) * 2)));
         }
         :host figcaption::before {
           width: calc(var(--divider-width) - var(--divider-height));
