@@ -9,6 +9,14 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Stage extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    const heading = this.root.querySelector('ks-a-heading')
+    if (this.getAttribute('namespace') === 'stage-title-' && heading) {
+      /* Note: Setting the "centered" attribute on <ks-a-heading> here but keep in mind that
+      in this case the <ks-a-heading> component does NOT copy the attribute to the actual html elements (h1, h2...),
+      so this might not work for other attributes ... */
+      heading.setAttribute('centered', '')
+    }
   }
 
   connectedCallback () {

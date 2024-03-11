@@ -200,6 +200,7 @@ export default class Heading extends Shadow() {
         background: var(--mdx-sys-color-accent-1-default);
       }
       
+      :host([centered][border-top][brand=ibaw]) [border-top]::after,
       :host([border-top][brand=ibaw]) [border-top]::before {
         content: unset;
       }
@@ -212,6 +213,19 @@ export default class Heading extends Shadow() {
         margin-left: 0.25em;
         background-size: contain;
         background-image: var(--ibaw-title-brand-shape);
+        background-repeat: no-repeat;
+      }
+
+      :host([centered][border-top][brand=ibaw]) [border-top]::before {
+        content: '';
+        display: block;
+        width: 0.622em;
+        height: 0.703em;
+        margin-left: auto;
+        background-size: contain;
+        background-image: var(--ibaw-title-brand-shape);
+        background-color: transparent; 
+        background-repeat: no-repeat;
       }
 
       :host(:first-child) > * {
