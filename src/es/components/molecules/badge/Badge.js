@@ -149,7 +149,7 @@ export default class Badge extends Shadow() {
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="m-badge">
-        ${this.type == 'primary'
+        ${this.type === 'primary'
           ? '<ks-a-button badge namespace="button-primary-" color="secondary">'
           : '<ks-a-button badge namespace="button-primary-" color="tertiary">'
         }

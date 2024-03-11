@@ -220,11 +220,11 @@ export default class KsFooter extends Footer {
       }
     ]).then(([iconMdx, button]) => {
       // Add toTheTop Button
-      const toTheTopButton = new button.constructorClass({ namespace: 'button-primary-' })
+      const toTheTopButton = new button.constructorClass({ namespace: 'button-primary-' }) // eslint-disable-line
       toTheTopButton.setAttribute('icon', true)
       toTheTopButton.setAttribute('color', 'secondary')
 
-      const icon = new iconMdx.constructorClass()
+      const icon = new iconMdx.constructorClass() // eslint-disable-line
       icon.setAttribute('icon-name', 'ArrowUp')
       icon.setAttribute('size', '1rem')
 
