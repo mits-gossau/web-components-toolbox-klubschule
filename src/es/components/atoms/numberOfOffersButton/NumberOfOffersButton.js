@@ -9,17 +9,17 @@ import Button from '../../web-components-toolbox/src/es/components/atoms/button/
  * @type {CustomElementConstructor}
  */
 export default class NumberOfOffersButton extends Button {
-    connectedCallback () {
-        super.connectedCallback()
-        document.body.addEventListener('with-facet', this.withFacetEventListener)
-    }
+  connectedCallback () {
+    super.connectedCallback()
+    document.body.addEventListener('with-facet', this.withFacetEventListener)
+  }
 
-    disconnectedCallback () {
-        super.disconnectedCallback()
-        document.body.removeEventListener('with-facet', this.withFacetEventListener)
-    }
+  disconnectedCallback () {
+    super.disconnectedCallback()
+    document.body.removeEventListener('with-facet', this.withFacetEventListener)
+  }
 
-    withFacetEventListener = async event => {
-        this.button.textContent = `(${(await event.detail.fetch).numberOfOffers}) ${this.getAttribute('translation-key-cta')}`
-    }
+  withFacetEventListener = async event => {
+    this.button.textContent = `(${(await event.detail.fetch).numberOfOffers}) ${this.getAttribute('translation-key-cta')}`
+  }
 }

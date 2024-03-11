@@ -180,12 +180,12 @@ export default class Login extends Prototype() {
     })
   }
 
-   /**
+  /**
    * fetches the template
    *
    * @return {void}
    */
-   fetchTemplate () {
+  fetchTemplate () {
     switch (this.getAttribute('namespace')) {
       case 'login-default-':
         return this.fetchCSS([{

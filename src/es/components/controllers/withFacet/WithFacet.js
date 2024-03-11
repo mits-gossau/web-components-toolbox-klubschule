@@ -29,27 +29,27 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
  * @type {CustomElementConstructor}
  */
 export default class WithFacet extends Shadow() {
-    constructor(options = {}, ...args) {
-        super({
-            importMetaUrl: import.meta.url,
-            mode: 'false',
-            ...options
-        }, ...args)
+  constructor (options = {}, ...args) {
+    super({
+      importMetaUrl: import.meta.url,
+      mode: 'false',
+      ...options
+    }, ...args)
 
-        this.url = new URL(window.location.href)
-        this.params = new URLSearchParams(this.url.search)
-        const withFacetCache = new Map()
+    this.url = new URL(window.location.href)
+    this.params = new URLSearchParams(this.url.search)
+    const withFacetCache = new Map()
 
-        this.abortController = null
-        this.isMocked = this.hasAttribute('mock')
-        this.requestWithFacetListener = (event) => {
-            if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
- 
-            const constructFilterItem = (filterItem) => {
-                if (!filterItem) return '';
-                
-                return filterItem
-                    ? `{
+    this.abortController = null
+    this.isMocked = this.hasAttribute('mock')
+    this.requestWithFacetListener = (event) => {
+      if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
+
+      const constructFilterItem = (filterItem) => {
+        if (!filterItem) return ''
+
+        return filterItem
+          ? `{
                         "children": [
                             ${filterItem.children.map(child => `{
                                 ${child.count ? `"count": ${child.count},` : ''}
@@ -79,104 +79,103 @@ export default class WithFacet extends Shadow() {
                         ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
                         "visible": ${filterItem.visible || true}
                     }`
-                    : ''
-            }
+          : ''
+      }
 
-            const filter = constructFilterItem(event.detail?.wrapper.filterItem)
-            const filters = []
-            if (filter) filters.push(filter)
+      const filter = constructFilterItem(event.detail?.wrapper.filterItem)
+      const filters = []
+      if (filter) filters.push(filter)
 
-            const request = `{
+      const request = `{
                 "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
                 "mandantId": ${this.getAttribute('mandant-id') || 110}
             }`
 
-            // @ts-ignore
-            // console.log('request (WithFacet.js)', request, self.data = event.detail?.wrapper.filterItem)
-            const url = this.isMocked ?
-                `${this.importMetaUrl}./mock/default.json` :
-                `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
+      // @ts-ignore
+      // console.log('request (WithFacet.js)', request, self.data = event.detail?.wrapper.filterItem)
+      const url = this.isMocked
+        ? `${this.importMetaUrl}./mock/default.json`
+        : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
 
-            let requestInit = {}
-            if (this.isMocked) {
-                requestInit = {
-                    method: 'GET'
-                }
-            } else {
-                requestInit = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    mode: 'cors',
-                    body: request
-                }
-            }
-
-            this.dispatchEvent(new CustomEvent('with-facet', {
-                detail: {
-                    /** @type {Promise<fetchAutoCompleteEventDetail>} */
-                    fetch: withFacetCache.has(request) ?
-                        withFacetCache.get(request)
-                        // TODO: withFacetCache key must include all variants as well as future payloads
-                        // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
-                        :
-                        withFacetCache.set(request, fetch(url, requestInit).then(response => {
-                            if (response.status >= 200 && response.status <= 299) {
-                                console.log('response (WithFacet.js)', response)
-                                return response.json()
-                            }
-                            throw new Error(response.statusText)
-                        }).then(json => {
-                            const filterData = json.filters
-                            let numberOfOffers = 0
-
-                            filterData.forEach(filterItem => {
-                                // set selected children to true if they are in the url params
-                                if (filterItem && this.params.has(filterItem.urlpara)) {
-                                    if (filterItem.children && filterItem.children.length > 0) {
-                                        filterItem.children.forEach(child => {
-                                            const selectedChildren = this.params.get(filterItem.urlpara)?.split(',')
-                                            if (selectedChildren?.includes(child.urlpara)) {
-                                                child.selected = true
-                                            }
-                                        })
-                                    }
-                                }
-                                // set url params if children are selected and count the number of offers
-                                if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                                    filterItem.children.forEach(child => {
-                                        let selectedChildren = filterItem.children
-                                            .filter(child => child.selected)
-                                            .map(child => child.urlpara)
-                                            .join(',')
-                                        
-                                        if (selectedChildren) {
-                                            this.params.set(filterItem.urlpara, selectedChildren)
-                                            window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-                                        }
-                                        if (child.selected && child.count > 0) {
-                                            numberOfOffers += child.count
-                                        }
-                                    })
-                                }
-                            })
-
-                            return {...json, numberOfOffers}
-                        })).get(request)
-                },
-                bubbles: true,
-                cancelable: true,
-                composed: true
-            }))
+      let requestInit = {}
+      if (this.isMocked) {
+        requestInit = {
+          method: 'GET'
         }
-    }
+      } else {
+        requestInit = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          mode: 'cors',
+          body: request
+        }
+      }
 
-    connectedCallback() {
-        this.addEventListener('request-with-facet', this.requestWithFacetListener)
-    }
+      this.dispatchEvent(new CustomEvent('with-facet', {
+        detail: {
+          /** @type {Promise<fetchAutoCompleteEventDetail>} */
+          fetch: withFacetCache.has(request)
+            ? withFacetCache.get(request)
+          // TODO: withFacetCache key must include all variants as well as future payloads
+          // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
+            : withFacetCache.set(request, fetch(url, requestInit).then(response => {
+              if (response.status >= 200 && response.status <= 299) {
+                console.log('response (WithFacet.js)', response)
+                return response.json()
+              }
+              throw new Error(response.statusText)
+            }).then(json => {
+              const filterData = json.filters
+              let numberOfOffers = 0
 
-    disconnectedCallback() {
-        this.removeEventListener('request-with-facet', this.requestWithFacetListener)
+              filterData.forEach(filterItem => {
+                // set selected children to true if they are in the url params
+                if (filterItem && this.params.has(filterItem.urlpara)) {
+                  if (filterItem.children && filterItem.children.length > 0) {
+                    filterItem.children.forEach(child => {
+                      const selectedChildren = this.params.get(filterItem.urlpara)?.split(',')
+                      if (selectedChildren?.includes(child.urlpara)) {
+                        child.selected = true
+                      }
+                    })
+                  }
+                }
+                // set url params if children are selected and count the number of offers
+                if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+                  filterItem.children.forEach(child => {
+                    const selectedChildren = filterItem.children
+                      .filter(child => child.selected)
+                      .map(child => child.urlpara)
+                      .join(',')
+
+                    if (selectedChildren) {
+                      this.params.set(filterItem.urlpara, selectedChildren)
+                      window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+                    }
+                    if (child.selected && child.count > 0) {
+                      numberOfOffers += child.count
+                    }
+                  })
+                }
+              })
+
+              return { ...json, numberOfOffers }
+            })).get(request)
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
     }
+  }
+
+  connectedCallback () {
+    this.addEventListener('request-with-facet', this.requestWithFacetListener)
+  }
+
+  disconnectedCallback () {
+    this.removeEventListener('request-with-facet', this.requestWithFacetListener)
+  }
 }
