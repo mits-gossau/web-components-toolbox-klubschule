@@ -83,6 +83,9 @@ export default class Login extends Prototype() {
     if (this.shouldRender()) showPromises.push(this.render())
     Promise.all(showPromises).then(() => (this.hidden = false))
     document.body.addEventListener(this.getAttribute('request-msrc-user') || 'request-msrc-user', this.requestMsrcUserListener)
+
+    this.isCheckout = this.parentElement.getAttribute('is-checkout') === 'true'
+    if (this.isCheckout) this.root.querySelector('section').style.display = 'none'
   }
 
   disconnectedCallback () {
@@ -113,19 +116,40 @@ export default class Login extends Prototype() {
         margin: calc(var(--content-spacing, unset) / 2) auto;  /* Warning! Keep horizontal margin at auto, otherwise the content width + margin may overflow into the scroll bar */
         width: var(--login-width, max(calc(_max-width_ - var(--content-spacing) * 2), 55%)); /* Environment.js mobileBreakpoint must correspond to the calc 1200px */
       }
+      :host > section {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        gap: calc(var(--content-spacing, 1em) * 2);
+      }
       :host .font-size-tiny {
+        font-family: var(--button-font-family, inherit);
         font-size: calc(0.75 * var(--p-font-size-mobile, var(--p-font-size, 1em)));
         line-height: var(--line-height-mobile, var(--line-height, normal));
+        padding: var(--button-padding, 0 0 0 0);
+        border-radius: var(--button-border-radius, 0.5em);
+        border: var(--button-border-width, 0px) solid var(--button-border-color, transparent);
+        color: var(--button-font-color);
       }
-      :host > a {
+      :host .font-size-tiny:before {
+        border-right: 2px solid var(--button-border-color);
+        height: 1rem;
+        width: 1.3rem;
+        margin-top: -2px;
+      }
+      :host .font-size-tiny:hover{
+        background-color: inherit;
+        color: inherit;
+      }
+      :host > section > a {
         color: var(--color);
         text-decoration: none;
         font-weight: var(--font-weight-strong, bold);
       }
-      :host > div {
+      :host > section > div {
         position: relative;
       }
-      :host > div div[open] {
+      :host > section > div div[open] {
         top: 15px;
       }
       :host([profile-flyout]) {
@@ -133,7 +157,8 @@ export default class Login extends Prototype() {
           z-index: 9999;
       }
       @media only screen and (max-width: _max-width_) {
-        :host {
+        :host,
+        :host > section {
           gap: calc(var(--content-spacing-mobile, var(--content-spacing, 1em)) * 2);
           margin: calc(var(--content-spacing-mobile, var(--content-spacing, unset)) / 2) auto; /* Warning! Keep horizontal margin at auto, otherwise the content width + margin may overflow into the scroll bar */
           width: var(--content-width-mobile, calc(100% - var(--content-spacing-mobile, var(--content-spacing)) * 2));
@@ -141,8 +166,10 @@ export default class Login extends Prototype() {
         :host .font-size-tiny {
           font-size: calc(0.75 * var(--p-font-size-mobile, var(--p-font-size, 1em)));
           line-height: var(--line-height-mobile, var(--line-height, normal));
+          padding: 0;
+          border: none;
         }
-        :host > div div[open] {
+        :host > section > div div[open] {
           top: 0 !important;
         }
       }
@@ -180,12 +207,12 @@ export default class Login extends Prototype() {
     })
   }
 
-   /**
-   * fetches the template
-   *
-   * @return {void}
-   */
-   fetchTemplate () {
+  /**
+  * fetches the template
+  *
+  * @return {void}
+  */
+  fetchTemplate () {
     switch (this.getAttribute('namespace')) {
       case 'login-default-':
         return this.fetchCSS([{

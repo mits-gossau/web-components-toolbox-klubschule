@@ -33,7 +33,7 @@ export default class BackLink extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.div
+    return !this.root.querySelector('.back-link')
   }
 
   /**
@@ -110,5 +110,4 @@ export default class BackLink extends Shadow() {
       </a>
     `
   }
-
 }

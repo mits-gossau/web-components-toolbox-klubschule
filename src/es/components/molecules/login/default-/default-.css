@@ -1,43 +1,57 @@
 :host {
     --transition: none;
+    --sort-default-hover-color: #F5F5F5;
+    --sort-default-title-font-weight: 500;
+    --sort-default-title-padding: 0 0.5rem 0 0;
+    --login-default-button-font-color: var(--color);
+    --login-default-button-padding: 0.35rem 0.5rem;
+    --login-default-button-border-radius: 0.5rem;
+    --login-default-button-border-width: 2px;
+    --login-default-button-border-color: #E0E0E0;
+    --button-secondary-filter-border-width: 2px;
+    --button-secondary-filter-border-color: #E0E0E0;
+    --button-secondary-filter-border-radius: 0.5rem;
+    --button-secondary-filter-color: var(--color);
+    --button-secondary-filter-font-size: 0.9rem;
+    --button-secondary-filter-padding: 0.1rem 0.3rem 0.1rem 0.5rem;
+    --button-secondary-filter-font-weight: 500;
+    --icon-mdx-ks-svg-size: 2rem;
+    --dialog-top-slide-in-a-margin: 0;
+    --dialog-top-slide-in-a-display: flex;
 }
-:host > a {
+:host > section > a {
     --login-default-font-weight-strong: 500;
     font-size: 0.9rem;
     display: flex;
     position: relative;
 }
 
-:host > a > .active-notification {
-    position: relative;
+:host ks-m-sort {
+    --sort-default-item-min-width: 10rem;
 }
 
-:host .only-desktop{
+:host > section > a:hover {
+    text-decoration: underline;
+}
+
+:host .only-desktop {
      display: flex;
 }
 
-:host > a > .active-notification::after{
-    content: '';
-    display: block;
-    height: .4rem;
-    width: .4rem;
-    background: red;
-    border-radius: 50%;
-    position: absolute;
-    outline: solid 2px white;
-    right: -2px;
-    top: 1px;
+:host > section > div > div {
+    --login-default-p-font-size: 1.2rem;
 }
 
 @media only screen and (max-width: _max-width_) {
-    :host {
+    :host,
+    :host > section {
         gap: 1rem;
     }
     :host .only-desktop {
         display: none;
    }
-   :host > div > div > button {
+   :host > section > div > div > button {
     min-width: auto;
     padding-left: 0;
-}
+   }
 }

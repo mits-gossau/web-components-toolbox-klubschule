@@ -1,1 +1,3 @@
-:host {}
+:host {
+    --heading-default-ibaw-title-brand-shape: var(--ibaw-title-brand-shape;)
+}
