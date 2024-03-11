@@ -49,37 +49,37 @@ export default class WithFacet extends Shadow() {
         if (!filterItem) return ''
 
         return filterItem
-          ? `{
-                        "children": [
-                            ${filterItem.children.map(child => `{
-                                ${child.count ? `"count": ${child.count},` : ''}
-                                ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
-                                "hasChilds": ${child.hasChilds},
-                                "id": "${child.id}",
-                                "label": "${child.label}",
-                                ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
-                                ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
-                                "selected": ${child.label.trim() === event.detail?.target.label.trim() ? true : child.selected},
-                                ${child.sort ? `"sort": ${child.sort},` : 0}
-                                ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
-                                ${child.typ ? `"typ": "${child.typ}",` : ''}
-                                "urlpara": "${child.urlpara}"
-                            }`)}
-                        ],
-                        ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
-                        ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
-                        ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
-                        ${filterItem.id ? `"id": "${filterItem.id}",` : ''}
-                        ${filterItem.label ? `"label": "${filterItem.label}",` : ''}
-                        ${filterItem.options ? `"options": ${filterItem.options},` : ''}
-                        ${filterItem.partitionKey ? `"partitionKey": "${filterItem.partitionKey}",` : ''}
-                        ${filterItem.rowKey ? `"rowKey": "${filterItem.rowKey}",` : ''}
-                        ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
-                        ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
-                        ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
-                        "visible": ${filterItem.visible || true}
-                    }`
-          : ''
+            ? `{
+                "children": [
+                    ${filterItem.children.map(child => `{
+                        ${child.count ? `"count": ${child.count},` : ''}
+                        ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
+                        "hasChilds": ${child.hasChilds},
+                        "id": "${child.id}",
+                        "label": "${child.label}",
+                        ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
+                        ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
+                        "selected": ${child.label.trim() === event.detail?.target.label.trim() ? true : child.selected},
+                        ${child.sort ? `"sort": ${child.sort},` : 0}
+                        ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
+                        ${child.typ ? `"typ": "${child.typ}",` : ''}
+                        "urlpara": "${child.urlpara}"
+                    }`)}
+                ],
+                ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
+                ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
+                ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
+                ${filterItem.id ? `"id": "${filterItem.id}",` : ''}
+                ${filterItem.label ? `"label": "${filterItem.label}",` : ''}
+                ${filterItem.options ? `"options": ${filterItem.options},` : ''}
+                ${filterItem.partitionKey ? `"partitionKey": "${filterItem.partitionKey}",` : ''}
+                ${filterItem.rowKey ? `"rowKey": "${filterItem.rowKey}",` : ''}
+                ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
+                ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
+                ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
+                "visible": ${filterItem.visible || true}
+            }`
+            : ''
       }
 
       const filter = constructFilterItem(event.detail?.wrapper.filterItem)
