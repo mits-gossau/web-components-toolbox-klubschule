@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../../../src/css/variablesCustom.css rel=stylesheet" type="text/css">
+        <script async="" src="../../../src/es/components/web-components-toolbox/src/es/helpers/Environment.js"></script>
+        <title>Customer Portal</title>
+    </head>
+
+    <body>
+        <c-fetch-html>
+            <c-fetch-css>
+                <c-fetch-modules>
+                    <c-router routes="[
+                        {
+                            'name': 'p-appointment-list',
+                            'path': '../../pages/AppointmentList.js',
+                            'regExp': ['/[#=]{1}\/$/', '/^\/$/']
+                        },
+                        {
+                            'name': 'p-login',
+                            'path': '../../pages/Login.js',
+                            'regExp': ['/[#=]{1}\/login/']
+                        }
+                    ]">
+                    </c-router>
+                </c-fetch-modules>
+            </c-fetch-css>
+        </c-fetch-html>
+        <div>
+            <a href="?page=/" route target="_self">
+                appointment
+            </a>
+        </div>
+        <div>
+            <a href="?page=/login" route target="_self">
+                login
+            </a>
+        </div>
+        <script rel=preload type=module>
+    Promise.all([
+      import('../components/web-components-toolbox/src/es/components/controllers/fetchHtml/FetchHtml.js').then(module => ['c-fetch-html', module.default]),
+      import('../components/web-components-toolbox/src/es/components/controllers/fetchCss/FetchCss.js').then(module => ['c-fetch-css', module.default]),
+      import('../components/web-components-toolbox/src/es/components/controllers/fetchModules/FetchModules.js').then(module => ['c-fetch-modules', module.default]),
+      import('./event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default])
+    ]).then(elements => elements.forEach(element => {
+      if (element && !customElements.get(element[0])) customElements.define(...element)
+    }))
+  </script>
+    </body>
+
+</html>
