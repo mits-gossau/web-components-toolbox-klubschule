@@ -1,10 +1,6 @@
 // @ts-check
 import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js'
 
-/* global location */
-/* global self */
-/* global CustomEvent */
-
 /**
  *
  * @export

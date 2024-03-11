@@ -110,5 +110,4 @@ export default class BackLink extends Shadow() {
       </a>
     `
   }
-
 }

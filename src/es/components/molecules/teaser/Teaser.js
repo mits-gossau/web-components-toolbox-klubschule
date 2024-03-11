@@ -1,7 +1,7 @@
 // @ts-check
 import Teaser from '../../web-components-toolbox/src/es/components/molecules/teaser/Teaser.js'
 
-/* global CustomEvent */
+/* global self */
 
 /**
  * Creates a Teaser
