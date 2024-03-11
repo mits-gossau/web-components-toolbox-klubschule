@@ -19,7 +19,7 @@
     --dialog-top-slide-in-a-margin: 0;
     --dialog-top-slide-in-a-display: flex;
 }
-:host > a {
+:host > section > a {
     --login-default-font-weight-strong: 500;
     font-size: 0.9rem;
     display: flex;
@@ -30,26 +30,27 @@
     --sort-default-item-min-width: 10rem;
 }
 
-:host > a:hover {
+:host > section > a:hover {
     text-decoration: underline;
 }
 
-:host .only-desktop{
+:host .only-desktop {
      display: flex;
 }
 
-:host > div > div {
+:host > section > div > div {
     --login-default-p-font-size: 1.2rem;
 }
 
 @media only screen and (max-width: _max-width_) {
-    :host {
+    :host,
+    :host > section {
         gap: 1rem;
     }
     :host .only-desktop {
         display: none;
    }
-   :host > div > div > button {
+   :host > section > div > div > button {
     min-width: auto;
     padding-left: 0;
    }
