@@ -6,14 +6,14 @@ export default class Tab extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
-      this.tabActive.classList.remove('active');
-      this.contentActive.classList.remove('show');
+      this.tabActive.classList.remove('active')
+      this.contentActive.classList.remove('show')
 
-      event.target.classList.add('active');
-      this.tabActive = event.target;
-      this.tabActiveId = event.target.getAttribute('tab-target');
-      this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`);
-      this.contentActive.classList.add('show');      
+      event.target.classList.add('active')
+      this.tabActive = event.target
+      this.tabActiveId = event.target.getAttribute('tab-target')
+      this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`)
+      this.contentActive.classList.add('show')
     }
   }
 
@@ -21,22 +21,22 @@ export default class Tab extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
 
     // Show content of default active tab
-    this.tabs = this.root.querySelectorAll('button');
-    this.tabActive = this.root.querySelector('button.active');
-    this.tabActiveId = this.tabActive.getAttribute('tab-target');
-    this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`);
-    this.contentActive.classList.add('show');
+    this.tabs = this.root.querySelectorAll('button')
+    this.tabActive = this.root.querySelector('button.active')
+    this.tabActiveId = this.tabActive.getAttribute('tab-target')
+    this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`)
+    this.contentActive.classList.add('show')
 
     // Handle changing active tabs
     this.tabs.forEach(tab => {
-      tab.addEventListener('click', this.clickEventListener);
-    });
+      tab.addEventListener('click', this.clickEventListener)
+    })
   }
 
   disconnectedCallback () {
     this.tabs.forEach(tab => {
-      tab.removeEventListener('click', this.clickEventListener);
-    });
+      tab.removeEventListener('click', this.clickEventListener)
+    })
   }
 
   shouldRenderCSS () {
@@ -47,12 +47,22 @@ export default class Tab extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
+        :host {
+          --any-content-width: 100%;
+          --any-content-width-mobile: 100%;
+        }
+
         :host ul {
           list-style: none;
           display: flex;
           margin: 0;
           padding: 0;
           overflow-x: auto;
+        }
+
+        :host ul.tab-search-result {
+          width: 80%;
+          margin: 0 auto;
         }
 
         :host ul li + li {
@@ -81,6 +91,7 @@ export default class Tab extends Shadow() {
 
         :host div[tab-content-target].show {
           display: block;
+          background-color: var(--mdx-base-color-klubschule-creme-400);
         }
 
         @media only screen and (max-width: _max-width_) {

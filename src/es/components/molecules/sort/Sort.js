@@ -9,26 +9,31 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Sort extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.closeEventListener = event => this.root.querySelector('.m-sort__tooltip-open')?.classList.remove('m-sort__tooltip-open')
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.toggleTooltip();
+    this.toggleTooltip()
+    if (this.getAttribute('close-event-name')) document.body.addEventListener(this.getAttribute('close-event-name'), this.closeEventListener)
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    if (this.getAttribute('close-event-name')) document.body.removeEventListener(this.getAttribute('close-event-name'), this.closeEventListener)
+  }
 
   /**
    * Toggle tooltip
    */
-  toggleTooltip() {
-    const toggle = this.root.querySelector('.m-sort');
+  toggleTooltip () {
+    const toggle = this.root.querySelector('.m-sort')
     toggle.addEventListener('click', () => {
-      const tooltip = this.root.querySelector('.m-sort__tooltip');
-      tooltip.classList.toggle('m-sort__tooltip-open');
-    });
+      const tooltip = this.root.querySelector('.m-sort__tooltip')
+      tooltip.classList.toggle('m-sort__tooltip-open')
+    })
   }
 
   /**
@@ -82,7 +87,7 @@ export default class Sort extends Shadow() {
 
       :host .m-sort__item {
         padding: 1em 1.5em;
-        min-width: 18em;
+        min-width: var(--item-min-width, 18em);
         font-size: 1em;
         line-height: 1.375em;
         color: var(--m-black);
@@ -90,7 +95,7 @@ export default class Sort extends Shadow() {
       }
 
       :host .m-sort__item:hover {
-        background-color: var(--mdx-base-color-grey-100);
+        background-color: var(--hover-color);
       }
 
       :host .m-sort__item-active {
@@ -129,9 +134,9 @@ export default class Sort extends Shadow() {
       case 'sort-default-':
         return this.fetchCSS([
           {
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-          namespace: false
-        }, ...styles])
+            path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false
+          }, ...styles])
       case 'sort-right-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
@@ -141,7 +146,7 @@ export default class Sort extends Shadow() {
             flags: 'g',
             replacement: '--sort-right-'
           }]
-        },{
+        }, {
           path: `${this.importMetaUrl}./right-/right-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }, ...styles])
@@ -155,23 +160,28 @@ export default class Sort extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
+    const ul = this.root.querySelector('ul')
+    const currentText = ul.getAttribute('main-text') || ''
+    const iconSize = this.getAttribute('icon-size') || '1em'
+    const iconName = this.getAttribute('icon-name') || 'ChevronDown'
+    const buttonSpanPadding = this.getAttribute('button-span-padding') || '0 0 0 0'
+
+    ul.classList.add('m-sort__list')
+    Array.from(ul.children).forEach(li => li.classList.add('m-sort__item'))
+    Array.from(ul.querySelectorAll('[active]')).forEach(li => li.classList.add('m-sort__item-active'))
+
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="m-sort">
         <ks-a-button namespace="button-secondary-filter-" color="tertiary">
-            <span>Relevanz</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ChevronDown" size="1em" class="icon-down">
+            <span style="padding: ${buttonSpanPadding}">${currentText}</span>
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-name=${iconName} size=${iconSize} class="icon-down">
         </ks-a-button>
         <div class="m-sort__tooltip">
-            <ul class="m-sort__list">
-                <li class="m-sort__item">Lorem Ipsum</li>
-                <li class="m-sort__item">Lorem Ipsum</li>
-                <li class="m-sort__item m-sort__item-active">Lorem Ipsum</li>
-                <li class="m-sort__item">Lorem Ipsum</li>
-            </ul>
         </div>
     </div>
     `
+    this.root.querySelector('.m-sort__tooltip').appendChild(ul)
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,

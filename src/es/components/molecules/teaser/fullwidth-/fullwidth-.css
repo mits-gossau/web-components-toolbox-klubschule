@@ -15,8 +15,8 @@
     margin-bottom: var(--mdx-sys-spacing-flex-l);
 }
 
-/* when the teaser is used as last-child in ks-o-body-style it should not have margin bottom */
-:host(.ks-o-body-style__last-child) {
+/* when the teaser is used as last-child in ks-o-body-section it should not have margin bottom */
+:host(.ks-o-body-section__last-child) {
     margin-bottom: 0;
 }
 

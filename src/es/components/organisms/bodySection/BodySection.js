@@ -1,5 +1,5 @@
 // @ts-check
-import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js';
+import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js'
 
 /* global location */
 /* global self */
@@ -11,7 +11,9 @@ import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/
  * @class KsBodyStyle
  * @type {CustomElementConstructor}
  * @attribute {
- *      variant=default|narrow|full
+ *      variant=default|narrow|full,
+ *      no-margin-y (flag)
+ *      has-background (flag)
  * }
  */
 export default class KsBodyStyle extends BodyStyle {
@@ -23,7 +25,7 @@ export default class KsBodyStyle extends BodyStyle {
   renderCSS () {
     super.renderCSS()
 
-    // add '.ks-o-body-style__last-child' class to the last child that is not style/script to be able to select it with css
+    // add '.ks-o-body-section__last-child' class to the last child that is not style/script to be able to select it with css
     this.addClassToLastChild()
     this.css = /* CSS */`
         :host {
@@ -61,8 +63,8 @@ export default class KsBodyStyle extends BodyStyle {
         }
         /* adding more space to the last (visible) child */
         :host:last-child,
-        :host > .ks-o-body-style__last-child,
-        :host > [wrapper].ks-o-body-style__last-child {
+        :host > .ks-o-body-section__last-child,
+        :host > [wrapper].ks-o-body-section__last-child {
             margin-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
@@ -71,16 +73,32 @@ export default class KsBodyStyle extends BodyStyle {
             padding-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
+        :host([no-margin-y]) > *:first-child,
         :host([has-background]) > *:first-child {
             margin-top: 0;
         }
 
-        :host([has-background]) > .ks-o-body-style__last-child {
+        :host([no-margin-y]) > .ks-o-body-section__last-child,
+        :host([has-background]) > .ks-o-body-section__last-child {
             margin-bottom: 0;
         }
 
-        :host([variant=default]) > [namespace="teaser-fullwidth-"] {
+        :host([variant=default]) > [namespace="teaser-fullwidth-"],
+        :host([variant=narrow]) > [namespace="teaser-fullwidth-"] {
             width: calc(86.666% + var(--mdx-sys-spacing-fix-m) * 2);
+        }
+
+        /* custom element spacings */
+        :host > ks-m-figure,
+        :host > ks-a-video,
+        :host > .margin-y-m {
+            margin-top: var(--mdx-sys-spacing-flex-m);
+            margin-bottom: var(--mdx-sys-spacing-flex-m);
+        }
+        :host > a[namespace="teaser-fullwidth-"][wrapper],
+        :host > a[namespace="teaser-text-image-"][wrapper] {
+            margin-top: var(--mdx-sys-spacing-flex-m);
+            margin-bottom: var(--mdx-sys-spacing-flex-m);
         }
 
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */
@@ -118,7 +136,7 @@ export default class KsBodyStyle extends BodyStyle {
                 width: 100%;
             }
 
-            /* expections for the width */
+            /* exceptions for the width */
             :host([variant=default]) > .extended-container-mobile,
             :host([variant=default]) > [namespace=teaser-text-image-] {
                 width: calc(100% - 1rem);
@@ -137,14 +155,14 @@ export default class KsBodyStyle extends BodyStyle {
     let lastChild = null
 
     Array.from(children).forEach(child => {
-        if (child.tagName !== 'STYLE' && child.tagName !== 'SCRIPT') {
-            lastChild = child;
-        }
+      if (child.tagName !== 'STYLE' && child.tagName !== 'SCRIPT') {
+        lastChild = child
+      }
     })
 
     if (lastChild) {
-        // @ts-ignore
-        lastChild.classList.add('ks-o-body-style__last-child')
+      // @ts-ignore
+      lastChild.classList.add('ks-o-body-section__last-child')
     }
   }
 }

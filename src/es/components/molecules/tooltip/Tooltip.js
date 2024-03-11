@@ -14,19 +14,19 @@ export default class Tooltip extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 
-    this.text = this.getAttribute('text') || 'This is a fallback tooltip text!';
+    this.text = this.getAttribute('text') || 'This is a fallback tooltip text!'
 
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.tooltip = this.root.querySelector('.tooltip');
+    this.tooltip = this.root.querySelector('.tooltip')
 
     this.root.addEventListener('click', () => {
-      this.tooltip.classList.toggle('tooltip-open');
-    });
+      this.tooltip.classList.toggle('tooltip-open')
+    })
   }
 
   disconnectedCallback () {
-    this.root.removeEventListener('click');
+    this.root.removeEventListener('click')
   }
 
   /**
@@ -148,7 +148,7 @@ export default class Tooltip extends Shadow() {
             flags: 'g',
             replacement: '--tooltip-right-'
           }]
-        },{
+        }, {
           path: `${this.importMetaUrl}./right-/right-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }])

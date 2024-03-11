@@ -1,0 +1,83 @@
+:host * {
+    position: relative;
+}
+
+:host {
+    --color: white;
+    --h-color: white;
+    --h-text-align: center;
+
+    --stage-default-color: white;
+
+    position: relative;
+
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+
+    background-size: cover;
+    background-position: center;
+    width: 100% !important;
+    aspect-ratio: 21/9;
+    padding: var(--mdx-sys-spacing-flex-m) var(--mdx-sys-spacing-flex-xs);
+}
+
+:host a {
+    font: var(--mdx-sys-font-fix-label1);
+}
+
+:host a-picture {
+    --img-width: 100%;
+    --img-height: 100%;
+    --img-object-fit: cover;
+    --img-max-height: none;
+
+    position: absolute;
+    inset: 0;
+}
+
+:host a-picture::after {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 40.4%, #000 100%);
+}
+
+:host a-input {
+    width: 100%;
+    max-width: calc(528/16 * 1rem);
+}
+
+:host > .topline {
+    margin-top: 0 !important;
+    margin-bottom: auto !important;
+    width: 100%;
+    text-align: left;
+}
+
+:host a {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    filter: drop-shadow(0 0 6px rgba(0,0,0,0.4));
+}
+
+:host ks-a-heading {
+    max-width: 1036px
+}
+
+/* brand adjustments */
+:host([brand=pro]) {
+    clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 14.03vw), 80.0867361% 100%, 0% calc(100% - 4.34vw));
+    padding-bottom: var(--mdx-sys-spacing-flex-xl);
+}
+
+@media screen and (max-width: _max-width_) {
+    :host {
+        aspect-ratio: 4/3;
+        padding: var(--mdx-sys-spacing-flex-s);
+    }
+}

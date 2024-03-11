@@ -12,11 +12,11 @@ export default class FavoriteButton extends Shadow() {
     this.favoritesClickListener = () => {
       isFavoured = !isFavoured
       if (isFavoured) {
-          icon.setAttribute('icon-name', 'HeartFilled')
-          text.innerHTML = this.getAttribute('on-text') || 'Gemerkt'
+        icon.setAttribute('icon-name', 'HeartFilled')
+        text.innerHTML = this.getAttribute('on-text') || 'Gemerkt'
       } else {
-          icon.setAttribute('icon-name', 'Heart')
-          text.innerHTML = this.getAttribute('off-text') || 'Merken'
+        icon.setAttribute('icon-name', 'Heart')
+        text.innerHTML = this.getAttribute('off-text') || 'Merken'
       }
     }
   }
