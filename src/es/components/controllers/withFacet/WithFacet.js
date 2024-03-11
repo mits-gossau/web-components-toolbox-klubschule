@@ -14,7 +14,7 @@
 }} fetchAutoCompleteEventDetail */
 
 /* global fetch */
-/* global AbortController */
+/* global self */
 /* global CustomEvent */
 
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
@@ -39,7 +39,6 @@ export default class WithFacet extends Shadow() {
 
     this.numberOfOffers = 0
 
-    this.abortController = null
     this.isMocked = this.hasAttribute('mock')
     this.requestWithFacetListener = (event) => {
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
