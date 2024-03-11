@@ -10,7 +10,7 @@ export default class Sort extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.closeEventListener = event => this.root.querySelector('.m-sort__tooltip-open').classList.remove('m-sort__tooltip-open')
+    this.closeEventListener = event => this.root.querySelector('.m-sort__tooltip-open')?.classList.remove('m-sort__tooltip-open')
   }
 
   connectedCallback () {
