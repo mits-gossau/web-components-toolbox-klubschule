@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang=en>
-<head>
-  <title>Overview</title>
-</head>
-<body>
-  <h1>web-components-toolbox-klubschule</h1>
-  <h2>Setup</h2>
-  <ol>
-    <li>git submodule update --init --recursive --remote --force</li>
-    <li>npm install</li>
-    <li>npm run serve</li>
-    <li>note: on windows systems you may need to run: "git config --system core.longpaths true"</li>
-  </ol>
-  <br>
-  <h2>Components & Pages</h2>
-  <div id=pages></div>
-  <script>
-    const pageQuery = 'rootFolder=src&css=./src/css/variablesCustom.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html'
-    document.querySelector('#pages').innerHTML = /* HTML */`
+
+  <head>
+    <title>Overview</title>
+  </head>
+
+  <body>
+    <h1>web-components-toolbox-klubschule</h1>
+    <h2>Setup</h2>
+    <ol>
+      <li>git submodule update --init --recursive --remote --force</li>
+      <li>npm install</li>
+      <li>npm run serve</li>
+      <li>note: on windows systems you may need to run: "git config --system core.longpaths true"</li>
+    </ol>
+    <br>
+    <h2>Components & Pages</h2>
+    <div id=pages></div>
+    <script>
+      const pageQuery = 'rootFolder=src&css=./src/css/variablesCustom.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html'
+      document.querySelector('#pages').innerHTML = /* HTML */`
       <section>
         <h3>Atoms</h3>
         <ul>
@@ -50,13 +52,13 @@
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/Tab.html">Tab</a></li>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/Facts.html">Facts</a></li>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/LogoList.html">LogoList (Partnerlist)</a></li>
-          </ul>
+        </ul>
         <h3>Organisms</h3>
         <ul>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/Accordion.html">Accordion</a></li>            
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/TileList.html">Tile List (Angebotsliste)</a></li>            
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/OBodySection.html">BodySection (Section mit/ohne Hintergrund)</a></li>            
-          </ul>
+        </ul>
         <h3>Partials</h3>
           <ul>
             <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/ColorStage.html">ColorStage</a></li>
@@ -82,33 +84,35 @@
         <ul>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/MDXinsideFormTest.html">MDXinsideFormTest</a></li>
         </ul>
+        <h3>Customer Portal</h3>
+        <ul>
+          <!-- <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/customer-portal/index.html">Customer Portal</a></li> -->
+          <li><a href="../src/es/customer-portal/index.html">Customer Portal</a></li>
+        </ul>
       </section>
     `
-  </script>
-  <hr />
-  <h3>Tests</h3>
-  <div id=tests></div>
-  <script>
-    document.querySelector('#tests').innerHTML = /* HTML */`
+    </script>
+    <hr />
+    <h3>Tests</h3>
+    <div id=tests></div>
+    <script>
+      document.querySelector('#tests').innerHTML = /* HTML */`
       <ul>
         <li><a href="./src/es/components/pages/Buttons.html">Buttons</a></li>
       </ul>
     `
-  </script>
-  <hr />
-  <h3>web-components-toolbox</h3>
-  <ul>
-    <li><a href="./src/es/components/web-components-toolbox/">Base web-components-toolbox</a></li>
-  </ul>
-  <hr />
-  <h3>web-components-toolbox-migros-design-experience</h3>
-  <ul>
-    <li><a href="./src/css/web-components-toolbox-migros-design-experience/">MDX stuff</a></li>
-  </ul>
+    </script>
     <hr />
-    <h3>Customer Portal</h3>
+    <h3>web-components-toolbox</h3>
     <ul>
-      <li><a href="./src/es/customer-portal/index.html">Customer Portal</a></li>
+      <li><a href="./src/es/components/web-components-toolbox/">Base web-components-toolbox</a></li>
     </ul>
-</body>
+    <hr />
+    <h3>web-components-toolbox-migros-design-experience</h3>
+    <ul>
+      <li><a href="./src/css/web-components-toolbox-migros-design-experience/">MDX stuff</a></li>
+    </ul>
+
+  </body>
+
 </html>

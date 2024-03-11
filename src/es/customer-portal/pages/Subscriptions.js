@@ -12,11 +12,8 @@ export default class Subscriptions extends Shadow() {
   /**
    * @param {any} args
    */
-  constructor (options = {}, ...args) {
-    super({
-      importMetaUrl: import.meta.url,
-      ...options
-    }, ...args)
+  constructor(options = {}, ...args) {
+    super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
   connectedCallback () {
