@@ -81,6 +81,7 @@ export default class filterSelect extends Shadow() {
     }]).then(() => {
       fetch.then(response => {
         const filterData = response.filters
+        console.log('filterData(FilterSelect.js)', filterData)
 
         filterData.forEach((filterItem, i) => {
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
@@ -106,6 +107,7 @@ export default class filterSelect extends Shadow() {
             div.innerHTML = doubleButton
 
             if (childItems.length > 0) {
+              this.html = ''
               this.html = div.children[0]
             }
           }
