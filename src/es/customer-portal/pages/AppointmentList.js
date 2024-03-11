@@ -20,7 +20,7 @@ export default class AppointmentList extends Shadow() {
     */
   renderHTML () {
     this.html = /* html */`
-        <h1>appointment list</h1>
+        <h1>Abo-Termine buchen</h1>
       `
   }
 }

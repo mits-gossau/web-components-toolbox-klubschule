@@ -14,10 +14,9 @@ export default class Login extends Shadow() {
   }
 
   /**
-      * renders the html
-      *
-      * @return {Promise<void>}
-      */
+   * renders the html
+   * @return {Promise<void>}
+  */
   renderHTML () {
     this.html = /* html */`
         <h1>LOGIN</h1>
