@@ -56,7 +56,7 @@ import { Prototype } from '../../web-components-toolbox/src/es/components/msrc/P
  * }
  */
 export default class Login extends Prototype() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.requestMsrcUserListener = event => {
@@ -77,7 +77,7 @@ export default class Login extends Prototype() {
     }
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.hidden = true
     const showPromises = []
     if (this.shouldRender()) showPromises.push(this.render())
@@ -88,7 +88,7 @@ export default class Login extends Prototype() {
     if (this.isCheckout) this.root.querySelector('section').style.display = 'none'
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('request-msrc-user') || 'request-msrc-user', this.requestMsrcUserListener)
   }
 
@@ -97,7 +97,7 @@ export default class Login extends Prototype() {
    *
    * @return {boolean}
    */
-  shouldRender() {
+  shouldRender () {
     return !this.msrcLoginButtonWrapper
   }
 
@@ -106,7 +106,7 @@ export default class Login extends Prototype() {
    *
    * @return {Promise<void>}
    */
-  render() {
+  render () {
     this.css = /* css */`
       :host {
         display: flex;
@@ -186,17 +186,17 @@ export default class Login extends Prototype() {
       await msrc.components.login[this.hasAttribute('profile-flyout')
         ? 'profileFlyout'
         : 'button'](this.msrcLoginButtonWrapper, {
-          language: this.getAttribute('language') || self.Environment.language,
-          theme: this.getAttribute('theme') || 'alnatura',
-          size: this.getAttribute('size') || 'small',
-          loginReturnTo: this.getAttribute('loginReturnTo') || '',
-          logoutReturnTo: this.getAttribute('logoutReturnTo') || '',
-          headerHeight: { mobile: '26px' },
-          inlinks: {
-            account: this.getAttribute('account') || ''
-          },
-          links: [{ label: this.getAttribute('contact-link-label') || '', link: this.getAttribute('contact-link') || '' }]
-        })
+        language: this.getAttribute('language') || self.Environment.language,
+        theme: this.getAttribute('theme') || 'alnatura',
+        size: this.getAttribute('size') || 'small',
+        loginReturnTo: this.getAttribute('loginReturnTo') || '',
+        logoutReturnTo: this.getAttribute('logoutReturnTo') || '',
+        headerHeight: { mobile: '26px' },
+        inlinks: {
+          account: this.getAttribute('account') || ''
+        },
+        links: [{ label: this.getAttribute('contact-link-label') || '', link: this.getAttribute('contact-link') || '' }]
+      })
       const getStylesReturn = this.getStyles(document.createElement('style'))
       getStylesReturn[1].then(() => {
         let button
@@ -212,7 +212,7 @@ export default class Login extends Prototype() {
   *
   * @return {void}
   */
-  fetchTemplate() {
+  fetchTemplate () {
     switch (this.getAttribute('namespace')) {
       case 'login-default-':
         return this.fetchCSS([{
@@ -222,11 +222,11 @@ export default class Login extends Prototype() {
     }
   }
 
-  initUser() {
+  initUser () {
     return this.user
   }
 
-  get user() {
+  get user () {
     return this.userPromise || (this.userPromise = new Promise(async resolve => { // eslint-disable-line
       const msrc = await this.loadDependency()
       // https://react-components.migros.ch/?path=/docs/msrc-login-00-readme--page#events
