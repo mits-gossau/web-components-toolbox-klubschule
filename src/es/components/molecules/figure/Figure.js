@@ -85,7 +85,7 @@ export default class KsFigure extends Shadow(HTMLElement) {
       /* line before caption */
       :host figcaption::before {
         content: "";
-        display: ${this.getAttribute("with-line") !== null ? "block" : "none"};
+        display: ${this.hasAttribute("with-line") ? "block" : "none"};
         width: var(--divider-width);
         height: var(--divider-height);
         background-color: var(--divider-color);
