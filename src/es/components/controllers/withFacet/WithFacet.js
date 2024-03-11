@@ -35,41 +35,64 @@ export default class WithFacet extends Shadow() {
             mode: 'false',
             ...options
         }, ...args)
-        const withFacetCache = new Map()
 
-        this.numberOfOffers = 0
+        this.url = new URL(window.location.href)
+        this.params = new URLSearchParams(this.url.search)
+        const withFacetCache = new Map()
 
         this.abortController = null
         this.isMocked = this.hasAttribute('mock')
         this.requestWithFacetListener = (event) => {
             if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
+ 
+            const constructFilterItem = (filterItem) => {
+                if (!filterItem) return '';
+                
+                return filterItem
+                    ? `{
+                        "children": [
+                            ${filterItem.children.map(child => `{
+                                ${child.count ? `"count": ${child.count},` : ''}
+                                ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
+                                "hasChilds": ${child.hasChilds},
+                                "id": "${child.id}",
+                                "label": "${child.label}",
+                                ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
+                                ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
+                                "selected": ${child.label.trim() === event.detail?.target.label.trim() ? true : child.selected},
+                                ${child.sort ? `"sort": ${child.sort},` : 0}
+                                ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
+                                ${child.typ ? `"typ": "${child.typ}",` : ''}
+                                "urlpara": "${child.urlpara}"
+                            }`)}
+                        ],
+                        ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
+                        ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
+                        ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
+                        ${filterItem.id ? `"id": "${filterItem.id}",` : ''}
+                        ${filterItem.label ? `"label": "${filterItem.label}",` : ''}
+                        ${filterItem.options ? `"options": ${filterItem.options},` : ''}
+                        ${filterItem.partitionKey ? `"partitionKey": "${filterItem.partitionKey}",` : ''}
+                        ${filterItem.rowKey ? `"rowKey": "${filterItem.rowKey}",` : ''}
+                        ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
+                        ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
+                        ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
+                        "visible": ${filterItem.visible || true}
+                    }`
+                    : ''
+            }
+
+            const filter = constructFilterItem(event.detail?.wrapper.filterItem)
+            const filters = []
+            if (filter) filters.push(filter)
 
             const request = `{
-                "filter": [
-                    ${event.detail?.wrapper.filterItem
-                        ? `{
-                            "children": [
-                                ${event.detail?.wrapper.filterItem.children.map(child => `{
-                                    ${child.count ? `"count": ${child.count},` : ''}
-                                    "hasChilds": ${child.hasChilds},
-                                    "id": "${child.id}",
-                                    "label": "${child.label}",
-                                    "selected": ${child.label.trim() === event.detail?.target.label.trim() ? true : child.selected},
-                                    "urlpara": "${child.urlpara}"
-                                }`)}
-                            ],
-                            "disabled": ${event.detail?.wrapper.filterItem.disabled},
-                            "id": "${event.detail?.wrapper.filterItem.id}",
-                            "visible": ${event.detail?.wrapper.filterItem.visible}
-                        }`
-                        : ''
-                    }
-                ],
-                "mandantId":${this.getAttribute('mandant-id')}
+                "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
+                "mandantId": ${this.getAttribute('mandant-id') || 110}
             }`
 
             // @ts-ignore
-            console.log('request (WithFacet.js)', request, self.data = event.detail?.wrapper.filterItem)
+            // console.log('request (WithFacet.js)', request, self.data = event.detail?.wrapper.filterItem)
             const url = this.isMocked ?
                 `${this.importMetaUrl}./mock/default.json` :
                 `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
@@ -107,15 +130,38 @@ export default class WithFacet extends Shadow() {
                         }).then(json => {
                             const filterData = json.filters
                             let numberOfOffers = 0
-                            filterData.forEach((filterItem, i) => {
+
+                            filterData.forEach(filterItem => {
+                                // set selected children to true if they are in the url params
+                                if (filterItem && this.params.has(filterItem.urlpara)) {
+                                    if (filterItem.children && filterItem.children.length > 0) {
+                                        filterItem.children.forEach(child => {
+                                            const selectedChildren = this.params.get(filterItem.urlpara)?.split(',')
+                                            if (selectedChildren?.includes(child.urlpara)) {
+                                                child.selected = true
+                                            }
+                                        })
+                                    }
+                                }
+                                // set url params if children are selected and count the number of offers
                                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                                     filterItem.children.forEach(child => {
+                                        let selectedChildren = filterItem.children
+                                            .filter(child => child.selected)
+                                            .map(child => child.urlpara)
+                                            .join(',')
+                                        
+                                        if (selectedChildren) {
+                                            this.params.set(filterItem.urlpara, selectedChildren)
+                                            window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+                                        }
                                         if (child.selected && child.count > 0) {
                                             numberOfOffers += child.count
                                         }
                                     })
                                 }
                             })
+
                             return {...json, numberOfOffers}
                         })).get(request)
                 },
