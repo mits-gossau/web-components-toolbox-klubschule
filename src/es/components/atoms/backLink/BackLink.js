@@ -42,18 +42,19 @@ export default class BackLink extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        font: var(--mdx-sys-font-fix-label1);
-        color: var(--mdx-sys-color-neutral-bold4);
+        color: var(--back-link-color, var(--mdx-sys-color-neutral-bold4));
       }
+
       :host .back-link {
         display: flex;
         align-items: center;
         text-decoration: none;
-        color: var(--mdx-sys-color-neutral-bold4);
+        color: inherit;
         gap: var(--a-back-link-gap, 0.2em);
+        font: var(--mdx-sys-font-fix-label1);
       }
       :host .back-link:hover {
-        color: var(--a-color);
+        color: var(--back-link-color-hover, var(--a-color));
       }
       :host a-icon-mdx {
         display: inline-block;
@@ -61,7 +62,7 @@ export default class BackLink extends Shadow() {
         top: var(--a-back-link-icon-top, 0.1em);
       }
       :host .back-link:hover a-icon-mdx {
-        color: var(--a-color);
+        color: var(--back-link-color-hover, var(--a-color));
       }
     `
     return this.fetchTemplate()
@@ -105,7 +106,7 @@ export default class BackLink extends Shadow() {
 
     this.html = /* html */`
       <a href="${this.getAttribute('href')}" alt="${this.getAttribute('alt')}" class="back-link">
-        <a-icon-mdx icon-name="${this.getAttribute('icon') || 'ArrowLeft'}" size="1em" rotate="0" class="icon-left"></a-icon-mdx>
+        <a-icon-mdx icon-name="${this.getAttribute('icon') || 'ArrowLeft'}" icon-size="24x24" size="1em" rotate="0" class="icon-left"></a-icon-mdx>
         <slot></slot>
       </a>
     `
