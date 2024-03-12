@@ -133,7 +133,7 @@ export default class WithFacet extends Shadow() {
 
               filterData.forEach(filterItem => {
                 
-                // set selected children to true if they are in the url params
+                // get selected children from url params
                 if (filterItem && this.params.has(filterItem.urlpara)) {
                   if (filterItem.children && filterItem.children.length > 0) {
                     filterItem.children.forEach(child => {
@@ -144,7 +144,8 @@ export default class WithFacet extends Shadow() {
                     })
                   }
                 }
-                // set url params if children are selected and count the number of offers
+                
+                // set selected children to url params
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   filterItem.children.forEach(child => {
                     selectedChildren = filterItem.children
