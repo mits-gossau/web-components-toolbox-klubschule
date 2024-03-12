@@ -6,7 +6,7 @@ export default create({
   base: 'light',
   brandTitle: 'Web Components',
   brandUrl: 'https://mits-gossau.github.io/web-components-toolbox-storybook/storybook-static/',
-  brandImage: 'src/assets/images/web-components.png',
+  brandImage: 'src/img/klubschule-logo-de.svg',
   brandTarget: '_self',
   colorPrimary: '#FF6600',
   colorSecondary: '#FF6600',
