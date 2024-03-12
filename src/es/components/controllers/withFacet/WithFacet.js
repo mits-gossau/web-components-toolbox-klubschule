@@ -38,6 +38,7 @@ export default class WithFacet extends Shadow() {
 
     this.url = new URL(window.location.href)
     this.params = new URLSearchParams(this.url.search)
+    console.log('url + params', this.url, this.params.toString())
     const withFacetCache = new Map()
 
     this.isMocked = this.hasAttribute('mock')
@@ -127,14 +128,16 @@ export default class WithFacet extends Shadow() {
               throw new Error(response.statusText)
             }).then(json => {
               const filterData = json.filters
+              let selectedChildren = ''
               let numberOfOffers = 0
 
               filterData.forEach(filterItem => {
+                
                 // set selected children to true if they are in the url params
                 if (filterItem && this.params.has(filterItem.urlpara)) {
                   if (filterItem.children && filterItem.children.length > 0) {
                     filterItem.children.forEach(child => {
-                      const selectedChildren = this.params.get(filterItem.urlpara)?.split(',')
+                      selectedChildren = String(this.params.get(filterItem.urlpara)?.split(','))
                       if (selectedChildren?.includes(child.urlpara)) {
                         child.selected = true
                       }
@@ -144,12 +147,14 @@ export default class WithFacet extends Shadow() {
                 // set url params if children are selected and count the number of offers
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   filterItem.children.forEach(child => {
-                    const selectedChildren = filterItem.children
+                    selectedChildren = filterItem.children
                       .filter(child => child.selected)
                       .map(child => child.urlpara)
                       .join(',')
 
+                      
                     if (selectedChildren) {
+                      console.log(filterItem.urlpara, selectedChildren)
                       this.params.set(filterItem.urlpara, selectedChildren)
                       window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                     }
