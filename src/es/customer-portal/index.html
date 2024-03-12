@@ -25,7 +25,8 @@
                             Meine Abonnemente
                         </a>
                     </div>
-                    <c-router routes="[
+                    <c-appointments>
+                        <c-router routes="[
                         {
                             'name': 'p-appointment-list',
                             'path': '../../pages/AppointmentList.js',
@@ -42,7 +43,9 @@
                             'regExp': ['/[#=]{1}\/subscriptions/']
                         }
                     ]">
-                    </c-router>
+                        </c-router>
+                    </c-appointments>
+
                 </c-fetch-modules>
             </c-fetch-css>
         </c-fetch-html>
@@ -52,6 +55,7 @@
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchHtml/FetchHtml.js').then(module => ['c-fetch-html', module.default]),
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchCss/FetchCss.js').then(module => ['c-fetch-css', module.default]),
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchModules/FetchModules.js').then(module => ['c-fetch-modules', module.default]),
+                import('./controllers/appointments/Appointments.js').then(module => ['c-appointments', module.default]),
                 import('./event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default])
             ]).then(elements => elements.forEach(element => {
                 if (element && !customElements.get(element[0])) customElements.define(...element)

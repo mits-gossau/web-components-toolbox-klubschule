@@ -11,28 +11,37 @@
 * @type {CustomElementConstructor}
 */
 export default class Appointments extends HTMLElement {
-  constructor () {
+  constructor() {
     super()
-    this.abortController = null
+    this.abortControllerSubscriptionCourseAppointments = null
   }
 
-  connectedCallback () {
-    this.addEventListener(this.getAttribute('request-appointments-event-name') || 'request-appointments-event-name', this.requestAppointmentsListener)
+  connectedCallback() {
+    this.addEventListener(this.getAttribute('request-subscription-course-appointments') || 'request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
   }
 
-  disconnectedCallback () {
-    this.removeEventListener(this.getAttribute('request-appointments-event-name') || 'request-appointments-event-name', this.requestAppointmentsListener)
+  disconnectedCallback() {
+    this.removeEventListener(this.getAttribute('request-subscription-course-appointments') || 'request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
   }
 
-  requestAppointmentsListener = async (event) => {
-    if (this.abortController) this.abortController.abort()
-    this.abortController = new AbortController()
+  requestSubscriptionCourseAppointmentsListener = async (event) => {
+    console.log("Controller - requestSubscriptionCourseAppointmentsListener", event)
+    if (this.abortControllerSubscriptionCourseAppointments) this.abortControllerSubscriptionCourseAppointments.abort()
+    this.abortControllerSubscriptionCourseAppointments = new AbortController()
+
+    
+    const data = {}
+  
     const fetchOptions = {
-      method: 'GET',
-      signal: this.abortController.signal
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      signal: this.abortControllerSubscriptionCourseAppointments.signal
     }
     const endpoint = ''
-    this.dispatchEvent(new CustomEvent(this.getAttribute('update-appointments') || 'update-appointments', {
+    this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
