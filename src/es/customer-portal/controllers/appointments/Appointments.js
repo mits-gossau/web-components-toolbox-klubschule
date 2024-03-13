@@ -11,27 +11,26 @@
 * @type {CustomElementConstructor}
 */
 export default class Appointments extends HTMLElement {
-  constructor() {
+  constructor () {
     super()
     this.abortControllerSubscriptionCourseAppointments = null
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.addEventListener(this.getAttribute('request-subscription-course-appointments') || 'request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.removeEventListener(this.getAttribute('request-subscription-course-appointments') || 'request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
   }
 
   requestSubscriptionCourseAppointmentsListener = async (event) => {
-    console.log("Controller - requestSubscriptionCourseAppointmentsListener", event)
+    console.log('Controller - requestSubscriptionCourseAppointmentsListener', event)
     if (this.abortControllerSubscriptionCourseAppointments) this.abortControllerSubscriptionCourseAppointments.abort()
     this.abortControllerSubscriptionCourseAppointments = new AbortController()
 
-    
     const data = {}
-  
+
     const fetchOptions = {
       method: 'POST',
       headers: {
