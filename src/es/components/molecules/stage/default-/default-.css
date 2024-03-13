@@ -23,8 +23,19 @@
     padding: var(--mdx-sys-spacing-flex-m) var(--mdx-sys-spacing-flex-xs);
 }
 
+:host a,
+:host ks-a-back-link {
+    filter: drop-shadow(0 0 6px rgba(0,0,0,0.4));
+
+    --back-link-color: white;
+    --back-link-color-hover: white;
+}
+
 :host a {
     font: var(--mdx-sys-font-fix-label1);
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
 }
 
 :host a-picture {
@@ -56,13 +67,6 @@
     margin-bottom: auto !important;
     width: 100%;
     text-align: left;
-}
-
-:host a {
-    display: flex;
-    gap: 0.25rem;
-    align-items: center;
-    filter: drop-shadow(0 0 6px rgba(0,0,0,0.4));
 }
 
 :host ks-a-heading {

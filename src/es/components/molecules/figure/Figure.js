@@ -83,20 +83,21 @@ export default class KsFigure extends Shadow(HTMLElement) {
 
       :host figure {
         margin: 0;
+        width: 100%;
       }
 
       /* line before caption */
       :host figcaption::before {
         content: "";
-        display: block;
+        display: ${this.hasAttribute("with-line") ? "block" : "none"};
         width: var(--divider-width);
         height: var(--divider-height);
         background-color: var(--divider-color);
-        margin: var(--wrapper-inner-spacing) 0 var(--copy-spacing);
+        margin: 0 0 var(--copy-spacing);
       }
       :host figcaption {
-        font: var(--copy-typography) !important;
-        margin: var(--copy-spacing) 0 0 !important;
+        font: var(--copy-typography);
+        margin: var(--wrapper-inner-spacing) 0 0;
       }
       :host([open]) figcaption {
         color: white;
@@ -104,9 +105,12 @@ export default class KsFigure extends Shadow(HTMLElement) {
 
       @media only screen and (max-width: _max-width_) {
         /* pulling the picture slightly (8px) out of the container on mobile with negative margin to match the design */
-        :host ks-a-picture {
-          margin-left: calc(var(--mdx-sys-spacing-fix-2xs) * -1);
-          margin-right: calc(var(--mdx-sys-spacing-fix-2xs) * -1);
+        :host a-picture {
+          display: block;
+        }
+        :host figcaption {
+          margin: var(--any-content-spacing-mobile, var(--content-spacing-mobile, var(--content-spacing, unset))) auto;
+          width: var(--any-content-width-mobile, var(--content-width-mobile, calc(100% - var(--content-spacing-mobile, var(--content-spacing)) * 2)));
         }
         :host figcaption::before {
           width: calc(var(--divider-width) - var(--divider-height));

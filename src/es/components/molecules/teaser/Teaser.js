@@ -111,6 +111,10 @@ export default class KsTeaser extends Teaser {
           ${(this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : ''}
         }
 
+        :host figure {
+          width: 100%;
+        }
+
         :host figure,
         :host article {
           display: flex;

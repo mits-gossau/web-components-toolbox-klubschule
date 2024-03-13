@@ -1,8 +1,16 @@
+<!-- Set the color for headlines. Not sure where this will be placed on the backend, but it needs to be included to adjust the color according to topic/brand -->
+<style>
+    :host {
+        --h-color: var(--mdx-sys-color-accent-1-default); /* Color can be adjusted */
+    }
+</style>
+
 <!-- Stage mit Titel -->
 <ks-m-stage namespace="stage-title-">
     <p class="topline">
-        <a href="/de/entdecken/" alt=""><a-icon-mdx icon-name="ArrowLeft" size="1em" icon-size='24x24'></a-icon-mdx>
-            <span>Stories</span></a>
+        <ks-a-back-link href="#" alt="Alternative Text for Backlink">
+            Stories
+        </ks-a-back-link>
     </p>
     <ks-a-heading tag="h1" display-3 centered border-top>
         Asd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
@@ -16,7 +24,42 @@
 <o-grid namespace="grid-2columns-content-section-" first-container-vertical="" first-column-with="66%"
     with-border="" width="100%">
     <ks-o-body-section content-width-var="100%" no-margin-y>
-    <!-- CMS Contentbereich 1 -->
+
+        <!-- Social LogoList -->
+        <ks-m-logo-list namespace="logo-list-default-" class="margin-y-m">
+            <p style="color: var(--mdx-sys-color-neutral-bold2)">von Max Muster, 8. August 2023</p>
+            <ul>
+                <li>
+                    <a  href="#">
+                        <a-icon-mdx icon-name="Facebook" size="1.5rem"></icon-mdx>
+                    </a>
+                </li>
+                <li>
+                    <a  href="#">
+                        <a-icon-mdx icon-name="Twitter" size="1.5rem"></icon-mdx>
+                    </a>
+                </li>
+                <li>
+                    <a  href="#">
+                        <a-icon-mdx icon-name="MessageCircle" size="1.5rem"></icon-mdx>
+                    </a>
+                </li>
+                <li>
+                    <a  href="#">
+                        <a-icon-mdx icon-name="Mail" size="1.5rem"></icon-mdx>
+                    </a>
+                </li>
+                <li>
+                    <a  href="#">
+                        <a-icon-mdx icon-name="Linkedin" size="1.5rem"></icon-mdx>
+                    </a>
+                </li>
+            </ul>
+        </ks-m-logo-list>
+        <!-- /Social LogoList -->
+
+        <!-- CMS Contentbereich 1 -->
+
         <!-- CMS Titel -->
         <ks-a-heading tag="h2">Title h2</ks-a-heading>
         <!-- /CMS Titel -->
@@ -185,7 +228,7 @@
         </m-carousel-two>
         <!-- /CMS Carousel -->
 
-    <!-- /CMS Contentbereich 1 -->
+        <!-- /CMS Contentbereich 1 -->
     </ks-o-body-section>
     <aside>
         <ks-a-heading tag="h2" style-as="h3">unter-navigation</ks-a-heading>
