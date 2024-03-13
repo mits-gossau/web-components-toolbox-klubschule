@@ -103,6 +103,7 @@ export default class KsBodyStyle extends BodyStyle {
             inset: 0;
             margin: auto;
             z-index: 2;
+            pointer-events: none;
         }
         :host > [debug-ruler]::before {
             content: '';
