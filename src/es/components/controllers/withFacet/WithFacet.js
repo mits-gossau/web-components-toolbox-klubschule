@@ -138,19 +138,7 @@ export default class WithFacet extends Shadow() {
               let numberOfOffers = 0
 
               filterData.forEach(filterItem => {
-                console.log('>>> ', filterItem.urlpara, ' <<<')
-                
-                // get selected filter from url params
-                if (filterItem && this.params.has(filterItem.urlpara)) {
-                  if (filterItem.children && filterItem.children.length > 0) {
-                    filterItem.children.forEach(child => {
-                      selectedFilter = String(this.params.get(filterItem.urlpara)?.split(','))
-                      if (selectedFilter?.includes(child.urlpara)) {
-                        child.selected = true
-                      }
-                    })
-                  }
-                }
+                console.log('>>> ', filterItem.urlpara, ' <<<', filterItem)
 
                 // set selected filter to url params
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
@@ -164,9 +152,41 @@ export default class WithFacet extends Shadow() {
                         numberOfOffers += child.count
                       }
                       console.log('selected:', child.urlpara)
+                      const currentValues = this.params.get(filterItem.urlpara) || ''
 
+                      if(!currentValues || !currentValues.includes(child.urlpara)) {
+                        console.log('setting:', child.urlpara)
+                        this.params.set(filterItem.urlpara, `${currentValues + ',' || ''}${child.urlpara}`)
+                      }
                     } else {
-                      console.log('unselected:', child.urlpara)
+                      // console.log('unselected:', child.urlpara)
+
+                      // const currentValues = this.params.get(filterItem.urlpara) || ''
+
+                      let index
+                      if (currentParams) {
+                        console.log(currentParams, index, currentParams.indexOf(child.urlpara))
+
+                        if(currentParams.includes(child.urlpara)) {
+                          console.log('removing:', child.urlpara)
+                          index = currentParams.indexOf(child.urlpara)
+                          currentParams.splice(index, 1)
+                          this.params.set(filterItem.urlpara, currentParams.join(','))
+                        }
+                        if (this.params.get(filterItem.urlpara) === '') {
+                          console.log('deleting:', filterItem.urlpara)
+                          this.params.delete(filterItem.urlpara)
+                        }
+                        // if (index === currentParams.indexOf(child.urlpara)) {
+                        //   currentParams.splice(index, 1)
+                        //   this.params.set(filterItem.urlpara, currentParams.join(','))
+                        // }
+                        // if (this.params.get(filterItem.urlpara) === '') {
+                        //   this.params.delete(filterItem.urlpara)
+                        // }
+                        // window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+                      }
+                      
                     }
                     // selectedFilter = filterItem.children
                     //   .filter(child => child.selected)
@@ -192,6 +212,8 @@ export default class WithFacet extends Shadow() {
                     //   }
                     // }
                   })
+
+                  window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                 }
                 
                 // set selected filter to url params
@@ -231,6 +253,18 @@ export default class WithFacet extends Shadow() {
                 //     //history.pushState({ ...history.state, pageTitle: (document.title = roomName) }, roomName, url.href) 
                 //   // }
                 // }
+
+                // get selected filter from url params
+                if (filterItem && this.params.has(filterItem.urlpara)) {
+                  if (filterItem.children && filterItem.children.length > 0) {
+                    filterItem.children.forEach(child => {
+                      selectedFilter = String(this.params.get(filterItem.urlpara)?.split(','))
+                      if (selectedFilter?.includes(child.urlpara)) {
+                        child.selected = true
+                      }
+                    })
+                  }
+                }
               })
 
               return { ...json, numberOfOffers }
