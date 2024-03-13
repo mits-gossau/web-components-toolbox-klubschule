@@ -31,24 +31,35 @@ export const StageDefault = ({ headline, imgUrl }) => toHTML(/* html */`
   </ks-m-stage>
 `)
 
-export const StageTitle = ({ headline, imgUrl }) => toHTML(/* html */`
-  <ks-m-stage namespace="stage-title-">
-    <p class="topline">
-        <ks-a-back-link href="#" alt="Alternative Text for Backlink">
-            Back Link
-        </ks-a-back-link>
-    </p>
-    <ks-a-heading tag="h1" display-3 border-top>
-        ${headline}
-    </ks-a-heading>
-    <a-picture
-        picture-load 
-        defaultSource="${imgUrl}" 
-        alt="randomized image">
-    </a-picture>
-  </ks-m-stage>
-`)
-
+export const StageTitle = {
+  /* additional args/argTypes */
+  argTypes: {
+    brand: {
+      type: 'select',
+      options: ['ks', 'ibaw', 'ksos']
+    }
+  },
+  args: {
+    brand: 'ks'
+  },
+  render: ({ headline, imgUrl, brand }) => toHTML(/* html */`
+    <ks-m-stage namespace="stage-title-">
+      <p class="topline">
+          <ks-a-back-link href="#" alt="Alternative Text for Backlink">
+              Back Link
+          </ks-a-back-link>
+      </p>
+      <ks-a-heading tag="h1" display-3 border-top brand="${brand}">
+          ${headline}
+      </ks-a-heading>
+      <a-picture
+          picture-load 
+          defaultSource="${imgUrl}" 
+          alt="randomized image">
+      </a-picture>
+    </ks-m-stage>
+  `)
+}
 /* Using lit-html seems to break when Args get changed */
 export const ExampleLitHtml = ({ headline, imgUrl }) => html`
   <ks-m-stage namespace="stage-title-">
