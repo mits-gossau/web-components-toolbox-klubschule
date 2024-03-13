@@ -6,7 +6,7 @@ export function toHTML (str) {
   // convert string to html and add script to load web components
   div.innerHTML = str;
 
-  if (Array.from(div.children) > 1) {
+  if (Array.from(div.children).length > 1) {
     return div;
   } else {
     return div.firstElementChild;

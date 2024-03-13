@@ -24,7 +24,7 @@ module.exports = {
     options: {}
   },
   docs: {
-    autodocs: false
+    autodocs: true
   },
   core: {
     disableTelemetry: true
@@ -35,7 +35,7 @@ module.exports = {
       test: /\.html$/,
       use: [{
         loader: 'html-loader',
-        options: { minimize: true }
+        options: { minimize: false }
       }],
     });
 
