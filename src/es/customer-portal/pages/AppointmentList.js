@@ -47,6 +47,7 @@ export default class AppointmentList extends Shadow() {
     console.log('subscriptionCourseAppointmentsListener', event)
     event.detail.fetch.then((/** @type {any} */ appointments) => {
       console.log(appointments)
+      this.html = ''
       this.renderHTML(appointments)
     }).catch((/** @type {any} */ error) => {
       console.error(error)
@@ -65,7 +66,7 @@ export default class AppointmentList extends Shadow() {
 
   /**
    * renders the html
-   * @return {Promise<void>}
+   * @return void
    * @param {{ selectedSubscription: { dayList: any; }; }} appointmentsData
    */
   renderHTML (appointmentsData) {
@@ -77,9 +78,9 @@ export default class AppointmentList extends Shadow() {
   }
 
   /**
-   * renders the m-Teaser css
+   * renders the css
    *
-   * @return {Promise<void>}
+   * @return void
    */
   renderCSS () {
     this.css = /* css */`

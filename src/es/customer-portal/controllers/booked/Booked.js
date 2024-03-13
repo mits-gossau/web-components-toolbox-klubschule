@@ -13,26 +13,37 @@
 export default class Booked extends HTMLElement {
   constructor () {
     super()
-    this.abortController = null
+    this.abortControllerBookedSubscriptionCourseAppointments = null
   }
 
   connectedCallback () {
-    this.addEventListener(this.getAttribute('request-booked-event-name') || 'request-booked-event-name', this.requestBookedListener)
+    this.addEventListener(this.getAttribute('request-booked-subscription-course-appointments') || 'request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener(this.getAttribute('request-booked-event-name') || 'request-booked-event-name', this.requestBookedListener)
+    this.removeEventListener(this.getAttribute('request-booked-subscription-course-appointments') || 'request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
   }
 
-  requestBookedListener = async (event) => {
-    if (this.abortController) this.abortController.abort()
-    this.abortController = new AbortController()
-    const fetchOptions = {
-      method: 'GET',
-      signal: this.abortController.signal
+  requestBookedSubscriptionCourseAppointmentsListener = async (event) => {
+    console.log('Controller - requestBookedSubscriptionCourseAppointmentsListener', event)
+    if (this.abortControllerBookedSubscriptionCourseAppointments) this.abortControllerBookedSubscriptionCourseAppointments.abort()
+    this.abortControllerBookedSubscriptionCourseAppointments = new AbortController()
+    const data = {
+      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2',
+      subscriptionType: '',
+      subscriptionId: 'undefined',
+      includeConsumedAppointments: 'false'
     }
-    const endpoint = ''
-    this.dispatchEvent(new CustomEvent(this.getAttribute('update-booked') || 'update-booked', {
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      signal: this.abortControllerBookedSubscriptionCourseAppointments.signal
+    }
+    const endpoint = 'https://qual.klubschule.ch/api/customerportal/bookedsubscriptioncourseappointments'
+    this.dispatchEvent(new CustomEvent(this.getAttribute('update-booked-subscription-course-appointments') || 'update-booked-subscription-course-appointments', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()

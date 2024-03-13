@@ -29,7 +29,10 @@ export default class Appointments extends HTMLElement {
     if (this.abortControllerSubscriptionCourseAppointments) this.abortControllerSubscriptionCourseAppointments.abort()
     this.abortControllerSubscriptionCourseAppointments = new AbortController()
 
-    const data = {}
+    const data = {
+      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2',
+      subscriptionType: ''
+    }
 
     const fetchOptions = {
       method: 'POST',
@@ -39,7 +42,7 @@ export default class Appointments extends HTMLElement {
       body: JSON.stringify(data),
       signal: this.abortControllerSubscriptionCourseAppointments.signal
     }
-    const endpoint = ''
+    const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptioncourseappointments'
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
