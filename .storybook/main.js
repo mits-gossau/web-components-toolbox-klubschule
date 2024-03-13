@@ -29,4 +29,16 @@ module.exports = {
   core: {
     disableTelemetry: true
   },
+  webpackFinal: async (config, { configType }) => {
+    // Add HTML loader rule
+    config.module.rules.push({
+      test: /\.html$/,
+      use: [{
+        loader: 'html-loader',
+        options: { minimize: true }
+      }],
+    });
+
+    return config;
+  },
 }
