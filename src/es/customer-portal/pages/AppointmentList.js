@@ -45,15 +45,28 @@ export default class AppointmentList extends Shadow() {
 
   subscriptionCourseAppointmentsListener = async (/** @type {{ detail: { fetch: Promise<any>; }; }} */ event) => {
     console.log('subscriptionCourseAppointmentsListener', event)
-    event.detail.fetch.then((/** @type {any} */ appointments) => {
+    try {
+      const appointments = await event.detail.fetch
       console.log(appointments)
+      if (appointments.errorCode !== 0) {
+        throw new Error(`${appointments.errorMessage}`)
+      }
       this.html = ''
       this.renderHTML(appointments)
-    }).catch((/** @type {any} */ error) => {
-      console.error(error)
+    } catch (error) {
+      console.log(error)
       this.html = ''
       this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
-    })
+    }
+    // event.detail.fetch.then((/** @type {any} */ appointments) => {
+    //   console.log(appointments)
+    //   this.html = ''
+    //   this.renderHTML(appointments)
+    // }).catch((/** @type {any} */ error) => {
+    //   console.error(error)
+    //   this.html = ''
+    //   this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
+    // })
   }
 
   shouldRenderHTML () {
@@ -67,12 +80,16 @@ export default class AppointmentList extends Shadow() {
   /**
    * renders the html
    * @return void
-   * @param {{ selectedSubscription: { dayList: any; }; }} appointmentsData
+   * @param {{ selectedSubscription: { dayList: any; }; filters: {subscriptions: any;} }} appointmentsData
    */
   renderHTML (appointmentsData) {
     this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
     this.html = /* html */`
         <h1>Abo-Termine buchen</h1>
+        <hr>
+        <h2>The Dropdown</h2>
+        ${this.display_nested_objects(appointmentsData.filters.subscriptions)} 
+        <hr>
         ${this.display_properties(appointmentsData.selectedSubscription.dayList)} 
       `
   }
