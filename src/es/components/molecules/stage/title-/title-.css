@@ -6,6 +6,7 @@
 :host {
     --h-text-align: center;
     --h-margin-custom: 0;
+    --h-color: var(--mdx-sys-color-neutral-bold4);
 
     display: flex !important;
     flex-direction: column;
