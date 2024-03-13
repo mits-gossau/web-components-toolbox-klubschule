@@ -13,25 +13,33 @@
 export default class Subscriptions extends HTMLElement {
   constructor () {
     super()
-    this.abortController = null
+    this.abortControllerSubscriptions = null
   }
 
   connectedCallback () {
-    this.addEventListener(this.getAttribute('request-subscriptions-event-name') || 'request-subscriptions-event-name', this.requestSubscriptionsListener)
+    this.addEventListener(this.getAttribute('request-subscriptions') || 'request-subscriptions', this.requestSubscriptionsListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener(this.getAttribute('request-subscriptions-event-name') || 'request-subscriptions-event-name', this.requestSubscriptionsListener)
+    this.removeEventListener(this.getAttribute('request-subscriptions') || 'request-subscriptions', this.requestSubscriptionsListener)
   }
 
   requestSubscriptionsListener = async (event) => {
-    if (this.abortController) this.abortController.abort()
-    this.abortController = new AbortController()
-    const fetchOptions = {
-      method: 'GET',
-      signal: this.abortController.signal
+    console.log('Controller - requestSubscriptionsListener', event)
+    if (this.abortControllerSubscriptions) this.abortControllerSubscriptions.abort()
+    this.abortControllerSubscriptions = new AbortController()
+    const data = {
+      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
     }
-    const endpoint = ''
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      signal: this.abortControllerSubscriptions.signal
+    }
+    const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptions'
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscriptions') || 'update-subscriptions', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {

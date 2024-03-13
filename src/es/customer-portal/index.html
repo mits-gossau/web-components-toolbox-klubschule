@@ -27,7 +27,8 @@
                     </div>
                     <c-appointments>
                         <c-booked>
-                            <c-router routes="[
+                            <c-subscriptions>
+                                <c-router routes="[
                         {
                             'name': 'p-appointment-list',
                             'path': '../../pages/AppointmentList.js',
@@ -40,11 +41,12 @@
                         },
                         {
                             'name': 'p-subscriptions',
-                            'path': '../../pages/Subscriptions.js',
+                            'path': '../../pages/SubscriptionList.js',
                             'regExp': ['/[#=]{1}\/subscriptions/']
                         }
                     ]">
-                            </c-router>
+                                </c-router>
+                            </c-subscriptions>
                         </c-booked>
                     </c-appointments>
 
@@ -59,6 +61,7 @@
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchModules/FetchModules.js').then(module => ['c-fetch-modules', module.default]),
                 import('./controllers/appointments/Appointments.js').then(module => ['c-appointments', module.default]),
                 import('./controllers/booked/Booked.js').then(module => ['c-booked', module.default]),
+                import('./controllers/subscriptions/Subscriptions.js').then(module => ['c-subscriptions', module.default]),
                 import('./event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default])
             ]).then(elements => elements.forEach(element => {
                 if (element && !customElements.get(element[0])) customElements.define(...element)
