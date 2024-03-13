@@ -49,9 +49,15 @@ export default class WithFacet extends Shadow() {
         if (!filterItem) return ''
 
         return filterItem
-            ? `{
-                "children": [
-                    ${filterItem.children.map(child => `{
+        ? `{
+          "children": [
+                ${filterItem.children.map(child => {
+                      const count = child.count ? `(${child.count})` : ''
+                      const label = count ? `${child.label} ${count}` : child.label
+                      const hasSameLabel = label.trim() === event.detail?.target.label.trim()
+                      const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
+
+                      return `{
                         ${child.count ? `"count": ${child.count},` : ''}
                         ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
                         "hasChilds": ${child.hasChilds},
@@ -59,12 +65,12 @@ export default class WithFacet extends Shadow() {
                         "label": "${child.label}",
                         ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
                         ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
-                        "selected": ${child.label.trim() === event.detail?.target.label.trim() ? true : child.selected},
-                        ${child.sort ? `"sort": ${child.sort},` : 0}
+                        "selected": ${hasSameLabel ? isCheckedNullOrUndefined ? child.selected : event.detail.target.checked : child.selected},
+                        ${child.sort ? `"sort": ${child.sort},` : ''}
                         ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
                         ${child.typ ? `"typ": "${child.typ}",` : ''}
                         "urlpara": "${child.urlpara}"
-                    }`)}
+                    }`})}
                 ],
                 ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
                 ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
@@ -128,42 +134,103 @@ export default class WithFacet extends Shadow() {
               throw new Error(response.statusText)
             }).then(json => {
               const filterData = json.filters
-              let selectedChildren = ''
+              let selectedFilter = ''
               let numberOfOffers = 0
 
               filterData.forEach(filterItem => {
+                console.log('>>> ', filterItem.urlpara, ' <<<')
                 
-                // get selected children from url params
+                // get selected filter from url params
                 if (filterItem && this.params.has(filterItem.urlpara)) {
                   if (filterItem.children && filterItem.children.length > 0) {
                     filterItem.children.forEach(child => {
-                      selectedChildren = String(this.params.get(filterItem.urlpara)?.split(','))
-                      if (selectedChildren?.includes(child.urlpara)) {
+                      selectedFilter = String(this.params.get(filterItem.urlpara)?.split(','))
+                      if (selectedFilter?.includes(child.urlpara)) {
                         child.selected = true
                       }
                     })
                   }
                 }
-                
-                // set selected children to url params
-                if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                  filterItem.children.forEach(child => {
-                    selectedChildren = filterItem.children
-                      .filter(child => child.selected)
-                      .map(child => child.urlpara)
-                      .join(',')
 
+                // set selected filter to url params
+                if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+                  const currentParams = this.params.get(filterItem.urlpara)?.split(',')
+                  console.log('currentParams', currentParams)
+
+                  filterItem.children.forEach(child => {
+                    if (child.selected) {
+                      // API does not answer with number of totals, the line below fixes that issue
+                      if (child.count > 0) { 
+                        numberOfOffers += child.count
+                      }
+                      console.log('selected:', child.urlpara)
+
+                    } else {
+                      console.log('unselected:', child.urlpara)
+                    }
+                    // selectedFilter = filterItem.children
+                    //   .filter(child => child.selected)
+                    //   .map(child => child.urlpara)
+                    //   .join(',')
+
+                    // if (selectedFilter) {
+                    //   this.params.set(filterItem.urlpara, selectedFilter)
+                    //   window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+                    // }
+                    // if (child.selected && child.count > 0) {
+                    //   numberOfOffers += child.count
+                    // }
+                    // if (!child.selected) {
                       
-                    if (selectedChildren) {
-                      console.log(filterItem.urlpara, selectedChildren)
-                      this.params.set(filterItem.urlpara, selectedChildren)
-                      window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-                    }
-                    if (child.selected && child.count > 0) {
-                      numberOfOffers += child.count
-                    }
+                    //   let index
+                    //   if (currentParams) {
+                    //     if ((index = currentParams.indexOf(child.urlpara))) {
+                    //       currentParams.splice(index, 1)
+                    //       this.params.set(filterItem.urlpara, currentParams.join(','))
+                    //     }
+                    //     if (this.params.get(filterItem.urlpara) === '') this.params.delete(filterItem.urlpara)
+                    //   }
+                    // }
                   })
                 }
+                
+                // set selected filter to url params
+                // if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+                //   const currentParams = this.params.toString()
+                //   const key = filterItem.urlpara // Eg.: Tag, Zeit, etc.
+                //   // console.log('initial key', key)
+                //   filterItem.children.forEach(child => {
+                //     if (child.selected) {
+                //       // API does not answer with number of totals, the line below fixes that issue
+                //       if (child.count > 0) {
+                //         numberOfOffers += child.count
+                //       }
+                //       const currentValues = this.params.get(key) || ''
+                //       console.log('key', this.params.get(key))
+                //       console.log('child selected', child.urlpara)
+                //       console.log('current values', currentValues)
+                //       if (!currentValues || currentValues.trim() !== '' || !currentValues.includes(child.urlpara)) this.params.set(key, `${currentValues + ',' || ''}${child.urlpara}`)
+                //       console.log('currentValues 1a', this.params.get(key))
+                //       console.log('currentValues 1b', currentValues)
+                //     } else {
+                //       const currentValues = this.params.get(key)?.split(',')
+                //       let index
+                //       if (currentValues) {
+                //         if ((index = currentValues.indexOf(child.urlpara))) {
+                //           currentValues.splice(index, 1)
+                //           this.params.set(key, currentValues.join(','))
+                //         }
+                //         if (this.params.get(key) === '') this.params.delete(key)
+                //       }
+                //     }
+                //   })
+                //   // console.log('currentParams 2', currentParams, this.params.toString())
+                //   // console.log('this params', this.params)
+                //   // if (currentParams !== this.params.toString()) {
+                //     window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+                //     //history.pushState({ ...history.state, pageTitle: (document.title = roomName) }, roomName, url.href) 
+                //   // }
+                // }
               })
 
               return { ...json, numberOfOffers }
