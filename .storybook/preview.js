@@ -13,9 +13,11 @@ import { html } from 'lit-html'
 
 export default {
   decorators: [(story) => html`
-    <div>${story()}</div>
-    <script>
-      window.dispatchEvent(new Event('storiesLoaded')); // triggers the wc-config loading of components
-    </script>
+${story()}
+
+<!-- DO NOT COPY SCRIPT! Only for demo purposes -->
+<script>
+  window.dispatchEvent(new Event('storiesLoaded')); // triggers the wc-config loading of components
+</script>
   `],
 };
