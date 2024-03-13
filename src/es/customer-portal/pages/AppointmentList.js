@@ -102,14 +102,14 @@ export default class AppointmentList extends Shadow() {
       // Check if the value is an object
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
         if (typeof obj[key] === 'object') {
-          result += this.display_nested_objects(obj[key]) + '<hr>'
+          result += this.display_nested_objects(obj[key])
         } else {
           // If the value is a primitive type, display it directly
           result += '<p><strong>' + key + ':</strong> ' + obj[key] + '</p>'
         }
       }
     }
-
+    result += '<hr>'
     return result
   }
 
