@@ -1147,6 +1147,45 @@
         "eTag": "W/\"datetime'2024-01-10T20%3A44%3A45.9714864Z'\""
     }],
     "courses": [
+        {
+            "key": "-IBfNY4BFiWED_Ky1Lad",
+            "typ": "E",
+            "id": "1689314",
+            "centerid": "1013",
+            "gebaeudeid": "306",
+            "ortid": "129",
+            "parentkey": "D_97351",
+            "title": "1001 Nacht - Orientalische Küche",
+            "dateBegin": "2024-06-20",
+            "dateEnd": "2024-06-20",
+            "location": {
+                "name": "Chur, Gartenstrasse 5",
+                "badge": ""
+            },
+            "days": [
+                "Mo"
+            ],
+            "timeBegin": "18:00",
+            "timeEnd": "21:20",
+            "price": {
+                "amount": "135.0 CHF",
+                "price": 135.0,
+                "per": "",
+                "pre": ""
+            },
+            "state": 0,
+            "permission": false,
+            "abnormal": false,
+            "cat_code": 0,
+            "score": 1,
+            "atyp": [
+                "E"
+            ],
+            "button": {
+                "text": "Buchen",
+                "link": "kurse/kurs/1001-Nacht-Orientalische-Kuche--E_1689314_1013/Configuration"
+            }
+        },
     {
         "key": "qg-i-IwBm0S_K5Z8d5xM",
         "typ": "D",
@@ -1169,11 +1208,15 @@
         ],
         "timeBegin": "18:00",
         "timeEnd": "21:20",
-        "pricetyp": "ab",
-        "price": 116.0,
+        "price": {
+            "amount": "116.0 CHF",
+            "price": 116.0,
+            "per": "",
+            "pre": "ab"
+        },
         "lessons": 0.0,
         "state": 0,
-        "stateDesc": "1 Veranstaltungen",
+        "button": {"text": "1 Veranstaltungen"},
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1202,11 +1245,15 @@
             "days": [],
             "timeBegin": "00:00",
             "timeEnd": "00:00",
-            "pricetyp": "ab",
-            "price": 390.0,
+            "price": {
+                "amount": "390.0 CHF",
+                "price": 390.0,
+                "per": "",
+                "pre": "ab"
+            },
             "lessons": 0.0,
             "state": 0,
-            "stateDesc": "Details",
+            "button": {"text": "Details"},
             "permission": false,
             "cantonshare": false,
             "cantonshareprice": 0,
@@ -1238,11 +1285,15 @@
             ],
             "timeBegin": "08:00",
             "timeEnd": "12:00",
-            "pricetyp": "ab",
-            "price": 600.0,
+            "price": {
+                "amount": "600.0 CHF",
+                "price": 600.0,
+                "per": "",
+                "pre": "ab"
+            },
             "lessons": 0.0,
             "state": 0,
-            "stateDesc": "Details",
+            "button": {"text": "Details"},
             "permission": false,
             "cantonshare": false,
             "cantonshareprice": 0,
@@ -1271,11 +1322,15 @@
             "days": [],
             "timeBegin": "00:00",
             "timeEnd": "00:00",
-            "pricetyp": "ab",
-            "price": 300.0,
+            "price": {
+                "amount": "300.0 CHF",
+                "price": 300.0,
+                "per": "",
+                "pre": "ab"
+            },
             "lessons": 0.0,
             "state": 0,
-            "stateDesc": "Details",
+            "button": {"text": "Details"},
             "permission": false,
             "cantonshare": false,
             "cantonshareprice": 0,
@@ -1309,11 +1364,15 @@
         "days": [],
         "timeBegin": "00:00",
         "timeEnd": "00:00",
-        "pricetyp": "ab",
-        "price": 390.0,
+        "price": {
+                "amount": "390.0 CHF",
+                "price": 390.0,
+                "per": "",
+                "pre": "ab"
+            },
         "lessons": 0.0,
         "state": 0,
-        "stateDesc": "Details",
+        "button": {"text": "Details"},
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1348,11 +1407,15 @@
         ],
         "timeBegin": "08:00",
         "timeEnd": "12:00",
-        "pricetyp": "ab",
-        "price": 600.0,
+        "price": {
+                "amount": "600.0 CHF",
+                "price": 600.0,
+                "per": "",
+                "pre": "ab"
+            },
         "lessons": 0.0,
         "state": 0,
-        "stateDesc": "1 Veranstaltungen",
+        "button": {"text": "1 Veranstaltungen"},
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1388,11 +1451,15 @@
         "days": [],
         "timeBegin": "00:00",
         "timeEnd": "00:00",
-        "pricetyp": "ab",
-        "price": 300.0,
+        "price": {
+                "amount": "300.0 CHF",
+                "price": 300.0,
+                "per": "",
+                "pre": "ab"
+            },
         "lessons": 0.0,
         "state": 0,
-        "stateDesc": "Details",
+        "button": {"text": "Details"},
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1428,11 +1495,15 @@
         "days": [],
         "timeBegin": "00:00",
         "timeEnd": "00:00",
-        "pricetyp": "ab",
-        "price": 600.0,
+        "price": {
+                "amount": "600.0 CHF",
+                "price": 600.0,
+                "per": "",
+                "pre": "ab"
+            },
         "lessons": 0.0,
         "state": 0,
-        "stateDesc": "Details",
+        "button": {"text": "Details"},
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1464,11 +1535,15 @@
         "days": [],
         "timeBegin": "00:00",
         "timeEnd": "00:00",
-        "pricetyp": "ab",
-        "price": 150.0,
+        "price": {
+            "amount": "150.0 CHF",
+            "price": 150.0,
+            "per": "",
+            "pre": "ab"
+        },
         "lessons": 0.0,
         "state": 0,
-        "stateDesc": "Details",
+        "button": {"text": "Details"},
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
