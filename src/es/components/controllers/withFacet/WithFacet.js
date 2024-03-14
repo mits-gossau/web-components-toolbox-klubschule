@@ -160,100 +160,28 @@ export default class WithFacet extends Shadow() {
                         this.params.set(filterItem.urlpara, `${currentValues + ',' || ''}${child.urlpara}`)
                       }
                     } else {
-                      // console.log('unselected:', child.urlpara)
-
-                      // const currentValues = this.params.get(filterItem.urlpara) || ''
-
+                      const currentValues = this.params.get(filterItem.urlpara)?.split(',')
                       let index
-                      if (currentParams) {
-                        console.log(currentParams, index, currentParams.indexOf(child.urlpara))
+                      if (currentValues) {
+                        console.log(currentValues, index, currentValues.indexOf(child.urlpara))
 
-                        if (currentParams.includes(child.urlpara)) {
+                        if (currentValues.includes(child.urlpara)) {
                           console.log('removing:', child.urlpara)
-                          index = currentParams.indexOf(child.urlpara)
-                          currentParams.splice(index, 1)
-                          this.params.set(filterItem.urlpara, currentParams.join(','))
+                          index = currentValues.indexOf(child.urlpara)
+                          currentValues.splice(index, 1)
+                          this.params.set(filterItem.urlpara, currentValues.join(','))
                         }
                         if (this.params.get(filterItem.urlpara) === '') {
                           console.log('deleting:', filterItem.urlpara)
                           this.params.delete(filterItem.urlpara)
                         }
-                        // if (index === currentParams.indexOf(child.urlpara)) {
-                        //   currentParams.splice(index, 1)
-                        //   this.params.set(filterItem.urlpara, currentParams.join(','))
-                        // }
-                        // if (this.params.get(filterItem.urlpara) === '') {
-                        //   this.params.delete(filterItem.urlpara)
-                        // }
-                        // window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                       }
                     }
-                    // selectedFilter = filterItem.children
-                    //   .filter(child => child.selected)
-                    //   .map(child => child.urlpara)
-                    //   .join(',')
-
-                    // if (selectedFilter) {
-                    //   this.params.set(filterItem.urlpara, selectedFilter)
-                    //   window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-                    // }
-                    // if (child.selected && child.count > 0) {
-                    //   numberOfOffers += child.count
-                    // }
-                    // if (!child.selected) {
-
-                    //   let index
-                    //   if (currentParams) {
-                    //     if ((index = currentParams.indexOf(child.urlpara))) {
-                    //       currentParams.splice(index, 1)
-                    //       this.params.set(filterItem.urlpara, currentParams.join(','))
-                    //     }
-                    //     if (this.params.get(filterItem.urlpara) === '') this.params.delete(filterItem.urlpara)
-                    //   }
-                    // }
                   })
 
                   window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                 }
-
-                // set selected filter to url params
-                // if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                //   const currentParams = this.params.toString()
-                //   const key = filterItem.urlpara // Eg.: Tag, Zeit, etc.
-                //   // console.log('initial key', key)
-                //   filterItem.children.forEach(child => {
-                //     if (child.selected) {
-                //       // API does not answer with number of totals, the line below fixes that issue
-                //       if (child.count > 0) {
-                //         numberOfOffers += child.count
-                //       }
-                //       const currentValues = this.params.get(key) || ''
-                //       console.log('key', this.params.get(key))
-                //       console.log('child selected', child.urlpara)
-                //       console.log('current values', currentValues)
-                //       if (!currentValues || currentValues.trim() !== '' || !currentValues.includes(child.urlpara)) this.params.set(key, `${currentValues + ',' || ''}${child.urlpara}`)
-                //       console.log('currentValues 1a', this.params.get(key))
-                //       console.log('currentValues 1b', currentValues)
-                //     } else {
-                //       const currentValues = this.params.get(key)?.split(',')
-                //       let index
-                //       if (currentValues) {
-                //         if ((index = currentValues.indexOf(child.urlpara))) {
-                //           currentValues.splice(index, 1)
-                //           this.params.set(key, currentValues.join(','))
-                //         }
-                //         if (this.params.get(key) === '') this.params.delete(key)
-                //       }
-                //     }
-                //   })
-                //   // console.log('currentParams 2', currentParams, this.params.toString())
-                //   // console.log('this params', this.params)
-                //   // if (currentParams !== this.params.toString()) {
-                //     window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-                //     //history.pushState({ ...history.state, pageTitle: (document.title = roomName) }, roomName, url.href)
-                //   // }
-                // }
-
+                
                 // get selected filter from url params
                 if (filterItem && this.params.has(filterItem.urlpara)) {
                   if (filterItem.children && filterItem.children.length > 0) {
