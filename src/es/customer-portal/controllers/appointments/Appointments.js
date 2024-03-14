@@ -29,6 +29,12 @@ export default class Appointments extends HTMLElement {
     if (this.abortControllerSubscriptionCourseAppointments) this.abortControllerSubscriptionCourseAppointments.abort()
     this.abortControllerSubscriptionCourseAppointments = new AbortController()
 
+    // when use dropdown send this data
+    /*
+      subscriptionId
+      subscriptionType
+      userId
+    */
     const data = {
       userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2',
       subscriptionType: ''

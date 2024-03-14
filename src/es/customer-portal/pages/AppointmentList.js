@@ -54,19 +54,10 @@ export default class AppointmentList extends Shadow() {
       this.html = ''
       this.renderHTML(appointments)
     } catch (error) {
-      console.log(error)
+      console.error(error)
       this.html = ''
       this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
     }
-    // event.detail.fetch.then((/** @type {any} */ appointments) => {
-    //   console.log(appointments)
-    //   this.html = ''
-    //   this.renderHTML(appointments)
-    // }).catch((/** @type {any} */ error) => {
-    //   console.error(error)
-    //   this.html = ''
-    //   this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
-    // })
   }
 
   shouldRenderHTML () {
