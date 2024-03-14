@@ -49,43 +49,44 @@ export default class WithFacet extends Shadow() {
         if (!filterItem) return ''
 
         return filterItem
-        ? `{
-          "children": [
-                ${filterItem.children.map(child => {
-                      const count = child.count ? `(${child.count})` : ''
-                      const label = count ? `${child.label} ${count}` : child.label
-                      const hasSameLabel = label.trim() === event.detail?.target.label.trim()
-                      const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
+          ? `{
+            "children": [
+              ${filterItem.children.map(child => {
+                const count = child.count ? `(${child.count})` : ''
+                const label = count ? `${child.label} ${count}` : child.label
+                const hasSameLabel = label.trim() === event.detail?.target.label.trim()
+                const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
 
-                      return `{
-                        ${child.count ? `"count": ${child.count},` : ''}
-                        ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
-                        "hasChilds": ${child.hasChilds},
-                        "id": "${child.id}",
-                        "label": "${child.label}",
-                        ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
-                        ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
-                        "selected": ${hasSameLabel ? isCheckedNullOrUndefined ? child.selected : event.detail.target.checked : child.selected},
-                        ${child.sort ? `"sort": ${child.sort},` : ''}
-                        ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
-                        ${child.typ ? `"typ": "${child.typ}",` : ''}
-                        "urlpara": "${child.urlpara}"
-                    }`})}
-                ],
-                ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
-                ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
-                ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
-                ${filterItem.id ? `"id": "${filterItem.id}",` : ''}
-                ${filterItem.label ? `"label": "${filterItem.label}",` : ''}
-                ${filterItem.options ? `"options": ${filterItem.options},` : ''}
-                ${filterItem.partitionKey ? `"partitionKey": "${filterItem.partitionKey}",` : ''}
-                ${filterItem.rowKey ? `"rowKey": "${filterItem.rowKey}",` : ''}
-                ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
-                ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
-                ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
-                "visible": ${filterItem.visible || true}
-            }`
-            : ''
+                return `{
+                  ${child.count ? `"count": ${child.count},` : ''}
+                  ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
+                  "hasChilds": ${child.hasChilds},
+                  "id": "${child.id}",
+                  "label": "${child.label}",
+                  ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
+                  ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
+                  "selected": ${hasSameLabel ? isCheckedNullOrUndefined ? child.selected : event.detail.target.checked : child.selected},
+                  ${child.sort ? `"sort": ${child.sort},` : ''}
+                  ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
+                  ${child.typ ? `"typ": "${child.typ}",` : ''}
+                  "urlpara": "${child.urlpara}"
+                }`
+              })}
+            ],
+            ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
+            ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
+            ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
+            ${filterItem.id ? `"id": "${filterItem.id}",` : ''}
+            ${filterItem.label ? `"label": "${filterItem.label}",` : ''}
+            ${filterItem.options ? `"options": ${filterItem.options},` : ''}
+            ${filterItem.partitionKey ? `"partitionKey": "${filterItem.partitionKey}",` : ''}
+            ${filterItem.rowKey ? `"rowKey": "${filterItem.rowKey}",` : ''}
+            ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
+            ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
+            ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
+            "visible": ${filterItem.visible || true}
+          }`
+          : ''
       }
 
       const filter = constructFilterItem(event.detail?.wrapper.filterItem)
@@ -93,9 +94,9 @@ export default class WithFacet extends Shadow() {
       if (filter) filters.push(filter)
 
       const request = `{
-                "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
-                "mandantId": ${this.getAttribute('mandant-id') || 110}
-            }`
+        "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
+        "mandantId": ${this.getAttribute('mandant-id') || 110}
+      }`
 
       // @ts-ignore
       // console.log('request (WithFacet.js)', request, self.data = event.detail?.wrapper.filterItem)
