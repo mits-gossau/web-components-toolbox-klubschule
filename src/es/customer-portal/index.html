@@ -4,6 +4,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href=../../../src/es/components/web-components-toolbox/src//css/initial.css rel=stylesheet type="text/css">
+        <link href=../../../src/es/components/web-components-toolbox/src/css/reset.css rel=stylesheet type="text/css">
+        <link href=../../../src/es/components/web-components-toolbox/src/css/colors.css rel=stylesheet type="text/css">
+        <link href=../../../src/es/components/web-components-toolbox/src/css/fonts.css rel=stylesheet type="text/css">
+        <link href=../../../src/es/components/web-components-toolbox/src/css/variables.css rel=stylesheet type="text/css">
         <link href="../../../src/css/variablesCustom.css" rel=stylesheet" type="text/css">
         <script async rel=preload as="script" type="text/javascript"
             src="../../../src/es/components/web-components-toolbox/src/es/helpers/Environment.js"></script>
@@ -14,21 +19,11 @@
         <c-fetch-html>
             <c-fetch-css>
                 <c-fetch-modules>
-                    <div>
-                        <a href="?page=/" route target="_self">
-                            Abo-Termine buchen
-                        </a> -
-                        <a href="?page=/booked" route target="_self">
-                            Gebuchte Termine
-                        </a> -
-                        <a href="?page=/subscriptions" route target="_self">
-                            Meine Abonnemente
-                        </a>
-                    </div>
                     <c-appointments>
                         <c-booked>
                             <c-subscriptions>
                                 <c-router routes="[
+                                    
                                     {
                                         'name': 'p-appointment-list',
                                         'path': '../../pages/AppointmentList.js',
@@ -59,10 +54,10 @@
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchHtml/FetchHtml.js').then(module => ['c-fetch-html', module.default]),
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchCss/FetchCss.js').then(module => ['c-fetch-css', module.default]),
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchModules/FetchModules.js').then(module => ['c-fetch-modules', module.default]),
+                import('./event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default]),
                 import('./controllers/appointments/Appointments.js').then(module => ['c-appointments', module.default]),
                 import('./controllers/booked/Booked.js').then(module => ['c-booked', module.default]),
                 import('./controllers/subscriptions/Subscriptions.js').then(module => ['c-subscriptions', module.default]),
-                import('./event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default])
             ]).then(elements => elements.forEach(element => {
                 if (element && !customElements.get(element[0])) customElements.define(...element)
             }))

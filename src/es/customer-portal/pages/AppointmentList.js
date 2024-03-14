@@ -1,5 +1,5 @@
 // @ts-check
-import { Shadow } from '../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import Index from './Index.js'
 
 /* global CustomEvent */
 
@@ -10,7 +10,7 @@ import { Shadow } from '../../components/web-components-toolbox/src/es/component
  * @class AppointmentList
  * @type {CustomElementConstructor}
  */
-export default class AppointmentList extends Shadow() {
+export default class AppointmentList extends Index {
   /**
    * @param {any} args
   */
@@ -60,10 +60,6 @@ export default class AppointmentList extends Shadow() {
     }
   }
 
-  shouldRenderHTML () {
-    return !this.appointmentWrapper
-  }
-
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
@@ -76,13 +72,21 @@ export default class AppointmentList extends Shadow() {
   renderHTML (appointmentsData) {
     this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
     this.html = /* html */`
+        <customer-portal-navigation></customer-portal-navigation>
         <h1>Abo-Termine buchen</h1>
         <hr>
         <h2>The Dropdown</h2>
-        ${this.display_nested_objects(appointmentsData.filters.subscriptions)} 
+        ${this.display_nested_objects(appointmentsData.filters.subscriptions)}
         <hr>
-        ${this.display_properties(appointmentsData.selectedSubscription.dayList)} 
+        ${this.display_properties(appointmentsData.selectedSubscription.dayList)}
       `
+    return this.fetchModules([
+      {
+        // @ts-ignore
+        path: `${this.importMetaUrl}../components/molecules/customerPortalNavigation/customerPortalNavigation.js?${Environment?.version || ''}`,
+        name: 'customer-portal-navigation'
+      }
+    ])
   }
 
   /**

@@ -1,6 +1,8 @@
 // @ts-check
 import { Shadow } from '../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/* global Environment */
+
 /**
 * Customer Portal
 *
@@ -72,11 +74,19 @@ export default class Index extends Shadow() {
     this.html = /* html */`
         <section>
             <main>
-                <div class=content></div>
+                <div>
+                  <customer-portal-navigation></customer-portal-navigation> 
+                </div>
           </main>
       </section>
     `
-    return this.fetchModules([])
+    return this.fetchModules([
+      {
+        // @ts-ignore
+        path: `${this.importMetaUrl}../components/molecules/customerPortalNavigation/customerPortalNavigation.js?${Environment?.version || ''}`,
+        name: 'customer-portal-navigation'
+      }
+    ])
   }
 
   get section () {

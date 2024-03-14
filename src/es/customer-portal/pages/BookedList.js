@@ -1,5 +1,5 @@
 // @ts-check
-import { Shadow } from '../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import Index from './Index.js'
 
 /* global CustomEvent */
 
@@ -10,7 +10,7 @@ import { Shadow } from '../../components/web-components-toolbox/src/es/component
  * @class BookedList
  * @type {CustomElementConstructor}
  */
-export default class BookedList extends Shadow() {
+export default class BookedList extends Index {
   /**
    * @param {any} args
    */

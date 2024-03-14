@@ -1,5 +1,5 @@
 // @ts-check
-import { Shadow } from '../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import Index from './Index.js'
 
 /**
  * Login
@@ -8,7 +8,7 @@ import { Shadow } from '../../components/web-components-toolbox/src/es/component
  * @class Login
  * @type {CustomElementConstructor}
  */
-export default class Login extends Shadow() {
+export default class Login extends Index {
   /**
    * @param {any} args
    */
