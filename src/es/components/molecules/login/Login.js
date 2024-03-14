@@ -181,11 +181,13 @@ export default class Login extends Prototype() {
       // subscribe before login | https://jira.migros.net/browse/MUTOBOTEAM-1964
       this.initUser()
       // Setup OIDC login configuration
+      // @ts-ignore
       await msrc.utilities.login.setup(this.constructor.parseAttribute(this.getAttribute('setup') || '{}'))
       // Initialize the login button
       await msrc.components.login[this.hasAttribute('profile-flyout')
         ? 'profileFlyout'
         : 'button'](this.msrcLoginButtonWrapper, {
+        // @ts-ignore
         language: this.getAttribute('language') || self.Environment.language,
         theme: this.getAttribute('theme') || 'alnatura',
         size: this.getAttribute('size') || 'small',

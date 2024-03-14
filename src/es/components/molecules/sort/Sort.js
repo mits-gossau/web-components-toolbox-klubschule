@@ -30,7 +30,7 @@ export default class Sort extends Shadow() {
    */
   toggleTooltip () {
     const toggle = this.root.querySelector('.m-sort')
-    toggle.addEventListener('click', () => {
+    if (toggle) toggle.addEventListener('click', () => {
       const tooltip = this.root.querySelector('.m-sort__tooltip')
       tooltip.classList.toggle('m-sort__tooltip-open')
     })
@@ -161,6 +161,7 @@ export default class Sort extends Shadow() {
    */
   renderHTML () {
     const ul = this.root.querySelector('ul')
+    if (!ul) return console.warn('element empty')
     const currentText = ul.getAttribute('main-text') || ''
     const iconSize = this.getAttribute('icon-size') || '1em'
     const iconName = this.getAttribute('icon-name') || 'ChevronDown'

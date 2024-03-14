@@ -9,7 +9,7 @@
     </ul>
      <div>
         <div id="content1" tab-content-target>
-            <ks-c-with-facet mock>
+            <ks-c-with-facet>
                 <!-- o-body-style is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
                 <o-body-style background-color-prop="#F7F4F1">
                     <o-grid namespace="grid-12er-">
@@ -20,7 +20,7 @@
                             <m-dialog namespace="dialog-top-slide-in-">
                                 <div class="container">
                                     <a-input
-                                        inputid="inputSearch"
+                                        inputid="input-search"
                                         placeholder="Suchen..."
                                         submit-search="request-with-facet"
                                         search
@@ -34,7 +34,7 @@
                                         icon-size="1.25em"
                                     >
                                         <label for="inputSearch">Angebote in der Nähe finden</label>
-                                    </a-input>                            
+                                    </a-input>
                                     <div id="close">
                                         <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                                     </div>
@@ -65,7 +65,39 @@
                             </m-dialog>
                         </div>
                     </o-grid>
+                    <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
+                        <!-- overlayer -->
+                        <div class="container dialog-header" tabindex="0">
+                            <div id="back">
+                                &nbsp;
+                            </div>
+                            <h3>Filter</h3>
+                            <div id="close">
+                                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+                            </div>
+                        </div>
+                        <div class="container dialog-content">
+                            <p class="reset-link">
+                                <a-button namespace="button-transparent-">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                                </a-button>
+                            </p>
+                            <div class="sub-content">
+                                <a-input inputid="location-search" width="100%" placeholder="Angebot suchen" icon-name="Search" icon-size="calc(20rem/18)" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>
+                                <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="Schliessen" translation-key-cta="Angebote" translation-key-reset="zur&uuml;cksetzen"></ks-m-filter-categories>
+                            </div>
+                        </div>
+                        <div class="container dialog-footer">
+                            <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+                            <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
+                        </div>
+                    </m-dialog>
                     <o-grid namespace="grid-432-auto-colums-auto-rows-">
+                        <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
+                            <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
+                        </ks-a-button>
+                        <ks-m-filter-select></ks-m-filter-select>
+                    </o-grid>
+                    <!--<o-grid namespace="grid-432-auto-colums-auto-rows-">
                         <ks-a-button filter namespace="button-primary-" color="secondary">
                             <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
                         </ks-a-button>
@@ -107,7 +139,7 @@
                             <span>Label</span>
                             <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
                         </ks-a-button>
-                    </o-grid>
+                    </o-grid>-->
                     <section>
                         <ks-m-sort namespace="sort-right-"></ks-m-sort>
                     </section>
