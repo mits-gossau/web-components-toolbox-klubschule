@@ -45,9 +45,9 @@ export default class WithFacet extends Shadow() {
     this.requestWithFacetListener = (event) => {
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-      const constructFilterItem = (filterItem) => {
-        if (!filterItem) return ''
+      console.log('---------------------------------event', event)
 
+      const constructFilterItem = (filterItem) => {
         return filterItem
           ? `{
             "children": [
@@ -89,13 +89,14 @@ export default class WithFacet extends Shadow() {
           : ''
       }
 
-      const filter = constructFilterItem(event.detail?.wrapper.filterItem)
+      const filter = constructFilterItem(event.detail?.wrapper?.filterItem)
       const filters = []
       if (filter) filters.push(filter)
 
       const request = `{
         "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
         "mandantId": ${this.getAttribute('mandant-id') || 110}
+        ${event.detail?.key === 'input-search' ? `,"searchText": "${event.detail.value}"` : ''}
       }`
 
       // @ts-ignore
@@ -169,6 +170,7 @@ export default class WithFacet extends Shadow() {
                           console.log('removing:', child.urlpara)
                           index = currentValues.indexOf(child.urlpara)
                           currentValues.splice(index, 1)
+
                           this.params.set(filterItem.urlpara, currentValues.join(','))
                         }
                         if (this.params.get(filterItem.urlpara) === '') {

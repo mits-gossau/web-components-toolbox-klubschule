@@ -9,8 +9,11 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Tooltip extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-  }
 
+    this.clickEventListener = event => {
+      this.tooltip.classList.toggle('tooltip-open')
+    }
+  }
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 
@@ -20,13 +23,11 @@ export default class Tooltip extends Shadow() {
 
     this.tooltip = this.root.querySelector('.tooltip')
 
-    this.root.addEventListener('click', () => {
-      this.tooltip.classList.toggle('tooltip-open')
-    })
+    this.root.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
-    this.root.removeEventListener('click')
+    this.root.removeEventListener('click', this.clickEventListener)
   }
 
   /**
