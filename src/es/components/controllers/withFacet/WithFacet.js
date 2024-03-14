@@ -125,8 +125,8 @@ export default class WithFacet extends Shadow() {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
           fetch: withFacetCache.has(request)
             ? withFacetCache.get(request)
-          // TODO: withFacetCache key must include all variants as well as future payloads
-          // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
+            // TODO: withFacetCache key must include all variants as well as future payloads
+            // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
             : withFacetCache.set(request, fetch(url, requestInit).then(response => {
               if (response.status >= 200 && response.status <= 299) {
                 console.log('response (WithFacet.js)', response)
@@ -149,13 +149,13 @@ export default class WithFacet extends Shadow() {
                   filterItem.children.forEach(child => {
                     if (child.selected) {
                       // API does not answer with number of totals, the line below fixes that issue
-                      if (child.count > 0) { 
+                      if (child.count > 0) {
                         numberOfOffers += child.count
                       }
                       console.log('selected:', child.urlpara)
                       const currentValues = this.params.get(filterItem.urlpara) || ''
 
-                      if(!currentValues || !currentValues.includes(child.urlpara)) {
+                      if (!currentValues || !currentValues.includes(child.urlpara)) {
                         console.log('setting:', child.urlpara)
                         this.params.set(filterItem.urlpara, `${currentValues + ',' || ''}${child.urlpara}`)
                       }
@@ -168,7 +168,7 @@ export default class WithFacet extends Shadow() {
                       if (currentParams) {
                         console.log(currentParams, index, currentParams.indexOf(child.urlpara))
 
-                        if(currentParams.includes(child.urlpara)) {
+                        if (currentParams.includes(child.urlpara)) {
                           console.log('removing:', child.urlpara)
                           index = currentParams.indexOf(child.urlpara)
                           currentParams.splice(index, 1)
@@ -187,7 +187,6 @@ export default class WithFacet extends Shadow() {
                         // }
                         // window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                       }
-                      
                     }
                     // selectedFilter = filterItem.children
                     //   .filter(child => child.selected)
@@ -202,7 +201,7 @@ export default class WithFacet extends Shadow() {
                     //   numberOfOffers += child.count
                     // }
                     // if (!child.selected) {
-                      
+
                     //   let index
                     //   if (currentParams) {
                     //     if ((index = currentParams.indexOf(child.urlpara))) {
@@ -216,7 +215,7 @@ export default class WithFacet extends Shadow() {
 
                   window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                 }
-                
+
                 // set selected filter to url params
                 // if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                 //   const currentParams = this.params.toString()
@@ -251,7 +250,7 @@ export default class WithFacet extends Shadow() {
                 //   // console.log('this params', this.params)
                 //   // if (currentParams !== this.params.toString()) {
                 //     window.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-                //     //history.pushState({ ...history.state, pageTitle: (document.title = roomName) }, roomName, url.href) 
+                //     //history.pushState({ ...history.state, pageTitle: (document.title = roomName) }, roomName, url.href)
                 //   // }
                 // }
 
