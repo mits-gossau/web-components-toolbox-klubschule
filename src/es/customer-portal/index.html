@@ -22,24 +22,24 @@
                     <c-appointments>
                         <c-booked>
                             <c-subscriptions>
+                                <cp-m-navigation></cp-m-navigation>
                                 <c-router routes="[
-                                    
-                                    {
-                                        'name': 'p-appointment-list',
-                                        'path': '../../pages/AppointmentList.js',
-                                        'regExp': ['/[#=]{1}\/$/', '/^\/$/']
-                                    },
-                                    {
-                                        'name': 'p-booked',
-                                        'path': '../../pages/BookedList.js',
-                                        'regExp': ['/[#=]{1}\/booked/']
-                                    },
-                                    {
-                                        'name': 'p-subscriptions',
-                                        'path': '../../pages/SubscriptionList.js',
-                                        'regExp': ['/[#=]{1}\/subscriptions/']
-                                    }
-                                    ]">
+                                {
+                                    'name': 'p-appointment-list',
+                                    'path': '../../pages/AppointmentList.js',
+                                     'regExp': ['/[#=]{1}\/$/', '/^\/$/']
+                                },
+                                {
+                                    'name': 'p-booked',
+                                    'path': '../../pages/BookedList.js',
+                                    'regExp': ['/[#=]{1}\/booked/']
+                                },
+                                {
+                                    'name': 'p-subscriptions',
+                                    'path': '../../pages/SubscriptionList.js',
+                                    'regExp': ['/[#=]{1}\/subscriptions/']
+                                }
+                                ]">
                                 </c-router>
                             </c-subscriptions>
                         </c-booked>
@@ -54,6 +54,7 @@
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchHtml/FetchHtml.js').then(module => ['c-fetch-html', module.default]),
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchCss/FetchCss.js').then(module => ['c-fetch-css', module.default]),
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchModules/FetchModules.js').then(module => ['c-fetch-modules', module.default]),
+                import('./components/molecules/navigation/Navigation.js').then(module => ['cp-m-navigation', module.default]), 
                 import('./event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default]),
                 import('./controllers/appointments/Appointments.js').then(module => ['c-appointments', module.default]),
                 import('./controllers/booked/Booked.js').then(module => ['c-booked', module.default]),

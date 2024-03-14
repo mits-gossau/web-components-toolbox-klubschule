@@ -12,8 +12,8 @@ export default class CustomerPortalNavigation extends Shadow() {
   }
 
   connectedCallback () {
-    // if (this.shouldRenderCSS()) this.renderCSS()
-    // if (this.shouldRenderHTML()) this.renderHTML()
+    if (this.shouldRenderCSS()) this.renderCSS()
+    if (this.shouldRenderHTML()) this.renderHTML()
     this.renderHTML()
   }
 
@@ -34,7 +34,7 @@ export default class CustomerPortalNavigation extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.div
+    return !this.navigationWrapper
   }
 
   /**
@@ -57,11 +57,11 @@ export default class CustomerPortalNavigation extends Shadow() {
     /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
-        path: `${this.importMetaUrl}../../../../css/reset.css`, // no variables for this reason no namespace
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
         namespace: false
       },
       {
-        path: `${this.importMetaUrl}../../../../css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
         namespaceFallback: true
       }
     ]
@@ -81,9 +81,11 @@ export default class CustomerPortalNavigation extends Shadow() {
    * @returns void
    */
   renderHTML () {
+    console.log('nav')
+    this.navigationWrapper = this.root.querySelector('div') || document.createElement('div')
     this.html = /* html */`
           <div>
-                        <a href="?page=/appointments" route target="_self">
+                        <a href="?page=/" route target="_self">
                             Abo-Termine buchen
                         </a> -
                         <a href="?page=/booked" route target="_self">

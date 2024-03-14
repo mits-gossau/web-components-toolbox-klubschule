@@ -21,8 +21,8 @@ export default class Index extends Shadow() {
   connectedCallback () {
     this.hidden = true
     const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+    // if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+    // if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
     Promise.all(showPromises).then(() => {
       this.hidden = false
     })
@@ -73,20 +73,10 @@ export default class Index extends Shadow() {
   renderHTML () {
     this.html = /* html */`
         <section>
-            <main>
-                <div>
-                  <customer-portal-navigation></customer-portal-navigation> 
-                </div>
-          </main>
+            <main></main>
       </section>
     `
-    return this.fetchModules([
-      {
-        // @ts-ignore
-        path: `${this.importMetaUrl}../components/molecules/customerPortalNavigation/customerPortalNavigation.js?${Environment?.version || ''}`,
-        name: 'customer-portal-navigation'
-      }
-    ])
+    return this.fetchModules([])
   }
 
   get section () {

@@ -72,7 +72,6 @@ export default class AppointmentList extends Index {
   renderHTML (appointmentsData) {
     this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
     this.html = /* html */`
-        <customer-portal-navigation></customer-portal-navigation>
         <h1>Abo-Termine buchen</h1>
         <hr>
         <h2>The Dropdown</h2>
@@ -80,13 +79,7 @@ export default class AppointmentList extends Index {
         <hr>
         ${this.display_properties(appointmentsData.selectedSubscription.dayList)}
       `
-    return this.fetchModules([
-      {
-        // @ts-ignore
-        path: `${this.importMetaUrl}../components/molecules/customerPortalNavigation/customerPortalNavigation.js?${Environment?.version || ''}`,
-        name: 'customer-portal-navigation'
-      }
-    ])
+    return this.fetchModules([])
   }
 
   /**
