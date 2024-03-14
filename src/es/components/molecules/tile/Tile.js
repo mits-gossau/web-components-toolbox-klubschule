@@ -267,7 +267,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__head">
           <span class="m-tile__title">${data.title || warnMandatory + 'title'}</span>
           ${data.iconTooltip
-? `
+            ? `
               <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
                 <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
               </ks-m-tooltip>
@@ -278,8 +278,8 @@ export default class Tile extends Shadow() {
         <div class="m-tile__body">
           ${data.location?.name
             ? /* html */`
-            ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
-            <span class="m-tile__content">${data.location?.name || warnMandatory + 'location'}</span>
+              ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
+              <span class="m-tile__content">${data.location?.name || warnMandatory + 'location'}</span>
             `
             : ''
           }
@@ -296,7 +296,7 @@ export default class Tile extends Shadow() {
           <div class="m-tile__foot-left">
             <!-- Trash Icon is pre-placed for wishlist -->
             <!-- <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx> -->
-            <ks-a-button namespace="button-secondary-" color="secondary">
+            <ks-a-button namespace="button-secondary-" color="secondary" ${data.button.link ? `href=${data.button.link}` : ''}>
               <span>${data.button.text || warnMandatory + 'button.text'}</span>
               <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
             </ks-a-button>
