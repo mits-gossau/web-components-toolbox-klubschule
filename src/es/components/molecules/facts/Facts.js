@@ -24,7 +24,6 @@ export default class Facts extends Shadow() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 4rem 0 5rem;
         }
 
         :host h2 {
