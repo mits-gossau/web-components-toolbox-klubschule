@@ -1,8 +1,6 @@
 // @ts-check
 import { Shadow } from '../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
-/* global Environment */
-
 /**
 * Customer Portal
 *
@@ -14,15 +12,15 @@ export default class Index extends Shadow() {
   /**
     * @param {any} args
   */
-  constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
-  }
+  // constructor (options = {}, ...args) {
+  //   super({ importMetaUrl: import.meta.url, ...options }, ...args)
+  // }
 
-  connectedCallback () {
-    super.connectedCallback()
-  }
+  // connectedCallback () {
+  //   super.connectedCallback()
+  // }
 
-  disconnectedCallback () {
-    super.disconnectedCallback()
-  }
+  // disconnectedCallback () {
+  //   super.disconnectedCallback()
+  // }
 }

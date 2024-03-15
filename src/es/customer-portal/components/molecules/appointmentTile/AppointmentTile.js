@@ -7,13 +7,14 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 * @type {CustomElementConstructor}
 */
 export default class AppointmentTile extends Tile {
-  constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
-  }
+  // constructor (options = {}, ...args) {
+  //   super({ importMetaUrl: import.meta.url, ...options }, ...args)
+  // }
 
   connectedCallback () {
-    if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
+    super.connectedCallback()
+    // if (this.shouldRenderCSS()) this.renderCSS()
+    // if (this.shouldRenderHTML()) this.renderHTML()
   }
 
   disconnectedCallback () {}
@@ -40,6 +41,7 @@ export default class AppointmentTile extends Tile {
    * renders the css
    */
   renderCSS () {
+    super.renderCSS()
     this.css = /* css */`
       :host {}
 
@@ -57,11 +59,11 @@ export default class AppointmentTile extends Tile {
   fetchTemplate () {
     const styles = [
       {
-        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
+        path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
         namespace: false
       },
       {
-        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+        path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
         namespaceFallback: true
       }
     ]
@@ -84,7 +86,15 @@ export default class AppointmentTile extends Tile {
   renderHTML () {
     this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
     this.html = /* HTML */`
-      <div><h1>TILE!!!</h1></div>
+    <div class="m-tile">
+    <div class="m-tile__wrap">
+        <div class="m-tile__overlay"></div>
+        <div class="m-tile__head">
+          <span class="m-tile__title">hello</span>
+      </div>
+          <h1>TILE!!!</h1>
+      </div>
+    </div>
     `
   }
 }
