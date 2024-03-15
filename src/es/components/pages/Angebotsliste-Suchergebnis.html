@@ -44,25 +44,37 @@
                             </m-dialog>
                         </div>
                         <div col-lg="6" col-md="6" col-sm="12">
-                            <m-dialog namespace="dialog-top-slide-in-">
-                                <div class="container">
-                                    <a-input 
-                                        inputid="location-search" 
-                                        placeholder="Ihr Standort?" 
-                                        icon-name="Location" 
-                                        icon-size="1.5em" 
-                                        search 
-                                        submit-search="request-auto-complete" 
-                                        any-key-listener 
-                                        type="search"
-                                    ></a-input>
-                                    <div id="close">
-                                        <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                            <ks-c-auto-complete-location mock request-auto-complete="request-auto-complete-location" auto-complete="auto-complete-location">
+                                <m-dialog namespace="dialog-top-slide-in-" id="location-search">
+                                    <div class="container">
+                                        <a-input 
+                                            id="location-search"
+                                            inputid="location-search" 
+                                            placeholder="Ihr Standort?" 
+                                            icon-name="Location" 
+                                            icon-size="1.5em" 
+                                            search 
+                                            submit-search="request-auto-complete-location" 
+                                            any-key-listener 
+                                            type="search"
+                                        ></a-input>
+                                        <div id="close">
+                                            <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="container"></div>
-                                <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search"></a-input>
-                            </m-dialog>
+                                    <div class="container">
+                                        <ks-m-auto-complete-list auto-complete="auto-complete-location">
+                                            <ul>
+                                                <li id="userLocation">
+                                                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Location" size="1em"></a-icon-mdx>
+                                                    <span>Aktueller Standort</span>
+                                                </li>
+                                            </ul>
+                                        </ks-m-auto-complete-list>
+                                    </div>
+                                    <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search"></a-input>
+                                </m-dialog>
+                            </ks-c-auto-complete>
                         </div>
                     </o-grid>
                     <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">

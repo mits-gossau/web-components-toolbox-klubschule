@@ -4,18 +4,29 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class AutoCompleteList extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-
+    const locateMe = this.shadowRoot.querySelector("#userLocation")
+    if (locateMe) {
+      locateMe.addEventListener('click', () => {
+        if (navigator.geolocation)
+        {
+          // TODO trigger Filtering
+          navigator.geolocation.getCurrentPosition((position) => console.log(position.coords));
+        } else {
+          console.log("Geolocation is not supported by this browser.")
+        }
+      })
+    }
     this.autoCompleteListener = event => this.renderHTML(event.detail.fetch)
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('auto-complete', this.autoCompleteListener)
+    document.body.addEventListener(this.getAttribute('auto-complete') || 'auto-complete', this.autoCompleteListener)
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('auto-complete', this.autoCompleteListener)
+    document.body.removeEventListener(this.getAttribute('auto-complete') || 'auto-complete', this.autoCompleteListener)
   }
 
   shouldRenderCSS () {

@@ -38,14 +38,14 @@ export default class WithFacet extends Shadow() {
 
     this.url = new URL(window.location.href)
     this.params = new URLSearchParams(this.url.search)
-    console.log('url + params', this.url, this.params.toString())
+    // console.log('url + params', this.url, this.params.toString())
     const withFacetCache = new Map()
 
     this.isMocked = this.hasAttribute('mock')
     this.requestWithFacetListener = (event) => {
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-      console.log('---------------------------------event', event)
+      // console.log('---------------------------------event', event)
 
       const constructFilterItem = (filterItem) => {
         return filterItem
@@ -130,7 +130,7 @@ export default class WithFacet extends Shadow() {
             // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
             : withFacetCache.set(request, fetch(url, requestInit).then(response => {
               if (response.status >= 200 && response.status <= 299) {
-                console.log('response (WithFacet.js)', response)
+                // console.log('response (WithFacet.js)', response)
                 return response.json()
               }
               throw new Error(response.statusText)
@@ -140,12 +140,12 @@ export default class WithFacet extends Shadow() {
               let numberOfOffers = 0
 
               filterData.forEach(filterItem => {
-                console.log('>>> ', filterItem.urlpara, ' <<<', filterItem)
+                // console.log('>>> ', filterItem.urlpara, ' <<<', filterItem)
 
                 // set selected filter to url params
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   const currentParams = this.params.get(filterItem.urlpara)?.split(',')
-                  console.log('currentParams', currentParams)
+                  // console.log('currentParams', currentParams)
 
                   filterItem.children.forEach(child => {
                     if (child.selected) {
@@ -153,28 +153,28 @@ export default class WithFacet extends Shadow() {
                       if (child.count > 0) {
                         numberOfOffers += child.count
                       }
-                      console.log('selected:', child.urlpara)
+                      // console.log('selected:', child.urlpara)
                       const currentValues = this.params.get(filterItem.urlpara) || ''
 
                       if (!currentValues || !currentValues.includes(child.urlpara)) {
-                        console.log('setting:', child.urlpara)
+                        // console.log('setting:', child.urlpara)
                         this.params.set(filterItem.urlpara, `${currentValues + ',' || ''}${child.urlpara}`)
                       }
                     } else {
                       const currentValues = this.params.get(filterItem.urlpara)?.split(',')
                       let index
                       if (currentValues) {
-                        console.log(currentValues, index, currentValues.indexOf(child.urlpara))
+                        // console.log(currentValues, index, currentValues.indexOf(child.urlpara))
 
                         if (currentValues.includes(child.urlpara)) {
-                          console.log('removing:', child.urlpara)
+                          // console.log('removing:', child.urlpara)
                           index = currentValues.indexOf(child.urlpara)
                           currentValues.splice(index, 1)
 
                           this.params.set(filterItem.urlpara, currentValues.join(','))
                         }
                         if (this.params.get(filterItem.urlpara) === '') {
-                          console.log('deleting:', filterItem.urlpara)
+                          // console.log('deleting:', filterItem.urlpara)
                           this.params.delete(filterItem.urlpara)
                         }
                       }
