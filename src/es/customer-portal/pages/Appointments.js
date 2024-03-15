@@ -1,6 +1,7 @@
 // @ts-check
 import Index from './Index.js'
 
+/* global Environment */
 /* global CustomEvent */
 
 /**
@@ -67,19 +68,25 @@ export default class AppointmentList extends Index {
   /**
    * renders the html
    * @return void
-   * @param {{ selectedSubscription: { dayList: any; }; filters: {subscriptions: any;} }} appointmentsData
+   * @param {{ filters: { subscriptions: any; }; selectedSubscription: { dayList: any; }; }} appointmentsData
    */
   renderHTML (appointmentsData) {
-    this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
     this.html = /* html */`
         <h1>Abo-Termine buchen</h1>
         <hr>
         <h2>The Dropdown</h2>
         ${this.display_nested_objects(appointmentsData.filters.subscriptions)}
         <hr>
+        <m-appointments-list></m-appointments-list>
         ${this.display_properties(appointmentsData.selectedSubscription.dayList)}
       `
-    return this.fetchModules([])
+    return this.fetchModules([
+      {
+        // @ts-ignore
+        path: `${this.importMetaUrl}../components/molecules/appointmentsList/AppointmentsList.js?${Environment?.version || ''}`,
+        name: 'm-appointments-list'
+      }
+    ])
   }
 
   /**

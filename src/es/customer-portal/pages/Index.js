@@ -19,68 +19,10 @@ export default class Index extends Shadow() {
   }
 
   connectedCallback () {
-    this.hidden = true
-    const showPromises = []
-    // if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    // if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-    Promise.all(showPromises).then(() => {
-      this.hidden = false
-    })
+    super.connectedCallback()
   }
 
   disconnectedCallback () {
     super.disconnectedCallback()
-  }
-
-  /**
-    * evaluates if a render is necessary
-    *
-    * @return {boolean}
-    */
-  shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
-  }
-
-  /**
-    * evaluates if a render is necessary
-    *
-    * @return {boolean}
-    */
-  shouldRenderHTML () {
-    // @ts-ignore
-    return !this.section
-  }
-
-  /**
-    * renders the css
-    *
-    * @return {void}
-    */
-  renderCSS () {
-    this.css = /* css */ `
-      :host {}
-      @media only screen and (max-width: _max-width_) {
-        :host {}
-     }
-    `
-  }
-
-  /**
-    * renders the html
-    *
-    * @return {Promise<void>}
-    */
-  renderHTML () {
-    this.html = /* html */`
-        <section>
-            <cp-m-navigation></cp-m-navigation>
-            <main></main>
-      </section>
-    `
-    return this.fetchModules([])
-  }
-
-  get section () {
-    return this.root.querySelector('section')
   }
 }
