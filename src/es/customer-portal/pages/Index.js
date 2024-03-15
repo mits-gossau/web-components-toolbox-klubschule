@@ -73,6 +73,7 @@ export default class Index extends Shadow() {
   renderHTML () {
     this.html = /* html */`
         <section>
+            <cp-m-navigation></cp-m-navigation>
             <main></main>
       </section>
     `

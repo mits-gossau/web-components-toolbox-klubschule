@@ -6,7 +6,10 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 * @class CustomerPortalNavigation
 * @type {CustomElementConstructor}
 */
-export default class CustomerPortalNavigation extends Shadow() {
+export default class Navigation extends Shadow() {
+  /**
+   * @param {any} args
+   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
@@ -14,10 +17,9 @@ export default class CustomerPortalNavigation extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    this.renderHTML()
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () { }
 
   /**
    * evaluates if a render is necessary
@@ -42,7 +44,10 @@ export default class CustomerPortalNavigation extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host {}
+      :host {
+        display:flex;
+        background-color:#dfdfdf;
+      }
       @media only screen and (max-width: _max-width_) {
         :host {}
       }
@@ -66,7 +71,7 @@ export default class CustomerPortalNavigation extends Shadow() {
       }
     ]
     switch (this.getAttribute('namespace')) {
-      case 'customer-portal-navigation-default-':
+      case 'navigation-default-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
@@ -81,19 +86,18 @@ export default class CustomerPortalNavigation extends Shadow() {
    * @returns void
    */
   renderHTML () {
-    console.log('nav')
     this.navigationWrapper = this.root.querySelector('div') || document.createElement('div')
-    this.html = /* html */`
-          <div>
-                        <a href="?page=/" route target="_self">
-                            Abo-Termine buchen
-                        </a> -
-                        <a href="?page=/booked" route target="_self">
-                            Gebuchte Termine
-                        </a> -
-                        <a href="?page=/subscriptions" route target="_self">
-                            Meine Abonnemente
-                        </a>
-                    </div>`
+    this.html = /* html */ `
+      <div>
+        <a href="?page=/" route target="_self">
+          Abo-Termine buchen
+        </a> -
+        <a href="?page=/booked" route target="_self">
+          Gebuchte Termine
+        </a> -
+        <a href="?page=/subscriptions" route target="_self">
+          Meine Abonnemente
+        </a>
+      </div>`
   }
 }
