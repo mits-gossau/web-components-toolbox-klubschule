@@ -90,9 +90,8 @@ export default class AppointmentTile extends Tile {
     <div class="m-tile__wrap">
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
-          <span class="m-tile__title">hello</span>
+          <span class="m-tile__title">hello title</span>
       </div>
-          <h1>TILE!!!</h1>
       </div>
     </div>
     `

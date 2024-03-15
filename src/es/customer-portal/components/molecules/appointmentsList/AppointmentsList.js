@@ -90,10 +90,11 @@ export default class AppointmentsList extends Shadow() {
         name: 'm-appointment-tile'
       }
     ])
-    this.html = /* html */ `
+    return Promise.all([fetchModules]).then(() => {
+      this.html = /* html */ `
       <div>
-        <h1>hello</h1>
         <m-appointment-tile></m-appointment-tile>
       </div>`
+    })
   }
 }
