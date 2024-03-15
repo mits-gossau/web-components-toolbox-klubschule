@@ -63,6 +63,7 @@ export default class Heading extends Shadow() {
     this.css = /* css */`
       :host {
         ${this.getAttribute('color') ? `--h-color: ${this.getAttribute('color')};` : ''};
+        ${this.getAttribute('content-stage') ? `font: var(--mdx-sys-font-flex-large-display3);` : ''};
         --h-margin: var(--h-margin-custom, var(--mdx-sys-spacing-flex-s) 0);
         --h-padding: 0;
 
@@ -179,6 +180,12 @@ export default class Heading extends Shadow() {
         padding: var(--display3-padding);
       }
 
+      /* content stage */
+      :host([content-stage]) [content-stage] {
+        font: var(--mdx-sys-font-flex-large-display3);
+        margin-top: 1rem;
+      }
+
       /* border top */
       :host([border-top]) [border-top]::before {
         background-color: var(--h-border-top-color, var(--mdx-sys-color-accent-1-default));
@@ -250,6 +257,11 @@ export default class Heading extends Shadow() {
           display: block;
           height: .25rem;
           width: 2rem;
+        }
+
+        /* content stage */
+        :host([content-stage]) [content-stage] {
+          font: var(--mdx-sys-font-flex-small-display3);
         }
       }
     `
