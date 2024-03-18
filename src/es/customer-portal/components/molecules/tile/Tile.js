@@ -100,7 +100,7 @@ export default class AppointmentTile extends Tile {
     <div class="m-tile__wrap">
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
-          <span class="m-tile__title">${content?.courseTitle}</span>
+          <span class="m-tile__title">${content?.courseTitle} (${content?.courseType}_${content?.courseId})</span>
       </div>
       </div>
     </div>

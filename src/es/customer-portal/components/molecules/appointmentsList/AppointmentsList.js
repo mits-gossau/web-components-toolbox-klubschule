@@ -136,14 +136,14 @@ export default class AppointmentsList extends Shadow() {
       // create dropdown
       // this.html =
       console.log(children[0][0])
-      const dayList = this.renderDayList(data.selectedSubscription.dayList, children[0][0])
+      // const dayList = this.renderDayList(data.selectedSubscription.dayList, children[0][0])
 
       this.html = /* html */ `
       <div>
        <h2>1 Million Termine</h2>
        ${this.renderFilterSubscriptions(data.filters.subscriptions)}
        <hr>
-       ${dayList}
+       ${this.renderDayList(data.selectedSubscription.dayList, children[0][0])}
       </div>`
     })
   }
@@ -172,18 +172,19 @@ export default class AppointmentsList extends Shadow() {
 
       // Loop over the subscriptionCourseAppointments for the current day
       day.subscriptionCourseAppointments.forEach(appointment => {
-      //   console.log(`
-      // <div>
-      //   <h3>${appointment.courseTitle}</h3>
-      //   <p>Location: ${appointment.courseLocation}</p>
-      //   <p>Time: ${appointment.courseAppointmentTimeFrom} - ${appointment.courseAppointmentTimeTo}</p>
-      //   <p>Instructor: ${appointment.instructorDescription}</p>
-      //   <p>Price: ${appointment.lessonPrice}</p>
+        //   console.log(`
+        // <div>
+        //   <h3>${appointment.courseTitle}</h3>
+        //   <p>Location: ${appointment.courseLocation}</p>
+        //   <p>Time: ${appointment.courseAppointmentTimeFrom} - ${appointment.courseAppointmentTimeTo}</p>
+        //   <p>Instructor: ${appointment.instructorDescription}</p>
+        //   <p>Price: ${appointment.lessonPrice}</p>
         // </div>`)
-        // const newsEle = new child[0].constructorClass(news, { namespace, mobileBreakpoint: this.mobileBreakpoint }) // eslint-disable-line
 
         const tile = new tileComponent.constructorClass({ namespace: 'tile-default-' }) // eslint-disable-line
-        tile.setAttribute('data', `${JSON.stringify(appointment)}`)
+        const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
+
+        tile.setAttribute('data', `${escapeForHtml(JSON.stringify(appointment))}`)
         dayWrapper.appendChild(tile)
       })
       list.push(dayWrapper.innerHTML)
