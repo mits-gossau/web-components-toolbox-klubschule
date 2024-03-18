@@ -309,3 +309,10 @@
 .class-name {
   list-style-type: decimal;
 }
+
+
+@media screen and (min-width: 1440px) {
+  :root {
+    --body-section-default-width: 81.25%;
+  }
+}
