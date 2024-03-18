@@ -44,11 +44,11 @@
                             </m-dialog>
                         </div>
                         <div col-lg="6" col-md="6" col-sm="12">
-                            <ks-c-auto-complete-location mock request-auto-complete="request-auto-complete-location" auto-complete="auto-complete-location">
-                                <m-dialog namespace="dialog-top-slide-in-" id="location-search">
+                            <ks-c-auto-complete-location api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s" request-auto-complete="request-auto-complete-location" auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
+                                <m-dialog namespace="dialog-top-slide-in-" id="location-search" close-event-name="close-location-dialog">
                                     <div class="container">
                                         <a-input 
-                                            id="location-search"
+                                            id="location-search-input"
                                             inputid="location-search" 
                                             placeholder="Ihr Standort?" 
                                             icon-name="Location" 
@@ -57,22 +57,24 @@
                                             submit-search="request-auto-complete-location" 
                                             any-key-listener 
                                             type="search"
+                                            delete-listener
+                                            answer-event-name="location-change"
                                         ></a-input>
                                         <div id="close">
                                             <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                                         </div>
                                     </div>
                                     <div class="container">
-                                        <ks-m-auto-complete-list auto-complete="auto-complete-location">
+                                        <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
                                             <ul>
                                                 <li id="userLocation">
-                                                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Location" size="1em"></a-icon-mdx>
+                                                    <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
                                                     <span>Aktueller Standort</span>
                                                 </li>
                                             </ul>
                                         </ks-m-auto-complete-list>
                                     </div>
-                                    <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search"></a-input>
+                                    <a-input id="show-modal-location" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search"answer-event-name="location-change"></a-input>
                                 </m-dialog>
                             </ks-c-auto-complete>
                         </div>
