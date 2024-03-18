@@ -11,13 +11,15 @@ export default class AppointmentTile extends Tile {
   //   super({ importMetaUrl: import.meta.url, ...options }, ...args)
   // }
 
-  connectedCallback () {
-    super.connectedCallback()
-    // if (this.shouldRenderCSS()) this.renderCSS()
-    // if (this.shouldRenderHTML()) this.renderHTML()
-  }
+  // connectedCallback () {
+  //   // super.connectedCallback()
+  //   // if (this.shouldRenderCSS()) this.renderCSS()
+  //   // if (this.shouldRenderHTML()) this.renderHTML()
+  // }
 
-  disconnectedCallback () {}
+  // disconnectedCallback () {
+  //   super.disconnectedCallback()
+  // }
 
   /**
    * evaluates if a render is necessary
@@ -43,14 +45,19 @@ export default class AppointmentTile extends Tile {
   renderCSS () {
     super.renderCSS()
     this.css = /* css */`
-      :host {}
+      :host {
+           background:pink;
+           display:flex;
+      }
 
       @media only screen and (max-width: _max-width_) {
-        :host  {}
+        :host  {
+       
+        }
 
       }
     `
-    return this.fetchTemplate()
+    // return this.fetchTemplate()
   }
 
   /**
@@ -82,15 +89,18 @@ export default class AppointmentTile extends Tile {
   /**
    * Render HTML
    * @returns Promise<void>
-   */
+  */
   renderHTML () {
+    // console.log(this.getAttribute('data'))
+    const content = Tile.parseAttribute(this.getAttribute('data'))
+    // super.renderHTML()
     this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
     this.html = /* HTML */`
     <div class="m-tile">
     <div class="m-tile__wrap">
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
-          <span class="m-tile__title">hello title</span>
+          <span class="m-tile__title">${content?.courseTitle}</span>
       </div>
       </div>
     </div>

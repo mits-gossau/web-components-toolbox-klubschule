@@ -1,6 +1,8 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/* global CustomEvent */
+
 /**
 * @export
 * @class AppointmentsList
@@ -15,11 +17,48 @@ export default class AppointmentsList extends Shadow() {
   }
 
   connectedCallback () {
-    if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
+    // if (this.shouldRenderCSS()) this.renderCSS()
+    // if (this.shouldRenderHTML()) this.renderHTML()
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
+    this.hidden = true
+    const showPromises = []
+    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+    Promise.all(showPromises).then(() => {
+      this.hidden = false
+      this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
+        {
+          detail: {
+            subscriptionType: '',
+            userId: ''
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }
+      ))
+    })
   }
 
-  disconnectedCallback () { }
+  disconnectedCallback () {
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
+  }
+
+  subscriptionCourseAppointmentsListener = async (/** @type {{ detail: { fetch: Promise<any>; }; }} */ event) => {
+    console.log('subscriptionCourseAppointmentsListener', event)
+    try {
+      const appointments = await event.detail.fetch
+      console.log(appointments)
+      if (appointments.errorCode !== 0) {
+        throw new Error(`${appointments.errorMessage}`)
+      }
+      this.html = ''
+      this.renderHTML(appointments)
+    } catch (error) {
+      console.error(error)
+      this.html = ''
+      this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
+    }
+  }
 
   /**
    * evaluates if a render is necessary
@@ -56,7 +95,6 @@ export default class AppointmentsList extends Shadow() {
    * fetches the template
    */
   fetchTemplate () {
-    /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
         path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
@@ -82,19 +120,75 @@ export default class AppointmentsList extends Shadow() {
    * Render HTML
    * @returns void
    */
-  renderHTML () {
+  renderHTML (data) {
+    console.log('data', data)
     this.listWrapper = this.root.querySelector('div') || document.createElement('div')
     const fetchModules = this.fetchModules([
       {
-        path: `${this.importMetaUrl}'../../../appointmentTile/AppointmentTile.js`,
-        name: 'm-appointment-tile'
+        path: `${this.importMetaUrl}'../../../tile/Tile.js`,
+        name: 'm-tile'
       }
     ])
-    return Promise.all([fetchModules]).then(() => {
+    return Promise.all([fetchModules]).then((children) => {
+      // ${this.display_nested_objects(appointmentsData.filters.subscriptions)}
+      // ${this.display_properties(appointmentsData.selectedSubscription.dayList)}
+
+      // create dropdown
+      // this.html =
+      console.log(children[0][0])
+      const dayList = this.renderDayList(data.selectedSubscription.dayList, children[0][0])
+
       this.html = /* html */ `
       <div>
-        <m-appointment-tile></m-appointment-tile>
+       <h2>1 Million Termine</h2>
+       ${this.renderFilterSubscriptions(data.filters.subscriptions)}
+       <hr>
+       ${dayList}
       </div>`
     })
+  }
+
+  renderFilterSubscriptions (subscriptionsData) {
+    const select = document.createElement('select')
+    select.id = 'filters-subscriptions'
+
+    subscriptionsData.forEach(item => {
+      const option = document.createElement('option')
+      option.value = item.subscriptionId
+      option.textContent = item.subscriptionDescription
+      select.appendChild(option)
+    })
+
+    const sortWrapper = document.createElement('div')
+    sortWrapper.innerHTML = select.outerHTML
+    return sortWrapper.innerHTML
+  }
+
+  renderDayList (dayList, tileComponent) {
+    const list = []
+    dayList.forEach(day => {
+      const dayWrapper = document.createElement('div')
+      dayWrapper.innerHTML = `<h1>${day.weekday}</h1>`
+
+      // Loop over the subscriptionCourseAppointments for the current day
+      day.subscriptionCourseAppointments.forEach(appointment => {
+      //   console.log(`
+      // <div>
+      //   <h3>${appointment.courseTitle}</h3>
+      //   <p>Location: ${appointment.courseLocation}</p>
+      //   <p>Time: ${appointment.courseAppointmentTimeFrom} - ${appointment.courseAppointmentTimeTo}</p>
+      //   <p>Instructor: ${appointment.instructorDescription}</p>
+      //   <p>Price: ${appointment.lessonPrice}</p>
+        // </div>`)
+        // const newsEle = new child[0].constructorClass(news, { namespace, mobileBreakpoint: this.mobileBreakpoint }) // eslint-disable-line
+
+        const tile = new tileComponent.constructorClass({ namespace: 'tile-default-' }) // eslint-disable-line
+        tile.setAttribute('data', `${JSON.stringify(appointment)}`)
+        dayWrapper.appendChild(tile)
+      })
+      list.push(dayWrapper.innerHTML)
+    })
+    // console.log(list)
+    return list
   }
 }

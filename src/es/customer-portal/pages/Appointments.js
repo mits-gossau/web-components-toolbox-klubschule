@@ -2,7 +2,6 @@
 import Index from './Index.js'
 
 /* global Environment */
-/* global CustomEvent */
 
 /**
  * Appointment List
@@ -14,51 +13,23 @@ import Index from './Index.js'
 export default class AppointmentList extends Index {
   /**
    * @param {any} args
-  */
+   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
   connectedCallback () {
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    this.hidden = true
-    const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    Promise.all(showPromises).then(() => {
-      this.hidden = false
-      this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
-        {
-          detail: {
-            subscriptionType: '',
-            userId: ''
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }
-      ))
-    })
+    if (this.shouldRenderHTML()) this.renderHTML()
+    if (this.shouldRenderCSS()) this.renderCSS()
   }
 
-  disconnectedCallback () {
-    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-  }
-
-  subscriptionCourseAppointmentsListener = async (/** @type {{ detail: { fetch: Promise<any>; }; }} */ event) => {
-    console.log('subscriptionCourseAppointmentsListener', event)
-    try {
-      const appointments = await event.detail.fetch
-      console.log(appointments)
-      if (appointments.errorCode !== 0) {
-        throw new Error(`${appointments.errorMessage}`)
-      }
-      this.html = ''
-      this.renderHTML(appointments)
-    } catch (error) {
-      console.error(error)
-      this.html = ''
-      this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
-    }
+  /**
+   * evaluates if a render is necessary
+   *
+   * @return {boolean}
+   */
+  shouldRenderHTML () {
+    return !this.listWrapper
   }
 
   shouldRenderCSS () {
@@ -68,25 +39,19 @@ export default class AppointmentList extends Index {
   /**
    * renders the html
    * @return void
-   * @param {{ filters: { subscriptions: any; }; selectedSubscription: { dayList: any; }; }} appointmentsData
    */
-  renderHTML (appointmentsData) {
-    this.html = /* html */`
-        <h1>Abo-Termine buchen</h1>
-        <hr>
-        <h2>The Dropdown</h2>
-        ${this.display_nested_objects(appointmentsData.filters.subscriptions)}
-        <hr>
-        <m-appointments-list></m-appointments-list>
-        ${this.display_properties(appointmentsData.selectedSubscription.dayList)}
-      `
-    return this.fetchModules([
+  async renderHTML () {
+    this.listWrapper = this.root.querySelector('div') || document.createElement('div')
+    const fetchModules = this.fetchModules([
       {
-        // @ts-ignore
-        path: `${this.importMetaUrl}../components/molecules/appointmentsList/AppointmentsList.js?${Environment?.version || ''}`,
+        path: `${this.importMetaUrl}../components/molecules/appointmentsList/AppointmentsList.js${Environment?.version || ''}`,
         name: 'm-appointments-list'
       }
     ])
+    await Promise.all([fetchModules])
+    this.html = /* html */ `
+        <m-appointments-list namespace="appointments-list-default-"></m-appointments-list>
+      `
   }
 
   /**
@@ -97,9 +62,6 @@ export default class AppointmentList extends Index {
   renderCSS () {
     this.css = /* css */`
     :host {}
-    :host h1 {
-      font-size:50px;
-    }
     @media only screen and (max-width: _max-width_) {
       :host {}
     }
