@@ -96,6 +96,14 @@ export default class KsBodyStyle extends BodyStyle {
             margin-top: var(--mdx-sys-spacing-flex-m);
             margin-bottom: var(--mdx-sys-spacing-flex-m);
         }
+        :host([has-background]) > a:first-child[namespace="teaser-fullwidth-"][wrapper],
+        :host([has-background]) > a:first-child[namespace="teaser-text-image-"][wrapper] {
+            margin-top: 0;
+        }
+        :host([has-background]) > a.ks-o-body-section__last-child[namespace="teaser-fullwidth-"][wrapper],
+        :host([has-background]) > a.ks-o-body-section__last-child[namespace="teaser-text-image-"][wrapper] {
+            margin-bottom: 0;
+        }
 
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */
         :host > [debug-ruler] {
