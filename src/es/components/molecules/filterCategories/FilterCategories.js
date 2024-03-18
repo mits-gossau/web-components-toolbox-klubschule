@@ -1,4 +1,7 @@
 // @ts-check
+
+/* global CustomEvent */
+
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /**
@@ -78,7 +81,7 @@ export default class FilterCategories extends Shadow() {
         }
       ])
     ]).then(([response]) => {
-      console.log('response (FilterCategories.js)', response)
+      // console.log('response (FilterCategories.js)', response)
       const filterData = response.filters
       // Backend should give us the data sorted, but in case it doesn't, we can sort it here
       // filterData.sort((a, b) => a.sort - b.sort);

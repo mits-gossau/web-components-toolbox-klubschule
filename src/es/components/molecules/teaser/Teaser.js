@@ -1,7 +1,7 @@
 // @ts-check
 import Teaser from '../../web-components-toolbox/src/es/components/molecules/teaser/Teaser.js'
 
-/* global CustomEvent */
+/* global self */
 
 /**
  * Creates a Teaser
@@ -109,6 +109,10 @@ export default class KsTeaser extends Teaser {
           display: block;
           overflow: hidden;
           ${(this.namespace === 'teaser-text-image-' && this.getAttribute('text-position') === 'left') ? 'order: 2;' : ''}
+        }
+
+        :host figure {
+          width: 100%;
         }
 
         :host figure,

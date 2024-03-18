@@ -13,12 +13,14 @@
         alt="randomized image">
     </a-picture>
     <p class="topline">
-        <a href="" alt=""><a-icon-mdx icon-name="ArrowLeft" size="1em" icon-size='24x24'></a-icon-mdx> <span>Back Link</span></a>
+        <ks-a-back-link href="#" alt="Alternative Text for Backlink">
+            Back Link
+        </ks-a-back-link>
     </p>
     <ks-a-heading tag="h1" display-2>
         Das ist eine Stage mit einer etwas längeren Headline.
     </ks-a-heading>
-    <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
+    <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" force submit-search="open-main-search" search delete-listener type="search"></a-input>
 </ks-m-stage>
 
 <br />
@@ -41,7 +43,7 @@
     <ks-a-heading tag="h1" display-2>
         Das ist eine Stage
     </ks-a-heading>
-    <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
+    <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" force submit-search="open-main-search" search delete-listener type="search"></a-input>
 </ks-m-stage>
 
 <br />
@@ -65,7 +67,7 @@
     <ks-a-heading tag="h1" display-2>
         Das ist eine Stage
     </ks-a-heading>
-    <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
+    <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" force submit-search="open-main-search" search delete-listener type="search"></a-input>
 </ks-m-stage>
 
 <br />
@@ -80,9 +82,31 @@
 
 <ks-m-stage namespace="stage-title-">
     <p class="topline">
+        <ks-a-back-link href="#" alt="Alternative Text for Backlink">
+            Back Link
+        </ks-a-back-link>
+    </p>
+    <ks-a-heading tag="h1" display-3 border-top>
+        Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    </ks-a-heading>
+    <a-picture
+        picture-load 
+        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A" 
+        alt="randomized image">
+    </a-picture>
+</ks-m-stage>
+
+<ks-a-heading tag="h2">
+    Title Stage IBAW Anpassung
+</ks-a-heading>
+<br />
+<br />
+
+<ks-m-stage namespace="stage-title-">
+    <p class="topline">
         <a href="" alt=""><a-icon-mdx icon-name="ArrowLeft" size="1em" icon-size='24x24'></a-icon-mdx> <span>Back Link</span></a>
     </p>
-    <ks-a-heading tag="h1" display-3>
+    <ks-a-heading tag="h1" display-3 border-top brand="ibaw">
         Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
     </ks-a-heading>
     <a-picture

@@ -1,5 +1,7 @@
 // @ts-check
 
+/* global CustomEvent */
+
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class TileFactory extends Shadow() {
@@ -122,6 +124,7 @@ export default class TileFactory extends Shadow() {
           ${this.fillGeneralTileInfo(course)}
         }"></ks-m-tile>`), '<section>') + '</section>'
     }).catch(error => {
+      console.error(error)
       this.html = ''
       this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}<br>${error}</span>`
     })
@@ -137,8 +140,9 @@ export default class TileFactory extends Shadow() {
         'badge': '${course.eTyp ? course.eTyp : ''}'
       },
       'button': {
-        'text': '${course.stateDesc}',
+        'text': '${course.button.text}',
         'iconName': 'ArrowRight'
+        ${course.button.link ? `, 'link': '${course.button.link}'`: ''}
       },
       'icons': [
         {
@@ -151,8 +155,8 @@ export default class TileFactory extends Shadow() {
         }
       ],
       'price': {
-        'from': '${course.pricetyp}',
-        'amount': '${course.price}',
+        'from': '${course.price.pre}',
+        'amount': '${course.price.amount}',
         'per': 'Semester'
       }
     `

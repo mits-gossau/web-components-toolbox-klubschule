@@ -1,12 +1,114 @@
 <ks-m-login namespace="login-default-" setup="{'env': 'local', 'theme': 'mgb'}"
     links="'{ label: 'Newsletter', link: 'https://www.alnatura.ch/aktuelles/newsletter/newsletter-anmeldung', category: '' }'"
     profile-flyout>
-    <a class="only-desktop" href="">Über uns</a>
-    <a class="only-desktop" href="">Zusätzliche Services</a>
-    <a>
-        <a-icon-mdx icon-name="Heart" size="1.5em" rotate="0" class="active-notification"></a-icon-mdx>
-    </a>
-    <a>
-        <a-icon-mdx icon-name="Search" size="1.5em" rotate="0"></a-icon-mdx>
-    </a>
+    <section>
+        <a class="only-desktop" href="">Über uns</a>
+        <a class="only-desktop" href="">Zusätzliche Services</a>
+        <a>
+            <a-icon-mdx icon-name="Heart" size="1.5em" rotate="0" custom-notification='{
+        "height":".4rem",
+        "width":".4rem",
+        "background":"red",
+        "borderRadius":"50%",
+        "outline":"solid 2px white",
+        "right":"-2px",
+        "top":"1px"}'>
+            </a-icon-mdx>
+        </a>
+        <m-dialog namespace="dialog-top-slide-in-" show-event-name="open-main-search" close-other-flyout>
+            <div></div>
+            <div class="container">
+                <a-input inputid="location-search" autofocus placeholder="Ihr Standort?" icon-name="Location"
+                    icon-size="1.5em" search submit-search="request-auto-complete" any-key-listener type="search"
+                    autofocus></a-input>
+                <div id="close">
+                    <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+                </div>
+            </div>
+            <div class="container">
+                <ks-m-auto-complete-list>
+                    <div>
+                        <ul>
+                            <li>
+                                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Search" size="1em"></a-icon-mdx>
+                                <span>Deutsch</span>
+                            </li>
+                            <li>
+                                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Search" size="1em"></a-icon-mdx>
+                                <span>Deutschschweiz</span>
+                            </li>
+                            <li>
+                                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Search" size="1em"></a-icon-mdx>
+                                <span>Bedeutungsnuancen</span>
+                            </li>
+                            <li>
+                                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em"></a-icon-mdx>
+                                <span>Deutsch Niveau A1</span>
+                            </li>
+                            <li>
+                                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em"></a-icon-mdx>
+                                <span>Deutsch Niveau A2</span>
+                            </li>
+                        </ul>
+                        <div class="content">
+                            <span class="heading">Weitere Inhalte</span>
+                            <ul class="list">
+                                <li>
+                                    <a-picture picture-load defaultSource="http://via.placeholder.com/200x200"
+                                        alt="more content"></a-picture>
+                                    <div>
+                                        <span class="title">Lorem Ipsum Headline</span>
+                                        <span class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <span class="title">Lorem Ipsum Headline</span>
+                                        <span class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a-picture picture-load defaultSource="http://via.placeholder.com/200x200"
+                                        alt="more content"></a-picture>
+                                    <div>
+                                        <span class="title">Lorem Ipsum Headline</span>
+                                        <span class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a-picture picture-load defaultSource="http://via.placeholder.com/200x200"
+                                        alt="more content"></a-picture>
+                                    <div>
+                                        <span class="title">Lorem Ipsum Headline</span>
+                                        <span class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a href="#">
+                                Link Text
+                                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em"></a-icon-mdx>
+                            </a>
+                        </div>
+                    </div>
+                </ks-m-auto-complete-list>
+            </div>
+            <a id="show-modal">
+                <a-icon-mdx icon-name="Search" size="1.5em" rotate="0"></a-icon-mdx>
+            </a>
+        </m-dialog>
+
+        <ks-m-sort class="only-desktop" namespace="sort-default-" icon-size="1.5rem" button-span-padding="0 0.3rem 0 0"
+            close-event-name="close-other-flyout">
+            <ul main-text="Deutsch">
+                <li active>Deutsch</li>
+                <li>Englisch</li>
+                <li>Français</li>
+                <li>Italiano</li>
+            </ul>
+        </ks-m-sort>
+    </section>
 </ks-m-login>

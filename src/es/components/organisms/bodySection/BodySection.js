@@ -1,10 +1,6 @@
 // @ts-check
 import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js'
 
-/* global location */
-/* global self */
-/* global CustomEvent */
-
 /**
  *
  * @export
@@ -40,16 +36,16 @@ export default class KsBodyStyle extends BodyStyle {
         }
 
         :host([variant=default]) > * {
-            width: 86.666%;
+            width: var(--body-section-default-width, 86.666%);
         }
         :host([variant=default]) > [wider] {
             width: calc(100% - 2rem);
         }
         :host([variant=narrow]) > * {
-            width: 57.222%;
+            width: var(--body-section-narrow-width, 57.222%);
         }
         :host([variant=narrow]) > [wider] {
-            width: 86.666%;
+            width: var(--body-section-default-width, 86.666%);
         }
         :host([variant=full]) > * {
             width: 100%;
@@ -85,7 +81,7 @@ export default class KsBodyStyle extends BodyStyle {
 
         :host([variant=default]) > [namespace="teaser-fullwidth-"],
         :host([variant=narrow]) > [namespace="teaser-fullwidth-"] {
-            width: calc(86.666% + var(--mdx-sys-spacing-fix-m) * 2);
+            width: calc(var(--body-section-default-width, 86.666%) + var(--mdx-sys-spacing-fix-m) * 2);
         }
 
         /* custom element spacings */
@@ -107,6 +103,7 @@ export default class KsBodyStyle extends BodyStyle {
             inset: 0;
             margin: auto;
             z-index: 2;
+            pointer-events: none;
         }
         :host > [debug-ruler]::before {
             content: '';

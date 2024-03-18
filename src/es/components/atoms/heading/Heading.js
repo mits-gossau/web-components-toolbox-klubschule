@@ -63,6 +63,7 @@ export default class Heading extends Shadow() {
     this.css = /* css */`
       :host {
         ${this.getAttribute('color') ? `--h-color: ${this.getAttribute('color')};` : ''};
+        ${this.getAttribute('content-stage') ? `font: var(--mdx-sys-font-flex-large-display3);` : ''};
         --h-margin: var(--h-margin-custom, var(--mdx-sys-spacing-flex-s) 0);
         --h-padding: 0;
 
@@ -179,6 +180,12 @@ export default class Heading extends Shadow() {
         padding: var(--display3-padding);
       }
 
+      /* content stage */
+      :host([content-stage]) [content-stage] {
+        font: var(--mdx-sys-font-flex-large-display3);
+        margin-top: 1rem;
+      }
+
       /* border top */
       :host([border-top]) [border-top]::before {
         background-color: var(--h-border-top-color, var(--mdx-sys-color-accent-1-default));
@@ -200,6 +207,7 @@ export default class Heading extends Shadow() {
         background: var(--mdx-sys-color-accent-1-default);
       }
       
+      :host([centered][border-top][brand=ibaw]) [border-top]::after,
       :host([border-top][brand=ibaw]) [border-top]::before {
         content: unset;
       }
@@ -212,6 +220,19 @@ export default class Heading extends Shadow() {
         margin-left: 0.25em;
         background-size: contain;
         background-image: var(--ibaw-title-brand-shape);
+        background-repeat: no-repeat;
+      }
+
+      :host([centered][border-top][brand=ibaw]) [border-top]::before {
+        content: '';
+        display: block;
+        width: 0.622em;
+        height: 0.703em;
+        margin-left: auto;
+        background-size: contain;
+        background-image: var(--ibaw-title-brand-shape);
+        background-color: transparent; 
+        background-repeat: no-repeat;
       }
 
       :host(:first-child) > * {
@@ -236,6 +257,11 @@ export default class Heading extends Shadow() {
           display: block;
           height: .25rem;
           width: 2rem;
+        }
+
+        /* content stage */
+        :host([content-stage]) [content-stage] {
+          font: var(--mdx-sys-font-flex-small-display3);
         }
       }
     `
