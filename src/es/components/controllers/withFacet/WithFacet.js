@@ -52,27 +52,29 @@ export default class WithFacet extends Shadow() {
       // update filters according to url params
       const url = new URL(self.location.href)
       const params = new URLSearchParams(url.search)
-      const entriesWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
       
-      entriesWithUnderscore.forEach(([key, value]) => {
-          console.log(`Key: ${key}, Value: ${value}`)
+      if (params) {
+        const entriesWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+        
+        entriesWithUnderscore.forEach(([key, value]) => {
+            // console.log(`Key: ${key}, Value: ${value}`)
+            const [urlparaKey, idKey] = key.split('_')
+            const [urlparaValue, idValue] = value.split('_')
 
-          const [urlparaKey, idKey] = key.split('_')
-          const [urlparaValue, idValue] = value.split('_')
+            const filter = (`{
+                "urlpara": "${urlparaKey}",
+                "id": "${idKey}",
+                "selected": true,
+                "children": [{
+                    "urlpara": "${urlparaValue}",
+                    "id": "${idValue}",
+                    "selected": true
+                }]
+            }`)
 
-          const filter = (`{
-              "urlpara": "${urlparaKey}",
-              "id": "${idKey}",
-              "selected": true,
-              "children": [{
-                  "urlpara": "${urlparaValue}",
-                  "id": "${idValue}",
-                  "selected": true
-              }]
-          }`)
-
-          filters.push(filter)
-      })
+            filters.push(filter)
+        })
+      }
 
       const request = `{
         "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
