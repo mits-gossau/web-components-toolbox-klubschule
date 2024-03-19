@@ -59,7 +59,7 @@ export default class OffersPage extends Shadow() {
         </ul>
           <div>
             <div id="content1" tab-content-target>
-                <ks-c-with-facet mock>
+                <ks-c-with-facet ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}>
                     <!-- o-body-style is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
                     <o-body-style has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
                         <o-grid namespace="grid-12er-">
