@@ -13,6 +13,13 @@ export default class OffersPage extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
+    if (this.shouldRenderCSS()) this.renderCSS()
+  }
+
+  shouldRenderCSS () {
+    return !this.root.querySelector(
+      `:host > style[_css], ${this.tagName} > style[_css]`
+    )
   }
 
   /**
@@ -22,6 +29,17 @@ export default class OffersPage extends Shadow() {
    */
   shouldRenderHTML () {
     return !this.ksMTab
+  }
+
+  /**
+   * renders the css
+   */
+  renderCSS () {
+    this.css = /* css */`
+      :host {
+        display: contents !important;
+      }
+    `
   }
 
   /**
@@ -43,7 +61,7 @@ export default class OffersPage extends Shadow() {
             <div id="content1" tab-content-target>
                 <ks-c-with-facet mock>
                     <!-- o-body-style is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-                    <o-body-style background-color-prop="#F7F4F1">
+                    <o-body-style has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
                         <o-grid namespace="grid-12er-">
                             <div col-lg="12" col-md="12" col-sm="12">
                                 <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
