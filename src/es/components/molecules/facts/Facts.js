@@ -24,7 +24,6 @@ export default class Facts extends Shadow() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 4rem 0 5rem;
         }
 
         :host h2 {
@@ -49,7 +48,7 @@ export default class Facts extends Shadow() {
         }
 
         :host .fact {
-          background-color: var(--mdx-base-color-grey-100);
+          background-color: var(--mdx-sys-color-accent-6-subtle2);
           display: flex;
           flex-direction: column;
           align-items: center;

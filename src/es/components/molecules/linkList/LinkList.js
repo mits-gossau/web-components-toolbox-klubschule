@@ -53,6 +53,7 @@ export default class LinkList extends Shadow() {
             line-height: 1.25em;
             font-weight: 500;
             color: #262626;
+            flex: 1;
         }
 
         :host li div span {
