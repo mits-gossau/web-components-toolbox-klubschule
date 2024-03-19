@@ -155,7 +155,13 @@ export default class AppointmentsList extends Shadow() {
     const list = []
     dayList.forEach(day => {
       const dayWrapper = document.createElement('div')
-      dayWrapper.innerHTML = `<h1>${day.weekday}</h1>`
+
+      const heading = document.createElement('h1')
+      heading.innerHTML = day.weekday
+      const headingWrapper = document.createElement('div')
+      headingWrapper.appendChild(heading)
+      dayWrapper.appendChild(headingWrapper)
+      // dayWrapper.innerHTML = `<h1>${day.weekday}</h1>`
 
       // Loop over the subscriptionCourseAppointments for the current day
       day.subscriptionCourseAppointments.forEach(appointment => {

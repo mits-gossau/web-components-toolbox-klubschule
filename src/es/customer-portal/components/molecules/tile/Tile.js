@@ -95,10 +95,11 @@ export default class AppointmentTile extends Tile {
   renderTile (content) {
     return /* html */ `
       <div class="m-tile">
+      <div class="m-tile__wrap">
         <div class="parent">
           <div class="course-info">
             <p>${content.courseTitle} (${content.courseType}_${content.courseId})</p>
-            <p>${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</p>
+            <span class="m-tile__content">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span>
             <p>${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo}</p>
           </div>
           <div class="course-admin">
@@ -113,6 +114,7 @@ export default class AppointmentTile extends Tile {
             <span>${content.lessonPrice}</span>
           </div>
         </div>
+        
       </div>
 
     `
