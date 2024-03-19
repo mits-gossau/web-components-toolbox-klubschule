@@ -54,13 +54,13 @@ export default class KsBodyStyle extends BodyStyle {
         /* adding more space to the first child */
         :host:first-child,
         :host > *:first-child,
-        :host > [wrapper]:first-child {
+        :host > a[wrapper]:first-child {
             margin-top: var(--mdx-sys-spacing-flex-l);
         }
         /* adding more space to the last (visible) child */
         :host:last-child,
         :host > .ks-o-body-section__last-child,
-        :host > [wrapper].ks-o-body-section__last-child {
+        :host > a[wrapper].ks-o-body-section__last-child {
             margin-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
@@ -71,12 +71,12 @@ export default class KsBodyStyle extends BodyStyle {
 
         :host([no-margin-y]) > *:first-child,
         :host([has-background]) > *:first-child {
-            margin-top: 0;
+            margin-top: 0 !important;
         }
 
         :host([no-margin-y]) > .ks-o-body-section__last-child,
         :host([has-background]) > .ks-o-body-section__last-child {
-            margin-bottom: 0;
+            margin-bottom: 0 !important;
         }
 
         :host([variant=default]) > [namespace="teaser-fullwidth-"],
