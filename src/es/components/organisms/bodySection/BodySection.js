@@ -72,6 +72,7 @@ export default class KsBodyStyle extends BodyStyle {
         }
         /* remove space of the last (visible) child */
         :host(:last-child),
+        :host(.ks-o-body-section__last-child),
         :host > .ks-o-body-section__last-child,
         :host > [wrapper].ks-o-body-section__last-child {
             margin-bottom: 0 !important;
