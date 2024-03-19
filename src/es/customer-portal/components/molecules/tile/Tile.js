@@ -130,8 +130,8 @@ export default class AppointmentTile extends Tile {
             <p>${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo}</p>
           </div>
           <div class="course-admin">
-            <p>Frei: ${content.courseAppointmentFreeSeats}</p>
-            <p>Chef: ${content.instructorDescription}</p>
+            <p>${content.courseAppointmentFreeSeats} freie Plätze</p>
+            <p>${content.instructorDescription}</p>
             <p>${content.courseLocation} <br /> Raum: ${content.roomDescription}</p>
           </div>
         </div>
