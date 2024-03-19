@@ -83,9 +83,13 @@ export default class AppointmentsList extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host { }
+      :host .list-wrapper {
+        display:flex;
+        flex-direction: column;
+        gap:1em;
+      }
       @media only screen and (max-width: _max-width_) {
-        :host {}
+        :host  {}
       }
     `
     return this.fetchTemplate()
@@ -143,7 +147,7 @@ export default class AppointmentsList extends Shadow() {
        <h2>1 Million Termine</h2>
        ${this.renderFilterSubscriptions(data.filters.subscriptions)}
        <hr>
-       <div>${this.renderDayList(data.selectedSubscription.dayList, children[0][0])}</div>
+       <div class="list-wrapper">${this.renderDayList(data.selectedSubscription.dayList, children[0][0])}</div>
       </div>`
     })
   }

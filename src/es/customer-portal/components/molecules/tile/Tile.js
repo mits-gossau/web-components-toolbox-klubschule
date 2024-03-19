@@ -126,7 +126,7 @@ export default class AppointmentTile extends Tile {
         <div class="parent">
           <div class="course-info">
             <p>${content.courseTitle} (${content.courseType}_${content.courseId})</p>
-            <p>${content.courseAppointmentDate}</p>
+            <p>${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</p>
             <p>${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo}</p>
           </div>
           <div class="course-admin">
@@ -142,5 +142,14 @@ export default class AppointmentTile extends Tile {
       </div>
 
     `
+  }
+
+  formatCourseAppointmentDate (date) {
+    const dateObject = new Date(date)
+    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
+    // @ts-ignore
+    const formatter = new Intl.DateTimeFormat('de-DE', options)
+    const formattedDate = formatter.format(dateObject)
+    return formattedDate
   }
 }
