@@ -131,21 +131,21 @@ export default class WithFacet extends Shadow() {
                   
                   const containsParent = paramsWithUnderscore.some(array => array.includes(`${filterItem.urlpara}_${filterItem.id}`))
                   console.log('containsParent', containsParent, `${filterItem.urlpara}_${filterItem.id}`)
-                  let selectedParent = ''
-                  if (containsParent) {
-                    selectedParent += `${filterItem.urlpara}_${filterItem.id}`
-                  }
-                  console.log('selectedParent', selectedParent)
+                  let selectedParent = []
+                  let selectedChildren = []
+
+                  // if (!containsParent) {
+                  //   selectedParent.push(`${filterItem.urlpara}_${filterItem.id}`)
+                  // }
 
                   filterItem.children.forEach(child => {
                     // check if the child is already in the url params
                     const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara}_${child.id}`))
                     console.log('containsChild', containsChild, `${child.urlpara}_${child.id}`)
-                    let selectedChildren = ''
+                    
                     if (containsChild) {
-                      selectedChildren += `${child.urlpara}_${child.id}`
+                      selectedChildren.push(`${child.urlpara}_${child.id}`)
                     }
-                    console.log('selectedChildren', selectedChildren)
 
                     if (child.selected) {
                       console.log('selected:', `${child.urlpara}_${child.id}`)
@@ -153,24 +153,14 @@ export default class WithFacet extends Shadow() {
                       if (child.count > 0) {
                         numberOfOffers += child.count
                       }
-                      
-                      if (!containsChild) {
-                        console.log('setting:', `${child.urlpara}_${child.id}`)
-                        selectedChildren += `${child.urlpara}_${child.id}`
-                        console.log('selectedChildren', selectedChildren)
-                        
-                        // console.log(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren + ',' || ''}${child.urlpara}_${child.id}`)
-                        // params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren + ',' || ''}${child.urlpara}_${child.id}`)
-                        // params.set(`${filterItem.urlpara}_${filterItem.id}`, `${paramsWithUnderscore + ',' || ''}${child.urlpara}_${child.id}`)
-                      }
-                      // const currentValues = params.get(filterItem.urlpara) || ''
-                      // console.log('currentValues', currentValues)
-                      
 
-                      // if (!currentValues || !currentValues.includes(child.urlpara)) {
-                      //   // console.log('setting:', child.urlpara)
-                      //   params.set(`${filterItem.urlpara}_${filterItem.id}`, `${currentValues + ',' || ''}${child.urlpara}_${child.id}`)
-                      // }
+                      if (!containsChild) {
+                        selectedChildren.push(`${child.urlpara}_${child.id}`)
+                        console.log('selectedChildren', selectedChildren)
+                      }
+
+                      console.log(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
+                      params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
                     } else {
                       // console.log('not selected:', child.urlpara)
                       const currentValues = params.get(filterItem.urlpara)?.split(',')
@@ -193,6 +183,8 @@ export default class WithFacet extends Shadow() {
                       }
                     }
                   })
+
+                  
                   
                   self.history.pushState({}, '', `${url.pathname}?${params.toString()}`)
                 }
