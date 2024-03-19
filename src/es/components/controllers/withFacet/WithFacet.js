@@ -126,74 +126,53 @@ export default class WithFacet extends Shadow() {
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   // const currentParams = params.get(filterItem.urlpara)?.split(',')
                   const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                  console.log('paramsWithUnderscore', paramsWithUnderscore)
+                  // console.log('paramsWithUnderscore', paramsWithUnderscore)
                   // console.log('currentParams', filterItem.urlpara, currentParams)
                   
-                  const containsParent = paramsWithUnderscore.some(array => array.includes(`${filterItem.urlpara}_${filterItem.id}`))
-                  console.log('containsParent', containsParent, `${filterItem.urlpara}_${filterItem.id}`)
-                  let selectedParent = ''
-                  if (containsParent) {
-                    selectedParent += `${filterItem.urlpara}_${filterItem.id}`
-                  }
-                  console.log('selectedParent', selectedParent)
+                  let selectedChildren = []
 
                   filterItem.children.forEach(child => {
                     // check if the child is already in the url params
                     const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara}_${child.id}`))
-                    console.log('containsChild', containsChild, `${child.urlpara}_${child.id}`)
-                    let selectedChildren = ''
+                    
                     if (containsChild) {
-                      selectedChildren += `${child.urlpara}_${child.id}`
+                      console.log('containsChild', containsChild, `${child.urlpara}_${child.id}`)
+                      selectedChildren.push(`${child.urlpara}_${child.id}`)
                     }
-                    console.log('selectedChildren', selectedChildren)
 
+                    // if selected, add it to the url params
                     if (child.selected) {
                       console.log('selected:', `${child.urlpara}_${child.id}`)
                       // API does not answer with number of totals, the line below fixes that issue
                       if (child.count > 0) {
                         numberOfOffers += child.count
                       }
-                      
+
                       if (!containsChild) {
-                        console.log('setting:', `${child.urlpara}_${child.id}`)
-                        selectedChildren += `${child.urlpara}_${child.id}`
+                        selectedChildren.push(`${child.urlpara}_${child.id}`)
                         console.log('selectedChildren', selectedChildren)
-                        
-                        // console.log(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren + ',' || ''}${child.urlpara}_${child.id}`)
-                        // params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren + ',' || ''}${child.urlpara}_${child.id}`)
-                        // params.set(`${filterItem.urlpara}_${filterItem.id}`, `${paramsWithUnderscore + ',' || ''}${child.urlpara}_${child.id}`)
                       }
-                      // const currentValues = params.get(filterItem.urlpara) || ''
-                      // console.log('currentValues', currentValues)
-                      
 
-                      // if (!currentValues || !currentValues.includes(child.urlpara)) {
-                      //   // console.log('setting:', child.urlpara)
-                      //   params.set(`${filterItem.urlpara}_${filterItem.id}`, `${currentValues + ',' || ''}${child.urlpara}_${child.id}`)
-                      // }
-                    } else {
-                      // console.log('not selected:', child.urlpara)
-                      const currentValues = params.get(filterItem.urlpara)?.split(',')
-                      let index
-                      if (currentValues) {
-                        console.log(currentValues, currentValues.includes(child.urlpara))
+                      params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
+                      console.log("set to url:", `${filterItem.urlpara}_${filterItem.id}=${selectedChildren.join(',')}`)
 
-                        if (currentValues.includes(child.urlpara)) {
-                          // console.log('removing:', child.urlpara)
-                          // console.log(index, currentValues)
-                          index = currentValues.indexOf(child.urlpara)
-                          currentValues.splice(index, 1)
+                    // if unselected, remove it from the url params
+                    } else {    
+                      if (containsChild) {
+                        console.log('removing:', `${child.urlpara}_${child.id}`)
+                        const index = selectedChildren.indexOf(`${child.urlpara}_${child.id}`)
+                        selectedChildren.splice(index, 1)
 
-                          params.set(`${filterItem.urlpara}_${filterItem.id}`, currentValues.join(','))
-                        }
-                        if (params.get(filterItem.urlpara) === '') {
-                          // console.log('deleting:', filterItem.urlpara)
-                          params.delete(filterItem.urlpara)
+                        params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
+
+                        if (params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
+                          params.delete(`${filterItem.urlpara}_${filterItem.id}`)
+                          console.log('deleted:', `${filterItem.urlpara}_${filterItem.id}`)
                         }
                       }
                     }
                   })
-                  
+
                   self.history.pushState({}, '', `${url.pathname}?${params.toString()}`)
                 }
               })
@@ -226,6 +205,7 @@ export default class WithFacet extends Shadow() {
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
             const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
+            console.log(hasSameLabel, isCheckedNullOrUndefined, child.selected, event.detail.target.checked)
 
             return `{
               ${child.count ? `"count": ${child.count},` : ''}
@@ -235,7 +215,11 @@ export default class WithFacet extends Shadow() {
               "label": "${child.label}",
               ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
               ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
-              "selected": ${hasSameLabel ? isCheckedNullOrUndefined ? child.selected : event.detail.target.checked : child.selected},
+              "selected": ${hasSameLabel 
+                ? isCheckedNullOrUndefined 
+                  ? child.selected 
+                  : event.detail.target.checked 
+                : child.selected},
               ${child.sort ? `"sort": ${child.sort},` : ''}
               ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
               ${child.typ ? `"typ": "${child.typ}",` : ''}
@@ -254,6 +238,7 @@ export default class WithFacet extends Shadow() {
         ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
         ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
         ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
+        ${filterItem.urlpara ? `"urlpara": "${filterItem.urlpara}",` : ''}
         "visible": ${filterItem.visible || true}
       }`
       : ''
