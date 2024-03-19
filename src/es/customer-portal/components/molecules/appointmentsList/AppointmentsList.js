@@ -143,7 +143,7 @@ export default class AppointmentsList extends Shadow() {
        <h2>1 Million Termine</h2>
        ${this.renderFilterSubscriptions(data.filters.subscriptions)}
        <hr>
-       ${this.renderDayList(data.selectedSubscription.dayList, children[0][0])}
+       <div>${this.renderDayList(data.selectedSubscription.dayList, children[0][0])}</div>
       </div>`
     })
   }
@@ -183,13 +183,11 @@ export default class AppointmentsList extends Shadow() {
 
         const tile = new tileComponent.constructorClass({ namespace: 'tile-default-' }) // eslint-disable-line
         const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
-
         tile.setAttribute('data', `${escapeForHtml(JSON.stringify(appointment))}`)
         dayWrapper.appendChild(tile)
       })
       list.push(dayWrapper.innerHTML)
     })
-    // console.log(list)
     return list
   }
 }
