@@ -1,0 +1,435 @@
+<!-- figma: https://www.figma.com/file/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?type=design&node-id=3111%3A289674&mode=design&t=QNrJHQav4gyyeVVi-1 -->
+
+<!-- 2-spaltige Bühne mit maximaler Ausprägung -->
+<o-grid namespace="grid-2columns-content-stage-" first-container-vertical first-column-with="66%" background-color="var(--mdx-sys-color-accent-4-default)" image-src="https://mits-gossau.github.io/web-components-toolbox-klubschule/src/img/content-stage/a59843713cfd9aefb7e8d172513e4bea.png" width="100%">
+    <div class="stage-content">
+        <p class="topline">
+            <a href="" alt="">
+                <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx> <span>A Larger Text inside the back link lorem ipsum dolor nonumy eirmod tempor invidunt</span>
+            </a>
+            <!-- Merken-Button für Mobile -->
+            <ks-m-favorite-button off-text="Merken" on-text="Gemerkt">
+                <ks-a-button namespace="button-tertiary-" color="secondary" round>
+                    <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>
+                </ks-a-button>
+            </ks-m-favorite-button>
+        </p>
+        <h1>Bodytoning Bauch,<br />Beine, Po</h1>
+        <p class="intro">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magn.</p>
+        <address>
+            <a-icon-mdx icon-name="Location" size="1.25em"></a-icon-mdx> Hofwiesenstrasse 350, 8050 Zürich <span class="label">Blended</span>
+        </address>
+    </div>
+    <aside>
+        <div class="aside-image">
+            <!-- Merken-Button für Desktop -->
+            <ks-m-favorite-button off-text="Merken" on-text="Gemerkt">
+                <ks-a-button namespace="button-tertiary-" color="secondary">
+                    <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>
+                    <span>Merken</span>
+                </ks-a-button>
+            </ks-m-favorite-button>
+        </div>
+    </aside>
+</o-grid>
+
+<!-- 2-spaltiger Content -->
+<o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" switch-aside-order-mobile>
+    <ks-o-body-section content-width-var="100%" no-margin-y>
+        <!-- Expand -->
+        <mdx-component>
+            <mdx-expand
+                line-clamp="5"
+                label-closed="Mehr anzeigen"
+                label-open="Weniger anzeigen"
+                expanded="false"
+            >
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. </p>
+            </mdx-expand>
+        </mdx-component>
+        <!-- /Expand -->
+
+        <!-- CMS Akkordeon Container -->
+        <div class="margin-y-m">
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 1</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <ks-a-heading tag="h3">test title</ks-a-heading>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 2</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 3</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <div>
+                                <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
+                                    target="_self">
+                                    <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
+                                        tabindex="0"> </a-icon-mdx>
+                                    <span id="label">btn</span>
+                                </ks-a-button>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+        </div>
+        <!-- /CMS Akkordeon Container -->
+    </ks-o-body-section>
+    <aside>
+        <h3>Unsere Fitnesskurse</h3>
+        <ks-m-link-list namespace="link-list-default-">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span>Abonnements</span>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span>Aerobic</span>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span>Bodytoning/BBP</span>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span>Power Yoga - mehrere Zeilen lorem ipsum dolor sit amet, consectetur</span>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span>Rückentraining</span>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span>Zumba</span>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span>Weitere Fitnesskurse</span>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+            </ul>
+        </ks-m-link-list>
+    </aside>
+</o-grid>
+
+<!-- CMS Teaser Slider -->
+<ks-o-body-section variant="default">
+    <m-carousel-two namespace=carousel-two-3-column- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+        <section>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Primary in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Primary in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Primary in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Primary in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Primary in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+        </section>
+        <div>
+            <nav>
+                <a href="#previous" aria-label="previous slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+                <a href="#next" aria-label="next slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+            </nav>
+        </div>
+    </m-carousel-two>
+</ks-o-body-section>
+<!-- /CMS Teaser Slider -->
+
+<!-- Angebotsliste -->
+<ks-o-body-section background="var(--mdx-sys-color-accent-6-subtle1)" variant="default" has-background>
+    <ks-c-with-facet mock>
+        <o-body-style content-width-var="100%" background="transparent">
+            <o-grid namespace="grid-12er-">
+                <div col-lg="12" col-md="12" col-sm="12">
+                    <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
+                </div>
+                <div col-lg="6" col-md="6" col-sm="12">
+                    <m-dialog namespace="dialog-top-slide-in-">
+                        <div class="container">
+                            <a-input
+                                inputid="inputSearch"
+                                placeholder="Suchen..."
+                                submit-search="request-with-facet"
+                                search
+                                type="search"
+                                any-key-listener
+                                change-listener
+                                delete-listener
+                                answer-event-name="with-facet"
+                                active-detail-property-name="fetch:searchText"
+                                icon-name="Search" 
+                                icon-size="1.25em"
+                            >
+                                <label for="inputSearch">Angebote in der Nähe finden</label>
+                            </a-input>                            
+                            <div id="close">
+                                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                            </div>
+                        </div>
+                        <div class="container"></div>
+                        <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Angebot" icon-name="Search" icon-size="1.25em" search type="search"></a-input>
+                    </m-dialog>
+                </div>
+                <div col-lg="6" col-md="6" col-sm="12">
+                    <m-dialog namespace="dialog-top-slide-in-">
+                        <div class="container">
+                            <a-input 
+                                inputid="location-search" 
+                                placeholder="Ihr Standort?" 
+                                icon-name="Location" 
+                                icon-size="1.5em" 
+                                search 
+                                submit-search="request-auto-complete" 
+                                any-key-listener 
+                                type="search"
+                            ></a-input>
+                            <div id="close">
+                                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                            </div>
+                        </div>
+                        <div class="container"></div>
+                        <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search"></a-input>
+                    </m-dialog>
+                </div>
+            </o-grid>
+            <o-grid namespace="grid-432-auto-colums-auto-rows-">
+                <ks-a-button filter namespace="button-primary-" color="secondary">
+                    <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
+                </ks-a-button>
+                <m-double-button namespace="double-button-default-" width="100%">
+                    <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                        <span part="label1">Niveau A2/A2+</span>
+                        <span part="label2" dynamic></span>
+                    </ks-a-button>
+                    <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                        <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                    </ks-a-button>
+                </m-double-button>
+                <m-double-button namespace="double-button-default-" width="100%">
+                    <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
+                        <span part="label1">Label</span>
+                        <span part="label2" dynamic></span>
+                    </ks-a-button>
+                    <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start">
+                        <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                    </ks-a-button>
+                </m-double-button>
+                <ks-a-button namespace="button-secondary-" color="tertiary">
+                    <span>Wochentag & Tageszeit</span>
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+                </ks-a-button>
+                <ks-a-button namespace="button-secondary-" color="tertiary">
+                    <span>Kategorien</span>
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+                </ks-a-button>
+                <ks-a-button namespace="button-secondary-" color="tertiary">
+                    <span>Label</span>
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+                </ks-a-button>
+                <ks-a-button namespace="button-secondary-" color="tertiary">
+                    <span>Label</span>
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+                </ks-a-button>
+                <ks-a-button namespace="button-secondary-" color="tertiary">
+                    <span>Label</span>
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
+                </ks-a-button>
+            </o-grid>
+            <section>
+                <ks-m-sort namespace="sort-right-"></ks-m-sort>
+            </section>
+            <ks-m-tile-factory></ks-m-tile-factory>
+            <ks-a-button namespace="button-primary-" color="secondary">
+                <span>Weitere Angebote</span>
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+            </ks-a-button>
+        </o-body-style>
+    </ks-c-with-facet>
+</ks-o-body-section>
+<!-- /Angebotsliste -->
+
+<!-- CMS Teaser Slider -->
+<ks-o-body-section variant="default">
+    <ks-a-heading tag="h2" style-as="h1" border-top>Inspiration für Sie</ks-a-heading>
+    <m-carousel-two namespace=carousel-two-3-column- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+        <section>
+            <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink-again-nomol/">
+                <figure>
+                    <figcaption>
+                        <strong>pretitle</strong>
+                        <h3>title</h3>
+                        <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                no-hover></a-icon-mdx></span>
+                    </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                        aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                </figure>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink-again-nomol/">
+                <figure>
+                    <figcaption>
+                        <strong>pretitle</strong>
+                        <h3>title</h3>
+                        <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                no-hover></a-icon-mdx></span>
+                    </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                        aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                </figure>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink-again-nomol/">
+                <figure>
+                    <figcaption>
+                        <strong>pretitle</strong>
+                        <h3>title</h3>
+                        <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                no-hover></a-icon-mdx></span>
+                    </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                        aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                </figure>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink-again-nomol/">
+                <figure>
+                    <figcaption>
+                        <strong>pretitle</strong>
+                        <h3>title</h3>
+                        <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                no-hover></a-icon-mdx></span>
+                    </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                        aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                </figure>
+            </ks-m-teaser>
+        </section>
+        <div>
+            <nav>
+                <a href="#previous" aria-label="previous slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+                <a href="#next" aria-label="next slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+            </nav>
+        </div>
+    </m-carousel-two>
+</ks-o-body-section>
+<!-- /CMS Teaser Slider -->
+
+<ks-o-body-section variant="default" background="var(--mdx-sys-color-accent-6-subtle1)" has-background>
+    <!-- CMS Teaser Text Image -->
+    <ks-m-teaser namespace=teaser-text-image- color="secondary" text-position="left" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1000x750"
+            aspect-ratio="0.75"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <!-- /CMS Teaser Text Image -->
+</ks-o-body-section>
