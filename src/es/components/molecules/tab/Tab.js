@@ -61,7 +61,7 @@ export default class Tab extends Shadow() {
         }
 
         :host ul.tab-search-result {
-          width: 80%;
+          width: var(--body-section-default-width);
           margin: 0 auto;
         }
 
