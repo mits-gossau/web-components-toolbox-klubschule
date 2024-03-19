@@ -43,7 +43,7 @@ export default class AppointmentsList extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
   }
 
-  subscriptionCourseAppointmentsListener = async (/** @type {{ detail: { fetch: Promise<any>; }; }} */ event) => {
+  subscriptionCourseAppointmentsListener = async (event) => {
     console.log('subscriptionCourseAppointmentsListener', event)
     try {
       const appointments = await event.detail.fetch
