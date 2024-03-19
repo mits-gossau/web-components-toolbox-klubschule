@@ -1,0 +1,304 @@
+// @ts-check
+import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
+
+/**
+* @export
+* @class OffersPage
+* @type {CustomElementConstructor}
+*/
+export default class OffersPage extends Shadow() {
+  constructor (options = {}, ...args) {
+    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+  }
+
+  connectedCallback () {
+    if (this.shouldRenderHTML()) this.renderHTML()
+  }
+
+  /**
+   * evaluates if a render is necessary
+   *
+   * @return {boolean}
+   */
+  shouldRenderHTML () {
+    return !this.ksMTab
+  }
+
+  /**
+   * Render HTML
+   * @return Promise<void>
+   */
+  renderHTML () {
+    this.html = /* html */`
+      <ks-m-tab>
+        <ul class="tab-search-result">
+            <li>
+                <button class="active" tab-target="content1">123 Angebote</button>
+            </li>
+            <li>
+                <button tab-target="content2">12 Story & Informationen</button>
+            </li>
+        </ul>
+          <div>
+            <div id="content1" tab-content-target>
+                <ks-c-with-facet mock>
+                    <!-- o-body-style is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
+                    <o-body-style background-color-prop="#F7F4F1">
+                        <o-grid namespace="grid-12er-">
+                            <div col-lg="12" col-md="12" col-sm="12">
+                                <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
+                            </div>
+                            <div col-lg="6" col-md="6" col-sm="12">
+                                <m-dialog namespace="dialog-top-slide-in-">
+                                    <div class="container">
+                                        <a-input
+                                            inputid="input-search"
+                                            placeholder="Suchen..."
+                                            submit-search="request-with-facet"
+                                            search
+                                            type="search"
+                                            any-key-listener
+                                            change-listener
+                                            delete-listener
+                                            answer-event-name="with-facet"
+                                            active-detail-property-name="fetch:searchText"
+                                            icon-name="Search" 
+                                            icon-size="1.25em"
+                                        >
+                                            <label for="inputSearch">Angebote in der Nähe finden</label>
+                                        </a-input>
+                                        <div id="close">
+                                            <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                                        </div>
+                                    </div>
+                                    <div class="container"></div>
+                                    <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Angebot" icon-name="Search" icon-size="1.25em" search type="search"></a-input>
+                                </m-dialog>
+                            </div>
+                            <div col-lg="6" col-md="6" col-sm="12">
+                                <m-dialog namespace="dialog-top-slide-in-">
+                                    <div class="container">
+                                        <a-input 
+                                            inputid="location-search" 
+                                            placeholder="Ihr Standort?" 
+                                            icon-name="Location" 
+                                            icon-size="1.5em" 
+                                            search 
+                                            submit-search="request-auto-complete" 
+                                            any-key-listener 
+                                            type="search"
+                                        ></a-input>
+                                        <div id="close">
+                                            <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                                        </div>
+                                    </div>
+                                    <div class="container"></div>
+                                    <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search"></a-input>
+                                </m-dialog>
+                            </div>
+                        </o-grid>
+                        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
+                            <!-- overlayer -->
+                            <div class="container dialog-header" tabindex="0">
+                                <div id="back">
+                                    &nbsp;
+                                </div>
+                                <h3>Filter</h3>
+                                <div id="close">
+                                    <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+                                </div>
+                            </div>
+                            <div class="container dialog-content">
+                                <p class="reset-link">
+                                    <a-button namespace="button-transparent-">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                                    </a-button>
+                                </p>
+                                <div class="sub-content">
+                                    <a-input inputid="location-search" width="100%" placeholder="Angebot suchen" icon-name="Search" icon-size="calc(20rem/18)" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>
+                                    <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="Schliessen" translation-key-cta="Angebote" translation-key-reset="zur&uuml;cksetzen"></ks-m-filter-categories>
+                                </div>
+                            </div>
+                            <div class="container dialog-footer">
+                                <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+                                <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
+                            </div>
+                        </m-dialog>
+                        <o-grid namespace="grid-432-auto-colums-auto-rows-">
+                            <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
+                                <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
+                            </ks-a-button>
+                            <ks-m-filter-select></ks-m-filter-select>
+                        </o-grid>
+                        <section>
+                            <ks-m-sort namespace="sort-right-"></ks-m-sort>
+                        </section>
+                        <ks-m-tile-factory></ks-m-tile-factory>
+                        <ks-a-button namespace="button-primary-" color="secondary">
+                            <span>Weitere Angebote</span>
+                            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+                        </ks-a-button>
+                    </o-body-style>
+                </ks-c-with-facet>
+            </div>
+            <div id="content2" tab-content-target>
+                <o-body-style background-color-prop="#F7F4F1">
+                    <o-grid namespace="grid-12er-">
+                        <div col-lg="12" col-md="12" col-sm="12">
+                            <ks-m-content-search-item>
+                                <a href="#">
+                                    <div>
+                                        <h3>Lorem Ipsum Headline</h3>
+                                        <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                    <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
+                                </a>
+                            </ks-m-content-search-item>
+                            <ks-m-content-search-item>
+                                <a href="#">
+                                    <div>
+                                        <h3>Lorem Ipsum Headline</h3>
+                                        <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                    <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
+                                </a>
+                            </ks-m-content-search-item>
+                            <ks-m-content-search-item>
+                                <a href="#">
+                                    <div>
+                                        <h3>Lorem Ipsum Headline</h3>
+                                        <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                </a>
+                            </ks-m-content-search-item>
+                            <ks-m-content-search-item>
+                                <a href="#">
+                                    <div>
+                                        <h3>Lorem Ipsum Headline</h3>
+                                        <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                    <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
+                                </a>
+                            </ks-m-content-search-item>
+                            <ks-m-content-search-item>
+                                <a href="#">
+                                    <div>
+                                        <h3>Lorem Ipsum Headline</h3>
+                                        <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                    <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
+                                </a>
+                            </ks-m-content-search-item>
+                            <ks-m-content-search-item>
+                                <a href="#">
+                                    <div>
+                                        <h3>Lorem Ipsum Headline</h3>
+                                        <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                    <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
+                                </a>
+                            </ks-m-content-search-item>
+                            <ks-m-content-search-item>
+                                <a href="#">
+                                    <div>
+                                        <h3>Lorem Ipsum Headline</h3>
+                                        <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                    <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
+                                </a>
+                            </ks-m-content-search-item>
+                            <ks-m-content-search-item>
+                                <a href="#">
+                                    <div>
+                                        <h3>Lorem Ipsum Headline</h3>
+                                        <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                </a>
+                            </ks-m-content-search-item>
+                        </div>
+                    </o-grid>
+                    <ks-a-button namespace="button-primary-" color="secondary">
+                        <span>Weitere Inhalte</span>
+                        <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+                    </ks-a-button>
+                </o-body-style>
+            </div>
+        </div>
+      </ks-m-tab>
+    `
+
+    return this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../molecules/tab/Tab.js`,
+        name: 'ks-m-tab'
+      },
+      {
+        path: `${this.importMetaUrl}../../controllers/withFacet/WithFacet.js`,
+        name: 'ks-c-with-facet'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js`,
+        name: 'o-body-style'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+        name: 'o-grid'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+        name: 'm-dialog'
+      },
+      {
+        path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
+        name: 'ks-a-heading'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/input/Input.js`,
+        name: 'a-input'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/button/Button.js`,
+        name: 'a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/filterCategories/FilterCategories.js`,
+        name: 'ks-m-filter-categories'
+      },
+      {
+        path: `${this.importMetaUrl}../../atoms/numberOfOffersButton/NumberOfOffersButton.js`,
+        name: 'ks-a-number-of-offers-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
+        name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/filterSelect/FilterSelect.js`,
+        name: 'ks-m-filter-select'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/sort/Sort.js`,
+        name: 'ks-m-sort'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/tileFactory/TileFactory.js`,
+        name: 'ks-m-tile-factory'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/contentSearchItem/ContentSearchItem.js`,
+        name: 'ks-m-content-search-item'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/picture/Picture.js`,
+        name: 'a-picture'
+      }
+    ])
+  }
+
+  get ksMTab () {
+    return this.root.querySelector('ks-m-tab')
+  }
+}
