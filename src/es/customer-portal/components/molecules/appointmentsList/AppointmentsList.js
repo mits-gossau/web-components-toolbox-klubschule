@@ -17,47 +17,27 @@ export default class AppointmentsList extends Shadow() {
   }
 
   connectedCallback () {
-    // if (this.shouldRenderCSS()) this.renderCSS()
-    // if (this.shouldRenderHTML()) this.renderHTML()
+    if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    this.hidden = true
-    const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    Promise.all(showPromises).then(() => {
-      this.hidden = false
-      this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
-        {
-          detail: {
-            subscriptionType: '',
-            userId: ''
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }
-      ))
-    })
+    this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
+      {
+        detail: {
+          subscriptionType: '',
+          userId: ''
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }
+    ))
   }
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
   }
 
-  subscriptionCourseAppointmentsListener = async (event) => {
-    console.log('subscriptionCourseAppointmentsListener', event)
-    try {
-      const appointments = await event.detail.fetch
-      console.log(appointments)
-      if (appointments.errorCode !== 0) {
-        throw new Error(`${appointments.errorMessage}`)
-      }
-      this.html = ''
-      this.renderHTML(appointments)
-    } catch (error) {
-      console.error(error)
-      this.html = ''
-      this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
-    }
+  subscriptionCourseAppointmentsListener = (event) => {
+    this.renderHTML(event.detail.fetch)
   }
 
   /**
@@ -114,7 +94,7 @@ export default class AppointmentsList extends Shadow() {
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
-        }, ...styles])
+        }, ...styles], false)
       default:
         return this.fetchCSS(styles)
     }
@@ -124,32 +104,35 @@ export default class AppointmentsList extends Shadow() {
    * Render HTML
    * @returns void
    */
-  renderHTML (data) {
-    console.log('data', data)
-    this.listWrapper = this.root.querySelector('div') || document.createElement('div')
-    const fetchModules = this.fetchModules([
-      {
-        path: `${this.importMetaUrl}'../../../tile/Tile.js`,
-        name: 'm-tile'
-      }
-    ])
-    return Promise.all([fetchModules]).then((children) => {
-      // ${this.display_nested_objects(appointmentsData.filters.subscriptions)}
-      // ${this.display_properties(appointmentsData.selectedSubscription.dayList)}
-
-      // create dropdown
-      // this.html =
-      console.log(children[0][0])
-      // const dayList = this.renderDayList(data.selectedSubscription.dayList, children[0][0])
-
-      this.html = /* html */ `
-      <div>
-       <h2>1 Million Termine</h2>
-       ${this.renderFilterSubscriptions(data.filters.subscriptions)}
-       <hr>
-       <div class="list-wrapper">${this.renderDayList(data.selectedSubscription.dayList, children[0][0])}</div>
-      </div>`
-    })
+  renderHTML (fetch) {
+    try {
+      fetch.then(appointments => {
+        if (appointments.errorCode !== 0) {
+          throw new Error(`${appointments.errorMessage}`)
+        }
+        // !!!
+        this.listWrapper = this.root.querySelector('div') || document.createElement('div')
+        const fetchModules = this.fetchModules([
+          {
+            path: `${this.importMetaUrl}'../../../tile/Tile.js`,
+            name: 'm-tile'
+          }
+        ])
+        return Promise.all([fetchModules]).then((children) => {
+          this.html = /* html */ `
+            <div>
+              <h2>1 Million Termine</h2>
+              ${this.renderFilterSubscriptions(appointments.filters.subscriptions)}
+              <hr>
+              <div class="list-wrapper">${this.renderDayList(appointments.selectedSubscription.dayList, children[0][0]).join('')}</div>
+            </div>`
+        })
+      })
+    } catch (error) {
+      console.error(error)
+      this.html = ''
+      this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
+    }
   }
 
   renderFilterSubscriptions (subscriptionsData) {

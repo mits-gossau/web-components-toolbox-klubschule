@@ -7,32 +7,6 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 * @type {CustomElementConstructor}
 */
 export default class AppointmentTile extends Tile {
-  // constructor (options = {}, ...args) {
-  //   super({ importMetaUrl: import.meta.url, ...options }, ...args)
-  // }
-
-  // disconnectedCallback () {
-  //   super.disconnectedCallback()
-  // }
-
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
-  shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
-  }
-
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
-  shouldRenderHTML () {
-    return !this.appointmentWrapper
-  }
-
   /**
    * renders the css
    */
@@ -60,8 +34,6 @@ export default class AppointmentTile extends Tile {
       :host .course-price {
         text-align:right;
       }
-      
-
       @media only screen and (max-width: _max-width_) {
         :host  {
        
@@ -75,28 +47,28 @@ export default class AppointmentTile extends Tile {
   /**
    * fetches the template
    */
-  fetchTemplate () {
-    const styles = [
-      {
-        path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
-        namespace: false
-      },
-      {
-        path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
-        namespaceFallback: true
-      }
-    ]
-    switch (this.getAttribute('namespace')) {
-      case 'tile-default-':
-        return this.fetchCSS([
-          {
-            path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-            namespace: false
-          }, ...styles])
-      default:
-        return this.fetchCSS(styles)
-    }
-  }
+  // fetchTemplate () {
+  //   const styles = [
+  //     {
+  //       path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
+  //       namespace: false
+  //     },
+  //     {
+  //       path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+  //       namespaceFallback: true
+  //     }
+  //   ]
+  //   switch (this.getAttribute('namespace')) {
+  //     case 'tile-default-':
+  //       return this.fetchCSS([
+  //         {
+  //           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+  //           namespace: false
+  //         }, ...styles])
+  //     default:
+  //       return super.fetchTemplate()
+  //   }
+  // }
 
   /**
    * Render HTML
@@ -137,7 +109,9 @@ export default class AppointmentTile extends Tile {
         </div>
         <div class="parent">
           <div class="course-booking">BOOKING BTN</div>
-          <div class="course-price">${content.lessonPrice}</div>
+          <div class="course-price">
+            <span>${content.lessonPrice}</span>
+          </div>
         </div>
       </div>
 

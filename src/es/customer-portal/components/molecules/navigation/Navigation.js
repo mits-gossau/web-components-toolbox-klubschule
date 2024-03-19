@@ -1,6 +1,9 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/* global history */
+/* global location */
+
 /**
 * @export
 * @class CustomerPortalNavigation
@@ -12,14 +15,29 @@ export default class Navigation extends Shadow() {
    */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.clickEventListener = event => {
+      event.preventDefault()
+      event.stopPropagation()
+      const target = event.composedPath()[0]
+      if (target.tagName === 'A') {
+        const url = new URL(location.href)
+        url.searchParams.set('page', target.getAttribute('href'))
+        console.log('changed', new URL(url.href))
+        history.pushState(history.state, document.title, url.href)
+      }
+    }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+    this.addEventListener('click', this.clickEventListener)
   }
 
-  disconnectedCallback () { }
+  disconnectedCallback () {
+    this.removeEventListener('click', this.clickEventListener)
+  }
 
   /**
    * evaluates if a render is necessary
@@ -89,13 +107,13 @@ export default class Navigation extends Shadow() {
     this.navigationWrapper = this.root.querySelector('div') || document.createElement('div')
     this.html = /* html */ `
       <div>
-        <a href="?page=/" route target="_self">
+        <a href="/" route target="_self">
           Abo-Termine buchen
         </a> -
-        <a href="?page=/booked" route target="_self">
+        <a href="/booked" route target="_self">
           Gebuchte Termine
         </a> -
-        <a href="?page=/subscriptions" route target="_self">
+        <a href="/subscriptions" route target="_self">
           Meine Abonnemente
         </a>
       </div>`
