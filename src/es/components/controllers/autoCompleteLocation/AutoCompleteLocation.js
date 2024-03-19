@@ -122,7 +122,17 @@ export default class AutoCompleteLocation extends Shadow() {
       composed: true
     }))
     // Todo dispatch filter event with lat/lng
-
+    this.dispatchEvent(new CustomEvent('request-with-facet',
+      {
+        detail: {
+          key: "location-search",
+          lat: lat,
+          lng: lng
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
   }
 
   dispatchInputChange(searchTerm) {

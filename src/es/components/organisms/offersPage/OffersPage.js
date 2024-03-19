@@ -94,7 +94,7 @@ export default class OffersPage extends Shadow() {
                                 </m-dialog>
                             </div>
                             <div col-lg="6" col-md="6" col-sm="12">
-                                <ks-c-auto-complete-location api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s" request-auto-complete="request-auto-complete-location" auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
+                                <ks-c-auto-complete-location api-key="" request-auto-complete="request-auto-complete-location" auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
                                     <m-dialog namespace="dialog-top-slide-in-" id="location-search" close-event-name="close-location-dialog">
                                         <div class="container">
                                             <a-input 
