@@ -124,47 +124,76 @@ export default class WithFacet extends Shadow() {
 
                 // set selected filter to url params
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                  const currentParams = params.get(filterItem.urlpara)?.split(',')
-                  console.log('currentParams', filterItem.urlpara, currentParams)
+                  // const currentParams = params.get(filterItem.urlpara)?.split(',')
+                  const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+                  console.log('paramsWithUnderscore', paramsWithUnderscore)
+                  // console.log('currentParams', filterItem.urlpara, currentParams)
+                  
+                  const containsParent = paramsWithUnderscore.some(array => array.includes(`${filterItem.urlpara}_${filterItem.id}`))
+                  console.log('containsParent', containsParent, `${filterItem.urlpara}_${filterItem.id}`)
+                  let selectedParent = ''
+                  if (containsParent) {
+                    selectedParent += `${filterItem.urlpara}_${filterItem.id}`
+                  }
+                  console.log('selectedParent', selectedParent)
 
                   filterItem.children.forEach(child => {
+                    // check if the child is already in the url params
+                    const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara}_${child.id}`))
+                    console.log('containsChild', containsChild, `${child.urlpara}_${child.id}`)
+                    let selectedChildren = ''
+                    if (containsChild) {
+                      selectedChildren += `${child.urlpara}_${child.id}`
+                    }
+                    console.log('selectedChildren', selectedChildren)
+
                     if (child.selected) {
-                      console.log('selected:', child.urlpara)
+                      console.log('selected:', `${child.urlpara}_${child.id}`)
                       // API does not answer with number of totals, the line below fixes that issue
                       if (child.count > 0) {
                         numberOfOffers += child.count
                       }
                       
-                      const currentValues = params.get(filterItem.urlpara) || ''
-
-                      if (!currentValues || !currentValues.includes(child.urlpara)) {
-                        console.log('setting:', child.urlpara)
-                        params.set(`${filterItem.urlpara}_${filterItem.id}`, `${currentValues + ',' || ''}${child.urlpara}_${child.id}`)
+                      if (!containsChild) {
+                        console.log('setting:', `${child.urlpara}_${child.id}`)
+                        selectedChildren += `${child.urlpara}_${child.id}`
+                        console.log('selectedChildren', selectedChildren)
+                        
+                        // console.log(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren + ',' || ''}${child.urlpara}_${child.id}`)
+                        // params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren + ',' || ''}${child.urlpara}_${child.id}`)
+                        // params.set(`${filterItem.urlpara}_${filterItem.id}`, `${paramsWithUnderscore + ',' || ''}${child.urlpara}_${child.id}`)
                       }
+                      // const currentValues = params.get(filterItem.urlpara) || ''
+                      // console.log('currentValues', currentValues)
+                      
+
+                      // if (!currentValues || !currentValues.includes(child.urlpara)) {
+                      //   // console.log('setting:', child.urlpara)
+                      //   params.set(`${filterItem.urlpara}_${filterItem.id}`, `${currentValues + ',' || ''}${child.urlpara}_${child.id}`)
+                      // }
                     } else {
-                      console.log('not selected:', child.urlpara)
+                      // console.log('not selected:', child.urlpara)
                       const currentValues = params.get(filterItem.urlpara)?.split(',')
                       let index
                       if (currentValues) {
                         console.log(currentValues, currentValues.includes(child.urlpara))
 
                         if (currentValues.includes(child.urlpara)) {
-                          console.log('removing:', child.urlpara)
-                          console.log(index, currentValues)
+                          // console.log('removing:', child.urlpara)
+                          // console.log(index, currentValues)
                           index = currentValues.indexOf(child.urlpara)
                           currentValues.splice(index, 1)
 
                           params.set(`${filterItem.urlpara}_${filterItem.id}`, currentValues.join(','))
                         }
                         if (params.get(filterItem.urlpara) === '') {
-                          console.log('deleting:', filterItem.urlpara)
+                          // console.log('deleting:', filterItem.urlpara)
                           params.delete(filterItem.urlpara)
                         }
                       }
                     }
                   })
                   
-                  console.log('currentParams', filterItem.urlpara, params.get(filterItem.urlpara)?.split(','))
                   self.history.pushState({}, '', `${url.pathname}?${params.toString()}`)
                 }
               })
