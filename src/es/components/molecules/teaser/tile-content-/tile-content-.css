@@ -63,6 +63,8 @@
   color: var(--color);
 
   background: var(--background-color);
+  
+  width: 100%;
 }
 
 :host figure:hover,
