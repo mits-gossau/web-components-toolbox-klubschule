@@ -96,30 +96,29 @@ export default class AppointmentsList extends Shadow() {
    * @returns void
    */
   renderHTML (fetch) {
-    try {
-      fetch.then(appointments => {
-        if (appointments.errorCode !== 0) {
-          throw new Error(`${appointments.errorMessage}`)
+    fetch.then(appointments => {
+      if (appointments.errorCode !== 0) {
+        throw new Error(`${appointments.errorMessage}`)
+      }
+      // !!!
+      this.listWrapper = this.root.querySelector('div') || document.createElement('div')
+      const fetchModules = this.fetchModules([
+        {
+          path: `${this.importMetaUrl}'../../../tile/Tile.js`,
+          name: 'm-tile'
+        },
+        {
+          path: `${this.importMetaUrl}'../../../../../../components/atoms/heading/Heading.js`,
+          name: 'ks-a-heading'
+        },
+        {
+          path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+          name: 'o-grid'
         }
-        // !!!
-        this.listWrapper = this.root.querySelector('div') || document.createElement('div')
-        const fetchModules = this.fetchModules([
-          {
-            path: `${this.importMetaUrl}'../../../tile/Tile.js`,
-            name: 'm-tile'
-          },
-          {
-            path: `${this.importMetaUrl}'../../../../../../components/atoms/heading/Heading.js`,
-            name: 'ks-a-heading'
-          },
-          {
-            path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
-            name: 'o-grid'
-          }
-        ])
-        return Promise.all([fetchModules]).then((children) => {
-          const heading = new children[0][1].constructorClass() // eslint-disable-line
-          this.html = /* html */ `
+      ])
+      return Promise.all([fetchModules]).then((children) => {
+        const heading = new children[0][1].constructorClass() // eslint-disable-line
+        this.html = /* html */ `
             <o-grid namespace="grid-12er-">
               <div col-lg="12" col-md="12" col-sm="12">
                 <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
@@ -133,13 +132,8 @@ export default class AppointmentsList extends Shadow() {
               ${this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], heading).join('')}
             </div>
             `
-        })
       })
-    } catch (error) {
-      console.error(error)
-      this.html = ''
-      this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
-    }
+    })
   }
 
   renderFilterSubscriptions (subscriptionsData) {
