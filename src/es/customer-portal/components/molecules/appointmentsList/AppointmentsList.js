@@ -50,15 +50,6 @@ export default class AppointmentsList extends Shadow() {
   }
 
   /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
-  shouldRenderHTML () {
-    return !this.listWrapper
-  }
-
-  /**
    * renders the css
    */
   renderCSS () {
@@ -171,26 +162,9 @@ export default class AppointmentsList extends Shadow() {
     const list = []
     dayList.forEach(day => {
       const dayWrapper = document.createElement('div')
-
-      // const heading = document.createElement('h1')
-      // heading.innerHTML = day.weekday
-      // heading.innerHTML = this.renderDayHeading(day.weekday)
-      // const headingWrapper = document.createElement('div')
-      // headingWrapper.appendChild(this.renderDayHeading(day.weekday))
       dayWrapper.appendChild(this.renderDayHeading(day.weekday, heading))
-      // dayWrapper.innerHTML = `<h1>${day.weekday}</h1>`
 
-      // Loop over the subscriptionCourseAppointments for the current day
       day.subscriptionCourseAppointments.forEach(appointment => {
-        //   console.log(`
-        // <div>
-        //   <h3>${appointment.courseTitle}</h3>
-        //   <p>Location: ${appointment.courseLocation}</p>
-        //   <p>Time: ${appointment.courseAppointmentTimeFrom} - ${appointment.courseAppointmentTimeTo}</p>
-        //   <p>Instructor: ${appointment.instructorDescription}</p>
-        //   <p>Price: ${appointment.lessonPrice}</p>
-        // </div>`)
-
         const tile = new tileComponent.constructorClass({ namespace: 'tile-default-' }) // eslint-disable-line
         const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
         tile.setAttribute('data', `${escapeForHtml(JSON.stringify(appointment))}`)
@@ -202,8 +176,6 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderDayHeading (data, heading) {
-    // const wrapper = document.createElement('div')
-    // const tile = new headingComponent.constructorClass({ namespace: 'tile-default-' }) // eslint-disable-line
     heading.setAttribute('tag', 'h2')
     heading.innerHTML = `${data}`
     return heading
