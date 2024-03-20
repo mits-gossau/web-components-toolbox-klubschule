@@ -67,7 +67,13 @@ export default class OffersPage extends Shadow() {
                                 <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
                             </div>
                             <div col-lg="6" col-md="6" col-sm="12">
-                              <ks-c-auto-complete auto-complete-selection="offers-page-auto-complete-selection" request-auto-complete="offers-page-request-auto-complete" ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}${this.hasAttribute('mock-auto-complete') ? ` mock` : ''} input-change="offers-page-search-change">
+                              <ks-c-auto-complete
+                                auto-complete-selection="offers-page-auto-complete-selection"
+                                request-auto-complete="offers-page-request-auto-complete"
+                                input-change="offers-page-search-change"
+                                ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+                                ${this.hasAttribute('mock-auto-complete') ? ` mock` : ''} 
+                              >
                                 <m-dialog namespace="dialog-top-slide-in-"  id="keyword-search" close-event-name="close-search-dialog">
                                     <div class="container">
                                       <a-input
@@ -83,7 +89,6 @@ export default class OffersPage extends Shadow() {
                                         delete-listener
                                         search
                                       >
-                                        <label for="inputSearch">Angebote in der Nähe finden</label>
                                       </a-input>
                                       <div id="close">
                                           <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
@@ -93,12 +98,27 @@ export default class OffersPage extends Shadow() {
                                       <ks-m-auto-complete-list auto-complete-selection="offers-page-auto-complete-selection">
                                       </ks-m-auto-complete-list>
                                     </div>
-                                    <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Angebot" icon-name="Search" icon-size="1.25em" search type="search" answer-event-name="offers-page-search-change"></a-input>
+                                    <a-input
+                                      id="show-modal"
+                                      inputid="show-modal"
+                                      placeholder="Ihr Angebot"
+                                      icon-name="Search"
+                                      icon-size="1.25em"
+                                      search type="search"
+                                      answer-event-name="offers-page-search-change"
+                                    >
+                                    </a-input>
                                 </m-dialog>
                               </ks-c-auto-complete>
                             </div>
                             <div col-lg="6" col-md="6" col-sm="12">
-                                <ks-c-auto-complete-location ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'} request-auto-complete="offers-page-request-auto-complete-location" auto-complete="offers-page-auto-complete-location" auto-complete-selection="offers-page-auto-complete-location-selection" input-change="offers-page-location-change">
+                                <ks-c-auto-complete-location 
+                                  request-auto-complete="offers-page-request-auto-complete-location"
+                                  auto-complete="offers-page-auto-complete-location"
+                                  auto-complete-selection="offers-page-auto-complete-location-selection"
+                                  input-change="offers-page-location-change"
+                                  ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}
+                                >
                                     <m-dialog namespace="dialog-top-slide-in-" id="location-search" close-event-name="close-location-dialog">
                                         <div class="container">
                                             <a-input 
@@ -114,7 +134,8 @@ export default class OffersPage extends Shadow() {
                                               type="search"
                                               delete-listener
                                               answer-event-name="offers-page-location-change"
-                                            ></a-input>
+                                            >
+                                            </a-input>
                                             <div id="close">
                                                 <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                                             </div>
@@ -129,7 +150,17 @@ export default class OffersPage extends Shadow() {
                                                 </ul>
                                             </ks-m-auto-complete-list>
                                         </div>
-                                        <a-input id="show-modal-location" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search" answer-event-name="offers-page-location-change"></a-input>
+                                        <a-input 
+                                          id="show-modal-location"
+                                          inputid="show-modal"
+                                          placeholder="Ihr Standort"
+                                          icon-name="Location"
+                                          icon-size="1.25em"
+                                          search
+                                          type="search"
+                                          answer-event-name="offers-page-location-change"
+                                        >
+                                        </a-input>
                                     </m-dialog>
                                 </ks-c-auto-complete>
                             </div>
