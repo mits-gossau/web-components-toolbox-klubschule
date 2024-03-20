@@ -100,8 +100,6 @@ export default class AppointmentsList extends Shadow() {
       if (appointments.errorCode !== 0) {
         throw new Error(`${appointments.errorMessage}`)
       }
-      // !!!
-      this.listWrapper = this.root.querySelector('div') || document.createElement('div')
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,
