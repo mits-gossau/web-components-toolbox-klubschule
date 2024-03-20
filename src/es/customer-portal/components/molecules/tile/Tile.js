@@ -17,11 +17,13 @@ export default class AppointmentTile extends Tile {
       :host > div {
         display:flex;
         flex-direction: column;
-        padding-bottom:1em;
       }
-      :host .parent {
+      :host .parent-body, .parent-footer {
         display:flex;
-        align-items: stretch;
+        padding:1.5em;
+      }
+      :host .parent-footer {
+        align-items: center;
       }
       :host .course-info, .course-booking {
         flex-basis: 50%;
@@ -75,49 +77,53 @@ export default class AppointmentTile extends Tile {
    * @returns Promise<void>
   */
   renderHTML () {
-    // console.log(this.getAttribute('data'))
-    const content = Tile.parseAttribute(this.getAttribute('data'))
-    // super.renderHTML()
-    this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
-    this.html = this.renderTile(content)
-    // this.html = /* HTML */`
-    // <div class="m-tile">
-    //   <div class="m-tile__wrap">
-    //     <div class="m-tile__overlay"></div>
-    //     <div class="m-tile__head">
-    //       <span class="m-tile__title">${content?.courseTitle} (${content?.courseType}_${content?.courseId})</span>
-    //     </div>
-    //   </div>
-    // </div>
-    // `
+    const fetchModules = this.fetchModules([
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/components/atoms/button/Button.js`,
+        name: 'ks-a-button'
+      }
+    ])
+    return Promise.all([fetchModules]).then((children) => {
+      // console.log(this.getAttribute('data'))
+      const content = Tile.parseAttribute(this.getAttribute('data'))
+      // super.renderHTML()
+      this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
+      this.html = this.renderTile(content)
+      // this.html = /* HTML */`
+      // <div class="m-tile">
+      //   <div class="m-tile__wrap">
+      //     <div class="m-tile__overlay"></div>
+      //     <div class="m-tile__head">
+      //       <span class="m-tile__title">${content?.courseTitle} (${content?.courseType}_${content?.courseId})</span>
+      //     </div>
+      //   </div>
+      // </div>
+      // `
+    })
   }
 
   renderTile (content) {
     return /* html */ `
       <div class="m-tile">
-      <div class="m-tile__wrap">
-        <div class="parent">
+        <div class="parent-body">
           <div class="course-info">
-            <p>${content.courseTitle} (${content.courseType}_${content.courseId})</p>
-            <span class="m-tile__content">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span>
-            <p>${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo}</p>
+            <span class="m-tile__title">${content.courseTitle} (${content.courseType}_${content.courseId})</span> <br />
+            <span>${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span><br />
+            <span>${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo}</span>
+            <span><ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button></span>
           </div>
           <div class="course-admin">
-            <p>${content.courseAppointmentFreeSeats} freie Plätze</p>
-            <p>${content.instructorDescription}</p>
-            <p>${content.courseLocation} <br /> Raum: ${content.roomDescription}</p>
-          </div>
+            <span>${content.courseAppointmentFreeSeats} freie Plätze</span><br />
+            <span>${content.instructorDescription}</span><br />
+            <span>${content.courseLocation} <br /> Raum: ${content.roomDescription}</span>
+          </div>  
         </div>
-        <div class="parent">
-          <div class="course-booking">BOOKING BTN</div>
-          <div class="course-price">
-            <span>${content.lessonPrice}</span>
-          </div>
+        <div class="parent-footer">
+          <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary">Termin buchen</ks-a-button></div>
+          <div class="course-price"><span class="m-tile__price"><strong>${content.lessonPrice}</strong></span></div>
         </div>
-        
       </div>
-
-    `
+      `
   }
 
   formatCourseAppointmentDate (date) {

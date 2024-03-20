@@ -116,16 +116,32 @@ export default class AppointmentsList extends Shadow() {
           {
             path: `${this.importMetaUrl}'../../../tile/Tile.js`,
             name: 'm-tile'
+          },
+          {
+            path: `${this.importMetaUrl}'../../../../../../components/atoms/heading/Heading.js`,
+            name: 'ks-a-heading'
+          },
+          {
+            path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+            name: 'o-grid'
           }
         ])
         return Promise.all([fetchModules]).then((children) => {
+          const heading = new children[0][1].constructorClass() // eslint-disable-line
           this.html = /* html */ `
-            <div>
-              <h2>1 Million Termine</h2>
-              ${this.renderFilterSubscriptions(appointments.filters.subscriptions)}
-              <hr>
-              <div class="list-wrapper">${this.renderDayList(appointments.selectedSubscription.dayList, children[0][0]).join('')}</div>
-            </div>`
+            <o-grid namespace="grid-12er-">
+              <div col-lg="12" col-md="12" col-sm="12">
+                <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
+              </div>
+              <div col-lg="12" col-md="12" col-sm="12">
+                ${this.renderFilterSubscriptions(appointments.filters.subscriptions)}
+              </div>
+              <div col-lg="12" col-md="12" col-sm="12">Filter...</div>
+            </o-grid>
+            <div class="list-wrapper">
+              ${this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], heading).join('')}
+            </div>
+            `
         })
       })
     } catch (error) {
@@ -151,16 +167,17 @@ export default class AppointmentsList extends Shadow() {
     return sortWrapper.innerHTML
   }
 
-  renderDayList (dayList, tileComponent) {
+  renderDayList (dayList, tileComponent, heading) {
     const list = []
     dayList.forEach(day => {
       const dayWrapper = document.createElement('div')
 
-      const heading = document.createElement('h1')
-      heading.innerHTML = day.weekday
-      const headingWrapper = document.createElement('div')
-      headingWrapper.appendChild(heading)
-      dayWrapper.appendChild(headingWrapper)
+      // const heading = document.createElement('h1')
+      // heading.innerHTML = day.weekday
+      // heading.innerHTML = this.renderDayHeading(day.weekday)
+      // const headingWrapper = document.createElement('div')
+      // headingWrapper.appendChild(this.renderDayHeading(day.weekday))
+      dayWrapper.appendChild(this.renderDayHeading(day.weekday, heading))
       // dayWrapper.innerHTML = `<h1>${day.weekday}</h1>`
 
       // Loop over the subscriptionCourseAppointments for the current day
@@ -182,5 +199,13 @@ export default class AppointmentsList extends Shadow() {
       list.push(dayWrapper.innerHTML)
     })
     return list
+  }
+
+  renderDayHeading (data, heading) {
+    // const wrapper = document.createElement('div')
+    // const tile = new headingComponent.constructorClass({ namespace: 'tile-default-' }) // eslint-disable-line
+    heading.setAttribute('tag', 'h2')
+    heading.innerHTML = `${data}`
+    return heading
   }
 }
