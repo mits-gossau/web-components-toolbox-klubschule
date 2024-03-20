@@ -5,6 +5,7 @@
 
     font: var(--mdx-sys-font-fix-label0);
     min-width: 200px;
+    max-width: 230px;
 }
 
 a-picture {

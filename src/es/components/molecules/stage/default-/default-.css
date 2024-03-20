@@ -21,6 +21,7 @@
     width: 100% !important;
     aspect-ratio: 21/9;
     padding: var(--mdx-sys-spacing-flex-m) var(--mdx-sys-spacing-flex-xs);
+    margin: 0 !important;
 }
 
 :host a,
