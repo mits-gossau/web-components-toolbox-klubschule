@@ -43,14 +43,11 @@ export default class AutoCompleteLocation extends Shadow() {
     this.RESOLVE_MSG = 'LOADED'
   }
 
-  connectedCallback() {
-    Promise
-      .resolve(this.loadDependency())
-      .then(() => {
-        this.addEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete-location', this.requestAutoCompleteListener)
-        this.addEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', this.clickOnPredictionListener)
-      })
+  async connectedCallback() {
+    this.addEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete-location', this.requestAutoCompleteListener)
+    this.addEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', this.clickOnPredictionListener)
     this.addEventListener("client-location-coords", this.clickOnLocateMe)
+    await this.loadDependency()
   }
 
   disconnectedCallback() {
@@ -121,7 +118,6 @@ export default class AutoCompleteLocation extends Shadow() {
       cancelable: true,
       composed: true
     }))
-    // Todo dispatch filter event with lat/lng
     this.dispatchEvent(new CustomEvent('request-with-facet',
       {
         detail: {
@@ -132,11 +128,12 @@ export default class AutoCompleteLocation extends Shadow() {
         bubbles: true,
         cancelable: true,
         composed: true
-      }))
+      })
+    )
   }
 
   dispatchInputChange(searchTerm) {
-    this.dispatchEvent(new CustomEvent('location-change', {
+    this.dispatchEvent(new CustomEvent(this.getAttribute('input-change') || 'location-change', {
       detail: {
         searchTerm: searchTerm
       },
@@ -147,7 +144,7 @@ export default class AutoCompleteLocation extends Shadow() {
   }
 
   get apiKey() {
-    return this.getAttribute('api-key') || ''
+    return this.getAttribute('google-api-key') || ''
   }
 
   clickOnPredictionListener = event => {

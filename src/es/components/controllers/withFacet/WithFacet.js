@@ -87,8 +87,8 @@ export default class WithFacet extends Shadow() {
         "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
         "mandantId": ${this.getAttribute('mandant-id') || 110}
         ${event.detail?.key === 'input-search' ? `,"searchText": "${event.detail.value}"` : ''}
-        ${event.detail?.key === 'location-search' ? `,"lat": "${event.detail.lat}"` : ''}
-        ${event.detail?.key === 'location-search' ? `,"lng": "${event.detail.lng}"` : ''}
+        ${event.detail?.key === 'location-search' ? `,"clat": "${event.detail.lat}"` : ''}
+        ${event.detail?.key === 'location-search' ? `,"clong": "${event.detail.lng}"` : ''}
       }`
 
       const request = filters.length > 0 ? filterRequest : initialRequest

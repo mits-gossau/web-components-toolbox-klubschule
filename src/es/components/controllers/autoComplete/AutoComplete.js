@@ -30,7 +30,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
  * @type {CustomElementConstructor}
  */
 export default class AutoComplete extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({
       importMetaUrl: import.meta.url,
       mode: 'false',
@@ -60,17 +60,48 @@ export default class AutoComplete extends Shadow() {
         composed: true
       }))
     }
+    this.clickOnPredictionListener = event => {
+      // update inputs
+      this.dispatchEvent(new CustomEvent(this.getAttribute('input-change') || 'search-change', {
+        detail: {
+          searchTerm: event.detail.description
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+      // close dialog
+      this.dispatchEvent(new CustomEvent('close-search-dialog', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+      // update Results
+      this.dispatchEvent(new CustomEvent('request-with-facet',
+        {
+          detail: {
+            key: this.id,
+            value: event.detail.description,
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        })
+      )
+    }
   }
 
-  connectedCallback () {
+  connectedCallback() {
     this.addEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete', this.requestAutoCompleteListener)
+    this.addEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-selection', this.clickOnPredictionListener)
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     this.removeEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete', this.requestAutoCompleteListener)
+    this.removeEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-selection', this.clickOnPredictionListener)
   }
 
-  dispatchMock () {
+  dispatchMock() {
     return this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {
       detail: {
         /** @type {Promise<fetchAutoCompleteEventDetail>} */
