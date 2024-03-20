@@ -37,6 +37,8 @@ export default class WithFacet extends Shadow() {
     }, ...args)
 
     const withFacetCache = new Map()
+    const initialRequest = this.getAttribute('initial-request')
+    console.log('initialRequest', initialRequest)
 
     this.isMocked = this.hasAttribute('mock')
     this.requestWithFacetListener = (event) => {
@@ -81,13 +83,16 @@ export default class WithFacet extends Shadow() {
         })
       }
 
-      const request = `{
+      const filterRequest = `{
         "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
         "mandantId": ${this.getAttribute('mandant-id') || 110}
         ${event.detail?.key === 'input-search' ? `,"searchText": "${event.detail.value}"` : ''}
         ${event.detail?.key === 'location-search' ? `,"clat": "${event.detail.lat}"` : ''}
         ${event.detail?.key === 'location-search' ? `,"clong": "${event.detail.lng}"` : ''}
       }`
+
+      const request = filters.length > 0 ? filterRequest : initialRequest
+      console.log('request', request)
 
       const apiUrl = this.isMocked
         ? `${this.importMetaUrl}./mock/default.json`
