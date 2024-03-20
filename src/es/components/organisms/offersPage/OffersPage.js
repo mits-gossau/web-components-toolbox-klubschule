@@ -94,25 +94,39 @@ export default class OffersPage extends Shadow() {
                                 </m-dialog>
                             </div>
                             <div col-lg="6" col-md="6" col-sm="12">
-                                <m-dialog namespace="dialog-top-slide-in-">
-                                    <div class="container">
-                                        <a-input 
-                                            inputid="location-search" 
-                                            placeholder="Ihr Standort?" 
-                                            icon-name="Location" 
-                                            icon-size="1.5em" 
-                                            search 
-                                            submit-search="request-auto-complete" 
-                                            any-key-listener 
-                                            type="search"
-                                        ></a-input>
-                                        <div id="close">
-                                            <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                                <ks-c-auto-complete-location api-key="" request-auto-complete="request-auto-complete-location" auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
+                                    <m-dialog namespace="dialog-top-slide-in-" id="location-search" close-event-name="close-location-dialog">
+                                        <div class="container">
+                                            <a-input 
+                                                id="location-search-input"
+                                                inputid="location-search" 
+                                                placeholder="Ihr Standort?" 
+                                                icon-name="Location" 
+                                                icon-size="1.5em" 
+                                                search 
+                                                submit-search="request-auto-complete-location" 
+                                                any-key-listener 
+                                                type="search"
+                                                delete-listener
+                                                answer-event-name="location-change"
+                                            ></a-input>
+                                            <div id="close">
+                                                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="container"></div>
-                                    <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search"></a-input>
-                                </m-dialog>
+                                        <div class="container">
+                                            <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
+                                                <ul>
+                                                    <li id="userLocation">
+                                                        <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
+                                                        <span>Aktueller Standort</span>
+                                                    </li>
+                                                </ul>
+                                            </ks-m-auto-complete-list>
+                                        </div>
+                                        <a-input id="show-modal-location" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search"answer-event-name="location-change"></a-input>
+                                    </m-dialog>
+                                </ks-c-auto-complete>
                             </div>
                         </o-grid>
                         <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
@@ -252,6 +266,14 @@ export default class OffersPage extends Shadow() {
       {
         path: `${this.importMetaUrl}../../controllers/withFacet/WithFacet.js`,
         name: 'ks-c-with-facet'
+      },
+      {
+        path: `${this.importMetaUrl}../../controllers/autoCompleteLocation/AutoCompleteLocation.js`,
+        name: 'ks-c-auto-complete-location'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/autoCompleteList/AutoCompleteList.js`,
+        name: 'ks-m-auto-complete-list'
       },
       {
         path: `${this.importMetaUrl}../../organisms/bodySection/BodySection.js`,

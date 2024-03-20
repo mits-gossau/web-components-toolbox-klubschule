@@ -245,7 +245,6 @@ export default class TileList extends Shadow() {
   renderHTML () {
     const warnMandatory = 'data attribute requires: '
     const data = TileList.parseAttribute(this.getAttribute('data'))
-    console.log(data)
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`

@@ -65,8 +65,11 @@ export default class KsFooter extends Footer {
             }
             :host > footer .invert {
                 margin: unset;
-                padding: var(--content-spacing-mobile) var(--content-spacing) 0;
+                padding: var(--content-spacing-mobile) var(--legal-flex-spacing-vertical) 0;
                 width: 67%;
+            }
+            :host > footer .invert.footer-links {
+                padding: var(--content-spacing-mobile) var(--content-spacing) 0;
             }
             :host > footer .invert > * {
                 margin: 0;
@@ -138,6 +141,9 @@ export default class KsFooter extends Footer {
             }
             :host footer>div:last-child .footer-links > .has-copyright > li:last-child {
                 margin-left: auto;
+            }
+            :host footer>div:last-child .footer-links > .has-copyright > li:first-child {
+                padding-left: 0;
             }
             :host footer>div:last-child>.footer-links>ul.has-copyright>li>p {
                 margin-bottom: 0;

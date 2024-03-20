@@ -2,23 +2,65 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class AutoCompleteList extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.locateMe = this.shadowRoot.querySelector("#userLocation")
     this.autoCompleteListener = event => this.renderHTML(event.detail.fetch)
   }
 
-  connectedCallback () {
+  connectedCallback() {
+    if (this.locateMe) {
+      this.locateMe.addEventListener('click', this.clickOnLocateMe)
+    }
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('auto-complete', this.autoCompleteListener)
+    document.body.addEventListener(this.getAttribute('auto-complete') || 'auto-complete', this.autoCompleteListener)
   }
 
-  disconnectedCallback () {
-    document.body.removeEventListener('auto-complete', this.autoCompleteListener)
+  disconnectedCallback() {
+    if (this.locateMe) {
+      this.locateMe.removeEventListener('click', this.clickOnLocateMe)
+    }
+    document.body.removeEventListener(this.getAttribute('auto-complete') || 'auto-complete', this.autoCompleteListener)
   }
 
-  shouldRenderCSS () {
+  clickOnLocateMe = () => {
+    if (navigator.geolocation) {
+      // TODO trigger Filtering
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position.coords)
+        // Todo dispatch filter event with lat/lng
+        /** @type {import("../../controllers/autoCompleteLocation/AutoCompleteLocation.js").LocationCoordinates} */
+        this.dispatchEvent(new CustomEvent('client-location-coords', {
+          detail: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      });
+    } else {
+      console.log("Geolocation is not supported by this browser.")
+    }
+  }
+
+  clickOnLocationListElement = (item) => {
+    this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', {
+      /** @type {import("../../controllers/autoCompleteLocation/AutoCompleteLocation.js").LocationSelectionItem} */
+      detail: {
+        description: item.term,
+        selected: item.placeId
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+
+  shouldRenderCSS() {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
@@ -29,11 +71,11 @@ export default class AutoCompleteList extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML () {
+  shouldRenderHTML() {
     return !this.list
   }
 
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */ `
         :host {
           padding-top: 1em;
@@ -160,7 +202,7 @@ export default class AutoCompleteList extends Shadow() {
     return this.fetchTemplate()
   }
 
-  fetchTemplate () {
+  fetchTemplate() {
     switch (this.getAttribute('namespace')) {
       case 'auto-complete-list-default-':
         return this.fetchCSS([
@@ -179,7 +221,7 @@ export default class AutoCompleteList extends Shadow() {
    * @param {Promise<import("../../controllers/autoComplete/AutoComplete.js").fetchAutoCompleteEventDetail>|null} [fetch=null]
    * @return {void}
    */
-  renderHTML (fetch = null) {
+  renderHTML(fetch = null) {
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
@@ -191,28 +233,43 @@ export default class AutoCompleteList extends Shadow() {
           (/**
             * @type {{total: number,success: boolean, searchText: string, items: import("../../controllers/autoComplete/AutoComplete.js").Item[], cms: []}}
             */
-            { total, success, searchText, items, cms }) => {
+            { total, success, searchText, items, cms }
+          ) => {
             if (total === 0) return
-            this.list.innerHTML = items.reduce((acc, curr) => `${acc}<li><a-icon-mdx icon-name="${curr.typ === 1
-              ? 'Search'
-              : curr.typ === 2
-                ? 'ArrowRight'
-                : 'Location'}" size="1em"></a-icon-mdx><span>${curr.term}</span></li>`, '')
+            const listItems = items.map(item => {
+              const listElement = document.createElement('li')
+              listElement.innerHTML = `
+                <a-icon-mdx icon-name="${item.typ === 1
+                  ? 'Search'
+                  : item.typ === 2
+                    ? 'ArrowRight'
+                    : 'Location'}" size="1em"></a-icon-mdx><span>${item.term}</span>
+              `
+              if (this.getAttribute('auto-complete') === "auto-complete-location") {
+                listElement.addEventListener('click', () => this.clickOnLocationListElement(item))
+              }
+              return listElement
+            })
+            this.list.replaceChildren(...listItems)
           })
       } else {
-        this.html = /* html */ `
-            <div>
-              <ul></ul>
-            </div>  
-        `
-        Array.from(this.root.children).forEach(node => {
-          if (node.tagName === 'LI') this.list.appendChild(node)
-        })
+        if (this.hasAttribute('auto-complete-location')) {
+          this.list.replaceChildren(this.locateMe)
+        } else {
+          this.html = /* html */ `
+              <div>
+                <ul></ul>
+              </div>  
+          `
+          Array.from(this.list.children).forEach(node => {
+            if (node.tagName === 'LI') this.list.appendChild(node)
+          })
+        }
       }
     })
   }
 
-  get list () {
+  get list() {
     return this.root.querySelector('ul')
   }
 }

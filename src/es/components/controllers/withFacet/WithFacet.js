@@ -42,7 +42,7 @@ export default class WithFacet extends Shadow() {
     this.requestWithFacetListener = (event) => {
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-      console.log('---------------------------------event', event)
+      // console.log('---------------------------------event', event)
 
       const filters = []
       const filter = this.constructFilterItem(event)
@@ -85,6 +85,8 @@ export default class WithFacet extends Shadow() {
         "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
         "mandantId": ${this.getAttribute('mandant-id') || 110}
         ${event.detail?.key === 'input-search' ? `,"searchText": "${event.detail.value}"` : ''}
+        ${event.detail?.key === 'location-search' ? `,"lat": "${event.detail.lat}"` : ''}
+        ${event.detail?.key === 'location-search' ? `,"lng": "${event.detail.lng}"` : ''}
       }`
 
       const apiUrl = this.isMocked
@@ -116,7 +118,7 @@ export default class WithFacet extends Shadow() {
             // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
             : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
               if (response.status >= 200 && response.status <= 299) {
-                console.log('response (WithFacet.js)', response)
+                // console.log('response (WithFacet.js)', response)
                 return response.json()
               }
               throw new Error(response.statusText)
@@ -125,7 +127,7 @@ export default class WithFacet extends Shadow() {
               let numberOfOffers = 0
 
               filterData.forEach(filterItem => {
-                console.log('>>> ', filterItem.urlpara, ' <<<', filterItem)
+                // console.log('>>> ', filterItem.urlpara, ' <<<', filterItem)
 
                 // set selected filter to url params
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
