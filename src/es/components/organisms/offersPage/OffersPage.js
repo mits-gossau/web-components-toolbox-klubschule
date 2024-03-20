@@ -60,8 +60,8 @@ export default class OffersPage extends Shadow() {
           <div>
             <div id="content1" tab-content-target>
                 <ks-c-with-facet ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}>
-                    <!-- o-body-style is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-                    <o-body-style has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
+                    <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
+                    <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
                         <o-grid namespace="grid-12er-">
                             <div col-lg="12" col-md="12" col-sm="12">
                                 <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
@@ -155,11 +155,11 @@ export default class OffersPage extends Shadow() {
                             <span>Weitere Angebote</span>
                             <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                         </ks-a-button>
-                    </o-body-style>
+                    </ks-o-body-section>
                 </ks-c-with-facet>
             </div>
             <div id="content2" tab-content-target>
-                <o-body-style background-color-prop="#F7F4F1">
+                <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)"">
                     <o-grid namespace="grid-12er-">
                         <div col-lg="12" col-md="12" col-sm="12">
                             <ks-m-content-search-item>
@@ -238,7 +238,7 @@ export default class OffersPage extends Shadow() {
                         <span>Weitere Inhalte</span>
                         <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                     </ks-a-button>
-                </o-body-style>
+                </ks-o-body-section>
             </div>
         </div>
       </ks-m-tab>
@@ -254,8 +254,8 @@ export default class OffersPage extends Shadow() {
         name: 'ks-c-with-facet'
       },
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js`,
-        name: 'o-body-style'
+        path: `${this.importMetaUrl}../../organisms/bodySection/BodySection.js`,
+        name: 'ks-o-body-section'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
