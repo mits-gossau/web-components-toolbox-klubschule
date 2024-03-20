@@ -60,14 +60,45 @@ export default class AutoComplete extends Shadow() {
         composed: true
       }))
     }
+    this.clickOnPredictionListener = event => {
+      // update inputs
+      this.dispatchEvent(new CustomEvent('search-change', {
+        detail: {
+          searchTerm: event.detail.description
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+      // close dialog
+      this.dispatchEvent(new CustomEvent('close-location-dialog', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+      // update Results
+      this.dispatchEvent(new CustomEvent('request-with-facet',
+        {
+          detail: {
+            key: this.id,
+            value: event.detail.description,
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        })
+      )
+    }
   }
 
   connectedCallback () {
     this.addEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete', this.requestAutoCompleteListener)
+    this.addEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-selection', this.clickOnPredictionListener)
   }
 
   disconnectedCallback () {
     this.removeEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete', this.requestAutoCompleteListener)
+    this.removeEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-selection', this.clickOnPredictionListener)
   }
 
   dispatchMock () {
