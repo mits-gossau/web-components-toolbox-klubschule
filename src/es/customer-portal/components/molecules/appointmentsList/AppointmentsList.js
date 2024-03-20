@@ -17,6 +17,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   connectedCallback () {
+    this.html = 'loading....'
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
@@ -95,7 +96,7 @@ export default class AppointmentsList extends Shadow() {
    * Render HTML
    * @returns void
    */
-  renderHTML (fetch) {
+  async renderHTML (fetch) {
     fetch.then(appointments => {
       if (appointments.errorCode !== 0) {
         throw new Error(`${appointments.errorMessage}`)
@@ -110,31 +111,34 @@ export default class AppointmentsList extends Shadow() {
           name: 'ks-a-heading'
         },
         {
-          path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+          path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
           name: 'o-grid'
         }
       ])
-      return Promise.all([fetchModules]).then((children) => {
-        const heading = new children[0][1].constructorClass() // eslint-disable-line
+      return Promise.all([fetchModules]).then(async (children) => {
+        this.html = ''
+        // const heading = new children[0][1].constructorClass() // eslint-disable-line
+        const filter = await this.renderFilterSubscriptions(appointments.filters.subscriptions)
+        const dayList = await this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1])
         this.html = /* html */ `
             <o-grid namespace="grid-12er-">
               <div col-lg="12" col-md="12" col-sm="12">
                 <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
               </div>
               <div col-lg="12" col-md="12" col-sm="12">
-                ${this.renderFilterSubscriptions(appointments.filters.subscriptions)}
+               ${filter}
               </div>
               <div col-lg="12" col-md="12" col-sm="12">Filter...</div>
             </o-grid>
             <div class="list-wrapper">
-              ${this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], heading).join('')}
+              ${dayList}
             </div>
             `
       })
     })
   }
 
-  renderFilterSubscriptions (subscriptionsData) {
+  async renderFilterSubscriptions (subscriptionsData) {
     const select = document.createElement('select')
     select.id = 'filters-subscriptions'
 
@@ -150,7 +154,7 @@ export default class AppointmentsList extends Shadow() {
     return sortWrapper.innerHTML
   }
 
-  renderDayList (dayList, tileComponent, heading) {
+  async renderDayList (dayList, tileComponent, heading) {
     const list = []
     dayList.forEach(day => {
       const dayWrapper = document.createElement('div')
@@ -168,8 +172,9 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderDayHeading (data, heading) {
-    heading.setAttribute('tag', 'h2')
-    heading.innerHTML = `${data}`
-    return heading
+    const title = new heading.constructorClass() // eslint-disable-line
+    title.setAttribute('tag', 'h2')
+    title.innerHTML = data
+    return title
   }
 }

@@ -36,6 +36,9 @@ export default class AppointmentTile extends Tile {
       :host .course-price {
         text-align:right;
       }
+      :host .m-tile__title{
+        color:red;
+      }
       @media only screen and (max-width: _max-width_) {
         :host  {
        
