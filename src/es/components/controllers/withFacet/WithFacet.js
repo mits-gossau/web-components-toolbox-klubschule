@@ -44,7 +44,6 @@ export default class WithFacet extends Shadow() {
 
       console.log('---------------------------------event', event)
 
-      let selectedFilter = ''
       const filters = []
       const filter = this.constructFilterItem(event)
       if (filter) filters.push(filter)
@@ -55,21 +54,27 @@ export default class WithFacet extends Shadow() {
       
       if (params) {
         const entriesWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+        console.log('entriesWithUnderscore', entriesWithUnderscore)
         
         entriesWithUnderscore.forEach(([key, value]) => {
-            // console.log(`Key: ${key}, Value: ${value}`)
             const [urlparaKey, idKey] = key.split('_')
-            const [urlparaValue, idValue] = value.split('_')
+            let children = []
+
+            value.split(',').forEach(value => {
+              const [urlparaValue, idValue] = value.split('_')
+
+              children.push(`{
+                "urlpara": "${urlparaValue}",
+                "id": "${idValue}",
+                "selected": true
+              }`)
+            })
 
             const filter = (`{
-                "urlpara": "${urlparaKey}",
-                "id": "${idKey}",
-                "selected": true,
-                "children": [{
-                    "urlpara": "${urlparaValue}",
-                    "id": "${idValue}",
-                    "selected": true
-                }]
+              "urlpara": "${urlparaKey}",
+              "id": "${idKey}",
+              "selected": true,
+              "children": [${children.join(',')}]
             }`)
 
             filters.push(filter)
@@ -126,7 +131,7 @@ export default class WithFacet extends Shadow() {
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   // const currentParams = params.get(filterItem.urlpara)?.split(',')
                   const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                  // console.log('paramsWithUnderscore', paramsWithUnderscore)
+                  console.log('paramsWithUnderscore', paramsWithUnderscore)
                   // console.log('currentParams', filterItem.urlpara, currentParams)
                   
                   let selectedChildren = []
