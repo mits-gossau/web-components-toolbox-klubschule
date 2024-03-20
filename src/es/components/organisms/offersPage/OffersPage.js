@@ -59,7 +59,11 @@ export default class OffersPage extends Shadow() {
         </ul>
           <div>
             <div id="content1" tab-content-target>
-                <ks-c-with-facet ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}>
+                <ks-c-with-facet
+                  ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
+                  ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
+                  ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
+                >
                     <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
                     <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
                         <o-grid namespace="grid-12er-">
