@@ -10,8 +10,8 @@
      <div>
         <div id="content1" tab-content-target>
             <ks-c-with-facet mock>
-                <!-- o-body-style is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-                <o-body-style background-color-prop="#F7F4F1">
+                <!-- o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
+                <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
                     <o-grid namespace="grid-12er-">
                         <div col-lg="6" col-md="6" col-sm="12">
                             <m-dialog namespace="dialog-top-slide-in-">
@@ -90,11 +90,11 @@
                         <span>Weitere Angebote</span>
                         <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                     </ks-a-button>
-                </o-body-style>
+                </ks-o-body-section>
             </ks-c-with-facet>
         </div>
         <div id="content2" tab-content-target>
-            <o-body-style background-color-prop="#F7F4F1">
+            <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
                 <o-grid namespace="grid-12er-">
                     <div col-lg="12" col-md="12" col-sm="12">
                         <ks-m-content-search-item>
@@ -173,7 +173,7 @@
                     <span>Weitere Inhalte</span>
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                 </ks-a-button>
-            </o-body-style>
+            </ks-o-body-section>
         </div>
     </div>
 </ks-m-tab>

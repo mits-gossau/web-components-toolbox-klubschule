@@ -43,6 +43,7 @@
     --img-height: 100%;
     --img-object-fit: cover;
     --img-max-height: none;
+    --overflow: hidden;
 
     position: absolute;
     inset: 0;

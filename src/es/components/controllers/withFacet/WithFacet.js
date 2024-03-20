@@ -42,9 +42,8 @@ export default class WithFacet extends Shadow() {
     this.requestWithFacetListener = (event) => {
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-      console.log('---------------------------------event', event)
+      // console.log('---------------------------------event', event)
 
-      let selectedFilter = ''
       const filters = []
       const filter = this.constructFilterItem(event)
       if (filter) filters.push(filter)
@@ -55,21 +54,27 @@ export default class WithFacet extends Shadow() {
       
       if (params) {
         const entriesWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+        console.log('entriesWithUnderscore', entriesWithUnderscore)
         
         entriesWithUnderscore.forEach(([key, value]) => {
-            // console.log(`Key: ${key}, Value: ${value}`)
             const [urlparaKey, idKey] = key.split('_')
-            const [urlparaValue, idValue] = value.split('_')
+            let children = []
+
+            value.split(',').forEach(value => {
+              const [urlparaValue, idValue] = value.split('_')
+
+              children.push(`{
+                "urlpara": "${urlparaValue}",
+                "id": "${idValue}",
+                "selected": true
+              }`)
+            })
 
             const filter = (`{
-                "urlpara": "${urlparaKey}",
-                "id": "${idKey}",
-                "selected": true,
-                "children": [{
-                    "urlpara": "${urlparaValue}",
-                    "id": "${idValue}",
-                    "selected": true
-                }]
+              "urlpara": "${urlparaKey}",
+              "id": "${idKey}",
+              "selected": true,
+              "children": [${children.join(',')}]
             }`)
 
             filters.push(filter)
@@ -80,6 +85,8 @@ export default class WithFacet extends Shadow() {
         "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
         "mandantId": ${this.getAttribute('mandant-id') || 110}
         ${event.detail?.key === 'input-search' ? `,"searchText": "${event.detail.value}"` : ''}
+        ${event.detail?.key === 'location-search' ? `,"lat": "${event.detail.lat}"` : ''}
+        ${event.detail?.key === 'location-search' ? `,"lng": "${event.detail.lng}"` : ''}
       }`
 
       const apiUrl = this.isMocked
@@ -111,7 +118,7 @@ export default class WithFacet extends Shadow() {
             // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
             : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
               if (response.status >= 200 && response.status <= 299) {
-                console.log('response (WithFacet.js)', response)
+                // console.log('response (WithFacet.js)', response)
                 return response.json()
               }
               throw new Error(response.statusText)
@@ -120,13 +127,13 @@ export default class WithFacet extends Shadow() {
               let numberOfOffers = 0
 
               filterData.forEach(filterItem => {
-                console.log('>>> ', filterItem.urlpara, ' <<<', filterItem)
+                // console.log('>>> ', filterItem.urlpara, ' <<<', filterItem)
 
                 // set selected filter to url params
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   // const currentParams = params.get(filterItem.urlpara)?.split(',')
                   const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                  // console.log('paramsWithUnderscore', paramsWithUnderscore)
+                  console.log('paramsWithUnderscore', paramsWithUnderscore)
                   // console.log('currentParams', filterItem.urlpara, currentParams)
                   
                   let selectedChildren = []

@@ -24,15 +24,28 @@ export default class KsBodyStyle extends BodyStyle {
     // add '.ks-o-body-section__last-child' class to the last child that is not style/script to be able to select it with css
     this.addClassToLastChild()
     this.css = /* CSS */`
-        :host {
+        :host(ks-o-body-section) {
             /* had to reset display here because it was set to display inline-block !important in parent class */
             display: ${this.getAttribute('display') || 'block'} !important;
             position: relative;
+            margin-top: var(--mdx-sys-spacing-flex-l) !important;
+            margin-bottom: var(--mdx-sys-spacing-flex-l) !important;
         }
+        
         :host > * {
             margin-left: auto;
             margin-right: auto;
             max-width: 100%;
+        }
+
+        :host([has-background]) {
+            padding-top: var(--mdx-sys-spacing-flex-l);
+            padding-bottom: var(--mdx-sys-spacing-flex-l);
+        }
+
+        :host([no-margin-y]) {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
         }
 
         :host([variant=default]) > * {
@@ -51,31 +64,17 @@ export default class KsBodyStyle extends BodyStyle {
             width: 100%;
         }
 
-        /* adding more space to the first child */
-        :host:first-child,
+        /* remove space of the first child */
+        :host(:first-child),
         :host > *:first-child,
-        :host > a[wrapper]:first-child {
-            margin-top: var(--mdx-sys-spacing-flex-l);
-        }
-        /* adding more space to the last (visible) child */
-        :host:last-child,
-        :host > .ks-o-body-section__last-child,
-        :host > a[wrapper].ks-o-body-section__last-child {
-            margin-bottom: var(--mdx-sys-spacing-flex-l);
-        }
-
-        :host([has-background]) {
-            padding-top: var(--mdx-sys-spacing-flex-l);
-            padding-bottom: var(--mdx-sys-spacing-flex-l);
-        }
-
-        :host([no-margin-y]) > *:first-child,
-        :host([has-background]) > *:first-child {
+        :host > [wrapper]:first-child {
             margin-top: 0 !important;
         }
-
-        :host([no-margin-y]) > .ks-o-body-section__last-child,
-        :host([has-background]) > .ks-o-body-section__last-child {
+        /* remove space of the last (visible) child */
+        :host(:last-child),
+        :host(.ks-o-body-section__last-child),
+        :host > .ks-o-body-section__last-child,
+        :host > [wrapper].ks-o-body-section__last-child {
             margin-bottom: 0 !important;
         }
 
@@ -95,6 +94,14 @@ export default class KsBodyStyle extends BodyStyle {
         :host > a[namespace="teaser-text-image-"][wrapper] {
             margin-top: var(--mdx-sys-spacing-flex-m);
             margin-bottom: var(--mdx-sys-spacing-flex-m);
+        }
+        :host([has-background]) > a:first-child[namespace="teaser-fullwidth-"][wrapper],
+        :host([has-background]) > a:first-child[namespace="teaser-text-image-"][wrapper] {
+            margin-top: 0;
+        }
+        :host([has-background]) > a.ks-o-body-section__last-child[namespace="teaser-fullwidth-"][wrapper],
+        :host([has-background]) > a.ks-o-body-section__last-child[namespace="teaser-text-image-"][wrapper] {
+            margin-bottom: 0;
         }
 
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */
