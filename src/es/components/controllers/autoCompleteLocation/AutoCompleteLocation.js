@@ -133,7 +133,7 @@ export default class AutoCompleteLocation extends Shadow() {
   }
 
   dispatchInputChange(searchTerm) {
-    this.dispatchEvent(new CustomEvent('location-change', {
+    this.dispatchEvent(new CustomEvent(this.getAttribute('input-change') || 'location-change', {
       detail: {
         searchTerm: searchTerm
       },
