@@ -125,7 +125,7 @@ export default class KsBodyStyle extends BodyStyle {
 
             ${(this.hasAttribute('display-mobile'))
                 /* had to reset display here because it was set to display inline-block !important in parent class */
-                ? `:host {
+                ? `:host(ks-o-body-section) {
                         display: ${this.getAttribute('display-mobile')} !important;
                     }`
                 : ''}
