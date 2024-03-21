@@ -80,7 +80,7 @@ export default class AutoComplete extends Shadow() {
       this.dispatchEvent(new CustomEvent('request-with-facet',
         {
           detail: {
-            key: "input-search",
+            key: this.id,
             value: event.detail.description,
           },
           bubbles: true,
