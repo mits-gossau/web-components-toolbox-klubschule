@@ -56,7 +56,7 @@ export default class WithFacet extends Shadow() {
       
       if (params) {
         const entriesWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-        console.log('entriesWithUnderscore', entriesWithUnderscore)
+        // console.log('entriesWithUnderscore', entriesWithUnderscore)
         
         entriesWithUnderscore.forEach(([key, value]) => {
             const [urlparaKey, idKey] = key.split('_')
@@ -138,7 +138,7 @@ export default class WithFacet extends Shadow() {
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   // const currentParams = params.get(filterItem.urlpara)?.split(',')
                   const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                  console.log('paramsWithUnderscore', paramsWithUnderscore)
+                  // console.log('paramsWithUnderscore', paramsWithUnderscore)
                   // console.log('currentParams', filterItem.urlpara, currentParams)
                   
                   let selectedChildren = []
