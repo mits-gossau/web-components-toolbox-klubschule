@@ -13,102 +13,109 @@ export default class AppointmentTile extends Tile {
   renderCSS () {
     super.renderCSS()
     this.css = /* css */`
-      :host {}
-      :host > div {
-        display:flex;
-        flex-direction: column;
+    :host {}
+    :host > div {
+      display:flex;
+      flex-direction: column;
+    }
+    :host .parent-body, .parent-footer {
+      display:flex;
+      padding:1.5em;
+    }
+    :host .parent-footer {
+      align-items: center;
+    }
+    :host .course-info, .course-booking {
+      flex-basis: 50%;
+    }
+    :host .course-admin, .course-price {
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+    :host .course-info {
+      display:flex;
+      flex-direction:column;
+    }
+    :host .course-price {
+      text-align:right;
+    }
+    :host .title {
+      color:var(--title-color);
+    }
+    :host .date, .time {
+      font-weight:400;
+    }
+    :host .time {
+      display:flex;
+      gap:0.5em;
+      align-items: center;
+    }
+    :host .vacancies {
+      display:flex;
+      padding-bottom:0.75em;
+    }
+    :host .body, .footer {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      grid-template-rows: auto auto auto;
+      align-items: center;
+      padding:1.5em 1.5em 0.75em 1.5em;
+      gap:0.25em;
+    }
+    :host .info {
+      display:flex;
+      align-items:center;
+    }
+    :host .location-room {
+      display:flex;
+      flex-direction:column;
+    }
+    :host .icon-info {
+      display:flex;
+      align-items: center;
+    }
+    @media only screen and (max-width: _max-width_) {
+      :host  {
+        
       }
-      :host .parent-body, .parent-footer {
-        display:flex;
-        padding:1.5em;
-      }
-      :host .parent-footer {
-        align-items: center;
-      }
-      :host .course-info, .course-booking {
-        flex-basis: 50%;
-      }
-      :host .course-admin, .course-price {
-        flex-grow: 1;
-        flex-shrink: 1;
-      }
-      :host .course-info {
-        display:flex;
-        flex-direction:column;
-      }
-      :host .course-price {
-        text-align:right;
-      }
-      :host .title {
-        color:#0053A6;
-      }
-      :host .date, .time {
-        font-weight:400;
-      }
-      :host .time {
-        display:flex;
-        gap:0.5em;
-        align-items: center;
-      }
-      :host .vacancies {
-        display:flex;
-        padding-bottom:0.75em;
-      }
-      :host .body, .footer {
-       display: grid;
-       grid-template-columns: 50% 50%;
-       grid-template-rows: auto auto auto;
-       align-items: center;
-       padding:1.5em 1.5em 0.75em 1.5em;
-       gap:0.25em;
-      }
-      :host .info {
-        display:flex;
-        align-items:center;
-      }
-      :host .location-room {
-        display:flex;
-        flex-direction:column;
-      }
-      :host .icon-info {
-        display:flex;
-        align-items: center;
-      }
-      @media only screen and (max-width: _max-width_) {
-        :host  {
-       
-        }
-
-      }
+      
+    }
     `
     // return this.fetchTemplate()
   }
 
   /**
    * fetches the template
-   */
-  // fetchTemplate () {
-  //   const styles = [
-  //     {
-  //       path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
-  //       namespace: false
-  //     },
-  //     {
-  //       path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
-  //       namespaceFallback: true
-  //     }
-  //   ]
-  //   switch (this.getAttribute('namespace')) {
-  //     case 'tile-default-':
-  //       return this.fetchCSS([
-  //         {
-  //           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-  //           namespace: false
-  //         }, ...styles])
-  //     default:
-  //       return super.fetchTemplate()
-  //   }
-  // }
+  */
+  fetchTemplate () {
+    // const styles = [
+    //   {
+    //     path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
+    //     namespace: false
+    //   },
+    //   {
+    //     path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+    //     namespaceFallback: true
+    //   }
+    // ]
+    switch (this.getAttribute('namespace')) {
+      case 'tile-course-appointment-':
+        return this.fetchCSS([{
+          path: `${this.importMetaUrl}../../../../es/components/molecules/tile/default-/default-.css`, // apply namespace since it is specific and no fallback
+          namespace: false,
+          replaces: [{
+            pattern: '--tile-default-',
+            flags: 'g',
+            replacement: '--tile-course-appointment-'
+          }]
+        }, {
+          path: `${this.importMetaUrl}../../../../es/customer-portal/components/molecules/tile/course-appointment-/course-appointment-.css`, // apply namespace since it is specific and no fallback
+          namespace: false
+        }], false)
+      default:
+        return this.fetchCSS()
+    }
+  }
 
   /**
    * Render HTML

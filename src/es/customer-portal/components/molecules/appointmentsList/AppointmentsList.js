@@ -208,7 +208,7 @@ export default class AppointmentsList extends Shadow() {
       console.log(day.subscriptionCourseAppointments)
       counter += day.subscriptionCourseAppointments.length
       day.subscriptionCourseAppointments.forEach(appointment => {
-        const tile = new tileComponent.constructorClass({ namespace: 'tile-default-' }) // eslint-disable-line
+        const tile = new tileComponent.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
         const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
         tile.setAttribute('data', `${escapeForHtml(JSON.stringify(appointment))}`)
         dayWrapper.appendChild(tile)
