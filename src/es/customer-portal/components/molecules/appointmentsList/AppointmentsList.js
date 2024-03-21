@@ -41,6 +41,7 @@ export default class AppointmentsList extends Shadow() {
 
   dialogListener = (event) => {
     console.log('event', JSON.parse(event.detail.tags[0]))
+    this.renderDialog(JSON.parse(event.detail.tags[0]))
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
@@ -131,15 +132,36 @@ export default class AppointmentsList extends Shadow() {
         // const heading = new children[0][1].constructorClass() // eslint-disable-line
         const filter = await this.renderFilterSubscriptions(appointments.filters.subscriptions)
         const dayList = await (await this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1]))
-
+        this.renderDialog()
         this.html = /* html */ `
-        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
+        
+
+            <o-grid namespace="grid-12er-">
+              <div col-lg="12" col-md="12" col-sm="12">
+                <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
+              </div>
+              <div col-lg="12" col-md="12" col-sm="12">
+               ${filter}
+              </div>
+              <div col-lg="12" col-md="12" col-sm="12">Filter...</div>
+            </o-grid>
+            <div class="list-wrapper">
+              ${dayList.list.join('')}
+            </div>
+            `
+      })
+    })
+  }
+
+  renderDialog (data = {}) {
+    console.log('render', data.courseTitle)
+    this.html = `<m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
             <!-- overlayer -->
             <div class="container dialog-header" tabindex="0">
                 <div id="back">
                     &nbsp;
                 </div>
-                <h3>Filter</h3>
+                <h3>${data.courseTitle}</h3>
                 <div id="close">
                     <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
                 </div>
@@ -158,23 +180,7 @@ export default class AppointmentsList extends Shadow() {
                 <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
                 <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
             </div>
-        </m-dialog>
-
-            <o-grid namespace="grid-12er-">
-              <div col-lg="12" col-md="12" col-sm="12">
-                <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
-              </div>
-              <div col-lg="12" col-md="12" col-sm="12">
-               ${filter}
-              </div>
-              <div col-lg="12" col-md="12" col-sm="12">Filter...</div>
-            </o-grid>
-            <div class="list-wrapper">
-              ${dayList.list.join('')}
-            </div>
-            `
-      })
-    })
+        </m-dialog>`
   }
 
   async renderFilterSubscriptions (subscriptionsData) {
