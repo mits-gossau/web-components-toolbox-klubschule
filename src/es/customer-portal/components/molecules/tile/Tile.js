@@ -132,6 +132,14 @@ export default class AppointmentTile extends Tile {
   }
 
   renderTile (content) {
+    const escapeForHtml = (htmlString) => {
+      return htmlString
+        .replaceAll(/&/g, '&amp;')
+        .replaceAll(/</g, '&lt;')
+        .replaceAll(/>/g, '&gt;')
+        .replaceAll(/"/g, '&quot;')
+        .replaceAll(/'/g, '&#39;')
+    }
     return /* html */ `
       <div class="m-tile">
         <div class="body">
@@ -148,7 +156,7 @@ export default class AppointmentTile extends Tile {
          </div>
         </div>
         <div class="footer">
-          <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" tag="hello" click-no-toggle-active>Termin buchen</ks-a-button></div>
+          <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" tag='${escapeForHtml(JSON.stringify(content))}'  click-no-toggle-active>Termin buchen</ks-a-button></div>
          <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
         </div>
       </div>

@@ -40,7 +40,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   dialogListener = (event) => {
-    console.log('event', event.detail)
+    console.log('event', JSON.parse(event.detail.tags[0]))
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
