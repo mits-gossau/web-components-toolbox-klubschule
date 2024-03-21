@@ -114,17 +114,49 @@ export default class AppointmentsList extends Shadow() {
         {
           path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
           name: 'o-grid'
+        },
+        {
+          path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+          name: 'm-dialog'
         }
       ])
       return Promise.all([fetchModules]).then(async (children) => {
         this.html = ''
         // const heading = new children[0][1].constructorClass() // eslint-disable-line
         const filter = await this.renderFilterSubscriptions(appointments.filters.subscriptions)
-        const dayList = await (await this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1])).join('')
+        const dayList = await (await this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1]))
+
         this.html = /* html */ `
+        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
+            <!-- overlayer -->
+            <div class="container dialog-header" tabindex="0">
+                <div id="back">
+                    &nbsp;
+                </div>
+                <h3>Filter</h3>
+                <div id="close">
+                    <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+                </div>
+            </div>
+            <div class="container dialog-content">
+                <p class="reset-link">
+                    <a-button namespace="button-transparent-">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                    </a-button>
+                </p>
+                <div class="sub-content">
+                    <a-input inputid="location-search" width="100%" placeholder="Angebot suchen" icon-name="Search" icon-size="calc(20rem/18)" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>
+                    <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="Schliessen" translation-key-cta="Angebote" translation-key-reset="zur&uuml;cksetzen"></ks-m-filter-categories>
+                </div>
+            </div>
+            <div class="container dialog-footer">
+                <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+                <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
+            </div>
+        </m-dialog>
+        
             <o-grid namespace="grid-12er-">
               <div col-lg="12" col-md="12" col-sm="12">
-                <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
+                <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
               </div>
               <div col-lg="12" col-md="12" col-sm="12">
                ${filter}
@@ -132,7 +164,7 @@ export default class AppointmentsList extends Shadow() {
               <div col-lg="12" col-md="12" col-sm="12">Filter...</div>
             </o-grid>
             <div class="list-wrapper">
-              ${dayList}
+              ${dayList.list.join('')}
             </div>
             `
       })
@@ -157,10 +189,12 @@ export default class AppointmentsList extends Shadow() {
 
   async renderDayList (dayList, tileComponent, heading) {
     const list = []
+    let counter = 0
     dayList.forEach(day => {
       const dayWrapper = document.createElement('div')
       dayWrapper.appendChild(this.renderDayHeading(day.weekday, heading))
-
+      console.log(day.subscriptionCourseAppointments)
+      counter += day.subscriptionCourseAppointments.length
       day.subscriptionCourseAppointments.forEach(appointment => {
         const tile = new tileComponent.constructorClass({ namespace: 'tile-default-' }) // eslint-disable-line
         const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
@@ -169,7 +203,12 @@ export default class AppointmentsList extends Shadow() {
       })
       list.push(dayWrapper.innerHTML)
     })
-    return list
+    const data = {
+      counter,
+      list
+    }
+    console.log(counter)
+    return data
   }
 
   renderDayHeading (data, heading) {

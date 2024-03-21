@@ -113,7 +113,7 @@ export default class AppointmentTile extends Tile {
   /**
    * Render HTML
    * @returns Promise<void>
-  */
+   */
   renderHTML () {
     const fetchModules = this.fetchModules([
       {
@@ -126,21 +126,8 @@ export default class AppointmentTile extends Tile {
       }
     ])
     return Promise.all([fetchModules]).then((children) => {
-      // console.log(this.getAttribute('data'))
       const content = Tile.parseAttribute(this.getAttribute('data'))
-      // super.renderHTML()
-      this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
       this.html = this.renderTile(content)
-      // this.html = /* HTML */`
-      // <div class="m-tile">
-      //   <div class="m-tile__wrap">
-      //     <div class="m-tile__overlay"></div>
-      //     <div class="m-tile__head">
-      //       <span class="m-tile__title">${content?.courseTitle} (${content?.courseType}_${content?.courseId})</span>
-      //     </div>
-      //   </div>
-      // </div>
-      // `
     })
   }
 
@@ -153,21 +140,15 @@ export default class AppointmentTile extends Tile {
           <div><span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span></div>
           <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.instructorDescription}</span></div>
           <div><span class="m-tile__title date time"> ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button></span></div>
-          <div class="info">
-            <div>
-              <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
-            </div>
-         <div>
-         
-         <div><span class="m-tile__content">${content.courseLocation}</span></div>
-         <div><span class="m-tile__content">Raum: ${content.roomDescription}</span></div>
-         
-         </div> 
-         
+         <div class="info">
+          <div><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx></div>
+          <div>
+            <div><span class="m-tile__content">${content.courseLocation}</span><br><span class="m-tile__content">Raum: ${content.roomDescription}</span></div>
           </div>
+         </div>
         </div>
         <div class="footer">
-         <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary">Termin buchen</ks-a-button></div> 
+          <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>Termin buchen</ks-a-button></div>
          <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
         </div>
       </div>
