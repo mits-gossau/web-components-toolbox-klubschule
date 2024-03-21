@@ -21,6 +21,11 @@ export default class ContentSearchItem extends Shadow() {
   renderCSS () {
     this.css = /* css */ `
         :host {
+          --aspect-ratio: 3 / 2;
+          --img-object-fit: cover;
+          --img-width: 150px;
+          --img-min-width: var(--img-width);
+          --img-max-width: var(--img-width);
           display: block;
           padding-bottom: 1.5rem;
         }
@@ -41,6 +46,7 @@ export default class ContentSearchItem extends Shadow() {
 
         :host div + a-picture {
           margin-left: 1rem;
+
         }
 
         :host h3 {

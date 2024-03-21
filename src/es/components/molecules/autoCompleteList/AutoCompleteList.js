@@ -5,7 +5,7 @@ export default class AutoCompleteList extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.locateMe = this.shadowRoot.querySelector("#userLocation")
+    this.locateMe = this.shadowRoot.querySelector("#user-location")
     this.autoCompleteListener = event => this.renderHTML(event.detail.fetch)
   }
 
@@ -29,7 +29,6 @@ export default class AutoCompleteList extends Shadow() {
     if (navigator.geolocation) {
       // TODO trigger Filtering
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position.coords)
         // Todo dispatch filter event with lat/lng
         /** @type {import("../../controllers/autoCompleteLocation/AutoCompleteLocation.js").LocationCoordinates} */
         this.dispatchEvent(new CustomEvent('client-location-coords', {
@@ -43,7 +42,7 @@ export default class AutoCompleteList extends Shadow() {
         }))
       });
     } else {
-      console.log("Geolocation is not supported by this browser.")
+      console.error("Geolocation is not supported by this browser.")
     }
   }
 
@@ -245,7 +244,7 @@ export default class AutoCompleteList extends Shadow() {
                     ? 'ArrowRight'
                     : 'Location'}" size="1em"></a-icon-mdx><span>${item.term}</span>
               `
-              if (this.getAttribute('auto-complete') === "auto-complete-location") {
+              if (this.hasAttribute('auto-complete-selection')) {
                 listElement.addEventListener('click', () => this.clickOnLocationListElement(item))
               }
               return listElement
