@@ -44,7 +44,7 @@ export default class WithFacet extends Shadow() {
     this.requestWithFacetListener = (event) => {
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-      // console.log('---------------------------------event', event)
+      console.log('---------------------------------event', event)
 
       const filters = []
       const filter = this.constructFilterItem(event)

@@ -78,7 +78,7 @@ export default class OffersPage extends Shadow() {
                                 ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
                                 ${this.hasAttribute('mock-auto-complete') ? ` mock` : ''} 
                               >
-                                <m-dialog namespace="dialog-top-slide-in-"  id="keyword-search" close-event-name="close-search-dialog">
+                                <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
                                     <div class="container">
                                       <a-input
                                         inputid="offers-page-input-search"
