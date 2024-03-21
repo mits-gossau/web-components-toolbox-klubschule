@@ -148,7 +148,7 @@ export default class AppointmentTile extends Tile {
          </div>
         </div>
         <div class="footer">
-          <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>Termin buchen</ks-a-button></div>
+          <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" tag="hello" click-no-toggle-active>Termin buchen</ks-a-button></div>
          <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
         </div>
       </div>

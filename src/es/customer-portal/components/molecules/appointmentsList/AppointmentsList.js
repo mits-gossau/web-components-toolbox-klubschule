@@ -19,6 +19,7 @@ export default class AppointmentsList extends Shadow() {
   connectedCallback () {
     // this.html = 'loading'
     if (this.shouldRenderCSS()) this.renderCSS()
+    document.body.addEventListener(this.getAttribute('dialog-open-first-level') || 'dialog-open-first-level', this.dialogListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
       {
@@ -35,6 +36,11 @@ export default class AppointmentsList extends Shadow() {
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
+    document.body.removeEventListener(this.getAttribute('dialog-open-first-level') || 'dialog-open-first-level', this.dialogListener)
+  }
+
+  dialogListener = (event) => {
+    console.log('event', event.detail)
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
@@ -153,7 +159,7 @@ export default class AppointmentsList extends Shadow() {
                 <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
             </div>
         </m-dialog>
-        
+
             <o-grid namespace="grid-12er-">
               <div col-lg="12" col-md="12" col-sm="12">
                 <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
