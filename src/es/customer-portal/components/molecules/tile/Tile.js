@@ -32,12 +32,47 @@ export default class AppointmentTile extends Tile {
         flex-grow: 1;
         flex-shrink: 1;
       }
-
+      :host .course-info {
+        display:flex;
+        flex-direction:column;
+      }
       :host .course-price {
         text-align:right;
       }
-      :host .m-tile__title{
-        color:red;
+      :host .title {
+        color:#0053A6;
+      }
+      :host .date, .time {
+        font-weight:400;
+      }
+      :host .time {
+        display:flex;
+        gap:0.5em;
+        align-items: center;
+      }
+      :host .vacancies {
+        display:flex;
+        padding-bottom:0.75em;
+      }
+      :host .body, .footer {
+       display: grid;
+       grid-template-columns: 50% 50%;
+       grid-template-rows: auto auto auto;
+       align-items: center;
+       padding:1.5em 1.5em 0.75em 1.5em;
+       gap:0.25em;
+      }
+      :host .info {
+        display:flex;
+        align-items:center;
+      }
+      :host .location-room {
+        display:flex;
+        flex-direction:column;
+      }
+      :host .icon-info {
+        display:flex;
+        align-items: center;
       }
       @media only screen and (max-width: _max-width_) {
         :host  {
@@ -84,6 +119,10 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/components/atoms/button/Button.js`,
         name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
       }
     ])
     return Promise.all([fetchModules]).then((children) => {
@@ -108,25 +147,54 @@ export default class AppointmentTile extends Tile {
   renderTile (content) {
     return /* html */ `
       <div class="m-tile">
-        <div class="parent-body">
-          <div class="course-info">
-            <span class="m-tile__title">${content.courseTitle} (${content.courseType}_${content.courseId})</span> <br />
-            <span>${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span><br />
-            <span>${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo}</span>
-            <span><ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button></span>
+        <div class="body">
+          <div><span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span></div>
+          <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span></div>
+          <div><span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span></div>
+          <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.instructorDescription}</span></div>
+          <div><span class="m-tile__title date time"> ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button></span></div>
+          <div class="info">
+            <div>
+              <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
+            </div>
+         <div>
+         
+         <div><span class="m-tile__content">${content.courseLocation}</span></div>
+         <div><span class="m-tile__content">Raum: ${content.roomDescription}</span></div>
+         
+         </div> 
+         
           </div>
-          <div class="course-admin">
-            <span>${content.courseAppointmentFreeSeats} freie Plätze</span><br />
-            <span>${content.instructorDescription}</span><br />
-            <span>${content.courseLocation} <br /> Raum: ${content.roomDescription}</span>
-          </div>  
         </div>
-        <div class="parent-footer">
-          <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary">Termin buchen</ks-a-button></div>
-          <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
+        <div class="footer">
+         <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary">Termin buchen</ks-a-button></div> 
+         <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
         </div>
       </div>
-      `
+    `
+    // return /* html */ `
+    //   <div class="m-tile">
+    //     <div class="parent-body">
+    //       <div class="course-info">
+    //         <span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span>
+    //         <span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span>
+    //         <span class="m-tile__title date time">
+    //           ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo}
+    //           <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button>
+    //         </span>
+    //       </div>
+    //       <div class="course-admin">
+    //         <div class="vacancies"><a-icon-mdx icon-name="Location" size="1em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span></div>
+    //         <div class="vacancies"><a-icon-mdx icon-name="Location" size="1em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.instructorDescription}</span></div>
+    //         <div class="vacancies"><a-icon-mdx icon-name="Location" size="1em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseLocation} <br /> Raum: ${content.roomDescription}</span></div>
+    //       </div>
+    //     </div>
+    //     <div class="parent-footer">
+    //       <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary">Termin buchen</ks-a-button></div>
+    //       <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
+    //     </div>
+    //   </div>
+    //   `
   }
 
   formatCourseAppointmentDate (date) {

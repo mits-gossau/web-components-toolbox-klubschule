@@ -17,7 +17,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   connectedCallback () {
-    this.html = 'loading....'
+    // this.html = 'loading'
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
@@ -38,6 +38,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
+    this.html = 'looooooading....'
     this.renderHTML(event.detail.fetch)
   }
 
@@ -119,7 +120,7 @@ export default class AppointmentsList extends Shadow() {
         this.html = ''
         // const heading = new children[0][1].constructorClass() // eslint-disable-line
         const filter = await this.renderFilterSubscriptions(appointments.filters.subscriptions)
-        const dayList = await this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1])
+        const dayList = await (await this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1])).join('')
         this.html = /* html */ `
             <o-grid namespace="grid-12er-">
               <div col-lg="12" col-md="12" col-sm="12">
