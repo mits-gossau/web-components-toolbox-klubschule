@@ -206,6 +206,10 @@ export default class Heading extends Shadow() {
         margin: 0 auto var(--mdx-sys-spacing-flex-xs);
         background: var(--mdx-sys-color-accent-1-default);
       }
+
+      :host([brand=ksos][border-top]) [border-top]::before {
+        background: #495449 !important; /* replace with design system token once available */
+      }
       
       :host([centered][border-top][brand=ibaw]) [border-top]::after,
       :host([border-top][brand=ibaw]) [border-top]::before {

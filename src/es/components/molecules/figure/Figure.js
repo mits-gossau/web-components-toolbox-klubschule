@@ -103,6 +103,19 @@ export default class KsFigure extends Shadow(HTMLElement) {
         color: white;
       }
 
+      :host([brand=ibaw]) figcaption::before {
+        background-color: transparent;
+        width: 1.3575em;
+        height: 1.625em;
+        background-size: contain;
+        background-image: var(--ibaw-title-brand-shape);
+        background-repeat: no-repeat;
+      }
+
+      :host([brand=ksos]) figcaption::before {
+        background: #495449; /* replace with design system token once available */
+      }
+
       @media only screen and (max-width: _max-width_) {
         /* pulling the picture slightly (8px) out of the container on mobile with negative margin to match the design */
         :host a-picture {
