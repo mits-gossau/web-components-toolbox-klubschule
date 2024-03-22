@@ -37,6 +37,7 @@ export default class AppointmentsList extends Shadow() {
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
     document.body.removeEventListener(this.getAttribute('dialog-open-first-level') || 'dialog-open-first-level', this.dialogListener)
+    this.select.removeEventListener('change', this.selectEventListener)
   }
 
   dialogListener = (event) => {
@@ -46,7 +47,14 @@ export default class AppointmentsList extends Shadow() {
 
   subscriptionCourseAppointmentsListener = (event) => {
     this.html = 'looooooading....'
-    this.renderHTML(event.detail.fetch)
+    this.renderHTML(event.detail.fetch).then(x => {
+      this.select = this.root.querySelector('o-grid').root.querySelector('select')
+      this.select.addEventListener('change', this.selectEventListener)
+    })
+  }
+
+  selectEventListener = (event) => {
+    console.log(event.target.value)
   }
 
   /**
@@ -105,7 +113,7 @@ export default class AppointmentsList extends Shadow() {
    * @returns void
    */
   async renderHTML (fetch) {
-    fetch.then(appointments => {
+    return fetch.then(appointments => {
       if (appointments.errorCode !== 0) {
         throw new Error(`${appointments.errorMessage}`)
       }
@@ -149,6 +157,7 @@ export default class AppointmentsList extends Shadow() {
               ${dayList.list.join('')}
             </div>
             `
+        return this.html
       })
     })
   }
