@@ -55,6 +55,19 @@ export default class AppointmentsList extends Shadow() {
 
   selectEventListener = (event) => {
     console.log(event.target.value)
+    const d = JSON.parse(event.target.value)
+    console.log(d)
+    this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
+      {
+        detail: {
+          subscriptionType: d.subscriptionType,
+          subscriptionId: d.subscriptionId
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }
+    ))
   }
 
   /**
@@ -139,11 +152,9 @@ export default class AppointmentsList extends Shadow() {
         this.html = ''
         // const heading = new children[0][1].constructorClass() // eslint-disable-line
         const filter = await this.renderFilterSubscriptions(appointments.filters.subscriptions)
-        const dayList = await (await this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1]))
+        const dayList = await (this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1]))
         this.renderDialog()
         this.html = /* html */ `
-        
-
             <o-grid namespace="grid-12er-">
               <div col-lg="12" col-md="12" col-sm="12">
                 <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
@@ -198,7 +209,8 @@ export default class AppointmentsList extends Shadow() {
 
     subscriptionsData.forEach(item => {
       const option = document.createElement('option')
-      option.value = item.subscriptionId
+      const v = { subscriptionId: item.subscriptionId, subscriptionType: item.subscriptionType }
+      option.value = JSON.stringify(v)
       option.textContent = item.subscriptionDescription
       select.appendChild(option)
     })

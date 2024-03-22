@@ -34,10 +34,13 @@ export default class Appointments extends HTMLElement {
       subscriptionId
       subscriptionType
       userId
-    */
+     */
+    const userId = '50505A02-2AA4-47AA-9AED-0B759902A0C2'
+    const eventData = event.detail
     const data = {
-      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2',
-      subscriptionType: ''
+      userId,
+      subscriptionType: eventData.subscriptionType || '',
+      subscriptionId: eventData.subscriptionId || ''
     }
 
     const fetchOptions = {
