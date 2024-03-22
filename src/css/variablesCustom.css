@@ -278,6 +278,7 @@
   --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
   --details-default-icon-right-h4-font-size: 1em;
   --details-default-icon-right-h4-line-height: 1.125em;
+  --details-default-icon-right-text-align: start;
 
   /* content stage */
   --grid-2columns-content-stage-stage-content-margin-custom: 3rem 6rem 2rem 1.5rem; 

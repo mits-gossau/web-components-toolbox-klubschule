@@ -25,6 +25,10 @@
     with-border="" width="100%">
     <ks-o-body-section content-width-var="100%" no-margin-y>
 
+        <!-- CMS Titel -->
+        <ks-a-heading tag="h2" style-as="h1" border-top>Titel-Modul</ks-a-heading>
+        <!-- /CMS Titel -->
+
         <!-- Social LogoList -->
         <ks-m-logo-list namespace="logo-list-default-" class="margin-y-m">
             <p style="color: var(--mdx-sys-color-neutral-bold2)">von Max Muster, 8. August 2023</p>
@@ -150,11 +154,28 @@
                         </div>
                     </details>
             </m-details>
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>Accordion mit Bild</h4>
+                    </summary>
+                    <div>
+                        <!-- CMS Bild -->
+                        <ks-m-figure with-line>
+                            <ks-a-picture picture-load namespace="picture-default-"
+                                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                                open-modal open-modal-mobile></ks-a-picture>
+                            <figcaption>test</figcaption>
+                        </ks-m-figure>
+                        <!-- /CMS Bild -->
+                    </div>
+                </details>
+            </m-details>
         </div>
         <!-- /CMS Akkordeon Container -->
 
         <!-- CMS Bild -->
-        <ks-m-figure>
+        <ks-m-figure with-line>
             <ks-a-picture picture-load namespace="picture-default-"
                 defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
                 open-modal open-modal-mobile></ks-a-picture>
@@ -187,28 +208,28 @@
                 <ks-m-figure with-line>
                     <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/arnaud-mariat-IPXcUYHeErc-unsplash.jpg" alt="Galaxies"></a-picture>
                 </ks-m-figure>
-                <ks-m-figure>
+                <ks-m-figure with-line>
                     <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/vladimir-kondriianenko-bxwzcFy9YwM-unsplash.jpg" alt="Minimalist nightmare"></a-picture>
                 </ks-m-figure>
-                <ks-m-figure>
+                <ks-m-figure with-line>
                     <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/matthew-smith-9CV6WrxxdrM-unsplash.jpg" alt="Motel"></a-picture>
                     <figcaption>Some figcaption</figcaption>
                 </ks-m-figure>
-                <ks-m-figure>
+                <ks-m-figure with-line>
                     <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/jakob-owens-EkxOtUljwhs-unsplash.jpg" alt="Hoops"></a-picture>
                     <figcaption>Another figcaption</figcaption>
                 </ks-m-figure>
-                <ks-m-figure>
+                <ks-m-figure with-line>
                     <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/tim-bogdanov-4uojMEdcwI8-unsplash.jpg" alt="Gentleman"></a-picture>
                     <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
                 </ks-m-figure>
-                <ks-m-figure>
+                <ks-m-figure with-line>
                     <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
                 </ks-m-figure>
-                <ks-m-figure>
+                <ks-m-figure with-line>
                     <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/a3ac1ed5abaedffd9947face7901e14c.jpg" alt="Stuff"></a-picture>
                 </ks-m-figure>
-                <ks-m-figure>
+                <ks-m-figure with-line>
                     <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
                 </ks-m-figure>
             </section>
@@ -308,25 +329,19 @@
         </ks-a-button>
     </div>
     <!-- /CMS Button -->
-    
-    <!-- CMS Global Fullwidth Teaser -->
-    <ks-m-teaser namespace="teaser-fullwidth-" color="secondary" text-position="right" href="/de/test-am/">
-        <a-picture picture-load namespace="picture-teaser-"
-            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"></a-picture>
-        <div>
-            <h3>Test</h3>
-            <p>Text Inhalt</p> 
-            <ks-a-button big namespace="button-tertiary-" color="secondary"
-                target="_self">
-                TEST AM
-                <a-icon-mdx icon-name="ArrowRight" size="1em" rotate="0" no-hover-transform></a-icon-mdx>
-            </ks-a-button>
-        </div>
-    </ks-m-teaser>
-    <!-- /CMS Global Fullwidth Teaser -->
 
     <!-- CMS Content Container -->
     <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
+        <!-- CMS Bild -->
+        <!-- Note: use "wider" on ks-m-figure inside ks-body-section variant="narrow" to display the image in larger size -->
+        <ks-m-figure with-line wider>
+            <ks-a-picture picture-load namespace="picture-default-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
+            </ks-a-picture>
+            <figcaption>Caption</figcaption>
+        </ks-m-figure>
+        <!-- CMS Bild -->
+
         <!-- CMS Titel -->
         <ks-a-heading tag="h2">content container title</ks-a-heading>
         <!-- /CMS Titel -->
@@ -342,7 +357,7 @@
         <!-- /CMS RichText -->
 
         <!-- CMS Bild -->
-        <ks-m-figure>
+        <ks-m-figure with-line>
             <ks-a-picture picture-load namespace="picture-default-"
                 defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"></ks-a-picture>
         </ks-m-figure>
