@@ -53,7 +53,9 @@ export default class BackLink extends Shadow() {
         gap: var(--a-back-link-gap, 0.2em);
         font: var(--mdx-sys-font-fix-label1);
       }
-      :host .back-link:hover {
+      :host .back-link:hover,
+      :host .back-link:active,
+      :host .back-link:focus {
         color: var(--back-link-color-hover, var(--a-color));
       }
       :host a-icon-mdx {
