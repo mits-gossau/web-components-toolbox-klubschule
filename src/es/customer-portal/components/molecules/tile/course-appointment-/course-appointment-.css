@@ -1,3 +1,3 @@
 :host {
-    --tile-course-appointment-title-color: #0053A6;
+    --tile-course-appointment-title-color: var(--color-secondary);
 }
