@@ -63,6 +63,8 @@ export default class KsTeaser extends Teaser {
         return this.fetchNamespaceTemplate(['fullwidth-/fullwidth-.css'])
       case 'teaser-link-box-':
         return this.fetchNamespaceTemplate(['link-box-/link-box-.css'])
+      case 'teaser-square-image-':
+        return this.fetchNamespaceTemplate(['square-image-/square-image-.css'])
       default:
         return super.fetchTemplate()
     }
