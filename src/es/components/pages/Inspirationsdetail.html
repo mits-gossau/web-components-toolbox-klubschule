@@ -92,6 +92,7 @@
         <!-- /CMS RichText -->
 
         <!-- CMS Akkordeon Container -->
+        <!-- the class margin-y-m adds more margin to the accordion -->
         <div class="margin-y-m">
             <m-details namespace="details-default-icon-right-">
                     <details>
@@ -330,7 +331,7 @@
     </div>
     <!-- /CMS Button -->
 
-    <!-- CMS Content Container -->
+
     <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
         <!-- CMS Bild -->
         <!-- Note: use "wider" on ks-m-figure inside ks-body-section variant="narrow" to display the image in larger size -->
@@ -341,9 +342,33 @@
             <figcaption>Caption</figcaption>
         </ks-m-figure>
         <!-- CMS Bild -->
+    </ks-o-body-section>
+
+    <!-- CMS RichText -->
+    <div>
+        <h2>Headline 2</h2>
+        <h3>Headline 3</h3>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <h3>Headline 3</h3>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <ul>
+            <li>List item</li>
+            <li>Lorem Ipsum</li>
+            <li>Dolor sit amet</li>
+        </ul>
+        <ol>
+            <li>List item</li>
+            <li>Lorem Ipsum</li>
+            <li>Dolor sit amet</li>
+        </ol>
+    </div>
+    <!-- /CMS RichText -->
+
+    <!-- CMS Content Container -->
+    <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
 
         <!-- CMS Titel -->
-        <ks-a-heading tag="h2">content container title</ks-a-heading>
+        <ks-a-heading tag="h2" border-top>Content container title</ks-a-heading>
         <!-- /CMS Titel -->
 
         <!-- CMS RichText -->
@@ -359,7 +384,10 @@
         <!-- CMS Bild -->
         <ks-m-figure with-line>
             <ks-a-picture picture-load namespace="picture-default-"
-                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"></ks-a-picture>
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
+            </ks-a-picture>
+            <!-- to see the line ks-m-figure will need to have a figcaption element -->
+            <figcaption></figcaption>
         </ks-m-figure>
         <!-- CMS Bild -->
 
@@ -382,6 +410,96 @@
             <p>ks video</p>
         </ks-a-video>
         <!-- /CMS Video -->
+
+        <!-- CMS Titel -->
+        <ks-a-heading tag="h2">Heading ohne Linie</ks-a-heading>
+        <!-- /CMS Titel -->
+
+        <!-- CMS Akkordeon Container -->
+        <!-- the class margin-y-m adds more margin to the accordion -->
+        <div class="margin-y-m">
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 1</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <ks-a-heading tag="h3">test title</ks-a-heading>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 2</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 3</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <div>
+                                <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
+                                    target="_self">
+                                    <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
+                                        tabindex="0"> </a-icon-mdx>
+                                    <span id="label">btn</span>
+                                </ks-a-button>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>Accordion mit Bild</h4>
+                    </summary>
+                    <div>
+                        <!-- CMS Bild -->
+                        <ks-m-figure with-line>
+                            <ks-a-picture picture-load namespace="picture-default-"
+                                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                                open-modal open-modal-mobile></ks-a-picture>
+                            <figcaption>test</figcaption>
+                        </ks-m-figure>
+                        <!-- /CMS Bild -->
+                    </div>
+                </details>
+            </m-details>
+        </div>
+        <!-- /CMS Akkordeon Container -->
+
+
     </ks-o-body-section>
     <!-- /CMS Content Container -->
 
@@ -456,45 +574,79 @@
             <table>
                 <thead>
                     <tr>
-                        <th>
-                            header 1
-                        </th>
-                        <th>
-                            header 2
-                        </th>
-                        <th>
-                            header 3
-                        </th>
+                        <th>header 1</th>
+                        <th>header 2</th>
+                        <th>header 3</th>
+                        <th>header 4</th>
+                        <th>header 5</th>
                     </tr>
                 </thead>
-                <tr>
-                    <td>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-                    </td>
-                    <td>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-                    </td>
-                    <td>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et</p>
-                    </td>
-                    <td>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et</p>
-                    </td>
-                    <td>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et</p>
-                    </td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td>Lorem</td>
+                        <td>Lorem ipsum dolor sit amet</td>
+                        <td>Sed diam voluptua.</td>
+                        <td>diam voluptua.</td>
+                        <td>Lorem ipsum dolor</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet
+                        </td>
+                        <td>
+                            Sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet
+                        </td>
+                        <td>
+                            Sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet
+                        </td>
+                        <td>
+                            Sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     <!-- /CMS Table -->

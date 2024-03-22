@@ -243,7 +243,7 @@
 
   /* Tables */
   --table-th-font-weight: 500;
-  --table-thead-display: table;
+  /* --table-thead-display: table; This should not be necessary */
   --table-border-collapse: collapse;
   --table-border-spacing: 0;
   --table-max-width: 100%;
