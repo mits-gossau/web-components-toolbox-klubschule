@@ -173,7 +173,7 @@ export default class WithFacet extends Shadow() {
         cancelable: true,
         composed: true
       }))
-    }
+    }      
   }
 
   connectedCallback () {
