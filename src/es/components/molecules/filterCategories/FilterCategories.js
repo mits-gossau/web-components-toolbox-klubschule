@@ -86,7 +86,7 @@ export default class FilterCategories extends Shadow() {
         const filterData = response.filters
         // Backend should give us the data sorted, but in case it doesn't, we can sort it here
         // filterData.sort((a, b) => a.sort - b.sort);
-        let numberOfOffers = 0
+        let numberOfOffers = response.total ? response.total : 0
 
         this.html = ''
         filterData.forEach((filterItem, i) => {
