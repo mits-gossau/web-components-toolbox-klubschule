@@ -226,7 +226,7 @@
   --a-color: var(--mdx-comp-link-color-default);
   --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
   --a-font-size: 1em;
-  --a-text-decoration: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+  --a-text-decoration: underline; /* this var seems to have the wrong value: var(--mdx-comp-link-medium-font-runningtext-text-decoration) */
   --a-color-hover: var(--mdx-comp-link-color-hover);
   --a-text-decoration-hover: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
 

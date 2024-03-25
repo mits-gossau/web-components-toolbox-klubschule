@@ -60,7 +60,6 @@
 </o-grid>
 
 <!-- 1-spaltiger Content -->
-<!-- <o-grid namespace="grid-1column-align-center-" column-with="66%"> -->
 <ks-o-body-section variant="narrow">
     <div>
         <h3>Heading</h3>
@@ -173,7 +172,7 @@
             <li>holdrio</li>
         </ol>
         <!-- Table 1 -->
-        <table border="1" height="66" style="border-collapse: collapse; width: 99.3724%;">
+        <table height="66" style="border-collapse: collapse; width: 100%;">
             <tbody>
                 <tr>
                     <td style="width: 33.3333%;">tabelle normal</td>
@@ -194,7 +193,7 @@
         </table>
         <p>&nbsp;</p>
         <!-- Table 2 -->
-        <table border="1" style="border-collapse: collapse; width: 100%; height: 54px;">
+        <table style="border-collapse: collapse; width: 100%; height: 54px;">
             <thead>
                 <tr style="background-color: rgb(149, 165, 166); height: 18px;">
                     <td style="width: 19.3286%; height: 18px;">sdsds</td>
@@ -245,6 +244,533 @@
         <h6>Titel H6</h6>
         <hr />
     </div>
+
+    <ks-a-heading tag="h2" border-top="">Weiterer Content</ks-a-heading>
+    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+        et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+        rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+        dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+        magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    
+    <!-- CMS Global TextImage -->
+    <ks-o-body-section variant="default">
+        <ks-m-teaser namespace="teaser-text-image-" color="secondary" text-position="right" href="/de/">
+            <a-picture picture-load namespace="picture-teaser-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
+            </a-picture>
+            <div>
+                <h3>bild und text</h3> 
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                <ks-a-button big namespace="button-primary-" href="/de/" target="_self">
+                    <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-left" tabindex="0"> </a-icon-mdx>
+                    <span id="label">btn label</span>
+                </ks-a-button>
+            </div>
+        </ks-m-teaser>
+        <ks-m-teaser namespace="teaser-text-image-" color="secondary" text-position="left" href="/de/">
+            <a-picture picture-load namespace="picture-teaser-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
+            </a-picture>
+            <div>
+                <h3>bild und text</h3> 
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                <ks-a-button big namespace="button-primary-" href="/de/" target="_self">
+                    <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-left" tabindex="0"> </a-icon-mdx>
+                    <span id="label">btn label</span>
+                </ks-a-button>
+            </div>
+        </ks-m-teaser>
+    </ks-o-body-section>
+    <!-- /CMS Global TextImage -->
+
+    <!-- CMS Button -->
+    <div class="center">
+        <ks-a-button namespace="button-primary-" href="/de/" color="secondary" target="_self">
+            <a-icon-mdx icon-name="AddToList" size="1em" class="icon-left" tabindex="0"> </a-icon-mdx>
+            <span id="label">button label</span>
+        </ks-a-button>
+    </div>
+    <!-- /CMS Button -->
+
+
+    <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
+        <!-- CMS Bild -->
+        <!-- Note: use "wider" on ks-m-figure inside ks-body-section variant="narrow" to display the image in larger size -->
+        <ks-m-figure with-line wider>
+            <ks-a-picture picture-load namespace="picture-default-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
+            </ks-a-picture>
+            <figcaption>Caption</figcaption>
+        </ks-m-figure>
+        <!-- CMS Bild -->
+    </ks-o-body-section>
+
+    <!-- CMS RichText -->
+    <div>
+        <h2>Headline 2</h2>
+        <h3>Headline 3</h3>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <h3>Headline 3</h3>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <ul>
+            <li>List item</li>
+            <li>Lorem Ipsum</li>
+            <li>Dolor sit amet</li>
+        </ul>
+        <ol>
+            <li>List item</li>
+            <li>Lorem Ipsum</li>
+            <li>Dolor sit amet</li>
+        </ol>
+    </div>
+    <!-- /CMS RichText -->
+
+    <!-- CMS Content Container -->
+    <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
+
+        <!-- CMS Titel -->
+        <ks-a-heading tag="h2" border-top>Content container title</ks-a-heading>
+        <!-- /CMS Titel -->
+
+        <!-- CMS RichText -->
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
+                sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+                ipsum dolor sit amet.</p>
+        <!-- /CMS RichText -->
+
+        <!-- CMS Bild -->
+        <ks-m-figure with-line>
+            <ks-a-picture picture-load namespace="picture-default-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
+            </ks-a-picture>
+            <!-- to see the line ks-m-figure will need to have a figcaption element -->
+            <figcaption></figcaption>
+        </ks-m-figure>
+        <!-- CMS Bild -->
+
+        <!-- CMS Button -->
+        <div class="center">
+            <ks-a-button namespace="button-primary-" href="/de/" color="secondary" target="_self">
+                <span id="label">btn label</span>
+                <a-icon-mdx icon-name="AddToList" size="1em" class="icon-right" tabindex="0"> </a-icon-mdx>
+            </ks-a-button>
+        </div>
+        <!-- /CMS Button -->
+        
+        <!-- CMS Video -->
+        <ks-a-video namespace="video-default-">
+            <iframe src="https://www.youtube.com/embed/Mq0TiSppMOU?rel=0" title="ks video" width="560"
+                height="315" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+            <span></span>
+            <p>ks video</p>
+        </ks-a-video>
+        <!-- /CMS Video -->
+
+        <!-- CMS Titel -->
+        <ks-a-heading tag="h2">Heading ohne Linie</ks-a-heading>
+        <!-- /CMS Titel -->
+
+        <!-- CMS Akkordeon Container -->
+        <!-- the class margin-y-m adds more margin to the accordion -->
+        <div class="margin-y-m">
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 1</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <ks-a-heading tag="h3">test title</ks-a-heading>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 2</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 3</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <div>
+                                <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
+                                    target="_self">
+                                    <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
+                                        tabindex="0"> </a-icon-mdx>
+                                    <span id="label">btn</span>
+                                </ks-a-button>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>Accordion mit Bild</h4>
+                    </summary>
+                    <div>
+                        <!-- CMS Bild -->
+                        <ks-m-figure with-line>
+                            <ks-a-picture picture-load namespace="picture-default-"
+                                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                                open-modal open-modal-mobile></ks-a-picture>
+                            <figcaption>test</figcaption>
+                        </ks-m-figure>
+                        <!-- /CMS Bild -->
+                    </div>
+                </details>
+            </m-details>
+        </div>
+        <!-- /CMS Akkordeon Container -->
+
+
+    </ks-o-body-section>
+    <!-- /CMS Content Container -->
+
+    <!-- CMS Akkordeon Container -->
+    <div class="margin-y-m">
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 1</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <ks-a-heading tag="h3">test title</ks-a-heading>
+                        <div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
+                        </div>
+                    </div>
+                </details>
+        </m-details>
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 2</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
+                        </div>
+                    </div>
+                </details>
+        </m-details>
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 3</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <div>
+                            <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
+                                target="_self">
+                                <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
+                                    tabindex="0"> </a-icon-mdx>
+                                <span id="label">btn</span>
+                            </ks-a-button>
+                        </div>
+                    </div>
+                </details>
+        </m-details>
+    </div>
+    <!-- /CMS Akkordeon Container -->
+
+    <!-- CMS Table -->
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>header 1</th>
+                        <th>header 2</th>
+                        <th>header 3</th>
+                        <th>header 4</th>
+                        <th>header 5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lorem</td>
+                        <td>Lorem ipsum dolor sit amet</td>
+                        <td>Sed diam voluptua.</td>
+                        <td>diam voluptua.</td>
+                        <td>Lorem ipsum dolor</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet
+                        </td>
+                        <td>
+                            Sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet
+                        </td>
+                        <td>
+                            Sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet
+                        </td>
+                        <td>
+                            Sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    <!-- /CMS Table -->
+
+    <!-- CMS Content Container (with bg) -->
+    <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
+        <!-- CMS Bild -->
+        <ks-m-figure with-line>
+            <ks-a-picture picture-load namespace="picture-default-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                open-modal open-modal-mobile></ks-a-picture>
+            <figcaption>test</figcaption>
+        </ks-m-figure>
+        <!-- /CMS Bild -->
+    </ks-o-body-section>
+    <!-- /CMS Content Container -->
+
+    <!-- CMS StoryTeaser -->
+    <ks-o-body-section variant="default">
+        <ks-a-heading tag="h2" style-as="h1" border-top>weitere stories</ks-a-heading>
+        <o-grid namespace="grid-12er-" class="extended-container-mobile">
+            <div col-sm="12" col-lg="8">
+                <ks-m-teaser namespace=teaser-story- color="quaternary" href="/de/entdecken/story-1/">
+                    <figure>
+                        <figcaption>
+                            <strong>pretitle</strong>
+                            <h3>title</h3>
+                            <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                    no-hover></a-icon-mdx></span>
+                        </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                            aspect-ratio="0.5625" alt="Aspectratio"></a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </div>
+            <div col-sm="12" col-lg="4">
+                <ks-m-teaser namespace=teaser-story- color="septenary" href="/de/entdecken/story-zwei/">
+                    <figure>
+                        <figcaption>
+                            <strong>pretitle</strong>
+                            <h3>title</h3>
+                            <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                    no-hover></a-icon-mdx></span>
+                        </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                            aspect-ratio="0.5625" alt="Aspectratio (2)"></a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </div>
+            <div col-sm="12" col-lg="4">
+                <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink/">
+                    <figure>
+                        <figcaption>
+                            <strong>pretitle</strong>
+                            <h3>title</h3>
+                            <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                    no-hover></a-icon-mdx></span>
+                        </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                            aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </div>
+            <div col-sm="12" col-lg="4">
+                <ks-m-teaser namespace=teaser-story- color="septenary" href="/de/entdecken/story-zwei-again/">
+                    <figure>
+                        <figcaption>
+                            <strong>pretitle</strong>
+                            <h3>title</h3>
+                            <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                    no-hover></a-icon-mdx></span>
+                        </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                            aspect-ratio="0.5625" alt="Aspectratio (2)"></a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </div>
+            <div col-sm="12" col-lg="4">
+                <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink-again-nomol/">
+                    <figure>
+                        <figcaption>
+                            <strong>pretitle</strong>
+                            <h3>title</h3>
+                            <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                    no-hover></a-icon-mdx></span>
+                        </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                            aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </div>
+        </o-grid> 
+    </ks-o-body-section>
+    <!-- /CMS StoryTeaser -->
+
+    <!-- CMS Teaser Slider -->
+    <ks-o-body-section variant="default">
+        <ks-a-heading tag="h2" style-as="h1" border-top>Teaser Slider</ks-a-heading>
+        <m-carousel-two namespace=carousel-two-3-column- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+            <section>
+                <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink-again-nomol/">
+                    <figure>
+                        <figcaption>
+                            <strong>pretitle</strong>
+                            <h3>title</h3>
+                            <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                    no-hover></a-icon-mdx></span>
+                        </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                            aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                    </figure>
+                </ks-m-teaser>
+                <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink-again-nomol/">
+                    <figure>
+                        <figcaption>
+                            <strong>pretitle</strong>
+                            <h3>title</h3>
+                            <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                    no-hover></a-icon-mdx></span>
+                        </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                            aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                    </figure>
+                </ks-m-teaser>
+                <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink-again-nomol/">
+                    <figure>
+                        <figcaption>
+                            <strong>pretitle</strong>
+                            <h3>title</h3>
+                            <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                    no-hover></a-icon-mdx></span>
+                        </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                            aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                    </figure>
+                </ks-m-teaser>
+                <ks-m-teaser namespace=teaser-story- color="quinary" href="/de/entdecken/story-pink-again-nomol/">
+                    <figure>
+                        <figcaption>
+                            <strong>pretitle</strong>
+                            <h3>title</h3>
+                            <span>beitrag lesen<a-icon-mdx icon-name="ArrowRight" size="1em"
+                                    no-hover></a-icon-mdx></span>
+                        </figcaption> <a-picture picture-load namespace="picture-teaser-"
+                            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                            aspect-ratio="0.5625" alt="Aspectratio (1)"></a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </section>
+            <div>
+                <nav>
+                    <a href="#previous" aria-label="previous slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                    <a href="#next" aria-label="next slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                </nav>
+            </div>
+        </m-carousel-two>
+    </ks-o-body-section>
+    <!-- /CMS Teaser Slider -->
+
 </ks-o-body-section>
-<!-- </o-grid> -->
 
