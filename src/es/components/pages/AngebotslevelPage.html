@@ -112,6 +112,82 @@
             </m-details>
         </div>
         <!-- /CMS Akkordeon Container -->
+
+        <!-- CMS Bild -->
+        <ks-m-figure with-line>
+            <ks-a-picture picture-load namespace="picture-default-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                open-modal open-modal-mobile></ks-a-picture>
+            <figcaption>test</figcaption>
+        </ks-m-figure>
+        <!-- /CMS Bild -->
+
+        <!-- CMS Video -->
+        <ks-a-video namespace="video-default-">
+            <iframe src="https://www.youtube.com/embed/Mq0TiSppMOU?rel=0" title="video beschreibung" width="560"
+                height="315" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+            <span></span>
+            <p>video beschreibung</p>
+        </ks-a-video>
+        <!-- /CMS Video -->
+
+        <!-- CMS Carousel -->
+        <m-carousel-two namespace=carousel-two-image- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+            <section>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/kenan-sulayman-FV3M7igu8Fs-unsplash.jpg" alt="Yosemite"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/anastasia-dulgier-NCFTGtjY3EQ-unsplash.jpg" alt="Houses"></a-picture>
+         
+                    <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/arnaud-mariat-IPXcUYHeErc-unsplash.jpg" alt="Galaxies"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/vladimir-kondriianenko-bxwzcFy9YwM-unsplash.jpg" alt="Minimalist nightmare"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/matthew-smith-9CV6WrxxdrM-unsplash.jpg" alt="Motel"></a-picture>
+                    <figcaption>Some figcaption</figcaption>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/jakob-owens-EkxOtUljwhs-unsplash.jpg" alt="Hoops"></a-picture>
+                    <figcaption>Another figcaption</figcaption>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/tim-bogdanov-4uojMEdcwI8-unsplash.jpg" alt="Gentleman"></a-picture>
+                    <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/a3ac1ed5abaedffd9947face7901e14c.jpg" alt="Stuff"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
+                </ks-m-figure>
+            </section>
+            <div>
+                <p id="index">
+                    some Text
+                </p>
+                <nav>
+                    <a href="#previous" aria-label="previous slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                    <a href="#next" aria-label="next slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                </nav>
+            </div>
+        </m-carousel-two>
+        <!-- /CMS Carousel -->
+
     </ks-o-body-section>
     <aside>
         <h3>Unsere Fitnesskurse</h3>
@@ -415,9 +491,27 @@
 </ks-o-body-section>
 <!-- /CMS Teaser Slider -->
 
-<ks-o-body-section variant="default" background="var(--mdx-sys-color-accent-6-subtle1)" has-background>
+<ks-o-body-section variant="default">
+    <ks-o-body-section variant="default" background="var(--mdx-sys-color-accent-6-subtle1)" has-background>
+        <!-- CMS Teaser Text Image -->
+        <ks-m-teaser namespace=teaser-text-image- color="secondary" text-position="left" href="#">
+            <a-picture 
+                namespace="picture-teaser-" 
+                picture-load defaultSource="https://via.placeholder.com/1000x750"
+                aspect-ratio="0.75"
+                alt="randomized image">
+            </a-picture>
+            <div>
+                <h3>Headline</h3>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+            </div>
+        </ks-m-teaser>
+        <!-- /CMS Teaser Text Image -->
+    </ks-o-body-section>
+
     <!-- CMS Teaser Text Image -->
-    <ks-m-teaser namespace=teaser-text-image- color="secondary" text-position="left" href="#">
+    <ks-m-teaser namespace=teaser-text-image- color="secondary" text-position="right">
         <a-picture 
             namespace="picture-teaser-" 
             picture-load defaultSource="https://via.placeholder.com/1000x750"
@@ -427,7 +521,6 @@
         <div>
             <h3>Headline</h3>
             <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-            <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
         </div>
     </ks-m-teaser>
     <!-- /CMS Teaser Text Image -->
