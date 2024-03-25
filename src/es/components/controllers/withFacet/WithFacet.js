@@ -129,7 +129,7 @@ export default class WithFacet extends Shadow() {
               throw new Error(response.statusText)
             }).then(json => {
               const filterData = json.filters
-              let numberOfOffers = 0
+              let numberOfOffers = json.total ? json.total : 0
 
               filterData.forEach(filterItem => {
                 // console.log('>>> ', filterItem.urlpara, ' <<<', filterItem)
