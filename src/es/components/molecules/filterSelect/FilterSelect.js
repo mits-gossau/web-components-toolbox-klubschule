@@ -84,7 +84,6 @@ export default class filterSelect extends Shadow() {
     }]).then(() => {
       fetch.then(response => {
         const filterData = response.filters
-        // console.log('filterData(FilterSelect.js)', filterData)
 
         this.html = ''
         filterData.forEach((filterItem, i) => {

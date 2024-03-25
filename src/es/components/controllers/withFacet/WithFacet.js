@@ -125,7 +125,6 @@ export default class WithFacet extends Shadow() {
               throw new Error(response.statusText)
             }).then(json => {
               const filterData = json.filters
-              let numberOfOffers = json.total ? json.total : 0
 
               filterData.forEach(filterItem => {
                 // set selected filter to url params
@@ -143,11 +142,6 @@ export default class WithFacet extends Shadow() {
 
                     // if selected, add it to the url params
                     if (child.selected) {
-                      // API does not answer with number of totals, the line below fixes that issue
-                      if (child.count > 0) {
-                        numberOfOffers += child.count
-                      }
-
                       if (!containsChild) {
                         selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                       }
@@ -172,7 +166,7 @@ export default class WithFacet extends Shadow() {
                   self.history.pushState({}, '', `${url.pathname}?${params.toString()}`)
                 }
               })
-              return { ...json, numberOfOffers }
+              return json
             })).get(request)
         },
         bubbles: true,
@@ -201,7 +195,6 @@ export default class WithFacet extends Shadow() {
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
             const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
-            console.log(hasSameLabel, isCheckedNullOrUndefined, child.selected, event.detail.target.checked)
 
             return `{
               ${child.count ? `"count": ${child.count},` : ''}
