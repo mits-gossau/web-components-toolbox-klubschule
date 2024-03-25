@@ -38,7 +38,6 @@ export default class WithFacet extends Shadow() {
 
     const withFacetCache = new Map()
     const initialRequest = this.getAttribute('initial-request')
-    console.log('initialRequest', initialRequest)
 
     this.isMocked = this.hasAttribute('mock')
     this.requestWithFacetListener = (event) => {
@@ -56,7 +55,6 @@ export default class WithFacet extends Shadow() {
       
       if (params) {
         const entriesWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-        // console.log('entriesWithUnderscore', entriesWithUnderscore)
         
         entriesWithUnderscore.forEach(([key, value]) => {
             const [urlparaKey, idKey] = key.split('_')
@@ -92,7 +90,6 @@ export default class WithFacet extends Shadow() {
       }`
 
       const request = filters.length > 0 ? filterRequest : initialRequest
-      console.log('request', request)
 
       const apiUrl = this.isMocked
         ? `${this.importMetaUrl}./mock/default.json`
@@ -123,7 +120,6 @@ export default class WithFacet extends Shadow() {
             // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
             : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
               if (response.status >= 200 && response.status <= 299) {
-                // console.log('response (WithFacet.js)', response)
                 return response.json()
               }
               throw new Error(response.statusText)
@@ -132,54 +128,42 @@ export default class WithFacet extends Shadow() {
               let numberOfOffers = json.total ? json.total : 0
 
               filterData.forEach(filterItem => {
-                // console.log('>>> ', filterItem.urlpara, ' <<<', filterItem)
-
                 // set selected filter to url params
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                  // const currentParams = params.get(filterItem.urlpara)?.split(',')
                   const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                  // console.log('paramsWithUnderscore', paramsWithUnderscore)
-                  // console.log('currentParams', filterItem.urlpara, currentParams)
-                  
                   let selectedChildren = []
 
                   filterItem.children.forEach(child => {
                     // check if the child is already in the url params
-                    const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara}_${child.id}`))
+                    const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
                     
                     if (containsChild) {
-                      console.log('containsChild', containsChild, `${child.urlpara}_${child.id}`)
-                      selectedChildren.push(`${child.urlpara}_${child.id}`)
+                      selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                     }
 
                     // if selected, add it to the url params
                     if (child.selected) {
-                      console.log('selected:', `${child.urlpara}_${child.id}`)
                       // API does not answer with number of totals, the line below fixes that issue
                       if (child.count > 0) {
                         numberOfOffers += child.count
                       }
 
                       if (!containsChild) {
-                        selectedChildren.push(`${child.urlpara}_${child.id}`)
-                        console.log('selectedChildren', selectedChildren)
+                        selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                       }
 
                       params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
-                      console.log("set to url:", `${filterItem.urlpara}_${filterItem.id}=${selectedChildren.join(',')}`)
 
                     // if unselected, remove it from the url params
                     } else {    
                       if (containsChild) {
-                        console.log('removing:', `${child.urlpara}_${child.id}`)
-                        const index = selectedChildren.indexOf(`${child.urlpara}_${child.id}`)
+                        const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                         selectedChildren.splice(index, 1)
 
                         params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
 
                         if (params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
                           params.delete(`${filterItem.urlpara}_${filterItem.id}`)
-                          console.log('deleted:', `${filterItem.urlpara}_${filterItem.id}`)
                         }
                       }
                     }
