@@ -74,10 +74,12 @@ export default class AppointmentTile extends Tile {
       display:flex;
       align-items: center;
     }
-    @media only screen and (max-width: _max-width_) {
-      :host  {
-        
+    :host m-load-template-tag {
+        min-height:10em;
+        display:block;
       }
+    @media only screen and (max-width: _max-width_) {
+      :host  {}
       
     }
     `
@@ -120,6 +122,14 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+        name: 'm-dialog'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/molecules/loadTemplateTag/LoadTemplateTag.js`,
+        name: 'm-load-template-tag'
       }
     ])
     return Promise.all([fetchModules]).then((children) => {
@@ -129,34 +139,57 @@ export default class AppointmentTile extends Tile {
   }
 
   renderTile (content) {
-    const escapeForHtml = (htmlString) => {
-      return htmlString
-        .replaceAll(/&/g, '&amp;')
-        .replaceAll(/</g, '&lt;')
-        .replaceAll(/>/g, '&gt;')
-        .replaceAll(/"/g, '&quot;')
-        .replaceAll(/'/g, '&#39;')
-    }
     return /* html */ `
-      <div class="m-tile">
-        <div class="body">
-          <div><span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span></div>
-          <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span></div>
-          <div><span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span></div>
-          <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.instructorDescription}</span></div>
-          <div><span class="m-tile__title date time"> ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button></span></div>
-         <div class="info">
-          <div><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx></div>
-          <div>
-            <div><span class="m-tile__content">${content.courseLocation}</span><br><span class="m-tile__content">Raum: ${content.roomDescription}</span></div>
-          </div>
-         </div>
-        </div>
-        <div class="footer">
-          <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" tag='${escapeForHtml(JSON.stringify(content))}'  click-no-toggle-active>Termin buchen</ks-a-button></div>
-         <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
-        </div>
-      </div>
+      <m-load-template-tag mode="false">
+          <template>
+            <div class="m-tile">
+              <div class="body">
+                <div><span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span></div>
+                <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span></div>
+                <div><span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span></div>
+                <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.instructorDescription}</span></div>
+                <div><span class="m-tile__title date time"> ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button></span></div>
+              <div class="info">
+                <div>
+                  <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx></div>
+                <div>
+                <div>
+                  <span class="m-tile__content">${content.courseLocation}</span><br><span class="m-tile__content">Raum: ${content.roomDescription}</span>
+                </div>
+                </div>
+              </div>
+              </div>
+              <div class="footer">
+                <div class="course-booking">
+                  <m-dialog namespace="dialog-left-slide-in-">
+                    <div class="container dialog-header">
+                      <div id="back"></div>
+                      <h3>Filter</h3>
+                      <div id="close">
+                        <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                      </div>
+                    </div>
+                    <div class="container dialog-content">
+                      <div>
+                        <p>Content here</p>
+                        <p>Content here</p>
+                        <p>Content here</p>
+                        <p>Content here</p>
+                        <p>Content here</p>
+                      </div>
+                    </div>
+                    <div class="container dialog-footer">
+                      <ks-a-button id="close" namespace="button-primary-">Close</ks-a-button>
+                      <ks-a-button namespace="button-primary-" color="secondary">Action</ks-a-button>
+                    </div>
+                    <ks-a-button id="show-modal" namespace="button-primary-" color="secondary">Termin buchen</ks-a-button>
+                  </m-dialog>
+                </div>
+                <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
+              </div>
+            </div>
+        </template>
+      </m-load-template-tag>
     `
     // return /* html */ `
     //   <div class="m-tile">

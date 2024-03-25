@@ -51,12 +51,12 @@ export default class Appointments extends HTMLElement {
       body: JSON.stringify(data),
       signal: this.abortControllerSubscriptionCourseAppointments.signal
     }
-    // const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptioncourseappointments'
-    const endpoint = '../../es/customer-portal/controllers/appointments/dummy-simple.json'
+    const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptioncourseappointments'
+    // const endpoint = '../../es/customer-portal/controllers/appointments/dummy-simple.json'
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
       detail: {
-        // fetch: fetch(endpoint, fetchOptions).then(async response => {
-        fetch: fetch(endpoint).then(async response => {
+        fetch: fetch(endpoint, fetchOptions).then(async response => {
+        // fetch: fetch(endpoint).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         })
       },

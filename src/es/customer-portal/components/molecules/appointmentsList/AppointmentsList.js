@@ -17,9 +17,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   connectedCallback () {
-    // this.html = 'loading'
     if (this.shouldRenderCSS()) this.renderCSS()
-    document.body.addEventListener(this.getAttribute('dialog-open-first-level') || 'dialog-open-first-level', this.dialogListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
       {
@@ -36,20 +34,15 @@ export default class AppointmentsList extends Shadow() {
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    document.body.removeEventListener(this.getAttribute('dialog-open-first-level') || 'dialog-open-first-level', this.dialogListener)
     this.select.removeEventListener('change', this.selectEventListener)
   }
 
-  dialogListener = (event) => {
-    console.log('event', JSON.parse(event.detail.tags[0]))
-    this.renderDialog(JSON.parse(event.detail.tags[0]))
-  }
-
   subscriptionCourseAppointmentsListener = (event) => {
-    this.html = 'looooooading....'
     this.renderHTML(event.detail.fetch).then(x => {
-      this.select = this.root.querySelector('o-grid').root.querySelector('select')
-      this.select.addEventListener('change', this.selectEventListener)
+      if (!this.select) {
+        this.select = this.root.querySelector('o-grid').root.querySelector('select')
+        this.select.addEventListener('change', this.selectEventListener)
+      }
     })
   }
 
@@ -126,6 +119,7 @@ export default class AppointmentsList extends Shadow() {
    * @returns void
    */
   async renderHTML (fetch) {
+    this.html = 'looooooading....'
     return fetch.then(appointments => {
       if (appointments.errorCode !== 0) {
         throw new Error(`${appointments.errorMessage}`)
@@ -149,11 +143,11 @@ export default class AppointmentsList extends Shadow() {
         }
       ])
       return Promise.all([fetchModules]).then(async (children) => {
+        // clear loading
         this.html = ''
-        // const heading = new children[0][1].constructorClass() // eslint-disable-line
-        const filter = await this.renderFilterSubscriptions(appointments.filters.subscriptions)
-        const dayList = await (this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1]))
-        this.renderDialog()
+        const filter = this.renderFilterSubscriptions(appointments.filters.subscriptions)
+        const dayList = this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1])
+        // this.renderDialog()
         this.html = /* html */ `
             <o-grid namespace="grid-12er-">
               <div col-lg="12" col-md="12" col-sm="12">
@@ -162,7 +156,9 @@ export default class AppointmentsList extends Shadow() {
               <div col-lg="12" col-md="12" col-sm="12">
                ${filter}
               </div>
-              <div col-lg="12" col-md="12" col-sm="12">Filter...</div>
+              <div col-lg="12" col-md="12" col-sm="12">
+                Filter...
+              </div>
             </o-grid>
             <div class="list-wrapper">
               ${dayList.list.join('')}
@@ -174,7 +170,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderDialog (data = {}) {
-    console.log('render', data.courseTitle)
+    console.log('render dialog', data.courseTitle)
     this.html = `<m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
             <!-- overlayer -->
             <div class="container dialog-header" tabindex="0">
@@ -203,7 +199,7 @@ export default class AppointmentsList extends Shadow() {
         </m-dialog>`
   }
 
-  async renderFilterSubscriptions (subscriptionsData) {
+  renderFilterSubscriptions (subscriptionsData) {
     const select = document.createElement('select')
     select.id = 'filters-subscriptions'
 
@@ -220,7 +216,7 @@ export default class AppointmentsList extends Shadow() {
     return sortWrapper.innerHTML
   }
 
-  async renderDayList (dayList, tileComponent, heading) {
+  renderDayList (dayList, tileComponent, heading) {
     const list = []
     let counter = 0
     dayList.forEach(day => {
