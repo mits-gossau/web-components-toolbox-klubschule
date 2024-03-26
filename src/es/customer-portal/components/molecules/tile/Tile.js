@@ -7,17 +7,17 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 * @type {CustomElementConstructor}
 */
 export default class AppointmentTile extends Tile {
-  connectedCallback () {
-    super.connectedCallback()
-    // document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-    // document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
-  }
+  // connectedCallback () {
+  //   super.connectedCallback()
+  //   // document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+  //   // document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+  // }
 
-  disconnectedCallback () {
-    super.disconnectedCallback()
-    // document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-    // document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
-  }
+  // disconnectedCallback () {
+  //   super.disconnectedCallback()
+  //   // document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+  //   // document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+  // }
 
   updateSubscriptionCourseAppointmentDetailListener = event => {
     event.detail.fetch.then(x => {
@@ -119,7 +119,6 @@ export default class AppointmentTile extends Tile {
       
     }
     `
-    // return this.fetchTemplate()
   }
 
   /**
@@ -168,44 +167,99 @@ export default class AppointmentTile extends Tile {
         name: 'm-load-template-tag'
       }
     ])
-    return Promise.all([fetchModules]).then((children) => {
-      this.content = Tile.parseAttribute(this.getAttribute('data'))
-      this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
-      this.html = this.renderTile(this.content, this.selectedSubscription)
+    Promise.all([fetchModules]).then((_) => {
+      const content = Tile.parseAttribute(this.getAttribute('data'))
+      const selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
+      this.html = this.renderTile(content, selectedSubscription)
     })
   }
 
   renderTile (content, selectedSubscription) {
-    return /* HTML */ `
+    return /* html */ `
       <m-load-template-tag mode="false">
-          <template>
-            <div class="m-tile" data-course-id=${content.courseId}>
-              <div class="body">
-                <div><span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span></div>
-                <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span></div>
-                <div><span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span></div>
-                <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.instructorDescription}</span></div>
-                <div><span class="m-tile__title date time"> ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button></span></div>
-              <div class="info">
+        <template>
+          <div class="m-tile" data-course-id=${content.courseId}>
+            <div class="parent-body">
+              <div class="course-info">
                 <div>
-                  <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx></div>
-                <div>
-                <div>
-                  <span class="m-tile__content">${content.courseLocation}</span><br><span class="m-tile__content">Raum: ${content.roomDescription}</span>
+                <span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span>
                 </div>
+                <div>
+                  <span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span>
+                </div> 
+                <div>
+                  <span class="m-tile__title date time">
+                    ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} 
+                    <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button>
+                  </span>
                 </div>
               </div>
-              </div>
-              <div class="footer">
-                <div class="course-booking">
-                  ${this.renderDialog(content, selectedSubscription)}
+              <!-- --> 
+              <div class="course-info">
+                <div class="icon-info">
+                  <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
+                  <span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span>
+                </div> 
+                <div class="icon-info">
+                  <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
+                  <span class="m-tile__content">${content.instructorDescription}</span>
                 </div>
-                <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
+                <div class="icon-info">
+                  <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
+                  <span class="m-tile__content">
+                    ${content.courseLocation}
+                  </span>
+                  <span class="m-tile__content">
+                    Raum: ${content.roomDescription}
+                  </span>
+                </div>
               </div>
-            </div>
+            </div><!-- parent body END -->
+            <div class="parent-footer">
+              <div class="course-booking">
+                ${this.renderDialog(content, selectedSubscription)}
+              </div>
+              <div class="course-price">
+                <span class="m-tile__title">
+                  ${content.lessonPrice}
+                </span>
+              </div>
+            </div><!-- parent footer END -->
+          </div>
         </template>
       </m-load-template-tag>
     `
+    // return /* HTML */ `
+    //   <m-load-template-tag mode="false">
+    //       <template>
+    //         <div class="m-tile" data-course-id=${content.courseId}>
+    //           <div class="body">
+    //             <div><span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span></div>
+    //             <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span></div>
+    //             <div><span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span></div>
+    //             <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.instructorDescription}</span></div>
+    //             <div><span class="m-tile__title date time"> ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button></span></div>
+    //           <div class="info">
+    //             <div>
+    //               <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx></div>
+    //             <div>
+    //             <div>
+    //               <span class="m-tile__content">${content.courseLocation}</span><br><span class="m-tile__content">Raum: ${content.roomDescription}</span>
+    //             </div>
+    //             </div>
+    //           </div>
+    //           </div>
+    //           <div class="footer">
+    //             <div class="course-booking">
+    //               ${this.renderDialog(content, selectedSubscription)}
+    //             </div>
+    //             <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
+    //           </div>
+    //         </div>
+    //     </template>
+    //   </m-load-template-tag>
+    // `
+
     // return /* html */ `
     //   <div class="m-tile">
     //     <div class="parent-body">
@@ -240,34 +294,29 @@ export default class AppointmentTile extends Tile {
         .replaceAll(/"/g, '&quot;')
         .replaceAll(/'/g, '&#39;')
     }
-    return `
-    <m-dialog namespace="dialog-left-slide-in-">
-                    <div class="container dialog-header">
-                      <div id="back"></div>
-                      <h3>???</h3>
-                      <div id="close">
-                        <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                      </div>
-                    </div>
-                    <div class="container dialog-content">
-                      <div class="sub-content">
-                        <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
-                        <div>
-                          <p id="description">${content.courseDescription}</p>
-                          <p>Content here</p>
-                          <p>Content here</p>
-                          <p>Content here</p>
-                          <p>Content here</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="container dialog-footer">
-                      <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
-                      <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='[${escapeForHtml(JSON.stringify(content))},${escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
-                    </div>
-                    <ks-a-button id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${escapeForHtml(JSON.stringify(content))},${escapeForHtml(JSON.stringify(selectedSubscription))}]' namespace="button-primary-" color="secondary">Termin buchen</ks-a-button>
-                  </m-dialog>
-    `
+    return /* html */ `
+      <m-dialog namespace="dialog-left-slide-in-">
+        <div class="container dialog-header">
+          <div id="back"></div>
+          <h3>Filter</h3>
+          <div id="close">
+            <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+          </div>
+        </div>
+        <div class="container dialog-content">
+          <p class="reset-link"></p>
+          <div class="sub-content">
+            <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
+            <p id="description"></p>
+          </div>
+        </div>
+        <div class="container dialog-footer">
+          <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
+          <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='[${escapeForHtml(JSON.stringify(content))},${escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
+        </div>
+        <ks-a-button id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${escapeForHtml(JSON.stringify(content))},${escapeForHtml(JSON.stringify(selectedSubscription))}]' namespace="button-primary-" color="secondary">Termin buchen</ks-a-button>
+      </m-dialog>
+      `
   }
 
   formatCourseAppointmentDate (date) {
