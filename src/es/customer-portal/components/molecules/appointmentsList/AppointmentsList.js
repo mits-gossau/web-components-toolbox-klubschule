@@ -19,6 +19,7 @@ export default class AppointmentsList extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
       {
         detail: {
@@ -34,7 +35,23 @@ export default class AppointmentsList extends Shadow() {
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     this.select.removeEventListener('change', this.selectEventListener)
+  }
+
+  updateSubscriptionCourseAppointmentDetailListener = event => {
+    event.detail.fetch.then(x => {
+      console.log(this.root.getElementById('list-wrapper'))
+      const tiles = this.root.getElementById('list-wrapper').childNodes
+      const selectedTile = this.findNthChildById(Array.from(tiles), x.courseId)
+      const dialog = selectedTile.shadowRoot.querySelector('m-dialog')
+      const description = dialog.shadowRoot.getElementById('description')
+      description.innerHTML = x.courseDescription
+    })
+  }
+
+  findNthChildById = (n, id) => {
+    return n.find(e => e.id * 1 === id)
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
@@ -77,7 +94,7 @@ export default class AppointmentsList extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host .list-wrapper {
+      :host #list-wrapper {
         display:flex;
         flex-direction: column;
         gap:1em;
@@ -160,7 +177,7 @@ export default class AppointmentsList extends Shadow() {
                 Filter...
               </div>
             </o-grid>
-            <div class="list-wrapper">
+            <div id="list-wrapper">
               ${dayList.list.join('')}
             </div>
             `
@@ -231,6 +248,7 @@ export default class AppointmentsList extends Shadow() {
       day.subscriptionCourseAppointments.forEach(appointment => {
         const tile = new tileComponent.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
         const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
+        tile.setAttribute('id', `${appointment.courseId}`)
         tile.setAttribute('data', `${escapeForHtml(JSON.stringify(appointment))}`)
         tile.setAttribute('data-selected-subscription', `${escapeForHtml(JSON.stringify(selectedSubscription))}`)
         dayWrapper.appendChild(tile)

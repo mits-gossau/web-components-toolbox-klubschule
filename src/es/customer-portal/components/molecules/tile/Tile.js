@@ -9,14 +9,14 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 export default class AppointmentTile extends Tile {
   connectedCallback () {
     super.connectedCallback()
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+    // document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    // document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   }
 
   disconnectedCallback () {
     super.disconnectedCallback()
-    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+    // document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    // document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   }
 
   updateSubscriptionCourseAppointmentDetailListener = event => {
@@ -253,7 +253,7 @@ export default class AppointmentTile extends Tile {
                       <div class="sub-content">
                         <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
                         <div>
-                          <p id="course-description">${content.courseDescription}</p>
+                          <p id="description">${content.courseDescription}</p>
                           <p>Content here</p>
                           <p>Content here</p>
                           <p>Content here</p>
