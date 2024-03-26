@@ -38,8 +38,14 @@ export default class WithFacet extends Shadow() {
 
     const withFacetCache = new Map()
     const initialRequest = this.getAttribute('initial-request')
-
+    const url = new URL(self.location.href)
+    const params = new URLSearchParams(url.search)
     this.isMocked = this.hasAttribute('mock')
+    this.resetAllFilters = this.root.querySelector('m-dialog').shadowRoot.querySelector('a-button[reset-all-filters]')
+    const apiUrl = this.isMocked
+        ? `${this.importMetaUrl}./mock/default.json`
+        : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
+
     this.requestWithFacetListener = (event) => {
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
@@ -50,9 +56,6 @@ export default class WithFacet extends Shadow() {
       if (filter) filters.push(filter)
 
       // update filters according to url params
-      const url = new URL(self.location.href)
-      const params = new URLSearchParams(url.search)
-
       if (params) {
         const entriesWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
 
@@ -91,10 +94,6 @@ export default class WithFacet extends Shadow() {
 
       const request = filters.length > 0 ? filterRequest : initialRequest
 
-      const apiUrl = this.isMocked
-        ? `${this.importMetaUrl}./mock/default.json`
-        : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
-
       let requestInit = {}
       if (this.isMocked) {
         requestInit = {
@@ -126,8 +125,8 @@ export default class WithFacet extends Shadow() {
             }).then(json => {
               const filterData = json.filters
 
+              // url kung fu
               filterData.forEach(filterItem => {
-                // set selected filter to url params
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
                   const selectedChildren = []
@@ -166,6 +165,62 @@ export default class WithFacet extends Shadow() {
                   self.history.pushState({}, '', `${url.pathname}?${params.toString()}`)
                 }
               })
+
+              return json
+            })).get(request)
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }
+
+    this.resetAllFiltersListener = (event) => {
+      console.log('resetAllFiltersListener', event)
+
+      const request = initialRequest
+      let requestInit = {}
+      if (this.isMocked) {
+        requestInit = {
+          method: 'GET'
+        }
+      } else {
+        requestInit = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          mode: 'cors',
+          body: request
+        }
+      }
+
+      this.dispatchEvent(new CustomEvent('with-facet', {
+        detail: {
+          /** @type {Promise<fetchAutoCompleteEventDetail>} */
+          fetch: withFacetCache.has(request)
+            ? withFacetCache.get(request)
+            // TODO: withFacetCache key must include all variants as well as future payloads
+            // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
+            : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
+              if (response.status >= 200 && response.status <= 299) {
+                return response.json()
+              }
+              throw new Error(response.statusText)
+            }).then(json => {
+              // remove all filter params from url
+              if (params) {
+                const keys = [...params.keys()]
+
+                keys.forEach(key => {
+                  if (key.includes('_')) {
+                    params.delete(key)
+                  }
+                })
+
+                self.history.pushState({}, '', `${url.pathname}?${params.toString()}`)
+              }
+
               return json
             })).get(request)
         },
@@ -178,10 +233,18 @@ export default class WithFacet extends Shadow() {
 
   connectedCallback () {
     this.addEventListener('request-with-facet', this.requestWithFacetListener)
+
+    if (this.resetAllFilters) {
+      this.resetAllFilters.addEventListener('click', this.resetAllFiltersListener)
+    }
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-with-facet', this.requestWithFacetListener)
+
+    if (this.resetAllFilters) {
+      this.resetAllFilters.removeEventListener('click', this.resetAllFiltersListener)
+    }
   }
 
   constructFilterItem (event) {
