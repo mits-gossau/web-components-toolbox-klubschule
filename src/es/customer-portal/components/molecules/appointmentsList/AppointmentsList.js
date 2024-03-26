@@ -146,7 +146,7 @@ export default class AppointmentsList extends Shadow() {
         // clear loading
         this.html = ''
         const filter = this.renderFilterSubscriptions(appointments.filters.subscriptions)
-        const dayList = this.renderDayList(appointments.selectedSubscription.dayList, children[0][0], children[0][1])
+        const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
         // this.renderDialog()
         this.html = /* html */ `
             <o-grid namespace="grid-12er-">
@@ -216,7 +216,11 @@ export default class AppointmentsList extends Shadow() {
     return sortWrapper.innerHTML
   }
 
-  renderDayList (dayList, tileComponent, heading) {
+  renderDayList (appointments, tileComponent, heading) {
+    const selectedSubscription = appointments.selectedSubscription
+    const dayList = appointments.selectedSubscription.dayList
+    delete selectedSubscription.dayList
+
     const list = []
     let counter = 0
     dayList.forEach(day => {
@@ -228,6 +232,7 @@ export default class AppointmentsList extends Shadow() {
         const tile = new tileComponent.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
         const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
         tile.setAttribute('data', `${escapeForHtml(JSON.stringify(appointment))}`)
+        tile.setAttribute('data-selected-subscription', `${escapeForHtml(JSON.stringify(selectedSubscription))}`)
         dayWrapper.appendChild(tile)
       })
       list.push(dayWrapper.innerHTML)

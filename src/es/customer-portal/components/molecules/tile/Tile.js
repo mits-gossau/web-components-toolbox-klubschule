@@ -7,6 +7,33 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 * @type {CustomElementConstructor}
 */
 export default class AppointmentTile extends Tile {
+  connectedCallback () {
+    super.connectedCallback()
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.subscriptionCourseAppointmentBookingListener)
+  }
+
+  disconnectedCallback () {
+    super.disconnectedCallback()
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.subscriptionCourseAppointmentBookingListener)
+  }
+
+  subscriptionCourseAppointmentBookingListener = event => {
+    // event.preventDefault()
+    // event.stopPropagation()
+    // console.log('update', event.target.innerHTML, event.detail.fetch)
+    event.detail.fetch.then(x => {
+      const td = this.dialog
+      this.dialog = ''
+      const dnew = this.renderDialog(x, this.selectedSubscription)
+      // const d = this.root.querySelector('m-dialog').children
+      // this.dialog = ''
+      this.dialog = dnew
+      // const tile = this.renderTile(x, this.selectedSubscription)
+      // this.html = tile
+      debugger
+    })
+  }
+
   /**
    * renders the css
    */
@@ -77,7 +104,10 @@ export default class AppointmentTile extends Tile {
     :host m-load-template-tag {
         min-height:10em;
         display:block;
-      }
+    }
+    :host .sub-content {
+      padding-top:1.5em;
+    }
     @media only screen and (max-width: _max-width_) {
       :host  {}
       
@@ -133,13 +163,15 @@ export default class AppointmentTile extends Tile {
       }
     ])
     return Promise.all([fetchModules]).then((children) => {
-      const content = Tile.parseAttribute(this.getAttribute('data'))
-      this.html = this.renderTile(content)
+      this.content = Tile.parseAttribute(this.getAttribute('data'))
+      this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
+      this.html = this.renderTile(this.content, this.selectedSubscription)
     })
   }
 
-  renderTile (content) {
-    return /* html */ `
+  renderTile (content, selectedSubscription) {
+    this.dialog = this.renderDialog(content, selectedSubscription)
+    return /* HTML */ `
       <m-load-template-tag mode="false">
           <template>
             <div class="m-tile">
@@ -161,29 +193,7 @@ export default class AppointmentTile extends Tile {
               </div>
               <div class="footer">
                 <div class="course-booking">
-                  <m-dialog namespace="dialog-left-slide-in-">
-                    <div class="container dialog-header">
-                      <div id="back"></div>
-                      <h3>Filter</h3>
-                      <div id="close">
-                        <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                      </div>
-                    </div>
-                    <div class="container dialog-content">
-                      <div>
-                        <p>Content here</p>
-                        <p>Content here</p>
-                        <p>Content here</p>
-                        <p>Content here</p>
-                        <p>Content here</p>
-                      </div>
-                    </div>
-                    <div class="container dialog-footer">
-                      <ks-a-button id="close" namespace="button-primary-">Close</ks-a-button>
-                      <ks-a-button namespace="button-primary-" color="secondary">Action</ks-a-button>
-                    </div>
-                    <ks-a-button id="show-modal" namespace="button-primary-" color="secondary">Termin buchen</ks-a-button>
-                  </m-dialog>
+                  ${this.dialog}
                 </div>
                 <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
               </div>
@@ -214,6 +224,45 @@ export default class AppointmentTile extends Tile {
     //     </div>
     //   </div>
     //   `
+  }
+
+  renderDialog (content, selectedSubscription) {
+    const escapeForHtml = (htmlString) => {
+      return htmlString
+        .replaceAll(/&/g, '&amp;')
+        .replaceAll(/</g, '&lt;')
+        .replaceAll(/>/g, '&gt;')
+        .replaceAll(/"/g, '&quot;')
+        .replaceAll(/'/g, '&#39;')
+    }
+    return `
+    <m-dialog namespace="dialog-left-slide-in-">
+                    <div class="container dialog-header">
+                      <div id="back"></div>
+                      <h3>???</h3>
+                      <div id="close">
+                        <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                      </div>
+                    </div>
+                    <div class="container dialog-content">
+                      <div class="sub-content">
+                        <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
+                        <div>
+                          <p>${content.courseDescription}</p>
+                          <p>Content here</p>
+                          <p>Content here</p>
+                          <p>Content here</p>
+                          <p>Content here</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="container dialog-footer">
+                      <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
+                      <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='${escapeForHtml(JSON.stringify(content))}'>Action</ks-a-button>
+                    </div>
+                    <ks-a-button id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${escapeForHtml(JSON.stringify(content))},${escapeForHtml(JSON.stringify(selectedSubscription))}]' namespace="button-primary-" color="secondary">Termin buchen</ks-a-button>
+                  </m-dialog>
+    `
   }
 
   formatCourseAppointmentDate (date) {
