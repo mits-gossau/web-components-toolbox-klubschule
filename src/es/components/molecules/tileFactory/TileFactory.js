@@ -142,7 +142,7 @@ export default class TileFactory extends Shadow() {
       'button': {
         'text': '${course.button.text}',
         'iconName': 'ArrowRight'
-        ${course.button.link ? `, 'link': '${course.button.link}'`: ''}
+        ${course.button.link ? `, 'link': '${course.button.link}'` : ''}
       },
       'icons': [
         {

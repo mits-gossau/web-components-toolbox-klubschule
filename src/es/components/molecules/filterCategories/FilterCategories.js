@@ -90,7 +90,7 @@ export default class FilterCategories extends Shadow() {
         filterData.forEach((filterItem, i) => {
           let childItems = ''
           const subNav = []
-          
+
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
             filterItem.children.forEach(child => {
               if (child.selected) {
@@ -109,7 +109,6 @@ export default class FilterCategories extends Shadow() {
               // @ts-ignore
               div.children[0].filterItem = filterItem
               subNav.push(div.children[0])
-
             })
 
             this.html = this.mainNav
@@ -176,7 +175,7 @@ export default class FilterCategories extends Shadow() {
 
   get mainNav () {
     if (this.root.querySelector('.main-level')) return this.root.querySelector('.main-level')
-    
+
     const mainNav = document.createElement('div')
     mainNav.setAttribute('class', 'main-level')
 

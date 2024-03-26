@@ -48,36 +48,36 @@ export default class WithFacet extends Shadow() {
       const filters = []
       const filter = this.constructFilterItem(event)
       if (filter) filters.push(filter)
-      
+
       // update filters according to url params
       const url = new URL(self.location.href)
       const params = new URLSearchParams(url.search)
-      
+
       if (params) {
         const entriesWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-        
+
         entriesWithUnderscore.forEach(([key, value]) => {
-            const [urlparaKey, idKey] = key.split('_')
-            let children = []
+          const [urlparaKey, idKey] = key.split('_')
+          const children = []
 
-            value.split(',').forEach(value => {
-              const [urlparaValue, idValue] = value.split('_')
+          value.split(',').forEach(value => {
+            const [urlparaValue, idValue] = value.split('_')
 
-              children.push(`{
+            children.push(`{
                 "urlpara": "${urlparaValue}",
                 "id": "${idValue}",
                 "selected": true
               }`)
-            })
+          })
 
-            const filter = (`{
+          const filter = (`{
               "urlpara": "${urlparaKey}",
               "id": "${idKey}",
               "selected": true,
               "children": [${children.join(',')}]
             }`)
 
-            filters.push(filter)
+          filters.push(filter)
         })
       }
 
@@ -130,12 +130,12 @@ export default class WithFacet extends Shadow() {
                 // set selected filter to url params
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                  let selectedChildren = []
+                  const selectedChildren = []
 
                   filterItem.children.forEach(child => {
                     // check if the child is already in the url params
                     const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
-                    
+
                     if (containsChild) {
                       selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                     }
@@ -149,7 +149,7 @@ export default class WithFacet extends Shadow() {
                       params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
 
                     // if unselected, remove it from the url params
-                    } else {    
+                    } else {
                       if (containsChild) {
                         const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                         selectedChildren.splice(index, 1)
@@ -173,7 +173,7 @@ export default class WithFacet extends Shadow() {
         cancelable: true,
         composed: true
       }))
-    }      
+    }
   }
 
   connectedCallback () {
@@ -204,10 +204,10 @@ export default class WithFacet extends Shadow() {
               "label": "${child.label}",
               ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
               ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
-              "selected": ${hasSameLabel 
-                ? isCheckedNullOrUndefined 
-                  ? child.selected 
-                  : event.detail.target.checked 
+              "selected": ${hasSameLabel
+                ? isCheckedNullOrUndefined
+                  ? child.selected
+                  : event.detail.target.checked
                 : child.selected},
               ${child.sort ? `"sort": ${child.sort},` : ''}
               ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}

@@ -7,16 +7,16 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class OffersPage extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
@@ -27,14 +27,14 @@ export default class OffersPage extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.ksMTab
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
         display: contents !important;
@@ -46,7 +46,7 @@ export default class OffersPage extends Shadow() {
    * Render HTML
    * @return Promise<void>
    */
-  renderHTML() {
+  renderHTML () {
     this.html = /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
@@ -76,7 +76,7 @@ export default class OffersPage extends Shadow() {
                                 request-auto-complete="offers-page-request-auto-complete"
                                 input-change="offers-page-search-change"
                                 ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
-                                ${this.hasAttribute('mock-auto-complete') ? ` mock` : ''} 
+                                ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
                               >
                                 <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
                                     <div class="container">
@@ -382,7 +382,7 @@ export default class OffersPage extends Shadow() {
     ])
   }
 
-  get ksMTab() {
+  get ksMTab () {
     return this.root.querySelector('ks-m-tab')
   }
 }
