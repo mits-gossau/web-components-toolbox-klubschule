@@ -285,15 +285,16 @@ export default class AppointmentTile extends Tile {
     //   `
   }
 
+  escapeForHtml = (htmlString) => {
+    return htmlString
+      .replaceAll(/&/g, '&amp;')
+      .replaceAll(/</g, '&lt;')
+      .replaceAll(/>/g, '&gt;')
+      .replaceAll(/"/g, '&quot;')
+      .replaceAll(/'/g, '&#39;')
+  }
+
   renderDialog (content, selectedSubscription) {
-    const escapeForHtml = (htmlString) => {
-      return htmlString
-        .replaceAll(/&/g, '&amp;')
-        .replaceAll(/</g, '&lt;')
-        .replaceAll(/>/g, '&gt;')
-        .replaceAll(/"/g, '&quot;')
-        .replaceAll(/'/g, '&#39;')
-    }
     return /* html */ `
       <m-dialog namespace="dialog-left-slide-in-">
         <div class="container dialog-header">
@@ -312,9 +313,9 @@ export default class AppointmentTile extends Tile {
         </div>
         <div class="container dialog-footer">
           <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
-          <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='[${escapeForHtml(JSON.stringify(content))},${escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
+          <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
         </div>
-        <ks-a-button id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${escapeForHtml(JSON.stringify(content))},${escapeForHtml(JSON.stringify(selectedSubscription))}]' namespace="button-primary-" color="secondary">Termin buchen</ks-a-button>
+        <ks-a-button id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]' namespace="button-primary-" color="secondary">Termin buchen</ks-a-button>
       </m-dialog>
       `
   }
