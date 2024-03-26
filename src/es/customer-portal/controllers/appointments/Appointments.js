@@ -71,21 +71,21 @@ export default class Appointments extends HTMLElement {
   }
 
   requestSubscriptionCourseAppointmentBookingListener = async (event) => {
-    console.log('Controller - requestSubscriptionCourseAppointmentBookingListener', JSON.parse(event.detail.tags))
+    console.log('Controller - requestSubscriptionCourseAppointmentBookingListener', event)
 
     if (this.abortControllerSubscriptionCourseAppointmentBooking) this.abortControllerSubscriptionCourseAppointmentBooking.abort()
     this.abortControllerSubscriptionCourseAppointmentBooking = new AbortController()
-    const tag = JSON.parse(event.detail.tags)
+    const tags = JSON.parse(event.detail.tags)
+
     const data = {
-      courseAppointmentDate: tag.courseAppointmentDate,
-      courseAppointmentTimeFrom: tag.courseAppointmentTimeFrom,
-      courseId: tag.courseId,
-      courseType: tag.courseType,
-      subscriptionId: tag.subscriptionId,
-      subscriptionType: tag.subscriptionType,
+      courseAppointmentDate: tags[0].courseAppointmentDate,
+      courseAppointmentTimeFrom: tags[0].courseAppointmentTimeFrom,
+      courseId: tags[0].courseId,
+      courseType: tags[0].courseType,
+      subscriptionId: tags[1].subscriptionId,
+      subscriptionType: tags[1].subscriptionType,
       userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
     }
-
     const fetchOptions = {
       method: 'POST',
       headers: {
@@ -131,7 +131,7 @@ export default class Appointments extends HTMLElement {
       signal: this.abortControllerSubscriptionCourseAppointmentDetail.signal
     }
     const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptioncourseappointmentdetail'
-    this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', {
+    this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()

@@ -9,28 +9,34 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 export default class AppointmentTile extends Tile {
   connectedCallback () {
     super.connectedCallback()
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.subscriptionCourseAppointmentBookingListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   }
 
   disconnectedCallback () {
     super.disconnectedCallback()
-    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.subscriptionCourseAppointmentBookingListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   }
 
-  subscriptionCourseAppointmentBookingListener = event => {
-    // event.preventDefault()
-    // event.stopPropagation()
-    // console.log('update', event.target.innerHTML, event.detail.fetch)
+  updateSubscriptionCourseAppointmentDetailListener = event => {
     event.detail.fetch.then(x => {
-      const td = this.dialog
-      this.dialog = ''
-      const dnew = this.renderDialog(x, this.selectedSubscription)
-      // const d = this.root.querySelector('m-dialog').children
-      // this.dialog = ''
-      this.dialog = dnew
-      // const tile = this.renderTile(x, this.selectedSubscription)
-      // this.html = tile
-      debugger
+      const description = this.root.querySelector('m-dialog')
+      if (description) {
+        const courseDescription = description.shadowRoot.getElementById('course-description')
+        courseDescription.innerText = x.courseDescription
+      }
+    })
+  }
+
+  updateSubscriptionCourseAppointmentBookingListener = event => {
+    event.detail.fetch.then(x => {
+      console.log('update booking subscription', x)
+      // const description = this.root.querySelector('m-dialog')
+      // if (description) {
+      //   const courseDescription = description.shadowRoot.getElementById('course-description')
+      //   courseDescription.innerText = x.courseDescription
+      // }
     })
   }
 
@@ -170,11 +176,10 @@ export default class AppointmentTile extends Tile {
   }
 
   renderTile (content, selectedSubscription) {
-    this.dialog = this.renderDialog(content, selectedSubscription)
     return /* HTML */ `
       <m-load-template-tag mode="false">
           <template>
-            <div class="m-tile">
+            <div class="m-tile" data-course-id=${content.courseId}>
               <div class="body">
                 <div><span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span></div>
                 <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span></div>
@@ -193,7 +198,7 @@ export default class AppointmentTile extends Tile {
               </div>
               <div class="footer">
                 <div class="course-booking">
-                  ${this.dialog}
+                  ${this.renderDialog(content, selectedSubscription)}
                 </div>
                 <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
               </div>
@@ -248,7 +253,7 @@ export default class AppointmentTile extends Tile {
                       <div class="sub-content">
                         <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
                         <div>
-                          <p>${content.courseDescription}</p>
+                          <p id="course-description">${content.courseDescription}</p>
                           <p>Content here</p>
                           <p>Content here</p>
                           <p>Content here</p>
@@ -258,7 +263,7 @@ export default class AppointmentTile extends Tile {
                     </div>
                     <div class="container dialog-footer">
                       <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
-                      <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='${escapeForHtml(JSON.stringify(content))}'>Action</ks-a-button>
+                      <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='[${escapeForHtml(JSON.stringify(content))},${escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
                     </div>
                     <ks-a-button id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${escapeForHtml(JSON.stringify(content))},${escapeForHtml(JSON.stringify(selectedSubscription))}]' namespace="button-primary-" color="secondary">Termin buchen</ks-a-button>
                   </m-dialog>
