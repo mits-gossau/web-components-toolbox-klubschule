@@ -1,0 +1,20 @@
+:host {
+    --system-notification-default-background-color: var(--${this.getAttribute('color')});
+    --system-notification-default-icon-background-color: var(--${this.getAttribute('icon-background')});
+    --icon-mdx-ks-color: var(--${this.getAttribute('icon-color')});
+    --system-notification-default-icon-border-color: var(--${this.getAttribute('border-color')});
+
+    --system-notification-default-icon-spacing: var(--mdx-sys-spacing-fix-s);
+    --system-notification-default-icon-padding: var(--mdx-sys-spacing-fix-3xs) var(--mdx-sys-spacing-fix-2xs);
+    --system-notification-default-icon-border-width: var(--mdx-sys-border-width-default);
+    --system-notification-default-item-padding: var(--mdx-sys-spacing-fix-s);
+    --system-notification-default-item-border-radius: var(--mdx-sys-border-radius-sm);
+    --system-notification-default-item-width: 100%;
+    --system-notification-default-typography: var(--mdx-sys-font-fix-body2);
+
+    --underline-text-decoration: var(--mdx-base-font-text-decoration-underline);
+    --underline-text-decoration-hover: var(--underline-text-decoration);
+
+    text-decoration-line: unset;
+    --p-margin: 0;
+}
