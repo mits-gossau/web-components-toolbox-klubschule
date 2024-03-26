@@ -116,7 +116,6 @@ export default class AppointmentTile extends Tile {
     }
     @media only screen and (max-width: _max-width_) {
       :host  {}
-      
     }
     `
   }

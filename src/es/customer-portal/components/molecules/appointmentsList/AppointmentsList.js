@@ -4,16 +4,18 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 /* global CustomEvent */
 
 /**
-* @export
-* @class AppointmentsList
-* @type {CustomElementConstructor}
-*/
+ * @export
+ * @class AppointmentsList
+ * @type {CustomElementConstructor}
+ */
 export default class AppointmentsList extends Shadow() {
   /**
    * @param {any} args
    */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    this.tiles = null
+    this.select = null
   }
 
   connectedCallback () {
@@ -40,19 +42,21 @@ export default class AppointmentsList extends Shadow() {
   }
 
   updateSubscriptionCourseAppointmentDetailListener = event => {
-    event.detail.fetch.then(x => {
-      console.log(this.root.getElementById('list-wrapper'))
-      const tiles = this.root.getElementById('list-wrapper').childNodes
-      const selectedTile = Array.from(tiles).find(t => t.id * 1 === x.courseId)
+    event.detail.fetch.then(courseDetail => {
+      console.log(courseDetail)
+      const { courseId, courseDescription } = courseDetail
+      const selectedTile = this.tiles?.find(t => t.id * 1 === courseId)
       const dialog = selectedTile.shadowRoot.querySelector('m-dialog')
       const description = dialog.shadowRoot.getElementById('description')
-      description.innerHTML = x.courseDescription
+      description.innerHTML = courseDescription
     })
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
-    this.renderHTML(event.detail.fetch).then(x => {
+    this.renderHTML(event.detail.fetch).then(_ => {
+      this.tiles = Array.from(this.root.getElementById('list-wrapper').childNodes)
       if (!this.select) {
+        // TODO: ?!?
         this.select = this.root.querySelector('o-grid').root.querySelector('select')
         this.select.addEventListener('change', this.selectEventListener)
       }
@@ -132,7 +136,8 @@ export default class AppointmentsList extends Shadow() {
    * @returns void
    */
   async renderHTML (fetch) {
-    this.html = 'looooooading....'
+    // this.html = '<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmcyd2Vvd3Y5YjN5YTMzbmd6dzk1d3FvYnoydDZtbmg5MXdnZ2NoOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0MYGtCMbPTYWOzaU/giphy.gif">'
+    this.renderLoading()
     return fetch.then(appointments => {
       if (appointments.errorCode !== 0) {
         throw new Error(`${appointments.errorMessage}`)
@@ -160,7 +165,6 @@ export default class AppointmentsList extends Shadow() {
         this.html = ''
         const filter = this.renderFilterSubscriptions(appointments.filters.subscriptions)
         const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
-        // this.renderDialog()
         this.html = /* html */ `
             <o-grid namespace="grid-12er-">
               <div col-lg="12" col-md="12" col-sm="12">
@@ -182,35 +186,37 @@ export default class AppointmentsList extends Shadow() {
     })
   }
 
-  renderDialog (data = {}) {
-    console.log('render dialog', data.courseTitle)
-    this.html = `<m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
-            <!-- overlayer -->
-            <div class="container dialog-header" tabindex="0">
-                <div id="back">
-                    &nbsp;
-                </div>
-                <h3>${data.courseTitle}</h3>
-                <div id="close">
-                    <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-                </div>
-            </div>
-            <div class="container dialog-content">
-                <p class="reset-link">
-                    <a-button namespace="button-transparent-">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
-                    </a-button>
-                </p>
-                <div class="sub-content">
-                    <a-input inputid="location-search" width="100%" placeholder="Angebot suchen" icon-name="Search" icon-size="calc(20rem/18)" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>
-                    <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="Schliessen" translation-key-cta="Angebote" translation-key-reset="zur&uuml;cksetzen"></ks-m-filter-categories>
-                </div>
-            </div>
-            <div class="container dialog-footer">
-                <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
-                <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
-            </div>
-        </m-dialog>`
+  renderLoading () {
+    this.html = '<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmcyd2Vvd3Y5YjN5YTMzbmd6dzk1d3FvYnoydDZtbmg5MXdnZ2NoOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0MYGtCMbPTYWOzaU/giphy.gif">'
   }
+
+  // renderDialog (data = {}) {
+  //   console.log('render dialog', data.courseTitle)
+  //   this.html = /* html */ `
+  //     <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
+  //           <div class="container dialog-header" tabindex="0">
+  //               <div id="back">
+  //                   &nbsp;
+  //               </div>
+  //               <h3>${data.courseTitle}</h3>
+  //               <div id="close">
+  //                   <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+  //               </div>
+  //           </div>
+  //           <div class="container dialog-content">
+  //               <p class="reset-link">asdfasd</p>
+  //               <div class="sub-content">
+  //                   <a-input inputid="location-search" width="100%" placeholder="Angebot suchen" icon-name="Search" icon-size="calc(20rem/18)" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>
+  //                   <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="Schliessen" translation-key-cta="Angebote" translation-key-reset="zur&uuml;cksetzen"></ks-m-filter-categories>
+  //               </div>
+  //           </div>
+  //           <div class="container dialog-footer">
+  //               <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+  //               <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
+  //           </div>
+  //       </m-dialog>
+  //     `
+  // }
 
   renderFilterSubscriptions (subscriptionsData) {
     const select = document.createElement('select')
@@ -257,7 +263,6 @@ export default class AppointmentsList extends Shadow() {
       counter,
       list
     }
-    console.log(counter)
     return data
   }
 
