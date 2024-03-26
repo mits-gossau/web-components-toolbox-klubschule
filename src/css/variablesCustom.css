@@ -139,7 +139,10 @@
   --font-size: 16px;
   --grid-1column-align-center-padding-custom: 4rem 1.5rem;
   --grid-1column-align-center-padding-mobile-custom: 3rem 0;
-  --grid-2columns-content-section-first-column-padding-custom: var(--mdx-sys-spacing-flex-m) calc((100vw - var(--body-section-default-width-vw)) / 2) var(--mdx-sys-spacing-flex-l);
+  --grid-2columns-content-section-first-column-padding-custom: 
+        var(--mdx-sys-spacing-flex-m) 
+        calc((100% * 1.5 - var(--body-section-default-width) * 1.5) / 2) /* Calculating the padding so it matches the auto margin of body section default width */
+        var(--mdx-sys-spacing-flex-l);
   --grid-2columns-content-section-padding-custom: var(--mdx-sys-spacing-flex-m) 1.5rem var(--mdx-sys-spacing-flex-l);
   --grid-2columns-content-section-padding-mobile-custom: var(--mdx-sys-spacing-flex-m) 1rem;
   --grid-2columns-content-section-second-column-padding-mobile-custom: var(--mdx-sys-spacing-flex-m) 1rem;
@@ -203,7 +206,6 @@
 
   /* body section */
   --body-section-default-width: 86.666%;
-  --body-section-default-width-vw: 86.666vw;
   --body-section-narrow-width: 57.222%;
 
   /* spacers */
@@ -313,9 +315,8 @@
 }
 
 
-@media screen and (min-width: 1440px) {
+@media screen and (min-width: 1441px) {
   :root {
     --body-section-default-width: 81.25%;
-    --body-section-default-width-vw: max(81.25vw, 1560px);
   }
 }
