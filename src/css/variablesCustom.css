@@ -226,9 +226,9 @@
   --a-color: var(--mdx-comp-link-color-default);
   --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
   --a-font-size: 1em;
-  --a-text-decoration: underline; /* this var seems to have the wrong value: var(--mdx-comp-link-medium-font-runningtext-text-decoration) */
+  --a-text-decoration: none;
   --a-color-hover: var(--mdx-comp-link-color-hover);
-  --a-text-decoration-hover: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+  --a-text-decoration-hover: none;
 
   /* hr */
   --hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-bold1);
@@ -316,6 +316,6 @@
 @media screen and (min-width: 1440px) {
   :root {
     --body-section-default-width: 81.25%;
-    --body-section-default-width-vw: 81.25vw;
+    --body-section-default-width-vw: max(81.25vw, 1560px);
   }
 }
