@@ -230,23 +230,25 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderDayList (appointments, tileComponent, heading) {
-    const selectedSubscription = appointments.selectedSubscription
-    const dayList = appointments.selectedSubscription.dayList
-    delete selectedSubscription.dayList
+    const { selectedSubscription, dayList } = this.getDayListData(appointments)
+
+    // const selectedSubscription = appointments.selectedSubscription
+    // const dayList = appointments.selectedSubscription.dayList
+    // delete selectedSubscription.dayList
 
     const list = []
     let counter = 0
     dayList.forEach(day => {
       const dayWrapper = document.createElement('div')
       dayWrapper.appendChild(this.renderDayHeading(day.weekday, heading))
-      console.log(day.subscriptionCourseAppointments)
       counter += day.subscriptionCourseAppointments.length
       day.subscriptionCourseAppointments.forEach(appointment => {
-        const tile = new tileComponent.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
-        const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
-        tile.setAttribute('id', `${appointment.courseId}`)
-        tile.setAttribute('data', `${escapeForHtml(JSON.stringify(appointment))}`)
-        tile.setAttribute('data-selected-subscription', `${escapeForHtml(JSON.stringify(selectedSubscription))}`)
+        const tile = this.makeTileComponent(tileComponent, appointment, selectedSubscription)
+        // const tile = new tileComponent.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
+        // const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
+        // tile.setAttribute('id', `${appointment.courseId}`)
+        // tile.setAttribute('data', `${escapeForHtml(JSON.stringify(appointment))}`)
+        // tile.setAttribute('data-selected-subscription', `${escapeForHtml(JSON.stringify(selectedSubscription))}`)
         dayWrapper.appendChild(tile)
       })
       list.push(dayWrapper.innerHTML)
@@ -264,5 +266,27 @@ export default class AppointmentsList extends Shadow() {
     title.setAttribute('tag', 'h2')
     title.innerHTML = data
     return title
+  }
+
+  makeTileComponent (tile, appointment, selectedSubscription) {
+    const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
+    const courseId = appointment.courseId
+    const appointmentData = escapeForHtml(JSON.stringify(appointment))
+    const selectedSubscriptionData = escapeForHtml(JSON.stringify(selectedSubscription))
+    const tileComponent = new tile.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
+    tileComponent.setAttribute('id', `${courseId}`)
+    tileComponent.setAttribute('data', `${appointmentData}`)
+    tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
+    return tileComponent
+  }
+
+  getDayListData (data) {
+    const selectedSubscription = data.selectedSubscription
+    const dayList = data.selectedSubscription.dayList
+    delete selectedSubscription.dayList
+    return {
+      selectedSubscription,
+      dayList
+    }
   }
 }
