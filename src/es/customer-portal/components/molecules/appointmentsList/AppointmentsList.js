@@ -43,15 +43,11 @@ export default class AppointmentsList extends Shadow() {
     event.detail.fetch.then(x => {
       console.log(this.root.getElementById('list-wrapper'))
       const tiles = this.root.getElementById('list-wrapper').childNodes
-      const selectedTile = this.findNthChildById(Array.from(tiles), x.courseId)
+      const selectedTile = Array.from(tiles).find(t => t.id * 1 === x.courseId)
       const dialog = selectedTile.shadowRoot.querySelector('m-dialog')
       const description = dialog.shadowRoot.getElementById('description')
       description.innerHTML = x.courseDescription
     })
-  }
-
-  findNthChildById = (n, id) => {
-    return n.find(e => e.id * 1 === id)
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
