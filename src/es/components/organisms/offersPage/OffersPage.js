@@ -182,7 +182,7 @@ export default class OffersPage extends Shadow() {
                             </div>
                             <div class="container dialog-content">
                                 <p class="reset-link">
-                                    <a-button namespace="button-transparent-" reset-all-filters request-event-name="reset-all-filters">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                                    <a-button namespace="button-transparent-" request-event-name="reset-all-filters">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
                                     </a-button>
                                 </p>
                                 <div class="sub-content">

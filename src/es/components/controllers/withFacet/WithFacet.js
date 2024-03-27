@@ -197,7 +197,7 @@ export default class WithFacet extends Shadow() {
     }
 
     // update heading
-    const totalOffersHeading = this.root.querySelector('#with-facet-body-section').shadowRoot.querySelector('o-grid[namespace="grid-12er-"]').shadowRoot.querySelector('#offers-page-main-title')
+    const totalOffersHeading = this.root.querySelector('#with-facet-body-section')?.shadowRoot.querySelector('o-grid[namespace="grid-12er-"]').shadowRoot.querySelector('#offers-page-main-title')
     if (totalOffersHeading) {
       totalOffersHeading.shadowRoot.querySelector('h1').textContent = total + label
     }
