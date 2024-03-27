@@ -79,12 +79,12 @@ a-picture {
 
 /* brand adjustments */
 :host([brand=ibaw]) > div,
-:host([brand=pro]) > div {
+:host([brand=ksos]) > div {
     margin: 0 !important;
 }
 
 :host([brand=ibaw]) > div::before,
-:host([brand=pro]) > div::before {
+:host([brand=ksos]) > div::before {
     content: '';
     display: block;
     position: absolute;
@@ -107,19 +107,19 @@ a-picture {
     aspect-ratio: 130/400;
 }
 
-:host([brand=pro][text-position=right]) > div::before {
+:host([brand=ksos][text-position=right]) > div::before {
     right: 100%;
     mask-image: url('data:image/svg+xml;utf8,<svg width="130" height="400" viewBox="0 0 130 400" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.499883 279.5L80 3.47506e-06L80 400L0.499883 279.5Z" fill="black"/></svg>');
     aspect-ratio: 79.5/400;
 }
 
-:host([brand=pro][text-position=left]) > div::before {
+:host([brand=ksos][text-position=left]) > div::before {
     left: 100%;
     mask-image: url('data:image/svg+xml;utf8,<svg width="130" height="400" viewBox="0 0 130 400" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M79.5001 280L-2.51139e-05 0.500003L-2.28882e-05 400.5L79.5001 280Z" fill="black"/></svg>');
     aspect-ratio: 79.5/400;
 }
 
-:host([brand=pro]) > div::after {
+:host([brand=ksos]) > div::after {
     content: '';
     display: block;
     position: absolute;
@@ -132,12 +132,12 @@ a-picture {
     background: var(--color-${this.getAttribute('color')});
 }
 
-:host([brand=pro][text-position=left]) > div::after {
+:host([brand=ksos][text-position=left]) > div::after {
     mask-image: url('data:image/svg+xml;utf8,<svg width="400" height="76" viewBox="0 0 400 76" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M378 0L0 75.5L400 75.5L378 0Z" fill="black"/></svg>');
     aspect-ratio: 400/75.5;
 }
 
-:host([brand=pro][text-position=right]) > div::after {
+:host([brand=ksos][text-position=right]) > div::after {
     mask-image: url('data:image/svg+xml;utf8,<svg width="400" height="76" viewBox="0 0 400 76" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 0.5L400 76L0 76L22 0.5Z" fill="black"/></svg>');
     aspect-ratio: 400/75.5;
 }
@@ -178,7 +178,7 @@ a-picture {
         display: none;
     }
     
-    :host([brand=pro]) > div::after {
+    :host([brand=ksos]) > div::after {
         mask-image: url('data:image/svg+xml;utf8,<svg width="375" height="20" viewBox="0 0 375 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M375 20L0 20L100 3.27934e-06L375 20Z" fill="black"/></svg>') !important;
         aspect-ratio: 375/20 !important;
         margin-bottom: -.25px;

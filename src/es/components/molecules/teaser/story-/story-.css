@@ -7,6 +7,7 @@
   /* css vars that are passed to children */
   --picture-teaser-transition: transform .5s ease-out;
   --picture-teaser-img-object-fit: cover;
+  --picture-teaser-aspect-ratio: 16/9;
   --color: var(--mdx-sys-color-neutral-bold4);
 
   /* component css vars */

@@ -21,6 +21,7 @@
     width: 100% !important;
     aspect-ratio: 21/9;
     padding: var(--mdx-sys-spacing-flex-m) var(--mdx-sys-spacing-flex-xs);
+    margin: 0 !important;
 }
 
 :host a,
@@ -75,7 +76,7 @@
 }
 
 /* brand adjustments */
-:host([brand=pro]) {
+:host([brand=ksos]) {
     clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 14.03vw), 80.0867361% 100%, 0% calc(100% - 4.34vw));
     padding-bottom: var(--mdx-sys-spacing-flex-xl);
 }

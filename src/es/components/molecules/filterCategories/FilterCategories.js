@@ -82,11 +82,9 @@ export default class FilterCategories extends Shadow() {
       ])
     ]).then(() => {
       fetch.then(response => {
-        // console.log('response (FilterCategories.js)', response)
         const filterData = response.filters
-        // Backend should give us the data sorted, but in case it doesn't, we can sort it here
-        // filterData.sort((a, b) => a.sort - b.sort);
-        let numberOfOffers = 0
+        const total = response.total
+        const totalLabel = response.total_label
 
         this.html = ''
         filterData.forEach((filterItem, i) => {
@@ -112,9 +110,6 @@ export default class FilterCategories extends Shadow() {
               div.children[0].filterItem = filterItem
               subNav.push(div.children[0])
 
-              if (child.selected && child.count > 0) {
-                numberOfOffers += child.count
-              }
             })
 
             this.html = this.mainNav
@@ -123,7 +118,11 @@ export default class FilterCategories extends Shadow() {
           let resetButton = ''
           if (this.hasAttribute('translation-key-reset')) {
             resetButton = /* html */`
-              <p class="reset-link"><a-button namespace="button-transparent-">${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx></a-button></p>
+              <p class="reset-link">
+                <a-button namespace="button-transparent-">
+                  ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                </a-button>
+              </p>
             `
           }
 
@@ -151,7 +150,7 @@ export default class FilterCategories extends Shadow() {
                 </div>
                 <div class="container dialog-footer">
                   <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
-                  <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${numberOfOffers > 0 ? `(${numberOfOffers}) ` : ''}${this.getAttribute('translation-key-cta')}</a-button>
+                  <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${total > 0 ? `(${total.toString()}) ` : ''}${totalLabel}</a-button>
                 </div>
                 <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
                   <div class="wrap">
