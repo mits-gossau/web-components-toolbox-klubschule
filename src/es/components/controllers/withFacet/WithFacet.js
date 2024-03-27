@@ -123,10 +123,20 @@ export default class WithFacet extends Shadow() {
               }
               throw new Error(response.statusText)
             }).then(json => {
-              const filterData = json.filters
+              // update total offers count in tab
+              const totalOffersTab = document.body.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-offers-page')?.shadowRoot?.querySelector('ks-m-tab')?.shadowRoot?.querySelector('#total-offers-tab-heading')
+              if (totalOffersTab) {
+                totalOffersTab.textContent = json.total + json.total_label
+              }
 
+              // update total offers count in heading
+              const totalOffersHeading = this.root.querySelector('#with-facet-body-section').shadowRoot.querySelector('o-grid[namespace="grid-12er-"]').shadowRoot.querySelector('#offers-page-main-title')
+              if (totalOffersHeading) {
+                totalOffersHeading.shadowRoot.querySelector('h1').textContent = json.total + json.total_label
+              }
+              
               // url kung fu
-              filterData.forEach(filterItem => {
+              json.filters.forEach(filterItem => {
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
                   const selectedChildren = []

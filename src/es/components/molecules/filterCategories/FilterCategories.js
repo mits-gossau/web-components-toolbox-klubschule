@@ -149,7 +149,7 @@ export default class FilterCategories extends Shadow() {
                 </div>
                 <div class="container dialog-footer">
                   <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
-                  <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${total > 0 ? `(${total.toString()}) ` : ''}${totalLabel}</a-button>
+                  <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${total > 0 ? `(${total.toString()})` : ''}${totalLabel}</a-button>
                 </div>
                 <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
                   <div class="wrap">

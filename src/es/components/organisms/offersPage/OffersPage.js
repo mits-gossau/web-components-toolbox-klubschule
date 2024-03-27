@@ -51,7 +51,7 @@ export default class OffersPage extends Shadow() {
       <ks-m-tab>
         <ul class="tab-search-result">
             <li>
-                <button class="active" tab-target="content1">123 Angebote</button>
+                <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
             </li>
             <li>
                 <button tab-target="content2">12 Story & Informationen</button>
@@ -68,7 +68,7 @@ export default class OffersPage extends Shadow() {
                     <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
                         <o-grid namespace="grid-12er-">
                             <div col-lg="12" col-md="12" col-sm="12">
-                                <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
+                                <ks-a-heading tag="h1" id="offers-page-main-title">&nbsp;</ks-a-heading>
                             </div>
                             <div col-lg="6" col-md="6" col-sm="12">
                               <ks-c-auto-complete
