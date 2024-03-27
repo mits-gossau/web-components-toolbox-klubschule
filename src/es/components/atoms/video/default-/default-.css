@@ -1,8 +1,0 @@
-:host {
-   --video-default-wrapper-inner-spacing: var(--mdx-sys-spacing-fix-m);
-   --video-default-divider-color: var(--mdx-sys-color-accent-1-default);
-   --video-default-divider-width: var(--mdx-sys-sizing-fix-3xl);
-   --video-default-divider-height: var(--mdx-sys-sizing-fix-2xs);
-   --video-default-copy-typography: var(--mdx-sys-font-fix-body1);
-   --video-default-copy-spacing: var(--mdx-sys-spacing-fix-2xs);
-}
