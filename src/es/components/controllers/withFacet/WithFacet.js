@@ -41,7 +41,8 @@ export default class WithFacet extends Shadow() {
     const url = new URL(self.location.href)
     const params = new URLSearchParams(url.search)
     this.isMocked = this.hasAttribute('mock')
-    this.resetAllFilters = this.root.querySelector('m-dialog').shadowRoot.querySelector('a-button[reset-all-filters]')
+    this.resetAllFilters = this.root.querySelector('m-dialog').shadowRoot.querySelector('a-button[reset-all-filters]') || this.root.querySelector('ks-o-body-section').shadowRoot
+    console.log('resetAllFilters', this.resetAllFilters)
     const apiUrl = this.isMocked
         ? `${this.importMetaUrl}./mock/default.json`
         : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
