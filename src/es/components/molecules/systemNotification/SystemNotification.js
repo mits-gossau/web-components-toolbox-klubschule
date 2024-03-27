@@ -2,24 +2,24 @@
 import SystemNotification from '../../web-components-toolbox/src/es/components/molecules/systemNotification/SystemNotification.js'
 
 export default class KsSystemNotification extends SystemNotification {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ ...options }, ...args)
   }
 
-  connectedCallback () {
+  connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     this.renderHTML()
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback() { }
 
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
   }
 
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */ `
       :host {
         background-color: var(--background-color);
@@ -38,11 +38,12 @@ export default class KsSystemNotification extends SystemNotification {
       }
       :host .icon {
         margin: auto 0;
-        height: ${this.iconSize};
+        height: var(--icon-size);
+        width: var(--icon-size);
         box-sizing: content-box;
         padding: var(--icon-padding);
-        background-color: var(--icon-background-color);
-        border: ${this.getAttribute('border-color') ? 'var(--icon-border-width) solid var(--icon-border-color)' : 'unset'};
+        background-color: ${this.hasAttribute('with-icon-background') ? 'var(--icon-background-color)' : 'tranparent'};
+        border: var(--icon-border-width) solid var(--icon-border-color);
         border-radius: 3px;
         color: var(--icon-color);
         display: flex;
@@ -51,7 +52,7 @@ export default class KsSystemNotification extends SystemNotification {
     return this.fetchTemplate()
   }
 
-  fetchTemplate () {
+  fetchTemplate() {
     const baseStyles = [
       {
         path: `${this.importMetaUrl}../../../../css/reset.css`, // no variables for this reason no namespace
@@ -62,35 +63,80 @@ export default class KsSystemNotification extends SystemNotification {
         namespaceFallback: true,
       }
     ]
+    let allStyles;
     switch (this.getAttribute('namespace')) {
       case 'system-notification-default-':
-        const styles = [{
+        allStyles = [{
           path: `${this.importMetaUrl}../../../../../../molecules/systemNotification/default-/default-.css`,
           namespace: false
         }, ...baseStyles]
-        return this.fetchCSS(styles).then(fetchCSSParams => {
-            // make template ${code} accessible aka. set the variables in the literal string
-            fetchCSSParams[0].styleNode.textContent = eval('`' + fetchCSSParams[0].style + '`')// eslint-disable-line no-eval
-          })
+
+        return this.fetchCSS(allStyles).then(fetchCSSParams => {
+          // make template ${code} accessible aka. set the variables in the literal string
+          fetchCSSParams[0].styleNode.textContent = eval('`' + fetchCSSParams[0].style + '`')// eslint-disable-line no-eval
+        })
+      case 'system-notification-error-':
+        allStyles = [
+          {
+            path: `${this.importMetaUrl}../../../../../../molecules/systemNotification/default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false,
+            replaces: [{
+              pattern: '--system-notification-default-',
+              flags: 'g',
+              replacement: '--system-notification-error-'
+            }]
+          },
+          {
+            path: `${this.importMetaUrl}../../../../../../molecules/systemNotification/error-/error-.css`,
+            namespace: false
+          },
+          ...baseStyles
+        ]
+
+        return this.fetchCSS(allStyles).then(fetchCSSParams => {
+          // make template ${code} accessible aka. set the variables in the literal string
+          fetchCSSParams[0].styleNode.textContent = eval('`' + fetchCSSParams[0].style + '`')// eslint-disable-line no-eval
+        })
+      case 'system-notification-neutral-':
+        allStyles = [
+          {
+            path: `${this.importMetaUrl}../../../../../../molecules/systemNotification/default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false,
+            replaces: [{
+              pattern: '--system-notification-default-',
+              flags: 'g',
+              replacement: '--system-notification-neutral-'
+            }]
+          },
+          {
+            path: `${this.importMetaUrl}../../../../../../molecules/systemNotification/neutral-/neutral-.css`,
+            namespace: false
+          },
+          ...baseStyles
+        ]
+
+        return this.fetchCSS(allStyles).then(fetchCSSParams => {
+          // make template ${code} accessible aka. set the variables in the literal string
+          fetchCSSParams[0].styleNode.textContent = eval('`' + fetchCSSParams[0].style + '`')// eslint-disable-line no-eval
+        })
       default:
         return this.fetchCSS(baseStyles)
     }
   }
 
-  renderHTML () {
+  renderHTML() {
     const iconName = this.getAttribute('icon-name') || ''
     const iconBadge = this.getAttribute('icon-badge') || ''
-    console.log(iconName, iconBadge)
     const description = this.innerHTML || ''
     this.html = /* html */ `
     <div class="system-notification" role="alert">
       <div class="icon">
         ${iconBadge ? (
           /* html */ `<span>${iconBadge}</span>`
-        ) : ''}
+      ) : ''}
         ${iconName ? (
-          /* html */ `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${iconName}" size="${this.iconSize}" />`
-        ) : ''}
+          /* html */ `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${iconName}" />`
+      ) : ''}
       </div>
       ${description ? /* html */ `
         <div class="description">${description}</div>
