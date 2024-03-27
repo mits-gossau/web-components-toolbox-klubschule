@@ -38,61 +38,42 @@ export default class WithFacet extends Shadow() {
 
     const withFacetCache = new Map()
     const initialRequest = this.getAttribute('initial-request')
-    const url = new URL(self.location.href)
-    const params = new URLSearchParams(url.search)
+    this.url = new URL(self.location.href)
+    this.params = new URLSearchParams(this.url.search)
     this.isMocked = this.hasAttribute('mock')
-    this.resetAllFilters = this.root.querySelector('m-dialog').shadowRoot.querySelector('a-button[reset-all-filters]') || this.root.querySelector('#with-facet-body-section').querySelector('#offers-page-filter-categories').shadowRoot.querySelector('a-button[reset-all-filters]')
     const apiUrl = this.isMocked
         ? `${this.importMetaUrl}./mock/default.json`
         : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
+    this.initialResponse = {}
 
     this.requestWithFacetListener = (event) => {
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-      console.log('---------------------------------event', event)
+      console.log('---------------------------------event', event, event.type === 'reset-all-filters' ? 'reset-all-filters' : 'request')
 
-      const filters = []
+      const shouldResetAllFilters = event.type === 'reset-all-filters'
+      const shouldResetFilters = event.type === 'reset-filters'
+      this.filters = []
       const filter = this.constructFilterItem(event)
-      if (filter) filters.push(filter)
+      if (filter) this.filters.push(filter)
 
-      // update filters according to url params
-      if (params) {
-        const entriesWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-
-        entriesWithUnderscore.forEach(([key, value]) => {
-          const [urlparaKey, idKey] = key.split('_')
-          const children = []
-
-          value.split(',').forEach(value => {
-            const [urlparaValue, idValue] = value.split('_')
-
-            children.push(`{
-                "urlpara": "${urlparaValue}",
-                "id": "${idValue}",
-                "selected": true
-              }`)
-          })
-
-          const filter = (`{
-              "urlpara": "${urlparaKey}",
-              "id": "${idKey}",
-              "selected": true,
-              "children": [${children.join(',')}]
-            }`)
-
-          filters.push(filter)
-        })
-      }
+      this.updateURLParams()
 
       const filterRequest = `{
-        "filter": ${filters.length > 0 ? `[${filters.join(',')}]` : '[]'},
+        "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
         "mandantId": ${this.getAttribute('mandant-id') || 110}
         ${event.detail?.key === 'input-search' ? `,"searchText": "${event.detail.value}"` : ''}
         ${event.detail?.key === 'location-search' ? `,"clat": "${event.detail.lat}"` : ''}
         ${event.detail?.key === 'location-search' ? `,"clong": "${event.detail.lng}"` : ''}
       }`
 
-      const request = filters.length > 0 ? filterRequest : initialRequest
+      let request = this.filters.length > 0 ? filterRequest : initialRequest
+
+      if (shouldResetAllFilters) {
+        request = initialRequest
+        this.removeURLParams()
+        this.updateTotalOffers(this.initialResponse.total, this.initialResponse.total_label)
+      }
 
       let requestInit = {}
       if (this.isMocked) {
@@ -119,63 +100,69 @@ export default class WithFacet extends Shadow() {
             // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
             : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
               if (response.status >= 200 && response.status <= 299) {
+                console.log('response (200, 299)', response)
                 return response.json()
               }
               throw new Error(response.statusText)
             }).then(json => {
-              // update total offers count in tab
-              const totalOffersTab = document.body.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-offers-page')?.shadowRoot?.querySelector('ks-m-tab')?.shadowRoot?.querySelector('#total-offers-tab-heading')
-              if (totalOffersTab) {
-                totalOffersTab.textContent = json.total + json.total_label
+              console.log('json', json)
+
+              // store initial response
+              if (!this.filters.length || this.filters.length === 0) {
+                this.initialResponse = json
               }
 
-              // update total offers count in heading
-              const totalOffersHeading = this.root.querySelector('#with-facet-body-section').shadowRoot.querySelector('o-grid[namespace="grid-12er-"]').shadowRoot.querySelector('#offers-page-main-title')
-              if (totalOffersHeading) {
-                totalOffersHeading.shadowRoot.querySelector('h1').textContent = json.total + json.total_label
-              }
+              // update total offers
+              this.updateTotalOffers(json.total, json.total_label)
               
               // url kung fu
               json.filters.forEach(filterItem => {
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                  const paramsWithUnderscore = [...params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+                  const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
                   const selectedChildren = []
 
                   filterItem.children.forEach(child => {
                     // check if the child is already in the url params
                     const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
-
+                    
                     if (containsChild) {
+                      console.log('containsChild:', containsChild, `${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                       selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                     }
 
                     // if selected, add it to the url params
                     if (child.selected) {
-                      if (!containsChild) {
+                      console.log('child.selected:', child.selected, `${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
+
+                      if (!containsChild && !shouldResetAllFilters) {
                         selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                       }
 
-                      params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
+                      if (selectedChildren.length > 0) {
+                        this.params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
+                      }
 
                     // if unselected, remove it from the url params
                     } else {
                       if (containsChild) {
+                        console.log('child.unselected:', child.selected, `${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
+
                         const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                         selectedChildren.splice(index, 1)
 
-                        params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
+                        this.params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
 
-                        if (params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
-                          params.delete(`${filterItem.urlpara}_${filterItem.id}`)
+                        if (this.params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
+                          this.params.delete(`${filterItem.urlpara}_${filterItem.id}`)
                         }
                       }
                     }
                   })
 
-                  self.history.pushState({}, '', `${url.pathname}?${params.toString()}`)
+                  self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                 }
               })
-
+              
               return json
             })).get(request)
         },
@@ -185,75 +172,85 @@ export default class WithFacet extends Shadow() {
       }))
     }
 
-    this.resetAllFiltersListener = (event) => {
-      console.log('resetAllFiltersListener', event)
-
-      const request = initialRequest
-      let requestInit = {}
-      if (this.isMocked) {
-        requestInit = {
-          method: 'GET'
-        }
-      } else {
-        requestInit = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          mode: 'cors',
-          body: request
-        }
-      }
-
-      this.dispatchEvent(new CustomEvent('with-facet', {
-        detail: {
-          /** @type {Promise<fetchAutoCompleteEventDetail>} */
-          fetch: withFacetCache.has(request)
-            ? withFacetCache.get(request)
-            // TODO: withFacetCache key must include all variants as well as future payloads
-            // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
-            : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
-              if (response.status >= 200 && response.status <= 299) {
-                return response.json()
-              }
-              throw new Error(response.statusText)
-            }).then(json => {
-              // remove all filter params from url
-              if (params) {
-                const keys = [...params.keys()]
-
-                keys.forEach(key => {
-                  if (key.includes('_')) {
-                    params.delete(key)
-                  }
-                })
-
-                self.history.pushState({}, '', `${url.pathname}?${params.toString()}`)
-              }
-
-              return json
-            })).get(request)
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
-    }
+    window.addEventListener('popstate', () => {
+      this.params = this.catchURLParams()
+    })
   }
 
   connectedCallback () {
     this.addEventListener('request-with-facet', this.requestWithFacetListener)
-
-    if (this.resetAllFilters) {
-      this.resetAllFilters.addEventListener('click', this.resetAllFiltersListener)
-    }
+    this.addEventListener('reset-all-filters', this.requestWithFacetListener)
+    this.addEventListener('reset-filters', this.requestWithFacetListener)
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-with-facet', this.requestWithFacetListener)
+    this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
+    this.removeEventListener('reset-filters', this.requestWithFacetListener)
+  }
 
-    if (this.resetAllFilters) {
-      this.resetAllFilters.removeEventListener('click', this.resetAllFiltersListener)
+  updateTotalOffers (total, label) {
+    // update tab
+    const totalOffersTab = document.body.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-offers-page')?.shadowRoot?.querySelector('ks-m-tab')?.shadowRoot?.querySelector('#total-offers-tab-heading')
+    if (totalOffersTab) {
+      totalOffersTab.textContent = total + label
+    }
+
+    // update heading
+    const totalOffersHeading = this.root.querySelector('#with-facet-body-section').shadowRoot.querySelector('o-grid[namespace="grid-12er-"]').shadowRoot.querySelector('#offers-page-main-title')
+    if (totalOffersHeading) {
+      totalOffersHeading.shadowRoot.querySelector('h1').textContent = total + label
+    }
+
+    console.log('total offers updated:', total, label)
+  }
+
+  catchURLParams () {
+    return new URLSearchParams(self.location.search)
+  }
+
+  updateURLParams () {
+    if (this.params) {
+      const entriesWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+
+      entriesWithUnderscore.forEach(([key, value]) => {
+        const [urlparaKey, idKey] = key.split('_')
+        const children = []
+
+        value.split(',').forEach(value => {
+          const [urlparaValue, idValue] = value.split('_')
+
+          children.push(`{
+              "urlpara": "${urlparaValue}",
+              "id": "${idValue}",
+              "selected": true
+            }`)
+        })
+
+        const filter = (`{
+            "urlpara": "${urlparaKey}",
+            "id": "${idKey}",
+            "selected": true,
+            "children": [${children.join(',')}]
+          }`)
+
+        this.filters.push(filter)
+      })
+    }
+  }
+
+  removeURLParams () {
+    if (this.params) {
+      const keys = [...this.params.keys()]
+
+      keys.forEach(key => {
+        if (key.includes('_')) {
+          this.params.delete(key)
+        }
+      })
+
+      self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+      console.log('removed all filters from url!')
     }
   }
 

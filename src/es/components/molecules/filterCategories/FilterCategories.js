@@ -118,7 +118,7 @@ export default class FilterCategories extends Shadow() {
           if (this.hasAttribute('translation-key-reset')) {
             resetButton = /* html */`
               <p class="reset-link">
-                <a-button namespace="button-transparent-">
+                <a-button namespace="button-transparent-" request-event-name="reset-filters">
                   ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
                 </a-button>
               </p>

@@ -54,7 +54,7 @@ export default class OffersPage extends Shadow() {
                 <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
             </li>
             <li>
-                <button tab-target="content2">12 Story & Informationen</button>
+                <button tab-target="content2" id="total-stories-tab-heading">12 Story & Informationen</button>
             </li>
         </ul>
           <div>
@@ -182,7 +182,7 @@ export default class OffersPage extends Shadow() {
                             </div>
                             <div class="container dialog-content">
                                 <p class="reset-link">
-                                    <a-button namespace="button-transparent-" reset-all-filters>Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                                    <a-button namespace="button-transparent-" reset-all-filters request-event-name="reset-all-filters">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
                                     </a-button>
                                 </p>
                                 <div class="sub-content">
