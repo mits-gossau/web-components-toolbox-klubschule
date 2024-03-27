@@ -170,14 +170,13 @@
   if (src.searchParams.get('triggerImmediately') === 'true') {
     loadListener()
   } else {
-    self.addEventListener('load', loadListener, { once: true })
+    // self.addEventListener('load', loadListener)
 
-    // added:
-    self.addEventListener('storiesLoaded', loadListener, { once: true })
+    self.addEventListener('storiesLoaded', loadListener)
   }
 })(window || self, document,
   // ↓↓↓ adjustable ↓↓↓
-  './src/es/components/', // baseUrl
+  '/src/es/components/', // baseUrl
   [
     {
       selector: 'ks-a-',

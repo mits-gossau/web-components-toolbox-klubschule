@@ -1,0 +1,54 @@
+import { Canvas, Meta, Primary, Controls, Story, Source } from '@storybook/blocks';
+import * as StageStories from './Stage.stories.js';
+
+<Meta of={StageStories} />
+
+# Stage Component
+
+Stage Component at the top of a page. Available in two variants: Default & Title.
+
+## Stage Default
+
+<Canvas of={StageStories.StageDefault} />
+<Controls of={StageStories.StageDefault} />
+<Source of={StageStories.StageDefault} excludeDecorators={true} />
+```html
+<ks-m-stage 
+    namespace="stage-default-" 
+  >
+    <a-picture
+        picture-load 
+        defaultSource="${imgUrl}" 
+        alt="randomized image">
+    </a-picture>
+    <p class="topline">
+        <ks-a-back-link href="#" alt="Alternative Text for Backlink">
+            Back Link
+        </ks-a-back-link>
+    </p>
+    <ks-a-heading tag="h1" display-2>
+        ${headline}
+    </ks-a-heading>
+    <a-input inputid="searchField" placeholder="Label" icon-name="Search" icon-size="1.25em" search="?q=" type="search"></a-input>
+</ks-m-stage>
+```
+
+## Stage Title
+
+```html
+<ks-m-stage namespace="stage-title-">
+    <p class="topline">
+        <ks-a-back-link href="#" alt="Alternative Text for Backlink">
+            Back Link
+        </ks-a-back-link>
+    </p>
+    <ks-a-heading tag="h1" display-3 border-top brand="${brand}">
+        ${headline}
+    </ks-a-heading>
+    <a-picture
+        picture-load 
+        defaultSource="${imgUrl}" 
+        alt="randomized image">
+    </a-picture>
+</ks-m-stage>
+```

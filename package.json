@@ -8,14 +8,36 @@
     "serve": "live-server --port=8081 --host=localhost --no-css-inject",
     "serve3000": "live-server --port=3000 --host=localhost --no-css-inject",
     "test": "live-server --port=2400 --host=localhost --no-browser --ignorePattern=.* & npx playwright test --config=e2e/ && killall node",
-    "update": "git submodule update --init --recursive --remote --force"
+    "update": "git submodule update --init --recursive --remote --force",
+    "storybook": "NODE_OPTIONS='--openssl-legacy-provider' storybook dev -p 6006"
   },
   "author": "weedshaker@gmail.com, edx.mgb@gmail.com",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "@etchteam/storybook-addon-css-variables-theme": "^2.0.6",
     "@playwright/test": "*",
+    "@storybook/addon-actions": "^8.0.0",
+    "@storybook/addon-essentials": "^8.0.0",
+    "@storybook/addon-links": "^8.0.0",
+    "@storybook/addon-mdx-gfm": "^8.0.0",
+    "@storybook/addon-webpack5-compiler-babel": "^3.0.3",
+    "@storybook/blocks": "^8.0.0",
+    "@storybook/web-components": "^8.0.0",
+    "@storybook/web-components-webpack5": "^8.0.0",
+    "ajv": "^8.12.0",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^6.8.1",
+    "html-loader": "^5.0.0",
+    "lit": "^3.1.0",
+    "lit-html": "^3.1.0",
     "live-server": "*",
-    "standard": "*"
+    "standard": "*",
+    "storybook": "^8.0.0",
+    "storybook-addon-themes": "^6.1.0",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.89.0"
   },
   "standard": {
     "ignore": [
