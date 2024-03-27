@@ -19,26 +19,28 @@ export default class AppointmentTile extends Tile {
   //   // document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   // }
 
-  updateSubscriptionCourseAppointmentDetailListener = event => {
-    event.detail.fetch.then(x => {
-      const description = this.root.querySelector('m-dialog')
-      if (description) {
-        const courseDescription = description.shadowRoot.getElementById('course-description')
-        courseDescription.innerText = x.courseDescription
-      }
-    })
-  }
+  // updateSubscriptionCourseAppointmentDetailListener = event => {
+  //   event.detail.fetch.then(x => {
+  //     const description = this.root.querySelector('m-dialog')
+  //     if (description) {
+  //       const courseDescription = description.shadowRoot.getElementById('course-description')
+  //       courseDescription.innerText = x.courseDescription
+  //     }
+  //   })
+  // }
 
-  updateSubscriptionCourseAppointmentBookingListener = event => {
-    event.detail.fetch.then(x => {
-      console.log('update booking subscription', x)
-      // const description = this.root.querySelector('m-dialog')
-      // if (description) {
-      //   const courseDescription = description.shadowRoot.getElementById('course-description')
-      //   courseDescription.innerText = x.courseDescription
-      // }
-    })
-  }
+  // updateSubscriptionCourseAppointmentBookingListener = event => {
+  //   event.detail.fetch.then(x => {
+  //     console.log('update booking subscription', x)
+  //     // TODO: Double!!!
+  //     const description = this.root.querySelector('m-dialog')
+  //     if (description) {
+  //       const courseDescription = description.shadowRoot.getElementById('sub-content')
+  //       debugger
+  //     //   courseDescription.innerText = x.courseDescription
+  //     }
+  //   })
+  // }
 
   /**
    * renders the css
@@ -108,7 +110,7 @@ export default class AppointmentTile extends Tile {
       align-items: center;
     }
     :host m-load-template-tag {
-        min-height:10em;
+        min-height:20em;
         display:block;
     }
     :host .sub-content {
@@ -181,7 +183,7 @@ export default class AppointmentTile extends Tile {
             <div class="parent-body">
               <div class="course-info">
                 <div>
-                <span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span>
+                  <span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span>
                 </div>
                 <div>
                   <span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span>
@@ -307,7 +309,9 @@ export default class AppointmentTile extends Tile {
           <p class="reset-link"></p>
           <div class="sub-content">
             <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
-            <p id="description"></p>
+            <div id="content">
+              <p id="description"></p>
+            </div>
           </div>
         </div>
         <div class="container dialog-footer">

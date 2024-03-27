@@ -16,12 +16,15 @@ export default class AppointmentsList extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.tiles = null
     this.select = null
+    this.selectedTile = null
+    this.dialog = null
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
       {
         detail: {
@@ -38,16 +41,26 @@ export default class AppointmentsList extends Shadow() {
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     this.select.removeEventListener('change', this.selectEventListener)
   }
 
   updateSubscriptionCourseAppointmentDetailListener = event => {
     event.detail.fetch.then(courseDetail => {
       const { courseId, courseDescription } = courseDetail
-      const selectedTile = this.tiles?.find(t => t.id * 1 === courseId)
-      const dialog = selectedTile.shadowRoot.querySelector('m-dialog')
-      const description = dialog.shadowRoot.getElementById('description')
+      this.selectedTile = this.tiles?.find(t => t.id * 1 === courseId)
+      this.dialog = this.selectedTile.shadowRoot.querySelector('m-dialog')
+      const description = this.dialog.shadowRoot.getElementById('description')
       description.innerHTML = courseDescription
+    })
+  }
+
+  updateSubscriptionCourseAppointmentBookingListener = event => {
+    event.detail.fetch.then(x => {
+      console.log('update booking subscription', x, this.selectedTile, this.dialog)
+      const dialogContent = this.dialog.shadowRoot.getElementById('content')
+      dialogContent.innerHTML = ''
+      dialogContent.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
     })
   }
 
