@@ -14,6 +14,7 @@ export default class Tooltip extends Shadow() {
       this.tooltip.classList.toggle('tooltip-open')
     }
   }
+
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 

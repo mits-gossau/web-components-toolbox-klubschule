@@ -7,16 +7,16 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class OffersPage extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
@@ -27,14 +27,14 @@ export default class OffersPage extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.ksMTab
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
         display: contents !important;
@@ -46,15 +46,15 @@ export default class OffersPage extends Shadow() {
    * Render HTML
    * @return Promise<void>
    */
-  renderHTML() {
+  renderHTML () {
     this.html = /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
             <li>
-                <button class="active" tab-target="content1">123 Angebote</button>
+                <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
             </li>
             <li>
-                <button tab-target="content2">12 Story & Informationen</button>
+                <button tab-target="content2" id="total-stories-tab-heading">12 Story & Informationen</button>
             </li>
         </ul>
           <div>
@@ -65,10 +65,10 @@ export default class OffersPage extends Shadow() {
                   ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
                 >
                     <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-                    <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
+                    <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
                         <o-grid namespace="grid-12er-">
                             <div col-lg="12" col-md="12" col-sm="12">
-                                <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
+                                <ks-a-heading tag="h1" id="offers-page-main-title">&nbsp;</ks-a-heading>
                             </div>
                             <div col-lg="6" col-md="6" col-sm="12">
                               <ks-c-auto-complete
@@ -76,7 +76,7 @@ export default class OffersPage extends Shadow() {
                                 request-auto-complete="offers-page-request-auto-complete"
                                 input-change="offers-page-search-change"
                                 ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
-                                ${this.hasAttribute('mock-auto-complete') ? ` mock` : ''} 
+                                ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
                               >
                                 <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
                                     <div class="container">
@@ -169,7 +169,7 @@ export default class OffersPage extends Shadow() {
                                 </ks-c-auto-complete>
                             </div>
                         </o-grid>
-                        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
+                        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
                             <!-- overlayer -->
                             <div class="container dialog-header" tabindex="0">
                                 <div id="back">
@@ -182,7 +182,7 @@ export default class OffersPage extends Shadow() {
                             </div>
                             <div class="container dialog-content">
                                 <p class="reset-link">
-                                    <a-button namespace="button-transparent-">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                                    <a-button namespace="button-transparent-" request-event-name="reset-all-filters">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
                                     </a-button>
                                 </p>
                                 <div class="sub-content">
@@ -382,7 +382,7 @@ export default class OffersPage extends Shadow() {
     ])
   }
 
-  get ksMTab() {
+  get ksMTab () {
     return this.root.querySelector('ks-m-tab')
   }
 }
