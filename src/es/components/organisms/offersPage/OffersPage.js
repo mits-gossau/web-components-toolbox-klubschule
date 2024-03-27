@@ -65,7 +65,7 @@ export default class OffersPage extends Shadow() {
                   ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
                 >
                     <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-                    <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
+                    <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
                         <o-grid namespace="grid-12er-">
                             <div col-lg="12" col-md="12" col-sm="12">
                                 <ks-a-heading tag="h1">123 Angebote</ks-a-heading>
@@ -169,7 +169,7 @@ export default class OffersPage extends Shadow() {
                                 </ks-c-auto-complete>
                             </div>
                         </o-grid>
-                        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
+                        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
                             <!-- overlayer -->
                             <div class="container dialog-header" tabindex="0">
                                 <div id="back">
