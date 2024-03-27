@@ -7,41 +7,6 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 * @type {CustomElementConstructor}
 */
 export default class AppointmentTile extends Tile {
-  // connectedCallback () {
-  //   super.connectedCallback()
-  //   // document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-  //   // document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
-  // }
-
-  // disconnectedCallback () {
-  //   super.disconnectedCallback()
-  //   // document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-  //   // document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
-  // }
-
-  // updateSubscriptionCourseAppointmentDetailListener = event => {
-  //   event.detail.fetch.then(x => {
-  //     const description = this.root.querySelector('m-dialog')
-  //     if (description) {
-  //       const courseDescription = description.shadowRoot.getElementById('course-description')
-  //       courseDescription.innerText = x.courseDescription
-  //     }
-  //   })
-  // }
-
-  // updateSubscriptionCourseAppointmentBookingListener = event => {
-  //   event.detail.fetch.then(x => {
-  //     console.log('update booking subscription', x)
-  //     // TODO: Double!!!
-  //     const description = this.root.querySelector('m-dialog')
-  //     if (description) {
-  //       const courseDescription = description.shadowRoot.getElementById('sub-content')
-  //       debugger
-  //     //   courseDescription.innerText = x.courseDescription
-  //     }
-  //   })
-  // }
-
   /**
    * renders the css
    */
