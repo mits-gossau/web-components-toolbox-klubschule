@@ -8,15 +8,17 @@ export default class KsSystemNotification extends SystemNotification {
 
   connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
-    this.renderHTML()
+    if (this.shouldRenderHTML()) this.renderHTML()
   }
-
-  disconnectedCallback() { }
 
   shouldRenderCSS() {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
+  }
+  
+  shouldRenderHTML() {
+    return !this.root.querySelector('.system-notification')
   }
 
   renderCSS() {
