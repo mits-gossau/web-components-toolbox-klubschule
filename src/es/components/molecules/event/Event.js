@@ -305,6 +305,12 @@ export default class Event extends Shadow() {
         :host .price {
           margin-top: 1rem;
         }
+
+        :host .details {
+          grid-template-columns: 100%;
+          row-gap: 3rem;
+          column-gap: 0;
+        }
       }
     `
   }
