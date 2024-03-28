@@ -1,5 +1,6 @@
 // @ts-check
 import Tile from '../../../../components/molecules/tile/Tile.js'
+import { courseAppointmentStatusMapping } from '../../../helpers/mapping.js'
 
 /**
 * @export
@@ -81,6 +82,12 @@ export default class AppointmentTile extends Tile {
     :host .sub-content {
       padding-top:1.5em;
     }
+    :host .status-booked-cancellation-possible {
+      border:10px solid pink;
+    }
+    :host .status-booked-cancellation-not-possible {
+      border:10px solid pink;
+    }
     @media only screen and (max-width: _max-width_) {
       :host  {}
     }
@@ -117,6 +124,10 @@ export default class AppointmentTile extends Tile {
   renderHTML () {
     const fetchModules = this.fetchModules([
       {
+        path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/molecules/loadTemplateTag/LoadTemplateTag.js`,
+        name: 'm-load-template-tag'
+      },
+      {
         path: `${this.importMetaUrl}'../../../../../../es/components/atoms/button/Button.js`,
         name: 'ks-a-button'
       },
@@ -127,10 +138,6 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
         name: 'm-dialog'
-      },
-      {
-        path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/molecules/loadTemplateTag/LoadTemplateTag.js`,
-        name: 'm-load-template-tag'
       }
     ])
     Promise.all([fetchModules]).then((_) => {
@@ -141,10 +148,16 @@ export default class AppointmentTile extends Tile {
   }
 
   renderTile (content, selectedSubscription) {
+    console.log(courseAppointmentStatusMapping[content.courseAppointmentStatus['css-tile']])
+    console.log('courseAppointmentStatus: ', content.courseAppointmentStatus)
+    let status = ''
+    if (content.courseAppointmentStatus === 6 || content.courseAppointmentStatus === 5) {
+      status = 'status-6'
+    }
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
-          <div class="m-tile" data-course-id=${content.courseId}>
+          <div class="m-tile ${status}" data-course-id=${content.courseId}>
             <div class="parent-body">
               <div class="course-info">
                 <div>
@@ -195,60 +208,6 @@ export default class AppointmentTile extends Tile {
         </template>
       </m-load-template-tag>
     `
-    // return /* HTML */ `
-    //   <m-load-template-tag mode="false">
-    //       <template>
-    //         <div class="m-tile" data-course-id=${content.courseId}>
-    //           <div class="body">
-    //             <div><span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span></div>
-    //             <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span></div>
-    //             <div><span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span></div>
-    //             <div class="icon-info"><a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.instructorDescription}</span></div>
-    //             <div><span class="m-tile__title date time"> ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button></span></div>
-    //           <div class="info">
-    //             <div>
-    //               <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx></div>
-    //             <div>
-    //             <div>
-    //               <span class="m-tile__content">${content.courseLocation}</span><br><span class="m-tile__content">Raum: ${content.roomDescription}</span>
-    //             </div>
-    //             </div>
-    //           </div>
-    //           </div>
-    //           <div class="footer">
-    //             <div class="course-booking">
-    //               ${this.renderDialog(content, selectedSubscription)}
-    //             </div>
-    //             <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
-    //           </div>
-    //         </div>
-    //     </template>
-    //   </m-load-template-tag>
-    // `
-
-    // return /* html */ `
-    //   <div class="m-tile">
-    //     <div class="parent-body">
-    //       <div class="course-info">
-    //         <span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span>
-    //         <span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span>
-    //         <span class="m-tile__title date time">
-    //           ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo}
-    //           <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button>
-    //         </span>
-    //       </div>
-    //       <div class="course-admin">
-    //         <div class="vacancies"><a-icon-mdx icon-name="Location" size="1em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span></div>
-    //         <div class="vacancies"><a-icon-mdx icon-name="Location" size="1em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.instructorDescription}</span></div>
-    //         <div class="vacancies"><a-icon-mdx icon-name="Location" size="1em" tabindex="0"></a-icon-mdx><span class="m-tile__content">${content.courseLocation} <br /> Raum: ${content.roomDescription}</span></div>
-    //       </div>
-    //     </div>
-    //     <div class="parent-footer">
-    //       <div class="course-booking"><ks-a-button namespace="button-primary-" color="secondary">Termin buchen</ks-a-button></div>
-    //       <div class="course-price"><span class="m-tile__title">${content.lessonPrice}</span></div>
-    //     </div>
-    //   </div>
-    //   `
   }
 
   escapeForHtml = (htmlString) => {

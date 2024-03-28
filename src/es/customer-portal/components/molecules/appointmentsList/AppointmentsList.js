@@ -49,9 +49,13 @@ export default class AppointmentsList extends Shadow() {
     event.detail.fetch.then(courseDetail => {
       const { courseId, courseDescription } = courseDetail
       this.selectedTile = this.tiles?.find(t => t.id * 1 === courseId)
-      this.dialog = this.selectedTile.shadowRoot.querySelector('m-dialog')
-      const description = this.dialog.shadowRoot.getElementById('description')
-      description.innerHTML = courseDescription
+      clearTimeout(this._updateInputTimeoutID)
+      this._updateInputTimeoutID = setTimeout(() => {
+        console.log(this.selectedTile.shadowRoot.children.length, courseDescription)
+        this.dialog = this.selectedTile.shadowRoot.querySelector('m-dialog')
+        const description = this.dialog.shadowRoot.getElementById('description')
+        description.innerHTML = courseDescription
+      }, 500)
     })
   }
 
@@ -202,34 +206,6 @@ export default class AppointmentsList extends Shadow() {
     this.html = '<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmcyd2Vvd3Y5YjN5YTMzbmd6dzk1d3FvYnoydDZtbmg5MXdnZ2NoOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0MYGtCMbPTYWOzaU/giphy.gif">'
   }
 
-  // renderDialog (data = {}) {
-  //   console.log('render dialog', data.courseTitle)
-  //   this.html = /* html */ `
-  //     <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
-  //           <div class="container dialog-header" tabindex="0">
-  //               <div id="back">
-  //                   &nbsp;
-  //               </div>
-  //               <h3>${data.courseTitle}</h3>
-  //               <div id="close">
-  //                   <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-  //               </div>
-  //           </div>
-  //           <div class="container dialog-content">
-  //               <p class="reset-link">asdfasd</p>
-  //               <div class="sub-content">
-  //                   <a-input inputid="location-search" width="100%" placeholder="Angebot suchen" icon-name="Search" icon-size="calc(20rem/18)" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>
-  //                   <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="Schliessen" translation-key-cta="Angebote" translation-key-reset="zur&uuml;cksetzen"></ks-m-filter-categories>
-  //               </div>
-  //           </div>
-  //           <div class="container dialog-footer">
-  //               <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
-  //               <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
-  //           </div>
-  //       </m-dialog>
-  //     `
-  // }
-
   renderFilterSubscriptions (subscriptionsData) {
     const select = document.createElement('select')
     select.id = 'filters-subscriptions'
@@ -276,7 +252,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   makeTileComponent (tile, appointment, selectedSubscription) {
-    const courseId = appointment.courseId
+    const { courseId } = appointment
     const appointmentData = this.escapeForHtml(appointment)
     const selectedSubscriptionData = this.escapeForHtml(selectedSubscription)
     const tileComponent = new tile.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
