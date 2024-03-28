@@ -1,254 +1,272 @@
-<!-- 2-spaltige Bühne -->
-<o-grid 
-    namespace="grid-2columns-content-stage-" 
-    first-container-vertical 
-    first-column-with="66%" 
-    background-color="#0053A6" 
-    image-src="https://picsum.photos/480/280"
-    width="100%"
->
-    <div>
-        <ks-a-heading tag="h1" color="white" content-stage>ContentPage (B&uuml;hne) Lorem Ipsum dolor bis zur zweiten Zeile</ks-a-heading>
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-            labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-            dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-            magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-    </div>
-    <aside>
-        <div class="aside-image"></div>
-    </aside>
-</o-grid>
+<!-- Set the color for headlines. Not sure where this will be placed on the backend, but it needs to be included to adjust the color according to topic/brand -->
+<style>
+    :host {
+        --h-color: var(--mdx-sys-color-accent-1-default); /* Color can be adjusted */
+    }
+</style>
 
-<!-- 2-spaltiger Content -->
-<o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" switch-aside-order-mobile>
-    <div>
-        <p class="intro">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-            invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-        </p>
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-            labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-            dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-            magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-    </div>
-    <aside>
-        <h3>Weiterführende Links</h3>
-        <ks-m-link-list namespace="link-list-default-">
+<!-- Stage mit Titel -->
+<ks-m-stage namespace="stage-title-">
+    <p class="topline">
+        <ks-a-back-link href="#" alt="Alternative Text for Backlink">
+            Stories
+        </ks-a-back-link>
+    </p>
+    <ks-a-heading tag="h1" display-3 centered border-top>
+        Asd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+    </ks-a-heading>
+    <a-picture picture-load namespace="picture-cover-" alt="Photoandy"
+        defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
+    </a-picture>
+</ks-m-stage>
+<!-- /Stage mit Titel -->
+
+<!-- Wichtig: Einstieg ohne zusätzliche Spalte wird in einer anderen Komponente ausgegeben -->
+<ks-o-body-section variant="narrow">
+
+        <!-- CMS Titel -->
+        <ks-a-heading tag="h2" style-as="h1" border-top>Titel-Modul</ks-a-heading>
+        <!-- /CMS Titel -->
+
+        <!-- Social LogoList -->
+        <ks-m-logo-list namespace="logo-list-default-" class="margin-y-m">
+            <p style="color: var(--mdx-sys-color-neutral-bold2)">von Max Muster, 8. August 2023</p>
             <ul>
                 <li>
-                    <a href="#">
-                        <span>Label</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    <a  href="#">
+                        <a-icon-mdx icon-name="Facebook" size="1.5rem"></icon-mdx>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span>Label</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    <a  href="#">
+                        <a-icon-mdx icon-name="Twitter" size="1.5rem"></icon-mdx>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span>Label</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    <a  href="#">
+                        <a-icon-mdx icon-name="MessageCircle" size="1.5rem"></icon-mdx>
+                    </a>
+                </li>
+                <li>
+                    <a  href="#">
+                        <a-icon-mdx icon-name="Mail" size="1.5rem"></icon-mdx>
+                    </a>
+                </li>
+                <li>
+                    <a  href="#">
+                        <a-icon-mdx icon-name="Linkedin" size="1.5rem"></icon-mdx>
                     </a>
                 </li>
             </ul>
-        </ks-m-link-list>
-    </aside>
-</o-grid>
+        </ks-m-logo-list>
+        <!-- /Social LogoList -->
 
-<!-- 1-spaltiger Content -->
-<ks-o-body-section variant="narrow">
-    <!-- CMS RichText -->
-    <div>
-        <h2>RichText Headline H2</h2>
-        <h3>RichText Headline H3</h3>
+        <!-- CMS Contentbereich 1 -->
+
+        <!-- CMS Titel -->
+        <ks-a-heading tag="h2">Title h2</ks-a-heading>
+        <!-- /CMS Titel -->
+
+        <!-- CMS RichText -->
         <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
             et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
             rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
             dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
             magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-        </p>
-        <p><em>Text kursiv Text kursivText kursivText kursivText kursivText kursivText kursiv.</em>&nbsp;</p>
-        <p><strong>Text bold - Text bold - Text bold - Text bold - Text bold - Text bold - Text bold</strong></p>
-        <p><span style="text-decoration: underline;">text ist unterstrichen</span></p>
-        <p>ich bin ein <a href="/" title="Klubschule">Link </a>und so weiter</p>
-        <!-- Lists -->
-        <ul>
-            <li>liste 1</li>
-            <li>liste 2</li>
-            <li>liste 3</li>
-        </ul>
-        <ul class="list-style-circle">
-            <li>liste 1</li>
-            <li>liste 2</li>
-            <li>liste 3</li>
-        </ul>
-        <ul class="list-style-square">
-            <li>liste 1</li>
-            <li>liste 2</li>
-            <li>liste 3</li>
-        </ul>
-        <ol>
-            <li>number 1</li>
-            <li>number 2</li>
-            <li>number 3</li>
-        </ol>
-        <ol class="list-style-decimal">
-            <li>number 1</li>
-            <li>number 2</li>
-            <li>number 3</li>
-        </ol>
-        <ol class="list-style-upper-alpha">
-            <li>holdrio</li>
-            <li>holdrio</li>
-            <li>holdrio</li>
-        </ol>
-        <ol>
-            <li>List item</li>
-            <li>Lorem Ipsum</li>
-            <li>Dolor sit amet</li>
-        </ol>
-        <!-- /Lists -->
-        <hr />
-        <o-grid namespace="grid-2colums2rows-" first-container-vertical>
-            <section>
-                <div>
-                    <ul>
-                        <li>List item</li>
-                        <li>Lorem Ipsum</li>
-                        <li>Dolor sit amet</li>
-                    </ul>
-                    <p><a href="#">Link Text -></a></p>
-                </div>
-                <div>
-                    <ul>
-                        <li>List item</li>
-                        <li>Lorem Ipsum</li>
-                        <li>Dolor sit amet</li>
-                    </ul>
-                    <p><a href="#">Link Text -></a></p>
-                </div>
-            </section>
-        </o-grid>
-    </div>
-    <!-- /CMS RichText -->
+            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <!-- /CMS RichText -->
 
-    <!-- CMS Table -->
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>header 1</th>
-                    <th>header 2</th>
-                    <th>header 3</th>
-                    <th>header 4</th>
-                    <th>header 5</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Lorem</td>
-                    <td>Lorem ipsum dolor sit amet</td>
-                    <td>Sed diam voluptua.</td>
-                    <td>diam voluptua.</td>
-                    <td>Lorem ipsum dolor</td>
-                </tr>
-                <tr>
-                    <td>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    </td>
-                    <td>
-                        Lorem ipsum dolor sit amet
-                    </td>
-                    <td>
-                        Sed diam voluptua.
-                    </td>
-                    <td>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    </td>
-                    <td>
-                        Lorem ipsum dolor
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    </td>
-                    <td>
-                        Lorem ipsum dolor sit amet
-                    </td>
-                    <td>
-                        Sed diam voluptua.
-                    </td>
-                    <td>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    </td>
-                    <td>
-                        Lorem ipsum dolor
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    </td>
-                    <td>
-                        Lorem ipsum dolor sit amet
-                    </td>
-                    <td>
-                        Sed diam voluptua.
-                    </td>
-                    <td>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                            ut labore et dolore magna aliquyam erat, sed diam voluptua.
-                    </td>
-                    <td>
-                        Lorem ipsum dolor
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!-- /CMS Table -->
-    
-    <!-- Beispiele CMS Titel Komponenten -->
-    <ks-a-heading tag="h1">Titel H1</ks-a-heading>
-    <ks-a-heading tag="h2">Titel H2</ks-a-heading>
-    <ks-a-heading tag="h3">Titel H3</ks-a-heading>
-    <ks-a-heading tag="h1" style-as="h3">Titel H1 as H3</ks-a-heading>
-    <ks-a-heading tag="h2" style-as="h3">Titel H2 as H3</ks-a-heading>
-    <ks-a-heading tag="h3" style-as="h3">Titel H3 as H3</ks-a-heading>
-    <ks-a-heading tag="h1" border-top>Titel H1</ks-a-heading>
-    <ks-a-heading tag="h2" border-top>Titel H2</ks-a-heading>
-    <ks-a-heading tag="h3" border-top>Titel H3</ks-a-heading>
-    <!-- /Beispiele CMS Titel Komponenten -->
+        <!-- CMS Titel -->
+        <ks-a-heading tag="h3">Title h3</ks-a-heading>
+        <!-- /CMS Titel -->
 
-    <!-- CMS Content Container -->
-    <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
+        <!-- CMS RichText -->
+        <p><strong>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                et justo duo dolores et ea rebum. </strong></p>
+        <p>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+            dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <!-- /CMS RichText -->
+
+        <!-- CMS Akkordeon Container -->
+        <!-- the class margin-y-m adds more margin to the accordion -->
+        <div class="margin-y-m">
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 1</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <ks-a-heading tag="h3">test title</ks-a-heading>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 2</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <div>
+                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                    voluptua.</p>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                    <details>
+                        <summary>
+                            <h4>accordion 3</h4>
+                        </summary>
+                        <div>
+                            <style>
+                                :host details summary~* {
+                                    --details-default-color-secondary: var(--color-hover);
+                                }
+                            </style>
+                            <div>
+                                <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
+                                    target="_self">
+                                    <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
+                                        tabindex="0"> </a-icon-mdx>
+                                    <span id="label">btn</span>
+                                </ks-a-button>
+                            </div>
+                        </div>
+                    </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>Accordion mit Bild</h4>
+                    </summary>
+                    <div>
+                        <!-- CMS Bild -->
+                        <ks-m-figure with-line>
+                            <ks-a-picture picture-load namespace="picture-default-"
+                                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+                                open-modal open-modal-mobile></ks-a-picture>
+                            <figcaption>test</figcaption>
+                        </ks-m-figure>
+                        <!-- /CMS Bild -->
+                    </div>
+                </details>
+            </m-details>
+        </div>
+        <!-- /CMS Akkordeon Container -->
+
         <!-- CMS Bild -->
-        <!-- Note: use "wider" on ks-m-figure inside ks-body-section variant="narrow" to display the image in larger size -->
-        <ks-m-figure with-line wider>
-            <ks-a-picture 
-                picture-load 
-                namespace="picture-default-"
+        <ks-m-figure with-line>
+            <ks-a-picture picture-load namespace="picture-default-"
                 defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
-                open-modal open-modal-mobile
-            >
-            </ks-a-picture>
-            <figcaption>Caption</figcaption>
+                open-modal open-modal-mobile></ks-a-picture>
+            <figcaption>test</figcaption>
         </ks-m-figure>
-        <!-- CMS Bild -->
-    </ks-o-body-section>
-    <!-- /CMS Content Container -->
+        <!-- /CMS Bild -->
 
+        <!-- CMS Video -->
+        <ks-m-figure with-line brand="ks">
+            <ks-a-video>
+                <iframe src="https://www.youtube.com/embed/Mq0TiSppMOU?rel=0" 
+                    title="ks video" 
+                    width="560"
+                    height="315" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </ks-a-video>
+            <!-- to see the line ks-m-figure will need to have a figcaption element -->
+            <figcaption>KS-M-Figure</figcaption>
+        </ks-m-figure>
+        <!-- /CMS Video -->
+
+        <!-- CMS Carousel -->
+        <m-carousel-two namespace=carousel-two-image- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+            <section>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/kenan-sulayman-FV3M7igu8Fs-unsplash.jpg" alt="Yosemite"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/anastasia-dulgier-NCFTGtjY3EQ-unsplash.jpg" alt="Houses"></a-picture>
+         
+                    <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/arnaud-mariat-IPXcUYHeErc-unsplash.jpg" alt="Galaxies"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/vladimir-kondriianenko-bxwzcFy9YwM-unsplash.jpg" alt="Minimalist nightmare"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/matthew-smith-9CV6WrxxdrM-unsplash.jpg" alt="Motel"></a-picture>
+                    <figcaption>Some figcaption</figcaption>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/jakob-owens-EkxOtUljwhs-unsplash.jpg" alt="Hoops"></a-picture>
+                    <figcaption>Another figcaption</figcaption>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/tim-bogdanov-4uojMEdcwI8-unsplash.jpg" alt="Gentleman"></a-picture>
+                    <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/a3ac1ed5abaedffd9947face7901e14c.jpg" alt="Stuff"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure with-line>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
+                </ks-m-figure>
+            </section>
+            <div>
+                <p id="index">
+                    some Text
+                </p>
+                <nav>
+                    <a href="#previous" aria-label="previous slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                    <a href="#next" aria-label="next slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                </nav>
+            </div>
+        </m-carousel-two>
+        <!-- /CMS Carousel -->
+
+        <!-- /CMS Contentbereich 1 -->
+</ks-o-body-section>
+
+<ks-o-body-section variant="narrow">
+<!-- CMS Contentbereich 2 -->
+    <ks-a-heading tag="h2" border-top="">titel CMS Contentbereich 2</ks-a-heading>
+    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+        et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+        rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+        dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+        magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    
     <!-- CMS Global TextImage -->
     <ks-o-body-section variant="default">
         <ks-m-teaser namespace="teaser-text-image-" color="secondary" text-position="right" href="/de/">
@@ -283,11 +301,44 @@
     <!-- CMS Button -->
     <div class="center">
         <ks-a-button namespace="button-primary-" href="/de/" color="secondary" target="_self">
-            button label
-            <a-icon-mdx icon-name="ArrowDownRight" size="1em" class="icon-right" tabindex="0"> </a-icon-mdx>
+            <a-icon-mdx icon-name="AddToList" size="1em" class="icon-left" tabindex="0"> </a-icon-mdx>
+            <span id="label">button label</span>
         </ks-a-button>
     </div>
     <!-- /CMS Button -->
+
+
+    <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
+        <!-- CMS Bild -->
+        <!-- Note: use "wider" on ks-m-figure inside ks-body-section variant="narrow" to display the image in larger size -->
+        <ks-m-figure with-line wider>
+            <ks-a-picture picture-load namespace="picture-default-"
+                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A">
+            </ks-a-picture>
+            <figcaption>Caption</figcaption>
+        </ks-m-figure>
+        <!-- CMS Bild -->
+    </ks-o-body-section>
+
+    <!-- CMS RichText -->
+    <div>
+        <h2>Headline 2</h2>
+        <h3>Headline 3</h3>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <h3>Headline 3</h3>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <ul>
+            <li>List item</li>
+            <li>Lorem Ipsum</li>
+            <li>Dolor sit amet</li>
+        </ul>
+        <ol>
+            <li>List item</li>
+            <li>Lorem Ipsum</li>
+            <li>Dolor sit amet</li>
+        </ol>
+    </div>
+    <!-- /CMS RichText -->
 
     <!-- CMS Content Container -->
     <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
@@ -297,16 +348,13 @@
         <!-- /CMS Titel -->
 
         <!-- CMS RichText -->
-        <div>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
                 ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
                 dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
                 sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
                 invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
                 justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-                ipsum dolor sit amet.
-            </p>
-        </div>
+                ipsum dolor sit amet.</p>
         <!-- /CMS RichText -->
 
         <!-- CMS Bild -->
@@ -319,20 +367,14 @@
         </ks-m-figure>
         <!-- CMS Bild -->
 
-        <!-- CMS Bild -->
-        <ks-m-figure with-line>
-            <!-- Include open-modal & open-modal-mobile as attributes to enable opening modal ;) -->
-            <ks-a-picture 
-                picture-load 
-                namespace="picture-default-"
-                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
-                open-modal open-modal-mobile
-            >
-            </ks-a-picture>
-            <!-- to see the line ks-m-figure will need to have a figcaption element -->
-            <figcaption>With caption</figcaption>
-        </ks-m-figure>
-        <!-- CMS Bild -->
+        <!-- CMS Button -->
+        <div class="center">
+            <ks-a-button namespace="button-primary-" href="/de/" color="secondary" target="_self">
+                <span id="label">btn label</span>
+                <a-icon-mdx icon-name="AddToList" size="1em" class="icon-right" tabindex="0"> </a-icon-mdx>
+            </ks-a-button>
+        </div>
+        <!-- /CMS Button -->
         
         <!-- CMS Video -->
         <ks-m-figure with-line brand="ks">
@@ -438,14 +480,6 @@
         </div>
         <!-- /CMS Akkordeon Container -->
 
-        <!-- CMS Button -->
-        <div class="center">
-            <ks-a-button namespace="button-primary-" href="/de/" color="secondary" target="_self">
-                <span id="label">Button & random Icon</span>
-                <a-icon-mdx icon-name="AddToList" size="1em" class="icon-right" tabindex="0"></a-icon-mdx>
-            </ks-a-button>
-        </div>
-        <!-- /CMS Button -->
 
     </ks-o-body-section>
     <!-- /CMS Content Container -->
@@ -515,6 +549,88 @@
         </m-details>
     </div>
     <!-- /CMS Akkordeon Container -->
+
+    <!-- CMS Table -->
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>header 1</th>
+                        <th>header 2</th>
+                        <th>header 3</th>
+                        <th>header 4</th>
+                        <th>header 5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lorem</td>
+                        <td>Lorem ipsum dolor sit amet</td>
+                        <td>Sed diam voluptua.</td>
+                        <td>diam voluptua.</td>
+                        <td>Lorem ipsum dolor</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet
+                        </td>
+                        <td>
+                            Sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet
+                        </td>
+                        <td>
+                            Sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet
+                        </td>
+                        <td>
+                            Sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                                ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        </td>
+                        <td>
+                            Lorem ipsum dolor
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    <!-- /CMS Table -->
 
     <!-- CMS Content Container (with bg) -->
     <ks-o-body-section variant="narrow" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
@@ -675,5 +791,5 @@
     </ks-o-body-section>
     <!-- /CMS Teaser Slider -->
 
+<!-- /CMS Contentbereich 2 -->
 </ks-o-body-section>
-
