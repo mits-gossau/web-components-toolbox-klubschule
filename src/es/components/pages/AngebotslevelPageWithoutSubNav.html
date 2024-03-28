@@ -31,219 +31,168 @@
     </aside>
 </o-grid>
 
-<!-- 2-spaltiger Content -->
-<o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" switch-aside-order-mobile>
-    <ks-o-body-section content-width-var="100%" no-margin-y>
-        <!-- Expand -->
-        <mdx-component>
-            <mdx-expand
-                line-clamp="5"
-                label-closed="Mehr anzeigen"
-                label-open="Weniger anzeigen"
-                expanded="false"
-            >
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. </p>
-            </mdx-expand>
-        </mdx-component>
-        <!-- /Expand -->
+<!-- Wichtig: Einstieg ohne zusätzliche Spalte wird in einer anderen Komponente ausgegeben -->
+<ks-o-body-section variant="narrow">
+    <!-- Expand -->
+    <mdx-component>
+        <mdx-expand
+            line-clamp="5"
+            label-closed="Mehr anzeigen"
+            label-open="Weniger anzeigen"
+            expanded="false"
+        >
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. </p>
+        </mdx-expand>
+    </mdx-component>
+    <!-- /Expand -->
 
-        <!-- CMS Akkordeon Container -->
-        <div class="margin-y-m">
-            <m-details namespace="details-default-icon-right-">
-                    <details>
-                        <summary>
-                            <h4>accordion 1</h4>
-                        </summary>
+    <!-- CMS Akkordeon Container -->
+    <div class="margin-y-m">
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 1</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <ks-a-heading tag="h3">test title</ks-a-heading>
                         <div>
-                            <style>
-                                :host details summary~* {
-                                    --details-default-color-secondary: var(--color-hover);
-                                }
-                            </style>
-                            <ks-a-heading tag="h3">test title</ks-a-heading>
-                            <div>
-                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-                                    voluptua.</p>
-                            </div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
                         </div>
-                    </details>
-            </m-details>
-            <m-details namespace="details-default-icon-right-">
-                    <details>
-                        <summary>
-                            <h4>accordion 2</h4>
-                        </summary>
+                    </div>
+                </details>
+        </m-details>
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 2</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
                         <div>
-                            <style>
-                                :host details summary~* {
-                                    --details-default-color-secondary: var(--color-hover);
-                                }
-                            </style>
-                            <div>
-                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                                    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-                                    voluptua.</p>
-                            </div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
                         </div>
-                    </details>
-            </m-details>
-            <m-details namespace="details-default-icon-right-">
-                    <details>
-                        <summary>
-                            <h4>accordion 3</h4>
-                        </summary>
+                    </div>
+                </details>
+        </m-details>
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 3</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
                         <div>
-                            <style>
-                                :host details summary~* {
-                                    --details-default-color-secondary: var(--color-hover);
-                                }
-                            </style>
-                            <div>
-                                <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
-                                    target="_self">
-                                    <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
-                                        tabindex="0"> </a-icon-mdx>
-                                    <span id="label">btn</span>
-                                </ks-a-button>
-                            </div>
+                            <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
+                                target="_self">
+                                <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
+                                    tabindex="0"> </a-icon-mdx>
+                                <span id="label">btn</span>
+                            </ks-a-button>
                         </div>
-                    </details>
-            </m-details>
+                    </div>
+                </details>
+        </m-details>
+    </div>
+    <!-- /CMS Akkordeon Container -->
+
+    <!-- CMS Bild -->
+    <ks-m-figure with-line>
+        <ks-a-picture picture-load namespace="picture-default-"
+            defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
+            open-modal open-modal-mobile></ks-a-picture>
+        <figcaption>test</figcaption>
+    </ks-m-figure>
+    <!-- /CMS Bild -->
+
+    <!-- CMS Video -->
+    <ks-m-figure with-line brand="ks">
+        <ks-a-video>
+            <iframe src="https://www.youtube.com/embed/Mq0TiSppMOU?rel=0" 
+                title="ks video" 
+                width="560"
+                height="315" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </ks-a-video>
+        <!-- to see the line ks-m-figure will need to have a figcaption element -->
+        <figcaption>KS-M-Figure</figcaption>
+    </ks-m-figure>
+    <!-- /CMS Video -->
+
+    <!-- CMS Carousel -->
+    <m-carousel-two namespace=carousel-two-image- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+        <section>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/kenan-sulayman-FV3M7igu8Fs-unsplash.jpg" alt="Yosemite"></a-picture>
+            </ks-m-figure>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/anastasia-dulgier-NCFTGtjY3EQ-unsplash.jpg" alt="Houses"></a-picture>
+        
+                <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
+            </ks-m-figure>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/arnaud-mariat-IPXcUYHeErc-unsplash.jpg" alt="Galaxies"></a-picture>
+            </ks-m-figure>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/vladimir-kondriianenko-bxwzcFy9YwM-unsplash.jpg" alt="Minimalist nightmare"></a-picture>
+            </ks-m-figure>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/matthew-smith-9CV6WrxxdrM-unsplash.jpg" alt="Motel"></a-picture>
+                <figcaption>Some figcaption</figcaption>
+            </ks-m-figure>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/jakob-owens-EkxOtUljwhs-unsplash.jpg" alt="Hoops"></a-picture>
+                <figcaption>Another figcaption</figcaption>
+            </ks-m-figure>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/tim-bogdanov-4uojMEdcwI8-unsplash.jpg" alt="Gentleman"></a-picture>
+                <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
+            </ks-m-figure>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
+            </ks-m-figure>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/a3ac1ed5abaedffd9947face7901e14c.jpg" alt="Stuff"></a-picture>
+            </ks-m-figure>
+            <ks-m-figure with-line>
+                <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
+            </ks-m-figure>
+        </section>
+        <div>
+            <p id="index">
+                some Text
+            </p>
+            <nav>
+                <a href="#previous" aria-label="previous slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+                <a href="#next" aria-label="next slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+            </nav>
         </div>
-        <!-- /CMS Akkordeon Container -->
+    </m-carousel-two>
+    <!-- /CMS Carousel -->
 
-        <!-- CMS Bild -->
-        <ks-m-figure with-line>
-            <ks-a-picture picture-load namespace="picture-default-"
-                defaultSource="https://www.klubschule.ch/-/media/Images/Slider/Kreativitaet/Intensivklassen-Schreiben-2024-960x480.ashx?gzip=true&hash=A56E1E24ABBD29CF26BE14EE07240780E586748A"
-                open-modal open-modal-mobile></ks-a-picture>
-            <figcaption>test</figcaption>
-        </ks-m-figure>
-        <!-- /CMS Bild -->
-
-        <!-- CMS Video -->
-        <ks-m-figure with-line brand="ks">
-            <ks-a-video>
-                <iframe src="https://www.youtube.com/embed/Mq0TiSppMOU?rel=0" 
-                    title="ks video" 
-                    width="560"
-                    height="315" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-                </iframe>
-            </ks-a-video>
-            <!-- to see the line ks-m-figure will need to have a figcaption element -->
-            <figcaption>KS-M-Figure</figcaption>
-        </ks-m-figure>
-        <!-- /CMS Video -->
-
-        <!-- CMS Carousel -->
-        <m-carousel-two namespace=carousel-two-image- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
-            <section>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/kenan-sulayman-FV3M7igu8Fs-unsplash.jpg" alt="Yosemite"></a-picture>
-                </ks-m-figure>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/anastasia-dulgier-NCFTGtjY3EQ-unsplash.jpg" alt="Houses"></a-picture>
-         
-                    <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
-                </ks-m-figure>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/arnaud-mariat-IPXcUYHeErc-unsplash.jpg" alt="Galaxies"></a-picture>
-                </ks-m-figure>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/vladimir-kondriianenko-bxwzcFy9YwM-unsplash.jpg" alt="Minimalist nightmare"></a-picture>
-                </ks-m-figure>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/matthew-smith-9CV6WrxxdrM-unsplash.jpg" alt="Motel"></a-picture>
-                    <figcaption>Some figcaption</figcaption>
-                </ks-m-figure>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/jakob-owens-EkxOtUljwhs-unsplash.jpg" alt="Hoops"></a-picture>
-                    <figcaption>Another figcaption</figcaption>
-                </ks-m-figure>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/tim-bogdanov-4uojMEdcwI8-unsplash.jpg" alt="Gentleman"></a-picture>
-                    <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
-                </ks-m-figure>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
-                </ks-m-figure>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/a3ac1ed5abaedffd9947face7901e14c.jpg" alt="Stuff"></a-picture>
-                </ks-m-figure>
-                <ks-m-figure with-line>
-                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
-                </ks-m-figure>
-            </section>
-            <div>
-                <p id="index">
-                    some Text
-                </p>
-                <nav>
-                    <a href="#previous" aria-label="previous slide">
-                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
-                    </a>
-                    <a href="#next" aria-label="next slide">
-                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
-                    </a>
-                </nav>
-            </div>
-        </m-carousel-two>
-        <!-- /CMS Carousel -->
-
-    </ks-o-body-section>
-    <aside>
-        <h3>Unsere Fitnesskurse</h3>
-        <ks-m-link-list namespace="link-list-default-">
-            <ul>
-                <li>
-                    <a href="#">
-                        <span>Abonnements</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span>Aerobic</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span>Bodytoning/BBP</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span>Power Yoga - mehrere Zeilen lorem ipsum dolor sit amet, consectetur</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span>Rückentraining</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span>Zumba</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span>Weitere Fitnesskurse</span>
-                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
-                    </a>
-                </li>
-            </ul>
-        </ks-m-link-list>
-    </aside>
-</o-grid>
+</ks-o-body-section>
 
 <!-- CMS Teaser Slider -->
 <ks-o-body-section variant="default">
