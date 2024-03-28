@@ -30,10 +30,12 @@ export default class Sort extends Shadow() {
    */
   toggleTooltip () {
     const toggle = this.root.querySelector('.m-sort')
-    if (toggle) toggle.addEventListener('click', () => {
-      const tooltip = this.root.querySelector('.m-sort__tooltip')
-      tooltip.classList.toggle('m-sort__tooltip-open')
-    })
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const tooltip = this.root.querySelector('.m-sort__tooltip')
+        tooltip.classList.toggle('m-sort__tooltip-open')
+      })
+    }
   }
 
   /**
