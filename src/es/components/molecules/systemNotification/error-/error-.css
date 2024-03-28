@@ -1,0 +1,6 @@
+:host {
+    --system-notification-error-background-color: var(--mdx-sys-color-error-subtle3);
+    --system-notification-error-icon-size: 1.5em;
+    --system-notification-error-icon-border-color: transparent;
+    --icon-mdx-ks-color: var(--mdx-sys-color-neutral-default);
+}
