@@ -1,26 +1,81 @@
 export const courseAppointmentStatusMapping = {
   1: {
     status: 'free',
-    'css-tile': 'status-free'
+    css: {
+      border: 'status-free',
+      status: '',
+      info: ''
+    },
+    content: {
+      icon: 'Users',
+      status: '',
+      info: 'freie Plätze'
+    }
   },
   2: {
     status: 'notBookable',
-    'css-tile': 'status-not-bookable'
+    css: {
+      border: 'status-not-bookable',
+      status: '',
+      info: ''
+    },
+    content: {
+      icon: 'X',
+      status: 'x?x',
+      info: 'x?x'
+    }
   },
   3: {
     status: 'bookedOut',
-    'css-tile': 'status-booked-out'
+    css: {
+      border: 'status-booked-out',
+      status: 'alert',
+      info: ''
+    },
+    content: {
+      icon: 'X',
+      status: 'Ausgebucht',
+      info: ''
+    }
   },
   4: {
     status: 'closed',
-    'css-tile': 'status-closed'
+    css: {
+      border: 'status-closed',
+      status: 'alert',
+      info: 'alert'
+    },
+    content: {
+      icon: 'X',
+      status: 'Geschlossen',
+      info: 'Keine Buchung bis 30 Minuten vor Terminbeginn möglich'
+    }
   },
   5: {
     status: 'bookedCancellationPossible',
-    'css-tile': 'status-booked-cancellation-possible'
+    css: {
+      border: 'status-booked-cancellation-possible',
+      status: 'success',
+      info: ''
+    },
+    content: {
+      icon: 'Check',
+      status: 'Gebucht',
+      info: ''
+    }
   },
   6: {
     status: 'bookedCancellationNotPossible',
-    'css-tile': 'status-booked-cancellation-not-possible'
+    css: {
+      border: 'status-booked-cancellation-not-possible',
+      status: 'success',
+      info: 'alert'
+    },
+    content: {
+      icon: 'Check',
+      status: 'Gebucht',
+      info: 'Keine Stornierung mehr möglich'
+    }
+
   }
 }

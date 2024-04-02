@@ -76,17 +76,32 @@ export default class AppointmentTile extends Tile {
       align-items: center;
     }
     :host m-load-template-tag {
-        min-height:20em;
+        min-height:16em;
         display:block;
     }
     :host .sub-content {
       padding-top:1.5em;
     }
+    :host .status-not-bookable {
+      border:1px solid #F4001B;
+    }
+    :host .status-booked-out {
+      border: 1px solid #F4001B;
+    }
+    :host .status-closed {
+      border: 1px solid #F4001B;
+    }
     :host .status-booked-cancellation-possible {
-      border:10px solid pink;
+      border: 1px solid #00997F;
     }
     :host .status-booked-cancellation-not-possible {
-      border:10px solid pink;
+      border: 1px solid #00997F;
+    }
+    :host .success {
+      color:#00997F;
+    }
+    :host .alert {
+      color:#F4001B;
     }
     @media only screen and (max-width: _max-width_) {
       :host  {}
@@ -148,19 +163,11 @@ export default class AppointmentTile extends Tile {
   }
 
   renderTile (content, selectedSubscription) {
-    console.log(courseAppointmentStatusMapping[content.courseAppointmentStatus]['css-tile'])
-    console.log('courseAppointmentStatus: ', content.courseAppointmentStatus)
-    let status = ''
-    if (content.courseAppointmentStatus === 6) {
-      debugger
-    }
-    if (content.courseAppointmentStatus === 3 || content.courseAppointmentStatus === 5) {
-      status = courseAppointmentStatusMapping[content.courseAppointmentStatus]['css-tile']
-    }
+    const tileStatus = this.getTileState(content)
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
-          <div class="m-tile ${status}" data-course-id=${content.courseId}>
+          <div class="m-tile ${tileStatus.css.border}" data-course-id=${content.courseId}>
             <div class="parent-body">
               <div class="course-info">
                 <div>
@@ -179,8 +186,8 @@ export default class AppointmentTile extends Tile {
               <!-- --> 
               <div class="course-info">
                 <div class="icon-info">
-                  <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
-                  <span class="m-tile__content">${content.courseAppointmentFreeSeats} freie Plätze</span>
+                  <a-icon-mdx icon-name="${tileStatus.icon}" size="1.5em" tabindex="0" class="${tileStatus.css.status}"></a-icon-mdx>
+                  <span class="m-tile__content"><span class="${tileStatus.css.status}">${tileStatus.status}</span> <span class="${tileStatus.css.info}">${tileStatus.info}</span></span>
                 </div> 
                 <div class="icon-info">
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
@@ -211,6 +218,18 @@ export default class AppointmentTile extends Tile {
         </template>
       </m-load-template-tag>
     `
+  }
+
+  getTileState (data) {
+    const type = courseAppointmentStatusMapping[data.courseAppointmentStatus]
+    const { courseAppointmentFreeSeats } = data
+
+    return {
+      css: type.css,
+      status: data.courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : type.content.status,
+      info: type.content.info,
+      icon: type.content.icon
+    }
   }
 
   escapeForHtml = (htmlString) => {
