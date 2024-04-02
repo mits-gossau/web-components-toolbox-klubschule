@@ -76,6 +76,10 @@ export const courseAppointmentStatusMapping = {
       status: 'Gebucht',
       info: 'Keine Stornierung mehr möglich'
     }
-
   }
+}
+
+export const subscriptionMode = {
+  PAUSCHALABO: 'FLAT',
+  WERTABO: 'SUBSCRIPTION'
 }

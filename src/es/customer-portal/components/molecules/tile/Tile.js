@@ -1,6 +1,6 @@
 // @ts-check
 import Tile from '../../../../components/molecules/tile/Tile.js'
-import { courseAppointmentStatusMapping } from '../../../helpers/mapping.js'
+import { courseAppointmentStatusMapping, subscriptionMode } from '../../../helpers/mapping.js'
 
 /**
 * @export
@@ -264,9 +264,25 @@ export default class AppointmentTile extends Tile {
           <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
           <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
         </div>
-        <ks-a-button id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]' namespace="button-primary-" color="secondary">Termin buchen</ks-a-button>
+        ${this.renderDialogActionButton(subscriptionMode[selectedSubscription.subscriptionMode], content.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(content)), this.escapeForHtml(JSON.stringify(selectedSubscription)))}
+       
       </m-dialog>
       `
+  }
+
+  renderDialogActionButton (subscriptionMode, status, content, selectedSubscription) {
+    debugger
+    // TODO: Translations!
+    switch (status) {
+      case 5:
+        return `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary"><a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
+      case 1:
+      case 3:
+        return `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary">Termin buchen</ks-a-button>`
+      case 2:
+      default:
+        return ''
+    }
   }
 
   formatCourseAppointmentDate (date) {
