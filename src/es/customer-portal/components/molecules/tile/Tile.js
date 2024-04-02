@@ -246,7 +246,7 @@ export default class AppointmentTile extends Tile {
       <m-dialog namespace="dialog-left-slide-in-">
         <div class="container dialog-header">
           <div id="back"></div>
-          <h3>Filter</h3>
+          <h3>Title...</h3>
           <div id="close">
             <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
           </div>

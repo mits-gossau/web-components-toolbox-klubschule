@@ -16,13 +16,13 @@ export const courseAppointmentStatusMapping = {
     status: 'notBookable',
     css: {
       border: 'status-not-bookable',
-      status: '',
-      info: ''
+      status: 'alert',
+      info: 'alert'
     },
     content: {
       icon: 'X',
-      status: 'x?x',
-      info: 'x?x'
+      status: 'Keine Buchung möglich',
+      info: 'Vorhandes Abo hat zu wenig Guthaben'
     }
   },
   3: {
