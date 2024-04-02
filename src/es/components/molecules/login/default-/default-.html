@@ -1,6 +1,4 @@
-<ks-m-login namespace="login-default-" setup="{'env': 'local', 'theme': 'mgb'}"
-    links="'{ label: 'Newsletter', link: 'https://www.alnatura.ch/aktuelles/newsletter/newsletter-anmeldung', category: '' }'"
-    profile-flyout>
+<ks-m-login namespace="login-default-">
     <section>
         <a class="only-desktop" href="">Über uns</a>
         <a class="only-desktop" href="">Zusätzliche Services</a>
@@ -111,4 +109,18 @@
             </ul>
         </ks-m-sort>
     </section>
+    <mdx-component>
+        <mdx-login-button
+            loginbuttonclick="function () {console.log('hello')}"
+            is-loggedin="false"
+        ></mdx-login-button>
+        <mdx-login-flyout
+            logout="self.open('/logout')"
+            user-profile-email="anita-ulrich@mgb.ch"
+            user-profile-name="Anita Ulrich"
+            account-url="https://account.migros.ch/account"
+            menuitemgroup='[{"title":"looooooooooooooooooooooooooooong Title","menuItems":[{"label":"I am a Link ","href":"https://account.migros.ch/account","as":"link"},{"label":"I am a Button","href":"#","as":"button"}]},{"title":"Group 2","menuItems":[{"label":"I am a looooooooooooooooooooooooooooong Link","href":"#","as":"link"},{"label":"Link 4","href":"#","as":"link"},{"label":"Link 5","href":"#","as":"link"},{"label":"Link 6","href":"#","as":"link"}]}]'
+            notificationlinks='{"notifications":{"cumulusConnection":"https://account.migros.ch/cumulus","mailDeliverability":"https://account.migros.ch/account"}}'
+        ></mdx-login-flyout>
+    </mdx-component>
 </ks-m-login>

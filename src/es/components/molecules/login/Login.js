@@ -13,66 +13,21 @@ import { Prototype } from '../../web-components-toolbox/src/es/components/msrc/P
  * @class Login
  * @type {CustomElementConstructor}
  * @attribute {
- *  {"de"|"fr"|"it"|"en"} [language=document.documentElement.getAttribute('lang') || 'de']
- *  {string|DeepPartial<ThemeInterface>|
- *    "melectronics"|
- *    "bikeworld"|
- *    "daily"|
- *    "doitGarden"|
- *    "exlibris"|
- *    "exlibrispickmup"|
- *    "interio"|
- *    "micasa"|
- *    "migrosService"|
- *    "sportxx"|
- *    "migipedia"|
- *    "migrosApp"|
- *    "alnatura"|
- *    "gesundheitsplattform"|
- *    "intercity"|
- *    "famigros"|
- *    "migrosbank"|
- *    "pickmup"|
- *    "voi"|
- *    "fitnesspark"|
- *    "mgb"|
- *    "migusto"} [theme="alnatura"]
- *  {string} [account="document.documentElement.getAttribute('account') || ''"]
- *  {string} [contact-link="document.documentElement.getAttribute('contact-link') || ''"]
- *  {string} [contact-link-label="document.documentElement.getAttribute('contact-link-label') || ''"]
- *  {"large"|"medium"|"small"} [size="small"]
- *  {string} [loginReturnTo="self.location"]
- *  {string} [logoutReturnTo="self.location"]
- *  {string|Partial<{
- *    authority: string,
- *    language: string,
- *    clientId: string,
- *    clientSecret: string,
- *    redirectURI: string,
- *    scope: string,
- *    claims: { userinfo: { given_name: null, family_name: null, email: null } }
- *  }>} [setup="{}"]
- *
  * }
  */
 export default class Login extends Prototype() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.requestMsrcUserListener = event => {
-      if (event.detail.resolve) {
-        event.detail.resolve(this.user)
+    this.clickLoginButtonEventListener = event => {
+      if (this.mdxLoginButton.getAttribute('is-loggedin') === 'false') return
+      if (!this.mdxLoginFlyout) return
+      event.preventDefault()
+      event.stopPropagation()
+      if (this.mdxLoginFlyout.hasAttribute('open')) {
+        this.mdxLoginFlyout.removeAttribute('open')
       } else {
-        this.dispatchEvent(new CustomEvent(this.getAttribute('msrc-user') || 'msrc-user', {
-          detail: {
-            origEvent: event,
-            user: this.user,
-            this: this
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }))
+        this.mdxLoginFlyout.setAttribute('open', 'true')
       }
     }
   }
@@ -80,16 +35,14 @@ export default class Login extends Prototype() {
   connectedCallback () {
     this.hidden = true
     const showPromises = []
-    if (this.shouldRender()) showPromises.push(this.render())
+    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
     Promise.all(showPromises).then(() => (this.hidden = false))
-    document.body.addEventListener(this.getAttribute('request-msrc-user') || 'request-msrc-user', this.requestMsrcUserListener)
-
-    this.isCheckout = this.parentElement.getAttribute('is-checkout') === 'true'
-    if (this.isCheckout) this.root.querySelector('section').style.display = 'none'
+    this.addEventListener('click', this.clickLoginButtonEventListener)
+    if (!this.mdxLoginFlyoutHTML) this.mdxLoginFlyoutHTML = this.mdxLoginFlyout.outerHTML
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener(this.getAttribute('request-msrc-user') || 'request-msrc-user', this.requestMsrcUserListener)
+    this.removeEventListener('click', this.clickLoginButtonEventListener)
   }
 
   /**
@@ -97,8 +50,8 @@ export default class Login extends Prototype() {
    *
    * @return {boolean}
    */
-  shouldRender () {
-    return !this.msrcLoginButtonWrapper
+  shouldRenderCSS () {
+    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
   /**
@@ -106,7 +59,7 @@ export default class Login extends Prototype() {
    *
    * @return {Promise<void>}
    */
-  render () {
+  renderCSS () {
     this.css = /* css */`
       :host {
         display: flex;
@@ -156,6 +109,17 @@ export default class Login extends Prototype() {
           max-height: 2.5em !important;
           z-index: 9999;
       }
+      :host > mdx-component {
+        position: relative;
+      }
+      :host > mdx-component >  mdx-login-button[is-loggedin=false] + mdx-login-flyout {
+        display: none;
+      }
+      :host > mdx-component > mdx-login-flyout {
+        position: absolute;
+        right: 0;
+        top: 100%;
+      }
       @media only screen and (max-width: _max-width_) {
         :host,
         :host > section {
@@ -174,45 +138,13 @@ export default class Login extends Prototype() {
         }
       }
     `
-    this.fetchTemplate()
-    this.msrcLoginButtonWrapper = this.root.querySelector('div') || document.createElement('div')
-    // subscribe to login:authenticate user by calling the getter before starting any msrc stuff
-    return this.loadDependency().then(async msrc => {
-      // subscribe before login | https://jira.migros.net/browse/MUTOBOTEAM-1964
-      this.initUser()
-      // Setup OIDC login configuration
-      // @ts-ignore
-      await msrc.utilities.login.setup(this.constructor.parseAttribute(this.getAttribute('setup') || '{}'))
-      // Initialize the login button
-      await msrc.components.login[this.hasAttribute('profile-flyout')
-        ? 'profileFlyout'
-        : 'button'](this.msrcLoginButtonWrapper, {
-        // @ts-ignore
-        language: this.getAttribute('language') || self.Environment.language,
-        theme: this.getAttribute('theme') || 'alnatura',
-        size: this.getAttribute('size') || 'small',
-        loginReturnTo: this.getAttribute('loginReturnTo') || '',
-        logoutReturnTo: this.getAttribute('logoutReturnTo') || '',
-        headerHeight: { mobile: '26px' },
-        inlinks: {
-          account: this.getAttribute('account') || ''
-        },
-        links: [{ label: this.getAttribute('contact-link-label') || '', link: this.getAttribute('contact-link') || '' }]
-      })
-      const getStylesReturn = this.getStyles(document.createElement('style'))
-      getStylesReturn[1].then(() => {
-        let button
-        if ((button = this.msrcLoginButtonWrapper.querySelector('button'))) button.classList.add('font-size-tiny')
-      })
-      this.html = [this.msrcLoginButtonWrapper, getStylesReturn[0]]
-      return getStylesReturn[1] // use this line if css build up should be avoided
-    })
+    return this.fetchTemplate()
   }
 
   /**
   * fetches the template
   *
-  * @return {void}
+  * @return {Promise<void>}
   */
   fetchTemplate () {
     switch (this.getAttribute('namespace')) {
@@ -222,23 +154,18 @@ export default class Login extends Prototype() {
           namespace: false
         }])
     }
+    return Promise.resolve()
   }
 
-  initUser () {
-    return this.user
+  get mdxComponent () {
+    return this.root.querySelector('mdx-component')
   }
 
-  get user () {
-    return this.userPromise || (this.userPromise = new Promise(async resolve => { // eslint-disable-line
-      const msrc = await this.loadDependency()
-      // https://react-components.migros.ch/?path=/docs/msrc-login-00-readme--page#events
-      const instance = await msrc.messenger.getInstance()
-      // in case the subscribe event login:authenticate does not fire
-      const timeoutId = setTimeout(() => resolve(msrc.utilities.login.getUser()), 3000)
-      instance.subscribe('login:authenticate', ({ isManualLogin, loggedIn, error }) => {
-        clearTimeout(timeoutId)
-        resolve(msrc.utilities.login.getUser())
-      })
-    }))
+  get mdxLoginButton () {
+    return this.root.querySelector('mdx-login-button')
+  }
+
+  get mdxLoginFlyout () {
+    return this.root.querySelector('mdx-login-flyout')
   }
 }
