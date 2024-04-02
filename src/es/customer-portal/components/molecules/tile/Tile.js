@@ -148,11 +148,14 @@ export default class AppointmentTile extends Tile {
   }
 
   renderTile (content, selectedSubscription) {
-    console.log(courseAppointmentStatusMapping[content.courseAppointmentStatus['css-tile']])
+    console.log(courseAppointmentStatusMapping[content.courseAppointmentStatus]['css-tile'])
     console.log('courseAppointmentStatus: ', content.courseAppointmentStatus)
     let status = ''
-    if (content.courseAppointmentStatus === 6 || content.courseAppointmentStatus === 5) {
-      status = 'status-6'
+    if (content.courseAppointmentStatus === 6) {
+      debugger
+    }
+    if (content.courseAppointmentStatus === 3 || content.courseAppointmentStatus === 5) {
+      status = courseAppointmentStatusMapping[content.courseAppointmentStatus]['css-tile']
     }
     return /* html */ `
       <m-load-template-tag mode="false">
