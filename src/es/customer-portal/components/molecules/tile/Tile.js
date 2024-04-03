@@ -265,24 +265,34 @@ export default class AppointmentTile extends Tile {
           <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
         </div>
         ${this.renderDialogActionButton(subscriptionMode[selectedSubscription.subscriptionMode], content.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(content)), this.escapeForHtml(JSON.stringify(selectedSubscription)))}
-       
       </m-dialog>
       `
   }
 
   renderDialogActionButton (subscriptionMode, status, content, selectedSubscription) {
-    debugger
-    // TODO: Translations!
-    switch (status) {
-      case 5:
-        return `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary"><a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
-      case 1:
-      case 3:
-        return `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary">Termin buchen</ks-a-button>`
-      case 2:
-      default:
-        return ''
+    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary">Termin buchen</ks-a-button>`
+    const btnCancel = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary"><a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
+
+    const actionButton = {
+      FLAT: {
+        1: btnBooking,
+        2: '',
+        3: '',
+        4: '',
+        5: btnCancel,
+        6: ''
+      },
+      SUBSCRIPTION: {
+        1: btnBooking,
+        2: '',
+        3: '',
+        4: '',
+        5: btnCancel,
+        6: ''
+      }
     }
+
+    return actionButton[subscriptionMode][status]
   }
 
   formatCourseAppointmentDate (date) {
