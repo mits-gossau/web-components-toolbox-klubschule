@@ -10,7 +10,7 @@
 <!-- /Stage -->
 
 <!-- Sparteneinstieg mobile -->
-<ks-o-body-section variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)" display="none" display-mobile="block">
+<ks-o-body-section no-margin-y variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)" display="none" display-mobile="block">
     <ks-a-heading tag="h2" style-as="h1" border-top>Finden Sie Ihre neue Herausforderung</ks-a-heading>
     <div class="extended-container-mobile">
         <o-grid namespace="grid-12er-" gap=".5rem">
@@ -237,15 +237,15 @@
                 <h2>F&#xFC;r jeden das passende Angebot</h2>
                 <div class="facts">
                     <div class="fact">
-                        <div><a-picture picture-load namespace="" defaultSource="https://dev.klubschule.ch/media/jqsnlf45/facts-instructor.svg"></a-picture></div>
+                        <div><a-picture picture-load namespace="" defaultSource="../../../../img/facts-light-bulb.svg"></a-picture></div>
                         <div><span>7.500</span><span>Kursleiter</span></div>
                     </div>
                     <a href="www.ibaw.ch" target="_blank" class="fact">
-                        <div><a-picture picture-load namespace="" defaultSource="https://dev.klubschule.ch/media/ylwihlrf/ibaw-logo_2021.jpg"></a-picture></div>
+                        <div><a-picture picture-load namespace="" defaultSource="../../../../img/facts-instructor.svg"></a-picture></div>
                         <div><span>7.500</span><span>Kursleiter</span></div>
                     </a>
                     <a href="https://www.klubschule.ch" target="_blank" class="fact">
-                        <div><a-picture picture-load namespace="" defaultSource="https://dev.klubschule.ch/media/f4tegnxx/klubschule_qual.svg"></a-picture></div>
+                        <div><a-picture picture-load namespace="" defaultSource="../../../../img/facts-location.svg"></a-picture></div>
                         <div><span>7.500</span><span>Teilnehmer</span></div>
                     </a>
                 </div>
@@ -295,5 +295,41 @@
     </ks-o-body-section>
     <!-- /CMS Global TextImage -->
     
+    <!-- CMS Global TextImage ohne Button -->
+    <ks-o-body-section variant="default">
+        <!-- no href attribute-->
+        <ks-m-teaser namespace=teaser-text-image- text-position="right">
+            <a-picture 
+                namespace="picture-teaser-" 
+                picture-load defaultSource="https://via.placeholder.com/1000x750"
+                aspect-ratio="0.75"
+                alt="randomized image">
+            </a-picture>
+            <div>
+                <h3>Text Image ohne Button</h3>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            </div>
+        </ks-m-teaser>
+    </ks-o-body-section>
+    <!-- /CMS Global TextImage ohne Button -->
+
+    <!-- CMS Global TextImage ohne Button -->
+    <ks-o-body-section variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
+        <!-- no href attribute-->
+        <ks-m-teaser namespace=teaser-text-image- text-position="left">
+            <a-picture 
+                namespace="picture-teaser-" 
+                picture-load defaultSource="https://via.placeholder.com/1000x750"
+                aspect-ratio="0.75"
+                alt="randomized image">
+            </a-picture>
+            <div>
+                <h3>Text Image ohne Button</h3>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            </div>
+        </ks-m-teaser>
+    </ks-o-body-section>
+    <!-- /CMS Global TextImage ohne Button -->
+
 </ks-o-body-section>
 <!-- /Content -->

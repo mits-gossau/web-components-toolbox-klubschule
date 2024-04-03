@@ -24,6 +24,15 @@ export default class KsBodyStyle extends BodyStyle {
     // add '.ks-o-body-section__last-child' class to the last child that is not style/script to be able to select it with css
     this.addClassToLastChild()
     this.css = /* CSS */`
+
+        /* Reseting table styles to browser defaults because they are overwritten in the parent class for a reason I do not know :D */
+        table {
+            display: table !important;
+        }
+        tbody {
+            display: table-row-group !important;
+        }
+
         :host(ks-o-body-section) {
             /* had to reset display here because it was set to display inline-block !important in parent class */
             display: ${this.getAttribute('display') || 'block'} !important;

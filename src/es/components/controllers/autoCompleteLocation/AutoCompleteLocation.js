@@ -33,7 +33,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
  * @type {CustomElementConstructor}
  */
 export default class AutoCompleteLocation extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({
       importMetaUrl: import.meta.url,
       mode: 'false',
@@ -43,20 +43,20 @@ export default class AutoCompleteLocation extends Shadow() {
     this.RESOLVE_MSG = 'LOADED'
   }
 
-  async connectedCallback() {
+  async connectedCallback () {
     this.addEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete-location', this.requestAutoCompleteListener)
     this.addEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', this.clickOnPredictionListener)
-    this.addEventListener("client-location-coords", this.clickOnLocateMe)
+    this.addEventListener('client-location-coords', this.clickOnLocateMe)
     await this.loadDependency()
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.removeEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete-location', this.requestAutoCompleteListener)
     this.removeEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', this.clickOnPredictionListener)
-    this.removeEventListener("client-location-coords", this.clickOnLocateMe)
+    this.removeEventListener('client-location-coords', this.clickOnLocateMe)
   }
 
-  loadDependency() {
+  loadDependency () {
     return this.loadDependencyPromise || (this.loadDependencyPromise = new Promise((resolve, reject) => {
       if (document.getElementById('google-maps-places')) resolve(this.RESOLVE_MSG)
       const googlePlaces = document.createElement('script')
@@ -72,7 +72,7 @@ export default class AutoCompleteLocation extends Shadow() {
           if ('google' in self) {
             resolve(self.google.maps)
             this.service = new google.maps.places.AutocompleteService()
-            this.geocoder = new google.maps.Geocoder();
+            this.geocoder = new google.maps.Geocoder()
           }
         }
       } catch (e) {
@@ -81,7 +81,7 @@ export default class AutoCompleteLocation extends Shadow() {
     }))
   }
 
-  dispatchMock() {
+  dispatchMock () {
     return this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete-location', {
       detail: {
         /** @type {Promise<fetchAutoCompleteEventDetail>} */
@@ -91,16 +91,16 @@ export default class AutoCompleteLocation extends Shadow() {
           searchText: 'St.',
           items: [
             {
-              term: 'St. Antönien',
+              term: 'St. Antönien'
             },
             {
-              term: 'St. Moritz',
+              term: 'St. Moritz'
             },
             {
-              term: 'St. Gallen',
+              term: 'St. Gallen'
             },
             {
-              term: 'St. Heinrich',
+              term: 'St. Heinrich'
             }
           ],
           cms: []
@@ -112,7 +112,7 @@ export default class AutoCompleteLocation extends Shadow() {
     }))
   }
 
-  setCoordinationFilter(lat, lng) {
+  setCoordinationFilter (lat, lng) {
     this.dispatchEvent(new CustomEvent('close-location-dialog', {
       bubbles: true,
       cancelable: true,
@@ -121,9 +121,9 @@ export default class AutoCompleteLocation extends Shadow() {
     this.dispatchEvent(new CustomEvent('request-with-facet',
       {
         detail: {
-          key: "location-search",
-          lat: lat,
-          lng: lng
+          key: 'location-search',
+          lat,
+          lng
         },
         bubbles: true,
         cancelable: true,
@@ -132,10 +132,10 @@ export default class AutoCompleteLocation extends Shadow() {
     )
   }
 
-  dispatchInputChange(searchTerm) {
+  dispatchInputChange (searchTerm) {
     this.dispatchEvent(new CustomEvent(this.getAttribute('input-change') || 'location-change', {
       detail: {
-        searchTerm: searchTerm
+        searchTerm
       },
       bubbles: true,
       cancelable: true,
@@ -143,14 +143,14 @@ export default class AutoCompleteLocation extends Shadow() {
     }))
   }
 
-  get apiKey() {
+  get apiKey () {
     return this.getAttribute('google-api-key') || ''
   }
 
   clickOnPredictionListener = event => {
     this.geocoder.geocode(
       {
-        'placeId': event.detail.selected
+        placeId: event.detail.selected
       },
       (responses, status) => {
         if (status == 'OK') {
@@ -166,20 +166,22 @@ export default class AutoCompleteLocation extends Shadow() {
   requestAutoCompleteListener = (event) => {
     const token = event.detail.value
     if (token === undefined || (token.length < 3 && token.length > 0)) return
-    if (token.length === 0) this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete-location', {
-      detail: {
-        fetch: null
-      },
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
+    if (token.length === 0) {
+      this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete-location', {
+        detail: {
+          fetch: null
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }
     if (this.hasAttribute('mock')) return this.dispatchMock()
     if (this.abortController) this.abortController.abort()
     this.abortController = new AbortController()
 
     if (this.service) {
-      this.service.getPlacePredictions({ input: token, componentRestrictions: { country: "ch" }, types: ["geocode"] }, async (predictions) => {
+      this.service.getPlacePredictions({ input: token, componentRestrictions: { country: 'ch' }, types: ['geocode'] }, async (predictions) => {
         this.predictions = predictions
         this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete-location', {
           detail: {
@@ -197,11 +199,10 @@ export default class AutoCompleteLocation extends Shadow() {
         }))
       })
     }
-
   }
 
   clickOnLocateMe = (event) => {
-    const { lat, lng } = event.detail;
+    const { lat, lng } = event.detail
 
     this.dispatchInputChange(`${lat}, ${lng}`)
     this.setCoordinationFilter(lat, lng)

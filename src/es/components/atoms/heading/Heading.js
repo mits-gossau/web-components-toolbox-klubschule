@@ -63,7 +63,7 @@ export default class Heading extends Shadow() {
     this.css = /* css */`
       :host {
         ${this.getAttribute('color') ? `--h-color: ${this.getAttribute('color')};` : ''};
-        ${this.getAttribute('content-stage') ? `font: var(--mdx-sys-font-flex-large-display3);` : ''};
+        ${this.getAttribute('content-stage') ? 'font: var(--mdx-sys-font-flex-large-display3);' : ''};
         --h-margin: var(--h-margin-custom, var(--mdx-sys-spacing-flex-s) 0);
         --h-padding: 0;
 

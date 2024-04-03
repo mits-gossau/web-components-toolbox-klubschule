@@ -2,14 +2,14 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class AutoCompleteList extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.locateMe = this.shadowRoot.querySelector("#user-location")
+    this.locateMe = this.shadowRoot.querySelector('#user-location')
     this.autoCompleteListener = event => this.renderHTML(event.detail.fetch)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.locateMe) {
       this.locateMe.addEventListener('click', this.clickOnLocateMe)
     }
@@ -18,7 +18,7 @@ export default class AutoCompleteList extends Shadow() {
     document.body.addEventListener(this.getAttribute('auto-complete') || 'auto-complete', this.autoCompleteListener)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     if (this.locateMe) {
       this.locateMe.removeEventListener('click', this.clickOnLocateMe)
     }
@@ -40,9 +40,9 @@ export default class AutoCompleteList extends Shadow() {
           cancelable: true,
           composed: true
         }))
-      });
+      })
     } else {
-      console.error("Geolocation is not supported by this browser.")
+      console.error('Geolocation is not supported by this browser.')
     }
   }
 
@@ -59,7 +59,7 @@ export default class AutoCompleteList extends Shadow() {
     }))
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
@@ -70,11 +70,11 @@ export default class AutoCompleteList extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.list
   }
 
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */ `
         :host {
           padding-top: 1em;
@@ -201,7 +201,7 @@ export default class AutoCompleteList extends Shadow() {
     return this.fetchTemplate()
   }
 
-  fetchTemplate() {
+  fetchTemplate () {
     switch (this.getAttribute('namespace')) {
       case 'auto-complete-list-default-':
         return this.fetchCSS([
@@ -220,7 +220,7 @@ export default class AutoCompleteList extends Shadow() {
    * @param {Promise<import("../../controllers/autoComplete/AutoComplete.js").fetchAutoCompleteEventDetail>|null} [fetch=null]
    * @return {void}
    */
-  renderHTML(fetch = null) {
+  renderHTML (fetch = null) {
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
@@ -268,7 +268,7 @@ export default class AutoCompleteList extends Shadow() {
     })
   }
 
-  get list() {
+  get list () {
     return this.root.querySelector('ul')
   }
 }

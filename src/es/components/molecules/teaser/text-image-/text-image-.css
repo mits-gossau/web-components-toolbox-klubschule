@@ -15,14 +15,14 @@ a-picture {
     --picture-teaser-img-max-height: none;
 }
 
-:host(:hover) {
+:host([href]:hover) {
     --picture-teaser-transform: scale(1.1);
 }
 
-:host(:hover) h1,
-:host(:hover) h2,
-:host(:hover) h3,
-:host(:hover) h4 {
+:host([href]:hover) h1,
+:host([href]:hover) h2,
+:host([href]:hover) h3,
+:host([href]:hover) h4 {
     color: var(--mdx-sys-color-primary-bold1) !important;
 }
 

@@ -90,7 +90,7 @@ export default class FilterCategories extends Shadow() {
         filterData.forEach((filterItem, i) => {
           let childItems = ''
           const subNav = []
-          
+
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
             filterItem.children.forEach(child => {
               if (child.selected) {
@@ -109,7 +109,6 @@ export default class FilterCategories extends Shadow() {
               // @ts-ignore
               div.children[0].filterItem = filterItem
               subNav.push(div.children[0])
-
             })
 
             this.html = this.mainNav
@@ -119,7 +118,7 @@ export default class FilterCategories extends Shadow() {
           if (this.hasAttribute('translation-key-reset')) {
             resetButton = /* html */`
               <p class="reset-link">
-                <a-button namespace="button-transparent-">
+                <a-button namespace="button-transparent-" request-event-name="reset-filter">
                   ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
                 </a-button>
               </p>
@@ -150,7 +149,7 @@ export default class FilterCategories extends Shadow() {
                 </div>
                 <div class="container dialog-footer">
                   <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
-                  <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${total > 0 ? `(${total.toString()}) ` : ''}${totalLabel}</a-button>
+                  <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${total > 0 ? `(${total.toString()})` : ''}${totalLabel}</a-button>
                 </div>
                 <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
                   <div class="wrap">
@@ -176,7 +175,7 @@ export default class FilterCategories extends Shadow() {
 
   get mainNav () {
     if (this.root.querySelector('.main-level')) return this.root.querySelector('.main-level')
-    
+
     const mainNav = document.createElement('div')
     mainNav.setAttribute('class', 'main-level')
 
