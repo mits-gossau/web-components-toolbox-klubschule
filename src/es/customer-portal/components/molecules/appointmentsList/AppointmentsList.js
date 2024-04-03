@@ -14,17 +14,13 @@ export default class AppointmentsList extends Shadow() {
    */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    this.tiles = null
+    // TODO: Refactor
     this.select = null
-    this.selectedTile = null
-    this.dialog = null
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
       {
         detail: {
@@ -40,46 +36,13 @@ export default class AppointmentsList extends Shadow() {
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     this.select.removeEventListener('change', this.selectEventListener)
-  }
-
-  updateSubscriptionCourseAppointmentDetailListener = event => {
-    event.detail.fetch.then(courseDetail => {
-      const { courseId, courseDescription } = courseDetail
-      this.selectedTile = this.tiles?.find(t => t.id * 1 === courseId)
-      clearTimeout(this._updateInputTimeoutID)
-      this._updateInputTimeoutID = setTimeout(() => {
-        console.log(this.selectedTile.shadowRoot.children.length, courseDescription)
-        this.dialog = this.selectedTile.shadowRoot.querySelector('m-dialog')
-        const description = this.dialog.shadowRoot.getElementById('description')
-        description.innerHTML = courseDescription
-      }, 500)
-    })
-  }
-
-  updateSubscriptionCourseAppointmentBookingListener = event => {
-    event.detail.fetch.then(x => {
-      console.log('update booking subscription', x, this.selectedTile, this.dialog)
-      const dialogContent = this.dialog.shadowRoot.getElementById('content')
-      dialogContent.innerHTML = ''
-      dialogContent.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
-      // TODO: DO THIS WORK?
-      const td = this.selectedTile
-      const tdData = JSON.parse(td.getAttribute('data'))
-      tdData.courseAppointmentFreeSeats = x.courseAppointmentFreeSeats
-      tdData.courseAppointmentStatus = x.courseAppointmentStatus
-      const appointmentData = this.escapeForHtml(tdData)
-      this.selectedTile.setAttribute('data', appointmentData)
-    })
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
     this.renderHTML(event.detail.fetch).then(_ => {
-      this.tiles = Array.from(this.root.getElementById('list-wrapper').childNodes)
       if (!this.select) {
-        // TODO: ?!?
+        // TODO: Refactor
         this.select = this.root.querySelector('o-grid').root.querySelector('select')
         this.select.addEventListener('change', this.selectEventListener)
       }
@@ -263,8 +226,8 @@ export default class AppointmentsList extends Shadow() {
     const appointmentData = this.escapeForHtml(appointment)
     const selectedSubscriptionData = this.escapeForHtml(selectedSubscription)
     const tileComponent = new tile.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
-    tileComponent.setAttribute('id', `${courseId}`)
     tileComponent.setAttribute('data', `${appointmentData}`)
+    tileComponent.setAttribute('data-id', `${courseId}`)
     tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
     return tileComponent
   }

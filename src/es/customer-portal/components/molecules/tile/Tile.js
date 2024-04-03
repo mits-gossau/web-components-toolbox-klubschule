@@ -3,27 +3,71 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 import { courseAppointmentStatusMapping, subscriptionMode } from '../../../helpers/mapping.js'
 
 /**
-* @export
-* @class AppointmentTile
-* @type {CustomElementConstructor}
-*/
+ * @export
+ * @class AppointmentTile
+ * @type {CustomElementConstructor}
+ */
 export default class AppointmentTile extends Tile {
-  static get observedAttributes () {
-    return ['data']
+  /**
+   * @param {any} args
+   */
+  constructor (options = {}, ...args) {
+    super({ ...options }, ...args)
+    this.dialog = null
   }
 
-  attributeChangedCallback (name, oldValue, newValue) {
-    if (oldValue === null) {
-      return
-    }
-    if (name === 'data') {
-      if (newValue !== oldValue) {
-        // TEST HACK
-        const newData = JSON.parse(newValue)
-        const st = this.statusText
-        this.statusText.innerText = newData.courseAppointmentFreeSeats
+  // static get observedAttributes () {
+  //   return ['data']
+  // }
+
+  // attributeChangedCallback (name, oldValue, newValue) {
+  //   if (oldValue === null) {
+  //     return
+  //   }
+  //   if (name === 'data') {
+  //     if (newValue !== oldValue) {
+  //       // TEST HACK
+  //       const newData = JSON.parse(newValue)
+  //       const st = this.statusText
+  //       this.statusText.innerText = newData.courseAppointmentFreeSeats
+  //     }
+  //   }
+  // }
+
+  connectedCallback () {
+    super.connectedCallback()
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+  }
+
+  disconnectedCallback () {
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+  }
+
+  updateSubscriptionCourseAppointmentDetailListener = event => {
+    event.detail.fetch.then(courseDetail => {
+      console.log(courseDetail.courseId, this.dataset.id)
+      if (this.dataset.id * 1 === courseDetail.courseId) {
+        this.dialog = this.root.querySelector('m-dialog')
+        if (this.dialog) {
+          const description = this.dialog.shadowRoot.getElementById('description')
+          description.innerHTML = courseDetail.courseDescription
+          // etc...
+        }
       }
-    }
+    })
+  }
+
+  updateSubscriptionCourseAppointmentBookingListener = event => {
+    event.detail.fetch.then(x => {
+      console.log('update booking response: ', x)
+      if (this.dialog) {
+        const dialogContent = this.dialog.shadowRoot.getElementById('content')
+        dialogContent.innerHTML = ''
+        dialogContent.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
+      }
+    })
   }
 
   /**
@@ -320,9 +364,5 @@ export default class AppointmentTile extends Tile {
     const formatter = new Intl.DateTimeFormat('de-DE', options)
     const formattedDate = formatter.format(dateObject)
     return formattedDate
-  }
-
-  get statusText () {
-    return this.root.getElementById('status')
   }
 }
