@@ -244,6 +244,10 @@
     {
       selector: 'mdx-component',
       url: './src/css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js'
+    },
+    {
+      selector: 'mdx-login',
+      url: './src/css/web-components-toolbox-migros-design-experience/src/es/components/atoms/login/Login.js'
     }
   ] // directories
   // ↑↑↑ adjustable ↑↑↑
