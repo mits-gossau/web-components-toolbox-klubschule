@@ -12,14 +12,16 @@ export default class EventPage extends Shadow() {
   }
 
   connectedCallback() {
-    if (this.shouldRenderHTML()) this.renderHTML()
-    if (this.shouldRenderCSS()) this.renderCSS()
-    this.addEventListener('with-facet', this.receiveData)
+    this.hidden = true
+    const showPromises = []
+    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+    Promise.all(showPromises).then(() => {
+      this.hidden = false
+    })
   }
 
-  disconnectedCallback () {
-    this.removeEventListener('with-facet', this.receiveData)
-  }
+  disconnectedCallback () { }
 
   shouldRenderCSS() {
     return !this.root.querySelector(
@@ -42,9 +44,17 @@ export default class EventPage extends Shadow() {
   renderCSS() {
     this.css = /* css */`
       :host {
+        --button-badge-padding: var(--mdx-sys-spacing-fix-3xs);
+        --button-badge-border-radius: 3px;
+        --button-primary-label-margin: 0;
+
         display: contents !important;
       }
+      :host .m-badge__container {
+        display: flex;
+      }
     `
+    return Promise.resolve()
   }
 
   /**
@@ -53,16 +63,17 @@ export default class EventPage extends Shadow() {
    */
   renderHTML() {
     this.html = /* html */`
-      <ks-c-with-facet
-        ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
-        ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
-        ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
-      >
+        <ks-c-with-facet
+          ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
+          ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
+          ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
+        >
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
               <o-grid namespace="grid-12er-">
                   <div col-lg="12" col-md="12" col-sm="12">
-                      <ks-a-heading id="events" tag="h1">123 Angebote</ks-a-heading>
+                    <ks-a-with-facet-counter ${this.hasAttribute('headline') ? ` headline="${this.getAttribute('headline')}"` : ''}>
+                    </ks-a-with-facet-counter>
                   </div>
               </o-grid>
               <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked">
@@ -104,9 +115,13 @@ export default class EventPage extends Shadow() {
                   <span>Weitere Angebote</span>
                   <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
               </ks-a-button>
+              <ks-m-badge-legend>
+                ${this.badgeContainer.innerHTML}
+              </ks-m-badge-legend>
           </ks-o-body-section>
       </ks-c-with-facet>
     `
+    this.badgeContainer.remove()
 
     return this.fetchModules([
       {
@@ -154,12 +169,20 @@ export default class EventPage extends Shadow() {
         name: 'ks-a-button'
       },
       {
+        path: `${this.importMetaUrl}../../atoms/withFacetCounter/WithFacetCounter.js`,
+        name: 'ks-a-with-facet-counter'
+      },
+      {
         path: `${this.importMetaUrl}../../molecules/filterSelect/FilterSelect.js`,
         name: 'ks-m-filter-select'
       },
       {
         path: `${this.importMetaUrl}../../molecules/sort/Sort.js`,
         name: 'ks-m-sort'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/badgeLegend/BadgeLegend.js`,
+        name: 'ks-m-badge-legend'
       },
       {
         path: `${this.importMetaUrl}../../molecules/tileFactory/TileFactory.js`,
@@ -172,22 +195,7 @@ export default class EventPage extends Shadow() {
     ])
   }
 
-  /**
-   * Event Listener: Get Data from WithFacet
-   */
-  receiveData(event) {
-    const fetchData = event?.detail?.fetch
-
-    const section = this.root.querySelector('ks-o-body-section')
-    const grid = section.root.querySelector('o-grid')
-    const ksHeading = grid.root.querySelector('ks-a-heading#events')
-    const heading = ksHeading.root.querySelector('h1')
-
-    
-    if (fetchData) {
-      Promise.resolve(event.detail.fetch).then((data) => {
-        heading.innerHTML = `${data.total} Angebote`;
-      })
-    }
+  get badgeContainer() {
+    return this.root.querySelector('.js-badge__selector')
   }
 }

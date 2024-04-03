@@ -77,7 +77,6 @@ export default class KsBodyStyle extends BodyStyle {
         :host > [wrapper].ks-o-body-section__last-child {
             margin-bottom: 0 !important;
         }
-
         :host([variant=default]) > [namespace="teaser-fullwidth-"],
         :host([variant=narrow]) > [namespace="teaser-fullwidth-"] {
             width: calc(var(--body-section-default-width, 86.666%) + var(--mdx-sys-spacing-fix-m) * 2);
