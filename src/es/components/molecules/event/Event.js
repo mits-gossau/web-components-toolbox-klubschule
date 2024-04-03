@@ -116,6 +116,7 @@ export default class Event extends Shadow() {
         font-size: 0.875rem;
         line-height: 1.125rem;
         margin-left: 0.625rem;
+        height: 1.125rem;
       }
 
       :host .meta {
@@ -247,6 +248,92 @@ export default class Event extends Shadow() {
         display: grid;
       }
 
+      :host .details-left div + div {
+        margin-top: 3rem;
+      }
+
+      :host h3 {
+        font-size: 1.25rem;
+        line-height: 1.375rem;
+        font-weight: 500;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      :host h3 span {
+        margin-left: 0.75rem;
+      }
+
+      :host table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      :host table tr {
+        border-top: 0.063rem solid var(--mdx-base-color-grey-700);
+        padding: 0.5rem 0 0.75rem;
+      }
+
+      :host table tr:last-child {
+        border-top: 0.063rem solid var(--mdx-base-color-grey-700);
+        border-bottom: 0.063rem solid var(--mdx-base-color-grey-700);
+      }
+
+      :host table tr th {
+        padding: 0.5rem 0 0.75rem;
+        text-align: left;
+        font-size: 0.875rem;
+        line-height: 1rem;
+        font-weight: 500;
+        width: 50%;
+      }
+
+      :host table tr td {
+        padding: 0.5rem 0 0.75rem;
+        text-align: left;
+        font-size: 0.875rem;
+        line-height: 1rem;
+        font-weight: 400;
+        width: 50%;
+      }
+
+      :host table + p {
+        margin-top: 1rem;
+        font-size: 0.875rem;
+        line-height: 1.125rem;
+        font-weight: 400;
+      }
+
+      :host .address div {
+        display: flex;
+        flex-direction: row;
+      }
+
+      :host address {
+        font-style: normal;
+      }
+
+      :host address a {
+        display: flex;
+        flex-direction: column;
+        color: var(--mdx-base-color-klubschule-blue-600);
+        text-decoration: none;
+        margin-right: 1rem;
+        min-width: 11.25rem;
+        font-size: 0.875rem;
+        line-height: 1rem;
+      }
+
+      :host address a .description {
+        font-weight: 500;
+      }
+
+      :host address a div span + span {
+        margin-left: 0.25rem;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host .event {
           padding: 1rem 0.5rem;
@@ -358,8 +445,78 @@ export default class Event extends Shadow() {
           </li>
         </ul>      
       </div>
-      <div class="details">
-        <div class="details-left">Details Left</div>
+      <div class="details details-expanded">
+        <div class="details-left">
+          <div>
+            <h3>
+              <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="FileText" size="1.75em" class="icon-right"></a-icon-mdx>
+              <span>${data.kursdetail_label}</span>
+            </h3>
+            <table>
+              <tr>
+                <th>${data.bezeichnung_label}</th>
+                <td>${data.bezeichnung}</td>
+              </tr>
+              <tr>
+                <th>${data.kurs_id_label}</th>
+                <td>${data.kurs_id}</td>
+              </tr>
+              <tr>
+                <th>${data.sprache_id_label}</th>
+                <td>${data.sprache_id}</td>
+              </tr>
+              <tr>
+                <th>${data.teilnehmer_max_label}</th>
+                <td>${data.teilnehmer_max}</td>
+              </tr>
+              <tr>
+                <th>${data.anzahl_dauer_label}</th>
+                <td>${data.anzahl_kurstage_label}</td>
+              </tr>
+            </table>
+            <p>${data.kurs_zusatzinfo}</p>          
+          </div>
+          <div class="address">
+            <h3>
+              <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.75em" class="icon-right"></a-icon-mdx>
+              <span>${data.location_label}</span>
+            </h3>
+            <div>
+              <address>
+                <a href="${data.durchfuehrungaddresse.link}" target="_blank">
+                  <span class="description">${data.durchfuehrungaddresse.beschreibung}</span>
+                  <span>${data.durchfuehrungaddresse.strasse}</span>
+                  <div>
+                    <span>${data.durchfuehrungaddresse.plz}</span>
+                    <span>${data.durchfuehrungaddresse.ort}</span>
+                  </div>
+                </a>
+              </address>
+              <div class="badge">${data.badge}</div>
+            </div>
+          </div>
+          <div>
+            <h3>
+              <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Download" size="1.75em" class="icon-right"></a-icon-mdx>
+              <span>Downloads</span>
+            </h3>
+            <ks-m-link-list namespace="link-list-download-">
+                <ul>
+                ${data.downloads.reduce((acc, download) => acc + /* html */`
+                <li>
+                  <a href="${download.link}">
+                      <span>${download.label}</span>
+                      <div>
+                          <span>${download.link_label}</span>
+                          <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                      </div>
+                  </a>                
+                </li>
+                `, '')}
+                </ul>
+            </ks-m-link-list>
+          </div>
+        </div>
         <div class="details-right">Details Right</div>
       </div>
       <div class="controls">
@@ -395,8 +552,16 @@ export default class Event extends Shadow() {
         name: 'ks-a-button'
       },
       {
+        path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
+        name: 'ks-a-heading'
+      },
+      {
         path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
         name: 'ks-m-tooltip'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/linkList/LinkList.js`,
+        name: 'ks-m-link-list'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
