@@ -16,24 +16,6 @@ export default class AppointmentTile extends Tile {
     this.dialog = null
   }
 
-  // static get observedAttributes () {
-  //   return ['data']
-  // }
-
-  // attributeChangedCallback (name, oldValue, newValue) {
-  //   if (oldValue === null) {
-  //     return
-  //   }
-  //   if (name === 'data') {
-  //     if (newValue !== oldValue) {
-  //       // TEST HACK
-  //       const newData = JSON.parse(newValue)
-  //       const st = this.statusText
-  //       this.statusText.innerText = newData.courseAppointmentFreeSeats
-  //     }
-  //   }
-  // }
-
   connectedCallback () {
     super.connectedCallback()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
