@@ -8,6 +8,24 @@ import { courseAppointmentStatusMapping, subscriptionMode } from '../../../helpe
 * @type {CustomElementConstructor}
 */
 export default class AppointmentTile extends Tile {
+  static get observedAttributes () {
+    return ['data']
+  }
+
+  attributeChangedCallback (name, oldValue, newValue) {
+    if (oldValue === null) {
+      return
+    }
+    if (name === 'data') {
+      if (newValue !== oldValue) {
+        // TEST HACK
+        const newData = JSON.parse(newValue)
+        const st = this.statusText
+        this.statusText.innerText = newData.courseAppointmentFreeSeats
+      }
+    }
+  }
+
   /**
    * renders the css
    */
@@ -167,7 +185,7 @@ export default class AppointmentTile extends Tile {
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
-          <div class="m-tile ${tileStatus.css.border}" data-course-id=${content.courseId}>
+          <div id="tile-wrapper" class="m-tile ${tileStatus.css.border}" data-course-id=${content.courseId}>
             <div class="parent-body">
               <div class="course-info">
                 <div>
@@ -185,9 +203,9 @@ export default class AppointmentTile extends Tile {
               </div>
               <!-- --> 
               <div class="course-info">
-                <div class="icon-info">
+                <div id="status-wrapper" class="icon-info">
                   <a-icon-mdx icon-name="${tileStatus.icon}" size="1.5em" tabindex="0" class="${tileStatus.css.status}"></a-icon-mdx>
-                  <span class="m-tile__content"><span class="${tileStatus.css.status}">${tileStatus.status}</span> <span class="${tileStatus.css.info}">${tileStatus.info}</span></span>
+                  <span class="m-tile__content"><span class="${tileStatus.css.status}" id="status">${tileStatus.status}</span> <span class="${tileStatus.css.info}">${tileStatus.info}</span></span>
                 </div> 
                 <div class="icon-info">
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
@@ -302,5 +320,9 @@ export default class AppointmentTile extends Tile {
     const formatter = new Intl.DateTimeFormat('de-DE', options)
     const formattedDate = formatter.format(dateObject)
     return formattedDate
+  }
+
+  get statusText () {
+    return this.root.getElementById('status')
   }
 }

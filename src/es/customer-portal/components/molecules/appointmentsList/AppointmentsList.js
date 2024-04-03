@@ -65,6 +65,13 @@ export default class AppointmentsList extends Shadow() {
       const dialogContent = this.dialog.shadowRoot.getElementById('content')
       dialogContent.innerHTML = ''
       dialogContent.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
+      // TODO: DO THIS WORK?
+      const td = this.selectedTile
+      const tdData = JSON.parse(td.getAttribute('data'))
+      tdData.courseAppointmentFreeSeats = x.courseAppointmentFreeSeats
+      tdData.courseAppointmentStatus = x.courseAppointmentStatus
+      const appointmentData = this.escapeForHtml(tdData)
+      this.selectedTile.setAttribute('data', appointmentData)
     })
   }
 
