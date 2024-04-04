@@ -14,6 +14,7 @@ export default class AppointmentTile extends Tile {
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
     this.dialog = null
+    this.currentTile = null
   }
 
   connectedCallback () {
@@ -28,6 +29,7 @@ export default class AppointmentTile extends Tile {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   }
 
+  // DETAIL
   updateSubscriptionCourseAppointmentDetailListener = event => {
     event.detail.fetch.then(courseDetail => {
       console.log(courseDetail.courseId, this.dataset.id)
@@ -42,13 +44,32 @@ export default class AppointmentTile extends Tile {
     })
   }
 
+  // BOOKED
   updateSubscriptionCourseAppointmentBookingListener = event => {
     event.detail.fetch.then(x => {
-      console.log('update booking response: ', x)
       if (this.dialog) {
+        console.log('update booking response: ', x)
+
         const dialogContent = this.dialog.shadowRoot.getElementById('content')
         dialogContent.innerHTML = ''
         dialogContent.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
+        //
+        this.currentTile = this.root.querySelector('m-load-template-tag').root.querySelector('div')
+        const statusIcon = this.currentTile.querySelector('#status-icon')
+        const status = this.currentTile.querySelector('#status')
+        const statusInfo = this.currentTile.querySelector('#status-info')
+
+        //
+        const st = this.getTileState(x)
+        this.currentTile.classList.add(st.css.border)
+        statusIcon.setAttribute('icon-name', st.icon)
+        statusIcon.classList.add(st.css.status)
+        //
+        status.innerHTML = st.status
+        status.classList.add(st.css.status)
+        //
+        statusInfo.innerHTML = st.info
+        statusInfo.classList = st.css.info
       }
     })
   }
@@ -231,8 +252,8 @@ export default class AppointmentTile extends Tile {
               <!-- --> 
               <div class="course-info">
                 <div id="status-wrapper" class="icon-info">
-                  <a-icon-mdx icon-name="${tileStatus.icon}" size="1.5em" tabindex="0" class="${tileStatus.css.status}"></a-icon-mdx>
-                  <span class="m-tile__content"><span class="${tileStatus.css.status}" id="status">${tileStatus.status}</span> <span class="${tileStatus.css.info}">${tileStatus.info}</span></span>
+                  <a-icon-mdx id="status-icon" icon-name="${tileStatus.icon}" size="1.5em" tabindex="0" class="${tileStatus.css.status}"></a-icon-mdx>
+                  <span class="m-tile__content"><span id="status" class="${tileStatus.css.status}">${tileStatus.status}</span> <span id="status-info" class="${tileStatus.css.info}">${tileStatus.info}</span></span>
                 </div> 
                 <div class="icon-info">
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
@@ -309,12 +330,12 @@ export default class AppointmentTile extends Tile {
           <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
           <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
         </div>
-        ${this.renderDialogActionButton(subscriptionMode[selectedSubscription.subscriptionMode], content.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(content)), this.escapeForHtml(JSON.stringify(selectedSubscription)))}
+        ${this.renderTileActionButton(subscriptionMode[selectedSubscription.subscriptionMode], content.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(content)), this.escapeForHtml(JSON.stringify(selectedSubscription)))}
       </m-dialog>
       `
   }
 
-  renderDialogActionButton (subscriptionMode, status, content, selectedSubscription) {
+  renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {
     const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary">Termin buchen</ks-a-button>`
     const btnCancel = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary"><a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
 
