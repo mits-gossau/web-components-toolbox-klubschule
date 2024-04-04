@@ -37,8 +37,8 @@ export default class KsBadgeLegend extends Shadow() {
       }
       :host > div {
         display: flex;
-        flex-basis: calc(25% - var(--item-spacing, 40px));
-        margin: 0 var(--item-spacing, 40px) var(--icon-spacing, var(--mdx-sys-spacing-fix-xs)) 0;
+        flex-basis: calc(25% - var(--mdx-sys-spacing-fix-xs));
+        margin: 0 var(--item-spacing, var(--mdx-sys-spacing-fix-xs)) var(--icon-spacing, var(--mdx-sys-spacing-fix-xs)) 0;
       }
       :host > div > span {
         margin: auto 0 auto var(--icon-spacing, var(--mdx-sys-spacing-fix-xs));
