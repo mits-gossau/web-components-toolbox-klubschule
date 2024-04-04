@@ -1,13 +1,11 @@
 // @ts-check
-import { Prototype } from '../../web-components-toolbox/src/es/components/msrc/Prototype.js'
+import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /* global self */
 /* global CustomEvent */
 
 /**
- * Login https://react-components.migros.ch/?path=/story/msrc-login-03-widgets-login-button--button-large
- * For Flyout Widget Version set 'profile-flyout' attribute https://react-components.migros.ch/?path=/docs/msrc-login-03-widgets-profile-flyout-widget--profile-flyout
- * Example at: alnatura Home.html
+ * Klubschule Meta Header
  *
  * @export
  * @class Login
@@ -15,34 +13,17 @@ import { Prototype } from '../../web-components-toolbox/src/es/components/msrc/P
  * @attribute {
  * }
  */
-export default class Login extends Prototype() {
+export default class Login extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-
-    this.clickLoginButtonEventListener = event => {
-      if (this.mdxLoginButton.getAttribute('is-loggedin') === 'false') return
-      if (!this.mdxLoginFlyout) return
-      event.preventDefault()
-      event.stopPropagation()
-      if (this.mdxLoginFlyout.hasAttribute('open')) {
-        this.mdxLoginFlyout.removeAttribute('open')
-      } else {
-        this.mdxLoginFlyout.setAttribute('open', 'true')
-      }
-    }
   }
 
   connectedCallback () {
     this.hidden = true
     const showPromises = []
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
     Promise.all(showPromises).then(() => (this.hidden = false))
-    this.addEventListener('click', this.clickLoginButtonEventListener)
-    if (!this.mdxLoginFlyoutHTML) this.mdxLoginFlyoutHTML = this.mdxLoginFlyout.outerHTML
-  }
-
-  disconnectedCallback () {
-    this.removeEventListener('click', this.clickLoginButtonEventListener)
   }
 
   /**
@@ -55,7 +36,16 @@ export default class Login extends Prototype() {
   }
 
   /**
-   * renders the html
+   * evaluates if a render is necessary
+   *
+   * @return {boolean}
+   */
+  shouldRenderHTML () {
+    return !this.root.querySelector('mdx-login')
+  }
+
+  /**
+   * renders the css
    *
    * @return {Promise<void>}
    */
@@ -109,17 +99,6 @@ export default class Login extends Prototype() {
           max-height: 2.5em !important;
           z-index: 9999;
       }
-      :host > mdx-component {
-        position: relative;
-      }
-      :host > mdx-component >  mdx-login-button[is-loggedin=false] + mdx-login-flyout {
-        display: none;
-      }
-      :host > mdx-component > mdx-login-flyout {
-        position: absolute;
-        right: 0;
-        top: 100%;
-      }
       @media only screen and (max-width: _max-width_) {
         :host,
         :host > section {
@@ -157,15 +136,17 @@ export default class Login extends Prototype() {
     return Promise.resolve()
   }
 
-  get mdxComponent () {
-    return this.root.querySelector('mdx-component')
-  }
-
-  get mdxLoginButton () {
-    return this.root.querySelector('mdx-login-button')
-  }
-
-  get mdxLoginFlyout () {
-    return this.root.querySelector('mdx-login-flyout')
+  /**
+   * renders the html
+   *
+   * @return {Promise<void>}
+   */
+  renderHTML () {
+    return this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/atoms/login/Login.js`,
+        name: 'mdx-login'
+      }
+    ])
   }
 }
