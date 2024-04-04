@@ -174,4 +174,20 @@
 
     /* component fixes */
     /* --mdx-comp-checkbox-border-width-default: 0; */
+
+    /* fix spacings unintentionally appearing to be smaller on largerscreens */
+    --mdx-sys-spacing-flex-xlarge-2xs: var(--mdx-sys-spacing-flex-large-2xs);
+    --mdx-sys-spacing-flex-xlarge-xs: var(--mdx-sys-spacing-flex-large-xs);
+    --mdx-sys-spacing-flex-xlarge-s: var(--mdx-sys-spacing-flex-large-s);
+    --mdx-sys-spacing-flex-xlarge-m: var(--mdx-sys-spacing-flex-large-m) ;
+    --mdx-sys-spacing-flex-xlarge-l: var(--mdx-sys-spacing-flex-large-l);
+    --mdx-sys-spacing-flex-xlarge-xl: var(--mdx-sys-spacing-flex-large-xl);
+    --mdx-sys-spacing-flex-xlarge-2xl: var(--mdx-sys-spacing-flex-large-2xl);
+    --mdx-sys-spacing-flex-2xlarge-2xs: var(--mdx-sys-spacing-flex-xlarge-2xs);
+    --mdx-sys-spacing-flex-2xlarge-xs: var(--mdx-sys-spacing-flex-xlarge-xs);
+    --mdx-sys-spacing-flex-2xlarge-s: var(--mdx-sys-spacing-flex-xlarge-s);
+    --mdx-sys-spacing-flex-2xlarge-m: var(--mdx-sys-spacing-flex-xlarge-m) ;
+    --mdx-sys-spacing-flex-2xlarge-l: var(--mdx-sys-spacing-flex-xlarge-l);
+    --mdx-sys-spacing-flex-2xlarge-xl: var(--mdx-sys-spacing-flex-xlarge-xl);
+    --mdx-sys-spacing-flex-2xlarge-2xl: var(--mdx-sys-spacing-flex-xlarge-2xl);
 }

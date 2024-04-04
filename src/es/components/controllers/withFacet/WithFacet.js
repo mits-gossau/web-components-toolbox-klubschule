@@ -52,7 +52,7 @@ export default class WithFacet extends Shadow() {
       console.log('---------------------------------event', event, event.type === 'reset-all-filters' ? 'reset-all-filters' : 'request')
 
       const shouldResetAllFilters = event.type === 'reset-all-filters'
-      const shouldResetFilters = event.type === 'reset-filters'
+      const shouldResetFilter = event.type === 'reset-filter'
       this.filters = []
       const filter = this.constructFilterItem(event)
       if (filter) this.filters.push(filter)
@@ -71,8 +71,19 @@ export default class WithFacet extends Shadow() {
 
       if (shouldResetAllFilters) {
         request = initialRequest
-        this.removeURLParams()
+        this.removeAllFilterParamsFromURL()
         this.updateTotalOffers(this.initialResponse.total, this.initialResponse.total_label)
+      }
+
+      if (shouldResetFilter) {
+        const filterParent = event.detail.this.getAttribute('filter-parent')
+        console.log('reset filters', filterParent)
+
+        // remove filter from url
+        // this.params.delete(`${filterParent}`)
+        console.log('params:', this.params)
+        // self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+        console.log('removed filter:', filterParent)
       }
 
       let requestInit = {}
@@ -100,13 +111,10 @@ export default class WithFacet extends Shadow() {
             // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
             : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
               if (response.status >= 200 && response.status <= 299) {
-                console.log('response (200, 299)', response)
                 return response.json()
               }
               throw new Error(response.statusText)
             }).then(json => {
-              console.log('json', json)
-
               // store initial response
               if (!this.filters.length || this.filters.length === 0) {
                 this.initialResponse = json
@@ -126,14 +134,11 @@ export default class WithFacet extends Shadow() {
                     const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
                     
                     if (containsChild) {
-                      console.log('containsChild:', containsChild, `${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                       selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                     }
 
                     // if selected, add it to the url params
                     if (child.selected) {
-                      console.log('child.selected:', child.selected, `${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-
                       if (!containsChild && !shouldResetAllFilters) {
                         selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                       }
@@ -145,8 +150,6 @@ export default class WithFacet extends Shadow() {
                     // if unselected, remove it from the url params
                     } else {
                       if (containsChild) {
-                        console.log('child.unselected:', child.selected, `${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-
                         const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                         selectedChildren.splice(index, 1)
 
@@ -180,13 +183,13 @@ export default class WithFacet extends Shadow() {
   connectedCallback () {
     this.addEventListener('request-with-facet', this.requestWithFacetListener)
     this.addEventListener('reset-all-filters', this.requestWithFacetListener)
-    this.addEventListener('reset-filters', this.requestWithFacetListener)
+    this.addEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-with-facet', this.requestWithFacetListener)
     this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
-    this.removeEventListener('reset-filters', this.requestWithFacetListener)
+    this.removeEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   updateTotalOffers (total, label) {
@@ -239,7 +242,7 @@ export default class WithFacet extends Shadow() {
     }
   }
 
-  removeURLParams () {
+  removeAllFilterParamsFromURL () {
     if (this.params) {
       const keys = [...this.params.keys()]
 

@@ -139,7 +139,10 @@
   --font-size: 16px;
   --grid-1column-align-center-padding-custom: 4rem 1.5rem;
   --grid-1column-align-center-padding-mobile-custom: 3rem 0;
-  --grid-2columns-content-section-first-column-padding-custom: var(--mdx-sys-spacing-flex-m) calc((100vw - var(--body-section-default-width-vw)) / 2) var(--mdx-sys-spacing-flex-l);
+  --grid-2columns-content-section-first-column-padding-custom: 
+        var(--mdx-sys-spacing-flex-m) 
+        calc((100% * 1.5 - var(--body-section-default-width) * 1.5) / 2) /* Calculating the padding so it matches the auto margin of body section default width */
+        var(--mdx-sys-spacing-flex-l);
   --grid-2columns-content-section-padding-custom: var(--mdx-sys-spacing-flex-m) 1.5rem var(--mdx-sys-spacing-flex-l);
   --grid-2columns-content-section-padding-mobile-custom: var(--mdx-sys-spacing-flex-m) 1rem;
   --grid-2columns-content-section-second-column-padding-mobile-custom: var(--mdx-sys-spacing-flex-m) 1rem;
@@ -203,7 +206,6 @@
 
   /* body section */
   --body-section-default-width: 86.666%;
-  --body-section-default-width-vw: 86.666vw;
   --body-section-narrow-width: 57.222%;
 
   /* spacers */
@@ -226,9 +228,9 @@
   --a-color: var(--mdx-comp-link-color-default);
   --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
   --a-font-size: 1em;
-  --a-text-decoration: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+  --a-text-decoration: none;
   --a-color-hover: var(--mdx-comp-link-color-hover);
-  --a-text-decoration-hover: var(--mdx-comp-link-medium-font-runningtext-text-decoration);
+  --a-text-decoration-hover: none;
 
   /* hr */
   --hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-bold1);
@@ -243,7 +245,7 @@
 
   /* Tables */
   --table-th-font-weight: 500;
-  --table-thead-display: table;
+  /* --table-thead-display: table; This should not be necessary */
   --table-border-collapse: collapse;
   --table-border-spacing: 0;
   --table-max-width: 100%;
@@ -278,6 +280,7 @@
   --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
   --details-default-icon-right-h4-font-size: 1em;
   --details-default-icon-right-h4-line-height: 1.125em;
+  --details-default-icon-right-text-align: start;
 
   /* content stage */
   --grid-2columns-content-stage-stage-content-margin-custom: 3rem 6rem 2rem 1.5rem; 
@@ -316,9 +319,8 @@
 }
 
 
-@media screen and (min-width: 1440px) {
+@media screen and (min-width: 1441px) {
   :root {
     --body-section-default-width: 81.25%;
-    --body-section-default-width-vw: 81.25vw;
   }
 }
