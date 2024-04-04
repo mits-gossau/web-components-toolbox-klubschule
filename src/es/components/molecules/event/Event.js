@@ -145,28 +145,33 @@ export default class Event extends Shadow() {
         justify-content: center;
       }
 
-      :host .meta li span {
+      :host .meta span {
         font-size: 1rem;
         line-height: 1.25rem;
         margin-left: 0.75rem;
       }
 
-      :host .meta li .expand {
+      :host .link-more {
         display: flex;
         flex-direction: row;
         align-items: center;
         border: none;
         background-color: transparent;
         color: var(--mdx-base-color-klubschule-blue-600);
-        font-size: 1.125rem;
-        line-height: 1.25rem;
-        font-weight: 500;
         margin: 0;
         padding: 0;
+        margin-top: 1rem;
         cursor: pointer;
       }
 
-      :host .meta li .expand span {
+      :host .meta li .link-more {
+        margin-top: 0;
+      }
+
+      :host .link-more span {
+        font-size: 1.125rem;
+        line-height: 1.25rem;
+        font-weight: 500;
         margin-left: 0;
         margin-right: 0.25rem;
       }
@@ -237,7 +242,7 @@ export default class Event extends Shadow() {
 
       :host .details {
         display: none;
-        grid-template-columns: 50% 50%;
+        grid-template-columns: 1fr 1fr;
         column-gap: 3rem;
         margin: 1.5rem 0;
         padding: 1.5rem 0;
@@ -248,7 +253,8 @@ export default class Event extends Shadow() {
         display: grid;
       }
 
-      :host .details-left div + div {
+      :host .details-left div + div,
+      :host .details-right div + div {
         margin-top: 3rem;
       }
 
@@ -268,9 +274,18 @@ export default class Event extends Shadow() {
 
       :host table {
         border-collapse: collapse;
+        table-layout: fixed;
         width: 100%;
       }
       
+      :host .table-price tr td {
+        text-align: right;
+      }
+
+      :host .details-right table tr td {
+        width: 33.33%;
+      }
+
       :host table tr {
         border-top: 0.063rem solid var(--mdx-base-color-grey-700);
         padding: 0.5rem 0 0.75rem;
@@ -297,6 +312,10 @@ export default class Event extends Shadow() {
         line-height: 1rem;
         font-weight: 400;
         width: 50%;
+      }
+
+      :host table tr td strong {
+        font-weight: 500;
       }
 
       :host table + p {
@@ -340,7 +359,7 @@ export default class Event extends Shadow() {
         }
 
         :host .head {
-          grid-template-columns: 100%;
+          grid-template-columns: 1fr;
           column-gap: 0;
         }
 
@@ -437,7 +456,7 @@ export default class Event extends Shadow() {
             <span>${data.location}</span>
           </li>
           <li>
-            <button class="expand">
+            <button class="link-more expand">
               <span class="more show">${data.detail_mehr_label}</span>
               <span class="less">${data.detail_weniger_label}</span>
               <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em" class="icon-right"></a-icon-mdx>
@@ -517,7 +536,57 @@ export default class Event extends Shadow() {
             </ks-m-link-list>
           </div>
         </div>
-        <div class="details-right">Details Right</div>
+        <div class="details-right">
+          <div>
+            <h3>
+              <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Wallet" size="1.75em" class="icon-right"></a-icon-mdx>
+              <span>${data.preis_info_label}</span>
+            </h3>
+            <table class="table-price">
+              <tr>
+                <th>${data.preis_kurs_label}</th>
+                <td>${data.preis_kurs}</td>
+              </tr>
+              <tr>
+                <th>${data.preis_lehrmittel_label}</th>
+                <td>${data.preis_lehrmittel}</td>
+              </tr>
+              <tr>
+                <th>${data.preis_material_label}</th>
+                <td>${data.preis_material}</td>
+              </tr>
+              <tr>
+                <th>${data.preis_total_label}</th>
+                <td><strong>${data.preis_total}</strong></td>
+              </tr>
+            </table>
+            <p>${data.preis_info}</p>          
+          </div>
+          <div>
+            <h3>
+              <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Calendar" size="1.75em" class="icon-right"></a-icon-mdx>
+              <span>${data.preis_info_label}</span>
+            </h3>
+            <table>
+              <tr>
+                <th>Wochentag</th>
+                <th>Termin</th>
+                <th>Zeit</th>
+              </tr>
+              ${data.termine.reduce((acc, termin) => acc + /* html */`
+              <tr>
+                <td>${termin.wochentaglabel}</td>                
+                <td>${termin.termin}</td>                
+                <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
+              </tr>
+              `, '')}              
+            </table>
+            <button class="link-more">
+              <span>${data.termine_alle_label}</span>
+              <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em" class="icon-right"></a-icon-mdx>
+            </button>
+          </div>        
+        </div>
       </div>
       <div class="controls">
         <div class="controls-left">
