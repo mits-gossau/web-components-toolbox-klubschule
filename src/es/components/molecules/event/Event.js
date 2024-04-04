@@ -353,6 +353,10 @@ export default class Event extends Shadow() {
         margin-left: 0.25rem;
       }
 
+      :host a-icon-mdx {
+        color: var(--mdx-base-color-grey-950);
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host .event {
           padding: 1rem 0.5rem;
@@ -443,23 +447,23 @@ export default class Event extends Shadow() {
         <ul class="meta">
           <li>
             <div>
-              <a-icon-mdx namespace="icon-mdx-ks-event-tick-" icon-name="Check" size="1.25em" class="icon-right"></a-icon-mdx>
+              <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(data)}" size="1.5em"></a-icon-mdx>
             </div>
             <span>${data.status_label}</span>
           </li>
           <li>
-            <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="FileText" size="1.5em" class="icon-right"></a-icon-mdx>
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/event-list.svg" size="1.5em"></a-icon-mdx>
             <span>${data.lektionen_label}</span>
           </li>
           <li>
-            <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em" class="icon-right"></a-icon-mdx>
+            <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
             <span>${data.location}</span>
           </li>
           <li>
             <button class="link-more expand">
               <span class="more show">${data.detail_mehr_label}</span>
               <span class="less">${data.detail_weniger_label}</span>
-              <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em" class="icon-right"></a-icon-mdx>
+              <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em"></a-icon-mdx>
             </button>
           </li>
         </ul>      
@@ -468,7 +472,7 @@ export default class Event extends Shadow() {
         <div class="details-left">
           <div>
             <h3>
-              <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="FileText" size="1.75em" class="icon-right"></a-icon-mdx>
+              <a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1.75em"></a-icon-mdx>
               <span>${data.kursdetail_label}</span>
             </h3>
             <table>
@@ -565,7 +569,7 @@ export default class Event extends Shadow() {
           <div>
             <h3>
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Calendar" size="1.75em" class="icon-right"></a-icon-mdx>
-              <span>${data.preis_info_label}</span>
+              <span>${data.termin_label}</span>
             </h3>
             <table>
               <tr>
@@ -590,12 +594,22 @@ export default class Event extends Shadow() {
       </div>
       <div class="controls">
         <div class="controls-left">
-          <div>
-            <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em" class="icon-right"></a-icon-mdx>  
-            <ks-a-button namespace="button-secondary-" color="secondary">
+            ${data.deletable || data.merken_label ? `<div>`: '' }
+            ${data.deletable
+              ? `
+              <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em" class="icon-right"></a-icon-mdx>
+              `
+              : ''
+            }
+            ${data.merken_label
+              ? `
+              <ks-a-button namespace="button-secondary-" color="secondary">
                 <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>${data.merken_label}
-            </ks-a-button>            
-          </div>
+              </ks-a-button> 
+              `
+              : ''
+            }
+            ${data.deletable || data.merken_label ? `</div>`: '' }
           <div>
             <ks-a-button namespace="button-primary-" color="secondary">${data.anmelden_label}</ks-a-button>          
           </div>
@@ -641,5 +655,26 @@ export default class Event extends Shadow() {
 
   get badge () {
     return this.root.querySelector('[badge]')
+  }
+
+  /**
+   * Set icon path deepending on state
+   * @param {*} data 
+   * @returns icon path
+   */
+  setIconUrl(data) {
+    let iconName = '';
+
+    if (data.status == 1) {
+      iconName = 'garanteed';
+    } else if (data.status == 2) {
+      iconName = 'started';
+    } else if (data.status == 3) {
+      iconName = 'await';
+    } else if (data.status == 4) {
+      iconName = 'almost';
+    }
+
+    return `../../../../../../../img/icons/event-state-${iconName}.svg`;
   }
 }
