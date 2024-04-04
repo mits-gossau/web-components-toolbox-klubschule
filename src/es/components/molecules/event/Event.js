@@ -282,6 +282,10 @@ export default class Event extends Shadow() {
         text-align: right;
       }
 
+      :host .table-price + p + div {
+        margin-top: 1rem;
+      }
+
       :host .details-right table tr td {
         width: 33.33%;
       }
@@ -323,6 +327,7 @@ export default class Event extends Shadow() {
         font-size: 0.875rem;
         line-height: 1.125rem;
         font-weight: 400;
+        margin-bottom: 0;
       }
 
       :host .address div {
@@ -564,7 +569,22 @@ export default class Event extends Shadow() {
                 <td><strong>${data.preis_total}</strong></td>
               </tr>
             </table>
-            <p>${data.preis_info}</p>          
+            <p>${data.preis_info}</p>
+            ${data.kantonsbeitrag_label
+              ? `
+              <div>
+                <ks-m-system-notification namespace="system-notification-default-" icon-name="Percent" with-icon-background>
+                    <div slot="description">
+                        <p>${data.kantonsbeitrag_label}</p>
+                        <a-link namespace="underline-">
+                            <a href="${data.kantonsbeitrag_link}">${data.kantonsbeitrag_link_label}</a>
+                        </a-link>
+                    </div>
+                </ks-m-system-notification>
+              </div>
+              `
+              : ''
+            }   
           </div>
           <div>
             <h3>
@@ -589,7 +609,7 @@ export default class Event extends Shadow() {
               <span>${data.termine_alle_label}</span>
               <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em" class="icon-right"></a-icon-mdx>
             </button>
-          </div>        
+          </div>   
         </div>
       </div>
       <div class="controls">
@@ -647,8 +667,16 @@ export default class Event extends Shadow() {
         name: 'ks-m-link-list'
       },
       {
+        path: `${this.importMetaUrl}../../molecules/systemNotification/SystemNotification.js`,
+        name: 'ks-m-system-notification'
+      },
+      {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
+        name: 'a-link'
       }
     ])
   }
