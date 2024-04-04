@@ -15,6 +15,8 @@ export default class AppointmentTile extends Tile {
     super({ ...options }, ...args)
     this.dialog = null
     this.currentTile = null
+    this.courseContent = null
+    this.selectedSubscription = null
   }
 
   connectedCallback () {
@@ -58,6 +60,11 @@ export default class AppointmentTile extends Tile {
         const statusIcon = this.currentTile.querySelector('#status-icon')
         const status = this.currentTile.querySelector('#status')
         const statusInfo = this.currentTile.querySelector('#status-info')
+        let tileActionButton = this.currentTile.querySelector('m-dialog').shadowRoot.getElementById('show-modal').outerHTML
+        tileActionButton = ''
+        debugger
+        const newAction = this.renderTileActionButton(subscriptionMode[this.selectedSubscription.subscriptionMode], x.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.courseContent)), this.escapeForHtml(JSON.stringify(this.selectedSubscription)))
+        tileActionButton = newAction
 
         //
         const st = this.getTileState(x)
@@ -222,9 +229,9 @@ export default class AppointmentTile extends Tile {
       }
     ])
     Promise.all([fetchModules]).then((_) => {
-      const content = Tile.parseAttribute(this.getAttribute('data'))
-      const selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
-      this.html = this.renderTile(content, selectedSubscription)
+      this.courseContent = Tile.parseAttribute(this.getAttribute('data'))
+      this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
+      this.html = this.renderTile(this.courseContent, this.selectedSubscription)
     })
   }
 
