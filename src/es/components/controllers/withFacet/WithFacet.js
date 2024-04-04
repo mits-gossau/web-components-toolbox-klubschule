@@ -45,45 +45,54 @@ export default class WithFacet extends Shadow() {
         ? `${this.importMetaUrl}./mock/default.json`
         : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
     this.initialResponse = {}
+    this.lastWithFacetRequest = null
 
     this.requestWithFacetListener = (event) => {
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
       console.log('---------------------------------event', event, event.type === 'reset-all-filters' ? 'reset-all-filters' : 'request')
 
-      const shouldResetAllFilters = event.type === 'reset-all-filters'
-      const shouldResetFilter = event.type === 'reset-filter'
-      this.filters = []
-      const filter = this.constructFilterItem(event)
-      if (filter) this.filters.push(filter)
-
-      this.updateURLParams()
-
-      const filterRequest = `{
-        "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
-        "mandantId": ${this.getAttribute('mandant-id') || 110}
-        ${event.detail?.key === 'input-search' ? `,"searchText": "${event.detail.value}"` : ''}
-        ${event.detail?.key === 'location-search' ? `,"clat": "${event.detail.lat}"` : ''}
-        ${event.detail?.key === 'location-search' ? `,"clong": "${event.detail.lng}"` : ''}
-      }`
-
-      let request = this.filters.length > 0 ? filterRequest : initialRequest
-
-      if (shouldResetAllFilters) {
-        request = initialRequest
-        this.removeAllFilterParamsFromURL()
-        this.updateTotalOffers(this.initialResponse.total, this.initialResponse.total_label)
-      }
-
-      if (shouldResetFilter) {
-        const filterParent = event.detail.this.getAttribute('filter-parent')
-        console.log('reset filters', filterParent)
-
-        // remove filter from url
-        // this.params.delete(`${filterParent}`)
-        console.log('params:', this.params)
-        // self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-        console.log('removed filter:', filterParent)
+      let request, shouldResetAllFilters, isNextPage = false
+      // ppage reuse last request
+      if (event.detail?.ppage && this.lastWithFacetRequest) {
+        request = JSON.stringify(Object.assign(JSON.parse(this.lastWithFacetRequest), {ppage: event.detail.ppage}))
+        shouldResetAllFilters = false
+        isNextPage = true
+        this.updateURLParams()
+      } else {
+        shouldResetAllFilters = event.type === 'reset-all-filters'
+        const shouldResetFilter = event.type === 'reset-filter'
+        this.filters = []
+        const filter = this.constructFilterItem(event)
+        if (filter) this.filters.push(filter)
+  
+        this.updateURLParams()
+  
+        const filterRequest = `{
+          "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
+          "mandantId": ${this.getAttribute('mandant-id') || 110}
+          ${event.detail?.key === 'input-search' ? `,"searchText": "${event.detail.value}"` : ''}
+          ${event.detail?.key === 'location-search' ? `,"clat": "${event.detail.lat}"` : ''}
+          ${event.detail?.key === 'location-search' ? `,"clong": "${event.detail.lng}"` : ''}
+        }`
+  
+        request = this.lastWithFacetRequest = this.filters.length > 0 ? filterRequest : initialRequest
+        
+        if (shouldResetAllFilters) {
+          request = initialRequest
+          this.removeAllFilterParamsFromURL()
+        }
+  
+        if (shouldResetFilter) {
+          const filterParent = event.detail.this.getAttribute('filter-parent')
+          console.log('reset filters', filterParent)
+  
+          // remove filter from url
+          // this.params.delete(`${filterParent}`)
+          console.log('params:', this.params)
+          // self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+          console.log('removed filter:', filterParent)
+        }
       }
 
       let requestInit = {}
@@ -119,9 +128,6 @@ export default class WithFacet extends Shadow() {
               if (!this.filters.length || this.filters.length === 0) {
                 this.initialResponse = json
               }
-
-              // update total offers
-              this.updateTotalOffers(json.total, json.total_label)
               
               // url kung fu
               json.filters.forEach(filterItem => {
@@ -165,7 +171,7 @@ export default class WithFacet extends Shadow() {
                   self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                 }
               })
-              
+              if (isNextPage) json = Object.assign(json, {isNextPage})
               return json
             })).get(request)
         },
@@ -190,22 +196,6 @@ export default class WithFacet extends Shadow() {
     this.removeEventListener('request-with-facet', this.requestWithFacetListener)
     this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
     this.removeEventListener('reset-filter', this.requestWithFacetListener)
-  }
-
-  updateTotalOffers (total, label) {
-    // update tab
-    const totalOffersTab = document.body.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-offers-page')?.shadowRoot?.querySelector('ks-m-tab')?.shadowRoot?.querySelector('#total-offers-tab-heading')
-    if (totalOffersTab) {
-      totalOffersTab.textContent = total + label
-    }
-
-    // update heading
-    const totalOffersHeading = this.root.querySelector('#with-facet-body-section')?.shadowRoot.querySelector('o-grid[namespace="grid-12er-"]').shadowRoot.querySelector('#offers-page-main-title')
-    if (totalOffersHeading) {
-      totalOffersHeading.shadowRoot.querySelector('h1').textContent = total + label
-    }
-
-    console.log('total offers updated:', total, label)
   }
 
   catchURLParams () {

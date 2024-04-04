@@ -57,10 +57,14 @@ export default class OffersPage extends Shadow() {
       <ks-m-tab>
         <ul class="tab-search-result">
             <li>
-              <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
+              <ks-a-with-facet-counter>
+                <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
+              </ks-a-with-facet-counter>
             </li>
             <li>
-                <button tab-target="content2" id="total-stories-tab-heading">12 Story & Informationen</button>
+              <ks-a-with-facet-counter label=" Story & Informationen" total="contentItems.length">
+                <button tab-target="content2" id="total-stories-tab-heading"></button>
+              </ks-a-with-facet-counter>
             </li>
         </ul>
           <div>
@@ -156,6 +160,10 @@ export default class OffersPage extends Shadow() {
         name: 'ks-a-with-facet-counter'
       },
       {
+        path: `${this.importMetaUrl}../../atoms/withFacetPagination/WithFacetPagination.js`,
+        name: 'ks-a-with-facet-pagination'
+      },
+      {
         path: `${this.importMetaUrl}../../molecules/tileFactory/TileFactory.js`,
         name: 'ks-m-tile-factory'
       },
@@ -182,7 +190,7 @@ export default class OffersPage extends Shadow() {
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
               <o-grid namespace="grid-12er-">
                 <div col-lg="12" col-md="12" col-sm="12">
-                  <ks-a-heading tag="h1" id="offers-page-main-title">&nbsp;</ks-a-heading>
+                  <ks-a-with-facet-counter></ks-a-with-facet-counter>
                 </div>
                 ${this.isEventSearch ? '' : /* HTML */ `
                   <div col-lg="6" col-md="6" col-sm="12">
@@ -326,10 +334,12 @@ export default class OffersPage extends Shadow() {
                   ${this.badgeContainer.innerHTML}
                 </ks-m-badge-legend>
               ` : ''}
-              <ks-a-button namespace="button-primary-" color="secondary">
-                  <span>Weitere Angebote</span>
-                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-              </ks-a-button>
+              <ks-a-with-facet-pagination>
+                <ks-a-button namespace="button-primary-" color="secondary">
+                    <span>Weitere Angebote</span>
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+                </ks-a-button>
+              </ks-a-with-facet-pagination>
           </ks-o-body-section>
       </ks-c-with-facet>
     `
