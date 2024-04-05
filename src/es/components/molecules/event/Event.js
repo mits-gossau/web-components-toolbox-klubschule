@@ -493,7 +493,7 @@ export default class Event extends Shadow() {
           </li>
         </ul>      
       </div>
-      <div class="details details-expanded">
+      <div class="details">
         <div class="details-left">
           <div>
             <h3>
