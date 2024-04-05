@@ -19,6 +19,7 @@ export default class AppointmentTile extends Tile {
     this.selectedSubscription = null
     this.tileActionButtonReplace = null
     this.tileActionButtonReplaceIcon = null
+    this.xox = null
   }
 
   connectedCallback () {
@@ -283,11 +284,16 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
         name: 'm-dialog'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/atoms/statusButton/StatusButton.js`,
+        name: 'a-status-button'
       }
     ])
     Promise.all([fetchModules]).then((children) => {
       this.tileActionButtonReplace = children[0][1]
       this.tileActionButtonReplaceIcon = children[0][2]
+      this.xox = children[0][4]
       this.courseContent = Tile.parseAttribute(this.getAttribute('data'))
       this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
       this.html = this.renderTile(this.courseContent, this.selectedSubscription)
@@ -310,6 +316,7 @@ export default class AppointmentTile extends Tile {
                 </div> 
                 <div>
                   <span class="m-tile__title date time">
+                   
                     ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} 
                     <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button>
                   </span>
@@ -395,8 +402,9 @@ export default class AppointmentTile extends Tile {
         <div class="container dialog-footer">
           <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
           <ks-a-button id="btn-action" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
-        </div>
-        ${this.renderTileActionButton(subscriptionMode[selectedSubscription.subscriptionMode], content.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(content)), this.escapeForHtml(JSON.stringify(selectedSubscription)))}
+          </div>
+          <a-status-button id="show-modal"></a-status-button>
+          ${this.renderTileActionButton(subscriptionMode[selectedSubscription.subscriptionMode], content.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(content)), this.escapeForHtml(JSON.stringify(selectedSubscription)))}
       </m-dialog>
       `
   }
