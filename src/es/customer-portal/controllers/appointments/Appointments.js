@@ -101,7 +101,8 @@ export default class Appointments extends HTMLElement {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
-        })
+        }),
+        id: data.courseId
       },
       bubbles: true,
       cancelable: true,
