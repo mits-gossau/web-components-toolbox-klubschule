@@ -17,6 +17,7 @@ export default class AppointmentTile extends Tile {
     this.currentTile = null
     this.courseContent = null
     this.selectedSubscription = null
+    this.tileActionButtonReplace = null
   }
 
   connectedCallback () {
@@ -55,16 +56,34 @@ export default class AppointmentTile extends Tile {
         const dialogContent = this.dialog.shadowRoot.getElementById('content')
         dialogContent.innerHTML = ''
         dialogContent.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
+
+        //
+        const btn = this.dialog.shadowRoot.querySelector('ks-a-button').shadowRoot
+        const newAction = this.renderTileActionButton(subscriptionMode[this.selectedSubscription.subscriptionMode], x.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.courseContent)), this.escapeForHtml(JSON.stringify(this.selectedSubscription)))
+        if (newAction !== '') {
+          let labelText = ''
+          let btnNamespace = ''
+          const a = JSON.stringify(this.courseContent)
+          const b = JSON.stringify(this.selectedSubscription)
+          const tag = `[${a}, ${b}]`
+          if (x.courseAppointmentStatus === 5) {
+            labelText = 'Stornieren'
+            btnNamespace = 'button-secondary-'
+          }
+          const newElementBtn = new this.tileActionButtonReplace.constructorClass({ namespace: btnNamespace }) // eslint-disable-line
+          newElementBtn.setAttribute('label', labelText)
+          newElementBtn.setAttribute('id', 'show-modal')
+          newElementBtn.setAttribute('request-event-name', 'request-subscription-course-appointment-detail')
+          newElementBtn.setAttribute('tag', tag)
+          newElementBtn.setAttribute('color', 'secondary')
+          btn.innerHTML = newElementBtn.outerHTML
+        }
+
         //
         this.currentTile = this.root.querySelector('m-load-template-tag').root.querySelector('div')
         const statusIcon = this.currentTile.querySelector('#status-icon')
         const status = this.currentTile.querySelector('#status')
         const statusInfo = this.currentTile.querySelector('#status-info')
-        let tileActionButton = this.currentTile.querySelector('m-dialog').shadowRoot.getElementById('show-modal').outerHTML
-        tileActionButton = ''
-        debugger
-        const newAction = this.renderTileActionButton(subscriptionMode[this.selectedSubscription.subscriptionMode], x.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.courseContent)), this.escapeForHtml(JSON.stringify(this.selectedSubscription)))
-        tileActionButton = newAction
 
         //
         const st = this.getTileState(x)
@@ -228,7 +247,8 @@ export default class AppointmentTile extends Tile {
         name: 'm-dialog'
       }
     ])
-    Promise.all([fetchModules]).then((_) => {
+    Promise.all([fetchModules]).then((children) => {
+      this.tileActionButtonReplace = children[0][1]
       this.courseContent = Tile.parseAttribute(this.getAttribute('data'))
       this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
       this.html = this.renderTile(this.courseContent, this.selectedSubscription)
