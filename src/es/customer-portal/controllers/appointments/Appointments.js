@@ -30,6 +30,7 @@ export default class Appointments extends HTMLElement {
     this.removeEventListener(this.getAttribute('request-subscription-course-appointment-booking') || 'request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
   }
 
+  // LIST ALL
   requestSubscriptionCourseAppointmentsListener = async (event) => {
     console.log('Controller - requestSubscriptionCourseAppointmentsListener', event)
     if (this.abortControllerSubscriptionCourseAppointments) this.abortControllerSubscriptionCourseAppointments.abort()
@@ -70,6 +71,7 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
+  // MAKE BOOKING
   requestSubscriptionCourseAppointmentBookingListener = async (event) => {
     console.log('Controller - requestSubscriptionCourseAppointmentBookingListener', event)
 
@@ -107,6 +109,7 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
+  // GET DETAILS
   requestSubscriptionCourseAppointmentDetailListener = async (event) => {
     console.log('!!!!requestSubscriptionCourseAppointmentDetailListener', event)
     if (this.abortControllerSubscriptionCourseAppointmentDetail) this.abortControllerSubscriptionCourseAppointmentDetail.abort()

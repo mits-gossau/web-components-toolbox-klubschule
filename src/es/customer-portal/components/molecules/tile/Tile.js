@@ -18,6 +18,7 @@ export default class AppointmentTile extends Tile {
     this.courseContent = null
     this.selectedSubscription = null
     this.tileActionButtonReplace = null
+    this.tileActionButtonReplaceIcon = null
   }
 
   connectedCallback () {
@@ -36,11 +37,40 @@ export default class AppointmentTile extends Tile {
   updateSubscriptionCourseAppointmentDetailListener = event => {
     event.detail.fetch.then(courseDetail => {
       console.log(courseDetail.courseId, this.dataset.id)
+
       if (this.dataset.id * 1 === courseDetail.courseId) {
         this.dialog = this.root.querySelector('m-dialog')
         if (this.dialog) {
+          // TODO: HACK
+          // !!!
           const description = this.dialog.shadowRoot.getElementById('description')
           description.innerHTML = courseDetail.courseDescription
+
+          const dc = {
+            1: 'Termin buchen',
+            2: '2',
+            3: '3',
+            4: '4',
+            5: 'Termin stornieren',
+            6: '6'
+          }
+
+          const title = this.dialog.shadowRoot.getElementById('title')
+          title.innerHTML = dc[courseDetail.courseAppointmentStatus]
+
+          // action btn
+          const actionBtn = this.dialog.shadowRoot.getElementById('btn-action')
+          actionBtn.setAttribute('label', dc[courseDetail.courseAppointmentStatus])
+          if (courseDetail.courseAppointmentStatus === 5) {
+            debugger
+            actionBtn.setAttribute('color', 'quaternary')
+          } else {
+            // color="quaternary"
+            // actionBtn.setAttribute('color', 'var(--button-primary-background-color)')
+            actionBtn.style.backgroundColor = 'green;'
+          }
+          // actionBtn.labelText = dc[courseDetail.courseAppointmentStatus]
+
           // etc...
         }
       }
@@ -52,10 +82,10 @@ export default class AppointmentTile extends Tile {
     event.detail.fetch.then(x => {
       if (this.dialog) {
         console.log('update booking response: ', x)
-
         const dialogContent = this.dialog.shadowRoot.getElementById('content')
-        dialogContent.innerHTML = ''
-        dialogContent.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
+        const description = dialogContent.querySelector('#description')
+        description.innerHTML = ''
+        description.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
 
         //
         const btn = this.dialog.shadowRoot.querySelector('ks-a-button').shadowRoot
@@ -76,6 +106,14 @@ export default class AppointmentTile extends Tile {
           newElementBtn.setAttribute('request-event-name', 'request-subscription-course-appointment-detail')
           newElementBtn.setAttribute('tag', tag)
           newElementBtn.setAttribute('color', 'secondary')
+          // icon
+          const newElementIcon = new this.tileActionButtonReplaceIcon.constructorClass({}) // eslint-disable-line
+          newElementIcon.setAttribute('icon-name', 'Trash')
+          newElementIcon.classList.add('icon-left')
+          newElementIcon.setAttribute('size', '1em')
+          newElementBtn.appendChild(newElementIcon)
+
+          //
           btn.innerHTML = newElementBtn.outerHTML
         }
 
@@ -249,6 +287,7 @@ export default class AppointmentTile extends Tile {
     ])
     Promise.all([fetchModules]).then((children) => {
       this.tileActionButtonReplace = children[0][1]
+      this.tileActionButtonReplaceIcon = children[0][2]
       this.courseContent = Tile.parseAttribute(this.getAttribute('data'))
       this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
       this.html = this.renderTile(this.courseContent, this.selectedSubscription)
@@ -339,9 +378,9 @@ export default class AppointmentTile extends Tile {
       <m-dialog namespace="dialog-left-slide-in-">
         <div class="container dialog-header">
           <div id="back"></div>
-          <h3>Title...</h3>
+          <h3 id="title"></h3>
           <div id="close">
-            <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+            <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
           </div>
         </div>
         <div class="container dialog-content">
@@ -355,7 +394,7 @@ export default class AppointmentTile extends Tile {
         </div>
         <div class="container dialog-footer">
           <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
-          <ks-a-button namespace="button-primary-" color="secondary" request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
+          <ks-a-button id="btn-action" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
         </div>
         ${this.renderTileActionButton(subscriptionMode[selectedSubscription.subscriptionMode], content.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(content)), this.escapeForHtml(JSON.stringify(selectedSubscription)))}
       </m-dialog>
@@ -363,8 +402,8 @@ export default class AppointmentTile extends Tile {
   }
 
   renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {
-    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary">Termin buchen</ks-a-button>`
-    const btnCancel = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}]' color="secondary"><a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
+    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary">Termin buchen</ks-a-button>`
+    const btnCancel = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'cancel' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
 
     const actionButton = {
       FLAT: {
