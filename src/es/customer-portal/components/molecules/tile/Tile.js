@@ -59,17 +59,14 @@ export default class AppointmentTile extends Tile {
           title.innerHTML = dc[courseDetail.courseAppointmentStatus]
 
           // action btn
-          const actionBtn = this.dialog.shadowRoot.getElementById('btn-action')
+          /* const actionBtn = this.dialog.shadowRoot.getElementById('btn-action')
+          actionBtn.classList.add('hide-dialog-action-btn')
           actionBtn.setAttribute('label', dc[courseDetail.courseAppointmentStatus])
           if (courseDetail.courseAppointmentStatus === 5) {
-            debugger
             actionBtn.setAttribute('color', 'quaternary')
           } else {
-            // color="quaternary"
-            // actionBtn.setAttribute('color', 'var(--button-primary-background-color)')
             actionBtn.style.backgroundColor = 'green;'
-          }
-          // actionBtn.labelText = dc[courseDetail.courseAppointmentStatus]
+          } */
 
           // etc...
         }
@@ -88,34 +85,34 @@ export default class AppointmentTile extends Tile {
         description.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
 
         //
-        const btn = this.dialog.shadowRoot.querySelector('ks-a-button').shadowRoot
-        const newAction = this.renderTileActionButton(subscriptionMode[this.selectedSubscription.subscriptionMode], x.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.courseContent)), this.escapeForHtml(JSON.stringify(this.selectedSubscription)))
-        if (newAction !== '') {
-          let labelText = ''
-          let btnNamespace = ''
-          const a = JSON.stringify(this.courseContent)
-          const b = JSON.stringify(this.selectedSubscription)
-          const tag = `[${a}, ${b}]`
-          if (x.courseAppointmentStatus === 5) {
-            labelText = 'Stornieren'
-            btnNamespace = 'button-secondary-'
-          }
-          const newElementBtn = new this.tileActionButtonReplace.constructorClass({ namespace: btnNamespace }) // eslint-disable-line
-          newElementBtn.setAttribute('label', labelText)
-          newElementBtn.setAttribute('id', 'show-modal')
-          newElementBtn.setAttribute('request-event-name', 'request-subscription-course-appointment-detail')
-          newElementBtn.setAttribute('tag', tag)
-          newElementBtn.setAttribute('color', 'secondary')
-          // icon
-          const newElementIcon = new this.tileActionButtonReplaceIcon.constructorClass({}) // eslint-disable-line
-          newElementIcon.setAttribute('icon-name', 'Trash')
-          newElementIcon.classList.add('icon-left')
-          newElementIcon.setAttribute('size', '1em')
-          newElementBtn.appendChild(newElementIcon)
+        // const btn = this.dialog.shadowRoot.querySelector('ks-a-button').shadowRoot
+        // const newAction = this.renderTileActionButton(subscriptionMode[this.selectedSubscription.subscriptionMode], x.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.courseContent)), this.escapeForHtml(JSON.stringify(this.selectedSubscription)))
+        // if (newAction !== '') {
+        //   let labelText = ''
+        //   let btnNamespace = ''
+        //   const a = JSON.stringify(this.courseContent)
+        //   const b = JSON.stringify(this.selectedSubscription)
+        //   const tag = `[${a}, ${b}]`
+        //   if (x.courseAppointmentStatus === 5) {
+        //     labelText = 'Stornieren'
+        //     btnNamespace = 'button-secondary-'
+        //   }
+        //   const newElementBtn = new this.tileActionButtonReplace.constructorClass({ namespace: btnNamespace }) // eslint-disable-line
+        //   newElementBtn.setAttribute('label', labelText)
+        //   newElementBtn.setAttribute('id', 'show-modal')
+        //   newElementBtn.setAttribute('request-event-name', 'request-subscription-course-appointment-detail')
+        //   newElementBtn.setAttribute('tag', tag)
+        //   newElementBtn.setAttribute('color', 'secondary')
+        //   // icon
+        //   const newElementIcon = new this.tileActionButtonReplaceIcon.constructorClass({}) // eslint-disable-line
+        //   newElementIcon.setAttribute('icon-name', 'Trash')
+        //   newElementIcon.classList.add('icon-left')
+        //   newElementIcon.setAttribute('size', '1em')
+        //   newElementBtn.appendChild(newElementIcon)
 
-          //
-          btn.innerHTML = newElementBtn.outerHTML
-        }
+        //   //
+        //   btn.innerHTML = newElementBtn.outerHTML
+        // }
 
         //
         this.currentTile = this.root.querySelector('m-load-template-tag').root.querySelector('div')
@@ -233,6 +230,9 @@ export default class AppointmentTile extends Tile {
     :host .alert {
       color:#F4001B;
     }
+    :host .hide-dialog-action-btn{
+      display:none;
+    }
     @media only screen and (max-width: _max-width_) {
       :host  {}
     }
@@ -285,8 +285,12 @@ export default class AppointmentTile extends Tile {
         name: 'm-dialog'
       },
       {
-        path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/atoms/statusButton/StatusButton.js`,
-        name: 'a-status-button'
+        path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/atoms/tileStatusButton/TileStatusButton.js`,
+        name: 'a-tile-status-button'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/atoms/dialogStatusButton/DialogStatusButton.js`,
+        name: 'a-dialog-status-button'
       }
     ])
     Promise.all([fetchModules]).then((children) => {
@@ -398,9 +402,11 @@ export default class AppointmentTile extends Tile {
         </div>
         <div class="container dialog-footer">
           <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
-          <ks-a-button id="btn-action" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Action</ks-a-button>
-          </div>
-          <a-status-button id="show-modal" data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>
+          <a-dialog-status-button data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
+          <!--<ks-a-button id="btn-action" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Termin buchen</ks-a-button>
+          <ks-a-button id="btn-action-cancel" color="quaternary" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Termin stornieren</ks-a-button>-->
+        </div>
+        <a-tile-status-button id="show-modal" data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>  
       </m-dialog>
       `
   }
