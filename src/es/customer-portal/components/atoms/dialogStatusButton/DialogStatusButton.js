@@ -2,9 +2,6 @@
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 import { subscriptionMode } from '../../../helpers/mapping.js'
 
-/* global history */
-/* global location */
-
 /**
 * @export
 * @class DialogStatusButton
