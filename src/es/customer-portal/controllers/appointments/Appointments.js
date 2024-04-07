@@ -16,17 +16,20 @@ export default class Appointments extends HTMLElement {
     this.abortControllerSubscriptionCourseAppointments = null
     this.abortControllerSubscriptionCourseAppointmentDetail = null
     this.abortControllerSubscriptionCourseAppointmentBooking = null
+    this.abortControllerSubscriptionCourseAppointmentReversalListener = null
   }
 
   connectedCallback () {
     this.addEventListener(this.getAttribute('request-subscription-course-appointments') || 'request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
     this.addEventListener(this.getAttribute('request-subscription-course-appointment-detail') || 'request-subscription-course-appointment-detail', this.requestSubscriptionCourseAppointmentDetailListener)
+    this.addEventListener(this.getAttribute('request-subscription-course-appointment-reversal') || 'request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.addEventListener(this.getAttribute('request-subscription-course-appointment-booking') || 'request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
   }
 
   disconnectedCallback () {
     this.removeEventListener(this.getAttribute('request-subscription-course-appointments') || 'request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
     this.removeEventListener(this.getAttribute('request-subscription-course-appointment-detail') || 'request-subscription-course-appointment-detail', this.requestSubscriptionCourseAppointmentDetailListener)
+    this.removeEventListener(this.getAttribute('request-subscription-course-appointment-reversal') || 'request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.removeEventListener(this.getAttribute('request-subscription-course-appointment-booking') || 'request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
   }
 
@@ -79,6 +82,16 @@ export default class Appointments extends HTMLElement {
     this.abortControllerSubscriptionCourseAppointmentBooking = new AbortController()
     const tags = JSON.parse(event.detail.tags)
 
+    /* {
+      "userId": "50505A02-2AA4-47AA-9AED-0B759902A0C2",
+        "subscriptionType": "7A",
+          "subscriptionId": 32925,
+            "courseType": "E",
+              "courseId": 1707277,
+                "courseAppointmentDate": "2024-04-05T00:00:00",
+                  "courseAppointmentTimeFrom": "15:30"
+    } */
+
     const data = {
       courseAppointmentDate: tags[0].courseAppointmentDate,
       courseAppointmentTimeFrom: tags[0].courseAppointmentTimeFrom,
@@ -97,7 +110,6 @@ export default class Appointments extends HTMLElement {
       signal: this.abortControllerSubscriptionCourseAppointmentBooking.signal
     }
     const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptioncourseappointmentbooking'
-    debugger
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
@@ -137,6 +149,44 @@ export default class Appointments extends HTMLElement {
     }
     const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptioncourseappointmentdetail'
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', {
+      detail: {
+        fetch: fetch(endpoint, fetchOptions).then(async response => {
+          if (response.status >= 200 && response.status <= 299) return await response.json()
+        }),
+        id: data.courseId
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+
+  // CANCEL - REVERSAL
+  requestSubscriptionCourseAppointmentReversalListener = async (event) => {
+    console.log('!!!!requestSubscriptionCourseAppointmentReversalListener', event)
+    if (this.abortControllerSubscriptionCourseAppointmentReversalListener) this.abortControllerSubscriptionCourseAppointmentReversalListener.abort()
+    this.abortControllerSubscriptionCourseAppointmentReversalListener = new AbortController()
+    const tags = JSON.parse(event.detail.tags)
+
+    const data = {
+      courseAppointmentDate: tags[0].courseAppointmentDate,
+      courseAppointmentTimeFrom: tags[0].courseAppointmentTimeFrom,
+      courseId: tags[0].courseId,
+      courseType: tags[0].courseType,
+      subscriptionId: tags[1].subscriptionId,
+      subscriptionType: tags[1].subscriptionType,
+      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
+    }
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      signal: this.abortControllerSubscriptionCourseAppointmentReversalListener.signal
+    }
+    const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptioncourseappointmentreversal'
+    this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()

@@ -23,16 +23,29 @@ export default class DialogStatusButton extends Shadow() {
     // if (this.shouldRenderCSS()) this.renderCSS()
     // if (this.shouldRenderHTML()) this.renderHTML(this.dataContent, this.dataSubscription)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
   }
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
   }
 
   updateSubscriptionCourseAppointmentDetailListener = event => {
     event.detail.fetch.then(courseDetail => {
       if (this.dataset.id * 1 === event.detail.id) {
         const btn = this.renderDialogActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.dataContent)), this.escapeForHtml(JSON.stringify(this.dataSubscription)))
+        this.html = ''
+        this.html = btn
+      }
+    })
+  }
+
+  updateSubscriptionCourseAppointmentReversalListener = event => {
+    event.detail.fetch.then(courseDetail => {
+      if (this.dataset.id * 1 === event.detail.id) {
+        const btn = this.renderDialogActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.dataContent)), this.escapeForHtml(JSON.stringify(this.dataSubscription)))
+        debugger
         this.html = ''
         this.html = btn
       }
@@ -122,7 +135,7 @@ export default class DialogStatusButton extends Shadow() {
 
   renderDialogActionButton (subscriptionMode, status, content, selectedSubscription) {
     const btnBooking = `<ks-a-button namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'>DIATermin buchen</ks-a-button>`
-    const btnCancel = `<ks-a-button color="quaternary" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'>DIATermin stornieren</ks-a-button>`
+    const btnCancel = `<ks-a-button color="quaternary" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'>DIATermin stornieren</ks-a-button>`
 
     const actionButton = {
       FLAT: {

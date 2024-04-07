@@ -25,12 +25,14 @@ export default class AppointmentTile extends Tile {
     super.connectedCallback()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
   }
 
   disconnectedCallback () {
     super.disconnectedCallback()
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
   }
 
   // DETAIL
@@ -131,6 +133,19 @@ export default class AppointmentTile extends Tile {
         //
         statusInfo.innerHTML = st.info
         statusInfo.classList = st.css.info
+      }
+    })
+  }
+
+  // CANCEL
+  updateSubscriptionCourseAppointmentReversalListener = event => {
+    event.detail.fetch.then(x => {
+      if (this.dialog) {
+        console.log('reversal response: ', x)
+        const dialogContent = this.dialog.shadowRoot.getElementById('content')
+        const description = dialogContent.querySelector('#description')
+        description.innerHTML = ''
+        description.innerHTML = '<h1>Sie haben den Termin erfolgreich storniert</h1>'
       }
     })
   }
@@ -291,6 +306,10 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/atoms/dialogStatusButton/DialogStatusButton.js`,
         name: 'a-dialog-status-button'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/atoms/courseInfo/CourseInfo.js`,
+        name: 'a-course-info'
       }
     ])
     Promise.all([fetchModules]).then((children) => {
@@ -326,6 +345,7 @@ export default class AppointmentTile extends Tile {
               <!-- --> 
               <div class="course-info">
                 <div id="status-wrapper" class="icon-info">
+                  <a-course-info data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}"></a-course-info>
                   <a-icon-mdx id="status-icon" icon-name="${tileStatus.icon}" size="1.5em" tabindex="0" class="${tileStatus.css.status}"></a-icon-mdx>
                   <span class="m-tile__content"><span id="status" class="${tileStatus.css.status}">${tileStatus.status}</span> <span id="status-info" class="${tileStatus.css.info}">${tileStatus.info}</span></span>
                 </div> 
