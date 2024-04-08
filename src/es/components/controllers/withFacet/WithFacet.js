@@ -245,6 +245,8 @@ export default class WithFacet extends Shadow() {
   constructFilterItem (event) {
     const filterItem = event.detail?.wrapper?.filterItem
 
+    
+
     return filterItem
       ? `{
         "children": [
@@ -264,9 +266,9 @@ export default class WithFacet extends Shadow() {
               ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
               "selected": ${hasSameLabel
                 ? isCheckedNullOrUndefined
-                  ? child.selected
+                  ? (child.selected || false)
                   : event.detail.target.checked
-                : child.selected},
+                : (child.selected || false)},
               ${child.sort ? `"sort": ${child.sort},` : ''}
               ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
               ${child.typ ? `"typ": "${child.typ}",` : ''}
