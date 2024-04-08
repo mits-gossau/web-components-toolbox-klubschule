@@ -105,7 +105,8 @@ export default class Appointments extends HTMLElement {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
-        id: data.courseId
+        id: data.courseId,
+        type: 'booking'
       },
       bubbles: true,
       cancelable: true,
@@ -118,7 +119,6 @@ export default class Appointments extends HTMLElement {
     console.log('!!!!requestSubscriptionCourseAppointmentDetailListener', event)
     if (this.abortControllerSubscriptionCourseAppointmentDetail) this.abortControllerSubscriptionCourseAppointmentDetail.abort()
     this.abortControllerSubscriptionCourseAppointmentDetail = new AbortController()
-    debugger
     const tags = JSON.parse(event.detail.tags)
     const data = {
       courseAppointmentDate: tags[0].courseAppointmentDate,
@@ -183,7 +183,8 @@ export default class Appointments extends HTMLElement {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
-        id: data.courseId
+        id: data.courseId,
+        type: 'cancel'
       },
       bubbles: true,
       cancelable: true,

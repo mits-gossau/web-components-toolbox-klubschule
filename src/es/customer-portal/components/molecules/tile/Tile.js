@@ -1,6 +1,6 @@
 // @ts-check
 import Tile from '../../../../components/molecules/tile/Tile.js'
-import { courseAppointmentStatusMapping, subscriptionMode } from '../../../helpers/mapping.js'
+import { courseAppointmentStatusMapping, actionType } from '../../../helpers/mapping.js'
 
 /**
  * @export
@@ -19,6 +19,9 @@ export default class AppointmentTile extends Tile {
     this.selectedSubscription = null
     this.tileActionButtonReplace = null
     this.tileActionButtonReplaceIcon = null
+    this.actionType = actionType.detail
+    this.viewContent = null
+    this.courseDetail = null
   }
 
   connectedCallback () {
@@ -26,6 +29,7 @@ export default class AppointmentTile extends Tile {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
+    document.body.addEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.updateDialogBookingDetailListener)
   }
 
   disconnectedCallback () {
@@ -33,11 +37,21 @@ export default class AppointmentTile extends Tile {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
+    document.body.removeEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.updateDialogBookingDetailListener)
+  }
+
+  updateDialogBookingDetailListener = event => {
+    if (this.dataset.id === event.detail.tags[0]) {
+      const content = this.dialog.shadowRoot.getElementById('view-content')
+      const d = this.renderDialogContentDetails(this.courseContent, this.courseContent)
+      debugger
+      content.innerHTML = d
+    }
   }
 
   // DETAIL
   updateSubscriptionCourseAppointmentDetailListener = event => {
-    const type = event.detail.type
+    this.actionType = event.detail.type
     event.detail.fetch.then(courseDetail => {
       console.log(courseDetail.courseId, this.dataset.id)
       if (this.dataset.id * 1 === courseDetail.courseId) {
@@ -45,17 +59,23 @@ export default class AppointmentTile extends Tile {
         if (this.dialog) {
           // TODO: HACK
           // !!!
-          const description = this.dialog.shadowRoot.getElementById('description')
-          description.innerHTML = courseDetail.courseDescription
+          // const description = this.dialog.shadowRoot.getElementById('description')
+          // description.innerHTML = courseDetail.courseDescription
+
+          this.courseDetail = courseDetail
+          const content = this.dialog.shadowRoot.getElementById('view-content')
+          const d = this.renderDialogContentDetails(this.courseContent, this.courseDetail)
+          content.innerHTML = d
+          debugger
 
           let newTitle = ''
-          if (type === 'detail') {
-            newTitle = 'Detail'
+          if (this.actionType === 'detail') {
+            newTitle = 'Termindetails'
           }
-          if (type === 'booking') {
+          if (this.actionType === 'booking') {
             newTitle = 'Termin buchen'
           }
-          if (type === 'cancel') {
+          if (this.actionType === 'cancel') {
             newTitle = 'Termin stornieren'
           }
 
@@ -129,15 +149,15 @@ export default class AppointmentTile extends Tile {
 
         //
         this.currentTile = this.root.querySelector('m-load-template-tag').root.querySelector('div')
-        const statusIcon = this.currentTile.querySelector('#status-icon')
-        const status = this.currentTile.querySelector('#status')
-        const statusInfo = this.currentTile.querySelector('#status-info')
+        // const statusIcon = this.currentTile.querySelector('#status-icon')
+        // const status = this.currentTile.querySelector('#status')
+        // const statusInfo = this.currentTile.querySelector('#status-info')
 
         //
         const st = this.getTileState(x)
         this.currentTile.classList.add(st.css.border)
-        statusIcon.setAttribute('icon-name', st.icon)
-        statusIcon.classList.add(st.css.status)
+        // statusIcon.setAttribute('icon-name', st.icon)
+        // statusIcon.classList.add(st.css.status)
         //
         // status.innerHTML = st.status
         // status.classList.add(st.css.status)
@@ -353,7 +373,6 @@ export default class AppointmentTile extends Tile {
             <div class="parent-body">
               <div class="course-info">
                 <div>
-                 
                   <span class="m-tile__title title"> <a-course-title data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-course-title></span>
                 </div>
                 <div>
@@ -370,8 +389,6 @@ export default class AppointmentTile extends Tile {
               <div class="course-info">
                 <div id="status-wrapper" class="icon-info">
                   <a-course-info data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}"></a-course-info>
-                  ((-- <a-icon-mdx id="status-icon" icon-name="${tileStatus.icon}" size="1.5em" tabindex="0" class="${tileStatus.css.status}"></a-icon-mdx>
-                  <span class="m-tile__content"><span id="status" class="${tileStatus.css.status}">${tileStatus.status}</span> <span id="status-info" class="${tileStatus.css.info}">${tileStatus.info}</span></span> --))
                 </div> 
                 <div class="icon-info">
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
@@ -437,11 +454,8 @@ export default class AppointmentTile extends Tile {
         </div>
         <div class="container dialog-content">
           <p class="reset-link"></p>
-          <div class="sub-content">
-            <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
-            <div id="content">
-              <p id="description"></p>
-            </div>
+          <div class="sub-content" id="view-content">
+            ${this.renderDialogContent(content)}
           </div>
         </div>
         <div class="container dialog-footer">
@@ -455,31 +469,68 @@ export default class AppointmentTile extends Tile {
       `
   }
 
-  renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {
-    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary">Termin buchen</ks-a-button>`
-    const btnCancel = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'cancel' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
-
-    const actionButton = {
-      FLAT: {
-        1: btnBooking,
-        2: '',
-        3: '',
-        4: '',
-        5: btnCancel,
-        6: ''
-      },
-      SUBSCRIPTION: {
-        1: btnBooking,
-        2: '',
-        3: '',
-        4: '',
-        5: btnCancel,
-        6: ''
-      }
+  renderDialogContent (data) {
+    const expr = this.actionType
+    console.log('TYP', expr)
+    switch (expr) {
+      case actionType.detail:
+        return this.renderDialogContentDetails(data)
+      case actionType.booking:
+        return this.renderDialogContentBooking(data)
+      case actionType.cancel:
+        return this.renderDialogContentBookingSuccess(data)
+      default:
+        return this.renderDialogContentDetails(data)
     }
-
-    return actionButton[subscriptionMode][status]
   }
+
+  // dialog default content view
+  renderDialogContentDetails (data, detail = {}) {
+    return `<div><h2>${data.courseTitle} (${data.courseType}_${data.courseId})</h2>
+            <div id="content">
+              <p id="description">${detail.courseDescription}</p>
+            </div></div>`
+  }
+
+  // dialog final booking content view
+  renderDialogContentBooking (data, detail = {}) {
+    return `<div><h2>${data.courseTitle} (${data.courseType}_${data.courseId})</h2>
+            <div id="content">
+              <p id="description">${detail.courseDescription}</p>
+              <p>Preis: ${detail.lessonPrice}</p>
+            </div></div>`
+  }
+
+  // dialog success booking content view
+  renderDialogContentBookingSuccess (data) {
+    return ``
+  }
+
+  // renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {
+  //   const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary">Termin buchen</ks-a-button>`
+  //   const btnCancel = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'cancel' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
+
+  //   const actionButton = {
+  //     FLAT: {
+  //       1: btnBooking,
+  //       2: '',
+  //       3: '',
+  //       4: '',
+  //       5: btnCancel,
+  //       6: ''
+  //     },
+  //     SUBSCRIPTION: {
+  //       1: btnBooking,
+  //       2: '',
+  //       3: '',
+  //       4: '',
+  //       5: btnCancel,
+  //       6: ''
+  //     }
+  //   }
+
+  //   return actionButton[subscriptionMode][status]
+  // }
 
   formatCourseAppointmentDate (date) {
     const dateObject = new Date(date)

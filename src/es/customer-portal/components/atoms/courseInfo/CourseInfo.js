@@ -76,7 +76,8 @@ export default class CourseInfo extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        display:block;
+        display:flex;
+        align-items: center;
       }
       :host .success {
         color:#00997F;
