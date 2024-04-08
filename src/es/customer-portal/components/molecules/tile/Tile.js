@@ -30,6 +30,7 @@ export default class AppointmentTile extends Tile {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.updateDialogBookingDetailListener)
+    document.body.addEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.updateDialogBookingCancelListener)
   }
 
   disconnectedCallback () {
@@ -38,14 +39,23 @@ export default class AppointmentTile extends Tile {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.removeEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.updateDialogBookingDetailListener)
+    document.body.removeEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.updateDialogBookingCancelListener)
   }
 
   updateDialogBookingDetailListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
-      const content = this.dialog.shadowRoot.getElementById('view-content')
-      const d = this.renderDialogContentDetails(this.courseContent, this.courseContent)
-      debugger
-      content.innerHTML = d
+      if (this.viewContent) {
+        this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseContent, this.courseDetail)
+      }
+    }
+  }
+
+  // CANCEL
+  updateDialogBookingCancelListener = event => {
+    if (this.dataset.id === event.detail.tags[0]) {
+      if (this.viewContent) {
+        this.viewContent.innerHTML = this.renderDialogContentCancel(this.courseContent, this.courseDetail)
+      }
     }
   }
 
@@ -63,9 +73,8 @@ export default class AppointmentTile extends Tile {
           // description.innerHTML = courseDetail.courseDescription
 
           this.courseDetail = courseDetail
-          const content = this.dialog.shadowRoot.getElementById('view-content')
-          const d = this.renderDialogContentDetails(this.courseContent, this.courseDetail)
-          content.innerHTML = d
+          this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
+          this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseContent, this.courseDetail)
           debugger
 
           let newTitle = ''
@@ -112,10 +121,11 @@ export default class AppointmentTile extends Tile {
     event.detail.fetch.then(x => {
       if (this.dialog) {
         console.log('update booking response: ', x)
-        const dialogContent = this.dialog.shadowRoot.getElementById('content')
-        const description = dialogContent.querySelector('#description')
-        description.innerHTML = ''
-        description.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
+        // const dialogContent = this.dialog.shadowRoot.getElementById('content')
+        // const description = dialogContent.querySelector('#description')
+        // description.innerHTML = ''
+        // description.innerHTML = '<h1>Sie haben den Termin erfolgreich gebucht</h1>'
+        this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseContent, this.courseDetail)
 
         //
         // const btn = this.dialog.shadowRoot.querySelector('ks-a-button').shadowRoot
@@ -177,6 +187,9 @@ export default class AppointmentTile extends Tile {
         const description = dialogContent.querySelector('#description')
         description.innerHTML = ''
         description.innerHTML = '<h1>Sie haben den Termin erfolgreich storniert</h1>'
+
+        this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
+        this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseContent, this.courseDetail)
 
         //
         this.currentTile = this.root.querySelector('m-load-template-tag').root.querySelector('div')
@@ -470,18 +483,19 @@ export default class AppointmentTile extends Tile {
   }
 
   renderDialogContent (data) {
-    const expr = this.actionType
-    console.log('TYP', expr)
-    switch (expr) {
-      case actionType.detail:
-        return this.renderDialogContentDetails(data)
-      case actionType.booking:
-        return this.renderDialogContentBooking(data)
-      case actionType.cancel:
-        return this.renderDialogContentBookingSuccess(data)
-      default:
-        return this.renderDialogContentDetails(data)
-    }
+    return this.renderDialogContentDetails(data)
+    // const expr = this.actionType
+    // console.log('TYP', expr)
+    // switch (expr) {
+    //   case actionType.detail:
+    //     return this.renderDialogContentDetails(data)
+    //   case actionType.booking:
+    //     return this.renderDialogContentBooking(data)
+    //   case actionType.cancel:
+    //     return this.renderDialogContentBookingSuccess(data)
+    //   default:
+    //     return this.renderDialogContentDetails(data)
+    // }
   }
 
   // dialog default content view
@@ -496,14 +510,22 @@ export default class AppointmentTile extends Tile {
   renderDialogContentBooking (data, detail = {}) {
     return `<div><h2>${data.courseTitle} (${data.courseType}_${data.courseId})</h2>
             <div id="content">
-              <p id="description">${detail.courseDescription}</p>
-              <p>Preis: ${detail.lessonPrice}</p>
+              <p id="description">Buchen?</p>
+              <p>Preis: ${data.lessonPrice}</p>
             </div></div>`
   }
 
   // dialog success booking content view
-  renderDialogContentBookingSuccess (data) {
-    return ``
+  renderDialogContentBookingSuccess (data, detail = {}) {
+    return '<div><h1>Sie haben den Termin erfolgreich gebucht</h1></div>'
+  }
+
+  renderDialogContentCancel (data, detail = {}) {
+    return 'cancel really?'
+  }
+
+  renderDialogContentCancelSuccess (data, detail = {}) {
+    return 'cancel ok'
   }
 
   // renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {
