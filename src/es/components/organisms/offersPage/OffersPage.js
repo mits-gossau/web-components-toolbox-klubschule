@@ -7,11 +7,11 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class OffersPage extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.hidden = true
     const showPromises = []
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
@@ -21,7 +21,7 @@ export default class OffersPage extends Shadow() {
     })
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
@@ -32,14 +32,14 @@ export default class OffersPage extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.root.querySelector('ks-c-with-facet') || !this.ksMTab
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
         display: contents !important;
@@ -52,7 +52,7 @@ export default class OffersPage extends Shadow() {
    * Render HTML
    * @return Promise<void>
    */
-  renderHTML() {
+  renderHTML () {
     this.html = this.isEventSearch ? this.tabContentOne : /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
@@ -178,9 +178,8 @@ export default class OffersPage extends Shadow() {
     ])
   }
 
-
-  get tabContentOne() {
-      return /* html */ `
+  get tabContentOne () {
+    return /* html */ `
       <ks-c-with-facet
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
@@ -388,7 +387,7 @@ export default class OffersPage extends Shadow() {
     `
   }
 
-  get tabContentTwo() {
+  get tabContentTwo () {
     return /* HTML */ `
       <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)"">
         <o-grid namespace="grid-12er-">
@@ -473,15 +472,15 @@ export default class OffersPage extends Shadow() {
     `
   }
 
-  get ksMTab() {
+  get ksMTab () {
     return this.root.querySelector('ks-m-tab')
   }
 
-  get badgeContainer() {
+  get badgeContainer () {
     return this.root.querySelector('.js-badge__selector')
   }
 
-  get isEventSearch() {
-    return this.hasAttribute("event-page")
+  get isEventSearch () {
+    return this.hasAttribute('event-page')
   }
 }
