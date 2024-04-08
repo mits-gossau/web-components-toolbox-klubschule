@@ -82,16 +82,6 @@ export default class Appointments extends HTMLElement {
     this.abortControllerSubscriptionCourseAppointmentBooking = new AbortController()
     const tags = JSON.parse(event.detail.tags)
 
-    /* {
-      "userId": "50505A02-2AA4-47AA-9AED-0B759902A0C2",
-        "subscriptionType": "7A",
-          "subscriptionId": 32925,
-            "courseType": "E",
-              "courseId": 1707277,
-                "courseAppointmentDate": "2024-04-05T00:00:00",
-                  "courseAppointmentTimeFrom": "15:30"
-    } */
-
     const data = {
       courseAppointmentDate: tags[0].courseAppointmentDate,
       courseAppointmentTimeFrom: tags[0].courseAppointmentTimeFrom,
@@ -128,8 +118,8 @@ export default class Appointments extends HTMLElement {
     console.log('!!!!requestSubscriptionCourseAppointmentDetailListener', event)
     if (this.abortControllerSubscriptionCourseAppointmentDetail) this.abortControllerSubscriptionCourseAppointmentDetail.abort()
     this.abortControllerSubscriptionCourseAppointmentDetail = new AbortController()
+    debugger
     const tags = JSON.parse(event.detail.tags)
-
     const data = {
       courseAppointmentDate: tags[0].courseAppointmentDate,
       courseAppointmentTimeFrom: tags[0].courseAppointmentTimeFrom,
@@ -139,6 +129,7 @@ export default class Appointments extends HTMLElement {
       subscriptionType: tags[1].subscriptionType,
       userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
     }
+    const type = tags[2] ? tags[2].type : ''
     const fetchOptions = {
       method: 'POST',
       headers: {
@@ -153,7 +144,8 @@ export default class Appointments extends HTMLElement {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
-        id: data.courseId
+        id: data.courseId,
+        type
       },
       bubbles: true,
       cancelable: true,

@@ -125,7 +125,6 @@ export default class CourseInfo extends Shadow() {
    * @returns void
    */
   renderHTML (data) {
-    debugger
     this.wrapper = this.root.querySelector('div') || document.createElement('div')
     this.icon = `<a-icon-mdx id="status-icon" icon-name="${data.icon}" size="1.5em" tabindex="0" class="${data.css.status}"></a-icon-mdx>`
     this.html = `${this.icon}<span class="m-tile__content" ><span id="status" class="${data.css.status}">${data.status}</span> <span id="status-info" class="${data.css.info}">${data.info}</span></span>`
@@ -133,7 +132,6 @@ export default class CourseInfo extends Shadow() {
 
   getTileState (data) {
     const type = courseAppointmentStatusMapping[data.courseAppointmentStatus]
-    debugger
     const { courseAppointmentFreeSeats } = data
 
     return {

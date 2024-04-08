@@ -37,9 +37,9 @@ export default class AppointmentTile extends Tile {
 
   // DETAIL
   updateSubscriptionCourseAppointmentDetailListener = event => {
+    const type = event.detail.type
     event.detail.fetch.then(courseDetail => {
       console.log(courseDetail.courseId, this.dataset.id)
-
       if (this.dataset.id * 1 === courseDetail.courseId) {
         this.dialog = this.root.querySelector('m-dialog')
         if (this.dialog) {
@@ -48,17 +48,28 @@ export default class AppointmentTile extends Tile {
           const description = this.dialog.shadowRoot.getElementById('description')
           description.innerHTML = courseDetail.courseDescription
 
-          const dc = {
-            1: 'Termin buchen',
-            2: '2',
-            3: '3',
-            4: '4',
-            5: 'Termin stornieren',
-            6: '6'
+          let newTitle = ''
+          if (type === 'detail') {
+            newTitle = 'Detail'
+          }
+          if (type === 'booking') {
+            newTitle = 'Termin buchen'
+          }
+          if (type === 'cancel') {
+            newTitle = 'Termin stornieren'
           }
 
+          // const dc = {
+          //   1: 'Termin buchen',
+          //   2: '',
+          //   3: '',
+          //   4: '',
+          //   5: 'Termin stornieren',
+          //   6: ''
+          // }
           const title = this.dialog.shadowRoot.getElementById('title')
-          title.innerHTML = dc[courseDetail.courseAppointmentStatus]
+          // title.innerHTML = dc[courseDetail.courseAppointmentStatus]
+          title.innerHTML = newTitle
 
           // action btn
           /* const actionBtn = this.dialog.shadowRoot.getElementById('btn-action')
@@ -318,6 +329,10 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/atoms/courseInfo/CourseInfo.js`,
         name: 'a-course-info'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/atoms/courseTitle/CourseTitle.js`,
+        name: 'a-course-title'
       }
     ])
     Promise.all([fetchModules]).then((children) => {
@@ -338,7 +353,8 @@ export default class AppointmentTile extends Tile {
             <div class="parent-body">
               <div class="course-info">
                 <div>
-                  <span class="m-tile__title title">${content.courseTitle} (${content.courseType}_${content.courseId})</span>
+                 
+                  <span class="m-tile__title title"> <a-course-title data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-course-title></span>
                 </div>
                 <div>
                   <span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span>
@@ -354,8 +370,8 @@ export default class AppointmentTile extends Tile {
               <div class="course-info">
                 <div id="status-wrapper" class="icon-info">
                   <a-course-info data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}"></a-course-info>
-                  <a-icon-mdx id="status-icon" icon-name="${tileStatus.icon}" size="1.5em" tabindex="0" class="${tileStatus.css.status}"></a-icon-mdx>
-                  <span class="m-tile__content"><span id="status" class="${tileStatus.css.status}">${tileStatus.status}</span> <span id="status-info" class="${tileStatus.css.info}">${tileStatus.info}</span></span>
+                  ((-- <a-icon-mdx id="status-icon" icon-name="${tileStatus.icon}" size="1.5em" tabindex="0" class="${tileStatus.css.status}"></a-icon-mdx>
+                  <span class="m-tile__content"><span id="status" class="${tileStatus.css.status}">${tileStatus.status}</span> <span id="status-info" class="${tileStatus.css.info}">${tileStatus.info}</span></span> --))
                 </div> 
                 <div class="icon-info">
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
@@ -411,7 +427,7 @@ export default class AppointmentTile extends Tile {
 
   renderDialog (content, selectedSubscription) {
     return /* html */ `
-      <m-dialog namespace="dialog-left-slide-in-">
+      <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${content.courseId}">
         <div class="container dialog-header">
           <div id="back"></div>
           <h3 id="title"></h3>
