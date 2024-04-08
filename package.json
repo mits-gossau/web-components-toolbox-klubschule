@@ -5,7 +5,8 @@
   "main": "./index.html",
   "scripts": {
     "fix": "standard --fix",
-    "serve": "live-server --port=3000 --host=localhost --no-css-inject",
+    "serve": "live-server --port=8081 --host=localhost --no-css-inject",
+    "serve3000": "live-server --port=3000 --host=localhost --no-css-inject",
     "test": "live-server --port=2400 --host=localhost --no-browser --ignorePattern=.* & npx playwright test --config=e2e/ && killall node",
     "update": "git submodule update --init --recursive --remote --force"
   },
