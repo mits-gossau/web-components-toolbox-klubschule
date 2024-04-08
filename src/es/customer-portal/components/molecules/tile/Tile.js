@@ -128,11 +128,11 @@ export default class AppointmentTile extends Tile {
         statusIcon.setAttribute('icon-name', st.icon)
         statusIcon.classList.add(st.css.status)
         //
-        status.innerHTML = st.status
-        status.classList.add(st.css.status)
+        // status.innerHTML = st.status
+        // status.classList.add(st.css.status)
         //
-        statusInfo.innerHTML = st.info
-        statusInfo.classList = st.css.info
+        // statusInfo.innerHTML = st.info
+        // statusInfo.classList = st.css.info
       }
     })
   }
@@ -146,6 +146,14 @@ export default class AppointmentTile extends Tile {
         const description = dialogContent.querySelector('#description')
         description.innerHTML = ''
         description.innerHTML = '<h1>Sie haben den Termin erfolgreich storniert</h1>'
+
+        //
+        this.currentTile = this.root.querySelector('m-load-template-tag').root.querySelector('div')
+        const st = this.getTileState(x)
+        const defaultBorder = this.currentTile.classList[0]
+        this.currentTile.classList = ''
+        this.currentTile.classList.add(defaultBorder)
+        this.currentTile.classList.add(st.css.border)
       }
     })
   }

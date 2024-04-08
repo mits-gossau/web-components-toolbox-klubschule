@@ -22,28 +22,32 @@ export default class CourseInfo extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML(tileStatus)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   }
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+  }
+
+  updateSubscriptionCourseAppointmentBookingListener = event => {
+    event.detail.fetch.then(courseDetail => {
+      if (this.dataset.id * 1 === event.detail.id) {
+        //
+        const st = this.getTileState(courseDetail)
+        this.html = ''
+        this.renderHTML(st)
+      }
+    })
   }
 
   updateSubscriptionCourseAppointmentReversalListener = event => {
     event.detail.fetch.then(courseDetail => {
       if (this.dataset.id * 1 === event.detail.id) {
         //
-        debugger
         const st = this.getTileState(courseDetail)
         this.html = ''
         this.renderHTML(st)
-        // this.icon.setAttribute('icon-name', st.icon)
-        // statusIcon.classList.add(st.css.status)
-        // //
-        // status.innerHTML = st.status
-        // status.classList.add(st.css.status)
-        // //
-        // statusInfo.innerHTML = st.info
-        // statusInfo.classList = st.css.info
       }
     })
   }
