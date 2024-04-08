@@ -310,7 +310,50 @@ export default class OffersPage extends Shadow() {
                           </a-button>
                       </p>
                       <div class="sub-content">
-                          <a-input inputid="location-search" width="100%" placeholder="Angebot suchen" icon-name="Search" icon-size="calc(20rem/18)" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>
+                          <!--<a-input inputid="location-search" width="100%" placeholder="Angebot suchen" icon-name="Search" icon-size="calc(20rem/18)" search submit-search="request-auto-complete" any-key-listener type="search"></a-input>-->
+                          <ks-c-auto-complete
+                            auto-complete-selection="offers-page-auto-complete-selection"
+                            request-auto-complete="offers-page-request-auto-complete"
+                            input-change="offers-page-search-change"
+                            ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+                            ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
+                          >
+                            <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
+                              <div class="container">
+                                <a-input
+                                  inputid="offers-page-input-search"
+                                  autofocus
+                                  placeholder="Angebot suchen"
+                                  icon-name="Search" 
+                                  icon-size="calc(20rem/18)"
+                                  submit-search="offers-page-request-auto-complete"
+                                  any-key-listener
+                                  type="search"
+                                  answer-event-name="offers-page-search-change"
+                                  delete-listener
+                                  search
+                                >
+                                </a-input>
+                                <div id="close">
+                                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                                </div>
+                              </div>
+                              <div class="container">
+                                <ks-m-auto-complete-list auto-complete-selection="offers-page-auto-complete-selection">
+                                </ks-m-auto-complete-list>
+                              </div>
+                              <a-input
+                                id="show-modal"
+                                inputid="show-modal"
+                                placeholder="Ihr Angebot"
+                                icon-name="Search"
+                                icon-size="1.25em"
+                                search type="search"
+                                answer-event-name="offers-page-search-change"
+                              >
+                              </a-input>
+                            </m-dialog>
+                          </ks-c-auto-complete>
                           <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="Schliessen" translation-key-reset="zur&uuml;cksetzen"></ks-m-filter-categories>
                       </div>
                   </div>
