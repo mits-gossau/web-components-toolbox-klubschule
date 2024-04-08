@@ -44,6 +44,14 @@ export default class OffersPage extends Shadow() {
       :host {
         display: contents !important;
       }
+      :host ks-o-body-section {
+        padding: 3.375em 0 5em;
+      }
+      @media only screen and (max-width: _max-width_) {
+        :host ks-o-body-section {
+          padding: 3em 0 4em;
+        }
+      }
     `
     return Promise.resolve()
   }
@@ -180,7 +188,7 @@ export default class OffersPage extends Shadow() {
 
 
   get tabContentOne() {
-      return /* html */ `
+    return /* html */ `
       <ks-c-with-facet
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
@@ -328,7 +336,7 @@ export default class OffersPage extends Shadow() {
               <section>
                   <ks-m-sort namespace="sort-right-"></ks-m-sort>
               </section>
-              <ks-m-tile-factory></ks-m-tile-factory>
+              <ks-m-tile-factory ${this.isEventSearch ? `event-detail-url="${this.getAttribute('event-detail-url')}"` : ''}></ks-m-tile-factory>
               ${this.badgeContainer ? /* HTML */ `
                 <ks-m-badge-legend>
                   ${this.badgeContainer.innerHTML}
@@ -439,6 +447,6 @@ export default class OffersPage extends Shadow() {
   }
 
   get isEventSearch() {
-    return this.hasAttribute("event-page")
+    return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
   }
 }

@@ -9,13 +9,13 @@ export default class TileFactory extends Shadow() {
   * @param options
   * @param {any} args
   */
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
   }
 
-  connectedCallback () {
+  connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('with-facet', this.withFacetEventNameListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
@@ -27,11 +27,11 @@ export default class TileFactory extends Shadow() {
     ))
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     document.body.removeEventListener('with-facet', this.withFacetEventNameListener)
   }
 
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -40,7 +40,7 @@ export default class TileFactory extends Shadow() {
   *
   * @return {Promise<void>}
   */
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */ `
     :host> section {
       display: flex;
@@ -66,7 +66,7 @@ export default class TileFactory extends Shadow() {
   *
   * @return {Promise<void>}
   */
-  fetchTemplate () {
+  fetchTemplate() {
     switch (this.getAttribute('namespace')) {
       case 'course-list-default-':
         return this.fetchCSS([{
@@ -83,7 +83,7 @@ export default class TileFactory extends Shadow() {
   * @param {any} fetch - An array of course fetch objects.
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  async renderHTML (fetch) {
+  async renderHTML(fetch) {
     /*
     // TODO: If needed do the loading animation
     this.fetchModules([
@@ -105,6 +105,10 @@ export default class TileFactory extends Shadow() {
         {
           path: `${this.importMetaUrl}../../organisms/tileList/TileList.js`,
           name: 'ks-o-tile-list'
+        },
+        {
+          path: `${this.importMetaUrl}../Event/Event.js`,
+          name: 'ks-m-event'
         }
       ])
     ]).then(([data]) => {
@@ -113,23 +117,42 @@ export default class TileFactory extends Shadow() {
         this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}</span>`
         return
       }
-      this.html = data.courses.reduce((acc, course) => acc + (course.children?.length
-        ? /* html */`<ks-o-tile-list data="{
-          ${this.fillGeneralTileInfo(course)},
-          'buttonMore': {
-            'text': 'Weitere Standorte',
-            'iconName': 'ArrowDownRight'
-          },
-          'tiles': [${course.children.reduce((acc, child, i, arr) => acc + `
-            {
-              ${this.fillGeneralTileInfo(child)}
-            }${i === arr.length - 1 ? '' : ','}
-          `, '')}
-          ]
-        }"></ks-o-tile-list>`
-        : /* html */`<ks-m-tile namespace="tile-default-" data="{
-          ${this.fillGeneralTileInfo(course)}
-        }"></ks-m-tile>`), '<section>') + '</section>'
+      this.html = data.courses.reduce(
+        (acc, course) => {
+          console.log(this.fillGeneralTileInfoEvents(course))
+          const tile = this.isEventSearch ? /* html */ `
+            <ks-m-event
+              event-detail-url='${this.isEventSearch}'
+              data="${this.fillGeneralTileInfoEvents(course)}"
+            ></ks-m-event>
+          ` : (
+            course.children?.length
+              ? /* html */`
+                <ks-o-tile-list data="{
+                  ${this.fillGeneralTileInfo(course)},
+                  'buttonMore': {
+                    'text': 'Weitere Standorte',
+                    'iconName': 'ArrowDownRight'
+                  },
+                  'tiles': [${course.children.reduce((acc, child, i, arr) => acc + `
+                    {
+                      ${this.fillGeneralTileInfo(child)}
+                    }${i === arr.length - 1 ? '' : ','}
+                  `, '')}
+                  ]
+                }">
+                </ks-o-tile-list>
+              `
+              : /* html */`
+                <ks-m-tile namespace="tile-default-" data="{
+                  ${this.fillGeneralTileInfo(course)}
+                }"></ks-m-tile>
+              `
+          )
+          return acc = acc + tile
+        },
+        '<section>'
+      ) + '</section>'
     }).catch(error => {
       console.error(error)
       this.html = ''
@@ -137,7 +160,7 @@ export default class TileFactory extends Shadow() {
     })
   }
 
-  fillGeneralTileInfo (course) {
+  fillGeneralTileInfo(course) {
     return `
       'title': '${course.title}',
       'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text',
@@ -167,5 +190,44 @@ export default class TileFactory extends Shadow() {
         'per': 'Semester'
       }
     `
+  }
+
+  fillGeneralTileInfoEvents(event) {
+    return `{
+      'id': '${event.id}',
+      'center_id': '${event.centerid}',
+      'language': '${event.parentkey.split('_')[0]}',
+      'typ': '${event.typ}',
+      'location': '${event.location.name}',
+      'gueltig_ab': '${event.dateBegin}',
+      'gueltig_bis': '${event.dateEnd}',
+      'days': '${event.days}',
+      'detail_mehr_label': '${event.detail_mehr_label || "Mehr Details"}',
+      'detail_weniger_label': '${event.detail_weniger_label || "Weniger Details"}',
+      'status': '${event.state}',
+      'status_label': '${event.status_label || "Status Label"}',
+      'lektionen_label': '${event.lektionen_label}',
+      'merken_label': '${event.merken_label || 'Merken'}',
+      'anmelden_label': '${event.anmelden_label || 'Anmelden'}',
+      'icons': [
+        {
+          'iconTooltip': 'Tooltip 1',
+          'name': 'Star'
+        },
+        {
+          'iconTooltip': 'Tooltip 2',
+          'name': 'Tag'
+        },
+        {
+          'iconTooltip': 'Tooltip 3',
+          'name': 'Percent'
+        }
+      ],
+      'deletable': ${event.deletable || "true"}
+    }`
+  }
+
+  get isEventSearch() {
+    return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
   }
 }
