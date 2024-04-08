@@ -46,6 +46,10 @@ export default class TileFactory extends Shadow() {
       display: flex;
       flex-direction: column;
       gap: 1em;
+      margin-bottom: 1em;
+    }
+    :host> section:last-child {
+      margin-bottom: 0;
     }
     : host > .error {
       color: var(--color-error);
@@ -80,6 +84,8 @@ export default class TileFactory extends Shadow() {
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
   async renderHTML (fetch) {
+    /*
+    // TODO: If needed do the loading animation
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/loading/Loading.js`,
@@ -88,6 +94,7 @@ export default class TileFactory extends Shadow() {
     ])
     this.html = ''
     this.html = '<a-loading></a-loading>'
+    */
     return Promise.all([
       fetch,
       this.fetchModules([
@@ -101,7 +108,7 @@ export default class TileFactory extends Shadow() {
         }
       ])
     ]).then(([data]) => {
-      this.html = ''
+      if (!data.isNextPage) this.html = ''
       if (!data) {
         this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}</span>`
         return
