@@ -119,7 +119,6 @@ export default class TileFactory extends Shadow() {
       }
       this.html = data.courses.reduce(
         (acc, course) => {
-          console.log(this.fillGeneralTileInfoEvents(course))
           const tile = this.isEventSearch ? /* html */ `
             <ks-m-event
               event-detail-url='${this.isEventSearch}'

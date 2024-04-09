@@ -7,20 +7,19 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class WithFacetCounter extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
   }
-  
-  connectedCallback() {
+
+  connectedCallback () {
     document.body.addEventListener('with-facet', this.receiveData)
     this.initialContent = this.root.children[0]
   }
-  
-  disconnectedCallback() {
+
+  disconnectedCallback () {
     document.body.removeEventListener('with-facet', this.receiveData)
   }
-  
-  
+
   /**
   * Event Listener: Get Data from WithFacet
   */
@@ -34,7 +33,7 @@ export default class WithFacetCounter extends Shadow() {
       this.html = ''
       this.html = /* HTML */ `<ks-a-heading tag="h1">${total} ${label}</ks-a-heading>`
     }
-    
+
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
