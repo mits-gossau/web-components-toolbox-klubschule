@@ -63,16 +63,17 @@ export default class WithFacet extends Shadow() {
       } else {
         shouldResetAllFilters = event.type === 'reset-all-filters'
         const shouldResetFilter = event.type === 'reset-filter'
+        
         const initialFilters = JSON.parse(this.initialRequest).filter
-        const test = initialFilters.map((filter) => JSON.stringify(filter))
+        const initialFiltersAsString = initialFilters.map((filter) => JSON.stringify(filter))
 
         this.filters = []
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
 
         // if there is an initial Filter set (e.g. for Events) we want to keep it
-        if (filter && test?.length) {
-          this.filters.push(test)
+        if (filter && initialFiltersAsString?.length) {
+          this.filters.push(initialFiltersAsString)
         }
 
         if (shouldResetAllFilters) {
