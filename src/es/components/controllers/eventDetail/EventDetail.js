@@ -42,7 +42,6 @@ export default class EventDetail extends Shadow() {
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/'}`
 
     this.requestEventDetailListener = (event) => {
-      console.log(event)
       event.detail.resolve(fetch(`${apiUrl}?lang=${event.detail.language}&typ=${event.detail.typ}&id=${event.detail.id}&center_id=${event.detail.center_id}`, {
         method: 'GET'
       }).then(response => {

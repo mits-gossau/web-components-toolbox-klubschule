@@ -192,7 +192,6 @@ export default class OffersPage extends Shadow() {
 
   get tabContentOne() {
     const initialRequest = this.getAttribute('initial-request')
-    console.log(JSON.parse(initialRequest).psize)
     return /* html */ `
       <ks-c-with-facet
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}

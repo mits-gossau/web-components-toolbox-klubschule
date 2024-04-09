@@ -40,7 +40,6 @@ export default class WithFacet extends Shadow() {
     let initialRequest = this.getAttribute('initial-request')
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(this.url.search)
-    console.log(this.params)
     this.isMocked = this.hasAttribute('mock')
     const apiUrl = this.isMocked
       ? `${this.importMetaUrl}./mock/default.json`
