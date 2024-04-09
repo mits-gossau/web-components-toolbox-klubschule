@@ -17,7 +17,9 @@ export default class FilterCategories extends Shadow() {
 
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
-    // this.html = this.mainNav
+    this.keepDialogOpenEventListener = event => {
+      this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
+    }
   }
 
   connectedCallback () {
@@ -29,10 +31,13 @@ export default class FilterCategories extends Shadow() {
         cancelable: true,
         composed: true
       }))
+
+    this.addEventListener('click', this.keepDialogOpenEventListener)
   }
 
   disconnectedCallback () {
     document.body.removeEventListener('with-facet', this.withFacetEventListener)
+    this.removeEventListener('click', this.keepDialogOpenEventListener)
   }
 
   shouldRenderCSS () {
@@ -118,7 +123,7 @@ export default class FilterCategories extends Shadow() {
           if (this.hasAttribute('translation-key-reset')) {
             resetButton = /* html */`
               <p class="reset-link">
-                <a-button namespace="button-transparent-" request-event-name="reset-filters">
+                <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-parent="${filterItem.urlpara}_${filterItem.id}">
                   ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
                 </a-button>
               </p>
@@ -133,7 +138,7 @@ export default class FilterCategories extends Shadow() {
             if (filterItem.visible === false || filterItem.children?.length === 0) return
 
             const navLevelItem = /* html */ `
-              <m-dialog id="${filterItem.id}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+              <m-dialog id="${filterItem.id}" ${filterItem.id === this.lastId ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
                 <div class="container dialog-header" tabindex="0">
                   <a-button id="close-back">
                     <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>

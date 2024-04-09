@@ -12,14 +12,17 @@ export default class Badge extends Shadow() {
   }
 
   connectedCallback () {
-    if (this.shouldRenderCSS()) this.renderCSS()
-
     this.text = this.getAttribute('text') || null
     this.type = this.getAttribute('type') || 'default'
-
+    this.iconName = this.getAttribute('icon-name')
+    this.iconSize = this.getAttribute('icon-size') || '1em'
+    this.tooltip = this.getAttribute('tooltip')
+    if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.toggleTooltip()
+    if (this.tooltip) {
+      this.toggleTooltip()
+    }
   }
 
   disconnectedCallback () {}
@@ -58,6 +61,13 @@ export default class Badge extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
+      :host {
+        display: block;
+      }
+      :host ks-a-button {
+        max-width: calc(${this.iconSize} + 2 * var(--button-badge-padding));
+        min-width: calc(${this.iconSize} + 2 * var(--button-badge-padding));
+      }
       :host .m-badge {
         position: relative;
       }
@@ -147,6 +157,7 @@ export default class Badge extends Shadow() {
    */
   renderHTML () {
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
+    this.html = ''
     this.html = /* HTML */`
     <div class="m-badge">
         ${this.type === 'primary'
@@ -157,14 +168,18 @@ export default class Badge extends Shadow() {
               ? ''
               : `${this.text}`
             }
-            <a-icon-mdx icon-name="Scan_2" size="1em" class="icon-right"></a-icon-mdx>
+            ${this.iconName ? /* html */ `
+              <a-icon-mdx icon-name="${this.iconName}" size="${this.iconSize}" class="icon-right"></a-icon-mdx>
+            ` : ''}
         </ks-a-button>
-        <div class="m-badge__tooltip">
-          <div class="m-badge__icon">
-            <a-icon-mdx icon-name="x" size="1.5em" class="icon-right"></a-icon-mdx>
+        ${this.tooltip ? /* html */ `
+          <div class="m-badge__tooltip">
+            <div class="m-badge__icon">
+              <a-icon-mdx icon-name="x" size="1.5em" class="icon-right"></a-icon-mdx>
+            </div>
+            <span>${this.tooltip}</span>
           </div>
-          <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
-        </div>
+        ` : ''}
     </div>
     `
     return this.fetchModules([
