@@ -397,8 +397,9 @@ export default class AppointmentTile extends Tile {
         </div>
         <div class="container dialog-content">
           <p class="reset-link"></p>
-          <div class="sub-content" id="view-content">
-            ${this.renderDialogContentDetails(content)}
+          <div class="sub-content" >
+            <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
+            <div id="view-content">${this.renderDialogContentDetails(content)}</div>
           </div>
         </div>
         <div class="container dialog-footer">
@@ -414,23 +415,19 @@ export default class AppointmentTile extends Tile {
 
   // dialog default content view
   renderDialogContentDetails (data, detail = {}) {
-    return `
-      <div>
-        <h2>${data.courseTitle} (${data.courseType}_${data.courseId})</h2>
+    return /* html */ `
         <div id="content">
           <p id="description">${detail.courseDescription}</p>
-        </div>
-      </div>
-      `
+        </div>`
   }
 
   // dialog final booking content view
   renderDialogContentBooking (data, detail = {}) {
-    return `<div><h2>${data.courseTitle} (${data.courseType}_${data.courseId})</h2>
-            <div id="content">
-              <p id="description">Buchen?</p>
-              <p>Preis: ${data.lessonPrice}</p>
-            </div></div>`
+    return /* html */ `
+      <div id="content">
+        <p>Status: ${detail.courseAppointmentFreeSeats} freie Plätze</p>
+        <p>Preis: ${data.lessonPrice}</p>
+      </div>`
   }
 
   // dialog success booking content view
@@ -460,7 +457,22 @@ export default class AppointmentTile extends Tile {
 
   // cancel success
   renderDialogContentCancelSuccess (data, detail = {}) {
-    return '<div><ks-a-heading tag="h2" color="#00997F">Sie haben den Termin erfolgreich storniert</ks-a-heading></div>'
+    return /* html */`
+      <style>
+        .success-message{
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 1em;
+        }
+        .success {
+          color:#00997F;
+        }
+      </style>
+      <div class="success-message">
+        <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>
+        <ks-a-heading tag="h2" color="#00997F">Sie haben den Termin erfolgreich storniert</ks-a-heading>
+      </div>`
   }
 
   formatCourseAppointmentDate (date) {
