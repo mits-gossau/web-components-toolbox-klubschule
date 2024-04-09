@@ -98,12 +98,10 @@ export default class AppointmentTile extends Tile {
   // BOOKED - SUCCESS
   updateSubscriptionCourseAppointmentBookingListener = event => {
     event.detail.fetch.then(x => {
-      if (this.dataset.id === this.courseId) {
-        if (this.dialog && this.viewContent) {
-          this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseContent, this.courseDetail)
-          const st = this.getTileState(x)
-          this.currentTile.classList.add(st.css.border)
-        }
+      if ((this.courseId === event.detail.id)) {
+        this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseContent, this.courseDetail)
+        const st = this.getTileState(x)
+        this.currentTile.classList.add(st.css.border)
       }
     })
   }
@@ -111,16 +109,14 @@ export default class AppointmentTile extends Tile {
   // CANCEL - SUCCESS
   updateSubscriptionCourseAppointmentReversalListener = event => {
     event.detail.fetch.then(x => {
-      if (this.dataset.id === this.courseId) {
-        if (this.dialog && this.viewContent) {
-          console.log('reversal response: ', x)
-          this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseContent, this.courseDetail)
-          const st = this.getTileState(x)
-          const defaultClass = this.currentTile.classList[0]
-          this.currentTile.classList.remove(...this.currentTile.classList)
-          this.currentTile.classList.add(defaultClass)
-          this.currentTile.classList.add(st.css.border)
-        }
+      if (this.courseId === event.detail.id) {
+        console.log('reversal response: ', x)
+        this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseContent, this.courseDetail)
+        const st = this.getTileState(x)
+        const defaultClass = this.currentTile.classList[0]
+        this.currentTile.classList.remove(...this.currentTile.classList)
+        this.currentTile.classList.add(defaultClass)
+        this.currentTile.classList.add(st.css.border)
       }
     })
   }
@@ -200,19 +196,19 @@ export default class AppointmentTile extends Tile {
       padding-top:1.5em;
     }
     :host .status-not-bookable {
-      border:1px solid #F4001B;
+      border:10px solid #F4001B;
     }
     :host .status-booked-out {
-      border: 1px solid #F4001B;
+      border: 10px solid #F4001B;
     }
     :host .status-closed {
-      border: 1px solid #F4001B;
+      border: 10px solid #F4001B;
     }
     :host .status-booked-cancellation-possible {
-      border: 1px solid #00997F;
+      border: 10px solid #00997F;
     }
     :host .status-booked-cancellation-not-possible {
-      border: 1px solid #00997F;
+      border: 10px solid #00997F;
     }
     :host .success {
       color:#00997F;

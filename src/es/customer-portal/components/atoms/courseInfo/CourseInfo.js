@@ -35,6 +35,7 @@ export default class CourseInfo extends Shadow() {
     event.detail.fetch.then(courseDetail => {
       if (this.dataset.id === event.detail.id) {
         //
+        debugger
         const st = this.getTileState(courseDetail)
         this.html = ''
         this.renderHTML(st)
@@ -46,6 +47,7 @@ export default class CourseInfo extends Shadow() {
     event.detail.fetch.then(courseDetail => {
       if (this.dataset.id === event.detail.id) {
         //
+        debugger
         const st = this.getTileState(courseDetail)
         this.html = ''
         this.renderHTML(st)
