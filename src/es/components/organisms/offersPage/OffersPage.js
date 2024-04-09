@@ -104,6 +104,10 @@ export default class OffersPage extends Shadow() {
         name: 'ks-c-with-facet'
       },
       {
+        path: `${this.importMetaUrl}../../controllers/eventDetail/EventDetail.js`,
+        name: 'ks-c-event-detail'
+      },
+      {
         path: `${this.importMetaUrl}../../controllers/autoCompleteLocation/AutoCompleteLocation.js`,
         name: 'ks-c-auto-complete-location'
       },
@@ -195,6 +199,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${initialRequest}'` : ''}
       >
+        <ks-c-event-detail endpoint="${this.getAttribute('event-detail-url')}">
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
               <o-grid namespace="grid-12er-">
@@ -393,6 +398,7 @@ export default class OffersPage extends Shadow() {
                 </ks-a-button>
               </ks-a-with-facet-pagination>
           </ks-o-body-section>
+        </ks-c-event-detail>
       </ks-c-with-facet>
     `
   }

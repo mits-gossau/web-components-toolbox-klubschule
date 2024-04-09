@@ -590,172 +590,181 @@ export default class Event extends Shadow() {
       ])
       this.details.classList.add('loading')
       this.details.innerHTML = '<a-loading></a-loading>'
-      fetch(`${this.isEventSearch}?lang=${this.data.language}&typ=${this.data.typ}&id=${this.data.id}&center_id=${this.data.center_id}`)
-        .then((response) => response.json())
-        .then((data) => {
-          this.details.classList.remove('loading')
-          this.details.innerHTML = /* HTML */ `
-              <div class="details-left">
-                <div>
-                  <h3>
-                    <a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1.75em"></a-icon-mdx>
-                    <span>${data.kursdetail_label}</span>
-                  </h3>
-                  <table>
-                    <tr>
-                      <th>${data.bezeichnung_label}</th>
-                      <td>${data.bezeichnung}</td>
-                    </tr>
-                    <tr>
-                      <th>${data.kurs_id_label}</th>
-                      <td>${data.kurs_id}</td>
-                    </tr>
-                    <tr>
-                      <th>${data.sprache_id_label}</th>
-                      <td>${data.sprache_id}</td>
-                    </tr>
-                    <tr>
-                      <th>${data.teilnehmer_max_label}</th>
-                      <td>${data.teilnehmer_max}</td>
-                    </tr>
-                    <tr>
-                      <th>${data.anzahl_dauer_label}</th>
-                      <td>${data.anzahl_kurstage_label}</td>
-                    </tr>
-                  </table>
-                  <p>${data.kurs_zusatzinfo}</p>          
-                </div>
-                <div class="address">
-                  <h3>
-                    <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.75em" class="icon-right"></a-icon-mdx>
-                    <span>${data.location_label}</span>
-                  </h3>
-                  <div>
-                    <address>
-                      <a href="${data.durchfuehrungaddresse.link}" target="_blank">
-                        <span class="description">${data.durchfuehrungaddresse.beschreibung}</span>
-                        <span>${data.durchfuehrungaddresse.strasse}</span>
-                        <div>
-                          <span>${data.durchfuehrungaddresse.plz}</span>
-                          <span>${data.durchfuehrungaddresse.ort}</span>
-                        </div>
-                      </a>
-                    </address>
-                    <div class="badge">${data.badge}</div>
-                  </div>
-                </div>
-                <div>
-                  <h3>
-                    <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Download" size="1.75em" class="icon-right"></a-icon-mdx>
-                    <span>Downloads</span>
-                  </h3>
-                  <ks-m-link-list namespace="link-list-download-">
-                      <ul>
-                      ${data.downloads.reduce((acc, download) => acc + /* html */`
-                      <li>
-                        <a href="${download.link}">
-                            <span>${download.label}</span>
-                            <div>
-                                <span>${download.link_label}</span>
-                                <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-                            </div>
-                        </a>                
-                      </li>
-                      `, '')}
-                      </ul>
-                  </ks-m-link-list>
-                </div>
-              </div>
-              <div class="details-right">
-                <div>
-                  <h3>
-                    <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Wallet" size="1.75em" class="icon-right"></a-icon-mdx>
-                    <span>${data.preis_info_label}</span>
-                  </h3>
-                  <table class="table-price">
-                    <tr>
-                      <th>${data.preis_kurs_label}</th>
-                      <td>${data.preis_kurs}</td>
-                    </tr>
-                    <tr>
-                      <th>${data.preis_lehrmittel_label}</th>
-                      <td>${data.preis_lehrmittel}</td>
-                    </tr>
-                    <tr>
-                      <th>${data.preis_material_label}</th>
-                      <td>${data.preis_material}</td>
-                    </tr>
-                    <tr>
-                      <th>${data.preis_total_label}</th>
-                      <td><strong>${data.preis_total}</strong></td>
-                    </tr>
-                  </table>
-                  <p>${data.preis_info}</p>
-                  ${data.kantonsbeitrag_label
-              ? `
+      new Promise(resolve => this.dispatchEvent(new CustomEvent('request-event-detail', {
+        detail: {
+          resolve,
+          language: this.data.language,
+          typ: this.data.typ,
+          id: this.data.id,
+          center_id: this.data.center_id
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))).then((data) => {
+        this.details.classList.remove('loading')
+        this.details.innerHTML = /* HTML */ `
+          <div class="details-left">
+            <div>
+              <h3>
+                <a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1.75em"></a-icon-mdx>
+                <span>${data.kursdetail_label}</span>
+              </h3>
+              <table>
+                <tr>
+                  <th>${data.bezeichnung_label}</th>
+                  <td>${data.bezeichnung}</td>
+                </tr>
+                <tr>
+                  <th>${data.kurs_id_label}</th>
+                  <td>${data.kurs_id}</td>
+                </tr>
+                <tr>
+                  <th>${data.sprache_id_label}</th>
+                  <td>${data.sprache_id}</td>
+                </tr>
+                <tr>
+                  <th>${data.teilnehmer_max_label}</th>
+                  <td>${data.teilnehmer_max}</td>
+                </tr>
+                <tr>
+                  <th>${data.anzahl_dauer_label}</th>
+                  <td>${data.anzahl_kurstage_label}</td>
+                </tr>
+              </table>
+              <p>${data.kurs_zusatzinfo}</p>          
+            </div>
+            <div class="address">
+              <h3>
+                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.75em" class="icon-right"></a-icon-mdx>
+                <span>${data.location_label}</span>
+              </h3>
+              <div>
+                <address>
+                  <a href="${data.durchfuehrungaddresse.link}" target="_blank">
+                    <span class="description">${data.durchfuehrungaddresse.beschreibung}</span>
+                    <span>${data.durchfuehrungaddresse.strasse}</span>
                     <div>
-                      <ks-m-system-notification namespace="system-notification-default-" icon-name="Percent" with-icon-background>
-                          <div slot="description">
-                              <p>${data.kantonsbeitrag_label}</p>
-                              <a-link namespace="underline-">
-                                  <a href="${data.kantonsbeitrag_link}">${data.kantonsbeitrag_link_label}</a>
-                              </a-link>
-                          </div>
-                      </ks-m-system-notification>
+                      <span>${data.durchfuehrungaddresse.plz}</span>
+                      <span>${data.durchfuehrungaddresse.ort}</span>
                     </div>
-                    `
-              : ''
-            }   
-                </div>
-                <div>
-                  <h3>
-                    <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Calendar" size="1.75em" class="icon-right"></a-icon-mdx>
-                    <span>${data.termin_label}</span>
-                  </h3>
-                  <table>
-                    <tr>
-                      <th>Wochentag</th>
-                      <th>Termin</th>
-                      <th>Zeit</th>
-                    </tr>
-                    ${data.termine.reduce((acc, termin) => acc + /* html */`
-                    <tr>
-                      <td>${termin.wochentaglabel}</td>                
-                      <td>${termin.termin}</td>                
-                      <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
-                    </tr>
-                    `, '')}              
-                  </table>
-                  <button class="link-more">
-                    <span>${data.termine_alle_label}</span>
-                    <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em" class="icon-right"></a-icon-mdx>
-                  </button>
-                </div>   
+                  </a>
+                </address>
+                <div class="badge">${data.badge}</div>
               </div>
-          `
-          return this.fetchModules([
-            {
-              path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-              name: 'a-icon-mdx'
-            },
-            {
-              path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
-              name: 'ks-a-heading'
-            },
-            {
-              path: `${this.importMetaUrl}../../molecules/linkList/LinkList.js`,
-              name: 'ks-m-link-list'
-            },
-            {
-              path: `${this.importMetaUrl}../../molecules/systemNotification/SystemNotification.js`,
-              name: 'ks-m-system-notification'
-            },
-            {
-              path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
-              name: 'a-link'
-            }
-          ])
-        })
+            </div>
+            <div>
+              <h3>
+                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Download" size="1.75em" class="icon-right"></a-icon-mdx>
+                <span>Downloads</span>
+              </h3>
+              <ks-m-link-list namespace="link-list-download-">
+                  <ul>
+                  ${data.downloads.reduce((acc, download) => acc + /* html */`
+                  <li>
+                    <a href="${download.link}">
+                        <span>${download.label}</span>
+                        <div>
+                            <span>${download.link_label}</span>
+                            <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                        </div>
+                    </a>                
+                  </li>
+                  `, '')}
+                  </ul>
+              </ks-m-link-list>
+            </div>
+          </div>
+          <div class="details-right">
+            <div>
+              <h3>
+                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Wallet" size="1.75em" class="icon-right"></a-icon-mdx>
+                <span>${data.preis_info_label}</span>
+              </h3>
+              <table class="table-price">
+                <tr>
+                  <th>${data.preis_kurs_label}</th>
+                  <td>${data.preis_kurs}</td>
+                </tr>
+                <tr>
+                  <th>${data.preis_lehrmittel_label}</th>
+                  <td>${data.preis_lehrmittel}</td>
+                </tr>
+                <tr>
+                  <th>${data.preis_material_label}</th>
+                  <td>${data.preis_material}</td>
+                </tr>
+                <tr>
+                  <th>${data.preis_total_label}</th>
+                  <td><strong>${data.preis_total}</strong></td>
+                </tr>
+              </table>
+              <p>${data.preis_info}</p>
+              ${data.kantonsbeitrag_label
+          ? `
+                <div>
+                  <ks-m-system-notification namespace="system-notification-default-" icon-name="Percent" with-icon-background>
+                      <div slot="description">
+                          <p>${data.kantonsbeitrag_label}</p>
+                          <a-link namespace="underline-">
+                              <a href="${data.kantonsbeitrag_link}">${data.kantonsbeitrag_link_label}</a>
+                          </a-link>
+                      </div>
+                  </ks-m-system-notification>
+                </div>
+                `
+          : ''
+        }   
+            </div>
+            <div>
+              <h3>
+                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Calendar" size="1.75em" class="icon-right"></a-icon-mdx>
+                <span>${data.termin_label}</span>
+              </h3>
+              <table>
+                <tr>
+                  <th>Wochentag</th>
+                  <th>Termin</th>
+                  <th>Zeit</th>
+                </tr>
+                ${data.termine.reduce((acc, termin) => acc + /* html */`
+                <tr>
+                  <td>${termin.wochentaglabel}</td>                
+                  <td>${termin.termin}</td>                
+                  <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
+                </tr>
+                `, '')}              
+              </table>
+              <button class="link-more">
+                <span>${data.termine_alle_label}</span>
+                <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em" class="icon-right"></a-icon-mdx>
+              </button>
+            </div>   
+          </div>
+        `
+        return this.fetchModules([
+          {
+            path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+            name: 'a-icon-mdx'
+          },
+          {
+            path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
+            name: 'ks-a-heading'
+          },
+          {
+            path: `${this.importMetaUrl}../../molecules/linkList/LinkList.js`,
+            name: 'ks-m-link-list'
+          },
+          {
+            path: `${this.importMetaUrl}../../molecules/systemNotification/SystemNotification.js`,
+            name: 'ks-m-system-notification'
+          },
+          {
+            path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
+            name: 'a-link'
+          }
+        ])
+      })
     }
   }
 
