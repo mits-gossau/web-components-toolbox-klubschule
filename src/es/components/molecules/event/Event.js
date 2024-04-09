@@ -162,6 +162,11 @@ export default class Event extends Shadow() {
         padding: 0;
         margin-top: 1rem;
         cursor: pointer;
+        text-decoration: none;
+      }
+
+      :host .link-more a-icon-mdx {
+        color: var(--mdx-base-color-klubschule-blue-600);
       }
 
       :host .meta li .link-more {
@@ -189,6 +194,10 @@ export default class Event extends Shadow() {
         display: flex;
         flex-direction: row;
         align-items: center;
+      }
+
+      :host .controls-left a-icon-mdx {
+        color: var(--mdx-base-color-klubschule-blue-600);
       }
 
       :host .controls-left div + div,
@@ -364,6 +373,17 @@ export default class Event extends Shadow() {
 
       :host a-icon-mdx {
         color: var(--mdx-base-color-grey-950);
+      }
+
+      :host .abo {
+        height: 1.75rem;
+        width: 1.75rem;
+        border: 0.063rem solid var(--mdx-base-color-grey-975);
+        border-radius: 0.188rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 400;
       }
 
       @media only screen and (max-width: _max-width_) {
