@@ -1,4 +1,5 @@
 // @ts-check
+import { makeUniqueCourseId } from '../../helpers/Shared.js'
 
 /* global AbortController */
 /* global CustomEvent */
@@ -91,6 +92,7 @@ export default class Appointments extends HTMLElement {
       subscriptionType: tags[1].subscriptionType,
       userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
     }
+    const courseId = makeUniqueCourseId(tags[0])
     const fetchOptions = {
       method: 'POST',
       headers: {
@@ -105,7 +107,7 @@ export default class Appointments extends HTMLElement {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
-        id: data.courseId,
+        id: courseId,
         type: 'booking'
       },
       bubbles: true,
@@ -130,6 +132,7 @@ export default class Appointments extends HTMLElement {
       userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
     }
     const type = tags[2] ? tags[2].type : ''
+    const courseId = makeUniqueCourseId(tags[0])
     const fetchOptions = {
       method: 'POST',
       headers: {
@@ -144,7 +147,7 @@ export default class Appointments extends HTMLElement {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
-        id: data.courseId,
+        id: courseId,
         type
       },
       bubbles: true,
@@ -169,6 +172,7 @@ export default class Appointments extends HTMLElement {
       subscriptionType: tags[1].subscriptionType,
       userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
     }
+    const courseId = makeUniqueCourseId(tags[0])
     const fetchOptions = {
       method: 'POST',
       headers: {
@@ -183,7 +187,7 @@ export default class Appointments extends HTMLElement {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
-        id: data.courseId,
+        id: courseId,
         type: 'cancel'
       },
       bubbles: true,

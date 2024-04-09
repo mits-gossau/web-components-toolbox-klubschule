@@ -33,7 +33,7 @@ export default class CourseInfo extends Shadow() {
 
   updateSubscriptionCourseAppointmentBookingListener = event => {
     event.detail.fetch.then(courseDetail => {
-      if (this.dataset.id * 1 === event.detail.id) {
+      if (this.dataset.id === event.detail.id) {
         //
         const st = this.getTileState(courseDetail)
         this.html = ''
@@ -44,7 +44,7 @@ export default class CourseInfo extends Shadow() {
 
   updateSubscriptionCourseAppointmentReversalListener = event => {
     event.detail.fetch.then(courseDetail => {
-      if (this.dataset.id * 1 === event.detail.id) {
+      if (this.dataset.id === event.detail.id) {
         //
         const st = this.getTileState(courseDetail)
         this.html = ''

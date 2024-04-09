@@ -1,5 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import { makeUniqueCourseId } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 
@@ -36,7 +37,8 @@ export default class CourseTitle extends Shadow() {
   updateSubscriptionCourseAppointmentDetailListener = event => {
     event.detail.fetch.then(courseDetail => {
       console.log(courseDetail.courseId, this.dataset.id)
-      if (this.dataset.id * 1 === courseDetail.courseId) {
+      const courseId = makeUniqueCourseId(courseDetail)
+      if (this.dataset.id === courseId) {
         // open dialog
         this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
           {

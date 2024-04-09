@@ -1,5 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import { makeUniqueCourseId } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 
@@ -222,12 +223,12 @@ export default class AppointmentsList extends Shadow() {
   }
 
   makeTileComponent (tile, appointment, selectedSubscription) {
-    const { courseId } = appointment
+    // const { courseId } = appointment
     const appointmentData = this.escapeForHtml(appointment)
     const selectedSubscriptionData = this.escapeForHtml(selectedSubscription)
     const tileComponent = new tile.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
     tileComponent.setAttribute('data', `${appointmentData}`)
-    tileComponent.setAttribute('data-id', `${courseId}`)
+    tileComponent.setAttribute('data-id', `${makeUniqueCourseId(appointment)}`)
     tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
     return tileComponent
   }

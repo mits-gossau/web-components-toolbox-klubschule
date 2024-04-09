@@ -1,6 +1,7 @@
 // @ts-check
 import Tile from '../../../../components/molecules/tile/Tile.js'
 import { courseAppointmentStatusMapping, actionType } from '../../../helpers/mapping.js'
+import { makeUniqueCourseId } from '../../../helpers/Shared.js'
 
 /**
  * @export
@@ -65,12 +66,10 @@ export default class AppointmentTile extends Tile {
   updateSubscriptionCourseAppointmentDetailListener = event => {
     this.actionType = event.detail.type
     event.detail.fetch.then(courseDetail => {
-      console.log(courseDetail.courseId, this.dataset.id)
-      debugger
-      if (this.dataset.id * 1 === courseDetail.courseId) {
-        // this.dialog = this.root.querySelector('m-dialog')
+      const courseId = makeUniqueCourseId(courseDetail)
+      if (this.dataset.id === courseId) {
         if (this.dialog) {
-          this.courseId = courseDetail.courseId
+          this.courseId = courseId
           this.courseDetail = courseDetail
 
           this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
@@ -99,7 +98,7 @@ export default class AppointmentTile extends Tile {
   // BOOKED - SUCCESS
   updateSubscriptionCourseAppointmentBookingListener = event => {
     event.detail.fetch.then(x => {
-      if (this.dataset.id * 1 === this.courseId) {
+      if (this.dataset.id === this.courseId) {
         if (this.dialog && this.viewContent) {
           this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseContent, this.courseDetail)
           const st = this.getTileState(x)
@@ -112,7 +111,7 @@ export default class AppointmentTile extends Tile {
   // CANCEL - SUCCESS
   updateSubscriptionCourseAppointmentReversalListener = event => {
     event.detail.fetch.then(x => {
-      if (this.dataset.id * 1 === this.courseId) {
+      if (this.dataset.id === this.courseId) {
         if (this.dialog && this.viewContent) {
           console.log('reversal response: ', x)
           this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseContent, this.courseDetail)
@@ -307,14 +306,15 @@ export default class AppointmentTile extends Tile {
 
   renderTile (content, selectedSubscription) {
     const tileStatus = this.getTileState(content)
+    this.courseId = makeUniqueCourseId(content)
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
-          <div id="tile-wrapper" class="m-tile ${tileStatus.css.border}" data-course-id=${content.courseId}>
+          <div id="tile-wrapper" class="m-tile ${tileStatus.css.border}" data-course-id=${this.courseId}>
             <div class="parent-body">
               <div class="course-info">
                 <div>
-                  <span class="m-tile__title title"> <a-course-title data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-course-title></span>
+                  <span class="m-tile__title title"> <a-course-title data-id="${this.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-course-title></span>
                 </div>
                 <div>
                   <span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span>
@@ -329,7 +329,7 @@ export default class AppointmentTile extends Tile {
               <!-- --> 
               <div class="course-info">
                 <div id="status-wrapper" class="icon-info">
-                  <a-course-info data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}"></a-course-info>
+                  <a-course-info data-id="${this.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}"></a-course-info>
                 </div> 
                 <div class="icon-info">
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
@@ -385,7 +385,7 @@ export default class AppointmentTile extends Tile {
 
   renderDialog (content, selectedSubscription) {
     return /* html */ `
-      <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${content.courseId}">
+      <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${this.courseId}">
         <div class="container dialog-header">
           <div id="back"></div>
           <h3 id="title"></h3>
@@ -401,11 +401,11 @@ export default class AppointmentTile extends Tile {
         </div>
         <div class="container dialog-footer">
           <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
-          <a-dialog-status-button data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
+          <a-dialog-status-button data-id="${this.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
           <!--<ks-a-button id="btn-action" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Termin buchen</ks-a-button>
           <ks-a-button id="btn-action-cancel" color="quaternary" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Termin stornieren</ks-a-button>-->
         </div>
-        <a-tile-status-button id="show-modal" data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>  
+        <a-tile-status-button id="show-modal" data-id="${this.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>  
       </m-dialog>
       `
   }
