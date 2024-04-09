@@ -37,7 +37,7 @@ export default class WithFacet extends Shadow() {
     }, ...args)
 
     const withFacetCache = new Map()
-    const initialRequest = this.getAttribute('initial-request')
+    let initialRequest = this.getAttribute('initial-request')
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(this.url.search)
     this.isMocked = this.hasAttribute('mock')
@@ -67,7 +67,7 @@ export default class WithFacet extends Shadow() {
         if (filter) this.filters.push(filter)
 
         if (shouldResetAllFilters) {
-          request = initialRequest
+          initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetAllFilters }))
           this.removeAllFilterParamsFromURL()
         }
 
@@ -166,7 +166,10 @@ export default class WithFacet extends Shadow() {
                   self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                 }
               })
+
               if (isNextPage) json = Object.assign(json, { isNextPage })
+              if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
+
               return json
             })).get(request)
         },
@@ -238,7 +241,6 @@ export default class WithFacet extends Shadow() {
       })
 
       self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-      console.log('removed all filters from url!')
     }
   }
 
