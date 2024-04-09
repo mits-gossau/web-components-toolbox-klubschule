@@ -9,7 +9,15 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.setTotalListener = (event) => {
+      Promise.resolve(event.detail.fetch).then((data) => {
+        this.total = data.total
+        this.psize = data.psize
+      })
+    }
   }
+
 
   connectedCallback() {
     this.hidden = true
@@ -19,6 +27,11 @@ export default class OffersPage extends Shadow() {
     Promise.all(showPromises).then(() => {
       this.hidden = false
     })
+    this.addEventListener('with-facet', this.setTotalListener)
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('with-facet', this.setTotalListener)
   }
 
   shouldRenderCSS() {
@@ -390,12 +403,14 @@ export default class OffersPage extends Shadow() {
                   ${this.badgeContainer.innerHTML}
                 </ks-m-badge-legend>
               ` : ''}
-              <ks-a-with-facet-pagination>
-                <ks-a-button namespace="button-primary-" color="secondary">
-                    <span>Weitere Angebote</span>
-                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-                </ks-a-button>
-              </ks-a-with-facet-pagination>
+              ${this.total && this.total > this.psize ? /* html */ `
+                <ks-a-with-facet-pagination>
+                  <ks-a-button namespace="button-primary-" color="secondary">
+                      <span>Weitere Angebote</span>
+                      <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+                  </ks-a-button>
+                </ks-a-with-facet-pagination>
+              ` : ''}
           </ks-o-body-section>
         ${this.eventDetailURL ? `</ks-c-event-detail>` : ''}
       </ks-c-with-facet>
