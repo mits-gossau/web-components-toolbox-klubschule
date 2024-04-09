@@ -7,7 +7,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class WithFacetPagination extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
 
     this.ppage = 1
@@ -24,18 +24,17 @@ export default class WithFacetPagination extends Shadow() {
       })
     )
   }
-  
-  connectedCallback() {
+
+  connectedCallback () {
     document.body.addEventListener('with-facet', this.receiveData)
     this.addEventListener('click', this.clickEventListener)
   }
-  
-  disconnectedCallback() {
+
+  disconnectedCallback () {
     document.body.removeEventListener('with-facet', this.receiveData)
     this.removeEventListener('click', this.clickEventListener)
   }
-  
-  
+
   /**
   * Event Listener: Get Data from WithFacet
   */

@@ -37,13 +37,13 @@ export default class WithFacet extends Shadow() {
     }, ...args)
 
     const withFacetCache = new Map()
-    const initialRequest = this.getAttribute('initial-request')
+    let initialRequest = this.getAttribute('initial-request')
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(this.url.search)
     this.isMocked = this.hasAttribute('mock')
     const apiUrl = this.isMocked
-        ? `${this.importMetaUrl}./mock/default.json`
-        : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
+      ? `${this.importMetaUrl}./mock/default.json`
+      : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
     this.initialResponse = {}
     this.lastWithFacetRequest = null
 
@@ -52,10 +52,10 @@ export default class WithFacet extends Shadow() {
 
       console.log('---------------------------------event', event, event.type === 'reset-all-filters' ? 'reset-all-filters' : 'request')
 
-      let request, shouldResetAllFilters, isNextPage = false
+      let request; let shouldResetAllFilters; let isNextPage = false
       // ppage reuse last request
       if (event.detail?.ppage && this.lastWithFacetRequest) {
-        request = JSON.stringify(Object.assign(JSON.parse(this.lastWithFacetRequest), {ppage: event.detail.ppage}))
+        request = JSON.stringify(Object.assign(JSON.parse(this.lastWithFacetRequest), { ppage: event.detail.ppage }))
         shouldResetAllFilters = false
         isNextPage = true
         this.updateURLParams()
@@ -65,9 +65,20 @@ export default class WithFacet extends Shadow() {
         this.filters = []
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
-  
+
+        if (shouldResetAllFilters) {
+          initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetAllFilters }))
+          this.removeAllFilterParamsFromURL()
+        }
+
+        if (shouldResetFilter) {
+          const filterParent = event.detail.this.getAttribute('filter-parent')
+          this.params.delete(`${filterParent}`)
+          self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+        }
+
         this.updateURLParams()
-  
+
         const filterRequest = `{
           "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
           "mandantId": ${this.getAttribute('mandant-id') || 110}
@@ -75,24 +86,8 @@ export default class WithFacet extends Shadow() {
           ${event.detail?.key === 'location-search' ? `,"clat": "${event.detail.lat}"` : ''}
           ${event.detail?.key === 'location-search' ? `,"clong": "${event.detail.lng}"` : ''}
         }`
-  
+
         request = this.lastWithFacetRequest = this.filters.length > 0 ? filterRequest : initialRequest
-        
-        if (shouldResetAllFilters) {
-          request = initialRequest
-          this.removeAllFilterParamsFromURL()
-        }
-  
-        if (shouldResetFilter) {
-          const filterParent = event.detail.this.getAttribute('filter-parent')
-          console.log('reset filters', filterParent)
-  
-          // remove filter from url
-          // this.params.delete(`${filterParent}`)
-          console.log('params:', this.params)
-          // self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-          console.log('removed filter:', filterParent)
-        }
       }
 
       let requestInit = {}
@@ -128,7 +123,7 @@ export default class WithFacet extends Shadow() {
               if (!this.filters.length || this.filters.length === 0) {
                 this.initialResponse = json
               }
-              
+
               // url kung fu
               json.filters.forEach(filterItem => {
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
@@ -138,7 +133,7 @@ export default class WithFacet extends Shadow() {
                   filterItem.children.forEach(child => {
                     // check if the child is already in the url params
                     const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
-                    
+
                     if (containsChild) {
                       selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                     }
@@ -171,7 +166,10 @@ export default class WithFacet extends Shadow() {
                   self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
                 }
               })
-              if (isNextPage) json = Object.assign(json, {isNextPage})
+
+              if (isNextPage) json = Object.assign(json, { isNextPage })
+              if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
+
               return json
             })).get(request)
         },
@@ -243,7 +241,6 @@ export default class WithFacet extends Shadow() {
       })
 
       self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-      console.log('removed all filters from url!')
     }
   }
 
@@ -269,9 +266,9 @@ export default class WithFacet extends Shadow() {
               ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
               "selected": ${hasSameLabel
                 ? isCheckedNullOrUndefined
-                  ? child.selected
+                  ? (child.selected || false)
                   : event.detail.target.checked
-                : child.selected},
+                : (child.selected || false)},
               ${child.sort ? `"sort": ${child.sort},` : ''}
               ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
               ${child.typ ? `"typ": "${child.typ}",` : ''}
