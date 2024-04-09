@@ -121,7 +121,6 @@ export default class TileFactory extends Shadow() {
         (acc, course) => {
           const tile = this.isEventSearch ? /* html */ `
             <ks-m-event
-              event-detail-url='${this.isEventSearch}'
               data="${this.fillGeneralTileInfoEvents(course)}"
             ></ks-m-event>
           ` : (
@@ -227,6 +226,6 @@ export default class TileFactory extends Shadow() {
   }
 
   get isEventSearch() {
-    return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
+    return this.hasAttribute('is-event')
   }
 }

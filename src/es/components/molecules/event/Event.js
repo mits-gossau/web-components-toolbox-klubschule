@@ -701,7 +701,7 @@ export default class Event extends Shadow() {
               </table>
               <p>${data.preis_info}</p>
               ${data.kantonsbeitrag_label
-          ? `
+            ? `
                 <div>
                   <ks-m-system-notification namespace="system-notification-default-" icon-name="Percent" with-icon-background>
                       <div slot="description">
@@ -713,8 +713,8 @@ export default class Event extends Shadow() {
                   </ks-m-system-notification>
                 </div>
                 `
-          : ''
-        }   
+            : ''
+          }   
             </div>
             <div>
               <h3>
@@ -766,10 +766,6 @@ export default class Event extends Shadow() {
         ])
       })
     }
-  }
-
-  get isEventSearch() {
-    return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
   }
 
   get details() {

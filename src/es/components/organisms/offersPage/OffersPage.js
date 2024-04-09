@@ -7,11 +7,11 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class OffersPage extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
-  connectedCallback () {
+  connectedCallback() {
     this.hidden = true
     const showPromises = []
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
@@ -21,7 +21,7 @@ export default class OffersPage extends Shadow() {
     })
   }
 
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
@@ -32,14 +32,14 @@ export default class OffersPage extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML () {
+  shouldRenderHTML() {
     return !this.root.querySelector('ks-c-with-facet') || !this.ksMTab
   }
 
   /**
    * renders the css
    */
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */`
       :host {
         display: contents !important;
@@ -60,8 +60,8 @@ export default class OffersPage extends Shadow() {
    * Render HTML
    * @return Promise<void>
    */
-  renderHTML () {
-    this.html = this.isEventSearch ? this.tabContentOne : /* html */`
+  renderHTML() {
+    this.html = this.eventDetailURL ? this.tabContentOne : /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
             <li>
@@ -190,7 +190,7 @@ export default class OffersPage extends Shadow() {
     ])
   }
 
-  get tabContentOne () {
+  get tabContentOne() {
     const initialRequest = this.getAttribute('initial-request')
     console.log(JSON.parse(initialRequest).psize)
     return /* html */ `
@@ -199,14 +199,14 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${initialRequest}'` : ''}
       >
-        <ks-c-event-detail endpoint="${this.getAttribute('event-detail-url')}">
+        ${this.eventDetailURL ? `<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
               <o-grid namespace="grid-12er-">
                 <div col-lg="12" col-md="12" col-sm="12">
                   <ks-a-with-facet-counter></ks-a-with-facet-counter>
                 </div>
-                ${this.isEventSearch ? '' : /* HTML */ `
+                ${this.eventDetailURL ? '' : /* HTML */ `
                   <div col-lg="6" col-md="6" col-sm="12">
                     <ks-c-auto-complete
                       auto-complete-selection="offers-page-auto-complete-selection"
@@ -385,7 +385,7 @@ export default class OffersPage extends Shadow() {
               <section>
                   <ks-m-sort namespace="sort-right-"></ks-m-sort>
               </section>
-              <ks-m-tile-factory ${this.isEventSearch ? `event-detail-url="${this.getAttribute('event-detail-url')}"` : ''}></ks-m-tile-factory>
+              <ks-m-tile-factory ${this.eventDetailURL ? `is-event ` : ''}></ks-m-tile-factory>
               ${this.badgeContainer ? /* HTML */ `
                 <ks-m-badge-legend>
                   ${this.badgeContainer.innerHTML}
@@ -398,12 +398,12 @@ export default class OffersPage extends Shadow() {
                 </ks-a-button>
               </ks-a-with-facet-pagination>
           </ks-o-body-section>
-        </ks-c-event-detail>
+        ${this.eventDetailURL ? `</ks-c-event-detail>` : ''}
       </ks-c-with-facet>
     `
   }
 
-  get tabContentTwo () {
+  get tabContentTwo() {
     return /* HTML */ `
       <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)"">
         <o-grid namespace="grid-12er-">
@@ -488,15 +488,15 @@ export default class OffersPage extends Shadow() {
     `
   }
 
-  get ksMTab () {
+  get ksMTab() {
     return this.root.querySelector('ks-m-tab')
   }
 
-  get badgeContainer () {
+  get badgeContainer() {
     return this.root.querySelector('.js-badge__selector')
   }
 
-  get isEventSearch() {
+  get eventDetailURL() {
     return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
   }
 }
