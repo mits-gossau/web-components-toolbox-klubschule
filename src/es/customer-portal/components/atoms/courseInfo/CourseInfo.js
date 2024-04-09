@@ -1,6 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { courseAppointmentStatusMapping, subscriptionMode } from '../../../helpers/mapping.js'
+import { courseAppointmentStatusMapping } from '../../../helpers/mapping.js'
 
 /**
 * @export
@@ -14,6 +14,7 @@ export default class CourseInfo extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.dataContent = null
+    this.icon = null
   }
 
   connectedCallback () {
@@ -67,7 +68,7 @@ export default class CourseInfo extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.wrapper
+    return !this.icon
   }
 
   /**
@@ -78,6 +79,9 @@ export default class CourseInfo extends Shadow() {
       :host {
         display:flex;
         align-items: center;
+      }
+      :host .content {
+        padding: 0 0.5em;
       }
       :host .success {
         color:#00997F;
@@ -126,9 +130,13 @@ export default class CourseInfo extends Shadow() {
    * @returns void
    */
   renderHTML (data) {
-    this.wrapper = this.root.querySelector('div') || document.createElement('div')
-    this.icon = `<a-icon-mdx id="status-icon" icon-name="${data.icon}" size="1.5em" tabindex="0" class="${data.css.status}"></a-icon-mdx>`
-    this.html = `${this.icon}<span class="m-tile__content" ><span id="status" class="${data.css.status}">${data.status}</span> <span id="status-info" class="${data.css.info}">${data.info}</span></span>`
+    this.icon = `<a-icon-mdx icon-name="${data.icon}" size="1.5em" tabindex="0" class="${data.css.status}"></a-icon-mdx>`
+    this.html = `
+      ${this.icon}
+      <span class="content">
+        <span class="${data.css.status}">${data.status}</span>
+        <span class="${data.css.info}">${data.info}</span>
+      </span>`
   }
 
   getTileState (data) {

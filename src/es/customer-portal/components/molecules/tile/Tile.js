@@ -13,8 +13,6 @@ export default class AppointmentTile extends Tile {
    */
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
-    this.dialog = null
-    this.currentTile = null
     this.courseContent = null
     this.selectedSubscription = null
     this.tileActionButtonReplace = null
@@ -22,6 +20,7 @@ export default class AppointmentTile extends Tile {
     this.actionType = actionType.detail
     this.viewContent = null
     this.courseDetail = null
+    this.courseId = null
   }
 
   connectedCallback () {
@@ -42,16 +41,19 @@ export default class AppointmentTile extends Tile {
     document.body.removeEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.updateDialogBookingCancelListener)
   }
 
+  // BOOKING - SHOW FINAL STEP
   updateDialogBookingDetailListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
+      // this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
       if (this.viewContent) {
         this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseContent, this.courseDetail)
       }
     }
   }
 
-  // CANCEL - SHOW FINAL
+  // CANCEL - SHOW FINAL STEP
   updateDialogBookingCancelListener = event => {
+    // this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
     if (this.dataset.id === event.detail.tags[0]) {
       if (this.viewContent) {
         this.viewContent.innerHTML = this.renderDialogContentCancel(this.courseContent, this.courseDetail)
@@ -64,13 +66,12 @@ export default class AppointmentTile extends Tile {
     this.actionType = event.detail.type
     event.detail.fetch.then(courseDetail => {
       console.log(courseDetail.courseId, this.dataset.id)
+      debugger
       if (this.dataset.id * 1 === courseDetail.courseId) {
-        debugger
-        this.dialog = this.root.querySelector('m-dialog')
+        // this.dialog = this.root.querySelector('m-dialog')
         if (this.dialog) {
+          this.courseId = courseDetail.courseId
           this.courseDetail = courseDetail
-
-          debugger
 
           this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
           let newTitle = ''
@@ -95,33 +96,32 @@ export default class AppointmentTile extends Tile {
     })
   }
 
-  // BOOKED
+  // BOOKED - SUCCESS
   updateSubscriptionCourseAppointmentBookingListener = event => {
     event.detail.fetch.then(x => {
-      if (this.dialog) {
-        this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseContent, this.courseDetail)
-        debugger
-        this.currentTile = this.root.querySelector('m-load-template-tag').root.querySelector('div')
-        const st = this.getTileState(x)
-        this.currentTile.classList.add(st.css.border)
+      if (this.dataset.id * 1 === this.courseId) {
+        if (this.dialog && this.viewContent) {
+          this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseContent, this.courseDetail)
+          const st = this.getTileState(x)
+          this.currentTile.classList.add(st.css.border)
+        }
       }
     })
   }
 
-  // CANCEL
+  // CANCEL - SUCCESS
   updateSubscriptionCourseAppointmentReversalListener = event => {
     event.detail.fetch.then(x => {
-      if (this.dialog) {
-        console.log('reversal response: ', x)
-        this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
-        this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseContent, this.courseDetail)
-
-        // TODO: Refactor
-        const st = this.getTileState(x)
-        const defaultClass = this.currentTile.classList[0]
-        this.currentTile.classList.remove(...this.currentTile.classList)
-        this.currentTile.classList.add(defaultClass)
-        this.currentTile.classList.add(st.css.border)
+      if (this.dataset.id * 1 === this.courseId) {
+        if (this.dialog && this.viewContent) {
+          console.log('reversal response: ', x)
+          this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseContent, this.courseDetail)
+          const st = this.getTileState(x)
+          const defaultClass = this.currentTile.classList[0]
+          this.currentTile.classList.remove(...this.currentTile.classList)
+          this.currentTile.classList.add(defaultClass)
+          this.currentTile.classList.add(st.css.border)
+        }
       }
     })
   }
@@ -290,6 +290,10 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/atoms/courseTitle/CourseTitle.js`,
         name: 'a-course-title'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/components/atoms/heading/Heading.js`,
+        name: 'ks-a-heading'
       }
     ])
     Promise.all([fetchModules]).then((children) => {
@@ -392,7 +396,7 @@ export default class AppointmentTile extends Tile {
         <div class="container dialog-content">
           <p class="reset-link"></p>
           <div class="sub-content" id="view-content">
-            ${this.renderDialogContent(content)}
+            ${this.renderDialogContentDetails(content)}
           </div>
         </div>
         <div class="container dialog-footer">
@@ -404,22 +408,6 @@ export default class AppointmentTile extends Tile {
         <a-tile-status-button id="show-modal" data-id="${content.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>  
       </m-dialog>
       `
-  }
-
-  renderDialogContent (data) {
-    return this.renderDialogContentDetails(data)
-    // const expr = this.actionType
-    // console.log('TYP', expr)
-    // switch (expr) {
-    //   case actionType.detail:
-    //     return this.renderDialogContentDetails(data)
-    //   case actionType.booking:
-    //     return this.renderDialogContentBooking(data)
-    //   case actionType.cancel:
-    //     return this.renderDialogContentBookingSuccess(data)
-    //   default:
-    //     return this.renderDialogContentDetails(data)
-    // }
   }
 
   // dialog default content view
@@ -450,7 +438,7 @@ export default class AppointmentTile extends Tile {
 
   // cancel really
   renderDialogContentCancel (data, detail = {}) {
-    return 'cancel really?'
+    return '<div><ks-a-heading tag="h1" style-as="h3" color="#F4001B">Hiermit stornieren sie diesen Termin</ks-a-heading></div>'
   }
 
   // cancel success
@@ -465,5 +453,13 @@ export default class AppointmentTile extends Tile {
     const formatter = new Intl.DateTimeFormat('de-DE', options)
     const formattedDate = formatter.format(dateObject)
     return formattedDate
+  }
+
+  get currentTile () {
+    return this.root.querySelector('m-load-template-tag').root.querySelector('div')
+  }
+
+  get dialog () {
+    return this.root.querySelector('m-dialog')
   }
 }
