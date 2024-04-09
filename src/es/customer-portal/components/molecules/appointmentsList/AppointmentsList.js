@@ -174,7 +174,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderLoading () {
-    this.html = '<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmcyd2Vvd3Y5YjN5YTMzbmd6dzk1d3FvYnoydDZtbmg5MXdnZ2NoOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0MYGtCMbPTYWOzaU/giphy.gif">'
+    this.html = '<img src="../customer-portal/img/loading.gif">'
   }
 
   renderFilterSubscriptions (subscriptionsData) {

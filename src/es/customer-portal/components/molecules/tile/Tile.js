@@ -219,6 +219,12 @@ export default class AppointmentTile extends Tile {
     :host .hide-dialog-action-btn{
       display:none;
     }
+    :host .success-mesage {
+      display:flex;
+    }
+     ks-a-heading::part(success-message) {
+      color:pink !important;
+     }
     @media only screen and (max-width: _max-width_) {
       :host  {}
     }
@@ -429,17 +435,32 @@ export default class AppointmentTile extends Tile {
 
   // dialog success booking content view
   renderDialogContentBookingSuccess (data, detail = {}) {
-    return '<div><h1>Sie haben den Termin erfolgreich gebucht</h1></div>'
+    return /* html */`
+      <style>
+        .success-message{
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 1em;
+        }
+        .success {
+          color:#00997F;
+        }
+      </style>
+      <div class="success-message">
+        <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>
+        <ks-a-heading tag="h2" color="#00997F">Sie haben den Termin erfolgreich gebucht</ks-a-heading>
+      </div>`
   }
 
   // cancel really
   renderDialogContentCancel (data, detail = {}) {
-    return '<div><ks-a-heading tag="h1" style-as="h3" color="#F4001B">Hiermit stornieren sie diesen Termin</ks-a-heading></div>'
+    return '<div><ks-a-heading tag="h2" style-as="h3" color="#F4001B">Hiermit stornieren sie diesen Termin</ks-a-heading></div>'
   }
 
   // cancel success
   renderDialogContentCancelSuccess (data, detail = {}) {
-    return 'cancel successfully'
+    return '<div><ks-a-heading tag="h2" color="#00997F">Sie haben den Termin erfolgreich storniert</ks-a-heading></div>'
   }
 
   formatCourseAppointmentDate (date) {

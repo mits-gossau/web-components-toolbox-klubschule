@@ -179,15 +179,15 @@ export default class DialogStatusButton extends Shadow() {
   renderDialogActionButton (id, type, subscriptionMode, status, content, selectedSubscription) {
     debugger
     if (type === 'detail' && status === 1) {
-      return `<ks-a-button tag="${id}" namespace="button-primary-" tag="[${actionType.bookingFinal}]"  request-event-name="request-show-dialog-booking">DO BOOKING</ks-a-button>`
+      return `<ks-a-button tag="${id}" namespace="button-primary-" tag="[${actionType.bookingFinal}]"  request-event-name="request-show-dialog-booking">Termin buchen</ks-a-button>`
     }
 
     if (type === 'detail' && status === 5) {
-      return `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="[${actionType.cancel}]"  request-event-name="request-show-dialog-cancel">DO CANCEL</ks-a-button>`
+      return `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="[${actionType.cancel}]"  request-event-name="request-show-dialog-cancel">Termin stornieren</ks-a-button>`
     }
 
-    const btnBooking = `<ks-a-button namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'>DIATermin buchen</ks-a-button>`
-    const btnCancel = `<ks-a-button color="quaternary" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'>DIATermin stornieren</ks-a-button>`
+    const btnBooking = `<ks-a-button namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'>Jetzt Termin buchen</ks-a-button>`
+    const btnCancel = `<ks-a-button color="quaternary" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'>Jetzt Termin stornieren</ks-a-button>`
 
     const actionButton = {
       FLAT: {

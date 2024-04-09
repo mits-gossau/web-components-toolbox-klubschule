@@ -136,8 +136,8 @@ export default class StatusButton extends Shadow() {
   }
 
   renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {
-    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary">COM-Termin buchen</ks-a-button>`
-    const btnCancel = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'cancel' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>X0X-Stornieren</ks-a-button>`
+    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary">Termin buchen</ks-a-button>`
+    const btnCancel = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'cancel' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
 
     const actionButton = {
       FLAT: {
