@@ -147,9 +147,9 @@ export default class TileFactory extends Shadow() {
         'badge': '${course.eTyp ? course.eTyp : ''}'
       },
       'button': {
-        'text': '${course.buttons.text}',
+        'text': '${course.buttons[0].text}',
         'iconName': 'ArrowRight'
-        ${course.buttons.link ? `, 'link': '${course.buttons.link}'` : ''}
+        ${course.buttons[0].link ? `, 'link': '${course.buttons[0].link}'` : ''}
       },
       'icons': [
         {
