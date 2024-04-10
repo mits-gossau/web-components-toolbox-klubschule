@@ -62,9 +62,18 @@ export default class WithFacet extends Shadow() {
       } else {
         shouldResetAllFilters = event.type === 'reset-all-filters'
         const shouldResetFilter = event.type === 'reset-filter'
+        
+        const initialFilters = JSON.parse(initialRequest).filter
+        const initialFiltersAsString = initialFilters.map((filter) => JSON.stringify(filter))
+
         this.filters = []
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
+
+        // if there is an initial Filter set (e.g. for Events) we want to keep it
+        if (filter && initialFiltersAsString?.length) {
+          this.filters.push(initialFiltersAsString)
+        }
 
         if (shouldResetAllFilters) {
           initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetAllFilters }))
@@ -88,8 +97,6 @@ export default class WithFacet extends Shadow() {
           ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lat) ? `,"clat": "${event.detail.lat}"` : ''}
           ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lng) ? `,"clong": "${event.detail.lng}"` : ''}
         }`
-
-        console.log('filterRequest*****************', event.detail, filterRequest, hasSearchTerm, hasSearchLocation);
 
         request = this.lastWithFacetRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation ? filterRequest : initialRequest
       }
