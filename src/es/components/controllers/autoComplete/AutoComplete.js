@@ -40,11 +40,24 @@ export default class AutoComplete extends Shadow() {
     this.abortController = null
     this.requestAutoCompleteListener = event => {
       const token = event.detail.value
-      if (!token || token.length < 3) return
+      if (!token || token.length < 3) {
+        // update results
+        return this.dispatchEvent(new CustomEvent('request-with-facet',
+          {
+            detail: {
+              key: 'input-search',
+              value: ''
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          })
+        )
+      }
       if (this.hasAttribute('mock')) return this.dispatchMock()
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
-      this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {
+      this.dispatchEvent(new CustomEvent('auto-complete', {
         detail: {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
           fetch: fetch(`${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
@@ -61,26 +74,17 @@ export default class AutoComplete extends Shadow() {
       }))
     }
     this.clickOnPredictionListener = event => {
-      // update inputs
-      this.dispatchEvent(new CustomEvent(this.getAttribute('input-change') || 'search-change', {
-        detail: {
-          searchTerm: event.detail.description
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
       // close dialog
       this.dispatchEvent(new CustomEvent('close-search-dialog', {
         bubbles: true,
         cancelable: true,
         composed: true
       }))
-      // update Results
+      // update results
       this.dispatchEvent(new CustomEvent('request-with-facet',
         {
           detail: {
-            key: this.id,
+            key: 'input-search',
             value: event.detail.description
           },
           bubbles: true,
@@ -92,17 +96,17 @@ export default class AutoComplete extends Shadow() {
   }
 
   connectedCallback () {
-    this.addEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete', this.requestAutoCompleteListener)
-    this.addEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-selection', this.clickOnPredictionListener)
+    this.addEventListener('request-auto-complete', this.requestAutoCompleteListener)
+    this.addEventListener('auto-complete-selection', this.clickOnPredictionListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete', this.requestAutoCompleteListener)
-    this.removeEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-selection', this.clickOnPredictionListener)
+    this.removeEventListener('request-auto-complete', this.requestAutoCompleteListener)
+    this.removeEventListener('auto-complete-selection', this.clickOnPredictionListener)
   }
 
   dispatchMock () {
-    return this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete', {
+    return this.dispatchEvent(new CustomEvent('auto-complete', {
       detail: {
         /** @type {Promise<fetchAutoCompleteEventDetail>} */
         fetch: Promise.resolve({
