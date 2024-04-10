@@ -1,259 +1,143 @@
 <h1 id="tile">Event</h1>
 <section style="background-color: #f5ebeb; padding: 1em; will-change: auto;">
     <h2>Default</h2>
-    <ks-m-event data="{
-        'gueltig_ab': '22.04.2024',
-        'gueltig_bis': '19.06.2024',
-        'days': 'Mo, 18:00 - 20:00',
-        'badge': 'Blended',
-        'status': 1,
-        'status_label': 'Garantiert Durchgeführt',
-        'lektionen_label': '10 Lektionen',
-        'location': 'Zürich, Limmatstrasse 152',
-        'detail_mehr_label': 'Mehr Details',
-        'detail_weniger_label': 'Weniger Details',
-        'merken_label': '',
-        'anmelden_label': 'Jetzt anmelden',
-        'icons': [
-            {
+    <!-- Controller for Event Detail Request -->
+    <ks-c-event-detail endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/">
+        <ks-m-event data="{
+            'id': '1690680',
+            'center_id': '1019',
+            'language': 'D',
+            'typ': 'E',
+            'location': 'Wetzikon, Schellerstrasse 14',
+            'gueltig_ab': '2024-04-02',
+            'gueltig_bis': '2024-04-02',
+            'days': 'Mo',
+            'detail_mehr_label': 'Mehr Details',
+            'detail_weniger_label': 'Weniger Details',
+            'status': '0',
+            'status_label': 'Status Label',
+            'lektionen_label': '4 Lektionen',
+            'icons': [
+              {
                 'iconTooltip': 'Tooltip 1',
                 'name': 'Star'
-            },
-            {
+              },
+              {
                 'iconTooltip': 'Tooltip 2',
                 'name': 'Tag'
-            },
-            {
+              },
+              {
                 'iconTooltip': 'Tooltip 3',
                 'name': 'Percent'
-            }
-        ],
-        'price': {
-            'amount': '600.00 CHF',
-            'price': '600.00',
-            'per': 'Semester',
-            'from': 'ab'
-        },
-        'kursdetail_label': 'Kursdetails',
-        'bezeichnung_label': 'Kurs/Lehrgang',
-        'bezeichnung': 'Deutsch Niveau A2 (1/2) - Intensiv',
-        'kurs_id_label': 'Kurs Nr.',
-        'kurs_id': 'E_1198345',
-        'sprache_id_label': 'Kurssprache',
-        'sprache_id': 'Deutsch',
-        'teilnehmer_max_label': 'Max. Teilnehmer',
-        'teilnehmer_max': 14,
-        'anzahl_dauer_label': 'Dauer',
-        'anzahl_kurstage_label': '10 Lektionen',
-        'anzahl_lektionen_label': 'Total 5 Lektionen zu 50 Min.',
-        'kurs_zusatzinfo': 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa aliquid facilis, nobis vel officia itaque voluptatibus nostrum adipisci omnis fugit!',
-        'location_label': 'Durchführungsort',
-        'durchfuehrungaddresse': {
-            'link': 'https://maps.app.goo.gl/hrtbLoUa4HgubjXg8',
-            'beschreibung': 'Durchführungsort',
-            'strasse': 'Limmatstrasse 152',
-            'plz': '8005',
-            'ort': 'Zürich'
-        },
-        'downloads': [
-            {
-                'label': 'Angebotsdetail',
-                'link_label': 'PDF (1,4 MB)',
-                'link': '#'
+              }
+            ],
+            'price': {
+              'from': '',
+              'amount': '135.0 CHF',
+              'per': '',
+              'price': '135'
             },
-            {
-                'label': 'Ausbildungsplan',
-                'link_label': 'PDF (2,1 MB)',
-                'link': '#'
-            },
-            {
-                'label': 'Semesterplan',
-                'link_label': 'PDF (1,3 MB)',
-                'link': '#'
-            }
-        ],
-        'preis_info_label': 'Preisinfos',
-        'preis_kurs_label': 'Kursgeld',
-        'preis_kurs': '600.00 CHF',
-        'preis_lehrmittel_label': 'Lehrmittel',
-        'preis_lehrmittel': 'Inkl.',
-        'preis_material_label': 'Materialkosten',
-        'preis_material': '20.00 CHF',
-        'preis_total_label': 'Total (inkl. allfälliger MwSt.)',
-        'preis_total': '620.00 CHF',
-        'preis_info': 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
-        'termin_label': 'Termine',
-        'termine_alle_label': 'Alle Termine anzeigen',
-        'termine': [
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '24.04.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            },
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '24.05.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            },
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '24.06.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            },
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '25.07.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            },
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '25.08.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            }
-        ],
-        'deletable': false,
-        'kantonsbeitrag_label': 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa aliquid facilis, nobis vel officia itaque voluptatibus nostrum adipisci omnis fugit!',
-        'kantonsbeitrag_link': '#',
-        'kantonsbeitrag_link_label': 'Mehr erfahren',
-        'abo_label': 'Abonnements',
-        'abo_info_label': 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa aliquid facilis, nobis vel officia itaque voluptatibus nostrum adipisci omnis fugit!',
-        'abo_link': '#',
-        'abo_link_label': 'Mehr erfahren',
-        'abo_link_more': '#',
-        'abo_link_more_label': 'Passende Abonnemente anzeigen'
-    }"></ks-m-event>
+            
+                'kanton': {
+                  'tooltip': 'Test Tooltip Kanton',
+                  'title': 'Kanton Title'
+                },
+              
+            
+                'bewilligungspflichtig': {
+                  'tooltip': 'Bewilligungspflichtig tooltip',
+                  'title': 'Bewilligungspflichtig Title'
+                },
+              
+            'buttons': [{'link': '','text': 'Merken','event': 'bookmark'},{'link': 'kurse/kurs/1001-Nacht-Orientalische-Kuche-mit-Noretta-Keller--E_1690680_1019/Configuration','text': 'Buchen','event': 'undefined'}],
+            
+              'abo_typen': [
+                {
+                  'tooltip': 'abotype1',
+                  'typ': 'H',
+                  'title': 'abotype1',
+                  'link': '#'
+                },
+                {
+                  'tooltip': 'abotype2',
+                  'typ': 'O',
+                  'title': 'abotype2',
+                  'link': '#'
+                }
+              ],
+            
+            'deletable': false
+          }"></ks-m-event>
+    </ks-c-event-detail>
 </section>
 <section style="background-color: #f5ebeb; padding: 1em; will-change: auto;">
     <h2>Default</h2>
-    <ks-m-event data="{
-        'gueltig_ab': '22.04.2024',
-        'gueltig_bis': '19.06.2024',
-        'days': 'Mo, 18:00 - 20:00',
-        'badge': 'Blended',
-        'status': 3,
-        'status_label': 'Ausgebucht, Warteliste möglich',
-        'lektionen_label': '10 Lektionen',
-        'location': 'Zürich, Limmatstrasse 152',
-        'detail_mehr_label': 'Mehr Details',
-        'detail_weniger_label': 'Weniger Details',
-        'merken_label': 'Merken',
-        'anmelden_label': 'Jetzt anmelden',
-        'icons': [
-            {
+    <!-- Controller for Event Detail Request -->
+    <ks-c-event-detail endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/">
+        <ks-m-event data="{
+            'id': '1690721',
+            'center_id': '1019',
+            'language': 'D',
+            'typ': 'E',
+            'location': 'Wetzikon, Schellerstrasse 14',
+            'gueltig_ab': '2024-05-14',
+            'gueltig_bis': '2024-05-14',
+            'days': 'Mo',
+            'detail_mehr_label': 'Mehr Details',
+            'detail_weniger_label': 'Weniger Details',
+            'status': '0',
+            'status_label': 'Status Label',
+            'lektionen_label': '4 Lektionen',
+            'icons': [
+              {
                 'iconTooltip': 'Tooltip 1',
                 'name': 'Star'
-            },
-            {
+              },
+              {
                 'iconTooltip': 'Tooltip 2',
                 'name': 'Tag'
-            },
-            {
+              },
+              {
                 'iconTooltip': 'Tooltip 3',
                 'name': 'Percent'
-            }
-        ],
-        'price': {
-            'amount': '600.00 CHF',
-            'price': '600.00',
-            'per': 'Semester',
-            'from': 'ab'
-        },
-        'kursdetail_label': 'Kursdetails',
-        'bezeichnung_label': 'Kurs/Lehrgang',
-        'bezeichnung': 'Deutsch Niveau A2 (1/2) - Intensiv',
-        'kurs_id_label': 'Kurs Nr.',
-        'kurs_id': 'E_1198345',
-        'sprache_id_label': 'Kurssprache',
-        'sprache_id': 'Deutsch',
-        'teilnehmer_max_label': 'Max. Teilnehmer',
-        'teilnehmer_max': 14,
-        'anzahl_dauer_label': 'Dauer',
-        'anzahl_kurstage_label': '10 Lektionen',
-        'anzahl_lektionen_label': 'Total 5 Lektionen zu 50 Min.',
-        'kurs_zusatzinfo': 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa aliquid facilis, nobis vel officia itaque voluptatibus nostrum adipisci omnis fugit!',
-        'location_label': 'Durchführungsort',
-        'durchfuehrungaddresse': {
-            'link': 'https://maps.app.goo.gl/hrtbLoUa4HgubjXg8',
-            'beschreibung': 'Durchführungsort',
-            'strasse': 'Limmatstrasse 152',
-            'plz': '8005',
-            'ort': 'Zürich'
-        },
-        'downloads': [
-            {
-                'label': 'Angebotsdetail',
-                'link_label': 'PDF (1,4 MB)',
-                'link': '#'
+              }
+            ],
+            'price': {
+              'from': '',
+              'amount': '135.0 CHF',
+              'per': '',
+              'price': '135'
             },
-            {
-                'label': 'Ausbildungsplan',
-                'link_label': 'PDF (2,1 MB)',
-                'link': '#'
-            },
-            {
-                'label': 'Semesterplan',
-                'link_label': 'PDF (1,3 MB)',
-                'link': '#'
-            }
-        ],
-        'preis_info_label': 'Preisinfos',
-        'preis_kurs_label': 'Kursgeld',
-        'preis_kurs': '600.00 CHF',
-        'preis_lehrmittel_label': 'Lehrmittel',
-        'preis_lehrmittel': 'Inkl.',
-        'preis_material_label': 'Materialkosten',
-        'preis_material': '20.00 CHF',
-        'preis_total_label': 'Total (inkl. allfälliger MwSt.)',
-        'preis_total': '620.00 CHF',
-        'preis_info': 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
-        'termin_label': 'Termine',
-        'termine_alle_label': 'Alle Termine anzeigen',
-        'termine': [
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '24.04.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            },
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '24.05.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            },
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '24.06.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            },
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '25.07.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            },
-            {
-                'wochentaglabel': 'Montag',
-                'termin': '25.08.2024',
-                'start_zeit': '18:00',
-                'ende_zeit': '20:00'
-            }
-        ],
-        'deletable': true,
-        'kantonsbeitrag_label': 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa aliquid facilis, nobis vel officia itaque voluptatibus nostrum adipisci omnis fugit!',
-        'kantonsbeitrag_link': '#',
-        'kantonsbeitrag_link_label': 'Mehr erfahren',
-        'abo_label': 'Abonnements',
-        'abo_info_label': 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa aliquid facilis, nobis vel officia itaque voluptatibus nostrum adipisci omnis fugit!',
-        'abo_link': '#',
-        'abo_link_label': 'Mehr erfahren',
-        'abo_link_more': '#',
-        'abo_link_more_label': 'Passende Abonnemente anzeigen'
-    }"></ks-m-event>
+            
+                'kanton': {
+                  'tooltip': 'Test Tooltip Kanton',
+                  'title': 'Kanton Title'
+                },
+              
+            
+                'bewilligungspflichtig': {
+                  'tooltip': 'Bewilligungspflichtig tooltip',
+                  'title': 'Bewilligungspflichtig Title'
+                },
+              
+            'buttons': [{'link': '','text': 'Merken','event': 'bookmark'},{'link': 'kurse/kurs/1001-Nacht-Orientalische-Kuche-mit-Noretta-Keller--E_1690721_1019/Configuration','text': 'Buchen','event': 'undefined'}],
+            
+              'abo_typen': [
+                {
+                  'tooltip': 'abotype1',
+                  'typ': 'H',
+                  'title': 'abotype1',
+                  'link': '#'
+                },
+                {
+                  'tooltip': 'abotype2',
+                  'typ': 'O',
+                  'title': 'abotype2',
+                  'link': '#'
+                }
+              ],
+            
+            'deletable': false
+          }"></ks-m-event>
+    </ks-c-event-detail>
 </section>

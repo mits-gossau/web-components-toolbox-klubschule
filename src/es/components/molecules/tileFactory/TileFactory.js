@@ -191,6 +191,10 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfoEvents(event) {
+    const buttons = event.buttons?.reduce((acc, button, index) => acc + `{'link': '${button.link}','text': '${button.text}','event': '${button.event}'}${index >= event.buttons.length - 1 ? '' : ','}`, '')
+    const buttonsAsJson = buttons ? `'buttons': [${buttons}],` : undefined
+    const aboTypes = event.abo_typen?.reduce((acc, abo, index) => acc + `{'tooltip': '${abo.name}','typ': '${abo.typ}','title': '${abo.title}','link': '${abo.link}'}${index >= event.buttons.length - 1 ? '' : ','}`, '')
+    const aboTypesAsJson = aboTypes ? `'abo_typen': [${aboTypes}],` : undefined
     return `{
       'id': '${event.id}',
       'center_id': '${event.centerid}',
@@ -200,28 +204,35 @@ export default class TileFactory extends Shadow() {
       'gueltig_ab': '${event.dateBegin}',
       'gueltig_bis': '${event.dateEnd}',
       'days': '${event.days}',
-      'detail_mehr_label': '${event.detail_mehr_label || "Mehr Details"}',
-      'detail_weniger_label': '${event.detail_weniger_label || "Weniger Details"}',
+      'detail_label_more': '${event.detail_label_more}',
+      'detail_label_less': '${event.detail_label_less}',
       'status': '${event.state}',
-      'status_label': '${event.status_label || "Status Label"}',
+      'status_label': '${event.status_label}',
       'lektionen_label': '${event.lektionen_label}',
-      'merken_label': '${event.merken_label || 'Merken'}',
-      'anmelden_label': '${event.anmelden_label || 'Anmelden'}',
-      'icons': [
-        {
-          'iconTooltip': 'Tooltip 1',
-          'name': 'Star'
-        },
-        {
-          'iconTooltip': 'Tooltip 2',
-          'name': 'Tag'
-        },
-        {
-          'iconTooltip': 'Tooltip 3',
-          'name': 'Percent'
-        }
-      ],
-      'deletable': ${event.deletable || "true"}
+      'price': {
+        'from': '${event.price.pre}',
+        'amount': '${event.price.amount}',
+        'per': '${event.price.per}',
+        'price': '${event.price.price}'
+      },
+      ${event.KANTON ? `
+          'kanton': {
+            'tooltip': '${event.KANTON.name}',
+            'title': '${event.KANTON.title}'
+          },
+        `
+        : ``
+      }
+      ${event.bewilligungspflichtig ? `
+          'bewilligungspflichtig': {
+            'tooltip': '${event.bewilligungspflichtig.name}',
+            'title': '${event.bewilligungspflichtig.title}'
+          },
+        ` : ``
+      }
+      ${buttonsAsJson ? buttonsAsJson : ''}
+      ${aboTypesAsJson ? aboTypesAsJson : ``}
+      'deletable': ${event.deletable || "false"}
     }`
   }
 

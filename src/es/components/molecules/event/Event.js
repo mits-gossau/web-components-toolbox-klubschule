@@ -65,6 +65,9 @@ export default class Event extends Shadow() {
    */
   renderCSS() {
     this.css = /* css */`
+      :host ks-m-badge {
+        --button-badge-padding: 4px;
+      }
       :host .event {
         display: flex;
         flex-direction: column;
@@ -217,22 +220,12 @@ export default class Event extends Shadow() {
         align-items: center;
       }
 
-      :host .icon {
-        background-color: var(--mdx-base-color-klubschule-blue-600);
-        border-radius:  0.1875em;
-        height: 1.5rem;
-        width: 1.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      :host .icon + .icon {
+      :host ks-m-badge + ks-m-badge {
         margin-left: 0.5em;
       }
       
-      :host .icon a-icon-mdx {
-          color: var(--icon-box-color);
+      :host ks-m-badge a-icon-mdx {
+        color: var(--icon-box-color);
       }
 
       :host .price {
@@ -460,7 +453,7 @@ export default class Event extends Shadow() {
    */
   renderHTML() {
     const warnMandatory = 'data attribute requires: '
-
+    console.log(this.data)
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
@@ -476,7 +469,7 @@ export default class Event extends Shadow() {
           <ul class="meta">
             <li>
               <div>
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(this.data)}" size="1.5em"></a-icon-mdx>
+                ${this.data.status && this.data.status > 0 ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(this.data)}" size="1.5em"></a-icon-mdx>` : ''}
               </div>
               <span>${this.data.status_label}</span>
             </li>
@@ -490,8 +483,8 @@ export default class Event extends Shadow() {
             </li>
             <li>
               <button class="link-more expand">
-                <span class="more show">${this, this.data.detail_mehr_label}</span>
-                <span class="less">${this, this.data.detail_weniger_label}</span>
+                <span class="more show">${this, this.data.detail_label_more}</span>
+                <span class="less">${this, this.data.detail_label_less}</span>
                 <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em"></a-icon-mdx>
               </button>
             </li>
@@ -502,35 +495,35 @@ export default class Event extends Shadow() {
         </div>
         <div class="controls">
           <div class="controls-left">
-              ${this.data.deletable || this.data.merken_label ? `<div>` : ''}
-              ${this.data.deletable
-        ? `
-                <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em" class="icon-right"></a-icon-mdx>
-                `
-        : ''
-      }
-              ${this.data.merken_label
-        ? `
-                <ks-a-button namespace="button-secondary-" color="secondary">
-                  <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>${this.data.merken_label}
-                </ks-a-button> 
-                `
-        : ''
-      }
-              ${this.data.deletable || this.data.merken_label ? `</div>` : ''}
-            <div>
-              <ks-a-button namespace="button-primary-" color="secondary">${this.data.anmelden_label}</ks-a-button>          
-            </div>
+            ${this.data.buttons ? this.data.buttons.reduce(
+      (acc, button, index) => acc + (button.event != "bookmark" ? /* html */ `
+                <div>
+                  ${index === 0 && this.data.deletable ? /* html */ `<a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em" class="icon-right"></a-icon-mdx>` : ''}
+                  <ks-a-button namespace="${button.event === "bookmark" ? 'button-secondary-' : 'button-primary-'}" color="secondary" ${button.link ? `href="${button.link}"` : ""}>
+                    ${button.event === "bookmark" ? /* html */ `<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>` : ''}
+                    ${button.text}
+                  </ks-a-button>          
+                </div>
+              ` : ''),
+      ''
+    ) : ''}
           </div>
           <div class="controls-right">
             <div class="icons">
-              ${this.data.icons.reduce((acc, icon) => acc + /* html */`
-              <div class="icon">
-                <ks-m-tooltip namespace="tooltip-right-" text="${icon.iconTooltip}">
-                  <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
-                </ks-m-tooltip>
-              </div>
-              `, '')}
+              ${this.data.bewilligungspflichtig ? /* html */ `
+                <ks-m-badge type="primary" icon-name="Key" tooltip="${this.data.bewilligungspflichtig.tooltip}"></ks-m-badge>
+              ` : ''
+      }
+              ${this.data.abo_typen ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
+                <ks-m-badge type="primary" icon-url="${aboType.typ === "H" ? "../../../../../../../img/icons/event-abo-plus.svg" : "../../../../../../../img/icons/event-abo.svg"}" tooltip="${aboType.tooltip}">
+                </ks-m-badge>
+              `, ''
+      ) : ''}
+              ${this.data.kanton ? /* html */ `
+                <ks-m-badge type="primary" icon-name="Percent" tooltip="${this.data.kanton.tooltip}">
+                </ks-m-badge>
+              ` : ''
+      }
             </div>
             <span class="price">${this.data.price?.from ? this.data.price?.from + ' ' : ''}<strong>${this.data.price?.amount || ''}</strong>${this.data.price?.per ? ' / ' + this.data.price?.per : ''}</span>
           </div>
@@ -561,14 +554,13 @@ export default class Event extends Shadow() {
    */
   setIconUrl(data) {
     let iconName = '';
-
-    if (data.status == "0") {
+    if (data.status == "1") {
       iconName = 'garanteed';
-    } else if (data.status == "1") {
-      iconName = 'started';
     } else if (data.status == "2") {
-      iconName = 'await';
+      iconName = 'started';
     } else if (data.status == "3") {
+      iconName = 'await';
+    } else if (data.status == "4") {
       iconName = 'almost';
     }
 
@@ -650,7 +642,7 @@ export default class Event extends Shadow() {
                     </div>
                   </a>
                 </address>
-                <div class="badge">${data.badge}</div>
+                ${data.badge ? /* html */ `<div class="badge">${data.badge}</div>` : ''}
               </div>
             </div>
             <div>
@@ -661,15 +653,15 @@ export default class Event extends Shadow() {
               <ks-m-link-list namespace="link-list-download-">
                   <ul>
                   ${data.downloads.reduce((acc, download) => acc + /* html */`
-                  <li>
-                    <a href="${download.link}">
-                        <span>${download.label}</span>
-                        <div>
-                            <span>${download.link_label}</span>
-                            <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-                        </div>
-                    </a>                
-                  </li>
+                    <li>
+                      <a href="${download.link}">
+                          <span>${download.label}</span>
+                          <div>
+                              <span>${download.link_label}</span>
+                              <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                          </div>
+                      </a>                
+                    </li>
                   `, '')}
                   </ul>
               </ks-m-link-list>
