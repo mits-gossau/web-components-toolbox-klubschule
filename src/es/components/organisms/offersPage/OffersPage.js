@@ -199,6 +199,10 @@ export default class OffersPage extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/picture/Picture.js`,
         name: 'a-picture'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/contentFactory/ContentFactory.js`,
+        name: 'ks-m-content-factory'
       }
     ])
   }
@@ -410,7 +414,8 @@ export default class OffersPage extends Shadow() {
       <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)"">
         <o-grid namespace="grid-12er-">
           <div col-lg="12" col-md="12" col-sm="12">
-            <ks-m-content-search-item>
+            <ks-m-content-factory></ks-m-content-factory>
+            <!--<ks-m-content-search-item>
               <a href="#">
                 <div>
                     <h3>Lorem Ipsum Headline</h3>
@@ -479,13 +484,9 @@ export default class OffersPage extends Shadow() {
                   <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
               </a>
-            </ks-m-content-search-item>
+            </ks-m-content-search-item>-->
           </div>
         </o-grid>
-        <ks-a-button namespace="button-primary-" color="secondary">
-          <span>Weitere Inhalte</span>
-          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-        </ks-a-button>
       </ks-o-body-section>
     `
   }
