@@ -44,15 +44,15 @@ export default class AutoCompleteLocation extends Shadow() {
   }
 
   async connectedCallback () {
-    this.addEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete-location', this.requestAutoCompleteListener)
-    this.addEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', this.clickOnPredictionListener)
+    this.addEventListener('request-auto-complete-location', this.requestAutoCompleteListener)
+    this.addEventListener('auto-complete-location-selection', this.clickOnPredictionListener)
     this.addEventListener('client-location-coords', this.clickOnLocateMe)
     await this.loadDependency()
   }
 
   disconnectedCallback () {
-    this.removeEventListener(this.getAttribute('request-auto-complete') || 'request-auto-complete-location', this.requestAutoCompleteListener)
-    this.removeEventListener(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', this.clickOnPredictionListener)
+    this.removeEventListener('request-auto-complete-location', this.requestAutoCompleteListener)
+    this.removeEventListener('auto-complete-location-selection', this.clickOnPredictionListener)
     this.removeEventListener('client-location-coords', this.clickOnLocateMe)
   }
 
@@ -82,7 +82,7 @@ export default class AutoCompleteLocation extends Shadow() {
   }
 
   dispatchMock () {
-    return this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete-location', {
+    return this.dispatchEvent(new CustomEvent('auto-complete-location', {
       detail: {
         /** @type {Promise<fetchAutoCompleteEventDetail>} */
         fetch: Promise.resolve({
@@ -132,17 +132,6 @@ export default class AutoCompleteLocation extends Shadow() {
     )
   }
 
-  dispatchInputChange (searchTerm) {
-    this.dispatchEvent(new CustomEvent(this.getAttribute('input-change') || 'location-change', {
-      detail: {
-        searchTerm
-      },
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
-  }
-
   get apiKey () {
     return this.getAttribute('google-api-key') || ''
   }
@@ -160,14 +149,13 @@ export default class AutoCompleteLocation extends Shadow() {
         }
       }
     )
-    this.dispatchInputChange(event.detail.description)
   }
 
   requestAutoCompleteListener = (event) => {
     const token = event.detail.value
-    if (token === undefined || (token.length < 3 && token.length > 0)) return
+    if (token === undefined || (token.length < 3 && token.length > 0)) return 
     if (token.length === 0) {
-      this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete-location', {
+      this.dispatchEvent(new CustomEvent('auto-complete-location', {
         detail: {
           fetch: null
         },
@@ -175,6 +163,16 @@ export default class AutoCompleteLocation extends Shadow() {
         cancelable: true,
         composed: true
       }))
+      this.dispatchEvent(new CustomEvent('request-with-facet',
+        {
+          detail: {
+            key: 'location-search'
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        })
+      )
     }
     if (this.hasAttribute('mock')) return this.dispatchMock()
     if (this.abortController) this.abortController.abort()
@@ -183,7 +181,7 @@ export default class AutoCompleteLocation extends Shadow() {
     if (this.service) {
       this.service.getPlacePredictions({ input: token, componentRestrictions: { country: 'ch' }, types: ['geocode'] }, async (predictions) => {
         this.predictions = predictions
-        this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete') || 'auto-complete-location', {
+        this.dispatchEvent(new CustomEvent('auto-complete-location', {
           detail: {
             fetch: Promise.resolve({
               total: this.predictions.length,
@@ -204,7 +202,6 @@ export default class AutoCompleteLocation extends Shadow() {
   clickOnLocateMe = (event) => {
     const { lat, lng } = event.detail
 
-    this.dispatchInputChange(`${lat}, ${lng}`)
     this.setCoordinationFilter(lat, lng)
   }
 }
