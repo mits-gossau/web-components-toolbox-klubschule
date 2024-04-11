@@ -62,9 +62,18 @@ export default class WithFacet extends Shadow() {
       } else {
         shouldResetAllFilters = event.type === 'reset-all-filters'
         const shouldResetFilter = event.type === 'reset-filter'
+        
+        const initialFilters = JSON.parse(initialRequest).filter
+        const initialFiltersAsString = initialFilters.map((filter) => JSON.stringify(filter))
+
         this.filters = []
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
+
+        // if there is an initial Filter set (e.g. for Events) we want to keep it
+        if (filter && initialFiltersAsString?.length) {
+          this.filters.push(initialFiltersAsString)
+        }
 
         if (shouldResetAllFilters) {
           initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetAllFilters }))
@@ -79,15 +88,17 @@ export default class WithFacet extends Shadow() {
 
         this.updateURLParams()
 
+        let hasSearchTerm = false
+        let hasSearchLocation = false
         const filterRequest = `{
           "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
           "mandantId": ${this.getAttribute('mandant-id') || 110}
-          ${event.detail?.key === 'input-search' ? `,"searchText": "${event.detail.value}"` : ''}
-          ${event.detail?.key === 'location-search' ? `,"clat": "${event.detail.lat}"` : ''}
-          ${event.detail?.key === 'location-search' ? `,"clong": "${event.detail.lng}"` : ''}
+          ${(hasSearchTerm = event.detail?.key === 'input-search') ? `,"searchText": "${event.detail.value}"` : ''}
+          ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lat) ? `,"clat": "${event.detail.lat}"` : ''}
+          ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lng) ? `,"clong": "${event.detail.lng}"` : ''}
         }`
 
-        request = this.lastWithFacetRequest = this.filters.length > 0 ? filterRequest : initialRequest
+        request = this.lastWithFacetRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation ? filterRequest : initialRequest
       }
 
       let requestInit = {}
@@ -106,10 +117,11 @@ export default class WithFacet extends Shadow() {
         }
       }
 
+      let fetchPromise = null
       this.dispatchEvent(new CustomEvent('with-facet', {
         detail: {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
-          fetch: withFacetCache.has(request)
+          fetch: (fetchPromise = withFacetCache.has(request)
             ? withFacetCache.get(request)
             // TODO: withFacetCache key must include all variants as well as future payloads
             // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
@@ -171,12 +183,33 @@ export default class WithFacet extends Shadow() {
               if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
 
               return json
-            })).get(request)
+            })).get(request))
         },
         bubbles: true,
         cancelable: true,
         composed: true
       }))
+
+      fetchPromise.finally(json => {
+        const requestObj = JSON.parse(request)
+        // update inputs
+        this.dispatchEvent(new CustomEvent('search-change', {
+          detail: {
+            searchTerm: (json || requestObj).searchText
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+        this.dispatchEvent(new CustomEvent('location-change', {
+          detail: {
+            searchTerm: !(json || requestObj).clat || !(json || requestObj).clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      })
     }
 
     window.addEventListener('popstate', () => {

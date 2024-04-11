@@ -46,7 +46,7 @@ export default class AutoCompleteList extends Shadow() {
     }
   }
 
-  clickOnLocationListElement = (item) => {
+  clickOnListElement = (item) => {
     this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', {
       /** @type {import("../../controllers/autoCompleteLocation/AutoCompleteLocation.js").LocationSelectionItem} */
       detail: {
@@ -245,7 +245,7 @@ export default class AutoCompleteList extends Shadow() {
                     : 'Location'}" size="1em"></a-icon-mdx><span>${item.term}</span>
               `
               if (this.hasAttribute('auto-complete-selection')) {
-                listElement.addEventListener('click', () => this.clickOnLocationListElement(item))
+                listElement.addEventListener('click', () => this.clickOnListElement(item))
               }
               return listElement
             })
