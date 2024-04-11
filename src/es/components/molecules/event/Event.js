@@ -453,7 +453,6 @@ export default class Event extends Shadow() {
    */
   renderHTML() {
     const warnMandatory = 'data attribute requires: '
-    console.log(this.data)
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
@@ -511,16 +510,16 @@ export default class Event extends Shadow() {
           <div class="controls-right">
             <div class="icons">
               ${this.data.bewilligungspflichtig ? /* html */ `
-                <ks-m-badge type="primary" icon-name="Key" tooltip="${this.data.bewilligungspflichtig.tooltip}"></ks-m-badge>
+                <ks-m-badge type="primary" icon-name="Key" tooltip="${this.data.bewilligungspflichtig.text}"></ks-m-badge>
               ` : ''
       }
               ${this.data.abo_typen ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
-                <ks-m-badge type="primary" icon-url="${aboType.typ === "H" ? "../../../../../../../img/icons/event-abo-plus.svg" : "../../../../../../../img/icons/event-abo.svg"}" tooltip="${aboType.tooltip}">
+                <ks-m-badge type="primary" icon-url="${aboType.typ === "H" ? "../../../../../../../img/icons/event-abo-plus.svg" : "../../../../../../../img/icons/event-abo.svg"}" tooltip="${aboType.text}">
                 </ks-m-badge>
               `, ''
       ) : ''}
               ${this.data.kanton ? /* html */ `
-                <ks-m-badge type="primary" icon-name="Percent" tooltip="${this.data.kanton.tooltip}">
+                <ks-m-badge type="primary" icon-name="Percent" tooltip="${this.data.kanton.text}">
                 </ks-m-badge>
               ` : ''
       }
@@ -674,39 +673,27 @@ export default class Event extends Shadow() {
                 <span>${data.preis_info_label}</span>
               </h3>
               <table class="table-price">
-                <tr>
-                  <th>${data.preis_kurs_label}</th>
-                  <td>${data.preis_kurs}</td>
-                </tr>
-                <tr>
-                  <th>${data.preis_lehrmittel_label}</th>
-                  <td>${data.preis_lehrmittel}</td>
-                </tr>
-                <tr>
-                  <th>${data.preis_material_label}</th>
-                  <td>${data.preis_material}</td>
-                </tr>
-                <tr>
-                  <th>${data.preis_total_label}</th>
-                  <td><strong>${data.preis_total}</strong></td>
-                </tr>
+                ${data.preisinfos.reduce((acc,preisinfo) => acc + /* html */ `
+                  <tr>
+                    <th>${preisinfo.label}</th>
+                    <td>${preisinfo.text}</td>
+                  </tr>
+                `, '')}
               </table>
-              <p>${data.preis_info}</p>
-              ${data.kantonsbeitrag_label
-            ? `
-                <div>
-                  <ks-m-system-notification namespace="system-notification-default-" icon-name="Percent" with-icon-background>
-                      <div slot="description">
-                          <p>${data.kantonsbeitrag_label}</p>
-                          <a-link namespace="underline-">
-                              <a href="${data.kantonsbeitrag_link}">${data.kantonsbeitrag_link_label}</a>
-                          </a-link>
-                      </div>
-                  </ks-m-system-notification>
-                </div>
-                `
-            : ''
-          }   
+              ${data.preis_info ? /* html */ `<p>${data.preis_info}</p>` : ''}
+              ${data.kantonsbeitrag_label ? /* html */ `
+                  <div>
+                    <ks-m-system-notification namespace="system-notification-default-" icon-name="Percent" with-icon-background>
+                        <div slot="description">
+                            <p>${data.kantonsbeitrag_label}</p>
+                            <a-link namespace="underline-">
+                                <a href="${data.kantonsbeitrag_link}">${data.kantonsbeitrag_link_label}</a>
+                            </a-link>
+                        </div>
+                    </ks-m-system-notification>
+                  </div>
+                ` : ''
+              }   
             </div>
             <div>
               <h3>
@@ -719,7 +706,7 @@ export default class Event extends Shadow() {
                   <th>Termin</th>
                   <th>Zeit</th>
                 </tr>
-                ${data.termine.reduce((acc, termin) => acc + /* html */`
+                ${data.termine.reduce((acc, termin) => acc + /* html */ `
                 <tr>
                   <td>${termin.wochentaglabel}</td>                
                   <td>${termin.termin}</td>                
@@ -727,11 +714,34 @@ export default class Event extends Shadow() {
                 </tr>
                 `, '')}              
               </table>
-              <button class="link-more">
-                <span>${data.termine_alle_label}</span>
-                <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em" class="icon-right"></a-icon-mdx>
-              </button>
-            </div>   
+              ${data.termine_alle_label ? /* html */ `
+                <button class="link-more">
+                  <span>${data.termine_alle_label}</span>
+                  <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em" class="icon-right"></a-icon-mdx>
+                </button>
+              ` : ''}
+            </div>
+            ${data.abo_typen_label && this.data.abo_typen ? /* html */ `
+              <div>
+                <h3>
+                  <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Calendar" size="1.75em" class="icon-right"></a-icon-mdx>
+                  <span>${data.abo_typen_label}</span>
+                </h3>
+                ${this.data.abo_typen ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
+                  <div>
+                    <ks-m-system-notification namespace="system-notification-default-" icon-url="${aboType.typ === "H" ? "../../../../../../../img/icons/event-abo-plus.svg" : "../../../../../../../img/icons/event-abo.svg"}" with-icon-background>
+                        <div slot="description">
+                            <p>${aboType.text}</p>
+                            <a-link namespace="underline-">
+                                <a href="${aboType.link}">${aboType.link}</a>
+                            </a-link>
+                        </div>
+                    </ks-m-system-notification>
+                  </div>
+                `, ''
+                ) : ''}
+              </div>
+            ` : ''}
           </div>
         `
         return this.fetchModules([

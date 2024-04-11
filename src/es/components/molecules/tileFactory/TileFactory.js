@@ -193,7 +193,7 @@ export default class TileFactory extends Shadow() {
   fillGeneralTileInfoEvents(event) {
     const buttons = event.buttons?.reduce((acc, button, index) => acc + `{'link': '${button.link}','text': '${button.text}','event': '${button.event}'}${index >= event.buttons.length - 1 ? '' : ','}`, '')
     const buttonsAsJson = buttons ? `'buttons': [${buttons}],` : undefined
-    const aboTypes = event.abo_typen?.reduce((acc, abo, index) => acc + `{'tooltip': '${abo.name}','typ': '${abo.typ}','title': '${abo.title}','link': '${abo.link}'}${index >= event.buttons.length - 1 ? '' : ','}`, '')
+    const aboTypes = event.abo_typen?.reduce((acc, abo, index) => acc + `{'text': '${abo.text}','typ': '${abo.typ}','title': '${abo.title}','link': '${abo.link}'}${index >= event.buttons.length - 1 ? '' : ','}`, '')
     const aboTypesAsJson = aboTypes ? `'abo_typen': [${aboTypes}],` : undefined
     return `{
       'id': '${event.id}',
@@ -217,7 +217,7 @@ export default class TileFactory extends Shadow() {
       },
       ${event.KANTON ? `
           'kanton': {
-            'tooltip': '${event.KANTON.name}',
+            'text': '${event.KANTON.name}',
             'title': '${event.KANTON.title}'
           },
         `
@@ -225,7 +225,7 @@ export default class TileFactory extends Shadow() {
       }
       ${event.bewilligungspflichtig ? `
           'bewilligungspflichtig': {
-            'tooltip': '${event.bewilligungspflichtig.name}',
+            'text': '${event.bewilligungspflichtig.name}',
             'title': '${event.bewilligungspflichtig.title}'
           },
         ` : ``

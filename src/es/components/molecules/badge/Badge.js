@@ -159,9 +159,6 @@ export default class Badge extends Shadow() {
   renderHTML() {
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = ''
-    console.log(this.iconURL, `
-    <a-icon-mdx ${this.iconName ? `icon-name="${this.iconName}"` : ""} ${this.iconURL ? `icon-url="${this.iconURL}"` : ""} ${this.iconSize ? `size="${this.iconSize}"` : ''} class="icon-right"></a-icon-mdx>
-  `)
     this.html = /* HTML */`
     <div class="m-badge">
         ${this.type === 'primary'
