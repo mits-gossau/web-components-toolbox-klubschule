@@ -139,7 +139,6 @@ export default class Event extends Shadow() {
       }
 
       :host .meta li div {
-        background-color: var(--mdx-base-color-klubschule-green-600);
         height: 1.5rem;
         width: 1.5rem;
         border-radius: 100%;
