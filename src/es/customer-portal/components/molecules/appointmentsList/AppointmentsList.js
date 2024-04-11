@@ -161,7 +161,9 @@ export default class AppointmentsList extends Shadow() {
                ${filter}
               </div>
               <div col-lg="12" col-md="12" col-sm="12">
-                Filter...
+                [[ Filter ]]
+                <hr>
+                <br>
               </div>
             </o-grid>
             <div id="list-wrapper">

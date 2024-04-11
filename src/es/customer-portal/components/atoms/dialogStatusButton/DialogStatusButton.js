@@ -44,7 +44,6 @@ export default class DialogStatusButton extends Shadow() {
     event.detail.fetch.then(courseDetail => {
       if (this.dataset.id === event.detail.id) {
         this.courseAppointmentStatus = courseDetail.courseAppointmentStatus
-        debugger
         const btn = this.renderDialogActionButton(this.dataset.id, type, subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.dataContent)), this.escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         this.html = btn
@@ -57,7 +56,6 @@ export default class DialogStatusButton extends Shadow() {
     // const type = event.detail.type
     event.detail.fetch.then(courseDetail => {
       if (this.dataset.id === event.detail.id) {
-        debugger
         // const btn = this.renderDialogActionButton(this.dataset.id, type, subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.dataContent)), this.escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         // this.html = btn
@@ -70,7 +68,6 @@ export default class DialogStatusButton extends Shadow() {
     // const type = event.detail.type
     event.detail.fetch.then(courseDetail => {
       if (this.dataset.id === event.detail.id) {
-        debugger
         // const btn = this.renderDialogActionButton(this.dataset.id, type, subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.dataContent)), this.escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         // this.html = btn
@@ -80,7 +77,6 @@ export default class DialogStatusButton extends Shadow() {
 
   updateDialogBookingDetailListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
-      debugger
       const btn = this.renderDialogActionButton(this.dataset.id, null, subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.dataContent)), this.escapeForHtml(JSON.stringify(this.dataSubscription)))
       this.html = ''
       this.html = btn
@@ -177,7 +173,6 @@ export default class DialogStatusButton extends Shadow() {
   }
 
   renderDialogActionButton (id, type, subscriptionMode, status, content, selectedSubscription) {
-    debugger
     if (type === 'detail' && status === 1) {
       return `<ks-a-button tag="${id}" namespace="button-primary-" tag="[${actionType.bookingFinal}]"  request-event-name="request-show-dialog-booking">Termin buchen</ks-a-button>`
     }

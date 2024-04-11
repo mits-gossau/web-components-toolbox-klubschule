@@ -150,6 +150,9 @@ export default class AppointmentTile extends Tile {
       display:flex;
       flex-direction:column;
     }
+    :host .course-execution-info{
+      gap:0.5em;
+    }
     :host .course-price {
       text-align:right;
     }
@@ -196,19 +199,19 @@ export default class AppointmentTile extends Tile {
       padding-top:1.5em;
     }
     :host .status-not-bookable {
-      border:10px solid #F4001B;
+      border: 1px solid #F4001B;
     }
     :host .status-booked-out {
-      border: 10px solid #F4001B;
+      border: 1px solid #F4001B;
     }
     :host .status-closed {
-      border: 10px solid #F4001B;
+      border: 1px solid #F4001B;
     }
     :host .status-booked-cancellation-possible {
-      border: 10px solid #00997F;
+      border: 1px solid #00997F;
     }
     :host .status-booked-cancellation-not-possible {
-      border: 10px solid #00997F;
+      border: 1px solid #00997F;
     }
     :host .success {
       color:#00997F;
@@ -219,12 +222,7 @@ export default class AppointmentTile extends Tile {
     :host .hide-dialog-action-btn{
       display:none;
     }
-    :host .success-mesage {
-      display:flex;
-    }
-     ks-a-heading::part(success-message) {
-      color:pink !important;
-     }
+    
     @media only screen and (max-width: _max-width_) {
       :host  {}
     }
@@ -324,12 +322,12 @@ export default class AppointmentTile extends Tile {
                 <div>
                   <span class="m-tile__title date time">
                     ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} 
-                    <ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button>
+                    <!--<ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button>-->
                   </span>
                 </div>
               </div>
               <!-- --> 
-              <div class="course-info">
+              <div class="course-info course-execution-info">
                 <div id="status-wrapper" class="icon-info">
                   <a-course-info data-id="${this.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}"></a-course-info>
                 </div> 

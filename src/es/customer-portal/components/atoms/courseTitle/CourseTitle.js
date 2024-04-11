@@ -36,7 +36,6 @@ export default class CourseTitle extends Shadow() {
 
   updateSubscriptionCourseAppointmentDetailListener = event => {
     event.detail.fetch.then(courseDetail => {
-      console.log(courseDetail.courseId, this.dataset.id)
       const courseId = makeUniqueCourseId(courseDetail)
       if (this.dataset.id === courseId) {
         // open dialog
