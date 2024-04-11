@@ -23,7 +23,6 @@ export default class CourseTitle extends Shadow() {
   connectedCallback () {
     this.dataContent = JSON.parse(this.dataset.content)
     this.dataSubscription = JSON.parse(this.dataset.subscription)
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
     this.wrapper.addEventListener('click', this.clickEventListener)
@@ -31,24 +30,6 @@ export default class CourseTitle extends Shadow() {
 
   disconnectedCallback () {
     this.wrapper.removeEventListener('click', this.clickEventListener)
-    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-  }
-
-  updateSubscriptionCourseAppointmentDetailListener = event => {
-    event.detail.fetch.then(courseDetail => {
-      const courseId = makeUniqueCourseId(courseDetail)
-      if (this.dataset.id === courseId) {
-        // open dialog
-        this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
-          {
-            detail: {},
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }
-        ))
-      }
-    })
   }
 
   clickEventListener = event => {

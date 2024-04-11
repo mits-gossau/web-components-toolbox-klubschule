@@ -3,6 +3,8 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 import { courseAppointmentStatusMapping, actionType } from '../../../helpers/mapping.js'
 import { makeUniqueCourseId } from '../../../helpers/Shared.js'
 
+/* global CustomEvent */
+
 /**
  * @export
  * @class AppointmentTile
@@ -66,10 +68,18 @@ export default class AppointmentTile extends Tile {
   updateSubscriptionCourseAppointmentDetailListener = event => {
     this.actionType = event.detail.type
     event.detail.fetch.then(courseDetail => {
-      const courseId = makeUniqueCourseId(courseDetail)
-      if (this.dataset.id === courseId) {
+      this.courseId = makeUniqueCourseId(courseDetail)
+      if (this.dataset.id === this.courseId) {
         if (this.dialog) {
-          this.courseId = courseId
+          // open dialog
+          this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
+            {
+              detail: {},
+              bubbles: true,
+              cancelable: true,
+              composed: true
+            }
+          ))
           this.courseDetail = courseDetail
 
           this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
