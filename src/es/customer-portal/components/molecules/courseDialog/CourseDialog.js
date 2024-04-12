@@ -46,18 +46,6 @@ export default class CourseDialog extends Shadow() {
     document.body.removeEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.updateDialogBookingCancelListener)
   }
 
-  getTileState (data) {
-    const type = courseAppointmentStatusMapping[data.courseAppointmentStatus]
-    const { courseAppointmentFreeSeats } = data
-
-    return {
-      css: type.css,
-      status: data.courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : type.content.status,
-      info: type.content.info,
-      icon: type.content.icon
-    }
-  }
-
   // DETAIL
   updateSubscriptionCourseAppointmentDetailListener = event => {
     const type = event.detail.type
@@ -111,8 +99,6 @@ export default class CourseDialog extends Shadow() {
       event.detail.fetch.then(x => {
         this.viewContent.innerHTML = ''
         this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseData, this.courseDetail)
-        // const st = this.getTileState(x)
-        // this.currentTile.classList.add(st.css.border)
       })
     }
   }
