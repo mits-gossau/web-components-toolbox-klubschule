@@ -15,7 +15,6 @@ export default class AppointmentsList extends Shadow() {
    */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    // TODO: Refactor
     this.select = null
   }
 
@@ -51,14 +50,12 @@ export default class AppointmentsList extends Shadow() {
   }
 
   selectEventListener = (event) => {
-    console.log(event.target.value)
-    const d = JSON.parse(event.target.value)
-    console.log(d)
+    const data = JSON.parse(event.target.value)
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
       {
         detail: {
-          subscriptionType: d.subscriptionType,
-          subscriptionId: d.subscriptionId
+          subscriptionType: data.subscriptionType,
+          subscriptionId: data.subscriptionId
         },
         bubbles: true,
         cancelable: true,
@@ -82,9 +79,9 @@ export default class AppointmentsList extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host #list-wrapper {
-        display:flex;
+        display: flex;
         flex-direction: column;
-        gap:1em;
+        gap: 1em;
       }
       @media only screen and (max-width: _max-width_) {
         :host  {}
@@ -123,7 +120,6 @@ export default class AppointmentsList extends Shadow() {
    * @returns void
    */
   async renderHTML (fetch) {
-    // this.html = '<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmcyd2Vvd3Y5YjN5YTMzbmd6dzk1d3FvYnoydDZtbmg5MXdnZ2NoOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0MYGtCMbPTYWOzaU/giphy.gif">'
     this.renderLoading()
     return fetch.then(appointments => {
       if (appointments.errorCode !== 0) {
@@ -148,7 +144,6 @@ export default class AppointmentsList extends Shadow() {
         }
       ])
       return Promise.all([fetchModules]).then(async (children) => {
-        // clear loading
         this.html = ''
         const filter = this.renderFilterSubscriptions(appointments.filters.subscriptions)
         const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
@@ -172,6 +167,8 @@ export default class AppointmentsList extends Shadow() {
             `
         return this.html
       })
+    }).catch(e => {
+      console.error(e)
     })
   }
 
@@ -182,15 +179,13 @@ export default class AppointmentsList extends Shadow() {
   renderFilterSubscriptions (subscriptionsData) {
     const select = document.createElement('select')
     select.id = 'filters-subscriptions'
-
     subscriptionsData.forEach(item => {
       const option = document.createElement('option')
-      const v = { subscriptionId: item.subscriptionId, subscriptionType: item.subscriptionType }
-      option.value = JSON.stringify(v)
+      const value = { subscriptionId: item.subscriptionId, subscriptionType: item.subscriptionType }
+      option.value = JSON.stringify(value)
       option.textContent = item.subscriptionDescription
       select.appendChild(option)
     })
-
     const sortWrapper = document.createElement('div')
     sortWrapper.innerHTML = select.outerHTML
     return sortWrapper.innerHTML
@@ -225,7 +220,6 @@ export default class AppointmentsList extends Shadow() {
   }
 
   makeTileComponent (tile, appointment, selectedSubscription) {
-    // const { courseId } = appointment
     const appointmentData = this.escapeForHtml(appointment)
     const selectedSubscriptionData = this.escapeForHtml(selectedSubscription)
     const tileComponent = new tile.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line

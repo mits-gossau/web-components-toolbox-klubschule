@@ -1,7 +1,7 @@
 // @ts-check
 import Tile from '../../../../components/molecules/tile/Tile.js'
 import { courseAppointmentStatusMapping, actionType } from '../../../helpers/mapping.js'
-import { makeUniqueCourseId } from '../../../helpers/Shared.js'
+import { makeUniqueCourseId, escapeForHtml } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 
@@ -16,14 +16,9 @@ export default class AppointmentTile extends Tile {
    */
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
-    this.courseContent = null
+    this.courseData = null
     this.selectedSubscription = null
-    this.tileActionButtonReplace = null
-    this.tileActionButtonReplaceIcon = null
-    this.actionType = actionType.detail
-    this.viewContent = null
     this.courseDetail = null
-    this.courseId = null
   }
 
   connectedCallback () {
@@ -47,88 +42,81 @@ export default class AppointmentTile extends Tile {
   // BOOKING - SHOW FINAL STEP
   updateDialogBookingDetailListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
-      // this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
-      if (this.viewContent) {
-        this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseContent, this.courseDetail)
-      }
+      this.viewContent.innerHTML = ''
+      this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseData, this.courseDetail)
     }
   }
 
   // CANCEL - SHOW FINAL STEP
   updateDialogBookingCancelListener = event => {
-    // this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
     if (this.dataset.id === event.detail.tags[0]) {
-      if (this.viewContent) {
-        this.viewContent.innerHTML = this.renderDialogContentCancel(this.courseContent, this.courseDetail)
-      }
+      this.viewContent.innerHTML = ''
+      this.viewContent.innerHTML = this.renderDialogContentCancel(this.courseData, this.courseDetail)
     }
   }
 
   // DETAIL
   updateSubscriptionCourseAppointmentDetailListener = event => {
-    this.actionType = event.detail.type
-    event.detail.fetch.then(courseDetail => {
-      this.courseId = makeUniqueCourseId(courseDetail)
-      if (this.dataset.id === this.courseId) {
-        if (this.dialog) {
-          // open dialog
-          this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
-            {
-              detail: {},
-              bubbles: true,
-              cancelable: true,
-              composed: true
-            }
-          ))
-          this.courseDetail = courseDetail
-
-          this.viewContent = this.dialog.shadowRoot.getElementById('view-content')
-          let newTitle = ''
-          if (this.actionType === 'detail') {
-            newTitle = 'Termindetails'
-            this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseContent, this.courseDetail)
+    const type = event.detail.type
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(courseDetail => {
+        this.courseDetail = courseDetail
+        // open dialog
+        this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
+          {
+            detail: {},
+            bubbles: true,
+            cancelable: true,
+            composed: true
           }
-          if (this.actionType === 'booking') {
-            newTitle = 'Termin buchen'
-            this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseContent, this.courseDetail)
-          }
-          if (this.actionType === 'cancel') {
-            newTitle = 'Termin stornieren'
-            this.viewContent.innerHTML = this.renderDialogContentCancel(this.courseContent, this.courseDetail)
-          }
-
-          // update dialog title
-          const title = this.dialog.shadowRoot.getElementById('title')
-          title.innerHTML = newTitle
+        ))
+        this.viewContent.innerHTML = ''
+        let newTitle = ''
+        if (type === actionType.detail) {
+          newTitle = 'Termindetails'
+          this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
         }
-      }
-    })
+        if (type === actionType.booking) {
+          newTitle = 'Termin buchen'
+          this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseData, this.courseDetail)
+        }
+        if (type === actionType.cancel) {
+          newTitle = 'Termin stornieren'
+          this.viewContent.innerHTML = this.renderDialogContentCancel(this.courseData, this.courseDetail)
+        }
+
+        // update dialog title
+        const title = this.dialog.shadowRoot.getElementById('title')
+        title.innerHTML = newTitle
+      })
+    }
   }
 
   // BOOKED - SUCCESS
   updateSubscriptionCourseAppointmentBookingListener = event => {
-    event.detail.fetch.then(x => {
-      if ((this.courseId === event.detail.id)) {
-        this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseContent, this.courseDetail)
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(x => {
+        this.viewContent.innerHTML = ''
+        this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseData, this.courseDetail)
         const st = this.getTileState(x)
         this.currentTile.classList.add(st.css.border)
-      }
-    })
+      })
+    }
   }
 
   // CANCEL - SUCCESS
   updateSubscriptionCourseAppointmentReversalListener = event => {
-    event.detail.fetch.then(x => {
-      if (this.courseId === event.detail.id) {
-        console.log('reversal response: ', x)
-        this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseContent, this.courseDetail)
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(x => {
+        this.viewContent.innerHTML = ''
+        this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseData, this.courseDetail)
         const st = this.getTileState(x)
         const defaultClass = this.currentTile.classList[0]
         this.currentTile.classList.remove(...this.currentTile.classList)
         this.currentTile.classList.add(defaultClass)
         this.currentTile.classList.add(st.css.border)
-      }
-    })
+      })
+    }
   }
 
   /**
@@ -305,26 +293,26 @@ export default class AppointmentTile extends Tile {
         name: 'ks-a-heading'
       }
     ])
-    Promise.all([fetchModules]).then((children) => {
-      this.tileActionButtonReplace = children[0][1]
-      this.tileActionButtonReplaceIcon = children[0][2]
-      this.courseContent = Tile.parseAttribute(this.getAttribute('data'))
+    Promise.all([fetchModules]).then((_) => {
+      this.courseData = Tile.parseAttribute(this.getAttribute('data'))
       this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
-      this.html = this.renderTile(this.courseContent, this.selectedSubscription)
+      this.html = this.renderTile(this.courseData, this.selectedSubscription)
     })
   }
 
   renderTile (content, selectedSubscription) {
     const tileStatus = this.getTileState(content)
-    this.courseId = makeUniqueCourseId(content)
+    const courseId = makeUniqueCourseId(content)
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
-          <div id="tile-wrapper" class="m-tile ${tileStatus.css.border}" data-course-id=${this.courseId}>
+          <div id="tile-wrapper" class="m-tile ${tileStatus.css.border}" data-course-id=${courseId}>
             <div class="parent-body">
               <div class="course-info">
                 <div>
-                  <span class="m-tile__title title"> <a-course-title data-id="${this.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-course-title></span>
+                  <span class="m-tile__title title">
+                    <a-course-title data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-course-title>
+                  </span>
                 </div>
                 <div>
                   <span class="m-tile__title date">${this.formatCourseAppointmentDate(content.courseAppointmentDate)}</span>
@@ -339,7 +327,7 @@ export default class AppointmentTile extends Tile {
               <!-- --> 
               <div class="course-info course-execution-info">
                 <div id="status-wrapper" class="icon-info">
-                  <a-course-info data-id="${this.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}"></a-course-info>
+                  <a-course-info data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}"></a-course-info>
                 </div> 
                 <div class="icon-info">
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
@@ -358,7 +346,7 @@ export default class AppointmentTile extends Tile {
             </div><!-- parent body END -->
             <div class="parent-footer">
               <div class="course-booking">
-                ${this.renderDialog(content, selectedSubscription)}
+                ${this.renderDialog(courseId, content, selectedSubscription)}
               </div>
               <div class="course-price">
                 <span class="m-tile__title">
@@ -384,18 +372,9 @@ export default class AppointmentTile extends Tile {
     }
   }
 
-  escapeForHtml = (htmlString) => {
-    return htmlString
-      .replaceAll(/&/g, '&amp;')
-      .replaceAll(/</g, '&lt;')
-      .replaceAll(/>/g, '&gt;')
-      .replaceAll(/"/g, '&quot;')
-      .replaceAll(/'/g, '&#39;')
-  }
-
-  renderDialog (content, selectedSubscription) {
+  renderDialog (courseId, content, selectedSubscription) {
     return /* html */ `
-      <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${this.courseId}">
+      <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}">
         <div class="container dialog-header">
           <div id="back"></div>
           <h3 id="title"></h3>
@@ -412,11 +391,9 @@ export default class AppointmentTile extends Tile {
         </div>
         <div class="container dialog-footer">
           <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
-          <a-dialog-status-button data-id="${this.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
-          <!--<ks-a-button id="btn-action" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Termin buchen</ks-a-button>
-          <ks-a-button id="btn-action-cancel" color="quaternary" namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${this.escapeForHtml(JSON.stringify(content))},${this.escapeForHtml(JSON.stringify(selectedSubscription))}]'>Termin stornieren</ks-a-button>-->
+          <a-dialog-status-button data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
         </div>
-        <a-tile-status-button id="show-modal" data-id="${this.courseId}" data-content="${this.escapeForHtml(JSON.stringify(content))}" data-subscription="${this.escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>  
+        <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>  
       </m-dialog>
       `
   }
@@ -498,5 +475,9 @@ export default class AppointmentTile extends Tile {
 
   get dialog () {
     return this.root.querySelector('m-dialog')
+  }
+
+  get viewContent () {
+    return this.dialog.shadowRoot.getElementById('view-content')
   }
 }
