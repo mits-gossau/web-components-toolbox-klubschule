@@ -1,9 +1,10 @@
 <ks-o-offers-page endpoint="https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet"
-        initial-request='{"filter":[{"id": "17", "visible": false, "children": [{ "id": "D_97351_1019", "selected": true, "visible": false, "hasChilds": false, "eTag": null}],"hasChilds": true,"eTag": null}],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":6}'
+        initial-request='{"filter":[{"id": "17", "visible": false, "children": [{ "id": "D_97351_1019", "selected": true, "visible": false, "hasChilds": false, "eTag": null}],"hasChilds": true,"eTag": null}],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":12}'
         endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
         google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s" mock-auto-complete
         event-detail-url="https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/">
-        <div class="js-badge__selector">
+        <!-- Badge Legend -->
+        <ks-m-badge-legend>
                 <div><ks-m-badge type="primary" icon-name="Key"
                                 tooltip="Lorem Ipsum is simply dummy text of the printing and typesetting industry."></ks-m-badge><span>Bewilligunspflichtig</span>
                 </div>
@@ -17,5 +18,6 @@
                         <ks-m-badge type="primary" icon-name="Percent"
                                 tooltip="Lorem Ipsum is simply dummy text of the printing and typesetting industry."></ks-m-badge><span>Subventionen</span>
                 </div>
-        </div>
+        </ks-m-badge-legend>
+        <!-- /Badge Legend -->
 </ks-o-offers-page>

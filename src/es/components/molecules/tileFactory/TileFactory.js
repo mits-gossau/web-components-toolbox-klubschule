@@ -215,10 +215,10 @@ export default class TileFactory extends Shadow() {
         'per': '${event.price.per}',
         'price': '${event.price.price}'
       },
-      ${event.KANTON ? `
+      ${event.kanton ? `
           'kanton': {
-            'text': '${event.KANTON.name}',
-            'title': '${event.KANTON.title}'
+            'text': '${event.kanton.name}',
+            'title': '${event.kanton.title}'
           },
         `
         : ``

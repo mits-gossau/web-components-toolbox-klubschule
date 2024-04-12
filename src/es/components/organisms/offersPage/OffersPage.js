@@ -496,7 +496,7 @@ export default class OffersPage extends Shadow() {
   }
 
   get badgeContainer() {
-    return this.root.querySelector('.js-badge__selector')
+    return this.root.querySelector('ks-m-badge-legend')
   }
 
   get eventDetailURL() {
