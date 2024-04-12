@@ -535,8 +535,12 @@ export default class Event extends Shadow() {
         name: 'ks-a-button'
       },
       {
-        path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
-        name: 'ks-m-tooltip'
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/badge/Badge.js`,
+        name: 'ks-m-badge'
       }
     ])
   }
@@ -744,10 +748,6 @@ export default class Event extends Shadow() {
           </div>
         `
         return this.fetchModules([
-          {
-            path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-            name: 'a-icon-mdx'
-          },
           {
             path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
             name: 'ks-a-heading'
