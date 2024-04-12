@@ -173,6 +173,7 @@ export default class DialogStatusButton extends Shadow() {
   }
 
   renderDialogActionButton (id, type, subscriptionMode, status, content, selectedSubscription) {
+    debugger
     if (type === 'detail' && status === 1) {
       return `<ks-a-button tag="${id}" namespace="button-primary-" tag="[${actionType.bookingFinal}]"  request-event-name="request-show-dialog-booking">Termin buchen</ks-a-button>`
     }
