@@ -47,9 +47,8 @@
 ```
     <ks-m-contact-row
         name="Klubschule Migros Zürich"
-        icon-name="Mail"
+        icon-name="ArrowUpRight"
         href="www.google.com"
-        is-external
     >
     </ks-m-contact-row>
 ```
