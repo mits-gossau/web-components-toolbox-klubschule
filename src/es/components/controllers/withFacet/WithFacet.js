@@ -52,19 +52,24 @@ export default class WithFacet extends Shadow() {
 
       console.log('---------------------------------event', event, event.type === 'reset-all-filters' ? 'reset-all-filters' : 'request')
 
-      let request; let shouldResetAllFilters; let isNextPage = false
+      let request
+      let shouldResetAllFilters
+      let shouldResetFilter
+      let shouldResetFilterFromFilterSelectButton
+      let isNextPage = false
+
       // ppage reuse last request
       if (event.detail?.ppage && this.lastWithFacetRequest) {
         request = JSON.stringify(Object.assign(JSON.parse(this.lastWithFacetRequest), { ppage: event.detail.ppage }))
-        shouldResetAllFilters = false
         isNextPage = true
         this.updateURLParams()
       } else {
-        shouldResetAllFilters = event.type === 'reset-all-filters'
-        const shouldResetFilter = event.type === 'reset-filter'
-        
         const initialFilters = JSON.parse(initialRequest).filter
         const initialFiltersAsString = initialFilters.map((filter) => JSON.stringify(filter))
+
+        shouldResetAllFilters = event.type === 'reset-all-filters'
+        shouldResetFilter = event.type === 'reset-filter'
+        shouldResetFilterFromFilterSelectButton = event.detail?.this?.hasAttribute('filter')
 
         this.filters = []
         const filter = this.constructFilterItem(event)
@@ -81,9 +86,14 @@ export default class WithFacet extends Shadow() {
         }
 
         if (shouldResetFilter) {
+          initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetFilter }))
           const filterParent = event.detail.this.getAttribute('filter-parent')
           this.params.delete(`${filterParent}`)
           self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+        }
+
+        if(shouldResetFilterFromFilterSelectButton) {
+          initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetFilterFromFilterSelectButton }))
         }
 
         this.updateURLParams()
@@ -131,6 +141,7 @@ export default class WithFacet extends Shadow() {
               }
               throw new Error(response.statusText)
             }).then(json => {
+              console.log('----------json', json)
               // store initial response
               if (!this.filters.length || this.filters.length === 0) {
                 this.initialResponse = json
@@ -181,6 +192,8 @@ export default class WithFacet extends Shadow() {
 
               if (isNextPage) json = Object.assign(json, { isNextPage })
               if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
+              if (shouldResetFilter) json = Object.assign(json, { shouldResetFilter })
+              if (shouldResetFilterFromFilterSelectButton) json = Object.assign(json, { shouldResetFilterFromFilterSelectButton })
 
               return json
             })).get(request))
