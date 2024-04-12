@@ -1,0 +1,117 @@
+<o-grid namespace="grid-2columns-content-stage-" first-container-vertical="" first-column-with="100%"
+    background-color="var(--mdx-sys-color-accent-6-subtle1)" dark-text-color="" width="100%">
+    <div>
+        <ks-a-heading tag="h1" content-stage>
+            Klubschule Migros Baden
+        </ks-a-heading>
+    </div>
+</o-grid>
+
+<div class="spacer"></div>
+
+<o-grid namespace="grid-2columns-content-section-" first-container-vertical="" first-column-with="66%" with-border="">
+    <div>
+        <div class="center">
+            <ks-a-button namespace="button-primary-" color="secondary" href="#angebote">
+                <span> Angebote</span>
+                <a-icon-mdx icon-name="ArrowDownRight" size="1em" class="icon-right"></a-icon-mdx>
+            </ks-a-button>
+        </div>
+    </div>
+
+    <aside>
+        <ks-a-heading tag="h3">
+            Kontakt
+        </ks-a-heading>
+        <p>
+            Nordhaus 3 / G&#xFC;terstrasse<br />
+            5400 Baden
+        </p>
+        <div class="umbraco-forms-form-config umbraco-forms-hidden" data-id="6c33799dbfa74188a75f5b9413f6bfe3"
+            data-serialized-page-button-conditions="{}" data-serialized-fieldset-conditions="{}"
+            data-serialized-field-conditions="{}" data-serialized-fields-not-displayed="{}"
+            data-trigger-conditions-check-on="change" data-form-element-html-id-prefix=""
+            data-disable-validation-dependency-check="false"></div>
+
+        <p>
+            <a href="tel:&#x2B;41 58 568 97 97" title="&#x2B;41 58 568 97 97">&#x2B;41 58 568 97 97</a>
+        </p>
+
+        <ks-a-heading tag="h3">
+            &#xD6;ffnungszeiten
+        </ks-a-heading>
+        <table>
+            <tr>
+                <td>Montag</td>
+                <td>08:00</td>
+                <td>-</td>
+                <td>20:00</td>
+            </tr>
+            <tr>
+                <td>Dienstag</td>
+                <td>08:00</td>
+                <td>-</td>
+                <td>20:00</td>
+            </tr>
+            <tr>
+                <td>Mittwoch</td>
+                <td>08:00</td>
+                <td>-</td>
+                <td>20:00</td>
+            </tr>
+            <tr>
+                <td>Donnerstag</td>
+                <td colspan="3">geschlossen</td>
+            </tr>
+            <tr>
+                <td>Freitag</td>
+                <td>08:00</td>
+                <td>-</td>
+                <td>12:00</td>
+            </tr>
+            <tr>
+                <td>Samstag</td>
+                <td colspan="3">geschlossen</td>
+            </tr>
+            <tr>
+                <td>Sonntag</td>
+                <td colspan="3">geschlossen</td>
+            </tr>
+        </table>
+        <ks-a-heading tag="h3">
+            Service
+        </ks-a-heading>
+        <ks-m-link-list namespace="link-list-default-">
+            <ul>
+                <li>
+ <div class="umbraco-forms-form-config umbraco-forms-hidden"
+                        data-id="f0fd7747c9274881b671af5ca86c4177" data-serialized-page-button-conditions="{}"
+                        data-serialized-fieldset-conditions="{}" data-serialized-field-conditions="{}"
+                        data-serialized-fields-not-displayed="{}" data-trigger-conditions-check-on="change"
+                        data-form-element-html-id-prefix="" data-disable-validation-dependency-check="false"></div>
+
+                </li>
+                <li>
+
+                    <div class="umbraco-forms-form-config umbraco-forms-hidden"
+                        data-id="7acf130c180b4ce0a22cd34e36a7cf4d" data-serialized-page-button-conditions="{}"
+                        data-serialized-fieldset-conditions="{}" data-serialized-field-conditions="{}"
+                        data-serialized-fields-not-displayed="{}" data-trigger-conditions-check-on="change"
+                        data-form-element-html-id-prefix="" data-disable-validation-dependency-check="false"></div>
+
+                </li>
+            </ul>
+        </ks-m-link-list>
+    </aside>
+</o-grid>
+
+
+
+<div id="angebote">
+
+    <ks-o-offers-page endpoint="https://miducabulaliwebappdev-test.azurewebsites.net/api/CourseSearch/withfacet"
+    initial-request='{"filter":[],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":6}'
+    endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
+    google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"></ks-o-offers-page>
+
+</div>
