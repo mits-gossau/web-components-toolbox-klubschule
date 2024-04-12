@@ -154,6 +154,13 @@ export default class AppointmentTile extends Tile {
     :host .hide-dialog-action-btn{
       display:none;
     }
+
+    :host .location-room-info {
+      align-items: stretch;
+    }
+    :host .location-room {
+      display:flex;
+    }
     
     @media only screen and (max-width: _max-width_) {
       :host  {}
@@ -272,14 +279,16 @@ export default class AppointmentTile extends Tile {
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
                   <span class="m-tile__content">${content.instructorDescription}</span>
                 </div>
-                <div class="icon-info">
+                <div class="icon-info location-room-info">
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
-                  <span class="m-tile__content">
-                    ${content.courseLocation}
-                  </span>
-                  <span class="m-tile__content">
-                    Raum: ${content.roomDescription}
-                  </span>
+                  <div class="location-room">
+                    <span class="m-tile__content">
+                      ${content.courseLocation}
+                    </span>
+                    <span class="m-tile__content">
+                      Raum: ${content.roomDescription}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div><!-- parent body END -->
