@@ -1,6 +1,6 @@
 // @ts-check
 import Tile from '../../../../components/molecules/tile/Tile.js'
-import { courseAppointmentStatusMapping, actionType } from '../../../helpers/mapping.js'
+import { courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
 import { makeUniqueCourseId, escapeForHtml } from '../../../helpers/Shared.js'
 
 /**

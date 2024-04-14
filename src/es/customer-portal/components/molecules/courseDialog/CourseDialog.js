@@ -1,7 +1,7 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 import { escapeForHtml } from '../../../helpers/Shared.js'
-import { courseAppointmentStatusMapping, actionType } from '../../../helpers/mapping.js'
+import { actionType } from '../../../helpers/Mapping.js'
 
 /* global CustomEvent */
 
@@ -29,8 +29,8 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
-    document.body.addEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.updateDialogBookingDetailListener)
-    document.body.addEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.updateDialogBookingCancelListener)
+    document.body.addEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.requestBookingDetailListener)
+    document.body.addEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.requestBookingCancelListener)
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
   }
@@ -42,14 +42,15 @@ export default class CourseDialog extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
-    document.body.removeEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.updateDialogBookingDetailListener)
-    document.body.removeEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.updateDialogBookingCancelListener)
+    document.body.removeEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.requestBookingDetailListener)
+    document.body.removeEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.requestBookingCancelListener)
   }
 
   // DETAIL
   updateSubscriptionCourseAppointmentDetailListener = event => {
-    const type = event.detail.type
     if (this.dataset.id === event.detail.id) {
+      const type = event.detail.type
+      this.viewContent.innerHTML = ''
       event.detail.fetch.then(courseDetail => {
         this.courseDetail = courseDetail
         // open dialog
@@ -85,7 +86,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   // BOOKING - SHOW FINAL STEP
-  updateDialogBookingDetailListener = event => {
+  requestBookingDetailListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
       this.viewContent.innerHTML = ''
       this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseData, this.courseDetail)
@@ -124,7 +125,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   // CANCEL - SHOW FINAL STEP
-  updateDialogBookingCancelListener = event => {
+  requestBookingCancelListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
       this.viewContent.innerHTML = ''
       this.viewContent.innerHTML = this.renderDialogContentCancel(this.courseData, this.courseDetail)
@@ -239,7 +240,7 @@ export default class CourseDialog extends Shadow() {
           </div>
         </div>
         <div class="container dialog-footer">
-          <ks-a-button id="close" namespace="button-tertiary-" color="secondary">Close</ks-a-button>
+          
           <a-dialog-status-button data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
         </div>
         <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>  
