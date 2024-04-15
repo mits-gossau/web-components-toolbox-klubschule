@@ -246,6 +246,7 @@ export default class TileList extends Shadow() {
     const warnMandatory = 'data attribute requires: '
     const data = TileList.parseAttribute(this.getAttribute('data'))
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
+
     const buttons = data.buttons?.reduce((acc, button, index) => acc + /* html */`
         ${button.typ === 'primary' && index !== 0 ? '<div></div><div>' : ''}
           <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.typ ? 'button-'+button.typ+'-' : 'button-tertiary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>

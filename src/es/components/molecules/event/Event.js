@@ -90,6 +90,11 @@ export default class Event extends Shadow() {
         width: 100%;
       }
 
+      :host .controls-left_buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
       :host .date {
         font-size: 1.5rem;
         line-height: 1.625rem;
@@ -460,15 +465,13 @@ export default class Event extends Shadow() {
    */
   renderHTML() {
     const buttons = this.data.buttons?.reduce((acc, button, index) => acc + /* html */`
-        ${button.typ === 'primary' && index !== 0 ? '<div></div><div>' : ''}
-          <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-tertiary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
-            ${button.text ? '<span>' + button.text + '</span>' : ''}
-            ${button.text ? 
-              `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName || 'ArrowRight'}" size="1em" class="icon-right"></a-icon-mdx>` 
-              : ''}
-            ${!button.text && !button.typ ? `<a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em"></a-icon-mdx>` : ''}
-          </ks-a-button>
-        ${button.typ === 'primary' && index !== 0 ? '</div>' : ''}
+      <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-tertiary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
+        ${button.text ? '<span>' + button.text + '</span>' : ''}
+        ${button.text ? 
+          `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName || 'ArrowRight'}" size="1em" class="icon-right"></a-icon-mdx>` 
+          : ''}
+        ${!button.text && !button.typ ? `<a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em"></a-icon-mdx>` : ''}
+      </ks-a-button>
     `, '')
 
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
@@ -512,7 +515,9 @@ export default class Event extends Shadow() {
         </div>
         <div class="controls">
           <div class="controls-left">
-            ${buttons}
+            <div class="controls-left_buttons">
+              ${buttons}
+            </div>
           </div>
           <div class="controls-right">
             <div class="icons">

@@ -124,6 +124,11 @@ export default class Tile extends Shadow() {
           flex-direction: row;
           align-items: center;
       }
+
+      :host .m-tile__foot-buttons {
+        display: flex;
+        gap: 1em;
+      }
       
       :host .m-tile__foot-right {
           display: flex;
@@ -261,7 +266,7 @@ export default class Tile extends Shadow() {
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
 
     const buttons = data.buttons?.reduce((acc, button) => acc + /* html */`
-      <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.text ? 'button-secondary-' : 'button-tertiary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
+      <ks-a-button ${button.text || button.text !== '' ? '' : 'icon'} namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
         ${button.text ? '<span>' + button.text + '</span>' : ''}
         ${button.text ? 
           `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName || 'ArrowRight'}" size="1em" class="icon-right"></a-icon-mdx>` 
@@ -306,7 +311,9 @@ export default class Tile extends Shadow() {
           <div class="m-tile__foot-left">
             <!-- Trash Icon is pre-placed for wishlist -->
             <!-- <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx> -->
-            ${buttons}
+            <div class="m-tile__foot-buttons">
+              ${buttons}
+            </div>
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
