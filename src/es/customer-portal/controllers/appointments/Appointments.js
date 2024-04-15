@@ -53,15 +53,7 @@ export default class Appointments extends HTMLElement {
       subscriptionType,
       subscriptionId
     }
-
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-      signal: this.abortControllerSubscriptionCourseAppointments.signal
-    }
+    const fetchOptions = this.fetchOptions(data, this.abortControllerSubscriptionCourseAppointments)
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointments}`
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
@@ -91,14 +83,7 @@ export default class Appointments extends HTMLElement {
       userId: this.dataset.userId
     }
     const courseId = makeUniqueCourseId(tags[0])
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-      signal: this.abortControllerSubscriptionCourseAppointmentBooking.signal
-    }
+    const fetchOptions = this.fetchOptions(data, this.abortControllerSubscriptionCourseAppointmentBooking)
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointmentBooking}`
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', {
@@ -131,14 +116,7 @@ export default class Appointments extends HTMLElement {
     }
     const type = tags[2] ? tags[2].type : ''
     const courseId = makeUniqueCourseId(tags[0])
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-      signal: this.abortControllerSubscriptionCourseAppointmentDetail.signal
-    }
+    const fetchOptions = this.fetchOptions(data, this.abortControllerSubscriptionCourseAppointmentDetail)
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointmentDetail}`
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', {
@@ -170,14 +148,7 @@ export default class Appointments extends HTMLElement {
       userId: this.dataset.userId || ''
     }
     const courseId = makeUniqueCourseId(tags[0])
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-      signal: this.abortControllerSubscriptionCourseAppointmentReversalListener.signal
-    }
+    const fetchOptions = this.fetchOptions(data, this.abortControllerSubscriptionCourseAppointmentReversalListener)
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointmentReversal}`
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', {
@@ -192,5 +163,22 @@ export default class Appointments extends HTMLElement {
       cancelable: true,
       composed: true
     }))
+  }
+
+  /**
+   * Returns an object with method, headers, body, and signal properties for making a POST request with fetch.
+   * @param {Object} data - The data that you want to send in the POST request. This data should be in a format that can be converted to JSON.
+   * @param {AbortController} abortController - Abort Fetch requests
+   * @returns {Object} An object is being returned to use as option object for api fetch
+   */
+  fetchOptions (data, abortController) {
+    return {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      signal: abortController.signal
+    }
   }
 }

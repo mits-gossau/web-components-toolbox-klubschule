@@ -101,7 +101,7 @@ export default class AppointmentsList extends Shadow() {
         namespace: false
       },
       {
-        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`, 
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`,
         namespaceFallback: true
       }
     ]
