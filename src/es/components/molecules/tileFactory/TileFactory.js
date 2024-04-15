@@ -112,6 +112,7 @@ export default class TileFactory extends Shadow() {
         }
       ])
     ]).then(([data]) => {
+      console.log(data)
       if (!data.isNextPage) this.html = ''
       if (!data) {
         this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}</span>`
@@ -159,12 +160,15 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfo(course) {
+    console.log(course)
     const buttons = []
-    course.buttons.forEach(button => {
-      buttons.push(`{'text': '${button.text}','iconName': '${button.iconName ? button.iconName : 'ArrowRight'}'${button.link ? `, 'link': '${button.link}'` : ''}}`)
+    course.buttons?.forEach(button => {
+      buttons.push(`{
+        ${button.text ? `'text': '${button.text}'` : ''}
+        ${button.link ? `,'link': '${button.link}'` : ''}
+        ${button.typ ? `,'typ': '${button.typ}'` : ''}
+      }`)
     })
-    console.log('buttons', buttons)
-
       
     return `
       'title': '${course.title}',
@@ -194,6 +198,7 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfoEvents(event) {
+    console.log('event', event)
     return `{
       'id': '${event.id}',
       'center_id': '${event.centerid}',
@@ -210,6 +215,7 @@ export default class TileFactory extends Shadow() {
       'lektionen_label': '${event.lektionen_label}',
       'merken_label': '${event.merken_label || 'Merken'}',
       'anmelden_label': '${event.anmelden_label || 'Anmelden'}',
+      'buttons': '[${event.buttons || ''}]',
       'icons': [
         {
           'iconTooltip': 'Tooltip 1',

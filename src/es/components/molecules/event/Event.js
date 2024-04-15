@@ -461,7 +461,7 @@ export default class Event extends Shadow() {
   renderHTML() {
     const buttons = this.data.buttons?.reduce((acc, button, index) => acc + /* html */`
         ${button.typ === 'primary' && index !== 0 ? '<div></div><div>' : ''}
-          <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.typ ? 'button-'+button.typ+'-' : 'button-tertiary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
+          <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-tertiary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
             ${button.text ? '<span>' + button.text + '</span>' : ''}
             ${button.text ? 
               `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName || 'ArrowRight'}" size="1em" class="icon-right"></a-icon-mdx>` 

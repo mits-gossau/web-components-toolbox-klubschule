@@ -246,6 +246,18 @@ export default class TileList extends Shadow() {
     const warnMandatory = 'data attribute requires: '
     const data = TileList.parseAttribute(this.getAttribute('data'))
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
+    const buttons = data.buttons?.reduce((acc, button, index) => acc + /* html */`
+        ${button.typ === 'primary' && index !== 0 ? '<div></div><div>' : ''}
+          <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.typ ? 'button-'+button.typ+'-' : 'button-tertiary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
+            ${button.text ? '<span>' + button.text + '</span>' : ''}
+            ${button.text ? 
+              `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName || 'ArrowRight'}" size="1em" class="icon-right"></a-icon-mdx>` 
+              : ''}
+            ${!button.text && !button.typ ? `<a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em"></a-icon-mdx>` : ''}
+          </ks-a-button>
+        ${button.typ === 'primary' && index !== 0 ? '</div>' : ''}
+    `, '')
+    
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="o-tile-list">
@@ -253,12 +265,12 @@ export default class TileList extends Shadow() {
           <div class="o-tile-list__top">
             <span class="o-tile-list__title">${data.title || warnMandatory + 'title'}</span>
             ${data.iconTooltip
-? `
-            <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
-              <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
-            </ks-m-tooltip>
-              `
-: ''}          
+              ? `
+                <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
+                  <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
+                </ks-m-tooltip>
+                  `
+              : ''}          
           </div>
           <div class="o-tile-list__middle">
             ${data.location?.name
@@ -278,10 +290,7 @@ export default class TileList extends Shadow() {
           </div>
           <div class="o-tile-list__bottom">
             <div class="o-tile-list__bottom-left">
-              <ks-a-button namespace="button-quaternary-" color="secondary">
-                <span>${data.button.text || warnMandatory + 'button.text'}</span>
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ChevronDown" size="1em" class="icon-right">
-              </ks-a-button>
+              ${buttons}
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">

@@ -64,8 +64,8 @@ export default class WithFacet extends Shadow() {
         isNextPage = true
         this.updateURLParams()
       } else {
-        const initialFilters = JSON.parse(initialRequest).filter
-        const initialFiltersAsString = initialFilters.map((filter) => JSON.stringify(filter))
+        const initialFilters = JSON.parse(initialRequest)?.filter
+        const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
         shouldResetAllFilters = event.type === 'reset-all-filters'
         shouldResetFilter = event.type === 'reset-filter'
@@ -208,7 +208,7 @@ export default class WithFacet extends Shadow() {
         // update inputs
         this.dispatchEvent(new CustomEvent('search-change', {
           detail: {
-            searchTerm: (json || requestObj).searchText
+            searchTerm: (json || requestObj)?.searchText
           },
           bubbles: true,
           cancelable: true,
