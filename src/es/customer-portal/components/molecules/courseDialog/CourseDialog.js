@@ -31,7 +31,7 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.requestBookingDetailListener)
-    document.body.addEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.requestBookingCancelListener)
+    document.body.addEventListener(this.getAttribute('request-show-dialog-reversal') || 'request-show-dialog-reversal', this.requestBookingReversalListener)
     document.body.addEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
@@ -45,7 +45,7 @@ export default class CourseDialog extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.removeEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.requestBookingDetailListener)
-    document.body.removeEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.requestBookingCancelListener)
+    document.body.removeEventListener(this.getAttribute('request-show-dialog-reversal') || 'request-show-dialog-reversal', this.requestBookingReversalListener)
     document.body.removeEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
   }
 
@@ -80,9 +80,9 @@ export default class CourseDialog extends Shadow() {
           newTitle = 'Termin buchen'
           this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseData, this.courseDetail)
         }
-        if (type === actionType.cancel) {
+        if (type === actionType.reversal) {
           newTitle = 'Termin stornieren'
-          this.viewContent.innerHTML = this.renderDialogContentCancel(this.courseData, this.courseDetail)
+          this.viewContent.innerHTML = this.renderDialogContentReversal(this.courseData, this.courseDetail)
         }
 
         // update dialog title
@@ -130,31 +130,31 @@ export default class CourseDialog extends Shadow() {
       </div>`
   }
 
-  // CANCEL - SHOW FINAL STEP
-  requestBookingCancelListener = event => {
+  // REVERSAL - SHOW FINAL STEP
+  requestBookingReversalListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
       this.viewContent.innerHTML = ''
-      this.viewContent.innerHTML = this.renderDialogContentCancel(this.courseData, this.courseDetail)
+      this.viewContent.innerHTML = this.renderDialogContentReversal(this.courseData, this.courseDetail)
     }
   }
 
-  // cancel really
-  renderDialogContentCancel (data, detail = {}) {
+  // reversal really
+  renderDialogContentReversal (data, detail = {}) {
     return '<div><ks-a-heading tag="h2" style-as="h3" color="#F4001B">Hiermit stornieren sie diesen Termin</ks-a-heading></div>'
   }
 
-  // CANCEL - SUCCESS
+  // REVERSAL - SUCCESS
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(_ => {
         this.viewContent.innerHTML = ''
-        this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseData, this.courseDetail)
+        this.viewContent.innerHTML = this.renderDialogContentReversalSuccess(this.courseData, this.courseDetail)
       })
     }
   }
 
-  // cancel success
-  renderDialogContentCancelSuccess (data, detail = {}) {
+  // REVERSAL - SUCCESS - RENDER
+  renderDialogContentReversalSuccess (data, detail = {}) {
     return /* html */`
       <div class="success-message">
         <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>

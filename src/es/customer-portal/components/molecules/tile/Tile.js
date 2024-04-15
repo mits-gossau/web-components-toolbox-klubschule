@@ -41,7 +41,7 @@ export default class AppointmentTile extends Tile {
     }
   }
 
-  // CANCEL - SUCCESS
+  // REVERSAL - SUCCESS
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(x => {
@@ -140,10 +140,10 @@ export default class AppointmentTile extends Tile {
     :host .status-closed {
       border: 1px solid #F4001B;
     }
-    :host .status-booked-cancellation-possible {
+    :host .status-booked-reversal-possible {
       border: 1px solid #00997F;
     }
-    :host .status-booked-cancellation-not-possible {
+    :host .status-booked-reversal-not-possible {
       border: 1px solid #00997F;
     }
     :host .success {

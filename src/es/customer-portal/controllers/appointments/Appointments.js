@@ -155,7 +155,7 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
-  // CANCEL - REVERSAL
+  // REVERSAL
   requestSubscriptionCourseAppointmentReversalListener = async (event) => {
     if (this.abortControllerSubscriptionCourseAppointmentReversalListener) this.abortControllerSubscriptionCourseAppointmentReversalListener.abort()
     this.abortControllerSubscriptionCourseAppointmentReversalListener = new AbortController()
@@ -186,7 +186,7 @@ export default class Appointments extends HTMLElement {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
         id: courseId,
-        type: 'cancel'
+        type: 'reversal'
       },
       bubbles: true,
       cancelable: true,

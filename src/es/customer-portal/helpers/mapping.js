@@ -52,9 +52,9 @@ export const courseAppointmentStatusMapping = {
     }
   },
   5: {
-    status: 'bookedCancellationPossible',
+    status: 'bookedReversalPossible',
     css: {
-      border: 'status-booked-cancellation-possible',
+      border: 'status-booked-reversal-possible',
       status: 'success',
       info: ''
     },
@@ -65,9 +65,9 @@ export const courseAppointmentStatusMapping = {
     }
   },
   6: {
-    status: 'bookedCancellationNotPossible',
+    status: 'bookedReversalNotPossible',
     css: {
-      border: 'status-booked-cancellation-not-possible',
+      border: 'status-booked-reversal-not-possible',
       status: 'success',
       info: 'alert'
     },
@@ -88,5 +88,5 @@ export const actionType = {
   detail: 'detail',
   booking: 'booking',
   bookingFinal: 'bookingFinal',
-  cancel: 'cancel'
+  reversal: 'reversal'
 }

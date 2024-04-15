@@ -28,7 +28,7 @@ export default class DialogStatusButton extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.updateDialogBookingDetailListener)
-    document.body.addEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.updateDialogCancelDetailListener)
+    document.body.addEventListener(this.getAttribute('request-show-dialog-reversal') || 'request-show-dialog-reversal', this.updateDialogReversalDetailListener)
   }
 
   disconnectedCallback () {
@@ -36,7 +36,7 @@ export default class DialogStatusButton extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.removeEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.updateDialogBookingDetailListener)
-    document.body.removeEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.updateDialogCancelDetailListener)
+    document.body.removeEventListener(this.getAttribute('request-show-dialog-reversal') || 'request-show-dialog-reversal', this.updateDialogReversalDetailListener)
   }
 
   // details loaded
@@ -53,7 +53,7 @@ export default class DialogStatusButton extends Shadow() {
     }
   }
 
-  // cancel success
+  // reversal success
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
@@ -83,8 +83,8 @@ export default class DialogStatusButton extends Shadow() {
     }
   }
 
-  // cancel final step
-  updateDialogCancelDetailListener = event => {
+  // reversal final step
+  updateDialogReversalDetailListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
       this.html = ''
       let btn = this.renderDialogActionButton(this.dataset.id, null, subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
@@ -171,11 +171,11 @@ export default class DialogStatusButton extends Shadow() {
     }
 
     if (type === 'detail' && status === 5) {
-      return `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="[${actionType.cancel}]"  request-event-name="request-show-dialog-cancel">Termin stornieren</ks-a-button>`
+      return `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="[${actionType.reversal}]"  request-event-name="request-show-dialog-reversal">Termin stornieren</ks-a-button>`
     }
 
     const btnBooking = `<ks-a-button namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'>Jetzt Termin buchen</ks-a-button>`
-    const btnCancel = `<ks-a-button color="quaternary" namespace="button-primary-" request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'>Jetzt Termin stornieren</ks-a-button>`
+    const btnReversal = `<ks-a-button color="quaternary" namespace="button-primary-" request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'>Jetzt Termin stornieren</ks-a-button>`
 
     const actionButton = {
       FLAT: {
@@ -183,7 +183,7 @@ export default class DialogStatusButton extends Shadow() {
         2: '',
         3: '',
         4: '',
-        5: btnCancel,
+        5: btnReversal,
         6: ''
       },
       SUBSCRIPTION: {
@@ -191,7 +191,7 @@ export default class DialogStatusButton extends Shadow() {
         2: '',
         3: '',
         4: '',
-        5: btnCancel,
+        5: btnReversal,
         6: ''
       }
     }
