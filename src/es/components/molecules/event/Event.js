@@ -514,27 +514,6 @@ export default class Event extends Shadow() {
           <div class="controls-left">
             ${buttons}
           </div>
-          <!--<div class="controls-left">
-              ${this.data.deletable || this.data.merken_label ? `<div>` : ''}
-              ${this.data.deletable
-                ? `
-                        <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em"></a-icon-mdx>
-                        `
-                : ''
-              }
-                      ${this.data.merken_label
-                ? `
-                        <ks-a-button namespace="button-secondary-" color="secondary">
-                          <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>${this.data.merken_label}
-                        </ks-a-button> 
-                        `
-                : ''
-              }
-              ${this.data.deletable || this.data.merken_label ? `</div>` : ''}
-            <div>
-              <ks-a-button namespace="button-primary-" color="secondary">${this.data.anmelden_label}</ks-a-button>          
-            </div>
-          </div>-->
           <div class="controls-right">
             <div class="icons">
               ${this.data.icons.reduce((acc, icon) => acc + /* html */`
