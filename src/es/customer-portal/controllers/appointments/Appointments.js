@@ -36,7 +36,6 @@ export default class Appointments extends HTMLElement {
 
   // LIST ALL
   requestSubscriptionCourseAppointmentsListener = async (event) => {
-    console.log('Controller - requestSubscriptionCourseAppointmentsListener', event)
     if (this.abortControllerSubscriptionCourseAppointments) this.abortControllerSubscriptionCourseAppointments.abort()
     this.abortControllerSubscriptionCourseAppointments = new AbortController()
 
@@ -46,12 +45,12 @@ export default class Appointments extends HTMLElement {
       subscriptionType
       userId
      */
-    const userId = '50505A02-2AA4-47AA-9AED-0B759902A0C2'
-    const eventData = event.detail
+    const { subscriptionType, subscriptionId } = event.detail
+    const { userId } = this.dataset
     const data = {
       userId,
-      subscriptionType: eventData.subscriptionType || '',
-      subscriptionId: eventData.subscriptionId || ''
+      subscriptionType,
+      subscriptionId
     }
 
     const fetchOptions = {
@@ -62,7 +61,6 @@ export default class Appointments extends HTMLElement {
       body: JSON.stringify(data),
       signal: this.abortControllerSubscriptionCourseAppointments.signal
     }
-    // const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptioncourseappointments'
     const endpoint = 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointments'
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
       detail: {
@@ -78,12 +76,9 @@ export default class Appointments extends HTMLElement {
 
   // MAKE BOOKING
   requestSubscriptionCourseAppointmentBookingListener = async (event) => {
-    console.log('Controller - requestSubscriptionCourseAppointmentBookingListener', event)
-
     if (this.abortControllerSubscriptionCourseAppointmentBooking) this.abortControllerSubscriptionCourseAppointmentBooking.abort()
     this.abortControllerSubscriptionCourseAppointmentBooking = new AbortController()
     const tags = JSON.parse(event.detail.tags)
-
     const data = {
       courseAppointmentDate: tags[0].courseAppointmentDate,
       courseAppointmentTimeFrom: tags[0].courseAppointmentTimeFrom,
@@ -91,7 +86,7 @@ export default class Appointments extends HTMLElement {
       courseType: tags[0].courseType,
       subscriptionId: tags[1].subscriptionId,
       subscriptionType: tags[1].subscriptionType,
-      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
+      userId: this.dataset.userId
     }
     const courseId = makeUniqueCourseId(tags[0])
     const fetchOptions = {
@@ -119,7 +114,6 @@ export default class Appointments extends HTMLElement {
 
   // GET DETAILS
   requestSubscriptionCourseAppointmentDetailListener = async (event) => {
-    console.log('!!!!requestSubscriptionCourseAppointmentDetailListener', event)
     if (this.abortControllerSubscriptionCourseAppointmentDetail) this.abortControllerSubscriptionCourseAppointmentDetail.abort()
     this.abortControllerSubscriptionCourseAppointmentDetail = new AbortController()
     const tags = JSON.parse(event.detail.tags)
@@ -130,7 +124,7 @@ export default class Appointments extends HTMLElement {
       courseType: tags[0].courseType,
       subscriptionId: tags[1].subscriptionId,
       subscriptionType: tags[1].subscriptionType,
-      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
+      userId: this.dataset.userId || ''
     }
     const type = tags[2] ? tags[2].type : ''
     const courseId = makeUniqueCourseId(tags[0])
@@ -159,11 +153,9 @@ export default class Appointments extends HTMLElement {
 
   // CANCEL - REVERSAL
   requestSubscriptionCourseAppointmentReversalListener = async (event) => {
-    console.log('!!!!requestSubscriptionCourseAppointmentReversalListener', event)
     if (this.abortControllerSubscriptionCourseAppointmentReversalListener) this.abortControllerSubscriptionCourseAppointmentReversalListener.abort()
     this.abortControllerSubscriptionCourseAppointmentReversalListener = new AbortController()
     const tags = JSON.parse(event.detail.tags)
-
     const data = {
       courseAppointmentDate: tags[0].courseAppointmentDate,
       courseAppointmentTimeFrom: tags[0].courseAppointmentTimeFrom,
@@ -171,7 +163,7 @@ export default class Appointments extends HTMLElement {
       courseType: tags[0].courseType,
       subscriptionId: tags[1].subscriptionId,
       subscriptionType: tags[1].subscriptionType,
-      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
+      userId: this.dataset.userId || ''
     }
     const courseId = makeUniqueCourseId(tags[0])
     const fetchOptions = {

@@ -11,6 +11,7 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 */
 export default class Navigation extends Shadow() {
   /**
+   * @param options
    * @param {any} args
    */
   constructor (options = {}, ...args) {

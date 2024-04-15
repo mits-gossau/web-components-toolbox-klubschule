@@ -17,38 +17,37 @@
             src="../../../src/es/components/web-components-toolbox/src/es/helpers/Environment.js"></script>
         <title>Customer Portal</title>
     </head>
-
     <body>
         <c-fetch-html>
             <c-fetch-css>
                 <c-fetch-modules>
-                    <c-appointments>
+                    <c-appointments data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
                         <c-booked>
                             <c-subscriptions>
                                 <p-general>
-                                    <o-body-style has-background="" background-color="var(--mdx-sys-color-accent-6-subtle1)" tabindex="0"
+                                    <o-body-style has-background=""
+                                        background-color="var(--mdx-sys-color-accent-6-subtle1)" tabindex="0"
                                         aria-label="Section">
                                         <cp-m-navigation></cp-m-navigation>
                                         <c-router routes="[
-                                                                {
-                                                                    'name': 'p-appointments',
-                                                                    'path': '../../pages/Appointments.js',
-                                                                     'regExp': ['/[#=]{1}\/$/', '/^\/$/']
-                                                                },
-                                                                {
-                                                                    'name': 'p-booked',
-                                                                    'path': '../../pages/Booked.js',
-                                                                    'regExp': ['/[#=]{1}\/booked/']
-                                                                },
-                                                                {
-                                                                    'name': 'p-subscriptions',
-                                                                    'path': '../../pages/Subscriptions.js',
-                                                                    'regExp': ['/[#=]{1}\/subscriptions/']
-                                                                }
-                                                                ]">
+                                            {
+                                                'name': 'p-appointments',
+                                                'path': '../../pages/Appointments.js',
+                                                'regExp': ['/[#=]{1}\/$/', '/^\/$/']
+                                            },
+                                            {
+                                                'name': 'p-booked',
+                                                'path': '../../pages/Booked.js',
+                                                'regExp': ['/[#=]{1}\/booked/']
+                                            },
+                                            {
+                                                'name': 'p-subscriptions',
+                                                'path': '../../pages/Subscriptions.js',
+                                                'regExp': ['/[#=]{1}\/subscriptions/']
+                                            }
+                                            ]">
                                         </c-router>
                                     </o-body-style>
-
                                 </p-general>
                             </c-subscriptions>
                         </c-booked>
@@ -56,7 +55,6 @@
                 </c-fetch-modules>
             </c-fetch-css>
         </c-fetch-html>
-
         <script rel="preload" type="module">
             Promise.all([
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchHtml/FetchHtml.js').then(module => ['c-fetch-html', module.default]),
@@ -74,5 +72,4 @@
             }))
         </script>
     </body>
-
 </html>

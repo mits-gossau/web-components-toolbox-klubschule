@@ -11,6 +11,7 @@ import { makeUniqueCourseId } from '../../../helpers/Shared.js'
  */
 export default class AppointmentsList extends Shadow() {
   /**
+   * @param options
    * @param {any} args
    */
   constructor (options = {}, ...args) {
@@ -96,11 +97,11 @@ export default class AppointmentsList extends Shadow() {
   fetchTemplate () {
     const styles = [
       {
-        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`,
         namespace: false
       },
       {
-        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`, 
         namespaceFallback: true
       }
     ]
@@ -173,7 +174,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderLoading () {
-    this.html = '<img src="../customer-portal/img/loading.gif">'
+    this.html = '<img src="../customer-portal/img/loading.gif" alt="Loading">'
   }
 
   renderFilterSubscriptions (subscriptionsData) {
@@ -205,11 +206,10 @@ export default class AppointmentsList extends Shadow() {
       })
       list.push(dayWrapper.innerHTML)
     })
-    const data = {
+    return {
       counter,
       list
     }
-    return data
   }
 
   renderDayHeading (data, heading) {

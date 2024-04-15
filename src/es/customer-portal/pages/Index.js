@@ -10,6 +10,7 @@ import { Shadow } from '../../components/web-components-toolbox/src/es/component
  */
 export default class Index extends Shadow() {
   /**
+   * @param options
    * @param {any} args
    */
   constructor (options = {}, ...args) {

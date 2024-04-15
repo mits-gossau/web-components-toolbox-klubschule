@@ -1,6 +1,6 @@
 /**
  * Generates a unique course ID based on the provided data.
- * @param {{courseType: string, courseId: string, courseAppointmentDate:string, courseAppointmentTimeFrom: string }} data Course data
+ * @param {{courseType: string, courseId: string, courseAppointmentDate:string, courseAppointmentTimeFrom: string }} courseData Course data
  * @returns A unique course ID
  */
 export const makeUniqueCourseId = courseData => `${courseData?.courseType}_${courseData?.courseId}_${courseData?.courseAppointmentDate}_${courseData?.courseAppointmentTimeFrom}`

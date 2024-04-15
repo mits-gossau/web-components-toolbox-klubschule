@@ -12,6 +12,7 @@ import { actionType } from '../../../helpers/Mapping.js'
 */
 export default class CourseDialog extends Shadow() {
   /**
+   * @param options
    * @param {any} args
    */
   constructor (options = {}, ...args) {
@@ -102,7 +103,6 @@ export default class CourseDialog extends Shadow() {
   // BOOKED - SUCCESS
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
-      debugger
       event.detail.fetch.then(x => {
         this.viewContent.innerHTML = ''
         this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseData, this.courseDetail)
@@ -146,8 +146,7 @@ export default class CourseDialog extends Shadow() {
   // CANCEL - SUCCESS
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(x => {
-        debugger
+      event.detail.fetch.then(_ => {
         this.viewContent.innerHTML = ''
         this.viewContent.innerHTML = this.renderDialogContentCancelSuccess(this.courseData, this.courseDetail)
       })
@@ -248,7 +247,7 @@ export default class CourseDialog extends Shadow() {
         <div class="container dialog-footer">
           <a-dialog-status-button data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
         </div>
-        <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>  
+        <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-tile-status-button>  
       </m-dialog>
     `
   }

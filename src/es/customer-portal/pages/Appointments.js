@@ -10,6 +10,7 @@ import Index from './Index.js'
  */
 export default class AppointmentList extends Index {
   /**
+   * @param options
    * @param {any} args
    */
   constructor (options = {}, ...args) {

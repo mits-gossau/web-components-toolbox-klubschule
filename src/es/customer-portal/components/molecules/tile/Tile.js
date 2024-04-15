@@ -10,6 +10,7 @@ import { makeUniqueCourseId, escapeForHtml } from '../../../helpers/Shared.js'
  */
 export default class AppointmentTile extends Tile {
   /**
+   * @param options
    * @param {any} args
    */
   constructor (options = {}, ...args) {
@@ -326,8 +327,7 @@ export default class AppointmentTile extends Tile {
     const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
     // @ts-ignore
     const formatter = new Intl.DateTimeFormat('de-DE', options)
-    const formattedDate = formatter.format(dateObject)
-    return formattedDate
+    return formatter.format(dateObject)
   }
 
   get currentTile () {
