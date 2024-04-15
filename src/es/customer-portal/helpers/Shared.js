@@ -1,8 +1,16 @@
-export function makeUniqueCourseId (data) {
-  return `${data.courseType}_${data.courseId}_${data.courseAppointmentDate}_${data.courseAppointmentTimeFrom}`
-}
+/**
+ * Generates a unique course ID based on the provided data.
+ * @param {{courseType: string, courseId: string, courseAppointmentDate:string, courseAppointmentTimeFrom: string }} data Course data
+ * @returns A unique course ID
+ */
+export const makeUniqueCourseId = courseData => `${courseData?.courseType}_${courseData?.courseId}_${courseData?.courseAppointmentDate}_${courseData?.courseAppointmentTimeFrom}`
 
-export function escapeForHtml (htmlString) {
+/**
+ * Escapes special characters in an HTML string
+ * @param {string} htmlString String to escape
+ * @returns HTML-escaped version of the input `htmlString`
+ */
+export const escapeForHtml = htmlString => {
   return htmlString
     .replaceAll(/&/g, '&amp;')
     .replaceAll(/</g, '&lt;')

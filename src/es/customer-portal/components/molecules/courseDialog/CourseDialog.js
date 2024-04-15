@@ -31,6 +31,7 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.requestBookingDetailListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.requestBookingCancelListener)
+    document.body.addEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
   }
@@ -44,14 +45,20 @@ export default class CourseDialog extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.removeEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.requestBookingDetailListener)
     document.body.removeEventListener(this.getAttribute('request-show-dialog-cancel') || 'request-show-dialog-cancel', this.requestBookingCancelListener)
+    document.body.removeEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
+  }
+
+  // dialog close button event listener
+  dialogCloseListener = event => {
+    this.viewContent.innerHTML = ''
   }
 
   // DETAIL
   updateSubscriptionCourseAppointmentDetailListener = event => {
     if (this.dataset.id === event.detail.id) {
-      const type = event.detail.type
       this.viewContent.innerHTML = ''
       event.detail.fetch.then(courseDetail => {
+        this.viewContent.innerHTML = ''
         this.courseDetail = courseDetail
         // open dialog
         this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
@@ -62,9 +69,8 @@ export default class CourseDialog extends Shadow() {
             composed: true
           }
         ))
-        this.viewContent.innerHTML = ''
         let newTitle = ''
-        debugger
+        const type = event.detail.type
         if (type === actionType.detail) {
           newTitle = 'Termindetails'
           this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
@@ -224,7 +230,7 @@ export default class CourseDialog extends Shadow() {
    */
   renderHTML (courseId, content, selectedSubscription) {
     this.html = /* html */`
-    <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}">
+    <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}" close-event-name="dialog-close-${courseId}">
         <div class="container dialog-header">
           <div id="back"></div>
           <h3 id="title"></h3>
@@ -240,7 +246,6 @@ export default class CourseDialog extends Shadow() {
           </div>
         </div>
         <div class="container dialog-footer">
-          
           <a-dialog-status-button data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
         </div>
         <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-status-button>  

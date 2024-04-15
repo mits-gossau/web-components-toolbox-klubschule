@@ -1,6 +1,5 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { makeUniqueCourseId } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 
@@ -74,7 +73,6 @@ export default class CourseTitle extends Shadow() {
       :host > div:hover {
         cursor: pointer;
       }
-      
       @media only screen and (max-width: _max-width_) {
         :host {}
       }
