@@ -159,6 +159,13 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfo(course) {
+    const buttons = []
+    course.buttons.forEach(button => {
+      buttons.push(`{'text': '${button.text}','iconName': '${button.iconName ? button.iconName : 'ArrowRight'}'${button.link ? `, 'link': '${button.link}'` : ''}}`)
+    })
+    console.log('buttons', buttons)
+
+      
     return `
       'title': '${course.title}',
       'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text',
@@ -167,11 +174,7 @@ export default class TileFactory extends Shadow() {
         'name': '${course.locations ? course.locations.join(', ') : ''}',
         'badge': '${course.eTyp ? course.eTyp : ''}'
       },
-      'button': {
-        'text': '${course.buttons[0].text}',
-        'iconName': 'ArrowRight'
-        ${course.buttons[0].link ? `, 'link': '${course.buttons[0].link}'` : ''}
-      },
+      'buttons': [${buttons}],
       'icons': [
         {
           'name': 'Percent',

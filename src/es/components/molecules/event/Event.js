@@ -459,7 +459,17 @@ export default class Event extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML() {
-    const warnMandatory = 'data attribute requires: '
+    const buttons = this.data.buttons?.reduce((acc, button, index) => acc + /* html */`
+        ${button.typ === 'primary' && index !== 0 ? '<div></div><div>' : ''}
+          <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.typ ? 'button-'+button.typ+'-' : 'button-tertiary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
+            ${button.text ? '<span>' + button.text + '</span>' : ''}
+            ${button.text ? 
+              `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName || 'ArrowRight'}" size="1em" class="icon-right"></a-icon-mdx>` 
+              : ''}
+            ${!button.text && !button.typ ? `<a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em"></a-icon-mdx>` : ''}
+          </ks-a-button>
+        ${button.typ === 'primary' && index !== 0 ? '</div>' : ''}
+    `, '')
 
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
@@ -502,26 +512,29 @@ export default class Event extends Shadow() {
         </div>
         <div class="controls">
           <div class="controls-left">
+            ${buttons}
+          </div>
+          <!--<div class="controls-left">
               ${this.data.deletable || this.data.merken_label ? `<div>` : ''}
               ${this.data.deletable
-        ? `
-                <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em" class="icon-right"></a-icon-mdx>
-                `
-        : ''
-      }
-              ${this.data.merken_label
-        ? `
-                <ks-a-button namespace="button-secondary-" color="secondary">
-                  <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>${this.data.merken_label}
-                </ks-a-button> 
-                `
-        : ''
-      }
+                ? `
+                        <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em"></a-icon-mdx>
+                        `
+                : ''
+              }
+                      ${this.data.merken_label
+                ? `
+                        <ks-a-button namespace="button-secondary-" color="secondary">
+                          <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>${this.data.merken_label}
+                        </ks-a-button> 
+                        `
+                : ''
+              }
               ${this.data.deletable || this.data.merken_label ? `</div>` : ''}
             <div>
               <ks-a-button namespace="button-primary-" color="secondary">${this.data.anmelden_label}</ks-a-button>          
             </div>
-          </div>
+          </div>-->
           <div class="controls-right">
             <div class="icons">
               ${this.data.icons.reduce((acc, icon) => acc + /* html */`
@@ -546,6 +559,10 @@ export default class Event extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
         name: 'ks-m-tooltip'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
       }
     ])
   }
