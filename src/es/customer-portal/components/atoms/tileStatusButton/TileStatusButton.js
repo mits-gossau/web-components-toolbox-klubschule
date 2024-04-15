@@ -1,6 +1,7 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { subscriptionMode } from '../../../helpers/mapping.js'
+import { subscriptionMode, actionType } from '../../../helpers/Mapping.js'
+import { escapeForHtml } from '../../../helpers/Shared.js'
 
 /**
 * @export
@@ -34,7 +35,7 @@ export default class StatusButton extends Shadow() {
   updateSubscriptionCourseAppointmentBookingListener = event => {
     event.detail.fetch.then(courseDetail => {
       if (this.dataset.id === event.detail.id) {
-        const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.dataContent)), this.escapeForHtml(JSON.stringify(this.dataSubscription)))
+        const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         this.html = btn
       }
@@ -44,7 +45,7 @@ export default class StatusButton extends Shadow() {
   updateSubscriptionCourseAppointmentReversalListener = event => {
     event.detail.fetch.then(courseDetail => {
       if (this.dataset.id === event.detail.id) {
-        const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(this.dataContent)), this.escapeForHtml(JSON.stringify(this.dataSubscription)))
+        const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         this.html = btn
       }
@@ -118,24 +119,15 @@ export default class StatusButton extends Shadow() {
    * @returns void
    */
   renderHTML (content, subscription) {
-    console.log(content, subscription)
+    // console.log(content, subscription)
     this.wrapper = this.root.querySelector('div') || document.createElement('div')
-    const btn = this.renderTileActionButton(subscriptionMode[subscription.subscriptionMode], content.courseAppointmentStatus, this.escapeForHtml(JSON.stringify(content)), this.escapeForHtml(JSON.stringify(subscription)))
+    const btn = this.renderTileActionButton(subscriptionMode[subscription.subscriptionMode], content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
     this.html = btn
   }
 
-  escapeForHtml = (htmlString) => {
-    return htmlString
-      .replaceAll(/&/g, '&amp;')
-      .replaceAll(/</g, '&lt;')
-      .replaceAll(/>/g, '&gt;')
-      .replaceAll(/"/g, '&quot;')
-      .replaceAll(/'/g, '&#39;')
-  }
-
   renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {
-    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary">Termin buchen</ks-a-button>`
-    const btnReversal = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'reversal' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
+    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: actionType.booking })}]' color="secondary">Termin buchen</ks-a-button>`
+    const btnReversal = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: actionType.reversal })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
 
     const actionButton = {
       FLAT: {

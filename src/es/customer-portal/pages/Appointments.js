@@ -10,7 +10,7 @@ import Index from './Index.js'
  */
 export default class AppointmentList extends Index {
   /**
-   * @param options
+   * @param {Object} options
    * @param {any} args
    */
   constructor (options = {}, ...args) {
@@ -22,11 +22,6 @@ export default class AppointmentList extends Index {
     if (this.shouldRenderCSS()) this.renderCSS()
   }
 
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
   shouldRenderHTML () {
     return !this.appointmentList
   }
@@ -35,31 +30,22 @@ export default class AppointmentList extends Index {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * renders the html
-   * @return void
-   */
   renderHTML () {
-    this.html = /* html */ '<m-appointments-list namespace="appointments-list-default-"></m-appointments-list>'
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../components/molecules/appointmentsList/AppointmentsList.js`,
         name: 'm-appointments-list'
       }
     ])
+    this.html = '<m-appointments-list namespace="appointments-list-default-"></m-appointments-list>'
   }
 
-  /**
-   * renders the css
-   *
-   * @return void
-   */
   renderCSS () {
     this.css = /* css */`
-    :host {}
-    @media only screen and (max-width: _max-width_) {
       :host {}
-    }
+      @media only screen and (max-width: _max-width_) {
+        :host {}
+      }
     `
   }
 
