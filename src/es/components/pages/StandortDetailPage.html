@@ -169,24 +169,62 @@
         <ks-a-heading tag="h3">
             Kontakt
         </ks-a-heading>
-        <p>
-            Nordhaus 3 / G&#xFC;terstrasse<br />
-            5400 Baden
-        </p>
-        <div class="umbraco-forms-form-config umbraco-forms-hidden" data-id="6c33799dbfa74188a75f5b9413f6bfe3"
-            data-serialized-page-button-conditions="{}" data-serialized-fieldset-conditions="{}"
-            data-serialized-field-conditions="{}" data-serialized-fields-not-displayed="{}"
-            data-trigger-conditions-check-on="change" data-form-element-html-id-prefix=""
-            data-disable-validation-dependency-check="false"></div>
-
-        <p>
-            <a href="tel:&#x2B;41 58 568 97 97" title="&#x2B;41 58 568 97 97">&#x2B;41 58 568 97 97</a>
-        </p>
+        
+        <ks-m-contact-row
+            name="Klubschule Migros Baden"
+            street="Nordhaus 3 / G&#xFC;terstrasse"
+            place="5400 Baden"
+            icon-name="Home"
+            href="#"
+        >
+        </ks-m-contact-row>
+        <ks-m-contact-row
+            name="+49 0160 49858582"
+            icon-name="phone"
+            href="tel:+49016049858582"
+        >
+        </ks-m-contact-row>
+        <m-dialog namespace="dialog-left-slide-in-">
+            <form>
+                <div class="container dialog-header" tabindex="0">
+                    <div id="back">
+                        &nbsp;
+                    </div>
+                    <h3>Kontaktformular tbd</h3>
+                    <div id="close">
+                        <a-icon-mdx icon-name="Plus" size="2em" tabindex="0"></a-icon-mdx>
+                    </div>
+                </div>
+                <div class="container dialog-content">
+                    Kontaktformular tbd...
+                    <div style="height: 100%"></div>
+                </div>
+                <div class="container dialog-footer">
+                    <a-button id="close" namespace="button-secondary-" no-pointer-events="">Schliessen</a-button>
+                    <a-button typ="submit" namespace="button-primary-">Senden</a-button>
+                </div>
+            </form>
+            <ks-m-contact-row
+                id="show-modal"
+                name="Kontaktformular"
+                icon-name="mail"
+                href="#"
+            >
+            </ks-m-contact-row>
+        </m-dialog>
+        <ks-m-contact-row
+            name="External Link"
+            icon-name="ArrowUpRight"
+            href="https://www.google.com"
+        >
+        </ks-m-contact-row>
+        <br />
+        <br />
 
         <ks-a-heading tag="h3">
             &#xD6;ffnungszeiten
         </ks-a-heading>
-        <table class="clean">
+        <table>
             <tr>
                 <td>Montag</td>
                 <td>08:00</td>
