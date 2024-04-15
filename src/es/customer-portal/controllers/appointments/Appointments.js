@@ -1,6 +1,7 @@
 // @ts-check
 import { makeUniqueCourseId } from '../../helpers/Shared.js'
 
+/* global self */
 /* global AbortController */
 /* global CustomEvent */
 /* global fetch */
@@ -61,7 +62,8 @@ export default class Appointments extends HTMLElement {
       body: JSON.stringify(data),
       signal: this.abortControllerSubscriptionCourseAppointments.signal
     }
-    const endpoint = 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointments'
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointments}`
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
@@ -97,7 +99,8 @@ export default class Appointments extends HTMLElement {
       body: JSON.stringify(data),
       signal: this.abortControllerSubscriptionCourseAppointmentBooking.signal
     }
-    const endpoint = 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentbooking'
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointmentBooking}`
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
@@ -136,7 +139,8 @@ export default class Appointments extends HTMLElement {
       body: JSON.stringify(data),
       signal: this.abortControllerSubscriptionCourseAppointmentDetail.signal
     }
-    const endpoint = 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentdetail'
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointmentDetail}`
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
@@ -174,7 +178,8 @@ export default class Appointments extends HTMLElement {
       body: JSON.stringify(data),
       signal: this.abortControllerSubscriptionCourseAppointmentReversalListener.signal
     }
-    const endpoint = 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentreversal'
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointmentReversal}`
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
