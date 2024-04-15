@@ -112,7 +112,6 @@ export default class TileFactory extends Shadow() {
         }
       ])
     ]).then(([data]) => {
-      console.log(data)
       if (!data.isNextPage) this.html = ''
       if (!data) {
         this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}</span>`
@@ -160,7 +159,6 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfo(course) {
-    console.log(course)
     const buttons = []
     course.buttons?.forEach(button => {
       buttons.push(`{
