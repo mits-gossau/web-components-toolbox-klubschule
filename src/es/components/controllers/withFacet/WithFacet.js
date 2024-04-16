@@ -91,7 +91,7 @@ export default class WithFacet extends Shadow() {
           self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
         }
 
-        if(shouldResetFilterFromFilterSelectButton) {
+        if (shouldResetFilterFromFilterSelectButton) {
           initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetFilterFromFilterSelectButton }))
         }
 

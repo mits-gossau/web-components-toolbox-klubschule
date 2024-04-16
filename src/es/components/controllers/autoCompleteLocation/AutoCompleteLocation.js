@@ -153,7 +153,7 @@ export default class AutoCompleteLocation extends Shadow() {
 
   requestAutoCompleteListener = (event) => {
     const token = event.detail.value
-    if (token === undefined || (token.length < 3 && token.length > 0)) return 
+    if (token === undefined || (token.length < 3 && token.length > 0)) return
     if (token.length === 0) {
       this.dispatchEvent(new CustomEvent('auto-complete-location', {
         detail: {

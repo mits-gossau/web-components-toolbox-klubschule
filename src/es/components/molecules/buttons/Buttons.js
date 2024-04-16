@@ -1,7 +1,6 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
-
 /**
 * @export
 * @class Buttons
@@ -113,5 +112,4 @@ export default class Buttons extends Shadow() {
       }
     ])
   }
-
 }
