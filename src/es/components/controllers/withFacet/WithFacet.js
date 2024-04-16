@@ -43,7 +43,7 @@ export default class WithFacet extends Shadow() {
     this.isMocked = this.hasAttribute('mock')
     const apiUrl = this.isMocked
       ? `${this.importMetaUrl}./mock/default.json`
-      : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
+      : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
     // simply the last body of the last request
     this.lastResponse = {}
     // simply the payload of the last request
