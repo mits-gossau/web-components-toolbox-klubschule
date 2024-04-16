@@ -83,7 +83,7 @@ export default class CourseDialog extends Shadow() {
         }
         if (type === actionType.booking) {
           this.renderDialogTitle('Termin buchen')
-          this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseData, this.courseDetail)
+          this.viewContent.innerHTML = this.renderDialogContentBookingConfirmation(this.courseData, this.courseDetail)
         }
         if (type === actionType.reversal) {
           this.renderDialogTitle('Termin stornieren')
@@ -102,7 +102,7 @@ export default class CourseDialog extends Shadow() {
     if (this.dataset.id === event.detail.tags[0]) {
       this.renderDialogTitle('Termin buchen')
       this.viewContent.innerHTML = ''
-      this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseData, this.courseDetail)
+      this.viewContent.innerHTML = this.renderDialogContentBookingConfirmation(this.courseData, this.courseDetail)
     }
   }
 
@@ -329,7 +329,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   // dialog final booking content view
-  renderDialogContentBooking (data, detail = {}) {
+  renderDialogContentBookingConfirmation (data, detail = {}) {
     return /* html */ `
       <style>
         .details {
