@@ -14,7 +14,6 @@ export default class CourseTitle extends Shadow() {
    */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    this.wrapper = null
     this.dataContent = null
     this.dataSubscription = null
   }
@@ -23,15 +22,15 @@ export default class CourseTitle extends Shadow() {
     this.dataContent = JSON.parse(this.dataset.content)
     this.dataSubscription = JSON.parse(this.dataset.subscription)
     if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
-    this.wrapper.addEventListener('click', this.clickEventListener)
+    this.renderHTML()
+    this.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
-    this.wrapper.removeEventListener('click', this.clickEventListener)
+    this.removeEventListener('click', this.clickEventListener)
   }
 
-  clickEventListener = event => {
+  clickEventListener = () => {
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointment-detail',
       {
         detail: {
@@ -68,9 +67,9 @@ export default class CourseTitle extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        display:block;
+        color: var(--color, black);
       }
-      :host > div:hover {
+      :host(:hover) {
         cursor: pointer;
       }
       @media only screen and (max-width: _max-width_) {
@@ -96,7 +95,7 @@ export default class CourseTitle extends Shadow() {
       }
     ]
     switch (this.getAttribute('namespace')) {
-      case 'status-button-default-':
+      case 'course-title-default-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
@@ -112,17 +111,8 @@ export default class CourseTitle extends Shadow() {
    */
   renderHTML () {
     const title = `${this.dataContent.courseTitle} (${this.dataContent.courseType}_${this.dataContent.courseId})`
-    this.wrapper = this.root.querySelector('div') || document.createElement('div')
-    this.wrapper.innerHTML = title
-    this.html = this.wrapper
-  }
-
-  escapeForHtml = (htmlString) => {
-    return htmlString
-      .replaceAll(/&/g, '&amp;')
-      .replaceAll(/</g, '&lt;')
-      .replaceAll(/>/g, '&gt;')
-      .replaceAll(/"/g, '&quot;')
-      .replaceAll(/'/g, '&#39;')
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = title
+    this.html = wrapper
   }
 }
