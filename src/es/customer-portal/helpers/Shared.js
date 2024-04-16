@@ -8,7 +8,7 @@ export const makeUniqueCourseId = courseData => `${courseData?.courseType}_${cou
 /**
  * Escapes special characters in an HTML string
  * @param {string} htmlString String to escape
- * @returns HTML-escaped version of the input `htmlString`
+ * @returns {string} HTML-escaped version of the input `htmlString`
  */
 export const escapeForHtml = htmlString => {
   return htmlString
@@ -17,4 +17,21 @@ export const escapeForHtml = htmlString => {
     .replaceAll(/>/g, '&gt;')
     .replaceAll(/"/g, '&quot;')
     .replaceAll(/'/g, '&#39;')
+}
+
+/**
+ * Returns an object with css, status, info, and icon properties based on the type and data provided.
+ * @param {Object} type Object that contains `css`, `content`, and other properties.
+ * @param {Object} data Course data
+ * @returns {Object} Returns the object contains tile and state information
+ */
+export const getTileState = (type, data) => {
+  const { courseAppointmentFreeSeats, courseAppointmentStatus } = data
+  const { css, content } = type
+  return {
+    css,
+    status: courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : content.status,
+    info: content.info,
+    icon: content.icon
+  }
 }

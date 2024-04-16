@@ -274,7 +274,7 @@ export default class AppointmentTile extends Tile {
               <div class="course-info course-execution-info">
                 <div id="status-wrapper" class="icon-info">
                   <!-- !!! -->
-                  <a-course-info data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}"></a-course-info>
+                  <a-course-info namespace="course-info-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}"></a-course-info>
                 </div> 
                 <div class="icon-info">
                   <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>

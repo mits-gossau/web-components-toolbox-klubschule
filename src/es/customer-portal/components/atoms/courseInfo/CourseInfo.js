@@ -1,16 +1,13 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { courseAppointmentStatusMapping } from '../../../helpers/mapping.js'
+import { courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
+import { getTileState } from '../../../helpers/Shared.js'
 
 /**
-* @export
 * @class CourseInfo
 * @type {CustomElementConstructor}
 */
 export default class CourseInfo extends Shadow() {
-  /**
-   * @param {any} args
-   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.dataContent = null
@@ -19,9 +16,10 @@ export default class CourseInfo extends Shadow() {
 
   connectedCallback () {
     this.dataContent = JSON.parse(this.dataset.content)
-    const tileStatus = this.getTileState(this.dataContent)
+    const tileState = getTileState(courseAppointmentStatusMapping[this.dataContent.courseAppointmentStatus], this.dataContent)
+    console.log(tileState)
     if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML(tileStatus)
+    if (this.shouldRenderHTML()) this.renderHTML(tileState)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   }
@@ -32,63 +30,50 @@ export default class CourseInfo extends Shadow() {
   }
 
   updateSubscriptionCourseAppointmentBookingListener = event => {
-    event.detail.fetch.then(courseDetail => {
-      if (this.dataset.id === event.detail.id) {
-        const st = this.getTileState(courseDetail)
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(courseDetail => {
         this.html = ''
-        this.renderHTML(st)
-      }
-    })
+        const tileState = getTileState(courseAppointmentStatusMapping[courseDetail.courseAppointmentStatus], courseDetail)
+        this.renderHTML(tileState)
+      })
+    }
   }
 
   updateSubscriptionCourseAppointmentReversalListener = event => {
-    event.detail.fetch.then(courseDetail => {
-      if (this.dataset.id === event.detail.id) {
-        const st = this.getTileState(courseDetail)
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(courseDetail => {
         this.html = ''
-        this.renderHTML(st)
-      }
-    })
+        const tileState = getTileState(courseAppointmentStatusMapping[courseDetail.courseAppointmentStatus], courseDetail)
+        this.renderHTML(tileState)
+      })
+    }
   }
 
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
   shouldRenderHTML () {
     return !this.icon
   }
 
-  /**
-   * renders the css
-   */
   renderCSS () {
     this.css = /* css */`
       :host {
-        display:flex;
+        display: flex;
         align-items: center;
       }
       :host .content {
         padding: 0 0.5em;
       }
       :host .success {
-        color:#00997F;
+        color: var(--success, green);
       }
       :host .alert {
-        color:#F4001B;
+        color: var(--alert, red);
       }
       :host a-icon-mdx {
-        color: var(--mdx-sys-color-primary-default);
+        color: var(--icon-color, black);
       }
       @media only screen and (max-width: _max-width_) {
         :host {}
@@ -97,9 +82,6 @@ export default class CourseInfo extends Shadow() {
     return this.fetchTemplate()
   }
 
-  /**
-   * fetches the template
-   */
   fetchTemplate () {
     /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
@@ -113,9 +95,9 @@ export default class CourseInfo extends Shadow() {
       }
     ]
     switch (this.getAttribute('namespace')) {
-      case 'status-button-default-':
+      case 'course-info-default-':
         return this.fetchCSS([{
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+          path: `${this.importMetaUrl}./default-/default-.css`,
           namespace: false
         }, ...styles])
       default:
@@ -123,29 +105,26 @@ export default class CourseInfo extends Shadow() {
     }
   }
 
-  /**
-   * Render HTML
-   * @returns void
-   */
   renderHTML (data) {
-    this.icon = `<a-icon-mdx icon-name="${data.icon}" size="1.5em" tabindex="0" class="${data.css.status}"></a-icon-mdx>`
-    this.html = `
+    const { icon, css, status, info } = data
+    this.icon = /* html */ `<a-icon-mdx icon-name="${icon}" size="1.5em" tabindex="0" class="${css.status}"></a-icon-mdx>`
+    this.html = /* html */`
       ${this.icon}
       <span class="content">
-        <span class="${data.css.status}">${data.status}</span>
-        <span class="${data.css.info}">${data.info}</span>
+        <span class="${css.status}">${status}</span>
+        <span class="${css.info}">${info}</span>
       </span>`
   }
 
-  getTileState (data) {
-    const type = courseAppointmentStatusMapping[data.courseAppointmentStatus]
-    const { courseAppointmentFreeSeats } = data
+  // getTileState (data) {
+  //   const type = courseAppointmentStatusMapping[data.courseAppointmentStatus]
+  //   const { courseAppointmentFreeSeats } = data
 
-    return {
-      css: type.css,
-      status: data.courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : type.content.status,
-      info: type.content.info,
-      icon: type.content.icon
-    }
-  }
+  //   return {
+  //     css: type.css,
+  //     status: data.courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : type.content.status,
+  //     info: type.content.info,
+  //     icon: type.content.icon
+  //   }
+  // }
 }
