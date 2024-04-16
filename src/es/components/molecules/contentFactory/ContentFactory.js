@@ -9,13 +9,13 @@ export default class ContentFactory extends Shadow() {
   * @param options
   * @param {any} args
   */
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('with-facet', this.withFacetEventNameListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
@@ -27,11 +27,11 @@ export default class ContentFactory extends Shadow() {
     ))
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.body.removeEventListener('with-facet', this.withFacetEventNameListener)
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -40,7 +40,7 @@ export default class ContentFactory extends Shadow() {
   *
   * @return {Promise<void>}
   */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */ `
     :host> section {
       display: flex;
@@ -66,7 +66,7 @@ export default class ContentFactory extends Shadow() {
   *
   * @return {Promise<void>}
   */
-  fetchTemplate() {
+  fetchTemplate () {
     switch (this.getAttribute('namespace')) {
       case 'content-list-default-':
         return this.fetchCSS([{
@@ -83,7 +83,7 @@ export default class ContentFactory extends Shadow() {
   * @param {any} fetch - An array of course fetch objects.
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  async renderHTML(fetch) {
+  async renderHTML (fetch) {
     return Promise.all([
       fetch,
       this.fetchModules([
@@ -139,18 +139,19 @@ export default class ContentFactory extends Shadow() {
     })
   }
 
-  fillGeneralContentInfo(content) {
+  fillGeneralContentInfo (content) {
     return `{
       'link': '${content.link}',
       'title': '${content.title}'
       'text': '${content.text}',
-      ${content.image ? `
+      ${content.image
+? `
       'image': {
         'alt': '${content.image.alt}',
         'src': ${content.image.src}
       }    
-      `:
-      ''
+      `
+      : ''
       }
     }`
   }

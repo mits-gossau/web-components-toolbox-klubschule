@@ -7,19 +7,19 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class Event extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
       if (this.icon) {
         if (this.icon.getAttribute('icon-name') === 'ChevronDown') {
           this.icon.setAttribute('icon-name', 'ChevronUp')
-          this.root.querySelector('.more.show').classList.remove('show');
-          this.root.querySelector('.less').classList.add('show');
+          this.root.querySelector('.more.show').classList.remove('show')
+          this.root.querySelector('.less').classList.add('show')
         } else {
           this.icon.setAttribute('icon-name', 'ChevronDown')
-          this.root.querySelector('.less.show').classList.remove('show');
-          this.root.querySelector('.more').classList.add('show');
+          this.root.querySelector('.less.show').classList.remove('show')
+          this.root.querySelector('.more').classList.add('show')
         }
       }
 
@@ -28,17 +28,17 @@ export default class Event extends Shadow() {
     }
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
     this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
-    this.toggle = this.root.querySelector('.expand');
+    this.toggle = this.root.querySelector('.expand')
 
-    this.toggle.addEventListener('click', this.clickEventListener);
+    this.toggle.addEventListener('click', this.clickEventListener)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.toggle.removeEventListener('click', this.clickEventListener)
   }
 
@@ -47,7 +47,7 @@ export default class Event extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -56,14 +56,14 @@ export default class Event extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.badge
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host .event {
         display: flex;
@@ -458,7 +458,7 @@ export default class Event extends Shadow() {
    * Render HTML
    * @returns Promise<void>
    */
-  renderHTML() {
+  renderHTML () {
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
@@ -538,37 +538,36 @@ export default class Event extends Shadow() {
     ])
   }
 
-  get badge() {
+  get badge () {
     return this.root.querySelector('[badge]')
   }
 
   /**
    * Set icon path deepending on state
-   * @param {*} data 
+   * @param {*} data
    * @returns icon path
    */
-  setIconUrl(data) {
-    let iconName = '';
+  setIconUrl (data) {
+    let iconName = ''
 
-    if (data.status == "0") {
-      iconName = 'garanteed';
-    } else if (data.status == "1") {
-      iconName = 'started';
-    } else if (data.status == "2") {
-      iconName = 'await';
-    } else if (data.status == "3") {
-      iconName = 'almost';
+    if (data.status == '0') {
+      iconName = 'garanteed'
+    } else if (data.status == '1') {
+      iconName = 'started'
+    } else if (data.status == '2') {
+      iconName = 'await'
+    } else if (data.status == '3') {
+      iconName = 'almost'
     }
 
-    return `../../../../../../../img/icons/event-state-${iconName}.svg`;
+    return `../../../../../../../img/icons/event-state-${iconName}.svg`
   }
-
 
   /**
     * renderDetails
     * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  async renderDetails() {
+  async renderDetails () {
     if (!this.details.children.length) {
       this.fetchModules([
         {
@@ -756,11 +755,11 @@ export default class Event extends Shadow() {
     }
   }
 
-  get details() {
+  get details () {
     return this.root.querySelector('.details')
   }
 
-  get data() {
+  get data () {
     return Event.parseAttribute(this.getAttribute('data'))
   }
 }
