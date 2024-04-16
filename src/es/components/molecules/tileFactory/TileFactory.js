@@ -164,14 +164,10 @@ export default class TileFactory extends Shadow() {
       'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text',
       'location': {
         'iconName': 'Location',
-        'name': '${course.locations ? course.locations.join(', ') : ''}',
+        'name': '${course.locations ? course.locations.join(',') : ''}',
         'badge': '${course.eTyp ? course.eTyp : ''}'
       },
-      'button': {
-        'text': '${course.buttons[0].text}',
-        'iconName': 'ArrowRight'
-        ${course.buttons[0].link ? `, 'link': '${course.buttons[0].link}'` : ''}
-      },
+      'buttons': ${JSON.stringify(course.buttons) || ''},
       'icons': [
         {
           'name': 'Percent',
@@ -232,7 +228,7 @@ export default class TileFactory extends Shadow() {
       }
       ${buttonsAsJson ? buttonsAsJson : ''}
       ${aboTypesAsJson ? aboTypesAsJson : ``}
-      'deletable': ${event.deletable || "false"}
+      'deletable': ${event.deletable || 'false'}
     }`
   }
 

@@ -1181,10 +1181,10 @@
             "atyp": [
                 "E"
             ],
-            "button": {
+            "buttons": [{
                 "text": "Buchen",
                 "link": "kurse/kurs/1001-Nacht-Orientalische-Kuche--E_1689314_1013/Configuration"
-            }
+            }]
         },
     {
         "key": "qg-i-IwBm0S_K5Z8d5xM",
@@ -1216,7 +1216,7 @@
         },
         "lessons": 0.0,
         "state": 0,
-        "button": {"text": "1 Veranstaltungen"},
+        "buttons": [{"text": "1 Veranstaltungen", "typ": "secondary"}],
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1253,7 +1253,7 @@
             },
             "lessons": 0.0,
             "state": 0,
-            "button": {"text": "Details"},
+            "buttons": [{"text": "Details"}],
             "permission": false,
             "cantonshare": false,
             "cantonshareprice": 0,
@@ -1293,7 +1293,7 @@
             },
             "lessons": 0.0,
             "state": 0,
-            "button": {"text": "Details"},
+            "buttons": [{"text": "Details"}],
             "permission": false,
             "cantonshare": false,
             "cantonshareprice": 0,
@@ -1330,7 +1330,7 @@
             },
             "lessons": 0.0,
             "state": 0,
-            "button": {"text": "Details"},
+            "buttons": [{"text": "Details"}],
             "permission": false,
             "cantonshare": false,
             "cantonshareprice": 0,
@@ -1372,7 +1372,7 @@
             },
         "lessons": 0.0,
         "state": 0,
-        "button": {"text": "Details"},
+        "buttons": [{"text": "Details"}],
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1415,7 +1415,7 @@
             },
         "lessons": 0.0,
         "state": 0,
-        "button": {"text": "1 Veranstaltungen"},
+        "buttons": [{"text": "1 Veranstaltungen", "typ": "secondary"}],
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1459,7 +1459,7 @@
             },
         "lessons": 0.0,
         "state": 0,
-        "button": {"text": "Details"},
+        "buttons": [{"text": "Details"}],
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1503,7 +1503,7 @@
             },
         "lessons": 0.0,
         "state": 0,
-        "button": {"text": "Details"},
+        "buttons": [{"text": "Details"}],
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
@@ -1543,7 +1543,7 @@
         },
         "lessons": 0.0,
         "state": 0,
-        "button": {"text": "Details"},
+        "buttons": [{"text": "Details"}],
         "permission": false,
         "cantonshare": false,
         "cantonshareprice": 0,
