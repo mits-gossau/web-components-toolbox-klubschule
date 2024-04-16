@@ -459,20 +459,20 @@ export default class Event extends Shadow() {
             </div>
           </div>
           <ul class="meta">
-            <li>
+            ${this.data.status && this.data.status > 0 ? /* html */`<li>
               <div>
-                ${this.data.status && this.data.status > 0 ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(this.data)}" size="1.5em"></a-icon-mdx>` : ''}
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(this.data)}" size="1.5em"></a-icon-mdx>
               </div>
               <span>${this.data.status_label}</span>
-            </li>
-            <li>
+            </li>` : ''}
+            ${this.data.lektionen_label ? /* html */ `<li>
               <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/event-list.svg" size="1.5em"></a-icon-mdx>
               <span>${this.data.lektionen_label}</span>
-            </li>
-            <li>
+            </li>` : ''}
+            ${this.data.location ? /* html */ `<li>
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
               <span>${this.data.location}</span>
-            </li>
+            </li>` : ''}
             <li>
               <button class="link-more expand">
                 <span class="more show">${this, this.data.detail_label_more}</span>
