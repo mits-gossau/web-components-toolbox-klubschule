@@ -27,14 +27,14 @@ export default class CourseDialog extends Shadow() {
     this.courseData = JSON.parse(this.dataset.content)
     this.courseSubscription = JSON.parse(this.dataset.subscription)
     this.courseId = this.dataset.id
+    if (this.shouldRenderCSS()) this.renderCSS()
+    if (this.shouldRenderHTML()) this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking') || 'request-show-dialog-booking', this.requestBookingDetailListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-reversal') || 'request-show-dialog-reversal', this.requestBookingReversalListener)
     document.body.addEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
-    if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
   }
 
   /**
@@ -50,14 +50,13 @@ export default class CourseDialog extends Shadow() {
   }
 
   // dialog close button event listener
-  dialogCloseListener = event => {
+  dialogCloseListener = () => {
     this.viewContent.innerHTML = ''
   }
 
   // DETAIL
   updateSubscriptionCourseAppointmentDetailListener = event => {
     if (this.dataset.id === event.detail.id) {
-      this.viewContent.innerHTML = ''
       event.detail.fetch.then(courseDetail => {
         this.viewContent.innerHTML = ''
         this.courseDetail = courseDetail
@@ -103,7 +102,7 @@ export default class CourseDialog extends Shadow() {
   // BOOKED - SUCCESS
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(x => {
+      event.detail.fetch.then(() => {
         this.viewContent.innerHTML = ''
         this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseData, this.courseDetail)
       })
@@ -146,7 +145,7 @@ export default class CourseDialog extends Shadow() {
   // REVERSAL - SUCCESS
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(_ => {
+      event.detail.fetch.then(() => {
         this.viewContent.innerHTML = ''
         this.viewContent.innerHTML = this.renderDialogContentReversalSuccess(this.courseData, this.courseDetail)
       })
@@ -184,12 +183,6 @@ export default class CourseDialog extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {}
-      :host * .success-message{
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          gap: 1em;
-        }
       @media only screen and (max-width: _max-width_) {
         :host {}
       }
@@ -204,18 +197,18 @@ export default class CourseDialog extends Shadow() {
     /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
-        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`,
         namespace: false
       },
       {
-        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`,
         namespaceFallback: true
       }
     ]
     switch (this.getAttribute('namespace')) {
       case 'course-dialog-default-':
         return this.fetchCSS([{
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+          path: `${this.importMetaUrl}./default-/default-.css`,
           namespace: false
         }, ...styles])
       default:
@@ -228,36 +221,36 @@ export default class CourseDialog extends Shadow() {
    * @returns void
    */
   renderHTML (courseId, content, selectedSubscription) {
-    this.html = /* html */`
-    <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}" close-event-name="dialog-close-${courseId}">
+    this.html = /* html */ `
+      <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}" close-event-name="dialog-close-${courseId}">
         <div class="container dialog-header">
           <div id="back"></div>
-          <h3 id="title"></h3>
-          <div id="close">
-            <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+            <h3 id="title"></h3>
+            <div id="close">
+              <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+            </div>
           </div>
-        </div>
-        <div class="container dialog-content">
-          <p class="reset-link"></p>
-          <div class="sub-content" >
-            <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
-            <div id="view-content">${this.renderDialogContentDetails(content)}</div>
+          <div class="container dialog-content">
+            <p class="reset-link"></p>
+            <div class="sub-content" >
+              <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
+              <div id="view-content">${this.renderDialogContentDetails(content)}</div>
+            </div>
           </div>
-        </div>
-        <div class="container dialog-footer">
-          <a-dialog-status-button data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
-        </div>
-        <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-tile-status-button>  
+          <div class="container dialog-footer">
+            <a-dialog-status-button data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
+          </div>
+          <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-tile-status-button>  
       </m-dialog>
-    `
+      `
   }
 
   // dialog default content view
   renderDialogContentDetails (data, detail = {}) {
     return /* html */ `
-        <div id="content">
-          <p id="description">${detail.courseDescription}</p>
-        </div>`
+      <div id="content">
+        <p id="description">${detail.courseDescription}</p>
+      </div>`
   }
 
   // dialog final booking content view
