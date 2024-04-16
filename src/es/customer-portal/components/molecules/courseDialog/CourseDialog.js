@@ -152,6 +152,17 @@ export default class CourseDialog extends Shadow() {
   // REVERSAL - SUCCESS - RENDER
   renderDialogContentReversalSuccess (data, detail = {}) {
     return /* html */`
+      <style>
+        .success-message{
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 1em;
+        }
+        .success {
+          color:#00997F;
+        }
+      </style>
       <div class="success-message">
         <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>
         <ks-a-heading tag="h2" color="#00997F">Sie haben den Termin erfolgreich storniert</ks-a-heading>
