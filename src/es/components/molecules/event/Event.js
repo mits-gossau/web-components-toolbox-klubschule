@@ -459,8 +459,6 @@ export default class Event extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML() {
-    const warnMandatory = 'data attribute requires: '
-
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
@@ -502,25 +500,7 @@ export default class Event extends Shadow() {
         </div>
         <div class="controls">
           <div class="controls-left">
-              ${this.data.deletable || this.data.merken_label ? `<div>` : ''}
-              ${this.data.deletable
-        ? `
-                <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em" class="icon-right"></a-icon-mdx>
-                `
-        : ''
-      }
-              ${this.data.merken_label
-        ? `
-                <ks-a-button namespace="button-secondary-" color="secondary">
-                  <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>${this.data.merken_label}
-                </ks-a-button> 
-                `
-        : ''
-      }
-              ${this.data.deletable || this.data.merken_label ? `</div>` : ''}
-            <div>
-              <ks-a-button namespace="button-primary-" color="secondary">${this.data.anmelden_label}</ks-a-button>          
-            </div>
+            <ks-m-buttons data-buttons='${JSON.stringify(this.data.buttons)}'></ks-m-buttons>
           </div>
           <div class="controls-right">
             <div class="icons">
@@ -544,8 +524,16 @@ export default class Event extends Shadow() {
         name: 'ks-a-button'
       },
       {
+        path: `${this.importMetaUrl}../../molecules/buttons/Buttons.js`,
+        name: 'ks-m-buttons'
+      },
+      {
         path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
         name: 'ks-m-tooltip'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
       }
     ])
   }

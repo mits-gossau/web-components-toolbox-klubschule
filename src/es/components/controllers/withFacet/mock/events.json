@@ -649,9 +649,10 @@
             },
             "lessons": 0.0,
             "state": 0,
-            "button": {
-                "text": "1 Veranstaltungen"
-            },
+            "buttons": [{
+                "text": "1 Veranstaltungen", 
+                "typ": "secondary"
+            }],
             "permission": false,
             "cantonshare": false,
             "cantonshareprice": 0,
@@ -859,9 +860,10 @@
             },
             "lessons": 0.0,
             "state": 0,
-            "button": {
-                "text": "1 Veranstaltungen"
-            },
+            "buttons": [{
+                "text": "1 Veranstaltungen",
+                "typ": "secondary"
+            }],
             "permission": false,
             "cantonshare": false,
             "cantonshareprice": 0,
