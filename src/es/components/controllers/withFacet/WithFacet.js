@@ -216,7 +216,7 @@ export default class WithFacet extends Shadow() {
         }))
         this.dispatchEvent(new CustomEvent('location-change', {
           detail: {
-            searchTerm: !(json || requestObj).clat || !(json || requestObj).clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
+            searchTerm: !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
           },
           bubbles: true,
           cancelable: true,
