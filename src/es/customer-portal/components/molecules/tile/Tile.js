@@ -1,7 +1,7 @@
 // @ts-check
 import Tile from '../../../../components/molecules/tile/Tile.js'
 import { courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
-import { makeUniqueCourseId, escapeForHtml } from '../../../helpers/Shared.js'
+import { makeUniqueCourseId, escapeForHtml, getTileState } from '../../../helpers/Shared.js'
 
 /**
  * @export
@@ -34,9 +34,9 @@ export default class AppointmentTile extends Tile {
   // BOOKED - SUCCESS
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(x => {
-        const st = this.getTileState(x)
-        this.currentTile.classList.add(st.css.border)
+      event.detail.fetch.then(data => {
+        const tileState = getTileState(courseAppointmentStatusMapping[data.courseAppointmentStatus], data)
+        this.currentTile.classList.add(tileState.css.border)
       })
     }
   }
@@ -44,12 +44,12 @@ export default class AppointmentTile extends Tile {
   // REVERSAL - SUCCESS
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(x => {
-        const st = this.getTileState(x)
+      event.detail.fetch.then(data => {
+        const tileState = getTileState(courseAppointmentStatusMapping[data.courseAppointmentStatus], data)
         const defaultClass = this.currentTile.classList[0]
         this.currentTile.classList.remove(...this.currentTile.classList)
         this.currentTile.classList.add(defaultClass)
-        this.currentTile.classList.add(st.css.border)
+        this.currentTile.classList.add(tileState.css.border)
       })
     }
   }
@@ -60,118 +60,113 @@ export default class AppointmentTile extends Tile {
   renderCSS () {
     super.renderCSS()
     this.css = /* css */`
-    :host {}
-    :host > div {
-      display:flex;
-      flex-direction: column;
-    }
-    :host .parent-body, .parent-footer {
-      display:flex;
-      padding:1.5em;
-    }
-    :host .parent-footer {
-      align-items: center;
-    }
-    :host .course-info, .course-booking {
-      flex-basis: 50%;
-    }
-    :host .course-admin, .course-price {
-      flex-grow: 1;
-      flex-shrink: 1;
-    }
-    :host .course-info {
-      display:flex;
-      flex-direction:column;
-    }
-    :host .course-execution-info{
-      gap:0.5em;
-    }
-    :host .course-price {
-      text-align:right;
-    }
-    :host .title {
-      color:var(--title-color);
-    }
-    :host .date, .time {
-      font-weight:400;
-    }
-    :host .time {
-      display:flex;
-      gap:0.5em;
-      align-items: center;
-    }
-    :host .vacancies {
-      display:flex;
-      padding-bottom:0.75em;
-    }
-    :host .body, .footer {
-      display: grid;
-      grid-template-columns: 50% 50%;
-      grid-template-rows: auto auto auto;
-      align-items: center;
-      padding:1.5em 1.5em 0.75em 1.5em;
-      gap:0.25em;
-    }
-    :host .info {
-      display:flex;
-      align-items:center;
-    }
-    :host .location-room {
-      display:flex;
-      flex-direction:column;
-    }
-    :host .icon-info {
-      display:flex;
-      align-items: center;
-    }
-    :host m-load-template-tag {
-        min-height:16em;
-        display:block;
-    }
-    :host .sub-content {
-      padding-top:1.5em;
-    }
-    :host .status-not-bookable {
-      border: 1px solid #F4001B;
-    }
-    :host .status-booked-out {
-      border: 1px solid #F4001B;
-    }
-    :host .status-closed {
-      border: 1px solid #F4001B;
-    }
-    :host .status-booked-reversal-possible {
-      border: 1px solid #00997F;
-    }
-    :host .status-booked-reversal-not-possible {
-      border: 1px solid #00997F;
-    }
-    :host .success {
-      color:#00997F;
-    }
-    :host .alert {
-      color:#F4001B;
-    }
-    :host .hide-dialog-action-btn{
-      display:none;
-    }
-
-    :host .location-room-info {
-      align-items: stretch;
-    }
-    :host .location-room {
-      display:flex;
-    }
-    
-    @media only screen and (max-width: _max-width_) {
-      :host  {}
-    }
+      :host {}
+      :host > div {
+        display:flex;
+        flex-direction: column;
+      }
+      :host .parent-body, .parent-footer {
+        display:flex;
+        padding:1.5em;
+      }
+      :host .parent-footer {
+        align-items: center;
+      }
+      :host .course-info, .course-booking {
+        flex-basis: 50%;
+      }
+      :host .course-admin, .course-price {
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+      :host .course-info {
+        display:flex;
+        flex-direction:column;
+      }
+      :host .course-execution-info{
+        gap:0.5em;
+      }
+      :host .course-price {
+        text-align:right;
+      }
+      :host .title {
+        color:var(--title-color);
+      }
+      :host .date, .time {
+        font-weight:400;
+      }
+      :host .time {
+        display:flex;
+        gap:0.5em;
+        align-items: center;
+      }
+      :host .vacancies {
+        display:flex;
+        padding-bottom:0.75em;
+      }
+      :host .body, .footer {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: auto auto auto;
+        align-items: center;
+        padding:1.5em 1.5em 0.75em 1.5em;
+        gap:0.25em;
+      }
+      :host .info {
+        display:flex;
+        align-items:center;
+      }
+      :host .location-room {
+        display:flex;
+        flex-direction:column;
+      }
+      :host .icon-info {
+        display:flex;
+        align-items: center;
+      }
+      :host m-load-template-tag {
+          min-height:16em;
+          display:block;
+      }
+      :host .sub-content {
+        padding-top:1.5em;
+      }
+      :host .status-not-bookable {
+        border: 1px solid #F4001B;
+      }
+      :host .status-booked-out {
+        border: 1px solid #F4001B;
+      }
+      :host .status-closed {
+        border: 1px solid #F4001B;
+      }
+      :host .status-booked-reversal-possible {
+        border: 1px solid #00997F;
+      }
+      :host .status-booked-reversal-not-possible {
+        border: 1px solid #00997F;
+      }
+      :host .success {
+        color:#00997F;
+      }
+      :host .alert {
+        color:#F4001B;
+      }
+      :host .hide-dialog-action-btn{
+        display:none;
+      }
+      :host .location-room-info {
+        align-items: stretch;
+      }
+      :host .location-room {
+        display:flex;
+      }
+      @media only screen and (max-width: _max-width_) {
+        :host  {}
+      }
     `
   }
 
-  /**
-   * fetches the template
-   */
   fetchTemplate () {
     switch (this.getAttribute('namespace')) {
       case 'tile-course-appointment-':
@@ -192,10 +187,6 @@ export default class AppointmentTile extends Tile {
     }
   }
 
-  /**
-   * Render HTML
-   * @returns Promise<void>
-   */
   renderHTML () {
     const fetchModules = this.fetchModules([
       {
@@ -247,12 +238,12 @@ export default class AppointmentTile extends Tile {
   }
 
   renderTile (content, selectedSubscription) {
-    const tileStatus = this.getTileState(content)
+    const tileState = getTileState(courseAppointmentStatusMapping[content.courseAppointmentStatus], content)
     const courseId = makeUniqueCourseId(content)
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
-          <div id="tile-wrapper" class="m-tile ${tileStatus.css.border}" data-course-id=${courseId}>
+          <div id="tile-wrapper" class="m-tile ${tileState.css.border}" data-course-id=${courseId}>
             <div class="parent-body">
               <div class="course-info">
                 <div>
@@ -310,17 +301,17 @@ export default class AppointmentTile extends Tile {
     `
   }
 
-  getTileState (data) {
-    const type = courseAppointmentStatusMapping[data.courseAppointmentStatus]
-    const { courseAppointmentFreeSeats } = data
+  // getTileState (data) {
+  //   const type = courseAppointmentStatusMapping[data.courseAppointmentStatus]
+  //   const { courseAppointmentFreeSeats } = data
 
-    return {
-      css: type.css,
-      status: data.courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : type.content.status,
-      info: type.content.info,
-      icon: type.content.icon
-    }
-  }
+  //   return {
+  //     css: type.css,
+  //     status: data.courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : type.content.status,
+  //     info: type.content.info,
+  //     icon: type.content.icon
+  //   }
+  // }
 
   formatCourseAppointmentDate (date) {
     const dateObject = new Date(date)
