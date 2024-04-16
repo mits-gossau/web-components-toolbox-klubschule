@@ -58,7 +58,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   * Show course detail view
+   * SHOW course detail view
    *
    * @param {CustomEventInit} event
    */
@@ -94,9 +94,53 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   * Show booking confirmation view
+   * RENDER course detail view
    *
-   * @param {*} event
+   * @param {*} data
+   * @param {*} detail
+   * @returns
+   */
+  renderDialogContentDetails (data, detail = {}) {
+    return /* html */ `
+      <style>
+        .price-info {
+          display:flex;
+        }
+        .details {
+          display:flex;
+          flex-direction:column;
+          gap:1em;
+          margin-bottom:4em;
+          padding-top:2em;
+        }
+        .detail {
+          display:flex;
+          flex-direction:column;
+        }
+        .detail span:first-child {
+          font-weight: 500;
+          line-height: 110%;
+        } 
+      </style>
+      <div id="content">
+        <div>
+          <p class="description">${detail.courseDescription}</p>
+        </div>
+        <div class="details">
+          ${this.renderPriceInfoContent(data, detail)}
+          ${this.renderCourseDetailsContent(detail)}
+        </div>
+        <div>
+          <h3>Downloads</h3>
+          <div>${this.renderDownloads()}</div>
+        </div>
+      </div>`
+  }
+
+  /**
+   * SHOW booking confirmation view
+   *
+   * @param {CustomEventInit} event
    */
   requestShowDialogBookingConfirmationListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
@@ -106,7 +150,49 @@ export default class CourseDialog extends Shadow() {
     }
   }
 
-  // BOOKED - SUCCESS
+  /**
+   * RENDER booking confirmation view
+   *
+   * @param {*} data
+   * @param {*} detail
+   * @returns
+   */
+  renderDialogContentBookingConfirmation (data, detail = {}) {
+    return /* html */ `
+      <style>
+        .details {
+          display:flex;
+          flex-direction:column;
+          gap:1em;
+          margin-bottom:4em;
+          padding-top:2em;
+        }
+        .detail {
+          display:flex;
+          flex-direction:column;
+        }
+        .detail span:first-child {
+          font-weight: 500;
+          line-height: 110%;
+        }
+      </style>
+      <div id="content">
+        <div>
+          <span>Termin wird über ihr Abonnement gebucht</span>
+        </div>
+        <div class="details">
+          ${this.renderCourseDetailsContent(detail)}
+          ${this.renderNotification()}
+        </div>
+      </div>
+      `
+  }
+
+  /**
+   * SHOW booking success
+   *
+   * @param {CustomEventInit} event
+   */
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(() => {
@@ -116,7 +202,13 @@ export default class CourseDialog extends Shadow() {
     }
   }
 
-  // dialog success booking content view
+  /**
+   * RENDER booking success
+   *
+   * @param {*} data
+   * @param {*} detail
+   * @returns
+   */
   renderDialogContentBookingSuccess (data, detail = {}) {
     return /* html */`
       <style>
@@ -144,7 +236,11 @@ export default class CourseDialog extends Shadow() {
       `
   }
 
-  // REVERSAL - SHOW FINAL STEP
+  /**
+   * SHOW reversal confirmation
+   *
+   * @param {CustomEventInit} event
+   */
   requestShowDialogReversalConfirmationListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
       this.renderDialogTitle('Termin stornieren')
@@ -153,12 +249,22 @@ export default class CourseDialog extends Shadow() {
     }
   }
 
-  // reversal really
+  /**
+   * RENDER reversal confirmation
+   *
+   * @param {*} data
+   * @param {*} detail
+   * @returns
+   */
   renderDialogContentReversal (data, detail = {}) {
     return '<div><ks-a-heading tag="h2" style-as="h3" color="#F4001B">Hiermit stornieren sie diesen Termin</ks-a-heading></div>'
   }
 
-  // REVERSAL - SUCCESS
+  /**
+   * SHOW reversal success
+   *
+   * @param {CustomEventInit} event
+   */
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(() => {
@@ -168,7 +274,13 @@ export default class CourseDialog extends Shadow() {
     }
   }
 
-  // REVERSAL - SUCCESS - RENDER
+  /**
+   * RENDER reversal success
+   *
+   * @param {*} data
+   * @param {*} detail
+   * @returns
+   */
   renderDialogContentReversalSuccess (data, detail = {}) {
     return /* html */`
       <style>
@@ -284,87 +396,39 @@ export default class CourseDialog extends Shadow() {
     })
   }
 
-  // dialog default content view
-  renderDialogContentDetails (data, detail = {}) {
-    return /* html */ `
-      <style>
-        .price-info {
-          display:flex;
-        }
-        .details {
-          display:flex;
-          flex-direction:column;
-          gap:1em;
-          margin-bottom:4em;
-          padding-top:2em;
-        }
-        .detail {
-          display:flex;
-          flex-direction:column;
-        }
-        .detail span:first-child {
-          font-weight: 500;
-          line-height: 110%;
-        } 
-      </style>
-      <div id="content">
-        <div>
-          <p class="description">${detail.courseDescription}</p>
-        </div>
-        <div class="details">
-          ${this.renderPriceInfoContent(data, detail)}
-          ${this.renderCourseDetailsContent(detail)}
-        </div>
-        <div>
-          <h3>Downloads</h3>
-          <div>${this.renderDownloads()}</div>
-        </div>
-      </div>`
-  }
-
+  /**
+   * Returns HTML content based on the subscription mode of a course.
+   * @param courseData - `courseData`
+   * @param courseDetail - `courseDetail`
+   * @returns Returns an HTML string that contains information
+   * about the price of a course. If the subscription mode of the course is `WERTABO`, it includes the
+   * lesson price and a message indicating that the appointment is booked through the subscription.
+   * Otherwise, it returns an empty string.
+   */
   renderPriceInfoContent (courseData, courseDetail) {
     return subscriptionMode[courseDetail.subscriptionMode] === subscriptionMode.WERTABO
       ? /* html */ `<div class="detail price-info"><span>${courseData.lessonPrice}</span><span> Termin wird über ihr Abonnement gebucht</span></div>`
       : ''
   }
 
-  // dialog final booking content view
-  renderDialogContentBookingConfirmation (data, detail = {}) {
-    return /* html */ `
-      <style>
-        .details {
-          display:flex;
-          flex-direction:column;
-          gap:1em;
-          margin-bottom:4em;
-          padding-top:2em;
-        }
-        .detail {
-          display:flex;
-          flex-direction:column;
-        }
-        .detail span:first-child {
-          font-weight: 500;
-          line-height: 110%;
-        }
-      </style>
-      <div id="content">
-        <div>
-          <span>Termin wird über ihr Abonnement gebucht</span>
-        </div>
-        <div class="details">
-          ${this.renderCourseDetailsContent(detail)}
-          ${this.renderNotification()}
-        </div>
-      </div>
-      `
-  }
-
+  /**
+   * Updates element with the ID 'title' in a dialog component with the provided title.
+   * @param {string} title - `title`
+   */
   renderDialogTitle (title) {
     const titleElement = this.dialog.shadowRoot.getElementById('title')
     titleElement.innerHTML = title
   }
 
+  /**
+   * Generates HTML content displaying details of a course appointment,
+   * including date, time, location, instructor, status, and subscription information.
+   * @param detail - `detail`
+   * @returns Returning an HTML template string that contains various details about a course appointment.
+   * The details include the date and time of the appointment, location/room information, instructor details,
+   * appointment status, and subscription information. The appointment status is dynamically determined
+   * based on the `courseAppointmentStatus` property of the `detail` object.
+   */
   renderCourseDetailsContent (detail) {
     const state = detail.courseAppointmentStatus === 5 ? '<span>Gebucht</span>' : `<span>${detail.courseAppointmentFreeSeats} freie Plätze</span>`
     return /* html */ `
@@ -376,6 +440,10 @@ export default class CourseDialog extends Shadow() {
     `
   }
 
+  /**
+   * Generates HTML code for a system notification with a specific message and icon.
+   * @returns Returning an HTML template string
+   */
   renderNotification () {
     return /* html */ `
       <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertTriangle">
@@ -386,6 +454,10 @@ export default class CourseDialog extends Shadow() {
     `
   }
 
+  /**
+   * Generates HTML code for a list of downloadable items with links and icons.
+   * @returns Returning an HTML template string
+   */
   renderDownloads () {
     return /* html */ `
         <ks-m-link-list namespace="link-list-download-">
