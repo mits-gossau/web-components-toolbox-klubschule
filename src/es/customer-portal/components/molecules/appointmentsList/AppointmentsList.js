@@ -41,7 +41,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
-    this.renderHTML(event.detail.fetch).then(_ => {
+    this.renderHTML(event.detail.fetch).then(() => {
       if (!this.select) {
         // TODO: Refactor
         this.select = this.root.querySelector('o-grid').root.querySelector('select')
@@ -51,7 +51,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   selectEventListener = (event) => {
-    const data = JSON.parse(event.target.value)
+    const data = AppointmentsList.parseAttribute(event.target.value)
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
       {
         detail: {
@@ -116,11 +116,7 @@ export default class AppointmentsList extends Shadow() {
     }
   }
 
-  /**
-   * Render HTML
-   * @returns void
-   */
-  async renderHTML (fetch) {
+  renderHTML (fetch) {
     this.renderLoading()
     return fetch.then(appointments => {
       if (appointments.errorCode !== 0) {
@@ -144,31 +140,32 @@ export default class AppointmentsList extends Shadow() {
           name: 'm-dialog'
         }
       ])
-      return Promise.all([fetchModules]).then(async (children) => {
+      return Promise.all([fetchModules]).then((children) => {
         this.html = ''
         const filter = this.renderFilterSubscriptions(appointments.filters.subscriptions)
         const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
         this.html = /* html */ `
-            <o-grid namespace="grid-12er-">
-              <div col-lg="12" col-md="12" col-sm="12">
-                <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
-              </div>
-              <div col-lg="12" col-md="12" col-sm="12">
-               ${filter}
-              </div>
-              <div col-lg="12" col-md="12" col-sm="12">
-                [[ Filter ]]
-                <hr>
-                <br>
-              </div>
-            </o-grid>
-            <div id="list-wrapper">
-              ${dayList.list.join('')}
+          <o-grid namespace="grid-12er-">
+            <div col-lg="12" col-md="12" col-sm="12">
+              <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
             </div>
-            `
+            <div col-lg="12" col-md="12" col-sm="12">
+              ${filter}
+            </div>
+            <div col-lg="12" col-md="12" col-sm="12">
+              [[ Filter ]]
+              <hr>
+              <br>
+            </div>
+          </o-grid>
+          <div id="list-wrapper">
+            ${dayList.list.join('')}
+          </div>
+        `
         return this.html
       })
     }).catch(e => {
+      // TODO: Handle error
       console.error(e)
     })
   }
@@ -220,8 +217,8 @@ export default class AppointmentsList extends Shadow() {
   }
 
   makeTileComponent (tile, appointment, selectedSubscription) {
-    const appointmentData = this.escapeForHtml(appointment)
-    const selectedSubscriptionData = this.escapeForHtml(selectedSubscription)
+    const appointmentData = this.cleanAndStringifyData(appointment)
+    const selectedSubscriptionData = this.cleanAndStringifyData(selectedSubscription)
     const tileComponent = new tile.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
     tileComponent.setAttribute('data', `${appointmentData}`)
     tileComponent.setAttribute('data-id', `${makeUniqueCourseId(appointment)}`)
@@ -229,7 +226,7 @@ export default class AppointmentsList extends Shadow() {
     return tileComponent
   }
 
-  escapeForHtml (data) {
+  cleanAndStringifyData (data) {
     const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
     return escapeForHtml(JSON.stringify(data))
   }
