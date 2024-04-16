@@ -204,9 +204,9 @@ export default class TileFactory extends Shadow() {
       "status_label": "${event.status_label}",
       "lektionen_label": "${event.lektionen_label}",
       "price": {
-        "from": "${event.price.pre}",
+        "from": "${event.price.pre || ''}",
         "amount": "${event.price.amount}",
-        "per": "${event.price.per}",
+        "per": "${event.price.per || ''}",
         "price": "${event.price.price}"
       },
       ${event.kanton ? `
@@ -224,7 +224,7 @@ export default class TileFactory extends Shadow() {
           },
         ` : ``
       }
-      "buttons": ${JSON.stringify(event.buttons) || ""},
+      "buttons": ${JSON.stringify(event.buttons) || "[]"},
       ${aboTypesAsJson ? aboTypesAsJson : ``}
       "deletable": ${event.deletable || "false"}
     }`

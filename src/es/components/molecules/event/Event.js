@@ -242,7 +242,7 @@ export default class Event extends Shadow() {
       }
 
       :host .details {
-        display: block;
+        display: none;
       }
 
       :host .details-expanded {
