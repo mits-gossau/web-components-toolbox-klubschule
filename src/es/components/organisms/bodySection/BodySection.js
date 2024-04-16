@@ -129,6 +129,12 @@ export default class KsBodyStyle extends BodyStyle {
             border-right: 1px solid red;
         }
 
+        /* centered buttons */
+        :host > .center > ks-a-button {
+            width: 100%;
+            max-width: calc(400rem/16);
+        }
+
         @media screen and (max-width: _max-width_) {
 
             ${(this.hasAttribute('display-mobile'))

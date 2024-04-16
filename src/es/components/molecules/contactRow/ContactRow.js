@@ -55,6 +55,7 @@ export default class Contact extends Shadow() {
       }
       :host address span {
         display: block;
+        font-style: normal;
       }
     `
     return this.fetchCSS([

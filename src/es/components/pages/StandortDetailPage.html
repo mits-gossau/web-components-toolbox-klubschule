@@ -28,7 +28,7 @@
     <ks-o-body-section content-width-var="100%" no-margin-y>
         <div class="center">
             <ks-a-button namespace="button-primary-" color="secondary" href="#angebote">
-                <span>234 Angebote</span>
+                234 Angebote
                 <a-icon-mdx icon-name="ArrowDownRight" size="1em" class="icon-right"></a-icon-mdx>
             </ks-a-button>
         </div>
@@ -219,49 +219,31 @@
         >
         </ks-m-contact-row>
         <br />
-        <br />
 
         <ks-a-heading tag="h3">
             &#xD6;ffnungszeiten
         </ks-a-heading>
-        <table>
-            <tr>
-                <td>Montag</td>
-                <td>08:00</td>
-                <td>-</td>
-                <td>20:00</td>
-            </tr>
-            <tr>
-                <td>Dienstag</td>
-                <td>08:00</td>
-                <td>-</td>
-                <td>20:00</td>
-            </tr>
-            <tr>
-                <td>Mittwoch</td>
-                <td>08:00</td>
-                <td>-</td>
-                <td>20:00</td>
-            </tr>
-            <tr>
-                <td>Donnerstag</td>
-                <td colspan="3">geschlossen</td>
-            </tr>
-            <tr>
-                <td>Freitag</td>
-                <td>08:00</td>
-                <td>-</td>
-                <td>12:00</td>
-            </tr>
-            <tr>
-                <td>Samstag</td>
-                <td colspan="3">geschlossen</td>
-            </tr>
-            <tr>
-                <td>Sonntag</td>
-                <td colspan="3">geschlossen</td>
-            </tr>
-        </table>
+        <ks-m-opening-hours
+            data='[
+                {"label":"Montag","open":true,"hours":[["8:00","20:00"]]},
+                {"label":"Dienstag","open":true,"hours":[["8:00","20:00"]]},
+                {"label":"Mittwoch","open":true,"hours":[["8:00","20:00"]]},
+                {"label":"Donnerstag","open":false,"hours":[["8:00","18:00"]]},
+                {"label":"Freitag","open":true,"hours":[["8:00","12:00"],["13:30","18:00"]]},
+                {"label":"Samstag","open":true,"hours":[["8:00","12:00"],["13:30","18:00"]]},
+                {"label":"Sonntag","open":false,"hours":[]}
+            ]'
+            closed-label="geschlossen"
+        >
+        </ks-m-opening-hours>
+        <br />
+        <p>Im Kurslokal an der Bahnhofstrasse 5 in Davos Platz 
+            gibt es kein Sekretariat der Klubschule Migros. 
+            Für Beratung und Informationen wenden Sie sich bitte ans Klubschulsekretariat in Chur 
+            Tel. 058 712 44 40.
+        </p>
+        <br />
+
         <ks-a-heading tag="h3">
             Service
         </ks-a-heading>
