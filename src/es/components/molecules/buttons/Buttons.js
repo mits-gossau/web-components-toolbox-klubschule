@@ -81,9 +81,7 @@ export default class Buttons extends Shadow() {
    * @returns void
    */
   renderHTML () {
-    console.log(this.getAttribute('data-buttons'))
     const dataButtons = JSON.parse(this.getAttribute('data-buttons')) || [{}]
-    console.log(dataButtons)
 
     const buttons = dataButtons?.reduce((acc, button) => acc + /* html */`
       <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
