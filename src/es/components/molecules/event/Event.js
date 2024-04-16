@@ -90,11 +90,6 @@ export default class Event extends Shadow() {
         width: 100%;
       }
 
-      :host .controls-left_buttons {
-        display: flex;
-        gap: 1rem;
-      }
-
       :host .date {
         font-size: 1.5rem;
         line-height: 1.625rem;
