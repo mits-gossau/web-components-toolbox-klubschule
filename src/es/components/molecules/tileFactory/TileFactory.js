@@ -121,30 +121,30 @@ export default class TileFactory extends Shadow() {
         (acc, course) => {
           const tile = this.isEventSearch ? /* html */ `
             <ks-m-event
-              data="${this.fillGeneralTileInfoEvents(course)}"
+              data='${this.fillGeneralTileInfoEvents(course)}'
             ></ks-m-event>
           ` : (
             course.children?.length
               ? /* html */`
-                <ks-o-tile-list data="{
+                <ks-o-tile-list data='{
                   ${this.fillGeneralTileInfo(course)},
-                  'buttonMore': {
-                    'text': 'Weitere Standorte',
-                    'iconName': 'ArrowDownRight'
+                  "buttonMore": {
+                    "text": "Weitere Standorte",
+                    "iconName": "ArrowDownRight"
                   },
-                  'tiles': [${course.children.reduce((acc, child, i, arr) => acc + `
+                  "tiles": [${course.children.reduce((acc, child, i, arr) => acc + `
                     {
                       ${this.fillGeneralTileInfo(child)}
-                    }${i === arr.length - 1 ? '' : ','}
-                  `, '')}
+                    }${i === arr.length - 1 ? "" : ","}
+                  `, "")}
                   ]
-                }">
+                }'>
                 </ks-o-tile-list>
               `
               : /* html */`
-                <ks-m-tile namespace="tile-default-" data="{
+                <ks-m-tile namespace="tile-default-" data='{
                   ${this.fillGeneralTileInfo(course)}
-                }"></ks-m-tile>
+                }'></ks-m-tile>
               `
           )
           return acc = acc + tile
@@ -159,72 +159,66 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfo(course) {
-    const buttons = []
-    course.buttons.forEach(button => {
-      buttons.push(`{'text': '${button.text}','iconName': '${button.iconName ? button.iconName : 'ArrowRight'}'${button.link ? `, 'link': '${button.link}'` : ''}}`)
-    })
-    console.log('buttons', buttons)
-
-      
     return `
-      'title': '${course.title}',
-      'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text',
-      'location': {
-        'iconName': 'Location',
-        'name': '${course.locations ? course.locations.join(', ') : ''}',
-        'badge': '${course.eTyp ? course.eTyp : ''}'
+      "title": "${course.title}",
+      "iconTooltip": "Das ist ein sinnvoller Tooltip-Text",
+      "location": {
+        "iconName": "Location",
+        "name": "${course.locations ? course.locations.join(',') : ''}",
+        "badge": "${course.eTyp ? course.eTyp : ''}"
       },
-      'buttons': [${buttons}],
-      'icons': [
+      "buttons": ${JSON.stringify(course.buttons) || ""},
+      "icons": [
         {
-          'name': 'Percent',
-          'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text'
+          "name": "Percent",
+          "iconTooltip": "Das ist ein sinnvoller Tooltip-Text"
         },
         {
-          'name': 'Bell',
-          'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text'
+          "name": "Bell",
+          "iconTooltip": "Das ist ein sinnvoller Tooltip-Text"
         }
       ],
-      'price': {
-        'from': '${course.price.pre}',
-        'amount': '${course.price.amount}',
-        'per': 'Semester'
+      "price": {
+        "from": "${course.price.pre}",
+        "amount": "${course.price.amount}",
+        "per": "Semester"
       }
     `
   }
 
   fillGeneralTileInfoEvents(event) {
     return `{
-      'id': '${event.id}',
-      'center_id': '${event.centerid}',
-      'language': '${event.parentkey.split('_')[0]}',
-      'typ': '${event.typ}',
-      'location': '${event.location.name}',
-      'gueltig_ab': '${event.dateBegin}',
-      'gueltig_bis': '${event.dateEnd}',
-      'days': '${event.days}',
-      'detail_mehr_label': '${event.detail_mehr_label || "Mehr Details"}',
-      'detail_weniger_label': '${event.detail_weniger_label || "Weniger Details"}',
-      'status': '${event.state}',
-      'status_label': '${event.status_label || "Status Label"}',
-      'lektionen_label': '${event.lektionen_label}',
-      'merken_label': '${event.merken_label || 'Merken'}',
-      'anmelden_label': '${event.anmelden_label || 'Anmelden'}',
-      'icons': [
+      "id": "${event.id}",
+      "center_id": "${event.centerid}",
+      "language": "${event.parentkey.split('_')[0]}",
+      "typ": "${event.typ}",
+      "location": "${event.location.name}",
+      "gueltig_ab": "${event.dateBegin}",
+      "gueltig_bis": "${event.dateEnd}",
+      "days": "${event.days}",
+      "detail_mehr_label": "${event.detail_mehr_label || "Mehr Details"}",
+      "detail_weniger_label": "${event.detail_weniger_label || "Weniger Details"}",
+      "status": "${event.state}",
+      "status_label": "${event.status_label || "Status Label"}",
+      "lektionen_label": "${event.lektionen_label}",
+      "merken_label": "${event.merken_label || "Merken"}",
+      "anmelden_label": "${event.anmelden_label || "Anmelden"}",
+      "buttons": ${JSON.stringify(event.buttons) || ""},
+      "icons": [
         {
-          'iconTooltip': 'Tooltip 1',
-          'name': 'Star'
+          "iconTooltip": "Tooltip 1",
+          "name": "Star"
         },
         {
-          'iconTooltip': 'Tooltip 2',
-          'name': 'Tag'
+          "iconTooltip": "Tooltip 2",
+          "name": "Tag"
         },
         {
-          'iconTooltip': 'Tooltip 3',
-          'name': 'Percent'
+          "iconTooltip": "Tooltip 3",
+          "name": "Percent"
         }
       ],
-      'deletable': ${event.deletable || "true"}
+      "deletable": ${event.deletable || "true"}
     }`
   }
 

@@ -260,15 +260,6 @@ export default class Tile extends Shadow() {
     const data = Tile.parseAttribute(this.getAttribute('data'))
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
 
-    const buttons = data.buttons?.reduce((acc, button) => acc + /* html */`
-      <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.text ? 'button-secondary-' : 'button-tertiary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
-        ${button.text ? '<span>' + button.text + '</span>' : ''}
-        ${button.text ? 
-          `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName || 'ArrowRight'}" size="1em" class="icon-right"></a-icon-mdx>` 
-          : `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>`}
-      </ks-a-button>
-    `, '')
-
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="m-tile">
@@ -306,7 +297,7 @@ export default class Tile extends Shadow() {
           <div class="m-tile__foot-left">
             <!-- Trash Icon is pre-placed for wishlist -->
             <!-- <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx> -->
-            ${buttons}
+            <ks-m-buttons data-buttons='${JSON.stringify(data.buttons)}'></ks-m-buttons>
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
@@ -339,6 +330,10 @@ export default class Tile extends Shadow() {
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
         name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/buttons/Buttons.js`,
+        name: 'ks-m-buttons'
       },
       {
         path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
