@@ -33,23 +33,23 @@ export default class StatusButton extends Shadow() {
   }
 
   updateSubscriptionCourseAppointmentBookingListener = event => {
-    event.detail.fetch.then(courseDetail => {
-      if (this.dataset.id === event.detail.id) {
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(courseDetail => {
         const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         this.html = btn
-      }
-    })
+      })
+    }
   }
 
   updateSubscriptionCourseAppointmentReversalListener = event => {
-    event.detail.fetch.then(courseDetail => {
-      if (this.dataset.id === event.detail.id) {
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(courseDetail => {
         const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         this.html = btn
-      }
-    })
+      })
+    }
   }
 
   /**
@@ -75,12 +75,7 @@ export default class StatusButton extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host {
-        display:block;
-      }
-      :host .subscription {
-        display: none;
-      }
+      :host {}
       @media only screen and (max-width: _max-width_) {
         :host {}
       }
@@ -119,7 +114,7 @@ export default class StatusButton extends Shadow() {
    * @returns void
    */
   renderHTML (content, subscription) {
-    // console.log(content, subscription)
+    // TODO: Remove
     this.wrapper = this.root.querySelector('div') || document.createElement('div')
     const btn = this.renderTileActionButton(subscriptionMode[subscription.subscriptionMode], content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
     this.html = btn
