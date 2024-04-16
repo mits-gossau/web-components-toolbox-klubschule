@@ -487,15 +487,7 @@ export default class Event extends Shadow() {
         </div>
         <div class="controls">
           <div class="controls-left">
-            ${this.data.buttons ? this.data.buttons.reduce((acc, button, index) => acc + (button.event != "bookmark" ? /* html */ `
-              <div>
-                ${index === 0 && this.data.deletable ? /* html */ `<a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em" class="icon-right"></a-icon-mdx>` : ''}
-                <ks-a-button namespace="${button.event === "bookmark" ? 'button-secondary-' : 'button-primary-'}" color="secondary" ${button.link ? `href="${button.link}"` : ""}>
-                  ${button.event === "bookmark" ? /* html */ `<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>` : ''}
-                  ${button.text}
-                </ks-a-button>          
-              </div>
-            ` : ''), '') : ''}
+            <ks-m-buttons data-buttons='${JSON.stringify(this.data.buttons)}'></ks-m-buttons>
           </div>
           <div class="controls-right">
             <div class="icons">
@@ -519,12 +511,12 @@ export default class Event extends Shadow() {
 
     return this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
-        name: 'ks-a-button'
-      },
-      {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/buttons/Buttons.js`,
+        name: 'ks-m-buttons'
       },
       {
         path: `${this.importMetaUrl}../../molecules/badge/Badge.js`,
