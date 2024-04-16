@@ -1,7 +1,6 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
-
 /**
 * @export
 * @class Buttons
@@ -84,11 +83,15 @@ export default class Buttons extends Shadow() {
     const dataButtons = JSON.parse(this.getAttribute('data-buttons')) || [{}]
 
     const buttons = dataButtons?.reduce((acc, button) => acc + /* html */`
-      <ks-a-button ${button.text ? '' : 'icon'} namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" color="secondary" ${button.link ? `href=${button.link}` : ''}>
+      <ks-a-button 
+        ${button.iconName && !button.text ? 'icon' : ''} 
+        namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
+        color="secondary" 
+        ${button.link ? `href=${button.link}` : ''}
+      >
         ${button.text ? '<span>' + button.text + '</span>' : ''}
-        ${button.text ? 
-          `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName || 'ArrowRight'}" size="1em" class="icon-right"></a-icon-mdx>` 
-          : `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>`}
+        ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
+        ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
       </ks-a-button>
     `, '')
 
@@ -109,5 +112,4 @@ export default class Buttons extends Shadow() {
       }
     ])
   }
-
 }

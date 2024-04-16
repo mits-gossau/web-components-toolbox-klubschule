@@ -9,13 +9,13 @@ export default class TileFactory extends Shadow() {
   * @param options
   * @param {any} args
   */
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('with-facet', this.withFacetEventNameListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
@@ -27,11 +27,11 @@ export default class TileFactory extends Shadow() {
     ))
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.body.removeEventListener('with-facet', this.withFacetEventNameListener)
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -40,7 +40,7 @@ export default class TileFactory extends Shadow() {
   *
   * @return {Promise<void>}
   */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */ `
     :host> section {
       display: flex;
@@ -66,7 +66,7 @@ export default class TileFactory extends Shadow() {
   *
   * @return {Promise<void>}
   */
-  fetchTemplate() {
+  fetchTemplate () {
     switch (this.getAttribute('namespace')) {
       case 'course-list-default-':
         return this.fetchCSS([{
@@ -83,7 +83,7 @@ export default class TileFactory extends Shadow() {
   * @param {any} fetch - An array of course fetch objects.
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  async renderHTML(fetch) {
+  async renderHTML (fetch) {
     /*
     // TODO: If needed do the loading animation
     this.fetchModules([
@@ -158,7 +158,7 @@ export default class TileFactory extends Shadow() {
     })
   }
 
-  fillGeneralTileInfo(course) {
+  fillGeneralTileInfo (course) {
     return `
       'title': '${course.title}',
       'iconTooltip': 'Das ist ein sinnvoller Tooltip-Text',
@@ -187,8 +187,6 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfoEvents(event) {
-    const buttons = event.buttons?.reduce((acc, button, index) => acc + `{'link': '${button.link}','text': '${button.text}','event': '${button.event}'}${index >= event.buttons.length - 1 ? '' : ','}`, '')
-    const buttonsAsJson = buttons ? `'buttons': [${buttons}],` : undefined
     const aboTypes = event.abo_typen?.reduce((acc, abo, index) => acc + `{'text': '${abo.text}','typ': '${abo.typ}','title': '${abo.title}','link': '${abo.link}'}${index >= event.buttons.length - 1 ? '' : ','}`, '')
     const aboTypesAsJson = aboTypes ? `'abo_typen': [${aboTypes}],` : undefined
     return `{
@@ -226,13 +224,13 @@ export default class TileFactory extends Shadow() {
           },
         ` : ``
       }
-      ${buttonsAsJson ? buttonsAsJson : ''}
       ${aboTypesAsJson ? aboTypesAsJson : ``}
+      'buttons': ${JSON.stringify(event.buttons) || ''},
       'deletable': ${event.deletable || 'false'}
     }`
   }
 
-  get isEventSearch() {
+  get isEventSearch () {
     return this.hasAttribute('is-event')
   }
 }

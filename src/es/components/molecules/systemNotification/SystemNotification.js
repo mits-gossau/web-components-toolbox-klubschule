@@ -2,26 +2,26 @@
 import SystemNotification from '../../web-components-toolbox/src/es/components/molecules/systemNotification/SystemNotification.js'
 
 export default class KsSystemNotification extends SystemNotification {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
   }
-  
-  shouldRenderHTML() {
+
+  shouldRenderHTML () {
     return !this.root.querySelector('.system-notification')
   }
 
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */ `
       :host {
         background-color: var(--background-color);
@@ -54,18 +54,18 @@ export default class KsSystemNotification extends SystemNotification {
     return this.fetchTemplate()
   }
 
-  fetchTemplate() {
+  fetchTemplate () {
     const baseStyles = [
       {
         path: `${this.importMetaUrl}../../../../css/reset.css`, // no variables for this reason no namespace
-        namespace: false,
+        namespace: false
       },
       {
         path: `${this.importMetaUrl}../../../../css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
-        namespaceFallback: true,
+        namespaceFallback: true
       }
     ]
-    let allStyles;
+    let allStyles
     switch (this.getAttribute('namespace')) {
       case 'system-notification-default-':
         allStyles = [{
@@ -126,7 +126,7 @@ export default class KsSystemNotification extends SystemNotification {
     }
   }
 
-  renderHTML() {
+  renderHTML () {
     const iconName = this.getAttribute('icon-name') || ''
     const iconBadge = this.getAttribute('icon-badge') || ''
     const description = this.innerHTML || ''
@@ -152,10 +152,9 @@ export default class KsSystemNotification extends SystemNotification {
         name: 'a-icon-mdx'
       }
     ])
-
   }
 
-  get iconSize() {
+  get iconSize () {
     return this.getAttribute('icon-size') || '1em'
   }
 }

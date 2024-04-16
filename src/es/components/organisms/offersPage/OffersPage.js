@@ -7,7 +7,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class OffersPage extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.setTotalListener = (event) => {
@@ -20,8 +20,7 @@ export default class OffersPage extends Shadow() {
     }
   }
 
-
-  connectedCallback() {
+  connectedCallback () {
     this.hidden = true
     const showPromises = []
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
@@ -32,11 +31,11 @@ export default class OffersPage extends Shadow() {
     this.addEventListener('with-facet', this.setTotalListener)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.removeEventListener('with-facet', this.setTotalListener)
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
@@ -47,14 +46,14 @@ export default class OffersPage extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.root.querySelector('ks-c-with-facet') || !this.ksMTab
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
         display: contents !important;
@@ -75,7 +74,7 @@ export default class OffersPage extends Shadow() {
    * Render HTML
    * @return Promise<void>
    */
-  renderHTML() {
+  renderHTML () {
     this.html = this.eventDetailURL ? this.tabContentOne : /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
@@ -209,7 +208,7 @@ export default class OffersPage extends Shadow() {
     ])
   }
 
-  get tabContentOne() {
+  get tabContentOne () {
     const initialRequest = this.getAttribute('initial-request')
     return /* html */ `
       <ks-c-with-facet
@@ -391,7 +390,7 @@ export default class OffersPage extends Shadow() {
               <section>
                   <ks-m-sort namespace="sort-right-"></ks-m-sort>
               </section>
-              <ks-m-tile-factory ${this.eventDetailURL ? `is-event ` : ''}></ks-m-tile-factory>
+              <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}></ks-m-tile-factory>
               ${this.badgeContainer ? /* HTML */ `
                 <ks-m-badge-legend>
                   ${this.badgeContainer.innerHTML}
@@ -404,12 +403,12 @@ export default class OffersPage extends Shadow() {
                 </ks-a-button>
               </ks-a-with-facet-pagination>
           </ks-o-body-section>
-        ${this.eventDetailURL ? `</ks-c-event-detail>` : ''}
+        ${this.eventDetailURL ? '</ks-c-event-detail>' : ''}
       </ks-c-with-facet>
     `
   }
 
-  get tabContentTwo() {
+  get tabContentTwo () {
     return /* HTML */ `
       <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)"">
         <o-grid namespace="grid-12er-">
@@ -491,7 +490,7 @@ export default class OffersPage extends Shadow() {
     `
   }
 
-  get ksMTab() {
+  get ksMTab () {
     return this.root.querySelector('ks-m-tab')
   }
 
@@ -499,7 +498,7 @@ export default class OffersPage extends Shadow() {
     return this.root.querySelector('ks-m-badge-legend')
   }
 
-  get eventDetailURL() {
+  get eventDetailURL () {
     return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
   }
 }

@@ -7,17 +7,16 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class Contact extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
   }
-  
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
   }
 
   /**
@@ -25,7 +24,7 @@ export default class Contact extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -34,14 +33,14 @@ export default class Contact extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.badge
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
         --a-text-decoration-hover: underline;
@@ -74,27 +73,27 @@ export default class Contact extends Shadow() {
    * Render HTML
    * @returns Promise<void>
    */
-  renderHTML() {
+  renderHTML () {
     const firstRow = this.getAttribute('name')
     const secondRow = this.getAttribute('street')
     const thirdRow = this.getAttribute('place')
     const isAddress = secondRow && thirdRow
 
-    this.html =   /* HTML */ `
+    this.html = /* HTML */ `
       <a href="${this.getAttribute('href')}">
         <a-icon-mdx 
           namespace="icon-mdx-ks-" 
-          size="${this.getAttribute('icon-size') || "1em"}"
+          size="${this.getAttribute('icon-size') || '1em'}"
           ${this.getAttribute('icon-url') ? `icon-url="${this.getAttribute('icon-url')}"` : `icon-name="${this.getAttribute('icon-name')}"`} 
         >
         </a-icon-mdx>
-        ${isAddress ? /* html */ `<address>` : /* html */ `<div>`}
+        ${isAddress ? /* html */ '<address>' : /* html */ '<div>'}
           <span>
             ${firstRow}
           </span>
           ${secondRow ? /* html */ `<span>${secondRow}</span>` : ''}
           ${thirdRow ? /* html */ `<span>${thirdRow}</span>` : ''}
-        ${isAddress ? /* html */ `</address>` : /* html */ `</div>`}
+        ${isAddress ? /* html */ '</address>' : /* html */ '</div>'}
       </a>
     `
 
@@ -110,8 +109,7 @@ export default class Contact extends Shadow() {
     ])
   }
 
-
-  get data() {
+  get data () {
     return Contact.parseAttribute(this.getAttribute('data'))
   }
 }
