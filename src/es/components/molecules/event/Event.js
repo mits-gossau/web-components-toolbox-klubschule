@@ -57,7 +57,7 @@ export default class Event extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML() {
-    return !this.badge
+    return !this.root.querySelector('.event')
   }
 
   /**
@@ -242,12 +242,7 @@ export default class Event extends Shadow() {
       }
 
       :host .details {
-        display: none;
-        grid-template-columns: 1fr 1fr;
-        column-gap: 3rem;
-        margin: 1.5rem 0;
-        padding: 1.5rem 0;
-        width: 100%;
+        display: block;
       }
 
       :host .details-expanded {
@@ -493,35 +488,29 @@ export default class Event extends Shadow() {
         </div>
         <div class="controls">
           <div class="controls-left">
-            ${this.data.buttons ? this.data.buttons.reduce(
-      (acc, button, index) => acc + (button.event != "bookmark" ? /* html */ `
-                <div>
-                  ${index === 0 && this.data.deletable ? /* html */ `<a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em" class="icon-right"></a-icon-mdx>` : ''}
-                  <ks-a-button namespace="${button.event === "bookmark" ? 'button-secondary-' : 'button-primary-'}" color="secondary" ${button.link ? `href="${button.link}"` : ""}>
-                    ${button.event === "bookmark" ? /* html */ `<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>` : ''}
-                    ${button.text}
-                  </ks-a-button>          
-                </div>
-              ` : ''),
-      ''
-    ) : ''}
+            ${this.data.buttons ? this.data.buttons.reduce((acc, button, index) => acc + (button.event != "bookmark" ? /* html */ `
+              <div>
+                ${index === 0 && this.data.deletable ? /* html */ `<a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="Trash" size="1em" class="icon-right"></a-icon-mdx>` : ''}
+                <ks-a-button namespace="${button.event === "bookmark" ? 'button-secondary-' : 'button-primary-'}" color="secondary" ${button.link ? `href="${button.link}"` : ""}>
+                  ${button.event === "bookmark" ? /* html */ `<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>` : ''}
+                  ${button.text}
+                </ks-a-button>          
+              </div>
+            ` : ''), '') : ''}
           </div>
           <div class="controls-right">
             <div class="icons">
               ${this.data.bewilligungspflichtig ? /* html */ `
                 <ks-m-badge type="primary" icon-name="Key" tooltip="${this.data.bewilligungspflichtig.text}"></ks-m-badge>
-              ` : ''
-      }
+              ` : ''}
               ${this.data.abo_typen ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
                 <ks-m-badge type="primary" icon-url="${aboType.typ === "H" ? "../../../../../../../img/icons/event-abo-plus.svg" : "../../../../../../../img/icons/event-abo.svg"}" tooltip="${aboType.text}">
                 </ks-m-badge>
-              `, ''
-      ) : ''}
+              `, '') : ''}
               ${this.data.kanton ? /* html */ `
                 <ks-m-badge type="primary" icon-name="Percent" tooltip="${this.data.kanton.text}">
                 </ks-m-badge>
-              ` : ''
-      }
+              ` : ''}
             </div>
             <span class="price">${this.data.price?.from ? this.data.price?.from + ' ' : ''}<strong>${this.data.price?.amount || ''}</strong>${this.data.price?.per ? ' / ' + this.data.price?.per : ''}</span>
           </div>
@@ -543,10 +532,6 @@ export default class Event extends Shadow() {
         name: 'ks-m-badge'
       }
     ])
-  }
-
-  get badge() {
-    return this.root.querySelector('[badge]')
   }
 
   /**
@@ -598,171 +583,17 @@ export default class Event extends Shadow() {
       }))).then((data) => {
         this.details.classList.remove('loading')
         this.details.innerHTML = /* HTML */ `
-          <div class="details-left">
-            <div>
-              <h3>
-                <a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1.75em"></a-icon-mdx>
-                <span>${data.kursdetail_label}</span>
-              </h3>
-              <table>
-                <tr>
-                  <th>${data.bezeichnung_label}</th>
-                  <td>${data.bezeichnung}</td>
-                </tr>
-                <tr>
-                  <th>${data.kurs_id_label}</th>
-                  <td>${data.kurs_id}</td>
-                </tr>
-                <tr>
-                  <th>${data.sprache_id_label}</th>
-                  <td>${data.sprache_id}</td>
-                </tr>
-                <tr>
-                  <th>${data.teilnehmer_max_label}</th>
-                  <td>${data.teilnehmer_max}</td>
-                </tr>
-                <tr>
-                  <th>${data.anzahl_dauer_label}</th>
-                  <td>${data.anzahl_kurstage_label}</td>
-                </tr>
-              </table>
-              <p>${data.kurs_zusatzinfo}</p>          
-            </div>
-            <div class="address">
-              <h3>
-                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.75em" class="icon-right"></a-icon-mdx>
-                <span>${data.location_label}</span>
-              </h3>
-              <div>
-                <address>
-                  <a href="${data.durchfuehrungaddresse.link}" target="_blank">
-                    <span class="description">${data.durchfuehrungaddresse.beschreibung}</span>
-                    <span>${data.durchfuehrungaddresse.strasse}</span>
-                    <div>
-                      <span>${data.durchfuehrungaddresse.plz}</span>
-                      <span>${data.durchfuehrungaddresse.ort}</span>
-                    </div>
-                  </a>
-                </address>
-                ${data.badge ? /* html */ `<div class="badge">${data.badge}</div>` : ''}
-              </div>
-            </div>
-            <div>
-              <h3>
-                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Download" size="1.75em" class="icon-right"></a-icon-mdx>
-                <span>Downloads</span>
-              </h3>
-              <ks-m-link-list namespace="link-list-download-">
-                  <ul>
-                  ${data.downloads.reduce((acc, download) => acc + /* html */`
-                    <li>
-                      <a href="${download.link}">
-                          <span>${download.label}</span>
-                          <div>
-                              <span>${download.link_label}</span>
-                              <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-                          </div>
-                      </a>                
-                    </li>
-                  `, '')}
-                  </ul>
-              </ks-m-link-list>
-            </div>
-          </div>
-          <div class="details-right">
-            <div>
-              <h3>
-                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Wallet" size="1.75em" class="icon-right"></a-icon-mdx>
-                <span>${data.preis_info_label}</span>
-              </h3>
-              <table class="table-price">
-                ${data.preisinfos.reduce((acc,preisinfo) => acc + /* html */ `
-                  <tr>
-                    <th>${preisinfo.label}</th>
-                    <td>${preisinfo.text}</td>
-                  </tr>
-                `, '')}
-              </table>
-              ${data.preis_info ? /* html */ `<p>${data.preis_info}</p>` : ''}
-              ${data.kantonsbeitrag_label ? /* html */ `
-                  <div>
-                    <ks-m-system-notification namespace="system-notification-default-" icon-name="Percent" with-icon-background>
-                        <div slot="description">
-                            <p>${data.kantonsbeitrag_label}</p>
-                            <a-link namespace="underline-">
-                                <a href="${data.kantonsbeitrag_link}">${data.kantonsbeitrag_link_label}</a>
-                            </a-link>
-                        </div>
-                    </ks-m-system-notification>
-                  </div>
-                ` : ''
-              }   
-            </div>
-            <div>
-              <h3>
-                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Calendar" size="1.75em" class="icon-right"></a-icon-mdx>
-                <span>${data.termin_label}</span>
-              </h3>
-              <table>
-                <tr>
-                  <th>Wochentag</th>
-                  <th>Termin</th>
-                  <th>Zeit</th>
-                </tr>
-                ${data.termine.reduce((acc, termin) => acc + /* html */ `
-                <tr>
-                  <td>${termin.wochentaglabel}</td>                
-                  <td>${termin.termin}</td>                
-                  <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
-                </tr>
-                `, '')}              
-              </table>
-              ${data.termine_alle_label ? /* html */ `
-                <button class="link-more">
-                  <span>${data.termine_alle_label}</span>
-                  <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em" class="icon-right"></a-icon-mdx>
-                </button>
-              ` : ''}
-            </div>
-            ${data.abo_typen_label && this.data.abo_typen ? /* html */ `
-              <div>
-                <h3>
-                  <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Calendar" size="1.75em" class="icon-right"></a-icon-mdx>
-                  <span>${data.abo_typen_label}</span>
-                </h3>
-                ${this.data.abo_typen ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
-                  <div>
-                    <ks-m-system-notification namespace="system-notification-default-" icon-url="${aboType.typ === "H" ? "../../../../../../../img/icons/event-abo-plus.svg" : "../../../../../../../img/icons/event-abo.svg"}" with-icon-background>
-                        <div slot="description">
-                            <p>${aboType.text}</p>
-                            <a-link namespace="underline-">
-                                <a href="${aboType.link}">${aboType.link}</a>
-                            </a-link>
-                        </div>
-                    </ks-m-system-notification>
-                  </div>
-                `, ''
-                ) : ''}
-              </div>
-            ` : ''}
-          </div>
+          <ks-m-event-detail
+            data="${
+          // @ts-ignore
+          JSON.stringify(data).replaceAll('"', "'")
+          }"
+          ></ks-m-event-detail>
         `
         return this.fetchModules([
           {
-            path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
-            name: 'ks-a-heading'
-          },
-          {
-            path: `${this.importMetaUrl}../../molecules/linkList/LinkList.js`,
-            name: 'ks-m-link-list'
-          },
-          {
-            path: `${this.importMetaUrl}../../molecules/systemNotification/SystemNotification.js`,
-            name: 'ks-m-system-notification'
-          },
-          {
-            path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
-            name: 'a-link'
+            path: `${this.importMetaUrl}../../molecules/eventDetail/EventDetail.js`,
+            name: 'ks-m-event-detail'
           }
         ])
       })
