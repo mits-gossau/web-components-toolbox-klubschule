@@ -56,7 +56,7 @@ export default class DialogStatusButton extends Shadow() {
   // reversal success
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(courseDetail => {
+      event.detail.fetch.then(() => {
         this.html = ''
         this.html = this.closeButton
       })
@@ -66,7 +66,7 @@ export default class DialogStatusButton extends Shadow() {
   // booking success
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(courseDetail => {
+      event.detail.fetch.then(() => {
         this.html = ''
         this.html = this.closeButton
       })
@@ -119,7 +119,7 @@ export default class DialogStatusButton extends Shadow() {
       :host {
         display: flex;
         justify-content: space-between;
-        width:100%;
+        width: 100%;
         flex-direction: row-reverse;
       }
       @media only screen and (max-width: _max-width_) {
@@ -145,7 +145,7 @@ export default class DialogStatusButton extends Shadow() {
       }
     ]
     switch (this.getAttribute('namespace')) {
-      case 'status-button-default-':
+      case 'dialog-status-button-default-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
