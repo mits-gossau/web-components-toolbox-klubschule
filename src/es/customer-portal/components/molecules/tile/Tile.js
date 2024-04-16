@@ -301,18 +301,6 @@ export default class AppointmentTile extends Tile {
     `
   }
 
-  // getTileState (data) {
-  //   const type = courseAppointmentStatusMapping[data.courseAppointmentStatus]
-  //   const { courseAppointmentFreeSeats } = data
-
-  //   return {
-  //     css: type.css,
-  //     status: data.courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : type.content.status,
-  //     info: type.content.info,
-  //     icon: type.content.icon
-  //   }
-  // }
-
   formatCourseAppointmentDate (date) {
     const dateObject = new Date(date)
     const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }

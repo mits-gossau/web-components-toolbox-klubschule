@@ -17,7 +17,6 @@ export default class CourseInfo extends Shadow() {
   connectedCallback () {
     this.dataContent = JSON.parse(this.dataset.content)
     const tileState = getTileState(courseAppointmentStatusMapping[this.dataContent.courseAppointmentStatus], this.dataContent)
-    console.log(tileState)
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML(tileState)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
@@ -115,16 +114,4 @@ export default class CourseInfo extends Shadow() {
         <span class="${css.info}">${info}</span>
       </span>`
   }
-
-  // getTileState (data) {
-  //   const type = courseAppointmentStatusMapping[data.courseAppointmentStatus]
-  //   const { courseAppointmentFreeSeats } = data
-
-  //   return {
-  //     css: type.css,
-  //     status: data.courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : type.content.status,
-  //     info: type.content.info,
-  //     icon: type.content.icon
-  //   }
-  // }
 }
