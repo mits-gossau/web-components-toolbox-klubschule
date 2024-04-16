@@ -1,7 +1,7 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 import { escapeForHtml } from '../../../helpers/Shared.js'
-import { actionType } from '../../../helpers/Mapping.js'
+import { actionType, subscriptionMode } from '../../../helpers/Mapping.js'
 
 /* global CustomEvent */
 
@@ -56,9 +56,9 @@ export default class CourseDialog extends Shadow() {
 
   // DETAIL
   updateSubscriptionCourseAppointmentDetailListener = event => {
+    this.viewContent.innerHTML = ''
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
-        this.viewContent.innerHTML = ''
         this.courseDetail = courseDetail
         // open dialog
         this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
@@ -112,7 +112,7 @@ export default class CourseDialog extends Shadow() {
         .success-message{
           display: flex;
           flex-direction: row;
-          align-items: center;
+          align-items: flex-start;
           gap: 1em;
         }
         .success {
@@ -121,8 +121,45 @@ export default class CourseDialog extends Shadow() {
       </style>
       <div class="success-message">
         <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>
-        <ks-a-heading tag="h2" color="#00997F">Sie haben den Termin erfolgreich gebucht</ks-a-heading>
-      </div>`
+        <h2>Sie haben den Termin erfolgreich gebucht</h2>
+      </div>
+      <div>
+       <div>
+          <h3>Downloads</h3>
+          <div>
+            <ks-m-link-list namespace="link-list-download-">
+              <ul>
+                <li>
+                  <a href="#">
+                    <span>Kursdetails als PDF</span>
+                    <div>
+                      <span>PDF</span>
+                      <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <span>Termin in persönlichen Kalender</span>
+                    <div>
+                      <span>ICS</span>
+                      <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </ks-m-link-list>
+          </div>
+        </div>
+      </div>
+      <div>
+      <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertTriangle">
+            <div slot="description">
+              <p>Eine Stornierung ist nur bis zwei Stunden vor Terminbeginn möglich!</p>
+            </div>
+          </ks-m-system-notification>
+      </div>
+      `
   }
 
   // REVERSAL - SHOW FINAL STEP
@@ -229,44 +266,144 @@ export default class CourseDialog extends Shadow() {
    * @returns void
    */
   renderHTML (courseId, content, selectedSubscription) {
-    this.html = /* html */ `
-      <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}" close-event-name="dialog-close-${courseId}">
-        <div class="container dialog-header">
-          <div id="back"></div>
-            <h3 id="title"></h3>
-            <div id="close">
-              <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+    const fetchModules = this.fetchModules([
+      {
+        path: `${this.importMetaUrl}'../../../../../../components/molecules/linkList/LinkList.js`,
+        name: 'ks-m-link-list'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../components/molecules/systemNotification/SystemNotification.js`,
+        name: 'ks-m-system-notification'
+      }
+    ])
+    Promise.all([fetchModules]).then((_) => {
+      this.html = /* html */ `
+        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}" close-event-name="dialog-close-${courseId}">
+          <div class="container dialog-header">
+            <div id="back"></div>
+              <h3 id="title"></h3>
+              <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+              </div>
             </div>
-          </div>
-          <div class="container dialog-content">
-            <p class="reset-link"></p>
-            <div class="sub-content" >
-              <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
-              <div id="view-content">${this.renderDialogContentDetails(content)}</div>
+            <div class="container dialog-content">
+              <p class="reset-link"></p>
+              <div class="sub-content" >
+                <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
+                <div id="view-content">${this.renderDialogContentDetails(content)}</div>
+              </div>
             </div>
-          </div>
-          <div class="container dialog-footer">
-            <a-dialog-status-button namespace="dialog-status-button-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
-          </div>
-          <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-tile-status-button>  
-      </m-dialog>
-    `
+            <div class="container dialog-footer">
+              <a-dialog-status-button namespace="dialog-status-button-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
+            </div>
+            <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-tile-status-button>  
+        </m-dialog>
+        `
+    })
   }
 
   // dialog default content view
   renderDialogContentDetails (data, detail = {}) {
+    let priceInfo = ''
+    if (subscriptionMode[detail.subscriptionMode] === subscriptionMode.WERTABO) {
+      priceInfo = /* html */ `<div class="detail price-info"><span>${data.lessonPrice}</span><span> Termin wird über ihr Abonnement gebucht</span></div>`
+    }
     return /* html */ `
+      <style>
+        .price-info {
+          display:flex;
+        }
+        .details {
+          display:flex;
+          flex-direction:column;
+          gap:1em;
+          margin-bottom:4em;
+          padding-top:2em;
+        }
+        .detail {
+          display:flex;
+          flex-direction:column;
+        }
+        .detail span:first-child {
+          font-weight: 500;
+          line-height: 110%;
+        }
+       
+      </style>
       <div id="content">
-        <p id="description">${detail.courseDescription}</p>
+        <div><p class="description">${detail.courseDescription}</p></div>
+        <div class="details">
+          ${priceInfo}
+          <div class="detail"><span>Datum, Zeit</span><span>${detail.courseAppointmentDateFormatted}</span><span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span></div>
+          <div class="detail"><span>Ort/Raum</span><span>${detail.courseLocation} / Raum ${detail.roomDescription}</span></div>
+          <div class="detail"><span>Kursleitung</span><span>${detail.instructorDescription}</span></div>
+          <div class="detail"><span>Status</span><span>${detail.courseAppointmentFreeSeats} freie Plätze</span></div>
+          <div class="detail"><span>Abonnement</span><span>${detail.subscriptionDescription}</span><span>gültig bis ${detail.subscriptionValidTo} / aktuelles Guthaben ${detail.subscriptionBalance}</span></div>
+        </div>
+        <div>
+          <h3>Downloads</h3>
+          <div>
+            <ks-m-link-list namespace="link-list-download-">
+              <ul>
+                <li>
+                  <a href="#">
+                    <span>Kursdetails als PDF</span>
+                    <div>
+                      <span>PDF</span>
+                      <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <span>Termin in persönlichen Kalender</span>
+                    <div>
+                      <span>ICS</span>
+                      <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </ks-m-link-list>
+          </div>
+        </div>
       </div>`
   }
 
   // dialog final booking content view
   renderDialogContentBooking (data, detail = {}) {
     return /* html */ `
+      <style>
+        .details {
+          display:flex;
+          flex-direction:column;
+          gap:1em;
+          margin-bottom:4em;
+          padding-top:2em;
+        }
+        .detail {
+          display:flex;
+          flex-direction:column;
+        }
+        .detail span:first-child {
+          font-weight: 500;
+          line-height: 110%;
+        }
+      </style>
       <div id="content">
-        <p>Status: ${detail.courseAppointmentFreeSeats} freie Plätze</p>
-        <p>Preis: ${data.lessonPrice}</p>
+        <div><span>Termin wird über ihr Abonnement gebucht</span></div>
+        <div class="details">
+          <div class="detail"><span>Datum, Zeit</span><span>${detail.courseAppointmentDateFormatted}</span><span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span></div>
+          <div class="detail"><span>Ort/Raum</span><span>${detail.courseLocation} / Raum ${detail.roomDescription}</span></div>
+          <div class="detail"><span>Kursleitung</span><span>${detail.instructorDescription}</span></div>
+          <div class="detail"><span>Status</span><span>${detail.courseAppointmentFreeSeats} freie Plätze</span></div>
+          <div class="detail"><span>Abonnement</span><span>${detail.subscriptionDescription}</span><span>gültig bis ${detail.subscriptionValidTo} / aktuelles Guthaben ${detail.subscriptionBalance}</span></div>
+          <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertTriangle">
+            <div slot="description">
+              <p>Eine Stornierung ist nur bis zwei Stunden vor Terminbeginn möglich!</p>
+            </div>
+          </ks-m-system-notification>
+        </div>
       </div>`
   }
 

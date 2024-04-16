@@ -289,7 +289,7 @@ export default class AppointmentTile extends Tile {
                     <a-course-info namespace="course-info-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}"></a-course-info>
                   </li>
                   <li> 
-                    <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
+                    <a-icon-mdx icon-name="User" size="1.5em" tabindex="0"></a-icon-mdx>
                     <span>${content.instructorDescription}</span>
                   </li>
                   <li>
