@@ -219,7 +219,6 @@ export default class TileList extends Shadow() {
           padding-left: 0;
         }
 
-
         :host ks-m-tile {
           margin-right:0;
           margin-bottom: 1em;
@@ -253,12 +252,12 @@ export default class TileList extends Shadow() {
           <div class="o-tile-list__top">
             <span class="o-tile-list__title">${data.title || warnMandatory + 'title'}</span>
             ${data.iconTooltip
-? `
-            <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
-              <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
-            </ks-m-tooltip>
-              `
-: ''}          
+              ? `
+                <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
+                  <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
+                </ks-m-tooltip>
+                  `
+              : ''}          
           </div>
           <div class="o-tile-list__middle">
             ${data.location?.name
@@ -278,10 +277,7 @@ export default class TileList extends Shadow() {
           </div>
           <div class="o-tile-list__bottom">
             <div class="o-tile-list__bottom-left">
-              <ks-a-button namespace="button-quaternary-" color="secondary">
-                <span>${data.button.text || warnMandatory + 'button.text'}</span>
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ChevronDown" size="1em" class="icon-right">
-              </ks-a-button>
+              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons)}'></ks-m-buttons>
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
@@ -319,6 +315,10 @@ export default class TileList extends Shadow() {
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
         name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/buttons/Buttons.js`,
+        name: 'ks-m-buttons'
       },
       {
         path: `${this.importMetaUrl}../../molecules/tile/Tile.js`,

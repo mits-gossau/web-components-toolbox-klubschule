@@ -78,7 +78,8 @@
 :host figcaption,
 :host article > div {
   padding: 1.5rem;
-  min-height: 14.875rem;
+  height: 14.875rem;
+  overflow: hidden;
 }
 
 :host figure figcaption > strong:first-child,
@@ -93,6 +94,12 @@
 
 :host p {
   flex: 1;
+  min-height: unset;
+}
+
+/* link */
+:host span:last-child {
+  margin-top: auto !important;
 }
 
 @media only screen and (max-width: _max-width_) {

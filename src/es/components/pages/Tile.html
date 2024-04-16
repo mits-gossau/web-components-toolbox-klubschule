@@ -13,10 +13,10 @@
             'name': 'Ort, Straße 123',
             'badge': 'Blended'
         },
-        'button': {
+        'buttons': [{
             'text': 'Ortsauswahl',
             'iconName': 'ArrowRight'
-        },
+        }],
         'icons': [
             {
                 'name': 'Percent',
@@ -44,10 +44,12 @@
             'name': 'Ort, Straße 123',
             'badge': 'Blended'
         },
-        'button': {
-            'text': 'Ortsauswahl',
-            'iconName': 'ArrowRight'
-        },
+        'buttons': [
+            {
+                'text': 'Ortsauswahl',
+                'iconName': 'ArrowRight'
+            }
+        ],
         'icons': [
             {
                 'name': 'Percent',
@@ -69,6 +71,52 @@
                 'text': 'Alternativen',
                 'iconName': 'ArrowRight'
             }
+        }
+    }"></ks-m-tile>
+</section>
+
+<section style="background-color: #f5ebeb; padding: 1em; will-change: auto;">
+    <h2>Default</h2>
+    <ks-m-tile namespace="tile-default-" data="{
+        'title': 'Title',
+        'iconTooltip': 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+        'location': {
+            'iconName': 'Location',
+            'name': 'Ort, Straße 123',
+            'badge': 'Blended'
+        },
+        'buttons': [
+            {
+                'iconName': 'Trash',
+                'typ': 'tertiary'
+            }, 
+            {
+                'text': 'Merken',
+                'link': '',
+                'typ': 'secondary',
+                'iconName': 'Heart'
+            },
+            {
+                'text': 'Buchen',
+                'link': 'kurse/kurs/Anglais-niveau-A1-(3/3)--E_1703730_2675/Configuration',
+                'typ': 'primary',
+                'iconName': 'ArrowRight'
+            }
+        ],
+        'icons': [
+            {
+                'name': 'Percent',
+                'iconTooltip': 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+            },
+            {
+                'name': 'Bell',
+                'iconTooltip': 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+            }
+        ],
+        'price': {
+            'from': 'ab',
+            'amount': 'Price',
+            'per': 'Semester'
         }
     }"></ks-m-tile>
 </section>
