@@ -63,7 +63,7 @@ export default class CourseInfo extends Shadow() {
         align-items: center;
       }
       :host .content {
-        padding: 0 0.5em;
+        padding: 0 0.75em;
       }
       :host .success {
         color: var(--success, green);

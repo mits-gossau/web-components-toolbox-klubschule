@@ -69,24 +69,19 @@ export default class CourseDialog extends Shadow() {
             composed: true
           }
         ))
-        let newTitle = ''
-        const type = event.detail.type
+        const { type } = event.detail
         if (type === actionType.detail) {
-          newTitle = 'Termindetails'
+          this.renderDialogTitle('Termindetails')
           this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
         }
         if (type === actionType.booking) {
-          newTitle = 'Termin buchen'
+          this.renderDialogTitle('Termin buchen')
           this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseData, this.courseDetail)
         }
         if (type === actionType.reversal) {
-          newTitle = 'Termin stornieren'
+          this.renderDialogTitle('Termin stornieren')
           this.viewContent.innerHTML = this.renderDialogContentReversal(this.courseData, this.courseDetail)
         }
-
-        // update dialog title
-        const title = this.dialog.shadowRoot.getElementById('title')
-        title.innerHTML = newTitle
       })
     }
   }
@@ -94,6 +89,7 @@ export default class CourseDialog extends Shadow() {
   // BOOKING - SHOW FINAL STEP
   requestBookingDetailListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
+      this.renderDialogTitle('Termin buchen')
       this.viewContent.innerHTML = ''
       this.viewContent.innerHTML = this.renderDialogContentBooking(this.courseData, this.courseDetail)
     }
@@ -132,6 +128,7 @@ export default class CourseDialog extends Shadow() {
   // REVERSAL - SHOW FINAL STEP
   requestBookingReversalListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
+      this.renderDialogTitle('Termin stornieren')
       this.viewContent.innerHTML = ''
       this.viewContent.innerHTML = this.renderDialogContentReversal(this.courseData, this.courseDetail)
     }
@@ -260,6 +257,11 @@ export default class CourseDialog extends Shadow() {
         <p>Status: ${detail.courseAppointmentFreeSeats} freie Plätze</p>
         <p>Preis: ${data.lessonPrice}</p>
       </div>`
+  }
+
+  renderDialogTitle (title) {
+    const titleElement = this.dialog.shadowRoot.getElementById('title')
+    titleElement.innerHTML = title
   }
 
   get dialog () {

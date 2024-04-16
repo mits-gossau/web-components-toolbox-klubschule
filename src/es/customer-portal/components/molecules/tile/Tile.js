@@ -161,6 +161,27 @@ export default class AppointmentTile extends Tile {
       :host .location-room {
         display:flex;
       }
+      :host .meta {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      :host .meta li {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      :host .meta li + li {
+        margin-top: 1rem;
+      }
+      :host .meta li:last-of-type {
+        align-items: flex-start;
+      }
+      :host .meta span {
+        font-size: 1rem;
+        line-height: 1.25rem;
+        margin-left: 0.75rem;
+      }
       @media only screen and (max-width: _max-width_) {
         :host  {}
       }
@@ -263,25 +284,22 @@ export default class AppointmentTile extends Tile {
               </div>
               <!-- --> 
               <div class="course-info course-execution-info">
-                <div id="status-wrapper" class="icon-info">
-                  <!-- !!! -->
-                  <a-course-info namespace="course-info-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}"></a-course-info>
-                </div> 
-                <div class="icon-info">
-                  <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
-                  <span class="m-tile__content">${content.instructorDescription}</span>
-                </div>
-                <div class="icon-info location-room-info">
-                  <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
-                  <div class="location-room">
-                    <span class="m-tile__content">
-                      ${content.courseLocation}
-                    </span>
-                    <span class="m-tile__content">
-                      Raum: ${content.roomDescription}
-                    </span>
-                  </div>
-                </div>
+                <ul class="meta">
+                  <li>
+                    <a-course-info namespace="course-info-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}"></a-course-info>
+                  </li>
+                  <li> 
+                    <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
+                    <span>${content.instructorDescription}</span>
+                  </li>
+                  <li>
+                    <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
+                    <div class="location-room">
+                      <span>${content.courseLocation}</span>
+                      <span>Raum: ${content.roomDescription}</span>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div><!-- parent body END -->
             <div class="parent-footer">
