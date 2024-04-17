@@ -319,10 +319,17 @@ export default class AppointmentTile extends Tile {
     `
   }
 
+  /**
+   * Formats a given (string) date into a specific format with weekday,
+   * day, month, and year.
+   * @param date - `date`
+   * @returns Returns the formatted date string.
+   */
   formatCourseAppointmentDate (date) {
     const dateObject = new Date(date)
     const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
     // @ts-ignore
+    // TODO: locale!
     const formatter = new Intl.DateTimeFormat('de-DE', options)
     return formatter.format(dateObject)
   }
