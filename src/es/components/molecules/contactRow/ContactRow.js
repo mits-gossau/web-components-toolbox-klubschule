@@ -34,7 +34,7 @@ export default class Contact extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.badge
+    return !this.a
   }
 
   /**
@@ -114,5 +114,9 @@ export default class Contact extends Shadow() {
 
   get data () {
     return Contact.parseAttribute(this.getAttribute('data'))
+  }
+
+  get a () {
+    return this.root.querySelector('a')
   }
 }
