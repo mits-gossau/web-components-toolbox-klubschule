@@ -49,6 +49,7 @@
         name="Klubschule Migros Zürich"
         icon-name="ArrowUpRight"
         href="www.google.com"
+        target="_blank"
     >
     </ks-m-contact-row>
 ```
