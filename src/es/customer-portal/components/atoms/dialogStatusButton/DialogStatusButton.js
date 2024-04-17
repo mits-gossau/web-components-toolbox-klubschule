@@ -38,7 +38,11 @@ export default class DialogStatusButton extends Shadow() {
     document.body.removeEventListener(this.getAttribute('request-show-dialog-reversal-confirmation') || 'request-show-dialog-reversal-confirmation', this.requestShowDialogReversalConfirmationListener)
   }
 
-  // details loaded
+  /**
+   * DETAILS - LOADED
+   *
+   * @param {CustomEventInit} event
+   */
   updateSubscriptionCourseAppointmentDetailListener = event => {
     if (this.dataset.id === event.detail.id) {
       const type = event.detail.type
@@ -52,7 +56,11 @@ export default class DialogStatusButton extends Shadow() {
     }
   }
 
-  // reversal success
+  /**
+   * REVERSAL - SUCCESS
+   *
+   * @param {CustomEventInit} event
+   */
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(() => {
@@ -62,7 +70,11 @@ export default class DialogStatusButton extends Shadow() {
     }
   }
 
-  // booking success
+  /**
+   * BOOKING - SUCCESS
+   *
+   * @param {CustomEventInit} event
+   */
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(() => {
@@ -72,7 +84,11 @@ export default class DialogStatusButton extends Shadow() {
     }
   }
 
-  // booking final step
+  /**
+   * BOOKING - CONFIRMATION
+   *
+   * @param {CustomEventInit} event
+   */
   requestShowDialogBookingConfirmationListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
       this.html = ''
@@ -82,7 +98,11 @@ export default class DialogStatusButton extends Shadow() {
     }
   }
 
-  // reversal final step
+  /**
+   * REVERSAL - CONFIRMATION
+   *
+   * @param {CustomEventInit} event
+   */
   requestShowDialogReversalConfirmationListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
       this.html = ''
@@ -100,15 +120,6 @@ export default class DialogStatusButton extends Shadow() {
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
-
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
-  // shouldRenderHTML () {
-  //   return !this.wrapper
-  // }
 
   /**
    * renders the css
@@ -155,15 +166,15 @@ export default class DialogStatusButton extends Shadow() {
   }
 
   /**
-   * Render HTML
-   * @returns void
+   * Generates different action buttons based on the provided parameters such as type, subscription mode, and status.
+   * @param id - `id`
+   * @param {string} type - `type`
+   * @param subscriptionMode - It could be either "FLAT" or "SUBSCRIPTION".
+   * @param status - Determine which action button should be rendered based on the type and status of the appointment.
+   * @param content - `content`
+   * @param selectedSubscription - `selectedSubscription`
+   * @returns Returns a button element based on the provided parameters
    */
-  // renderHTML (content, subscription) {
-  //   this.wrapper = this.root.querySelector('div') || document.createElement('div')
-  //   const btn = this.renderDialogActionButton(subscriptionMode[subscription.subscriptionMode], content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
-  //   this.html = btn
-  // }
-
   renderDialogActionButton (id, type, subscriptionMode, status, content, selectedSubscription) {
     if (type === 'detail' && status === 1) {
       return `<ks-a-button tag="${id}" namespace="button-primary-" tag="[${actionType.bookingFinal}]"  request-event-name="request-show-dialog-booking-confirmation">Termin buchen</ks-a-button>`
@@ -199,6 +210,6 @@ export default class DialogStatusButton extends Shadow() {
   }
 
   get closeButton () {
-    return `<ks-a-button id="close" request-event-name="dialog-close-${this.dataset.id}" namespace="button-tertiary-" color="secondary">Schliessen</ks-a-button>`
+    return /* html */ `<ks-a-button id="close" request-event-name="dialog-close-${this.dataset.id}" namespace="button-tertiary-" color="secondary">Schliessen</ks-a-button>`
   }
 }
