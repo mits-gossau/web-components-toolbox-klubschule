@@ -160,7 +160,7 @@ export default class TileFactory extends Shadow() {
 
   fillGeneralTileInfo(course) {
     return `
-      "title": "${course.title}",
+      "title": "${course.bezeichnung}",
       "iconTooltip": "Das ist ein sinnvoller Tooltip-Text",
       "location": {
         "iconName": "Location",
