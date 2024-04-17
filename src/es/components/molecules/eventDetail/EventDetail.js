@@ -361,9 +361,10 @@ export default class EventDetail extends Shadow() {
               </div>
             `, '') : ''}
             ${this.data.abo_typen_link && this.data.abo_typen_link_label ? /* html */ `
-              <a-link>
-                <a href="${this.data.abo_typen_link}">${this.data.abo_typen_link_label}</a>
-              </a-link>
+              <button href="${this.data.abo_typen_link}" class="link-more">
+                <span>${this.data.abo_typen_link_label}</span>
+                <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ArrowRight" size="1em"></a-icon-mdx>
+              </button>
             ` : ''}
           </div>
         ` : ''}
