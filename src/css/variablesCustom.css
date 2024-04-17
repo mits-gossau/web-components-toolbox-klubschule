@@ -195,6 +195,7 @@
   --button-secondary-filter-background-color-hover: transparent;
   --button-secondary-filter-padding: 0;
 
+  --button-primary-width: 100%;
   --button-primary-icon-right-margin: 0;
   --button-primary-label-margin: 0 0.25em 0 0;
   --footer-default-footer-width: 100%;
