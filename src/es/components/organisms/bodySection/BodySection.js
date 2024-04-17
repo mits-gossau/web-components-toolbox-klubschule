@@ -32,7 +32,9 @@ export default class KsBodyStyle extends BodyStyle {
         tbody {
             display: table-row-group !important;
         }
-
+        :host ks-a-with-facet-pagination.hidden {
+            display: none;
+        }
         :host(ks-o-body-section) {
             /* had to reset display here because it was set to display inline-block !important in parent class */
             display: ${this.getAttribute('display') || 'block'} !important;
