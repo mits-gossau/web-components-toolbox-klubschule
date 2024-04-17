@@ -26,6 +26,7 @@ export const escapeForHtml = htmlString => {
  * @returns {Object} Returns the object contains tile and state information
  */
 export const getTileState = (type, data) => {
+  if (type === undefined) return
   const { courseAppointmentFreeSeats, courseAppointmentStatus } = data
   const { css, content } = type
   return {

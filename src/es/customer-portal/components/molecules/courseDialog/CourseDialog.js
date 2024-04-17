@@ -1,7 +1,7 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { escapeForHtml } from '../../../helpers/Shared.js'
-import { actionType, subscriptionMode } from '../../../helpers/Mapping.js'
+import { escapeForHtml, getTileState } from '../../../helpers/Shared.js'
+import { actionType, subscriptionMode, courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
 
 /* global CustomEvent */
 
@@ -37,9 +37,6 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
   }
 
-  /**
-   *
-   */
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('request-show-dialog-booking-confirmation') || 'request-show-dialog-booking-confirmation', this.requestShowDialogBookingConfirmationListener)
     document.body.removeEventListener(this.getAttribute('request-show-dialog-reversal-confirmation') || 'request-show-dialog-reversal-confirmation', this.requestShowDialogReversalConfirmationListener)
@@ -58,7 +55,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   * SHOW course detail view
+   * SHOW course detail
    *
    * @param {CustomEventInit} event
    */
@@ -87,14 +84,14 @@ export default class CourseDialog extends Shadow() {
         }
         if (type === actionType.reversal) {
           this.renderDialogTitle('Termin stornieren')
-          this.viewContent.innerHTML = this.renderDialogContentReversal(this.courseData, this.courseDetail)
+          this.viewContent.innerHTML = this.renderDialogContentReversalConfirmation(this.courseData, this.courseDetail)
         }
       })
     }
   }
 
   /**
-   * RENDER course detail view
+   * RENDER course detail
    *
    * @param {*} data
    * @param {*} detail
@@ -117,10 +114,16 @@ export default class CourseDialog extends Shadow() {
           display:flex;
           flex-direction:column;
         }
-        .detail span:first-child {
+        .detail > span:first-child {
           font-weight: 500;
           line-height: 110%;
-        } 
+        }
+        .success {
+          color: var(--success-color, #00997F);
+        }
+        .alert {
+          color: var(--alert-color, #F4001B);
+        }
       </style>
       <div id="content">
         <div>
@@ -128,7 +131,7 @@ export default class CourseDialog extends Shadow() {
         </div>
         <div class="details">
           ${this.renderPriceInfoContent(data, detail)}
-          ${this.renderCourseDetailsContent(detail)}
+          ${this.courseDetailsContent(detail)}
         </div>
         <div>
           <h3>Downloads</h3>
@@ -139,7 +142,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   * SHOW booking confirmation view
+   * SHOW booking confirmation
    *
    * @param {CustomEventInit} event
    */
@@ -152,7 +155,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   * RENDER booking confirmation view
+   * RENDER booking confirmation
    *
    * @param {*} data
    * @param {*} detail
@@ -172,7 +175,7 @@ export default class CourseDialog extends Shadow() {
           display:flex;
           flex-direction:column;
         }
-        .detail span:first-child {
+        .detail > span:first-child {
           font-weight: 500;
           line-height: 110%;
         }
@@ -182,7 +185,7 @@ export default class CourseDialog extends Shadow() {
           <span>Termin wird über ihr Abonnement gebucht</span>
         </div>
         <div class="details">
-          ${this.renderCourseDetailsContent(detail)}
+          ${this.courseDetailsContent(detail)}
           ${this.renderNotification()}
         </div>
       </div>
@@ -246,7 +249,7 @@ export default class CourseDialog extends Shadow() {
     if (this.dataset.id === event.detail.tags[0]) {
       this.renderDialogTitle('Termin stornieren')
       this.viewContent.innerHTML = ''
-      this.viewContent.innerHTML = this.renderDialogContentReversal(this.courseData, this.courseDetail)
+      this.viewContent.innerHTML = this.renderDialogContentReversalConfirmation(this.courseData, this.courseDetail)
     }
   }
 
@@ -257,8 +260,33 @@ export default class CourseDialog extends Shadow() {
    * @param {*} detail
    * @returns
    */
-  renderDialogContentReversal (data, detail = {}) {
-    return '<div><ks-a-heading tag="h2" style-as="h3" color="#F4001B">Hiermit stornieren sie diesen Termin</ks-a-heading></div>'
+  renderDialogContentReversalConfirmation (data, detail = {}) {
+    return /* html */ `
+      <style>
+        .details {
+          display:flex;
+          flex-direction:column;
+          gap:1em;
+          margin-bottom:4em;
+          padding-top:2em;
+        }
+        .detail {
+          display:flex;
+          flex-direction:column;
+        }
+        .detail > span:first-child {
+          font-weight: 500;
+          line-height: 110%;
+        }
+      </style>
+      <div id="content">
+        <div>
+          <ks-a-heading tag="h2" style-as="h3" color="#F4001B">Hiermit stornieren sie diesen Termin</ks-a-heading>
+        </div>
+        <div class="details">
+          ${this.courseDetailsContent(detail)}
+        </div>
+      </div>`
   }
 
   /**
@@ -323,7 +351,9 @@ export default class CourseDialog extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host {}
+      :host {
+        --alert: pink;
+      }
       @media only screen and (max-width: _max-width_) {
         :host {}
       }
@@ -431,13 +461,17 @@ export default class CourseDialog extends Shadow() {
    * appointment status, and subscription information. The appointment status is dynamically determined
    * based on the `courseAppointmentStatus` property of the `detail` object.
    */
-  renderCourseDetailsContent (detail) {
-    const state = detail.courseAppointmentStatus === 5 ? '<span>Gebucht</span>' : `<span>${detail.courseAppointmentFreeSeats} freie Plätze</span>`
+  courseDetailsContent (detail) {
+    // const state = detail.courseAppointmentStatus === 5 ? '<span>Gebucht</span>' : `<span>${detail.courseAppointmentFreeSeats} freie Plätze</span>`
+    const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
+    if (!state) return
+    console.log(state.css)
+
     return /* html */ `
       <div class="detail"><span>Datum, Zeit</span><span>${detail.courseAppointmentDateFormatted}</span><span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span></div>
       <div class="detail"><span>Ort/Raum</span><span>${detail.courseLocation} / Raum ${detail.roomDescription}</span></div>
       <div class="detail"><span>Kursleitung</span><span>${detail.instructorDescription}</span></div>
-      <div class="detail"><span>Status</span>${state}</div>
+      <div class="detail"><span>Status</span><div><span class="${state.css.status}">${state.status}</span> <span class="${state.css.info}">${state.info}</span></div></div>
       <div class="detail"><span>Abonnement</span><span>${detail.subscriptionDescription}</span><span>Gültig bis ${detail.subscriptionValidTo} / Aktuelles Guthaben ${detail.subscriptionBalance}</span></div> 
     `
   }

@@ -305,7 +305,7 @@ export default class AppointmentTile extends Tile {
             <div class="parent-footer">
               <div class="course-booking">
                 <!-- !!! -->
-                <m-course-dialog data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></m-course-dialog>
+                <m-course-dialog namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></m-course-dialog>
               </div>
               <div class="course-price">
                 <span class="m-tile__title">
