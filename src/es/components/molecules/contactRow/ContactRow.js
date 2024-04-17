@@ -55,6 +55,7 @@ export default class Contact extends Shadow() {
       }
       :host address span {
         display: block;
+        font-style: normal;
       }
     `
     return this.fetchCSS([
@@ -78,9 +79,10 @@ export default class Contact extends Shadow() {
     const secondRow = this.getAttribute('street')
     const thirdRow = this.getAttribute('place')
     const isAddress = secondRow && thirdRow
+    const id = this.getAttribute('id')
 
-    this.html = /* HTML */ `
-      <a href="${this.getAttribute('href')}">
+    this.html =   /* HTML */ `
+      <a href="${this.getAttribute('href')}" ${id ? `id="${id}"` : ''} >
         <a-icon-mdx 
           namespace="icon-mdx-ks-" 
           size="${this.getAttribute('icon-size') || '1em'}"

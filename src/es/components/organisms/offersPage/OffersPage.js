@@ -12,8 +12,10 @@ export default class OffersPage extends Shadow() {
 
     this.setTotalListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
-        this.total = data.total
-        this.psize = data.psize
+        if (data.total > data.psize * (data.ppage - 1)) {
+          const bodySection = this.eventDetailURL ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+          bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
+        }
       })
     }
   }
@@ -394,14 +396,12 @@ export default class OffersPage extends Shadow() {
                   ${this.badgeContainer.innerHTML}
                 </ks-m-badge-legend>
               ` : ''}
-              ${this.total && this.total > this.psize ? /* html */ `
-                <ks-a-with-facet-pagination>
-                  <ks-a-button namespace="button-primary-" color="secondary">
-                      <span>Weitere Angebote</span>
-                      <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-                  </ks-a-button>
-                </ks-a-with-facet-pagination>
-              ` : ''}
+              <ks-a-with-facet-pagination class="hidden" id="pagination">
+                <ks-a-button namespace="button-primary-" color="secondary">
+                    <span>Weitere Angebote</span>
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+                </ks-a-button>
+              </ks-a-with-facet-pagination>
           </ks-o-body-section>
         ${this.eventDetailURL ? '</ks-c-event-detail>' : ''}
       </ks-c-with-facet>
@@ -494,8 +494,8 @@ export default class OffersPage extends Shadow() {
     return this.root.querySelector('ks-m-tab')
   }
 
-  get badgeContainer () {
-    return this.root.querySelector('.js-badge__selector')
+  get badgeContainer() {
+    return this.root.querySelector('ks-m-badge-legend')
   }
 
   get eventDetailURL () {
