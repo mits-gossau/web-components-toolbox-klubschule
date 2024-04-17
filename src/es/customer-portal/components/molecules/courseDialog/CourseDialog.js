@@ -462,17 +462,15 @@ export default class CourseDialog extends Shadow() {
    * based on the `courseAppointmentStatus` property of the `detail` object.
    */
   courseDetailsContent (detail) {
-    // const state = detail.courseAppointmentStatus === 5 ? '<span>Gebucht</span>' : `<span>${detail.courseAppointmentFreeSeats} freie Plätze</span>`
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
     if (!state) return
-    console.log(state.css)
-
+    const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo, { month: '2-digit', day: '2-digit', year: 'numeric' }, 'de-DE')
     return /* html */ `
       <div class="detail"><span>Datum, Zeit</span><span>${detail.courseAppointmentDateFormatted}</span><span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span></div>
       <div class="detail"><span>Ort/Raum</span><span>${detail.courseLocation} / Raum ${detail.roomDescription}</span></div>
       <div class="detail"><span>Kursleitung</span><span>${detail.instructorDescription}</span></div>
       <div class="detail"><span>Status</span><div><span class="${state.css.status}">${state.status}</span> <span class="${state.css.info}">${state.info}</span></div></div>
-      <div class="detail"><span>Abonnement</span><span>${detail.subscriptionDescription}</span><span>Gültig bis ${detail.subscriptionValidTo} / Aktuelles Guthaben ${detail.subscriptionBalance}</span></div> 
+      <div class="detail"><span>Abonnement</span><span>${detail.subscriptionDescription}</span><span>Gültig bis ${validTo} / Aktuelles Guthaben ${detail.subscriptionBalance}</span></div> 
     `
   }
 
@@ -519,6 +517,14 @@ export default class CourseDialog extends Shadow() {
           </ul>
         </ks-m-link-list>
     `
+  }
+
+  formatCourseAppointmentDate (dateString, options, locale) {
+    const dateObject = new Date(dateString)
+    // const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
+    // @ts-ignore
+    const formatter = new Intl.DateTimeFormat(locale, options)
+    return formatter.format(dateObject)
   }
 
   get dialog () {
