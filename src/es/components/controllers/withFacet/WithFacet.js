@@ -86,9 +86,7 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetFilter) {
           initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetFilter }))
-          const filterParent = event.detail.this.getAttribute('filter-parent')
-          this.params.delete(`${filterParent}`)
-          self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
@@ -285,6 +283,13 @@ export default class WithFacet extends Shadow() {
         }
       })
 
+      self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+    }
+  }
+
+  removeFilterParamsFromURL (filterParent) {
+    if (this.params) {
+      this.params.delete(`${filterParent}`)
       self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
     }
   }
