@@ -1,0 +1,344 @@
+<o-grid 
+    namespace="grid-2columns-content-stage-" 
+    first-container-vertical="" 
+    first-column-with="66%"
+    background-color="var(--mdx-sys-color-accent-6-subtle1)" 
+    dark-text-color="" 
+    width="100%"
+    image-src="https://mits-gossau.github.io/web-components-toolbox-klubschule/src/img/content-stage/a59843713cfd9aefb7e8d172513e4bea.png"
+>
+    <div class="stage-content">
+        <p class="topline">
+            <a href="" alt="">
+                <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx> <span>&Uuml;bersicht</span>
+            </a>
+        </p>
+        <ks-a-heading tag="h1" content-stage>
+            Klubschule Migros Baden
+        </ks-a-heading>
+        <p class="intro">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magn.</p>
+    </div>
+    <aside>
+        <div class="aside-image">
+        </div>
+    </aside>
+</o-grid>
+
+<o-grid namespace="grid-2columns-content-section-" first-container-vertical="" first-column-with="66%" with-border="" width="100%">
+    <ks-o-body-section content-width-var="100%" no-margin-y>
+        <div class="center">
+            <ks-a-button namespace="button-primary-" color="secondary" href="#angebote">
+                234 Angebote
+                <a-icon-mdx icon-name="ArrowDownRight" size="1em" class="icon-right"></a-icon-mdx>
+            </ks-a-button>
+        </div>
+        <!-- Expand -->
+        <mdx-component class="margin-y-m">
+            <mdx-expand
+                line-clamp="5"
+                label-closed="Mehr anzeigen"
+                label-open="Weniger anzeigen"
+                expanded="false"
+            >
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. </p>
+            </mdx-expand>
+        </mdx-component>
+        <!-- /Expand -->
+        <!-- CMS Akkordeon Container -->
+        <div class="margin-y-m">
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 1</h4>
+                    </summary>
+                    <div>
+                        
+                        <ks-a-heading tag="h3">test title</ks-a-heading>
+                        <div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
+                        </div>
+                    </div>
+                </details>
+        </m-details>
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 2</h4>
+                    </summary>
+                    <div>
+                        
+                        <div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
+                        </div>
+                    </div>
+                </details>
+        </m-details>
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 3</h4>
+                    </summary>
+                    <div>
+                        
+                        <div>
+                            <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
+                                target="_self">
+                                <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
+                                    tabindex="0"> </a-icon-mdx>
+                                <span id="label">btn</span>
+                            </ks-a-button>
+                        </div>
+                    </div>
+                </details>
+        </m-details>
+        </div>
+        <!-- /CMS Akkordeon Container -->
+        <!-- CMS Carousel -->
+        <m-carousel-two namespace=carousel-two-image- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+            <section>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/kenan-sulayman-FV3M7igu8Fs-unsplash.jpg" alt="Yosemite"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/anastasia-dulgier-NCFTGtjY3EQ-unsplash.jpg" alt="Houses"></a-picture>
+         
+                    <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
+                </ks-m-figure>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/arnaud-mariat-IPXcUYHeErc-unsplash.jpg" alt="Galaxies"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/vladimir-kondriianenko-bxwzcFy9YwM-unsplash.jpg" alt="Minimalist nightmare"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/matthew-smith-9CV6WrxxdrM-unsplash.jpg" alt="Motel"></a-picture>
+                    <figcaption>Some figcaption</figcaption>
+                </ks-m-figure>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/jakob-owens-EkxOtUljwhs-unsplash.jpg" alt="Hoops"></a-picture>
+                    <figcaption>Another figcaption</figcaption>
+                </ks-m-figure>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/tim-bogdanov-4uojMEdcwI8-unsplash.jpg" alt="Gentleman"></a-picture>
+                    <figcaption>more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses more Houses</figcaption>
+                </ks-m-figure>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/a3ac1ed5abaedffd9947face7901e14c.jpg" alt="Stuff"></a-picture>
+                </ks-m-figure>
+                <ks-m-figure>
+                    <a-picture namespace="picture-cover-" aspect-ratio="0.5625" picture-load defaultSource="../src/es/components/molecules/carouselTwo/default-/img/weston-mackinnon-caUtk0DTiR0-unsplash.jpg" alt="Stuff"></a-picture>
+                </ks-m-figure>
+            </section>
+            <div>
+                <p id="index">
+                    some Text
+                </p>
+                <nav>
+                    <a href="#previous" aria-label="previous slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                    <a href="#next" aria-label="next slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                </nav>
+            </div>
+        </m-carousel-two>
+        <!-- /CMS Carousel -->
+    </ks-o-body-section>
+
+    <aside>
+        <ks-a-heading tag="h3">
+            Kontakt
+        </ks-a-heading>
+        
+        <ks-m-contact-row
+            name="Klubschule Migros Baden"
+            street="Nordhaus 3 / G&#xFC;terstrasse"
+            place="5400 Baden"
+            icon-name="Home"
+            href="#"
+        >
+        </ks-m-contact-row>
+        <ks-m-contact-row
+            name="+49 0160 49858582"
+            icon-name="phone"
+            href="tel:+49016049858582"
+        >
+        </ks-m-contact-row>
+        <m-dialog namespace="dialog-left-slide-in-">
+            <form>
+                <div class="container dialog-header" tabindex="0">
+                    <div id="back">
+                        &nbsp;
+                    </div>
+                    <h3>Kontaktformular tbd</h3>
+                    <div id="close">
+                        <a-icon-mdx icon-name="Plus" size="2em" tabindex="0"></a-icon-mdx>
+                    </div>
+                </div>
+                <div class="container dialog-content">
+                    Kontaktformular tbd...
+                    <div style="height: 100%"></div>
+                </div>
+                <div class="container dialog-footer">
+                    <a-button id="close" namespace="button-secondary-" no-pointer-events="">Schliessen</a-button>
+                    <a-button typ="submit" namespace="button-primary-">Senden</a-button>
+                </div>
+            </form>
+            <ks-m-contact-row
+                id="show-modal"
+                name="Kontaktformular"
+                icon-name="mail"
+                href="#"
+            >
+            </ks-m-contact-row>
+        </m-dialog>
+        <ks-m-contact-row
+            name="External Link"
+            icon-name="ArrowUpRight"
+            href="https://www.google.com"
+        >
+        </ks-m-contact-row>
+        <br />
+
+        <ks-a-heading tag="h3">
+            &#xD6;ffnungszeiten
+        </ks-a-heading>
+        <ks-m-opening-hours
+            data='[
+                {"label":"Montag","open":true,"hours":[["8:00","20:00"]]},
+                {"label":"Dienstag","open":true,"hours":[["8:00","20:00"]]},
+                {"label":"Mittwoch","open":true,"hours":[["8:00","20:00"]]},
+                {"label":"Donnerstag","open":false,"hours":[["8:00","18:00"]]},
+                {"label":"Freitag","open":true,"hours":[["8:00","12:00"],["13:30","18:00"]]},
+                {"label":"Samstag","open":true,"hours":[["8:00","12:00"],["13:30","18:00"]]},
+                {"label":"Sonntag","open":false,"hours":[]}
+            ]'
+            closed-label="geschlossen"
+        >
+        </ks-m-opening-hours>
+        <br />
+        <p>Im Kurslokal an der Bahnhofstrasse 5 in Davos Platz 
+            gibt es kein Sekretariat der Klubschule Migros. 
+            Für Beratung und Informationen wenden Sie sich bitte ans Klubschulsekretariat in Chur 
+            Tel. 058 712 44 40.
+        </p>
+        <br />
+
+        <ks-a-heading tag="h3">
+            Service
+        </ks-a-heading>
+        <!-- Link Liste mit Services -->
+        <ks-m-link-list namespace="link-list-default-">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span>Newsletter bestellen</span>
+                        <!-- Link: Icon ArrowRight -->
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span>Anfrage Raumvermietung</span>
+                        <!-- Link: Icon ArrowRight -->
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ArrowRight" size="1.5em" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span>Brosch&uuml;ren downloaden</span>
+                        <!-- Download: Icon Download -->
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+            </ul>
+        </ks-m-link-list>
+        <!-- /Link Liste mit Services -->
+    </aside>
+</o-grid>
+
+<!-- CMS Teaser Slider -->
+<ks-o-body-section variant="default">
+    <ks-a-heading tag="h2" style-as="h1">Was ist was?</ks-a-heading>
+    <m-carousel-two namespace=carousel-two-3-column- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+        <section>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Accent-4 in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Accent-4 in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Accent-4 in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Accent-4 in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary" href="#">
+                <article>
+                    <div>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <p>color=secondary: Accent-4 in Figma</p>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </div>
+                </article>
+            </ks-m-teaser>
+        </section>
+        <div>
+            <nav>
+                <a href="#previous" aria-label="previous slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+                <a href="#next" aria-label="next slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+            </nav>
+        </div>
+    </m-carousel-two>
+</ks-o-body-section>
+<!-- /CMS Teaser Slider -->
+
+<!-- Exceptionally added some inline styles to erase unwanted spacings -->
+<div id="angebote" style="width: 100%; margin-bottom: 0;">
+    <ks-o-offers-page endpoint="https://miducabulaliwebappdev-test.azurewebsites.net/api/CourseSearch/withfacet"
+    initial-request='{"filter":[],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":6}'
+    endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
+    google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"></ks-o-offers-page>
+</div>

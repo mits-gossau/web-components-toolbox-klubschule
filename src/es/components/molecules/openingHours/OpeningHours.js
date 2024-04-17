@@ -49,7 +49,7 @@ export default class OpeningHours extends Shadow() {
         table {
             text-align: left;
             width: 100%;
-            max-width: 320px;
+            max-width: var(--opening-hours-width, 320px);
             table-layout: fixed;
             font: var(--mdx-sys-font-fix-body1);
         }
@@ -57,7 +57,7 @@ export default class OpeningHours extends Shadow() {
             vertical-align: top;
         }
         .opening-hours__day-label {
-            width: 40%;
+            width: 50%;
             font: var(--mdx-sys-font-fix-label2);
         }
         .opening-hours__row > th,
