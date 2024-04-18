@@ -43,40 +43,39 @@ export default class WithFacet extends Shadow() {
     this.isMocked = this.hasAttribute('mock')
     const apiUrl = this.isMocked
       ? `${this.importMetaUrl}./mock/default.json`
-      : `${this.getAttribute('endpoint') || 'https://miducabulaliwebappdev.azurewebsites.net/api/CourseSearch/withfacet'}`
-    this.initialResponse = {}
-    this.lastWithFacetRequest = null
+      : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
+    // simply the last body of the last request
+    this.lastResponse = {}
+    // simply the payload of the last request
+    this.lastRequest = null
 
     this.requestWithFacetListener = (event) => {
+      // mdx prevent double event
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
       console.log('---------------------------------event', event, event.type === 'reset-all-filters' ? 'reset-all-filters' : 'request')
 
       let request
-      let shouldResetAllFilters
-      let shouldResetFilter
-      let shouldResetFilterFromFilterSelectButton
+      const shouldResetAllFilters = event.type === 'reset-all-filters'
+      const shouldResetFilter = event.type === 'reset-filter'
+      const shouldResetFilterFromFilterSelectButton = event.detail?.this?.hasAttribute('filter')
       let isNextPage = false
 
-      // ppage reuse last request
-      if (event.detail?.ppage && this.lastWithFacetRequest) {
-        request = JSON.stringify(Object.assign(JSON.parse(this.lastWithFacetRequest), { ppage: event.detail.ppage }))
+      if (event.detail?.ppage && this.lastRequest) {
+        // ppage reuse last request
+        request = JSON.stringify(Object.assign(JSON.parse(this.lastRequest), { ppage: event.detail.ppage }))
         isNextPage = true
-        this.updateURLParams()
       } else {
+        // new request
         const initialFilters = JSON.parse(initialRequest)?.filter
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
-
-        shouldResetAllFilters = event.type === 'reset-all-filters'
-        shouldResetFilter = event.type === 'reset-filter'
-        shouldResetFilterFromFilterSelectButton = event.detail?.this?.hasAttribute('filter')
 
         this.filters = []
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
 
-        // if there is an initial Filter set (e.g. for Events) we want to keep it
-        if (filter && initialFiltersAsString?.length) {
+        // if there is an initial filter set (e.g. for events) we want to keep it
+        if (initialFiltersAsString?.length) {
           this.filters.push(initialFiltersAsString)
         }
 
@@ -87,9 +86,7 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetFilter) {
           initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetFilter }))
-          const filterParent = event.detail.this.getAttribute('filter-parent')
-          this.params.delete(`${filterParent}`)
-          self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
@@ -108,7 +105,7 @@ export default class WithFacet extends Shadow() {
           ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lng) ? `,"clong": "${event.detail.lng}"` : ''}
         }`
 
-        request = this.lastWithFacetRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation ? filterRequest : initialRequest
+        request = this.lastRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation ? filterRequest : initialRequest
       }
 
       let requestInit = {}
@@ -144,7 +141,7 @@ export default class WithFacet extends Shadow() {
               console.log('----------json', json)
               // store initial response
               if (!this.filters.length || this.filters.length === 0) {
-                this.initialResponse = json
+                this.lastResponse = json
               }
 
               // url kung fu
@@ -286,6 +283,13 @@ export default class WithFacet extends Shadow() {
         }
       })
 
+      self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+    }
+  }
+
+  removeFilterParamsFromURL (filterParent) {
+    if (this.params) {
+      this.params.delete(`${filterParent}`)
       self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
     }
   }

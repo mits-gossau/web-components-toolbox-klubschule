@@ -34,7 +34,7 @@ export default class Contact extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.badge
+    return !this.a
   }
 
   /**
@@ -80,9 +80,10 @@ export default class Contact extends Shadow() {
     const thirdRow = this.getAttribute('place')
     const isAddress = secondRow && thirdRow
     const id = this.getAttribute('id')
+    const target = this.getAttribute('target')
 
     this.html =   /* HTML */ `
-      <a href="${this.getAttribute('href')}" ${id ? `id="${id}"` : ''} >
+      <a href="${this.getAttribute('href')}" ${id ? `id="${id}"` : ''} ${target ? `target="${target}"` : ''} >
         <a-icon-mdx 
           namespace="icon-mdx-ks-" 
           size="${this.getAttribute('icon-size') || '1em'}"
@@ -113,5 +114,9 @@ export default class Contact extends Shadow() {
 
   get data () {
     return Contact.parseAttribute(this.getAttribute('data'))
+  }
+
+  get a () {
+    return this.root.querySelector('a')
   }
 }
