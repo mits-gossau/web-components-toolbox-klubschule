@@ -9,10 +9,6 @@ import { makeUniqueCourseId, escapeForHtml, getTileState } from '../../../helper
  * @type {CustomElementConstructor}
  */
 export default class AppointmentTile extends Tile {
-  /**
-   * @param options
-   * @param {any} args
-   */
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
     this.courseData = null

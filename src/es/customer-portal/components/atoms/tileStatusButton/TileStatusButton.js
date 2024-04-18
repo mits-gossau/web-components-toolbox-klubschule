@@ -9,9 +9,6 @@ import { escapeForHtml } from '../../../helpers/Shared.js'
 * @type {CustomElementConstructor}
 */
 export default class StatusButton extends Shadow() {
-  /**
-   * @param {any} args
-   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.dataContent = null
@@ -116,8 +113,7 @@ export default class StatusButton extends Shadow() {
   renderHTML (content, subscription) {
     // TODO: Remove
     this.wrapper = this.root.querySelector('div') || document.createElement('div')
-    const btn = this.renderTileActionButton(subscriptionMode[subscription.subscriptionMode], content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
-    this.html = btn
+    this.html = this.renderTileActionButton(subscriptionMode[subscription.subscriptionMode], content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
   }
 
   renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {

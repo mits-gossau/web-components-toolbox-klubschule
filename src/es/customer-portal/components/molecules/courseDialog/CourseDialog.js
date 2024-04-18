@@ -11,10 +11,6 @@ import { actionType, subscriptionMode, courseAppointmentStatusMapping } from '..
 * @type {CustomElementConstructor}
 */
 export default class CourseDialog extends Shadow() {
-  /**
-   * @param options
-   * @param {any} args
-   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.courseData = null
@@ -92,7 +88,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * RENDER course detail
-   *
    * @param {*} data
    * @param {*} detail
    * @returns
@@ -143,7 +138,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * SHOW booking confirmation
-   *
    * @param {CustomEventInit} event
    */
   requestShowDialogBookingConfirmationListener = event => {
@@ -156,7 +150,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * RENDER booking confirmation
-   *
    * @param {*} data
    * @param {*} detail
    * @returns
@@ -194,7 +187,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * SHOW booking success
-   *
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentBookingListener = event => {
@@ -208,7 +200,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * RENDER booking success
-   *
    * @param {*} data
    * @param {*} detail
    * @returns
@@ -242,7 +233,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * SHOW reversal confirmation
-   *
    * @param {CustomEventInit} event
    */
   requestShowDialogReversalConfirmationListener = event => {
@@ -255,7 +245,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * RENDER reversal confirmation
-   *
    * @param {*} data
    * @param {*} detail
    * @returns
@@ -291,7 +280,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * SHOW reversal success
-   *
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentReversalListener = event => {
@@ -305,7 +293,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * RENDER reversal success
-   *
    * @param {*} data
    * @param {*} detail
    * @returns
@@ -464,7 +451,7 @@ export default class CourseDialog extends Shadow() {
   courseDetailsContent (detail) {
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
     if (!state) return
-    const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo, { month: '2-digit', day: '2-digit', year: 'numeric' }, 'de-DE')
+    const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo)
     return /* html */ `
       <div class="detail"><span>Datum, Zeit</span><span>${detail.courseAppointmentDateFormatted}</span><span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span></div>
       <div class="detail"><span>Ort/Raum</span><span>${detail.courseLocation} / Raum ${detail.roomDescription}</span></div>
@@ -519,11 +506,11 @@ export default class CourseDialog extends Shadow() {
     `
   }
 
-  formatCourseAppointmentDate (dateString, options, locale) {
+  formatCourseAppointmentDate (dateString) {
     const dateObject = new Date(dateString)
-    // const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
+    const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
     // @ts-ignore
-    const formatter = new Intl.DateTimeFormat(locale, options)
+    const formatter = new Intl.DateTimeFormat('de-DE', options)
     return formatter.format(dateObject)
   }
 

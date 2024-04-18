@@ -9,9 +9,6 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 * @type {CustomElementConstructor}
 */
 export default class CourseTitle extends Shadow() {
-  /**
-   * @param {any} args
-   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.dataContent = null

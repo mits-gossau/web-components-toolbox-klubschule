@@ -9,9 +9,6 @@ import { escapeForHtml } from '../../../helpers/Shared.js'
 * @type {CustomElementConstructor}
 */
 export default class DialogStatusButton extends Shadow() {
-  /**
-   * @param {any} args
-   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.dataContent = null
@@ -86,7 +83,6 @@ export default class DialogStatusButton extends Shadow() {
 
   /**
    * BOOKING - CONFIRMATION
-   *
    * @param {CustomEventInit} event
    */
   requestShowDialogBookingConfirmationListener = event => {
@@ -100,7 +96,6 @@ export default class DialogStatusButton extends Shadow() {
 
   /**
    * REVERSAL - CONFIRMATION
-   *
    * @param {CustomEventInit} event
    */
   requestShowDialogReversalConfirmationListener = event => {
@@ -114,7 +109,6 @@ export default class DialogStatusButton extends Shadow() {
 
   /**
    * evaluates if a render is necessary
-   *
    * @return {boolean}
    */
   shouldRenderCSS () {
@@ -128,9 +122,9 @@ export default class DialogStatusButton extends Shadow() {
     this.css = /* css */`
       :host {
         display: flex;
+        flex-direction: row-reverse;
         justify-content: space-between;
         width: 100%;
-        flex-direction: row-reverse;
       }
       @media only screen and (max-width: _max-width_) {
         :host {}

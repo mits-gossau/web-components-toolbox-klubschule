@@ -10,10 +10,6 @@ import { makeUniqueCourseId } from '../../../helpers/Shared.js'
  * @type {CustomElementConstructor}
  */
 export default class AppointmentsList extends Shadow() {
-  /**
-   * @param options
-   * @param {any} args
-   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.select = null
