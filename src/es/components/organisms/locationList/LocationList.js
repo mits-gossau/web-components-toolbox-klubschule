@@ -52,12 +52,46 @@ export default class LocationList extends Shadow() {
     this.css = /* css */`
         * {
             box-sizing: border-box;
+            padding: 0;
+            margin: 0;
         }
+        ul, li { list-style: none; }
         .location-list__letter {
             margin-bottom: var(--mdx-sys-spacing-flex-s);
         }
         .location-list__letter-wrapper {
             margin-bottom: var(--mdx-sys-spacing-flex-m);
+        }
+        .location-list__anchor-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            font: var(--mdx-sys-font-fix-label0, inherit);
+            gap: var(--mdx-sys-spacing-fix-xs, 0.5rem) var(--mdx-sys-spacing-fix-m, 1.5rem);
+            margin-bottom: var(--mdx-sys-spacing-flex-m);
+        }
+        .location-list__anchor-link > a,
+        .location-list__anchor-link > span {
+            padding: var(--mdx-sys-spacing-fix-xs) 0;
+            position: relative;
+            color: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .location-list__anchor-link > a:hover {
+            color: var(--mdx-sys-color-primary-default);
+        }
+        .location-list__anchor-link > span {
+            color: var(--mdx-sys-color-neutral-subtle4);
+        }
+        .location-list__anchor-link > a.active::before {
+            content: '';
+            display: block;
+            position: absolute;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--mdx-sys-color-primary-default, currentColor);
         }
     `
   }
@@ -75,14 +109,16 @@ export default class LocationList extends Shadow() {
 
     this.html = /* HTML */`
         <div>
-            <ul>
-                ${alphabet.map(letter => {
-                    // if an object for this letter exists inside the data object render a link otherwise just text
-                    return data[letter]
-                        ? `<li><a href="#${data[letter]?.id}">${letter}</a></li>`
-                        : `<li><span>${letter}</span></li>`
-                })}
-            </ul>
+            ${!this.hasAttribute('hide-anchor-nav')
+                ? /* html */`<ul class="location-list__anchor-navigation">
+                    ${alphabet.map(letter => {
+                        // if an object for this letter exists inside the data object render a link otherwise just text
+                        return data[letter]
+                            ? /* html */`<li class="location-list__anchor-link"><a href="#${data[letter]?.id}">${letter}</a></li>`
+                            : /* html */`<li class="location-list__anchor-link"><span>${letter}</span></li>`
+                    }).join('\n')}
+                </ul>`
+                : ''}
             ${Object.keys(data).map(letter => {
                     return /* html */`
                         <div id="${data[letter].id || warnMandatory('id')}" class="location-list__letter-wrapper">
@@ -126,7 +162,14 @@ export default class LocationList extends Shadow() {
   }
 
   scrollHashIntoView () {
-    this.root.querySelector(window.location.hash).scrollIntoView({ behavior: 'smooth' })
+    // Array.from(this.root.querySelectorAll('.location-list__anchor-link a')).forEach(element => {
+    //   if (element.hash === window.location.hash) {
+    //     element.classList.add('active')
+    //   } else {
+    //     element.classList.remove('active')
+    //   }
+    // })
+    this.root.querySelector(window.location.hash)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   anchorListener (event) {
