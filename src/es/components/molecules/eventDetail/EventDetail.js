@@ -196,6 +196,13 @@ export default class EventDetail extends Shadow() {
       :host a-icon-mdx {
         color: var(--mdx-base-color-grey-950);
       }
+      :host m-dialog {
+        --dialog-left-slide-in-max-width-custom: min(100%, 1020px);
+      }
+      :host m-dialog + ks-a-button {
+        --button-transparent-margin: 0;
+        --button-transparent-padding: 0;
+      }
 
       :host .with-border {
         padding: var(--mdx-sys-spacing-fix-3xs);
@@ -361,10 +368,40 @@ export default class EventDetail extends Shadow() {
               </div>
             `, '') : ''}
             ${this.data.abo_typen_link && this.data.abo_typen_link_label ? /* html */ `
-              <button href="${this.data.abo_typen_link}" class="link-more">
+              <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="dialog-open" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
+                <!-- overlayer -->
+                <div class="container dialog-header" tabindex="0">
+                    <div id="back">
+                        &nbsp;
+                    </div>
+                    <h3>Test</h3>
+                    <div id="close">
+                        <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+                    </div>
+                </div>
+                <div class="container dialog-content">
+                   ks-c-abo-list
+                    ks-m-abo
+                    <div style="height: 1000px">
+                      Test
+                    </div>
+                    <div style="height: 1000px">
+                      Test
+                    </div>
+                </div>
+                <div class="container dialog-footer">
+                    <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+                </div>
+              </m-dialog>
+              <ks-a-button
+                namespace="button-transparent-"
+                href="${this.data.abo_typen_link}" 
+                class="link-more" 
+                request-event-name="dialog-open"
+                click-no-toggle-active
+              >
                 <span>${this.data.abo_typen_link_label}</span>
-                <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ArrowRight" size="1em"></a-icon-mdx>
-              </button>
+              </ks-a-button>
             ` : ''}
           </div>
         ` : ''}
@@ -386,6 +423,14 @@ export default class EventDetail extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
         name: 'a-link'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/button/Button.js`,
+        name: 'a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+        name: 'm-dialog'
       },
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
