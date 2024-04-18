@@ -1,0 +1,28 @@
+<div>
+    <div>
+      <h1>Form with HTML Validation</h1>
+      <form action="/xyz">
+        <mdx-component>
+            <mdx-checkbox id="test-checkbox" name="test-checkbox" label="Test Checkbox" required>
+                <span slot="description">Checkbox Description</span>
+            </mdx-checkbox>
+            <mdx-input
+              name="username"
+              label="Username (only letters are allowed)"
+              type="text"
+              input-pattern="^[a-zA-Z]*$"
+              required
+            ></mdx-input>
+            <mdx-input name="email" label="E-Mail" type="email" required></mdx-input>
+            <mdx-input
+              name="password"
+              label="Passwort (requires at least one digit, one lowercase letter, one uppercase letter, and a minimum length of 8 characters)"
+              type="password"
+              input-pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              required
+            ></mdx-input>
+            <mdx-button type="submit">Submit</mdx-button>
+        </mdx-component>
+      </form>
+    </div>
+  </div>
