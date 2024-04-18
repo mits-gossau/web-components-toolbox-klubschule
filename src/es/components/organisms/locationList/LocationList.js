@@ -106,14 +106,14 @@ export default class LocationList extends Anchor() {
                         return data[letter]
                             ? /* html */`<li class="location-list__anchor-link"><a href="#${data[letter]?.id}">${letter}</a></li>`
                             : /* html */`<li class="location-list__anchor-link"><span>${letter}</span></li>`
-                    }).join('\n')}
+                    }).join('')}
                 </ul>`
                 : ''}
             ${Object.keys(data).map(letter => {
                     return /* html */`
                         <div id="${data[letter].id || warnMandatory('id')}" class="location-list__letter-wrapper">
                             <ks-a-heading tag="h2" style-as="h1" class="location-list__letter">${letter.toUpperCase()}</ks-a-heading>
-                            <o-grid namespace="grid-12er-" gap="3rem">
+                            <o-grid namespace="grid-12er-" gap="3rem" gap-mobile="1rem">
                                 ${data[letter].locations
                                     ? data[letter].locations.map(location => {
                                         return /* html */`
@@ -126,13 +126,13 @@ export default class LocationList extends Anchor() {
                                                 </ks-m-link-item>
                                             </div>
                                         `
-                                    }).join('\n')
+                                    }).join('')
                                     : warnMandatory('locations (in letter object)')
                                 }
                             </o-grid>
                         </div>
                     `
-            }).join('\n')}
+            }).join('')}
         </div>
     `
     return this.fetchModules([
