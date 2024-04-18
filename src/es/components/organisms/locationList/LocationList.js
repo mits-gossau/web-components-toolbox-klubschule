@@ -1,30 +1,20 @@
 // @ts-check
-import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import { Anchor } from '../../web-components-toolbox/src/es/components/prototypes/Anchor.js'
 
 /**
 * @export
 * @class LocationList
 * @type {CustomElementConstructor}
 */
-export default class LocationList extends Shadow() {
+export default class LocationList extends Anchor() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-
-    this.scrollHashIntoView = this.scrollHashIntoView.bind(this)
-    this.anchorListener = this.anchorListener.bind(this)
   }
 
   connectedCallback () {
+    super.connectedCallback()
     if (this.shouldRenderCSS()) { this.renderCSS() }
     if (this.shouldRenderHTML()) { this.renderHTML() }
-
-    window.addEventListener('hashchange', this.scrollHashIntoView)
-    this.root.addEventListener('click', this.anchorListener)
-  }
-
-  disconnectedCallback () {
-    window.removeEventListener('hashchange', this.scrollHashIntoView)
-    this.root.removeEventListener('click', this.anchorListener)
   }
 
   /**
@@ -159,23 +149,6 @@ export default class LocationList extends Shadow() {
         name: 'o-grid'
       }
     ])
-  }
-
-  scrollHashIntoView () {
-    // Array.from(this.root.querySelectorAll('.location-list__anchor-link a')).forEach(element => {
-    //   if (element.hash === window.location.hash) {
-    //     element.classList.add('active')
-    //   } else {
-    //     element.classList.remove('active')
-    //   }
-    // })
-    this.root.querySelector(window.location.hash)?.scrollIntoView({ behavior: 'smooth' })
-  }
-
-  anchorListener (event) {
-    if (event.target.tagName === 'A' && event.target.hash) {
-      this.scrollHashIntoView()
-    }
   }
 
   get div () {
