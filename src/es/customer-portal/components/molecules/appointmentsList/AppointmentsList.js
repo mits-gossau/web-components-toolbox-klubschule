@@ -38,11 +38,8 @@ export default class AppointmentsList extends Shadow() {
 
   subscriptionCourseAppointmentsListener = (event) => {
     this.renderHTML(event.detail.fetch).then(() => {
-      if (!this.select) {
-        // TODO: Refactor
-        this.select = this.root.querySelector('o-grid').root.querySelector('select')
-        this.select.addEventListener('change', this.selectEventListener)
-      }
+      this.select = this.root.querySelector('o-grid').root.querySelector('select')
+      this.select.addEventListener('change', this.selectEventListener)
     })
   }
 

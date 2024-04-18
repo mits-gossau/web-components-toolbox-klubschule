@@ -4,6 +4,8 @@ import { escapeForHtml, getTileState } from '../../../helpers/Shared.js'
 import { actionType, subscriptionMode, courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
 
 /* global CustomEvent */
+/* global Blob */
+/* global self */
 
 /**
 * @export
@@ -130,7 +132,7 @@ export default class CourseDialog extends Shadow() {
         </div>
         <div>
           <h3>Downloads</h3>
-          <div>${this.renderDownloads()}</div>
+          <div>${this.renderDownloads(data, detail)}</div>
         </div>
       </div>
     `
@@ -223,7 +225,7 @@ export default class CourseDialog extends Shadow() {
       </div>
       <div>
         <h3>Downloads</h3>
-        <div>${this.renderDownloads()}</div>
+        <div>${this.renderDownloads(data, detail)}</div>
       </div>
       <div>
         ${this.renderNotification()}
@@ -419,10 +421,7 @@ export default class CourseDialog extends Shadow() {
    * Returns HTML content based on the subscription mode of a course.
    * @param courseData - `courseData`
    * @param courseDetail - `courseDetail`
-   * @returns Returns an HTML string that contains information
-   * about the price of a course. If the subscription mode of the course is `WERTABO`, it includes the
-   * lesson price and a message indicating that the appointment is booked through the subscription.
-   * Otherwise, it returns an empty string.
+   * @returns Returns an HTML string.
    */
   renderPriceInfoContent (courseData, courseDetail) {
     return subscriptionMode[courseDetail.subscriptionMode] === subscriptionMode.WERTABO
@@ -443,10 +442,7 @@ export default class CourseDialog extends Shadow() {
    * Generates HTML content displaying details of a course appointment,
    * including date, time, location, instructor, status, and subscription information.
    * @param detail - `detail`
-   * @returns Returning an HTML template string that contains various details about a course appointment.
-   * The details include the date and time of the appointment, location/room information, instructor details,
-   * appointment status, and subscription information. The appointment status is dynamically determined
-   * based on the `courseAppointmentStatus` property of the `detail` object.
+   * @returns Returning an HTML template string.
    */
   courseDetailsContent (detail) {
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
@@ -479,12 +475,15 @@ export default class CourseDialog extends Shadow() {
    * Generates HTML code for a list of downloadable items with links and icons.
    * @returns Returning an HTML template string
    */
-  renderDownloads () {
+  renderDownloads (courseData, courseDetail) {
+    // @ts-ignore
+    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}`
+
     return /* html */ `
         <ks-m-link-list namespace="link-list-download-">
           <ul>
             <li>
-              <a href="#">
+              <a href="${pdfLink}">
                 <span>Kursdetails als PDF</span>
                 <div>
                   <span>PDF</span>
@@ -493,7 +492,7 @@ export default class CourseDialog extends Shadow() {
               </a>
             </li>
             <li>
-              <a href="#">
+            <a href="${this.createICSInvite(courseData)}" download="${courseData.courseTitle}.ics">
                 <span>Termin in persönlichen Kalender</span>
                 <div>
                   <span>ICS</span>
@@ -504,6 +503,52 @@ export default class CourseDialog extends Shadow() {
           </ul>
         </ks-m-link-list>
     `
+  }
+
+  createICSInvite (course) {
+    const courseFrom = course.courseAppointmentTimeFrom.split(':').map(Number)
+    const courseTo = course.courseAppointmentTimeTo.split(':').map(Number)
+    const from = new Date().setHours(courseFrom[0], courseFrom[1])
+    const fromIso = new Date(from).toISOString()
+    const to = new Date().setHours(courseTo[0], courseTo[1])
+    const toIso = new Date(to).toISOString()
+    const event = {
+      courseType: course.courseType,
+      courseId: course.courseId,
+      courseTitle: course.courseTitle,
+      courseLocation: course.courseLocation,
+      courseAppointmentDate: new Date(course.courseAppointmentDate).toISOString(),
+      courseAppointmentTimeFrom: fromIso,
+      courseAppointmentTimeTo: toIso,
+      roomDescription: course.roomDescription
+    }
+
+    // Encode the event details in a data URI
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const icsBody = 'BEGIN:VCALENDAR\n' +
+      'VERSION:2.0\n' +
+      'PRODID:-//Migros Klubschule//CustomerPortal//EN\n' +
+      'METHOD:PUBLISH\n' +
+      'BEGIN:VTIMEZONE\n' +
+      'TZID:' + timezone + '\n' +
+      'END:VTIMEZONE\n' +
+      'BEGIN:VEVENT\n' +
+      'SUMMARY:' + event.courseTitle + '(' + event.courseType + '_' + event.courseId + ')' + '\n' +
+      'UID:@Default\n' +
+      'SEQUENCE:0\n' +
+      'STATUS:CONFIRMED\n' +
+      'TRANSP:TRANSPARENT\n' +
+      'DTSTART;TZID=' + timezone + ':' + event.courseAppointmentTimeFrom + '\n' +
+      'DTEND;TZID=' + timezone + ':' + event.courseAppointmentTimeTo + '\n' +
+      'DTSTAMP:' + event.courseAppointmentDate + '\n' +
+      'LOCATION:' + event.courseLocation + '\n' +
+      'DESCRIPTION:' + 'Raum:' + event.roomDescription + '\n' +
+      'END:VEVENT\n' +
+      'END:VCALENDAR\n'
+
+    const blob = new Blob([icsBody], { type: 'text/calendar' })
+    const url = URL.createObjectURL(blob)
+    return url
   }
 
   formatCourseAppointmentDate (dateString) {
