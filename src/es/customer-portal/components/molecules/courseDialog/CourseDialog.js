@@ -4,7 +4,6 @@ import { escapeForHtml, getTileState } from '../../../helpers/Shared.js'
 import { actionType, subscriptionMode, courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
 
 /* global CustomEvent */
-/* global Blob */
 /* global self */
 
 /**
@@ -98,18 +97,17 @@ export default class CourseDialog extends Shadow() {
     return /* html */ `
       <style>
         .price-info {
-          display:flex;
+          display: flex;
         }
         .details {
-          display:flex;
-          flex-direction:column;
-          gap:1em;
-          margin-bottom:4em;
-          padding-top:2em;
+          display: flex;
+          flex-direction: column;
+          gap: 1.5em;
+          margin-bottom: 4em;
         }
         .detail {
-          display:flex;
-          flex-direction:column;
+          display: flex;
+          flex-direction: column;
         }
         .detail > span:first-child {
           font-weight: 500;
@@ -120,6 +118,12 @@ export default class CourseDialog extends Shadow() {
         }
         .alert {
           color: var(--alert-color, #F4001B);
+        }
+        .description {
+          margin-bottom: 4rem !important;
+        }
+        .downloads {
+          margin-bottom: 1em;
         }
       </style>
       <div id="content">
@@ -132,7 +136,7 @@ export default class CourseDialog extends Shadow() {
         </div>
         <div>
           <h3>Downloads</h3>
-          <div>${this.renderDownloads(data, detail)}</div>
+          <div class="downloads">${this.renderDownloads(data, detail)}</div>
         </div>
       </div>
     `
@@ -160,15 +164,14 @@ export default class CourseDialog extends Shadow() {
     return /* html */ `
       <style>
         .details {
-          display:flex;
-          flex-direction:column;
-          gap:1em;
-          margin-bottom:4em;
-          padding-top:2em;
+          display: flex;
+          flex-direction: column;
+          gap: 1.5em;
+          padding-top: 2em;
         }
         .detail {
-          display:flex;
-          flex-direction:column;
+          display: flex;
+          flex-direction: column;
         }
         .detail > span:first-child {
           font-weight: 500;
@@ -181,7 +184,9 @@ export default class CourseDialog extends Shadow() {
         </div>
         <div class="details">
           ${this.courseDetailsContent(detail)}
-          ${this.renderNotification()}
+          <div>
+            ${this.renderNotification()}
+          </div> 
         </div>
       </div>
     `
@@ -216,14 +221,17 @@ export default class CourseDialog extends Shadow() {
           gap: 1em;
         }
         .success {
-          color:#00997F;
+          color: #00997F;
+        }
+        .downloads {
+          margin: 4em 0 1.5em 0;
         }
       </style>
       <div class="success-message">
         <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>
-        <h2>Sie haben den Termin erfolgreich gebucht</h2>
+        <h2 class="success">Sie haben den Termin erfolgreich gebucht</h2>
       </div>
-      <div>
+      <div class="downloads">
         <h3>Downloads</h3>
         <div>${this.renderDownloads(data, detail)}</div>
       </div>
@@ -255,15 +263,15 @@ export default class CourseDialog extends Shadow() {
     return /* html */ `
       <style>
         .details {
-          display:flex;
+          display: flex;
           flex-direction:column;
-          gap:1em;
-          margin-bottom:4em;
-          padding-top:2em;
+          gap: 1em;
+          margin-bottom: 4em;
+          padding-top: 2em;
         }
         .detail {
-          display:flex;
-          flex-direction:column;
+          display: flex;
+          flex-direction: column;
         }
         .detail > span:first-child {
           font-weight: 500;
@@ -309,7 +317,7 @@ export default class CourseDialog extends Shadow() {
           gap: 1em;
         }
         .success {
-          color:#00997F;
+          color: #00997F;
         }
       </style>
       <div class="success-message">
@@ -340,9 +348,7 @@ export default class CourseDialog extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host {
-        --alert: pink;
-      }
+      :host {}
       @media only screen and (max-width: _max-width_) {
         :host {}
       }
