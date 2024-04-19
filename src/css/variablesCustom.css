@@ -1,55 +1,3 @@
-/**
-  * Variables naming rule: --{selector aka component aka namespace}-{css property}-{pseudo class or media query name} eg. --p-background-color-hover 
-  * NOTE: Within the component don't use any name spacing eg. component header don't use --header-default-color just use --color the namespace can be added by the Shadow as an html attribute
-  * - if a component holds other components or nodes you can declare or remap classes eg. :host > h1 {--color: var(--h1-color, white);}
-  * - if a component holds other components you should share the attribute namespace with its children
-  */
-
-/* src/css/web-components-toolbox-migros-design-experience/src/css/variablesCustom.css */
-/** 
- * mdx base files
- */
-@import "./web-components-toolbox-migros-design-experience/src/css/base.css";
-
-/** 
-* only import one mdx theme at a time for mapping it at sys.css and comp.css
-* replace .klubschule--light with :root
-*/
-@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/03_component/brands/migros/light-rem.css";
-@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/03_component/brands/klubschule/light-rem.css";
-@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/02_system/brands/klubschule/light-rem.css";
-
-@import "./web-components-toolbox-migros-design-experience/src/css/comp.css";
-@import "./web-components-toolbox-migros-design-experience/src/css/sys.css";
-
-/* For some edge cases design tokens from figma need to be fixed/overwritten */
-/* In the long term, this should be fixed with Figma & Tokens Studio in the main MDX Repo */
-@import "./temporaryMDXTokenFixes.css";
-
-/* font tracking */
-/*@import url("https://cdn.fonts.net/t/1.css?apiType=css&projectid=b2e5ea60-e0d9-11ec-b713-06e2001461d0");*/
-@font-face{
-  font-family:"Graphik";
-  src:url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Regular.woff2") format("woff2"),url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Regular.woff") format("woff");
-  font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-@font-face{
-	font-family:"Graphik";
-  src:url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Bold.woff2") format("woff2"),url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Bold.woff") format("woff");
-  font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-@font-face{
-	font-family:"Graphik";
-	src:url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Medium.woff2") format("woff2"),url("https://cdn.migros.ch/ch.migros/static/fonts/Graphik/Graphik-Medium.woff") format("woff");
-  font-weight: 500;
-	font-style: normal;
-	font-display: swap;
-}
-
 :root {
   --a-emotion-pictures-margin-top-first-child: auto;
   --color:#262626;
@@ -132,9 +80,6 @@
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-title-img-max-height: var(--emotion-pictures-default-img-max-height);
-  --font-family-bold: "Graphik", Helvetica, Arial, sans-serif;
-  --font-family-secondary: "Graphik", Helvetica, Arial, sans-serif;
-  --font-family: "Graphik", Helvetica, Arial, sans-serif;
   --font-size-mobile: min(16px, 4.3vw); /* base rem size for mobile and desktop need to be 16px */
   --font-size: 16px;
   --grid-1column-align-center-padding-custom: 4rem 1.5rem;
@@ -264,8 +209,8 @@
   --table-even-background-color: var(--mdx-base-color-klubschule-creme-400);
   --table-padding-right-last-child: var(--table-padding);
 
-  --icon-link-list-color: #0053A6;
-  --icon-link-list-color-hover: #0053A6;
+  --icon-link-list-color: var(--mdx-sys-color-primary-default);
+  --icon-link-list-color-hover: var(--mdx-sys-color-primary-default);
 
   --box-shadow-color: rgba(51, 51, 51, 0.1);
 
