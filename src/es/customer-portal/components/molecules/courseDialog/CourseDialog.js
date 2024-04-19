@@ -478,77 +478,85 @@ export default class CourseDialog extends Shadow() {
   renderDownloads (courseData, courseDetail) {
     // @ts-ignore
     const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}`
-
     return /* html */ `
-        <ks-m-link-list namespace="link-list-download-">
-          <ul>
-            <li>
-              <a href="${pdfLink}">
-                <span>Kursdetails als PDF</span>
-                <div>
-                  <span>PDF</span>
-                  <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-                </div>
-              </a>
-            </li>
-            <li>
-            <a href="${this.createICSInvite(courseData)}" download="${courseData.courseTitle}.ics">
-                <span>Termin in persönlichen Kalender</span>
-                <div>
-                  <span>ICS</span>
-                  <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </ks-m-link-list>
+      <ks-m-link-list namespace="link-list-download-">
+        <ul>
+          <li>
+            <a href="${pdfLink}">
+              <span>Kursdetails als PDF</span>
+              <div>
+                <span>PDF</span>
+                <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+              </div>
+            </a>
+          </li>
+          <li>
+            ${this.createDownloadICSFile(courseData)} 
+          </li>
+        </ul>
+      </ks-m-link-list>
     `
   }
 
-  createICSInvite (course) {
-    const courseFrom = course.courseAppointmentTimeFrom.split(':').map(Number)
-    const courseTo = course.courseAppointmentTimeTo.split(':').map(Number)
-    const from = new Date().setHours(courseFrom[0], courseFrom[1])
-    const fromIso = new Date(from).toISOString()
-    const to = new Date().setHours(courseTo[0], courseTo[1])
-    const toIso = new Date(to).toISOString()
-    const event = {
-      courseType: course.courseType,
-      courseId: course.courseId,
-      courseTitle: course.courseTitle,
-      courseLocation: course.courseLocation,
-      courseAppointmentDate: new Date(course.courseAppointmentDate).toISOString(),
-      courseAppointmentTimeFrom: fromIso,
-      courseAppointmentTimeTo: toIso,
-      roomDescription: course.roomDescription
-    }
+  icsDownload (filename, fileBody) {
+    const link = document.createElement('a')
+    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileBody))
+    link.setAttribute('download', filename)
+    link.innerHTML = /* html */ `
+      <span>Termin in persönlichen Kalender</span><div>
+        <span>ICS</span>
+        <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+      </div>
+    `
+    return link.outerHTML
+  }
 
-    // Encode the event details in a data URI
+  convertToICSDate (dt) {
+    const dateTime = new Date(dt)
+    const year = dateTime.getFullYear().toString()
+    const month = (dateTime.getMonth() + 1) < 10 ? '0' + (dateTime.getMonth() + 1).toString() : (dateTime.getMonth() + 1).toString()
+    const day = dateTime.getDate() < 10 ? '0' + dateTime.getDate().toString() : dateTime.getDate().toString()
+    const hours = dateTime.getHours() < 10 ? '0' + dateTime.getHours().toString() : dateTime.getHours().toString()
+    const minutes = dateTime.getMinutes() < 10 ? '0' + dateTime.getMinutes().toString() : dateTime.getMinutes().toString()
+    return year + month + day + 'T' + hours + minutes + '00'
+  }
+
+  /**
+   *
+   * @param {*} course
+   * @returns
+   */
+  createDownloadICSFile (course) {
+    const { courseType, courseId, courseTitle, courseLocation, courseAppointmentDate, courseAppointmentTimeFrom, courseAppointmentTimeTo, roomDescription } = course
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const courseFromDate = courseAppointmentTimeFrom.split(':').map(Number)
+    const courseFromDateTime = new Date(courseAppointmentDate).setHours(courseFromDate[0], courseFromDate[1])
+    const courseToDate = courseAppointmentTimeTo.split(':').map(Number)
+    const courseToDateTime = new Date(courseAppointmentDate).setHours(courseToDate[0], courseToDate[1])
+    const summary = `${courseTitle} (${courseType}_${courseId})`
+    const description = `Raum: ${roomDescription}`
+    const uid = `${courseTitle}_${courseAppointmentDate}_${courseFromDateTime}_${courseToDateTime}`
     const icsBody = 'BEGIN:VCALENDAR\n' +
-      'VERSION:2.0\n' +
       'PRODID:-//Migros Klubschule//CustomerPortal//EN\n' +
+      'VERSION:2.0\n' +
       'METHOD:PUBLISH\n' +
+      'CALSCALE:GREGORIAN\n' +
       'BEGIN:VTIMEZONE\n' +
       'TZID:' + timezone + '\n' +
       'END:VTIMEZONE\n' +
       'BEGIN:VEVENT\n' +
-      'SUMMARY:' + event.courseTitle + '(' + event.courseType + '_' + event.courseId + ')' + '\n' +
-      'UID:@Default\n' +
+      'SUMMARY:' + summary + '\n' +
+      'UID:' + uid + '\n' +
       'SEQUENCE:0\n' +
       'STATUS:CONFIRMED\n' +
       'TRANSP:TRANSPARENT\n' +
-      'DTSTART;TZID=' + timezone + ':' + event.courseAppointmentTimeFrom + '\n' +
-      'DTEND;TZID=' + timezone + ':' + event.courseAppointmentTimeTo + '\n' +
-      'DTSTAMP:' + event.courseAppointmentDate + '\n' +
-      'LOCATION:' + event.courseLocation + '\n' +
-      'DESCRIPTION:' + 'Raum:' + event.roomDescription + '\n' +
+      'DTSTART;TZID=' + timezone + ':' + this.convertToICSDate(courseFromDateTime) + '\n' +
+      'DTEND;TZID=' + timezone + ':' + this.convertToICSDate(courseToDateTime) + '\n' +
+      'LOCATION:' + courseLocation + '\n' +
+      'DESCRIPTION:' + description + '\n' +
       'END:VEVENT\n' +
       'END:VCALENDAR\n'
-
-    const blob = new Blob([icsBody], { type: 'text/calendar' })
-    const url = URL.createObjectURL(blob)
-    return url
+    return this.icsDownload(summary + '.ics', icsBody)
   }
 
   formatCourseAppointmentDate (dateString) {
