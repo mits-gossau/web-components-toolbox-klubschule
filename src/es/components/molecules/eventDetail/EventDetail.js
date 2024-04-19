@@ -231,6 +231,7 @@ export default class EventDetail extends Shadow() {
     * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
   renderHTML() {
+    if (!this.data) console.error('Data json attribute is missing or corrupted!', this)
     this.html = /* HTML */ `
       <div class="details-left">
         <div>
@@ -248,7 +249,7 @@ export default class EventDetail extends Shadow() {
           </table>
           ${this.data.kurs_zusatzinfo ? /* html */ `<p>${this.data.kurs_zusatzinfo}</p>` : ''}          
         </div>
-        ${this.data.location_label && this.data.durchfuehrungaddresse ? /* html */ `
+        ${this.data.location_label && this.data.durchfuehrungaddresse?.beschreibung ? /* html */ `
           <div class="address">
             <h3>
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1em"></a-icon-mdx>
@@ -292,7 +293,7 @@ export default class EventDetail extends Shadow() {
         </div>
       </div>
       <div class="details-right">
-        <div>
+        ${this.data.preisinfos?.length ? /* html */ `<div>
           <h3>
             <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Wallet" size="1em"></a-icon-mdx>
             <span>${this.data.preis_info_label}</span>
@@ -318,8 +319,8 @@ export default class EventDetail extends Shadow() {
                 </ks-m-system-notification>
               </div>
           ` : ''}   
-        </div>
-        ${this.data.termine && this.data.termin_label ? /* html */ `
+        </div>` : ''}
+        ${this.data.termine?.length && this.data.termin_label ? /* html */ `
           <div>
             <h3>
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Calendar" size="1em"></a-icon-mdx>
@@ -327,46 +328,46 @@ export default class EventDetail extends Shadow() {
             </h3>
             <table>
               <tr>
-                <th>Wochentag</th>
-                <th>Termin</th>
-                <th>Zeit</th>
+                <th>${this.data.wochentag_label}</th>
+                <th>${this.data.date_label}</th>
+                <th>${this.data.uhrzeit_label}</th>
               </tr>
-              ${this.data.termine.reduce((acc, termin) => acc + /* html */ `
+              ${this.data.termine.reduce((acc, termin, index) => acc + (index < 5 ? /* html */ `
                 <tr>
                   <td>${termin.wochentaglabel}</td>                
                   <td>${termin.termin}</td>                
                   <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
                 </tr>
-              `, '')}              
+              ` : ''), '')}              
             </table>
-            ${this.data.termine_alle_label ? /* html */ `
+            ${this.data.termin_alle_label ? /* html */ `
               <button class="link-more">
-                <span>${this.data.termine_alle_label}</span>
+                <span>${this.data.termin_alle_label}</span>
                 <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em"></a-icon-mdx>
               </button>
             ` : ''}
           </div>
         ` : ''}
-        ${this.data.abo_typen_label && (this.data.abo_typen || this.data.abo_typen_link) ? /* html */ `
+        ${this.data.abo_typen_label && (this.data.abo_typen?.length || this.data.abo_typen_link) ? /* html */ `
           <div>
             <h3>
               <div class="with-border">
-                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-url="../../../../../../../img/icons/event-abo-plus.svg" size="1em"></a-icon-mdx>
+                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="AboPlus" size="1em"></a-icon-mdx>
               </div>
               <span>${this.data.abo_typen_label}</span>
             </h3>
-            ${this.data.abo_typen?.length ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
+            ${this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
               <div>
-                <ks-m-system-notification namespace="system-notification-default-" icon-url="${aboType.typ === "H" ? "../../../../../../../img/icons/event-abo-plus.svg" : "../../../../../../../img/icons/event-abo.svg"}" with-icon-background>
+                <ks-m-system-notification namespace="system-notification-default-" icon-name="${aboType.typ === "H" ? "AboPlus" : "Abo"}" with-icon-background>
                     <div slot="description">
                         <p>${aboType.text}</p>
                         <a-link namespace="underline-">
-                            <a href="${aboType.link}">${aboType.link}</a>
+                            <a href="${aboType.link}">${aboType.link_label}</a>
                         </a-link>
                     </div>
                 </ks-m-system-notification>
               </div>
-            `, '') : ''}
+            `, '')}
             ${this.data.abo_typen_link && this.data.abo_typen_link_label ? /* html */ `
               <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="dialog-open" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
                 <!-- overlayer -->

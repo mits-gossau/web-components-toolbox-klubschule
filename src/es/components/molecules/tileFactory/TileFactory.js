@@ -121,20 +121,21 @@ export default class TileFactory extends Shadow() {
         (acc, course) => {
           const tile = this.isEventSearch ? /* html */ `
             <ks-m-event
-              data='${this.fillGeneralTileInfoEvents(course)}'
+              data='${JSON.stringify(course)}'
             ></ks-m-event>
           ` : (
+            // course.locations in the future
             course.children?.length
               ? /* html */`
                 <ks-o-tile-list data='{
-                  ${this.fillGeneralTileInfo(course)},
+                  ${JSON.stringify(course)},
                   "buttonMore": {
                     "text": "Weitere Standorte",
                     "iconName": "ArrowDownRight"
                   },
                   "tiles": [${course.children.reduce((acc, child, i, arr) => acc + `
                     {
-                      ${this.fillGeneralTileInfo(child)}
+                      ${JSON.stringify(child)}
                     }${i === arr.length - 1 ? "" : ","}
                   `, '')}
                   ]
@@ -160,7 +161,7 @@ export default class TileFactory extends Shadow() {
 
   fillGeneralTileInfo(course) {
     return `
-      "title": "${course.title}",
+      "title": "${course.bezeichnung}",
       "iconTooltip": "Das ist ein sinnvoller Tooltip-Text",
       "location": {
         "iconName": "Location",
@@ -195,35 +196,25 @@ export default class TileFactory extends Shadow() {
       "language": "${event.parentkey.split("_")[0]}",
       "typ": "${event.typ}",
       "location": "${event.location.name}",
-      "gueltig_ab": "${event.dateBegin}",
-      "gueltig_bis": "${event.dateEnd}",
-      "days": "${event.days}",
+      "datum_label": "${event.datum_label}",
+      "days_label": "${event.days_label}",
+      "download_label": "${event.download_label}",
+      "wochentag_label": "${event.wochentag_label}",
+      "termin_label": "${event.termin_label}",
+      "termin_alle_label": "${event.termin_alle_label}",
+      "zeit_label": "${event.zeit_label}",
+      "uhrzeit_label": "${event.uhrzeit_label}",
+      "days": [${event.days}],
+      "start_zeit": "${event.start_zeit}",
+      "ende_zeit": "${event.ende_zeit}",
+      "ist_zeit_unregelmaessig": ${event.ist_zeit_unregelmaessig},
       "detail_label_more": "${event.detail_label_more}",
       "detail_label_less": "${event.detail_label_less}",
-      "status": "${event.state}",
+      "status": "${event.status}",
       "status_label": "${event.status_label}",
       "lektionen_label": "${event.lektionen_label}",
-      "price": {
-        "from": "${event.price.pre || ''}",
-        "amount": "${event.price.amount}",
-        "per": "${event.price.per || ''}",
-        "price": "${event.price.price}"
-      },
-      ${event.kanton ? `
-          "kanton": {
-            "text": "${event.kanton.name}",
-            "title": "${event.kanton.title}"
-          },
-        `
-        : ``
-      }
-      ${event.bewilligungspflichtig ? `
-          "bewilligungspflichtig": {
-            "text": "${event.bewilligungspflichtig.name}",
-            "title": "${event.bewilligungspflichtig.title}"
-          },
-        ` : ``
-      }
+      "price": ${JSON.stringify(event.price)},
+      "icons": ${JSON.stringify(event.icons)},
       "buttons": ${JSON.stringify(event.buttons) || "[]"},
       ${aboTypesAsJson ? aboTypesAsJson : ``}
       "deletable": ${event.deletable || "false"}

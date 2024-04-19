@@ -1,6 +1,7 @@
-<h1 id="primary">Link List</h1>
+
+<!-- section is for demo purposes only, actual html to implement starts with <ks-m-link-list> --><h1 id="primary">Link List</h1>
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Default</h2>
+    <h2>Default [namespace="link-list-default-"]</h2>
     <div>
         <ks-m-link-list namespace="link-list-default-">
             <ul>
@@ -27,8 +28,106 @@
     </div>
 </section>
 
+<!-- section is for demo purposes only, actual html to implement starts with <ks-m-link-list> -->
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Extended</h2>
+    <h2>Default with description and chevron</h2>
+    <div>
+        <ks-m-link-list namespace="link-list-default-">
+            <ul>
+                <li>
+                    <a href="#">
+                        <div>
+                            <span>Label</span>
+                            <span>description</span>
+                        </div>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <span>Label</span>
+                            <span>description</span>
+                        </div>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <span>Label</span>
+                            <span>description</span>
+                        </div>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+            </ul>
+        </ks-m-link-list>
+    </div>
+</section>
+
+<!-- section is for demo purposes only, actual html to implement starts with <ks-m-link-list> -->
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Default without border [no-border]</h2>
+    <div>
+        <ks-m-link-list namespace="link-list-default-" no-border>
+            <ul>
+                <li>
+                    <a href="#">
+                        <div>
+                            <span>Label</span>
+                            <span>description</span>
+                        </div>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <span>Label</span>
+                            <span>description</span>
+                        </div>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <span>Label</span>
+                            <span>description</span>
+                        </div>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+            </ul>
+        </ks-m-link-list>
+    </div>
+</section>
+
+<!-- section is for demo purposes only, actual html to implement starts with <ks-m-link-list> -->
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Default with one element and border-bottom [no-border-top]</h2>
+    <div>
+        <ks-m-link-list namespace="link-list-default-" no-border-top>
+            <ul>
+                <li>
+                    <a href="#">
+                        <div>
+                            <span>Label</span>
+                            <span>description</span>
+                        </div>
+                        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>                        
+                    </a>
+                </li>
+            </ul>
+        </ks-m-link-list>
+    </div>
+</section>
+
+
+<!-- section is for demo purposes only, actual html to implement starts with <ks-m-link-list> -->
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Extended [namespace="link-list-download-"]</h2>
     <div>
         <ks-m-link-list namespace="link-list-download-">
             <ul>
@@ -36,7 +135,7 @@
                     <a href="#">
                         <span>Label</span>
                         <div>
-                            <span>Description</span>
+                            <span>description</span>
                             <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
                         </div>
                     </a>
@@ -45,7 +144,7 @@
                     <a href="#">
                         <span>Label</span>
                         <div>
-                            <span>Description</span>
+                            <span>description</span>
                             <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
                         </div>
                     </a>
@@ -54,7 +153,7 @@
                     <a href="#">
                         <span>Label</span>
                         <div>
-                            <span>Description</span>
+                            <span>description</span>
                             <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
                         </div>
                     </a>

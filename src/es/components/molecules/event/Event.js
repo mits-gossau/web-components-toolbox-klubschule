@@ -452,9 +452,9 @@ export default class Event extends Shadow() {
       <div class="event">
         <div class="head">
           <div class="dates">
-            <span class="date">${this.data.gueltig_ab} - ${this.data.gueltig_bis}</span>
+            <span class="date">${this.data.datum_label}</span>
             <div class="time">
-              <span class="days">${this.data.days}</span>
+              <span class="days">${this.data.timelabel}</span>
               ${this.data.badge ? /* html */ `<div class="badge">${this.data.badge}</div>` : ''}
             </div>
           </div>
@@ -469,9 +469,9 @@ export default class Event extends Shadow() {
               <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/event-list.svg" size="1.5em"></a-icon-mdx>
               <span>${this.data.lektionen_label}</span>
             </li>` : ''}
-            ${this.data.location ? /* html */ `<li>
+            ${this.data.location?.name ? /* html */ `<li>
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
-              <span>${this.data.location}</span>
+              <span>${this.data.location.name}</span>
             </li>` : ''}
             <li>
               <button class="link-more expand">
@@ -491,19 +491,12 @@ export default class Event extends Shadow() {
           </div>
           <div class="controls-right">
             <div class="icons">
-              ${this.data.bewilligungspflichtig ? /* html */ `
-                <ks-m-badge type="primary" icon-name="Key" tooltip="${this.data.bewilligungspflichtig.text}"></ks-m-badge>
-              ` : ''}
-              ${this.data.abo_typen ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
-                <ks-m-badge type="primary" icon-url="${aboType.typ === "H" ? "../../../../../../../img/icons/event-abo-plus.svg" : "../../../../../../../img/icons/event-abo.svg"}" tooltip="${aboType.text}">
+              ${this.data.icons?.length ? this.data.icons.reduce((acc, icon) => acc + /* html */ `
+                <ks-m-badge type="primary" icon-name="${icon.iconName}" tooltip="${icon.text}">
                 </ks-m-badge>
               `, '') : ''}
-              ${this.data.kanton ? /* html */ `
-                <ks-m-badge type="primary" icon-name="Percent" tooltip="${this.data.kanton.text}">
-                </ks-m-badge>
-              ` : ''}
             </div>
-            <span class="price">${this.data.price?.from ? this.data.price?.from + ' ' : ''}<strong>${this.data.price?.amount || ''}</strong>${this.data.price?.per ? ' / ' + this.data.price?.per : ''}</span>
+            <span class="price">${this.data.price?.pre ? this.data.price?.pre + ' ' : ''}<strong>${this.data.price?.amount || ''}</strong>${this.data.price?.per ? ' / ' + this.data.price?.per : ''}</span>
           </div>
         </div>
       </div>
@@ -572,12 +565,14 @@ export default class Event extends Shadow() {
         composed: true
       }))).then((data) => {
         this.details.classList.remove('loading')
-        this.details.innerHTML = /* HTML */ `
+
+        this.details.innerHTML = this.hasAttribute('mock') ? /* html */`
           <ks-m-event-detail
-            data="${
-          // @ts-ignore
-          JSON.stringify(data).replaceAll('"', "'")
-          }"
+            data='${this.mockData}'
+          ></ks-m-event-detail>
+        ` : /* html */ `
+          <ks-m-event-detail
+            data='${JSON.stringify(data)}'
           ></ks-m-event-detail>
         `
         return this.fetchModules([
@@ -596,5 +591,164 @@ export default class Event extends Shadow() {
 
   get data () {
     return Event.parseAttribute(this.getAttribute('data'))
+  }
+
+  get mockData () {
+    return `{
+      "preis_info": "Ich bin die Preis Info",
+      "badge": "Blended",
+      "termine": [
+        {
+          "wochentag": 1,
+          "termin": "2024-03-04",
+          "start_zeit": "19:00",
+          "ende_zeit": "21:50",
+          "wochentaglabel": "Mo"
+        },
+        {
+          "wochentag": 1,
+          "termin": "2024-03-11",
+          "start_zeit": "19:00",
+          "ende_zeit": "21:50",
+          "wochentaglabel": "Mo"
+        },
+        {
+          "wochentag": 1,
+          "termin": "2024-03-18",
+          "start_zeit": "19:00",
+          "ende_zeit": "21:50",
+          "wochentaglabel": "Mo"
+        },
+        {
+          "wochentag": 1,
+          "termin": "2024-03-25",
+          "start_zeit": "19:00",
+          "ende_zeit": "21:50",
+          "wochentaglabel": "Mo"
+        },
+        {
+          "wochentag": 1,
+          "termin": "2024-04-08",
+          "start_zeit": "19:00",
+          "ende_zeit": "21:50",
+          "wochentaglabel": "Mo"
+        },
+        {
+          "wochentag": 1,
+          "termin": "2024-04-15",
+          "start_zeit": "19:00",
+          "ende_zeit": "21:50",
+          "wochentaglabel": "Mo"
+        },
+        {
+          "wochentag": 1,
+          "termin": "2024-04-22",
+          "start_zeit": "19:00",
+          "ende_zeit": "21:50",
+          "wochentaglabel": "Mo"
+        },
+        {
+          "wochentag": 1,
+          "termin": "2024-04-29",
+          "start_zeit": "19:00",
+          "ende_zeit": "21:50",
+          "wochentaglabel": "Mo"
+        },
+        {
+          "wochentag": 1,
+          "termin": "2024-05-06",
+          "start_zeit": "19:00",
+          "ende_zeit": "21:50",
+          "wochentaglabel": "Mo"
+        }
+      ],
+      "kurs_zusatzinfo": "Vitae proin tellus phasellus in duis eu libero sed cursus. In vehicula placerat sed duis luctus malesuada pellentesque eu sed. Augue in lorem consequat rhoncus lectus sed commodo. Orci pellentesque etiam dui faucibus euismod neque. Commodo quis fringilla purus eu.",
+      "durchfuehrungaddresse": {
+        "plz": "8132",
+        "ort": "Zürich",
+        "strasse": "Teststraße 12",
+        "beschreibung": "Beschreibung",
+        "gebaeude_id": null,
+        "link": "#"
+      },
+      "durchfuehrung_sprache": 0,
+      "kursdetail_label": "Kursdetails",
+      "location_label": "Durchführungsort",
+      "termin_label": "Termine",
+      "preis_info_label": "Preisinfos",
+      "download_label": "Downloads",
+      "wochentag_label": "Wochentag",
+      "uhrzeit_label": "Zeit",
+      "termin_alle_label": "Alle Termine anzeigen",
+      "kantonsbeitrag_label": "Teilnehmende profitieren von einer Vergünstigung (siehe Zusatzinfos). Preis je nach Höhe der Subvention ab CHF 22’900.00.",
+      "kantonsbeitrag_link": "#",
+      "kantonsbeitrag_link_label": "Kantonsbeitrag Link Label",
+      "preisinfos": [
+        {
+          "id": 1,
+          "label": "Kursgeld",
+          "text": "1980.00 CHF",
+          "tooltip_titel": "",
+          "tooltip_text": ""
+        },
+        {
+          "id": 2,
+          "label": "Lehrmittel",
+          "text": "lontano 60.80 CH",
+          "tooltip_titel": "Lehrmittelauswahl",
+          "tooltip_text": "Mit der Anmeldung wählen Sie Ihr gewünschtes Lehrmittel (Buch, E-Book, Bundle) aus."
+        },
+        {
+          "id": 4,
+          "label": "Total (inkl. allfälliger MwSt.)",
+          "text": "1980.00 CHF",
+          "tooltip_titel": "",
+          "tooltip_text": ""
+        }
+      ],
+      "downloads": [
+        {
+          "label": "Angebotsdetails",
+          "link_label": "PDF",
+          "link": "/Umbraco/Api/CourseApi/pdf?lang=&typ=&id=0&center_id=0"
+        },
+        {
+          "label": "Zweiter Link",
+          "link_label": "Word",
+          "link": "/Umbraco/Api/CourseApi/pdf?lang=&typ=&id=0&center_id=0"
+        }
+      ],
+      "kursdetails": [
+        {
+          "label": "Kurs/Lehrgang",
+          "text": "Kurs1"
+        },
+        {
+          "label": "Kurs Nr",
+          "text": "123123123"
+        },
+        {
+          "label": "Kurssprache",
+          "text": "Deutsch"
+        },
+        {
+          "label": "max. Teilnehmer",
+          "text": "12"
+        },
+        {
+          "label": "Dauer",
+          "text": "12 Tage"
+        }
+      ],
+      "abo_typen_label": "Abo Typen Label",
+      "abo_typen": [
+        {
+          "text": "Sport Abo Premium: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse, deserunt dolorem. Hic error atque in doloremque ex.",
+          "link": "#",
+          "link_label": "Link Label"
+        }
+      ]
+    }
+    `
   }
 }

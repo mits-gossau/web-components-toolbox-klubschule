@@ -5,4 +5,6 @@
     --link-list-default-width: 100%;
     --link-list-default-margin-right: 0;
     --link-list-default-border-color: var(--m-gray-600);
+    --link-list-default-color-hover: var(--color-hover, var(--color));
+    --link-list-default-font-size: var(--p-font-size);
 }
