@@ -1,0 +1,337 @@
+/**
+  * Variables naming rule: --{selector aka component aka namespace}-{css property}-{pseudo class or media query name} eg. --p-background-color-hover 
+  * NOTE: Within the component don't use any name spacing eg. component header don't use --header-default-color just use --color the namespace can be added by the Shadow as an html attribute
+  * - if a component holds other components or nodes you can declare or remap classes eg. :host > h1 {--color: var(--h1-color, white);}
+  * - if a component holds other components you should share the attribute namespace with its children
+  */
+
+/* src/css/web-components-toolbox-migros-design-experience/src/css/variablesCustom.css */
+/** 
+ * mdx base files
+ */
+@import "./web-components-toolbox-migros-design-experience/src/css/base.css";
+
+/** 
+* only import one mdx theme at a time for mapping it at sys.css and comp.css
+* replace .klubschule--light with :root
+*/
+@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/03_component/brands/migros/light-rem.css";
+@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/03_component/brands/pro/light-rem.css";
+@import "./web-components-toolbox-migros-design-experience/node_modules/@migros/mdx-design-tokens/dist/css/02_system/brands/pro/light-rem.css";
+
+@import "./web-components-toolbox-migros-design-experience/src/css/comp.css";
+@import "./web-components-toolbox-migros-design-experience/src/css/sys.css";
+
+/* For some edge cases design tokens from figma need to be fixed/overwritten */
+/* In the long term, this should be fixed with Figma & Tokens Studio in the main MDX Repo */
+@import "./temporaryMDXTokenFixes.css";
+
+/* font tracking */
+/*@import url("https://cdn.fonts.net/t/1.css?apiType=css&projectid=b2e5ea60-e0d9-11ec-b713-06e2001461d0");*/
+@font-face{
+	font-family:"Calluna";
+  src:url("https://cdn.migros.ch/ch.migros/static/fonts/Calluna/CallunaBold.woff2") format("woff2"),url("https://cdn.migros.ch/ch.migros/static/fonts/Calluna/CallunaBold.woff") format("woff");
+  font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face{
+	font-family:"Corporate S";
+  src:url("https://cdn.migros.ch/ch.migros/static/fonts/CorporateS/CorporateSRegular.woff2") format("woff2"),url("https://cdn.migros.ch/ch.migros/static/fonts/CorporateS/CorporateSRegular.woff") format("woff");
+  font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face{
+	font-family:"Corporate S";
+  src:url("https://cdn.migros.ch/ch.migros/static/fonts/CorporateS/CorporateSBold.woff2") format("woff2"),url("https://cdn.migros.ch/ch.migros/static/fonts/CorporateS/CorporateSBold.woff") format("woff");
+  font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face{
+	font-family:"Corporate S";
+  src:url("https://cdn.migros.ch/ch.migros/static/fonts/CorporateS/CorporateSExtraBold.woff2") format("woff2"),url("https://cdn.migros.ch/ch.migros/static/fonts/CorporateS/CorporateSExtraBold.woff") format("woff");
+  font-weight: 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+:root {
+  --a-emotion-pictures-margin-top-first-child: auto;
+  --color:#262626;
+  --scrollbar-gutter-desktop: stable;
+  --scrollbar-gutter-mobile: auto;
+  --any-content-spacing-mobile: var(--any-content-spacing);
+  --any-content-spacing: var(--mdx-sys-spacing-flex-2xs);
+  --any-content-width: calc(min(100%, var(--body-max-width)) - var(--mdx-sys-spacing-flex-large-xs) * 2);
+  --a-wrapper-margin: 0;
+  --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-quinary-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-quinary-hover: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-quinary: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-secondary-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-secondary-hover: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-secondary: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-senary-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-senary-hover: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-senary: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-septenary-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-septenary-hover: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-septenary: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-tertiary-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-tertiary-hover: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-tertiary: var(--mdx-sys-color-brand-neutral-0);
+  --body-max-width: 1920px;
+  --body-margin: 0 auto;
+  --button-quaternary-background-color-quaternary-active: var(--mdx-sys-color-brand-accent-1-100);
+  --button-quaternary-background-color-quaternary-disabled: var(--mdx-sys-color-brand-accent-1-100);
+  --button-quaternary-background-color-quaternary-hover: var(--mdx-sys-color-brand-accent-1-100);
+  --button-quaternary-background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);
+  --button-quaternary-background-color-quinary-active: var(--mdx-sys-color-brand-accent-2-100);
+  --button-quaternary-background-color-quinary-disabled: var(--mdx-sys-color-brand-accent-2-100);
+  --button-quaternary-background-color-quinary-hover: var(--mdx-sys-color-brand-accent-2-100);
+  --button-quaternary-background-color-quinary: var(--mdx-sys-color-brand-neutral-0);
+  --button-quaternary-background-color-secondary-active: var(--mdx-sys-color-brand-primary-100);
+  --button-quaternary-background-color-secondary-disabled: var(--mdx-sys-color-brand-primary-100);
+  --button-quaternary-background-color-secondary-hover: var(--mdx-sys-color-brand-primary-100);
+  --button-quaternary-background-color-secondary: var(--mdx-sys-color-brand-neutral-0);
+  --button-quaternary-background-color-senary-active: var(--mdx-sys-color-brand-accent-3-100);
+  --button-quaternary-background-color-senary-disabled: var(--mdx-sys-color-brand-accent-3-100);
+  --button-quaternary-background-color-senary-hover: var(--mdx-sys-color-brand-accent-3-100);
+  --button-quaternary-background-color-senary: var(--mdx-sys-color-brand-neutral-0);
+  --button-quaternary-background-color-septenary-active: var(--mdx-sys-color-brand-accent-4-100);
+  --button-quaternary-background-color-septenary-disabled: var(--mdx-sys-color-brand-accent-4-100);
+  --button-quaternary-background-color-septenary-hover: var(--mdx-sys-color-brand-accent-4-100);
+  --button-quaternary-background-color-septenary: var(--mdx-sys-color-brand-neutral-0);
+  --button-quaternary-background-color-tertiary-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-tertiary-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-tertiary-hover: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-tertiary: var(--mdx-sys-color-brand-neutral-0);
+  --color-active: var(--color-hover);
+  --color-disabled: var(--mdx-sys-color-brand-neutral-300);
+  --color-quaternary-active: var(--color-quaternary-hover);
+  --color-quaternary-disabled: var(--color-disabled);
+  --color-quaternary-hover: var(--mdx-sys-color-brand-accent-1-700);
+  --color-quaternary: var(--mdx-sys-color-brand-accent-1-600);
+  --color-quinary-active: var(--color-quinary-hover);
+  --color-quinary-disabled: var(--color-disabled);
+  --color-quinary-hover: var(--mdx-sys-color-brand-accent-2-700);
+  --color-quinary: var(--mdx-sys-color-brand-accent-2-600);
+  --color-secondary-active: var(--color-secondary-hover);
+  --color-secondary-disabled: var(--color-disabled);
+  --color-secondary-hover: var(--color-hover);
+  --color-senary-active: var(--color-senary-hover);
+  --color-senary-disabled: var(--color-disabled);
+  --color-senary-hover: var(--mdx-sys-color-brand-accent-3-700);
+  --color-senary: var(--mdx-sys-color-brand-accent-3-600);
+  --color-septenary-active: var(--color-septenary-hover);
+  --color-septenary-disabled: var(--color-disabled);
+  --color-septenary-hover: var(--mdx-sys-color-brand-accent-4-700);
+  --color-septenary: var(--mdx-sys-color-brand-accent-4-600);
+  --color-tertiary-active: var(--color-tertiary-hover);
+  --color-tertiary-disabled: var(--color-disabled);
+  --color-tertiary-hover: var(--mdx-sys-color-brand-neutral-600);
+  --color-tertiary: var(--mdx-sys-color-brand-neutral-950);
+  --emotion-pictures-default-img-max-height: 50vh;
+  --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
+  --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
+  --emotion-pictures-with-title-img-max-height: var(--emotion-pictures-default-img-max-height);
+  --font-family-bold: "Graphik", Helvetica, Arial, sans-serif;
+  --font-family-secondary: "Graphik", Helvetica, Arial, sans-serif;
+  --font-family: "Graphik", Helvetica, Arial, sans-serif;
+  --font-size-mobile: min(16px, 4.3vw); /* base rem size for mobile and desktop need to be 16px */
+  --font-size: 16px;
+  --grid-1column-align-center-padding-custom: 4rem 1.5rem;
+  --grid-1column-align-center-padding-mobile-custom: 3rem 0;
+  --grid-2columns-content-section-first-column-padding-custom: 
+        var(--mdx-sys-spacing-flex-m) 
+        calc((100% * 1.5 - var(--body-section-default-width) * 1.5) / 2) /* Calculating the padding so it matches the auto margin of body section default width */
+        var(--mdx-sys-spacing-flex-l);
+  --grid-2columns-content-section-padding-custom: var(--mdx-sys-spacing-flex-m) 1.5rem var(--mdx-sys-spacing-flex-l);
+  --grid-2columns-content-section-padding-mobile-custom: var(--mdx-sys-spacing-flex-m) 1rem;
+  --grid-2columns-content-section-second-column-padding-mobile-custom: var(--mdx-sys-spacing-flex-m) 1rem;
+  --grid-2columns2rows-justify-content-custom: space-evenly;
+  --grid-432-auto-colums-auto-rows-grid-gap-custom: 1rem 0.5rem;
+  --header-nav-right-a-logo-top-custom: calc(60.5px / 2 - 60px / 2);
+  --header-nav-right-a-logo-top-mobile-custom: -0.5em;
+  --header-nav-right-a-menu-icon-background-color-custom: var(--color);
+  --header-nav-right-background-color-custom: white;
+  --header-nav-right-content-width: var(--any-content-width);
+  --header-nav-right-logo-width-custom: calc(100rem/18);
+  --header-nav-right-height-mobile-custom: 3.75rem;
+  --logo-default-height-mobile-custom: var(--header-nav-right-height-mobile-custom);
+  --logo-default-width-mobile-custom: var(--logo-default-height-mobile-custom);
+  --header-nav-right-height-custom: calc(100rem/18);
+  --header-nav-right-margin-custom: 0 0 1rem 0;
+  --header-nav-right-padding: 0;
+  --hr-border-width: 0 0 2px;
+  --hr-secondary-opacity: 1;
+  --label-letter-spacing: 0;
+  --menu-color-custom: white;
+  --login-width: var(--header-default-content-width);
+  --search-input-background-color-focus: var(--m-white);
+  --search-input-background-color-hover: var(--m-white);
+  --search-input-background-color: var(--m-white);
+  --search-input-border-color-focus: var(--mdx-base-color-grey-975);
+  --search-input-border-color-hover: var(--mdx-base-color-grey-975);
+  --search-input-border-color-custom: var(--m-gray-700);
+  --search-input-color: var(--mdx-base-color-grey-975);
+  --search-input-padding: 0.5em 1em;
+  --search-input-placeholder-color: var(--m-gray-700);
+  --search-input-width-big: 100%;
+  --search-justify-content-custom: flex-end;
+  --search-label-font-size: var(--font-size);
+  --search-label-line-height: calc(4/3);
+  --tag-filter-horizontal-gap: 0.5em;
+  --title-border-display: none;
+  --icon-color-blue: var(--mdx-sys-color-primary-default);
+  --content-width: 80%;
+  --body-no-scroll-overflow: visible;
+
+  --search-input-tiles-search-input-border-color: var(--m-gray-700);
+  --search-input-tiles-search-input-padding: 0.875em 1.5em;
+  --search-input-tiles-search-input-border-radius: 2em;
+  --search-input-tiles-input-color: var(--m-gray-600);
+  --search-input-tiles-input-font-size: 1.125em;
+  --search-input-tiles-icon-color: var(--icon-color-blue);
+
+  --button-secondary-filter-color: var(--mdx-sys-color-primary-default);
+  --button-secondary-filter-background-color-hover: transparent;
+  --button-secondary-filter-padding: 0;
+
+  --button-primary-width: 100%;
+  --button-primary-icon-right-margin: 0;
+  --button-primary-label-margin: 0 0.25em 0 0;
+  --footer-default-footer-width: 100%;
+  --footer-default-footer-margin: 0 auto;
+  --footer-default-footer-width-mobile: 100%;
+  --footer-default-footer-margin-mobile: 0;
+  
+  --h-hyphens: auto;
+
+  /* body section */
+  --body-section-default-width: 86.666%;
+  --body-section-narrow-width: 57.222%;
+
+  /* spacers */
+  --spacer-margin: 0;
+
+  /* list styles */
+  --ol-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
+  --ul-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
+  --ul-padding-left: 1.33333em;
+  --ul-li-padding-left: calc(4rem/18);
+
+  /* paragraph */
+  --p-font-family: var(--mdx-sys-font-flex-body3-font-family);
+  --p-font-size: var(--mdx-sys-font-flex-body3-font-size);
+  --p-line-height: var(--mdx-sys-font-flex-body3-line-height);
+  --p-font-weight: var(--mdx-sys-font-flex-body3-font-weight);
+  --p-margin: 0 auto var(--mdx-sys-spacing-flex-s);
+
+  /* links */
+  --a-color: var(--mdx-comp-link-color-default);
+  --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
+  --a-font-size: 1em;
+  --a-text-decoration: none;
+  --a-color-hover: var(--mdx-comp-link-color-hover);
+  --a-text-decoration-hover: none;
+
+  /* hr */
+  --hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-bold1);
+  --hr-opacity: 1;
+  --hr-border-width: 1px;
+  --hr-margin: var(--mdx-sys-spacing-flex-s) auto;
+
+  --hr-secondary-border-bottom: 1px solid var(--mdx-sys-color-neutral-subtle4);
+  --hr-secondary-border-width: 1px;
+  --hr-secondary-opacity: 1;
+  --hr-secondary-margin: var(--mdx-sys-spacing-flex-xs) auto;
+
+  /* Tables */
+  --table-th-font-weight: 500;
+  /* --table-thead-display: table; This should not be necessary */
+  --table-border-collapse: collapse;
+  --table-border-spacing: 0;
+  --table-max-width: 100%;
+  --table-word-break: normal;
+  --table-margin: 0;
+  --table-text-align: left;
+  --table-width: 100%;
+  --table-border: 0;
+  --table-vertical-align: top;
+  --table-padding: var(--mdx-sys-spacing-fix-s);
+  --table-padding-right: 1em;
+  --table-white-space: normal;
+  --table-thead-tr-background-color: var(--mdx-base-color-klubschule-creme-600);
+  --table-odd-background-color: var(--mdx-base-color-grey-0);
+  --table-even-background-color: var(--mdx-base-color-klubschule-creme-400);
+  --table-padding-right-last-child: var(--table-padding);
+
+  --icon-link-list-color: #0053A6;
+  --icon-link-list-color-hover: #0053A6;
+
+  --box-shadow-color: rgba(51, 51, 51, 0.1);
+
+  --icon-mdx-ks-tile-color: var(--mdx-base-color-klubschule-blue-600);
+  --icon-mdx-ks-badge-color: var(--mdx-base-color-grey-0);
+  --icon-link-list-color: var(--mdx-sys-color-primary-default);
+  --icon-link-list-color-hover: var(--mdx-sys-color-primary-default);
+
+  --details-default-icon-right-border-top-custom: none;
+  --details-default-icon-right-border-bottom: 0.0625em solid var(--mdx-base-color-grey-700);
+  --details-default-icon-right-border-bottom-last-custom: 0.0625em solid var(--mdx-base-color-grey-700);
+  --details-default-icon-right-border-color-custom: var(--mdx-base-color-grey-700);
+  --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
+  --details-default-icon-right-h4-font-size: 1em;
+  --details-default-icon-right-h4-line-height: 1.125em;
+  --details-default-icon-right-text-align: start;
+
+  /* content stage */
+  --grid-2columns-content-stage-stage-content-margin-custom: 3rem 6rem 2rem 1.5rem; 
+  --grid-2columns-content-stage-stage-content-margin-mobile-custom: 1rem 1rem 3rem 1rem; 
+  --grid-2columns-content-stage-text-color-custom: var(--mdx-base-color-grey-975);
+  --grid-2columns-content-stage-a-color: white;
+  --grid-2columns-content-stage-address-font-custom: var(--mdx-sys-font-flex-large-body3);
+  --grid-2columns-content-stage-address-gap-custom: 0.5em;
+  --grid-2columns-content-stage-aside-image-padding-custom: var(--mdx-sys-spacing-flex-large-xs);
+  --grid-2columns-content-stage-label-border-custom: 1px solid white;
+  --grid-2columns-content-stage-label-border-radius-custom: 0.1875em;
+  --grid-2columns-content-stage-label-font-custom: var(--mdx-sys-font-fix-body2);
+  --grid-2columns-content-stage-label-margin-left-custom: 0.25em;
+  --grid-2columns-content-stage-label-padding-custom: 0.25em 0.5em;
+  --grid-2columns-content-stage-paragraph-font-custom: var(--mdx-sys-font-flex-large-body2);
+  --grid-2columns-content-stage-topline-font-custom: var(--mdx-sys-font-fix-label1);
+
+  /* carousel */
+  --carousel-two-default-nav-margin-mobile-custom: var(--content-spacing-mobile) 0 0;
+  --carousel-two-default-nav-margin-custom: var(--content-spacing) 0 0;
+  --carousel-two-default-nav-opacity: 1;
+  --carousel-two-default-nav-transform-hover: none;
+  --carousel-two-default-p-margin: auto;
+  --carousel-two-3-column-width-custom: var(--body-section-default-width);
+  
+  /* brand shapes */
+  --ibaw-title-brand-shape: url("data:image/svg+xml,%3Csvg width='23' height='26' viewBox='0 0 23 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.71109 26L9.12688 0H13.5269L5.11108 26H0.71109Z' fill='%2300A2AD'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9.61163 26L18.0274 0H22.4274L14.0116 26H9.61163Z' fill='black'/%3E%3C/svg%3E%0A");
+
+  --icon-mdx-ks-event-tick-color: var(--mdx-base-color-grey-0);
+  --icon-mdx-ks-event-color: var(--mdx-base-color-grey-950);
+  --icon-mdx-ks-event-link-color: var(--mdx-base-color-klubschule-blue-600);
+}
+
+.class-name {
+  list-style-type: decimal;
+}
+
+
+@media screen and (min-width: 1441px) {
+  :root {
+    --body-section-default-width: 81.25%;
+  }
+}
