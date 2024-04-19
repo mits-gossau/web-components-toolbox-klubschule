@@ -460,11 +460,11 @@ export default class CourseDialog extends Shadow() {
    * Generates HTML content displaying details of a course appointment,
    * including date, time, location, instructor, status, and subscription information.
    * @param detail - `detail`
-   * @returns Returning an HTML template string.
+   * @returns {string} Returning an HTML template string.
    */
   courseDetailsContent (detail) {
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
-    if (!state) return
+    if (!state) return ''
     const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo)
     return /* html */ `
       <div class="detail"><span>Datum, Zeit</span><span>${detail.courseAppointmentDateFormatted}</span><span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span></div>
@@ -477,7 +477,7 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * Generates HTML code for a system notification with a specific message and icon.
-   * @returns Returning an HTML template string
+   * @returns {string} Returning an HTML template string
    */
   renderNotification () {
     return /* html */ `
@@ -491,7 +491,7 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * Generates HTML code for a list of downloadable items with links and icons.
-   * @returns Returning an HTML template string
+   * @returns {string} Returning an HTML template string
    */
   renderDownloads (courseData, courseDetail) {
     // @ts-ignore
@@ -516,6 +516,12 @@ export default class CourseDialog extends Shadow() {
     `
   }
 
+  /**
+   * Creates a download link for an .ics file with a specified filename and content.
+   * @param {string} filename - The name of the .ics file
+   * @param {string} fileBody - The content of the .ics file
+   * @returns {string} An link element with the specified filename and fileBody encoded as a data URL.
+   */
   icsDownload (filename, fileBody) {
     const link = document.createElement('a')
     link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileBody))
@@ -529,6 +535,12 @@ export default class CourseDialog extends Shadow() {
     return link.outerHTML
   }
 
+  /**
+   * Converts a given date and time to a string in the format YYYYMMDDTHHMM00
+   * the format required for an iCalendar event (ICS format).
+   * @param {Number} dt
+   * @returns {string} The formatted date string
+   */
   convertToICSDate (dt) {
     const dateTime = new Date(dt)
     const year = dateTime.getFullYear().toString()
@@ -542,7 +554,7 @@ export default class CourseDialog extends Shadow() {
   /**
    *
    * @param {*} course
-   * @returns
+   * @returns {string}
    */
   createDownloadICSFile (course) {
     const { courseType, courseId, courseTitle, courseLocation, courseAppointmentDate, courseAppointmentTimeFrom, courseAppointmentTimeTo, roomDescription } = course
