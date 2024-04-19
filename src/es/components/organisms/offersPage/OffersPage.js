@@ -12,7 +12,7 @@ export default class OffersPage extends Shadow() {
 
     this.setTotalListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
-        if (data.total > data.psize * (data.ppage - 1)) {
+        if (data.total > data.psize * data.ppage) {
           const bodySection = this.eventDetailURL ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
           bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
         }

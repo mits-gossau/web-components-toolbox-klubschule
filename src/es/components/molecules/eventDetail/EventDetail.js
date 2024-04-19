@@ -356,7 +356,7 @@ export default class EventDetail extends Shadow() {
               </div>
               <span>${this.data.abo_typen_label}</span>
             </h3>
-            ${this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
+            ${this.data.abo_typen?.length ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
               <div>
                 <ks-m-system-notification namespace="system-notification-default-" icon-name="${aboType.typ === "H" ? "AboPlus" : "Abo"}" with-icon-background>
                     <div slot="description">
@@ -367,7 +367,7 @@ export default class EventDetail extends Shadow() {
                     </div>
                 </ks-m-system-notification>
               </div>
-            `, '')}
+            `, '') : ''}
             ${this.data.abo_typen_link && this.data.abo_typen_link_label ? /* html */ `
               <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="dialog-open" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
                 <!-- overlayer -->
@@ -375,20 +375,615 @@ export default class EventDetail extends Shadow() {
                     <div id="back">
                         &nbsp;
                     </div>
-                    <h3>Test</h3>
+                    <h3>Passende Abonnements</h3>
                     <div id="close">
                         <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
                     </div>
                 </div>
                 <div class="container dialog-content">
-                   ks-c-abo-list
-                    ks-m-abo
-                    <div style="height: 1000px">
-                      Test
-                    </div>
-                    <div style="height: 1000px">
-                      Test
-                    </div>
+                    <ks-o-tile-list data="{
+                      'title': 'Abo-Titel Wert Abo CHF 100.-',
+                      'iconTooltip': '',
+                      'location': {
+                        'name': 'Basel, Luzern, Thun, Zürich-Oerlikon +3',
+                        'badge': 'Blended'
+                      },
+                      'buttons': [{
+                        'text': 'Ortsauswahl',
+                        'iconName': 'ChevronDown'
+                      }],
+                      'icons': [
+                        {
+                          'name': 'Percent',
+                          'iconTooltip': ''
+                        },
+                        {
+                          'name': 'Bell',
+                          'iconTooltip': ''
+                        }
+                      ],
+                      'price': {
+                        'from': 'ab',
+                        'amount': 'CHF 100.-',
+                        'per': 'Semester'
+                      },
+                      'buttonMore': {
+                        'text': 'Weitere Standorte',
+                        'iconName': 'ArrowDownRight'
+                      },
+                      'tiles': [
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'Price',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'Price',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'Price',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'Price',
+                            'per': 'Semester'
+                          }
+                        }
+                      ]
+                    }"></ks-o-tile-list>
+                    <ks-o-tile-list data="{
+                      'title': 'Title',
+                      'iconTooltip': '',
+                      'location': {
+                        'name': 'Basel, Luzern, Thun, Zürich-Oerlikon +3',
+                        'badge': 'Blended'
+                      },
+                      'buttons': [{
+                        'text': 'Ortsauswahl',
+                        'iconName': 'ChevronDown'
+                      }],
+                      'icons': [
+                        {
+                          'name': 'Percent',
+                          'iconTooltip': ''
+                        },
+                        {
+                          'name': 'Bell',
+                          'iconTooltip': ''
+                        }
+                      ],
+                      'price': {
+                        'from': 'ab',
+                        'amount': 'Price',
+                        'per': 'Semester'
+                      },
+                      'buttonMore': {
+                        'text': 'Weitere Standorte',
+                        'iconName': 'ArrowDownRight'
+                      },
+                      'tiles': [
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'Price',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'Price',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'Price',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        }
+                      ]
+                    }"></ks-o-tile-list>
+                    <ks-o-tile-list data="{
+                      'title': 'Title',
+                      'iconTooltip': '',
+                      'location': {
+                        'name': 'Basel, Luzern, Thun, Zürich-Oerlikon +3',
+                        'badge': 'Blended'
+                      },
+                      'buttons': [{
+                        'text': 'Ortsauswahl',
+                        'iconName': 'ChevronDown'
+                      }],
+                      'icons': [
+                        {
+                          'name': 'Percent',
+                          'iconTooltip': ''
+                        },
+                        {
+                          'name': 'Bell',
+                          'iconTooltip': ''
+                        }
+                      ],
+                      'price': {
+                        'from': 'ab',
+                        'amount': 'CHF 100.-',
+                        'per': 'Semester'
+                      },
+                      'buttonMore': {
+                        'text': 'Weitere Standorte',
+                        'iconName': 'ArrowDownRight'
+                      },
+                      'tiles': [
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                              {
+                                'name': 'Percent',
+                                'iconTooltip': ''
+                              },
+                              {
+                                'name': 'Bell',
+                                'iconTooltip': ''
+                              }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                              {
+                                'name': 'Percent',
+                                'iconTooltip': ''
+                              },
+                              {
+                                'name': 'Bell',
+                                'iconTooltip': ''
+                              }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                              'name': 'Percent',
+                              'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        },
+                        {
+                          'title': 'Title',
+                          'iconTooltip': '',
+                          'location': {
+                            'iconName': 'Location',
+                            'name': 'Ort, Straße 123',
+                            'badge': 'Blended'
+                          },
+                          'buttons': [{
+                            'text': 'Ortsauswahl',
+                            'iconName': 'ArrowRight'
+                          }],
+                          'icons': [
+                            {
+                                'name': 'Percent',
+                                'iconTooltip': ''
+                            },
+                            {
+                              'name': 'Bell',
+                              'iconTooltip': ''
+                            }
+                          ],
+                          'price': {
+                            'from': 'ab',
+                            'amount': 'CHF 100.-',
+                            'per': 'Semester'
+                          }
+                        }
+                      ]
+                    }"></ks-o-tile-list>
                 </div>
                 <div class="container dialog-footer">
                     <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
@@ -420,6 +1015,10 @@ export default class EventDetail extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/systemNotification/SystemNotification.js`,
         name: 'ks-m-system-notification'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/tileList/TileList.js`,
+        name: 'ks-o-tile-list'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
