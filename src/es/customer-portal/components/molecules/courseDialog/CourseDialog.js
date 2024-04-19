@@ -123,7 +123,7 @@ export default class CourseDialog extends Shadow() {
           margin-bottom: 4rem !important;
         }
         .downloads {
-          margin-bottom: 1em;
+          margin-bottom: 1.5em;
         }
       </style>
       <div id="content">
@@ -223,6 +223,9 @@ export default class CourseDialog extends Shadow() {
         .success {
           color: #00997F;
         }
+        h2.success {
+          color: #00997F !important;
+        }
         .downloads {
           margin: 4em 0 1.5em 0;
         }
@@ -265,9 +268,8 @@ export default class CourseDialog extends Shadow() {
         .details {
           display: flex;
           flex-direction:column;
-          gap: 1em;
-          margin-bottom: 4em;
-          padding-top: 2em;
+          gap: 1.5em;
+          margin: 2em 0;
         }
         .detail {
           display: flex;
@@ -277,10 +279,20 @@ export default class CourseDialog extends Shadow() {
           font-weight: 500;
           line-height: 110%;
         }
+        h2.alert{
+          color: #F4001B !important;
+          margin:0 !important;
+        }
+        .success {
+          color: var(--success-color, #00997F);
+        }
+        .alert {
+          color: var(--alert-color, #F4001B);
+        }
       </style>
       <div id="content">
         <div>
-          <ks-a-heading tag="h2" style-as="h3" color="#F4001B">Hiermit stornieren sie diesen Termin</ks-a-heading>
+          <h2 class="alert">Hiermit stornieren sie diesen Termin</h2>
         </div>
         <div class="details">
           ${this.courseDetailsContent(detail)}
