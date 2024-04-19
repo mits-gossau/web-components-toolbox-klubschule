@@ -98,6 +98,10 @@ export default class CourseDialog extends Shadow() {
       <style>
         .price-info {
           display: flex;
+          margin-bottom:1.5em;
+        }
+        .price {
+          margin: 0 !important;
         }
         .details {
           display: flex;
@@ -130,8 +134,8 @@ export default class CourseDialog extends Shadow() {
         <div>
           <p class="description">${detail.courseDescription}</p>
         </div>
+        ${this.renderPriceInfoContent(data, detail)}
         <div class="details">
-          ${this.renderPriceInfoContent(data, detail)}
           ${this.courseDetailsContent(detail)}
         </div>
         <div>
@@ -447,7 +451,7 @@ export default class CourseDialog extends Shadow() {
    */
   renderPriceInfoContent (courseData, courseDetail) {
     return subscriptionMode[courseDetail.subscriptionMode] === subscriptionMode.WERTABO
-      ? /* html */ `<div class="detail price-info"><span>${courseData.lessonPrice}</span><span> Termin wird über ihr Abonnement gebucht</span></div>`
+      ? /* html */ `<div class="detail price-info"><h3 class="price">${courseData.lessonPrice}</h3><span> Termin wird über ihr Abonnement gebucht</span></div>`
       : ''
   }
 
