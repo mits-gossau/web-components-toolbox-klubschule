@@ -42,10 +42,6 @@ export default class Appointments extends HTMLElement {
    * @param {CustomEventInit} event
    */
   requestSubscriptionCourseAppointmentsListener = async (event) => {
-    // TODO: When use dropdown send this data
-    // subscriptionId
-    // subscriptionType
-    // userId
     if (this.abortControllerSubscriptionCourseAppointments) this.abortControllerSubscriptionCourseAppointments.abort()
     this.abortControllerSubscriptionCourseAppointments = new AbortController()
     // @ts-ignore

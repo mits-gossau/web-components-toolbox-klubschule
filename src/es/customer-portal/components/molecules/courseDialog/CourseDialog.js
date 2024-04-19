@@ -136,7 +136,9 @@ export default class CourseDialog extends Shadow() {
         </div>
         <div>
           <h3>Downloads</h3>
-          <div class="downloads">${this.renderDownloads(data, detail)}</div>
+          <div class="downloads">
+            ${this.renderDownloads(data, detail)}
+          </div>
         </div>
       </div>
     `
@@ -423,7 +425,9 @@ export default class CourseDialog extends Shadow() {
               <p class="reset-link"></p>
               <div class="sub-content" >
                 <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
-                <div id="view-content">${this.renderDialogContentDetails(content)}</div>
+                <div id="view-content">
+                  ${this.renderDialogContentDetails(content)}
+                </div>
               </div>
             </div>
             <div class="container dialog-footer">
@@ -439,7 +443,7 @@ export default class CourseDialog extends Shadow() {
    * Returns HTML content based on the subscription mode of a course.
    * @param courseData - `courseData`
    * @param courseDetail - `courseDetail`
-   * @returns Returns an HTML string.
+   * @returns {string} Returns an HTML string.
    */
   renderPriceInfoContent (courseData, courseDetail) {
     return subscriptionMode[courseDetail.subscriptionMode] === subscriptionMode.WERTABO

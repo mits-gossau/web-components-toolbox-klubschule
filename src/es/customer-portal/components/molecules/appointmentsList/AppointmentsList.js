@@ -174,7 +174,8 @@ export default class AppointmentsList extends Shadow() {
       const option = document.createElement('option')
       const value = { subscriptionId: item.subscriptionId, subscriptionType: item.subscriptionType }
       option.value = JSON.stringify(value)
-      option.textContent = item.subscriptionDescription
+      option.text = item.subscriptionDescription
+      if (item.selected) option.setAttribute('selected', 'selected')
       select.appendChild(option)
     })
     const sortWrapper = document.createElement('div')
