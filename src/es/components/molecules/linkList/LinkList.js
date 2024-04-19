@@ -20,6 +20,10 @@ export default class LinkList extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
+        :host {
+          font-size: var(--font-size, 1em);
+        }
+
         :host ul {
             list-style: var(--list-style);
             margin: var(--margin);
@@ -35,8 +39,20 @@ export default class LinkList extends Shadow() {
             border-top: 0.0625em solid var(--border-color);
         }
 
-        :host li:last-child {
+        :host li a:hover span {
+          color: var(--color-hover);
+        }
+
+        :host li:last-child a {
             border-bottom: 0.0625em solid var(--border-color);
+        }
+
+        :host([no-border]) li a {
+          border: 0;
+        }
+
+        :host([no-border-top]) li a {
+          border-top: 0;
         }
 
         :host li:hover {
@@ -56,11 +72,19 @@ export default class LinkList extends Shadow() {
             flex: 1;
         }
 
-        :host li div span {
-            font-size: 0.875em;
+        :host li div:has(> a-icon-mdx) span, :host li div span + span {
+            font-size: 0.8888em;
             font-weight: 400;
             display: inline-block;
             margin-right: var(--margin-right);
+        }
+
+        :host li a > div:has(> span + span) {
+          flex-wrap: wrap;
+        }
+
+        :host li a > div:has(> span + span) > * {
+          flex-basis: 100%;
         }
     `
     return this.fetchTemplate()

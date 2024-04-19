@@ -95,8 +95,7 @@ export default class KsBodyStyle extends BodyStyle {
 
         /* custom element spacings */
         :host > ks-m-figure,
-        :host > ks-a-video,
-        :host > .margin-y-m {
+        :host > ks-a-video {
             margin-top: var(--mdx-sys-spacing-flex-m);
             margin-bottom: var(--mdx-sys-spacing-flex-m);
         }
@@ -112,6 +111,38 @@ export default class KsBodyStyle extends BodyStyle {
         :host([has-background]) > a.ks-o-body-section__last-child[namespace="teaser-fullwidth-"][wrapper],
         :host([has-background]) > a.ks-o-body-section__last-child[namespace="teaser-text-image-"][wrapper] {
             margin-bottom: 0;
+        }
+
+        /* Utilities */
+        :host > .margin-y-l {
+            margin-top: var(--mdx-sys-spacing-flex-l);
+            margin-bottom: var(--mdx-sys-spacing-flex-l);
+        }
+        :host > .margin-top-l {
+            margin-top: var(--mdx-sys-spacing-flex-l);
+        }
+        :host > .margin-bottom-l {
+            margin-bottom: var(--mdx-sys-spacing-flex-l);
+        }
+        :host > .margin-y-m {
+            margin-top: var(--mdx-sys-spacing-flex-m);
+            margin-bottom: var(--mdx-sys-spacing-flex-m);
+        }
+        :host > .margin-top-m {
+            margin-top: var(--mdx-sys-spacing-flex-m);
+        }
+        :host > .margin-bottom-m {
+            margin-bottom: var(--mdx-sys-spacing-flex-m);
+        }
+        :host > .margin-y-s {
+            margin-top: var(--mdx-sys-spacing-flex-s);
+            margin-bottom: var(--mdx-sys-spacing-flex-s);
+        }
+        :host > .margin-top-s {
+            margin-top: var(--mdx-sys-spacing-flex-s);
+        }
+        :host > .margin-bottom-s {
+            margin-bottom: var(--mdx-sys-spacing-flex-s);
         }
 
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */
