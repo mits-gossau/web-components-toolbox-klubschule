@@ -382,6 +382,12 @@ export default class OffersPage extends Shadow() {
                   </div>
               </m-dialog>
               <o-grid namespace="grid-432-auto-colums-auto-rows-">
+                  <style>
+                    :host {
+                      /* filter buttons have the exception of beeing fully rounded, that's why I am setting border-radius here */
+                      --button-primary-border-radius: 999px;
+                    }
+                  </style>
                   <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
                   </ks-a-button>

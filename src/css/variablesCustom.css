@@ -120,6 +120,7 @@
   --search-input-padding: 0.5em 1em;
   --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big: 100%;
+  --search-input-border-radius: 999px; /* search inputs are fully rounded for all brands */
   --search-justify-content-custom: flex-end;
   --search-label-font-size: var(--font-size);
   --search-label-line-height: calc(4/3);
@@ -147,6 +148,8 @@
   --footer-default-footer-margin: 0 auto;
   --footer-default-footer-width-mobile: 100%;
   --footer-default-footer-margin-mobile: 0;
+
+  --double-button-default-border-radius: 999px;
   
   --h-hyphens: auto;
 
@@ -214,7 +217,7 @@
 
   --box-shadow-color: rgba(51, 51, 51, 0.1);
 
-  --icon-mdx-ks-tile-color: var(--mdx-base-color-klubschule-blue-600);
+  --icon-mdx-ks-tile-color: var(--mdx-sys-color-primary-default);
   --icon-mdx-ks-badge-color: var(--mdx-base-color-grey-0);
   --icon-link-list-color: var(--mdx-sys-color-primary-default);
   --icon-link-list-color-hover: var(--mdx-sys-color-primary-default);
