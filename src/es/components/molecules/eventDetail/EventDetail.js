@@ -369,11 +369,10 @@ export default class EventDetail extends Shadow() {
               </div>
             `, '') : ''}
             ${this.data.abo_typen_link && this.data.abo_typen_link_label ? /* html */ `
-              <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="dialog-open" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
+              <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="dialog-open" id="offers-page-filter-categories">
                 <!-- overlayer -->
                 <div class="container dialog-header" tabindex="0">
-                    <div id="back">
-                        &nbsp;
+                    <div>
                     </div>
                     <h3>Passende Abonnements</h3>
                     <div id="close">
@@ -986,13 +985,11 @@ export default class EventDetail extends Shadow() {
                     }"></ks-o-tile-list>
                 </div>
                 <div class="container dialog-footer">
-                    <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+                  <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
                 </div>
               </m-dialog>
               <ks-a-button
                 namespace="button-transparent-"
-                href="${this.data.abo_typen_link}" 
-                class="link-more" 
                 request-event-name="dialog-open"
                 click-no-toggle-active
               >
