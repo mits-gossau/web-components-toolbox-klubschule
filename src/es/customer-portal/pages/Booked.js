@@ -37,7 +37,7 @@ export default class BookedList extends Index {
         name: 'm-appointments-list'
       }
     ])
-    this.html = '<m-appointments-list namespace="appointments-list-default-" data-show-filters="false" data-request-subscription="request-booked-subscription-course-appointments"></m-appointments-list>'
+    this.html = '<m-appointments-list namespace="appointments-list-default-" data-list-type="booked-appointments" data-show-filters="false" data-request-subscription="request-booked-subscription-course-appointments"></m-appointments-list>'
   }
 
   renderCSS () {

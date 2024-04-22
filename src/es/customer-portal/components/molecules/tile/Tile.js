@@ -41,6 +41,10 @@ export default class AppointmentTile extends Tile {
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(data => {
+        if (this.dataset.listType) {
+          this.hideTileFromList(this.dataset.listType, this)
+          return
+        }
         const tileState = getTileState(courseAppointmentStatusMapping[data.courseAppointmentStatus], data)
         const defaultClass = this.currentTile.classList[0]
         this.currentTile.classList.remove(...this.currentTile.classList)
@@ -330,7 +334,27 @@ export default class AppointmentTile extends Tile {
     return formatter.format(dateObject)
   }
 
+  hideTileFromList (type, tile) {
+    if (type === 'booked-appointments') {
+      debugger
+      this.currentCourseDialog.style.visibility = 'hidden'
+      this.templateTag.style.minHeight = '0'
+      tile.style.visibility = 'hidden'
+      if (tile.previousElementSibling.tagName === 'KS-A-HEADING') {
+        tile.previousElementSibling.style.display = 'none'
+      }
+    }
+  }
+
   get currentTile () {
     return this.root.querySelector('m-load-template-tag').root.querySelector('div')
+  }
+
+  get templateTag () {
+    return this.root.querySelector('m-load-template-tag')
+  }
+
+  get currentCourseDialog () {
+    return this.root.querySelector('m-course-dialog')
   }
 }

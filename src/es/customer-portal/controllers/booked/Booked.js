@@ -4,6 +4,7 @@
 /* global CustomEvent */
 /* global fetch */
 /* global HTMLElement */
+/* global self */
 
 /**
 * @export
@@ -25,13 +26,16 @@ export default class Booked extends HTMLElement {
   }
 
   requestBookedSubscriptionCourseAppointmentsListener = async (event) => {
-    console.log('Controller - requestBookedSubscriptionCourseAppointmentsListener', event)
     if (this.abortControllerBookedSubscriptionCourseAppointments) this.abortControllerBookedSubscriptionCourseAppointments.abort()
     this.abortControllerBookedSubscriptionCourseAppointments = new AbortController()
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiBookedSubscriptionCourseAppointments}`
+    const { subscriptionType, subscriptionId } = event.detail
+    const { userId } = this.dataset
     const data = {
-      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2',
-      subscriptionType: '',
-      subscriptionId: 'undefined',
+      userId,
+      subscriptionType,
+      subscriptionId,
       includeConsumedAppointments: 'false'
     }
     const fetchOptions = {
@@ -42,7 +46,6 @@ export default class Booked extends HTMLElement {
       body: JSON.stringify(data),
       signal: this.abortControllerBookedSubscriptionCourseAppointments.signal
     }
-    const endpoint = 'https://qual.klubschule.ch/api/customerportal/bookedsubscriptioncourseappointments'
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {

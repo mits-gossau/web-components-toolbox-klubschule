@@ -145,14 +145,16 @@ export default class AppointmentsList extends Shadow() {
             <div col-lg="12" col-md="12" col-sm="12">
               <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
             </div>
-            <div col-lg="12" col-md="12" col-sm="12">
-              ${filter}
-            </div>
-            <div col-lg="12" col-md="12" col-sm="12">
-              [[ Filter ]]
-              <hr>
-              <br>
-            </div>
+            ${(!this.dataset.showFilters || this.dataset.showFilters === 'true')
+            ? `<div col-lg="12" col-md="12" col-sm="12">
+                  ${filter}
+                </div>
+                <div col-lg="12" col-md="12" col-sm="12">
+                  [[ Filter ]]
+                  <hr>
+                  <br>
+                </div>`
+          : ''}         
           </o-grid>
           <div id="list-wrapper">
             ${dayList.list.join('')}
@@ -220,6 +222,8 @@ export default class AppointmentsList extends Shadow() {
     tileComponent.setAttribute('data', `${appointmentData}`)
     tileComponent.setAttribute('data-id', `${makeUniqueCourseId(appointment)}`)
     tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
+    tileComponent.setAttribute('data-list-type', this.dataset.listType || '')
+
     return tileComponent
   }
 
@@ -244,7 +248,6 @@ export default class AppointmentsList extends Shadow() {
           subscriptionValidFrom: booked.subscriptionValidFrom,
           subscriptionValidTo: booked.subscriptionValidTo
         }
-    debugger
     const dayList = data.selectedSubscription ? data.selectedSubscription.dayList : data.dayList
     delete selectedSubscription.dayList
     return {
