@@ -384,8 +384,9 @@ export default class OffersPage extends Shadow() {
               <o-grid namespace="grid-432-auto-colums-auto-rows-">
                   <style>
                     :host {
-                      /* filter buttons have the exception of beeing fully rounded, that's why I am setting border-radius here */
+                      /* filter buttons have the exception of being fully rounded, that's why I am setting border-radius here */
                       --button-primary-border-radius: 999px;
+                      --button-secondary-border-radius: 999px;
                     }
                   </style>
                   <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>

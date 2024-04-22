@@ -99,7 +99,7 @@ export default class AutoCompleteList extends Shadow() {
 
         :host ul li:hover {
           cursor: pointer;
-          color: var(--mdx-base-color-klubschule-blue-600); 
+          color: var(--mdx-sys-color-primary-default); 
         }
 
         :host ul li + li {
@@ -171,12 +171,12 @@ export default class AutoCompleteList extends Shadow() {
           font-size: 1.125em;
           line-height: 1.25em;
           font-weight: 500;
-          color: var(--mdx-base-color-klubschule-blue-600); ;
+          color: var(--mdx-sys-color-primary-default); ;
         }
 
         :host a a-icon-mdx {
           margin-left: 0.25em;
-          color: var(--mdx-base-color-klubschule-blue-600); ;
+          color: var(--mdx-sys-color-primary-default); ;
         }
 
         :host .list + a {
