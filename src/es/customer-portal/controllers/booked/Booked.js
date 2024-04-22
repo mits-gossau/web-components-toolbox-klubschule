@@ -43,7 +43,7 @@ export default class Booked extends HTMLElement {
       signal: this.abortControllerBookedSubscriptionCourseAppointments.signal
     }
     const endpoint = 'https://qual.klubschule.ch/api/customerportal/bookedsubscriptioncourseappointments'
-    this.dispatchEvent(new CustomEvent(this.getAttribute('update-booked-subscription-course-appointments') || 'update-booked-subscription-course-appointments', {
+    this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()

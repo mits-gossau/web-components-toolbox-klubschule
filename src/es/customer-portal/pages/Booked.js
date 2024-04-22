@@ -1,8 +1,6 @@
 // @ts-check
 import Index from './Index.js'
 
-/* global CustomEvent */
-
 /**
  * Booked List
  *
@@ -12,6 +10,7 @@ import Index from './Index.js'
  */
 export default class BookedList extends Index {
   /**
+   * @param {Object} options
    * @param {any} args
    */
   constructor (options = {}, ...args) {
@@ -19,78 +18,38 @@ export default class BookedList extends Index {
   }
 
   connectedCallback () {
-    document.body.addEventListener(this.getAttribute('update-booked-subscription-course-appointments') || 'update-booked-subscription-course-appointments', this.updateBookedSubscriptionCourseAppointmentsListener)
-    this.hidden = true
-    const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    Promise.all(showPromises).then(() => {
-      this.hidden = false
-      this.dispatchEvent(new CustomEvent('request-booked-subscription-course-appointments',
-        {
-          detail: {
-            subscriptionType: '',
-            userId: ''
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }
-      ))
-    })
-  }
-
-  disconnectedCallback () {
-    document.body.removeEventListener(this.getAttribute('update-booked-subscription-course-appointments') || 'update-booked-subscription-course-appointments', this.updateBookedSubscriptionCourseAppointmentsListener)
-  }
-
-  updateBookedSubscriptionCourseAppointmentsListener = async (/** @type {{ detail: { fetch: Promise<any>; }; }} */ event) => {
-    console.log('bookedSubscriptionCourseAppointmentsListener', event)
-    event.detail.fetch.then((/** @type {any} */ appointments) => {
-      console.log(appointments)
-      this.html = ''
-      this.renderHTML(appointments)
-    }).catch((/** @type {any} */ error) => {
-      console.error(error)
-      this.html = ''
-      this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
-    })
+    if (this.shouldRenderHTML()) this.renderHTML()
+    if (this.shouldRenderCSS()) this.renderCSS()
   }
 
   shouldRenderHTML () {
-    return !this.appointmentWrapper
+    return !this.appointmentList
   }
 
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * renders the html
-   * @return void
-   * @param {{ selectedSubscription: { dayList: any; }; }} appointmentsData
-   */
-  renderHTML (appointmentsData) {
-    console.log('appointmentsData', appointmentsData)
-    this.appointmentWrapper = this.root.querySelector('div') || document.createElement('div')
-    this.html = /* html */`
-        <h1>Gebuchte Termine</h1>
-      `
+  renderHTML () {
+    this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../components/molecules/appointmentsList/AppointmentsList.js`,
+        name: 'm-appointments-list'
+      }
+    ])
+    this.html = '<m-appointments-list namespace="appointments-list-default-" data-show-filters="false" data-request-subscription="request-booked-subscription-course-appointments"></m-appointments-list>'
   }
 
-  /**
-   * renders the css
-   *
-   * @return void
-   */
   renderCSS () {
     this.css = /* css */`
-    :host {}
-    :host h1 {
-      font-size:150px;
-    }
-    @media only screen and (max-width: _max-width_) {
       :host {}
-    }
+      @media only screen and (max-width: _max-width_) {
+        :host {}
+      }
     `
+  }
+
+  get appointmentList () {
+    return this.root.querySelector('m-appointments-list')
   }
 }

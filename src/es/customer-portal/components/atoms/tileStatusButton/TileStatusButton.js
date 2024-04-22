@@ -32,6 +32,7 @@ export default class StatusButton extends Shadow() {
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
+        debugger
         const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         this.html = btn
@@ -42,6 +43,7 @@ export default class StatusButton extends Shadow() {
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
+        debugger
         const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         this.html = btn
@@ -113,6 +115,7 @@ export default class StatusButton extends Shadow() {
   renderHTML (content, subscription) {
     // TODO: Remove
     this.wrapper = this.root.querySelector('div') || document.createElement('div')
+    debugger
     this.html = this.renderTileActionButton(subscriptionMode[subscription.subscriptionMode], content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
   }
 

@@ -37,7 +37,7 @@ export default class AppointmentList extends Index {
         name: 'm-appointments-list'
       }
     ])
-    this.html = '<m-appointments-list namespace="appointments-list-default-"></m-appointments-list>'
+    this.html = '<m-appointments-list namespace="appointments-list-default-" data-request-subscription="request-subscription-course-appointments"></m-appointments-list>'
   }
 
   renderCSS () {

@@ -18,7 +18,7 @@ export default class AppointmentsList extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
+    this.dispatchEvent(new CustomEvent(this.dataset.requestSubscription || 'request-subscription',
       {
         detail: {
           subscriptionType: '',
@@ -33,13 +33,15 @@ export default class AppointmentsList extends Shadow() {
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    this.select.removeEventListener('change', this.selectEventListener)
+    this.select?.removeEventListener('change', this.selectEventListener)
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
     this.renderHTML(event.detail.fetch).then(() => {
-      this.select = this.root.querySelector('o-grid').root.querySelector('select')
-      this.select.addEventListener('change', this.selectEventListener)
+      if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
+        this.select = this.root.querySelector('o-grid').root.querySelector('select')
+        this.select.addEventListener('change', this.selectEventListener)
+      }
     })
   }
 
@@ -110,6 +112,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderHTML (fetch) {
+    this.html = ''
     this.renderLoading()
     return fetch.then(appointments => {
       if (appointments.errorCode !== 0) {
@@ -135,7 +138,7 @@ export default class AppointmentsList extends Shadow() {
       ])
       return Promise.all([fetchModules]).then((children) => {
         this.html = ''
-        const filter = this.renderFilterSubscriptions(appointments.filters.subscriptions)
+        const filter = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
         const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
@@ -226,8 +229,23 @@ export default class AppointmentsList extends Shadow() {
   }
 
   getDayListData (data) {
+    let booked = {}
+    if (!data.selectedSubscription) {
+      booked = data.dayList[0].subscriptionCourseAppointments[0]
+    }
     const selectedSubscription = data.selectedSubscription
-    const dayList = data.selectedSubscription.dayList
+      ? data.selectedSubscription
+      : {
+          subscriptionBalance: booked.subscriptionBalance,
+          subscriptionDescription: booked.subscriptionDescription,
+          subscriptionId: booked.subscriptionId,
+          subscriptionMode: booked.subscriptionMode,
+          subscriptionType: booked.subscriptionType,
+          subscriptionValidFrom: booked.subscriptionValidFrom,
+          subscriptionValidTo: booked.subscriptionValidTo
+        }
+    debugger
+    const dayList = data.selectedSubscription ? data.selectedSubscription.dayList : data.dayList
     delete selectedSubscription.dayList
     return {
       selectedSubscription,
