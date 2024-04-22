@@ -315,11 +315,6 @@
   --icon-mdx-ks-event-link-color: var(--mdx-base-color-klubschule-blue-600);
 }
 
-.class-name {
-  list-style-type: decimal;
-}
-
-
 @media screen and (min-width: 1441px) {
   :root {
     --body-section-default-width: 81.25%;
