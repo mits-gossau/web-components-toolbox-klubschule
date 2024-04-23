@@ -1,4 +1,5 @@
 // @ts-check
+import { actionType } from '../../helpers/Mapping.js'
 
 /* global AbortController */
 /* global CustomEvent */
@@ -45,7 +46,8 @@ export default class Subscriptions extends HTMLElement {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
           throw new Error(response.statusText)
-        })
+        }),
+        type: actionType.subscriptions
       },
       bubbles: true,
       cancelable: true,

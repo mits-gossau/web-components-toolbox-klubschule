@@ -88,5 +88,6 @@ export const actionType = {
   detail: 'detail',
   booking: 'booking',
   bookingFinal: 'bookingFinal',
-  reversal: 'reversal'
+  reversal: 'reversal',
+  subscriptions: 'subscriptions'
 }

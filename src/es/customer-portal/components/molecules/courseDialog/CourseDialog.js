@@ -25,7 +25,14 @@ export default class CourseDialog extends Shadow() {
     this.courseId = this.dataset.id
     this.courseSubscription = JSON.parse(this.dataset.subscription)
     if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
+    debugger
+    if (this.shouldRenderHTML()) {
+      if (this.dataset.listType === 'subscriptions') {
+        this.renderSubscriptionsHTML(this.courseId, this.courseData)
+      } else {
+        this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
+      }
+    }
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking-confirmation') || 'request-show-dialog-booking-confirmation', this.requestShowDialogBookingConfirmationListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-reversal-confirmation') || 'request-show-dialog-reversal-confirmation', this.requestShowDialogReversalConfirmationListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
@@ -57,6 +64,7 @@ export default class CourseDialog extends Shadow() {
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentDetailListener = event => {
+    debugger
     if (this.dataset.id === event.detail.id) {
       this.viewContent.innerHTML = ''
       event.detail.fetch.then(courseDetail => {
@@ -398,6 +406,45 @@ export default class CourseDialog extends Shadow() {
       default:
         return this.fetchCSS(styles)
     }
+  }
+
+  renderSubscriptionsHTML (id, data) {
+    const fetchModules = this.fetchModules([
+      {
+        path: `${this.importMetaUrl}'../../../../../../components/molecules/linkList/LinkList.js`,
+        name: 'ks-m-link-list'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../components/molecules/systemNotification/SystemNotification.js`,
+        name: 'ks-m-system-notification'
+      }
+    ])
+    Promise.all([fetchModules]).then((_) => {
+      this.html = /* html */ `
+        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${id}" close-event-name="dialog-close-${id}">
+          <div class="container dialog-header">
+            <div id="back"></div>
+              <h3 id="title"></h3>
+              <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+              </div>
+            </div>
+            <div class="container dialog-content">
+              <p class="reset-link"></p>
+              <div class="sub-content" >
+                <h2>LALALAL</h2>
+                <div id="view-content">
+                 ddddeeeetails
+                </div>
+              </div>
+            </div>
+            <div class="container dialog-footer">
+              <a-dialog-status-button namespace="dialog-status-button-default-" data-id="${id}" data-content="${escapeForHtml(JSON.stringify(data))}" data-subscription="${escapeForHtml(JSON.stringify(data))}"></a-dialog-status-button>
+            </div>
+            <a-tile-status-button data-list-type="subscriptions" id="show-modal" data-id="${id}" data-content="${escapeForHtml(JSON.stringify(data))}" data-subscription="${escapeForHtml(JSON.stringify(data))}"></a-tile-status-button>  
+        </m-dialog>
+        `
+    })
   }
 
   /**

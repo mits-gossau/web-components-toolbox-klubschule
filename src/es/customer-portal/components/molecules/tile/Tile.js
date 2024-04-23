@@ -75,6 +75,10 @@ export default class AppointmentTile extends Tile {
       :host .course-info, .course-booking {
         flex-basis: 50%;
       }
+      :host .subscription-info {
+        display:flex;
+        flex-direction: column;
+      }
       :host .course-admin, .course-price {
         flex-grow: 1;
         flex-shrink: 1;
@@ -346,7 +350,7 @@ export default class AppointmentTile extends Tile {
       <template>
         <div id="tile-wrapper" class="m-tile ${tileState.css.border}" data-course-id=${courseId}>
               <div class="parent-body">
-                <div class="course-info">
+                <div class="subscription-info">
                   <div>
                     <span class="m-tile__title title">
                       <a-course-title data-list-type="subscriptions" namespace="course-title-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></a-course-title>
@@ -361,7 +365,7 @@ export default class AppointmentTile extends Tile {
               <div class="parent-footer">
                 <div class="course-booking">
                   <!-- !!! -->
-                  <m-course-dialog namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></m-course-dialog>
+                  <m-course-dialog data-list-type="subscriptions" namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></m-course-dialog>
                 </div>
               </div><!-- parent footer END -->
             </div>
@@ -387,12 +391,12 @@ export default class AppointmentTile extends Tile {
 
   hideTileFromList (type) {
     if (type === 'booked-appointments') {
-      this.currentCourseDialog.style.visibility = 'hidden'
+      // this.currentCourseDialog.style.visibility = 'hidden'
       // this.templateTag.style.minHeight = '0'
       // this.templateTag.style.visibility = 'hidden'
-
-      debugger
-
+      // const placeholder = document.createElement('div')
+      // placeholder.appendChild(this.currentCourseDialog)
+      // this.replaceWith(placeholder)
       // setTimeout(() => {
       //   if (this.previousElementSibling.tagName === 'KS-A-HEADING') {
       //     this.previousElementSibling.style.display = 'none'

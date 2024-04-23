@@ -116,7 +116,7 @@ export default class SubscriptionsList extends Shadow() {
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
             <div col-lg="12" col-md="12" col-sm="12">
-              <ks-a-heading tag="h1">X0X</ks-a-heading>
+              <ks-a-heading tag="h1">Aktive Abonnements</ks-a-heading>
             </div>    
           </o-grid>
           <div id="list-wrapper">
@@ -147,22 +147,20 @@ export default class SubscriptionsList extends Shadow() {
     }
   }
 
-  renderDayHeading (data, heading) {
-    const title = new heading.constructorClass() // eslint-disable-line
-    title.setAttribute('tag', 'h2')
-    title.innerHTML = data
-    return title
-  }
+  // renderDayHeading (data, heading) {
+  //   const title = new heading.constructorClass() // eslint-disable-line
+  //   title.setAttribute('tag', 'h2')
+  //   title.innerHTML = data
+  //   return title
+  // }
 
   makeTileComponent (tile, subscription) {
     const subscriptionData = this.cleanAndStringifyData(subscription)
-    const selectedSubscriptionData = {}
     const tileComponent = new tile.constructorClass({ namespace: 'tile-subscriptions-' }) // eslint-disable-line
     tileComponent.setAttribute('data', `${subscriptionData}`)
     tileComponent.setAttribute('data-id', `${subscription.subscriptionId}`)
-    tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
+    tileComponent.setAttribute('data-selected-subscription', '{}')
     tileComponent.setAttribute('data-list-type', this.dataset.listType || '')
-
     return tileComponent
   }
 
@@ -171,27 +169,27 @@ export default class SubscriptionsList extends Shadow() {
     return escapeForHtml(JSON.stringify(data))
   }
 
-  getDayListData (data) {
-    let booked = {}
-    if (!data.selectedSubscription) {
-      booked = data.dayList[0].subscriptionCourseAppointments[0]
-    }
-    const selectedSubscription = data.selectedSubscription
-      ? data.selectedSubscription
-      : {
-          subscriptionBalance: booked.subscriptionBalance,
-          subscriptionDescription: booked.subscriptionDescription,
-          subscriptionId: booked.subscriptionId,
-          subscriptionMode: booked.subscriptionMode,
-          subscriptionType: booked.subscriptionType,
-          subscriptionValidFrom: booked.subscriptionValidFrom,
-          subscriptionValidTo: booked.subscriptionValidTo
-        }
-    const dayList = data.selectedSubscription ? data.selectedSubscription.dayList : data.dayList
-    delete selectedSubscription.dayList
-    return {
-      selectedSubscription,
-      dayList
-    }
-  }
+  // getDayListData (data) {
+  //   let booked = {}
+  //   if (!data.selectedSubscription) {
+  //     booked = data.dayList[0].subscriptionCourseAppointments[0]
+  //   }
+  //   const selectedSubscription = data.selectedSubscription
+  //     ? data.selectedSubscription
+  //     : {
+  //         subscriptionBalance: booked.subscriptionBalance,
+  //         subscriptionDescription: booked.subscriptionDescription,
+  //         subscriptionId: booked.subscriptionId,
+  //         subscriptionMode: booked.subscriptionMode,
+  //         subscriptionType: booked.subscriptionType,
+  //         subscriptionValidFrom: booked.subscriptionValidFrom,
+  //         subscriptionValidTo: booked.subscriptionValidTo
+  //       }
+  //   const dayList = data.selectedSubscription ? data.selectedSubscription.dayList : data.dayList
+  //   delete selectedSubscription.dayList
+  //   return {
+  //     selectedSubscription,
+  //     dayList
+  //   }
+  // }
 }
