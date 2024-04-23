@@ -1,6 +1,5 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { makeUniqueCourseId } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 

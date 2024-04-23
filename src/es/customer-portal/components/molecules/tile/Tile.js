@@ -353,7 +353,7 @@ export default class AppointmentTile extends Tile {
                 <div class="subscription-info">
                   <div>
                     <span class="m-tile__title title">
-                      <a-course-title data-list-type="subscriptions" namespace="course-title-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></a-course-title>
+                      <a-course-title request-detail="request-subscription-detail" data-list-type="subscriptions" namespace="course-title-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></a-course-title>
                     </span>
                   </div>
                   <div>

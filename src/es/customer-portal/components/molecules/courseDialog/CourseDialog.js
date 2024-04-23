@@ -64,7 +64,6 @@ export default class CourseDialog extends Shadow() {
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentDetailListener = event => {
-    debugger
     if (this.dataset.id === event.detail.id) {
       this.viewContent.innerHTML = ''
       event.detail.fetch.then(courseDetail => {
@@ -79,6 +78,7 @@ export default class CourseDialog extends Shadow() {
           }
         ))
         const { type } = event.detail
+        debugger
         if (type === actionType.detail) {
           this.renderDialogTitle('Termindetails')
           this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
@@ -91,8 +91,49 @@ export default class CourseDialog extends Shadow() {
           this.renderDialogTitle('Termin stornieren')
           this.viewContent.innerHTML = this.renderDialogContentReversalConfirmation(this.courseData, this.courseDetail)
         }
+        if (type === actionType.subscriptions) {
+          this.renderDialogTitle('Abonnementdetails')
+          this.viewContent.innerHTML = this.renderDialogContentSubscriptionDetail(this.courseData, this.courseDetail)
+        }
       })
     }
+  }
+
+  renderDialogContentSubscriptionDetail (data, detail = {}) {
+    debugger
+    return /* html */ `
+      <style>
+        .details {
+          display: flex;
+          flex-direction: column;
+          padding-top: 2em;
+          gap:1.5em;
+          margin-bottom: 4em;
+        }
+        .detail {
+          display: flex;
+          flex-direction: column;
+        }
+        .detail > span:first-child {
+          font-weight: 500;
+          line-height: 110%;
+        }
+        .downloads {
+          margin-bottom: 1.5em;
+        }
+      </style>
+      <div id="content">
+        <div class="details">
+          ${this.subscriptionDetailsContent(data)}
+        </div>
+        <div>
+          <h3>Downloads</h3>
+          <div class="downloads">
+            ${this.renderSubscriptionDownloads(data)}
+          </div>
+        </div>
+      </div>
+    `
   }
 
   /**
@@ -102,6 +143,7 @@ export default class CourseDialog extends Shadow() {
    * @returns
    */
   renderDialogContentDetails (data, detail = {}) {
+    debugger
     return /* html */ `
       <style>
         .price-info {
@@ -420,6 +462,7 @@ export default class CourseDialog extends Shadow() {
       }
     ])
     Promise.all([fetchModules]).then((_) => {
+      debugger
       this.html = /* html */ `
         <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${id}" close-event-name="dialog-close-${id}">
           <div class="container dialog-header">
@@ -432,9 +475,9 @@ export default class CourseDialog extends Shadow() {
             <div class="container dialog-content">
               <p class="reset-link"></p>
               <div class="sub-content" >
-                <h2>LALALAL</h2>
+                <h2>${data.subscriptionDescription}</h2>
                 <div id="view-content">
-                 ddddeeeetails
+                  ${this.renderDialogContentSubscriptionDetail(data)}
                 </div>
               </div>
             </div>
@@ -511,6 +554,14 @@ export default class CourseDialog extends Shadow() {
     titleElement.innerHTML = title
   }
 
+  subscriptionDetailsContent (detail) {
+    debugger
+    return /* html */ `
+      <div class="detail"><span>Guthaben</span><span>${detail.subscriptionBalance}</span></div>
+      <div class="detail"><span>Gültigkeitsdauer</span><span>${detail.subscriptionValidFrom} - ${detail.subscriptionValidTo}</span></div>
+    `
+  }
+
   /**
    * Generates HTML content displaying details of a course appointment,
    * including date, time, location, instructor, status, and subscription information.
@@ -541,6 +592,27 @@ export default class CourseDialog extends Shadow() {
           <p>Eine Stornierung ist nur bis zwei Stunden vor Terminbeginn möglich!</p>
         </div>
       </ks-m-system-notification>
+    `
+  }
+
+  renderSubscriptionDownloads (courseData) {
+    debugger
+    // @ts-ignore
+    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}`
+    return /* html */ `
+      <ks-m-link-list namespace="link-list-download-">
+        <ul>
+          <li>
+            <a href="${pdfLink}">
+              <span>Kursdetails als PDF</span>
+              <div>
+                <span>PDF</span>
+                <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </ks-m-link-list>
     `
   }
 
