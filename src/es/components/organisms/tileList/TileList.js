@@ -30,18 +30,6 @@ export default class TileList extends Shadow() {
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
     if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
     Promise.all(showPromises).then(() => (this.hidden = false))
-
-    /**
-     * Toggle details
-     */
-    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
-    this.toggle = this.root.querySelector('.o-tile-list__bottom-left')
-
-    this.toggle.addEventListener('click', this.clickEventListener)
-  }
-
-  disconnectedCallback () {
-    this.toggle.removeEventListener('click', this.clickEventListener)
   }
 
   /**
@@ -241,10 +229,24 @@ export default class TileList extends Shadow() {
    * Render HTML
    * @returns Promise<void>
    */
-  renderHTML () {
+  renderHTML (data = TileList.parseAttribute(this.getAttribute('data'))) {
     const warnMandatory = 'data attribute requires: '
-    const data = TileList.parseAttribute(this.getAttribute('data'))
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
+    // no tiles are delivered as attribute. here we got to fetch the location data for the tiles
+    if (!data.tiles?.length && data.locations?.length && data.filter?.length) {
+      console.log('group', data)
+      return new Promise(resolve => this.dispatchEvent(new CustomEvent('request-locations', {
+        detail: {
+          resolve,
+          filter: data.filter
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))).then(tiles => {
+        this.renderHTML(Object.assign(data, {tiles: tiles}))
+      })
+    }
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="o-tile-list">
@@ -311,6 +313,13 @@ export default class TileList extends Shadow() {
         </div>
     </div>
     `
+    /**
+     * Toggle details
+     */
+    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
+    this.toggle = this.root.querySelector('.o-tile-list__bottom-left')
+
+    this.toggle.addEventListener('click', this.clickEventListener)
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,

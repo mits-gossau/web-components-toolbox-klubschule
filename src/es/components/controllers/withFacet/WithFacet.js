@@ -222,6 +222,10 @@ export default class WithFacet extends Shadow() {
       })
     }
 
+    this.requestLocations = event => {
+      console.log('request locations', event)
+    }
+
     window.addEventListener('popstate', () => {
       this.params = this.catchURLParams()
     })
@@ -231,12 +235,14 @@ export default class WithFacet extends Shadow() {
     this.addEventListener('request-with-facet', this.requestWithFacetListener)
     this.addEventListener('reset-all-filters', this.requestWithFacetListener)
     this.addEventListener('reset-filter', this.requestWithFacetListener)
+    this.addEventListener('request-locations', this.requestLocations)
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-with-facet', this.requestWithFacetListener)
     this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
     this.removeEventListener('reset-filter', this.requestWithFacetListener)
+    this.removeEventListener('request-locations', this.requestLocations)
   }
 
   catchURLParams () {
