@@ -273,15 +273,7 @@ export default class AppointmentTile extends Tile {
       }
       const renderFound = renderList[this.dataset.listType]
       const render = renderFound || this.renderTile(this.courseData, this.selectedSubscription)
-      // const r = renderList[this.dataset.listType] ? renderList[this.dataset.listType] : this.renderTile(this.courseData, this.selectedSubscription)
-      debugger
       this.html += render
-      // if (this.dataset.listType === 'subscriptions') {
-      //   debugger
-      //   this.html += this.renderSubscription(this.courseData)
-      // } else {
-      //   this.html = this.renderTile(this.courseData, this.selectedSubscription)
-      // }
     })
   }
 
@@ -395,16 +387,18 @@ export default class AppointmentTile extends Tile {
 
   hideTileFromList (type) {
     if (type === 'booked-appointments') {
-      // this.currentCourseDialog.style.display = 'hidden'
+      this.currentCourseDialog.style.visibility = 'hidden'
+      // this.templateTag.style.minHeight = '0'
+      // this.templateTag.style.visibility = 'hidden'
+
       debugger
-      // this.templateTag.style.minHeight = '0px'
-      // this.templateTag.style.display = 'none'
-      // this.tile.style.visibility = 'hidden'
-      this.style.display = 'none'
-      this.currentCourseDialog.display = 'none'
-      if (this.tile.previousElementSibling.tagName === 'KS-A-HEADING') {
-        this.tile.previousElementSibling.style.display = 'none'
-      }
+
+      // setTimeout(() => {
+      //   if (this.previousElementSibling.tagName === 'KS-A-HEADING') {
+      //     this.previousElementSibling.style.display = 'none'
+      //   }
+      //   this.style.display = 'none'
+      // }, 3000)
     }
   }
 
