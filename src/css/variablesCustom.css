@@ -229,9 +229,9 @@
   --a-color: var(--mdx-comp-link-color-default);
   --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
   --a-font-size: 1em;
-  --a-text-decoration: underline;
+  --a-text-decoration: none;
   --a-color-hover: var(--mdx-comp-link-color-hover);
-  --a-text-decoration-hover: underline;
+  --a-text-decoration-hover: none;
 
   /* hr */
   --hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-bold1);
@@ -314,11 +314,6 @@
   --icon-mdx-ks-event-color: var(--mdx-base-color-grey-950);
   --icon-mdx-ks-event-link-color: var(--mdx-base-color-klubschule-blue-600);
 }
-
-.class-name {
-  list-style-type: decimal;
-}
-
 
 @media screen and (min-width: 1441px) {
   :root {

@@ -35,6 +35,13 @@ export default class KsBodyStyle extends BodyStyle {
         :host ks-a-with-facet-pagination.hidden {
             display: none;
         }
+        :host(ks-o-body-section) a {
+            --a-text-decoration: underline;
+        }
+        :host(ks-o-body-section) a:hover {
+            --a-text-decoration-hover: underline;
+            text-decoration-line: var(--a-text-decoration-hover);
+        }
         :host(ks-o-body-section) {
             /* had to reset display here because it was set to display inline-block !important in parent class */
             display: ${this.getAttribute('display') || 'block'} !important;
