@@ -1,8 +1,6 @@
 // @ts-check
 import Index from './Index.js'
 
-/* global CustomEvent */
-
 /**
  * Subscriptions
  *
@@ -12,6 +10,7 @@ import Index from './Index.js'
  */
 export default class SubscriptionList extends Index {
   /**
+   * @param {Object} options
    * @param {any} args
    */
   constructor (options = {}, ...args) {
@@ -19,62 +18,26 @@ export default class SubscriptionList extends Index {
   }
 
   connectedCallback () {
-    document.body.addEventListener(this.getAttribute('update-subscriptions') || 'update-subscriptions', this.subscriptionsListener)
-    this.hidden = true
-    const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    Promise.all(showPromises).then(() => {
-      this.hidden = false
-      this.dispatchEvent(new CustomEvent('request-subscriptions',
-        {
-          detail: {
-            subscriptionType: '',
-            userId: ''
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }
-      ))
-    })
-  }
-
-  disconnectedCallback () {
-    document.body.removeEventListener(this.getAttribute('update-subscriptions') || 'update-subscriptions', this.subscriptionsListener)
-  }
-
-  subscriptionsListener = async (/** @type {{ detail: { fetch: Promise<any>; }; }} */ event) => {
-    console.log('subscriptionsListener', event)
-    event.detail.fetch.then((/** @type {any} */ subscriptions) => {
-      console.log(subscriptions)
-      this.html = ''
-      this.renderHTML(subscriptions)
-    }).catch((/** @type {any} */ error) => {
-      console.error(error)
-      this.html = ''
-      this.html = '<span style="color:red;">🤦‍♂️ Uh oh! The fetch failed! 🤦‍♂️</span>'
-    })
+    if (this.shouldRenderHTML()) this.renderHTML()
+    if (this.shouldRenderCSS()) this.renderCSS()
   }
 
   shouldRenderHTML () {
-    return !this.subscriptionsWrapper
+    return !this.subscriptionsList
   }
 
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * renders the html
-   * @return void
-   */
-  renderHTML (subscriptionsData) {
-    console.log('subscriptionsData', subscriptionsData)
-    this.subscriptionsWrapper = this.root.querySelector('div') || document.createElement('div')
-
-    this.html = /* html */`
-        <h1>Meine Abonnemente</h1>
-      `
+  renderHTML () {
+    this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../components/molecules/subscriptionsList/SubscriptionsList.js`,
+        name: 'm-subscriptions-list'
+      }
+    ])
+    this.html = '<m-subscriptions-list namespace="subscriptions-list-default-" data-request-subscription="request-subscriptions" data-list-type="subscriptions"></m-subscriptions-list>'
   }
 
   /**
@@ -85,12 +48,13 @@ export default class SubscriptionList extends Index {
   renderCSS () {
     this.css = /* css */`
     :host {}
-    :host h1 {
-      font-size:10px;
-    }
     @media only screen and (max-width: _max-width_) {
       :host {}
     }
     `
+  }
+
+  get subscriptionsList () {
+    return this.root.querySelector('m-subscriptions-list')
   }
 }

@@ -40,7 +40,8 @@ self.Environment = {
           apiSubscriptionCourseAppointmentBooking: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentbooking' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentbooking',
           apiSubscriptionCourseAppointmentDetail: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentdetail' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentdetail',
           apiSubscriptionCourseAppointmentReversal: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentreversal' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentreversal',
-          apiBookedSubscriptionCourseAppointments: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/bookedsubscriptioncourseappointments' : 'https://qual.klubschule.ch/api/CustomerPortal/bookedsubscriptioncourseappointments'
+          apiBookedSubscriptionCourseAppointments: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/bookedsubscriptioncourseappointments' : 'https://qual.klubschule.ch/api/CustomerPortal/bookedsubscriptioncourseappointments',
+          apiSubscriptions: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptions' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptions'
         }
       }
       default:

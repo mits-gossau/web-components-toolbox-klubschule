@@ -19,6 +19,7 @@ export default class DialogStatusButton extends Shadow() {
   connectedCallback () {
     this.dataContent = JSON.parse(this.dataset.content)
     this.dataSubscription = JSON.parse(this.dataset.subscription)
+    debugger
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)

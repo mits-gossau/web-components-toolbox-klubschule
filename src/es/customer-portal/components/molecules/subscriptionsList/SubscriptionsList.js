@@ -6,19 +6,18 @@ import { makeUniqueCourseId } from '../../../helpers/Shared.js'
 
 /**
  * @export
- * @class AppointmentsList
+ * @class SubscriptionsList
  * @type {CustomElementConstructor}
  */
-export default class AppointmentsList extends Shadow() {
+export default class SubscriptionsList extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    this.select = null
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    this.dispatchEvent(new CustomEvent(this.dataset.requestSubscription || 'request-appointments',
+    document.body.addEventListener(this.getAttribute('update-subscriptions') || 'update-subscriptions', this.subscriptionsListener)
+    this.dispatchEvent(new CustomEvent(this.dataset.requestSubscription || 'request-subscriptions',
       {
         detail: {
           subscriptionType: '',
@@ -32,32 +31,11 @@ export default class AppointmentsList extends Shadow() {
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    this.select?.removeEventListener('change', this.selectEventListener)
+    document.body.removeEventListener(this.getAttribute('update-subscriptions') || 'update-subscriptions', this.subscriptionsListener)
   }
 
-  subscriptionCourseAppointmentsListener = (event) => {
-    this.renderHTML(event.detail.fetch).then(() => {
-      if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
-        this.select = this.root.querySelector('o-grid').root.querySelector('select')
-        this.select.addEventListener('change', this.selectEventListener)
-      }
-    })
-  }
-
-  selectEventListener = (event) => {
-    const data = AppointmentsList.parseAttribute(event.target.value)
-    this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
-      {
-        detail: {
-          subscriptionType: data.subscriptionType,
-          subscriptionId: data.subscriptionId
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }
-    ))
+  subscriptionsListener = (event) => {
+    this.renderHTML(event.detail.fetch)
   }
 
   /**
@@ -101,7 +79,7 @@ export default class AppointmentsList extends Shadow() {
       }
     ]
     switch (this.getAttribute('namespace')) {
-      case 'appointments-list-default-':
+      case 'subscriptions-list-default-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
@@ -114,18 +92,14 @@ export default class AppointmentsList extends Shadow() {
   renderHTML (fetch) {
     this.html = ''
     this.renderLoading()
-    return fetch.then(appointments => {
-      if (appointments.errorCode !== 0) {
-        throw new Error(`${appointments.errorMessage}`)
+    fetch.then(subscriptions => {
+      if (subscriptions.errorCode !== 0) {
+        throw new Error(`${subscriptions.errorMessage}`)
       }
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,
           name: 'm-tile'
-        },
-        {
-          path: `${this.importMetaUrl}'../../../../../../components/atoms/heading/Heading.js`,
-          name: 'ks-a-heading'
         },
         {
           path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
@@ -136,28 +110,17 @@ export default class AppointmentsList extends Shadow() {
           name: 'm-dialog'
         }
       ])
-      return Promise.all([fetchModules]).then((children) => {
+      Promise.all([fetchModules]).then((children) => {
         this.html = ''
-        const filter = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
-        const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
+        const subscriptionList = this.renderSubscriptionsList(subscriptions, children[0][0])
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
             <div col-lg="12" col-md="12" col-sm="12">
-              <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
-            </div>
-            ${(!this.dataset.showFilters || this.dataset.showFilters === 'true')
-            ? `<div col-lg="12" col-md="12" col-sm="12">
-                  ${filter}
-                </div>
-                <div col-lg="12" col-md="12" col-sm="12">
-                  [[ Filter ]]
-                  <hr>
-                  <br>
-                </div>`
-          : ''}         
+              <ks-a-heading tag="h1">X0X</ks-a-heading>
+            </div>    
           </o-grid>
           <div id="list-wrapper">
-            ${dayList.list.join('')}
+            ${subscriptionList.list.join('')}
           </div>
         `
         return this.html
@@ -172,38 +135,14 @@ export default class AppointmentsList extends Shadow() {
     this.html = '<img src="../customer-portal/img/loading.gif" alt="Loading">'
   }
 
-  renderFilterSubscriptions (subscriptionsData) {
-    const select = document.createElement('select')
-    select.id = 'filters-subscriptions'
-    subscriptionsData.forEach(item => {
-      const option = document.createElement('option')
-      const value = { subscriptionId: item.subscriptionId, subscriptionType: item.subscriptionType }
-      option.value = JSON.stringify(value)
-      option.text = item.subscriptionDescription
-      if (item.selected) option.setAttribute('selected', 'selected')
-      select.appendChild(option)
-    })
-    const sortWrapper = document.createElement('div')
-    sortWrapper.innerHTML = select.outerHTML
-    return sortWrapper.innerHTML
-  }
-
-  renderDayList (appointments, tileComponent, heading) {
-    const { selectedSubscription, dayList } = this.getDayListData(appointments)
+  renderSubscriptionsList (subscriptions, tileComponent) {
+    const { activeSubscriptions } = subscriptions
     const list = []
-    let counter = 0
-    dayList.forEach(day => {
-      const dayWrapper = document.createElement('div')
-      dayWrapper.appendChild(this.renderDayHeading(day.weekday, heading))
-      counter += day.subscriptionCourseAppointments.length
-      day.subscriptionCourseAppointments.forEach(appointment => {
-        const tile = this.makeTileComponent(tileComponent, appointment, selectedSubscription)
-        dayWrapper.appendChild(tile)
-      })
-      list.push(dayWrapper.innerHTML)
+    activeSubscriptions.forEach(subscription => {
+      const tile = this.makeTileComponent(tileComponent, subscription)
+      list.push(tile.outerHTML)
     })
     return {
-      counter,
       list
     }
   }
@@ -215,12 +154,12 @@ export default class AppointmentsList extends Shadow() {
     return title
   }
 
-  makeTileComponent (tile, appointment, selectedSubscription) {
-    const appointmentData = this.cleanAndStringifyData(appointment)
-    const selectedSubscriptionData = this.cleanAndStringifyData(selectedSubscription)
-    const tileComponent = new tile.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
-    tileComponent.setAttribute('data', `${appointmentData}`)
-    tileComponent.setAttribute('data-id', `${makeUniqueCourseId(appointment)}`)
+  makeTileComponent (tile, subscription) {
+    const subscriptionData = this.cleanAndStringifyData(subscription)
+    const selectedSubscriptionData = {}
+    const tileComponent = new tile.constructorClass({ namespace: 'tile-subscriptions-' }) // eslint-disable-line
+    tileComponent.setAttribute('data', `${subscriptionData}`)
+    tileComponent.setAttribute('data-id', `${subscription.subscriptionId}`)
     tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
     tileComponent.setAttribute('data-list-type', this.dataset.listType || '')
 

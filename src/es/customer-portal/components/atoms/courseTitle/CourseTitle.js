@@ -18,6 +18,7 @@ export default class CourseTitle extends Shadow() {
   connectedCallback () {
     this.dataContent = JSON.parse(this.dataset.content)
     this.dataSubscription = JSON.parse(this.dataset.subscription)
+    debugger
     if (this.shouldRenderCSS()) this.renderCSS()
     this.renderHTML()
     this.addEventListener('click', this.clickEventListener)
@@ -107,7 +108,11 @@ export default class CourseTitle extends Shadow() {
    * @returns void
    */
   renderHTML () {
-    const title = `${this.dataContent.courseTitle} (${this.dataContent.courseType}_${this.dataContent.courseId})`
+    const titlesList = {
+      subscriptions: `${this.dataContent.subscriptionDescription}`
+    }
+    const titleFound = titlesList[this.dataset.listType]
+    const title = titleFound || `${this.dataContent.courseTitle} (${this.dataContent.courseType}_${this.dataContent.courseId})`
     const wrapper = document.createElement('div')
     wrapper.innerHTML = title
     this.html = wrapper

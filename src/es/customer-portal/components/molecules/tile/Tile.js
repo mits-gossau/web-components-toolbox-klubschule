@@ -42,7 +42,7 @@ export default class AppointmentTile extends Tile {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(data => {
         if (this.dataset.listType) {
-          this.hideTileFromList(this.dataset.listType, this)
+          this.hideTileFromList(this.dataset.listType)
           return
         }
         const tileState = getTileState(courseAppointmentStatusMapping[data.courseAppointmentStatus], data)
@@ -203,6 +203,19 @@ export default class AppointmentTile extends Tile {
           path: `${this.importMetaUrl}../../../../es/customer-portal/components/molecules/tile/course-appointment-/course-appointment-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }], false)
+      case 'tile-subscriptions-':
+        return this.fetchCSS([{
+          path: `${this.importMetaUrl}../../../../es/components/molecules/tile/default-/default-.css`, // apply namespace since it is specific and no fallback
+          namespace: false,
+          replaces: [{
+            pattern: '--tile-default-',
+            flags: 'g',
+            replacement: '--tile-subscriptions-'
+          }]
+        }, {
+          path: `${this.importMetaUrl}../../../../es/customer-portal/components/molecules/tile/course-appointment-/course-appointment-.css`, // apply namespace since it is specific and no fallback
+          namespace: false
+        }], false)
       default:
         return this.fetchCSS()
     }
@@ -254,7 +267,21 @@ export default class AppointmentTile extends Tile {
     Promise.all([fetchModules]).then((_) => {
       this.courseData = Tile.parseAttribute(this.getAttribute('data'))
       this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
-      this.html = this.renderTile(this.courseData, this.selectedSubscription)
+
+      const renderList = {
+        subscriptions: this.renderSubscription(this.courseData)
+      }
+      const renderFound = renderList[this.dataset.listType]
+      const render = renderFound || this.renderTile(this.courseData, this.selectedSubscription)
+      // const r = renderList[this.dataset.listType] ? renderList[this.dataset.listType] : this.renderTile(this.courseData, this.selectedSubscription)
+      debugger
+      this.html += render
+      // if (this.dataset.listType === 'subscriptions') {
+      //   debugger
+      //   this.html += this.renderSubscription(this.courseData)
+      // } else {
+      //   this.html = this.renderTile(this.courseData, this.selectedSubscription)
+      // }
     })
   }
 
@@ -319,6 +346,38 @@ export default class AppointmentTile extends Tile {
     `
   }
 
+  renderSubscription (subscription) {
+    const tileState = getTileState(courseAppointmentStatusMapping[1], subscription)
+    const courseId = `${subscription.subscriptionId}_${subscription.subscriptionKindId}`
+    return /* html */ `
+    <m-load-template-tag mode="false">
+      <template>
+        <div id="tile-wrapper" class="m-tile ${tileState.css.border}" data-course-id=${courseId}>
+              <div class="parent-body">
+                <div class="course-info">
+                  <div>
+                    <span class="m-tile__title title">
+                      <a-course-title data-list-type="subscriptions" namespace="course-title-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></a-course-title>
+                    </span>
+                  </div>
+                  <div>
+                    <span class="m-tile__title date">Gültigkeitsdauer ${subscription.subscriptionValidFrom} - ${subscription.subscriptionValidTo} </span>
+                  </div> 
+                </div>
+                <!-- --> 
+              </div><!-- parent body END -->
+              <div class="parent-footer">
+                <div class="course-booking">
+                  <!-- !!! -->
+                  <m-course-dialog namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></m-course-dialog>
+                </div>
+              </div><!-- parent footer END -->
+            </div>
+          </template>
+        </m-load-template-tag> 
+    `
+  }
+
   /**
    * Formats a given (string) date into a specific format with weekday,
    * day, month, and year.
@@ -334,14 +393,17 @@ export default class AppointmentTile extends Tile {
     return formatter.format(dateObject)
   }
 
-  hideTileFromList (type, tile) {
+  hideTileFromList (type) {
     if (type === 'booked-appointments') {
+      // this.currentCourseDialog.style.display = 'hidden'
       debugger
-      this.currentCourseDialog.style.visibility = 'hidden'
-      this.templateTag.style.minHeight = '0'
-      tile.style.visibility = 'hidden'
-      if (tile.previousElementSibling.tagName === 'KS-A-HEADING') {
-        tile.previousElementSibling.style.display = 'none'
+      // this.templateTag.style.minHeight = '0px'
+      // this.templateTag.style.display = 'none'
+      // this.tile.style.visibility = 'hidden'
+      this.style.display = 'none'
+      this.currentCourseDialog.display = 'none'
+      if (this.tile.previousElementSibling.tagName === 'KS-A-HEADING') {
+        this.tile.previousElementSibling.style.display = 'none'
       }
     }
   }
