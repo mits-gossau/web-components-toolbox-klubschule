@@ -541,25 +541,36 @@ export default class Event extends Shadow() {
 
   /**
     * renderDetails
-    * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  async renderDetails () {
+  async renderDetails() {
     if (!this.details.children.length) {
       this.fetchModules([
         {
           path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/loading/Loading.js`,
           name: 'a-loading'
+        },
+        {
+          path: `${this.importMetaUrl}../../molecules/eventDetail/EventDetail.js`,
+          name: 'ks-m-event-detail'
         }
       ])
       this.details.classList.add('loading')
       this.details.innerHTML = '<a-loading></a-loading>'
+      if (this.hasAttribute('mock')) {
+        this.details.innerHTML = /* html */`
+          <ks-m-event-detail
+            data='${this.mockData}'
+          ></ks-m-event-detail>
+        `
+      }
+
       new Promise(resolve => this.dispatchEvent(new CustomEvent('request-event-detail', {
         detail: {
           resolve,
-          language: this.data.language,
-          typ: this.data.typ,
-          id: this.data.id,
-          center_id: this.data.center_id
+          language: this.data.language || this.data.parentkey.split('_')[0],
+          typ: this.data.typ || this.data.kurs_typ,
+          id: this.data.id || this.data.kurs_id,
+          center_id: this.data.center_id || this.data.centerid
         },
         bubbles: true,
         cancelable: true,
@@ -576,12 +587,6 @@ export default class Event extends Shadow() {
             data='${JSON.stringify(data)}'
           ></ks-m-event-detail>
         `
-        return this.fetchModules([
-          {
-            path: `${this.importMetaUrl}../../molecules/eventDetail/EventDetail.js`,
-            name: 'ks-m-event-detail'
-          }
-        ])
       })
     }
   }
