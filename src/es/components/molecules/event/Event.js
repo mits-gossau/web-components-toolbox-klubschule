@@ -555,10 +555,10 @@ export default class Event extends Shadow() {
       new Promise(resolve => this.dispatchEvent(new CustomEvent('request-event-detail', {
         detail: {
           resolve,
-          language: this.data.language,
-          typ: this.data.typ,
-          id: this.data.id,
-          center_id: this.data.center_id
+          language: this.data.language || this.data.parentkey.split('_')[0],
+          typ: this.data.typ || this.data.kurs_typ,
+          id: this.data.id || this.data.kurs_id,
+          center_id: this.data.center_id || this.data.centerid
         },
         bubbles: true,
         cancelable: true,
