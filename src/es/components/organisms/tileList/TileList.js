@@ -21,6 +21,24 @@ export default class TileList extends Shadow() {
 
       this.details = this.root.querySelector('.o-tile-list__details')
       this.details.classList.toggle('o-tile-list__details--expanded')
+      if (this.details.classList.contains('o-tile-list__details--expanded')) {
+        // no tiles are delivered as attribute. here we got to fetch the location data for the tiles
+        if (!this.data.tiles?.length) {
+          return new Promise(resolve => this.dispatchEvent(new CustomEvent('request-locations', {
+            detail: {
+              resolve,
+              filter: this.data.filter
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))).then(tileData => {
+            // TODO: skip tiles if there is only one course
+            this.tilesContainer.innerHTML = Object.assign(this.data, {tiles: tileData.courses}).tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '')
+            console.log('tiles', this.data)
+          })
+        }
+      }
     }
   }
 
@@ -232,21 +250,7 @@ export default class TileList extends Shadow() {
   renderHTML (data = TileList.parseAttribute(this.getAttribute('data'))) {
     const warnMandatory = 'data attribute requires: '
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
-    // no tiles are delivered as attribute. here we got to fetch the location data for the tiles
-    if (!data.tiles?.length && data.locations?.length && data.filter?.length) {
-      console.log('group', data)
-      return new Promise(resolve => this.dispatchEvent(new CustomEvent('request-locations', {
-        detail: {
-          resolve,
-          filter: data.filter
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))).then(tiles => {
-        this.renderHTML(Object.assign(data, {tiles: tiles}))
-      })
-    }
+    this.data = data
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="o-tile-list">
@@ -296,16 +300,11 @@ export default class TileList extends Shadow() {
           </div>
         </div>
         <div class="o-tile-list__details">
-          <div class="o-tile-list__tiles">
-            ${data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '')}
-          </div>
+          <div class="o-tile-list__tiles"></div>
           ${data.buttonMore
             ? /* html */`
               <div class="o-tile-list__foot">
-                <ks-a-button namespace="button-secondary-" color="secondary">
-                  <span>${data.buttonMore.text || warnMandatory + 'buttonMore.text'}</span>
-                  <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.buttonMore.iconName || 'ArrowRight'}" size="1em" class="icon-right">
-                </ks-a-button>
+                <ks-m-buttons data-buttons='[${JSON.stringify(data.buttonMore)}]'></ks-m-buttons>
               </div> 
             `
             : ''
@@ -318,6 +317,7 @@ export default class TileList extends Shadow() {
      */
     this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
     this.toggle = this.root.querySelector('.o-tile-list__bottom-left')
+    this.tilesContainer = this.root.querySelector('.o-tile-list__tiles')
 
     this.toggle.addEventListener('click', this.clickEventListener)
     return this.fetchModules([

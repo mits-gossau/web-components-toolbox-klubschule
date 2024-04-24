@@ -223,7 +223,24 @@ export default class WithFacet extends Shadow() {
     }
 
     this.requestLocations = event => {
-      console.log('request locations', event)
+      const requestInit = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        body: `{
+          "filter": ${JSON.stringify(event.detail.filter)},
+          "mandantId": ${this.getAttribute('mandant-id') || 110}
+        }`
+      }
+      // @ts-ignore
+      event.detail.resolve(fetch(apiUrl, requestInit).then(response => {
+        if (response.status >= 200 && response.status <= 299) {
+          return response.json()
+        }
+        throw new Error(response.statusText)
+      }))
     }
 
     window.addEventListener('popstate', () => {

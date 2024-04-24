@@ -124,15 +124,10 @@ export default class TileFactory extends Shadow() {
               data='${JSON.stringify(course)}'
             ></ks-m-event>
           ` : (
-            // course.locations in the future
-            course.locations?.length && course.filter?.length
+            course.locations?.length > 1 && course.filter?.length
               ? /* html */`
                 <ks-o-tile-list data='{
                   ${this.fillGeneralTileInfo(course)},
-                  "buttonMore": {
-                    "text": "Weitere Standorte",
-                    "iconName": "ArrowDownRight"
-                  },
                   "filter": ${JSON.stringify(course.filter) || ""},
                   "locations": ${JSON.stringify(course.locations) || ""}
                 }'>
