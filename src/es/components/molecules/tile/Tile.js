@@ -139,10 +139,10 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__price strong {
-          font-family: 'Graphik';
-          font-size: 1.5em;
-          line-height: 1.625em;
-          font-weight: 500;    
+          font-family: var(--price-strong-font-family);
+          font-size: var(--price-strong-font-size);
+          line-height: var(--price-strong-line-height);
+          font-weight: var(--price-strong-font-weight);   
       }
       
       :host a-icon-mdx {

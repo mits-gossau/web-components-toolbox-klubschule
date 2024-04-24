@@ -72,16 +72,17 @@ export default class Tab extends Shadow() {
         :host ul li button {
           background-color: transparent;
           border: none;
-          font-size: 1.125em;
+          font-family: var(--mdx-comp-tabs-font-label-default-font-family, inherit);
+          font-size: var(--mdx-comp-tabs-font-label-default-font-size, 1.125em);
           line-height: 1.25em;
-          font-weight: 500;
+          font-weight: var(--mdx-comp-tabs-font-label-default-font-weight, 500);
           cursor: pointer;
           padding: 1em 0;
         }
 
         :host ul li button.active {
-          color: var(--mdx-base-color-klubschule-blue-600);
-          border-bottom: 0.125em solid var(--mdx-base-color-klubschule-blue-600);
+          color: var(--mdx-sys-color-primary-default);
+          border-bottom: 0.125em solid var(--mdx-sys-color-primary-default);
         }
 
         :host div[tab-content-target] {
@@ -91,7 +92,7 @@ export default class Tab extends Shadow() {
 
         :host div[tab-content-target].show {
           display: block;
-          background-color: var(--mdx-base-color-klubschule-creme-400);
+          background-color: var(--mdx-sys-color-accent-6-subtle1);
         }
 
         @media only screen and (max-width: _max-width_) {
