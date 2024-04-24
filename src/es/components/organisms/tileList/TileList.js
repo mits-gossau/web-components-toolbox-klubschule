@@ -296,7 +296,9 @@ export default class TileList extends Shadow() {
           </div>
         </div>
         <div class="o-tile-list__details">
-          <div class="o-tile-list__tiles"></div>
+          <div class="o-tile-list__tiles">
+            ${data.tiles ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '') : ''}
+          </div>
           ${data.buttonMore
             ? /* html */`
               <div class="o-tile-list__foot">
