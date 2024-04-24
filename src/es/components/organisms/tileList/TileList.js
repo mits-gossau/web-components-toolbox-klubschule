@@ -32,11 +32,7 @@ export default class TileList extends Shadow() {
             bubbles: true,
             cancelable: true,
             composed: true
-          }))).then(tileData => {
-            // TODO: skip tiles if there is only one course
-            this.tilesContainer.innerHTML = Object.assign(this.data, {tiles: tileData.courses}).tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '')
-            console.log('tiles', this.data)
-          })
+          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, {tiles: tileData.courses}).tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '')))
         }
       }
     }
