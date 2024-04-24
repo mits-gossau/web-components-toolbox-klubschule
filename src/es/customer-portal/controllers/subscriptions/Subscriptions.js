@@ -17,16 +17,19 @@ export default class Subscriptions extends HTMLElement {
     super()
     this.abortControllerSubscriptions = null
     this.abortControllerSubscriptionDetail = null
+    this.abortControllerSubscriptionPdf = null
   }
 
   connectedCallback () {
     this.addEventListener(this.getAttribute('request-subscriptions') || 'request-subscriptions', this.requestSubscriptionsListener)
     this.addEventListener(this.getAttribute('request-subscription-detail') || 'request-subscription-detail', this.requestSubscriptionDetailListener)
+    this.addEventListener('request-subscription-pdf', this.requestSubscriptionPdfListener)
   }
 
   disconnectedCallback () {
     this.removeEventListener(this.getAttribute('request-subscriptions') || 'request-subscriptions', this.requestSubscriptionsListener)
     this.removeEventListener(this.getAttribute('request-subscription-detail') || 'request-subscription-detail', this.requestSubscriptionDetailListener)
+    this.removeEventListener('request-subscription-pdf', this.requestSubscriptionPdfListener)
   }
 
   /**
@@ -102,5 +105,38 @@ export default class Subscriptions extends HTMLElement {
       cancelable: true,
       composed: true
     }))
+  }
+
+  requestSubscriptionPdfListener = async (event) => {
+    if (this.abortControllerSubscriptionPdf) this.abortControllerSubscriptionPdf.abort()
+    this.abortControllerSubscriptionPdf = new AbortController()
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionPdf}`
+    const subscription = JSON.parse(event.detail.subscription)
+    const courseId = `${subscription.subscriptionId}_${subscription.subscriptionKindId}`
+    const data = {
+      subscriptionId: subscription.subscriptionId,
+      subscriptionType: subscription.subscriptionType,
+      userId: this.dataset.userId
+    }
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      signal: this.abortControllerSubscriptionPdf.signal
+    }
+    this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', {
+      detail: {
+        fetch: fetch(endpoint, fetchOptions).then(async response => {
+          if (response.status >= 200 && response.status <= 299) return await response.blob()
+        }),
+        id: courseId
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    })) 
   }
 }
