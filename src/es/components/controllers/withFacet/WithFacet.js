@@ -38,6 +38,7 @@ export default class WithFacet extends Shadow() {
 
     const withFacetCache = new Map()
     let initialRequest = this.getAttribute('initial-request')
+    const initialRequestObjFrozen = Object.freeze(JSON.parse(initialRequest))
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(this.url.search)
     this.isMocked = this.hasAttribute('mock')
@@ -99,7 +100,9 @@ export default class WithFacet extends Shadow() {
         let hasSearchLocation = false
         const filterRequest = `{
           "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
-          "mandantId": ${this.getAttribute('mandant-id') || 110}
+          "MandantId": ${this.getAttribute('mandant-id') || initialRequestObjFrozen.MandantId || 110},
+          "PortalId": ${this.getAttribute('portal-id') || initialRequestObjFrozen.PortalId || 29},
+          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}"
           ${(hasSearchTerm = event.detail?.key === 'input-search') ? `,"searchText": "${event.detail.value}"` : ''}
           ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lat) ? `,"clat": "${event.detail.lat}"` : ''}
           ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lng) ? `,"clong": "${event.detail.lng}"` : ''}
@@ -231,7 +234,9 @@ export default class WithFacet extends Shadow() {
         mode: 'cors',
         body: `{
           "filter": ${JSON.stringify(event.detail.filter)},
-          "mandantId": ${this.getAttribute('mandant-id') || 110}
+          "MandantId": ${this.getAttribute('mandant-id') || initialRequestObjFrozen.MandantId || 110},
+          "PortalId": ${this.getAttribute('portal-id') || initialRequestObjFrozen.PortalId || 29},
+          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}"
         }`
       }
       // @ts-ignore
