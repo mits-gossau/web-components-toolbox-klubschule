@@ -7,26 +7,89 @@
   --any-content-spacing: var(--mdx-sys-spacing-flex-2xs);
   --any-content-width: calc(min(100%, var(--body-max-width)) - var(--mdx-sys-spacing-flex-large-xs) * 2);
   --a-wrapper-margin: 0;
+
+  /* deprecated background color variables start *
   --background-color-quaternary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quaternary: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quinary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quinary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-quinary: var(--mdx-sys-color-brand-neutral-0);
+  /* deprecated background color variables end */
+  
   --background-color-secondary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-secondary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-secondary: var(--mdx-sys-color-brand-neutral-0);
+
+  /* deprecated background color variables start *
   --background-color-senary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-senary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-senary: var(--mdx-sys-color-brand-neutral-0);
   --background-color-septenary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-septenary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-septenary: var(--mdx-sys-color-brand-neutral-0);
+  /* deprecated background color variables end */
+  
   --background-color-tertiary-disabled: var(--mdx-sys-color-brand-neutral-0);
   --background-color-tertiary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-tertiary: var(--mdx-sys-color-brand-neutral-0);
+
+  /* --- Selectable CMS background colors Start --- */
+  --background-color-ks-blue: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-blue-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-blue-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-blue-hover: var(--mdx-sys-color-brand-neutral-0);
+
+  --background-color-ks-red: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-red-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-red-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-red-hover: var(--mdx-sys-color-brand-neutral-0);
+
+  --background-color-ks-pink: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-pink-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-pink-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-pink-hover: var(--mdx-sys-color-brand-neutral-0);
+
+  --background-color-ks-orange: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-orange-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-orange-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-orange-hover: var(--mdx-sys-color-brand-neutral-0);
+
+  --background-color-ks-green: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-green-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-green-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-green-hover: var(--mdx-sys-color-brand-neutral-0);
+
+  --background-color-ks-companies: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-companies-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-companies-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ks-companies-hover: var(--mdx-sys-color-brand-neutral-0);
+
+  --background-color-ibaw-turquoise: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ibaw-turquoise-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ibaw-turquoise-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ibaw-turquoise-hover: var(--mdx-sys-color-brand-neutral-0);
+
+  --background-color-ibaw-lightblue: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ibaw-lightblue-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ibaw-lightblue-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-ibaw-lightblue-hover: var(--mdx-sys-color-brand-neutral-0);
+
+  --background-color-pro-greengray: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-pro-greengray-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-pro-greengray-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-pro-greengray-hover: var(--mdx-sys-color-brand-neutral-0);
+
+  --background-color-pro-terracotta: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-pro-terracotta-active: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-pro-terracotta-disabled: var(--mdx-sys-color-brand-neutral-0);
+  --background-color-pro-terracotta-hover: var(--mdx-sys-color-brand-neutral-0);
+  /* --- Selectable CMS background colors End --- */
+  
   --body-max-width: 1920px;
   --body-margin: 0 auto;
+
+  /* deprecated button color variables start *
   --button-quaternary-background-color-quaternary-active: var(--mdx-sys-color-brand-accent-1-100);
   --button-quaternary-background-color-quaternary-disabled: var(--mdx-sys-color-brand-accent-1-100);
   --button-quaternary-background-color-quaternary-hover: var(--mdx-sys-color-brand-accent-1-100);
@@ -35,10 +98,14 @@
   --button-quaternary-background-color-quinary-disabled: var(--mdx-sys-color-brand-accent-2-100);
   --button-quaternary-background-color-quinary-hover: var(--mdx-sys-color-brand-accent-2-100);
   --button-quaternary-background-color-quinary: var(--mdx-sys-color-brand-neutral-0);
+  /* deprecated button color variables end */
+  
   --button-quaternary-background-color-secondary-active: var(--mdx-sys-color-brand-primary-100);
   --button-quaternary-background-color-secondary-disabled: var(--mdx-sys-color-brand-primary-100);
   --button-quaternary-background-color-secondary-hover: var(--mdx-sys-color-brand-primary-100);
   --button-quaternary-background-color-secondary: var(--mdx-sys-color-brand-neutral-0);
+
+  /* deprecated button color variables start *
   --button-quaternary-background-color-senary-active: var(--mdx-sys-color-brand-accent-3-100);
   --button-quaternary-background-color-senary-disabled: var(--mdx-sys-color-brand-accent-3-100);
   --button-quaternary-background-color-senary-hover: var(--mdx-sys-color-brand-accent-3-100);
@@ -47,12 +114,69 @@
   --button-quaternary-background-color-septenary-disabled: var(--mdx-sys-color-brand-accent-4-100);
   --button-quaternary-background-color-septenary-hover: var(--mdx-sys-color-brand-accent-4-100);
   --button-quaternary-background-color-septenary: var(--mdx-sys-color-brand-neutral-0);
+  /* deprecated button color variables end */
+
   --button-quaternary-background-color-tertiary-active: var(--mdx-sys-color-brand-neutral-100);
   --button-quaternary-background-color-tertiary-disabled: var(--mdx-sys-color-brand-neutral-100);
   --button-quaternary-background-color-tertiary-hover: var(--mdx-sys-color-brand-neutral-100);
   --button-quaternary-background-color-tertiary: var(--mdx-sys-color-brand-neutral-0);
+
+  /* --- Selectable CMS button-quaternary background colors Start --- */
+  --button-quaternary-background-color-ks-blue: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-blue-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-blue-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-blue-hover: var(--mdx-sys-color-brand-neutral-100);
+
+  --button-quaternary-background-color-ks-red: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-red-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-red-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-red-hover: var(--mdx-sys-color-brand-neutral-100);
+
+  --button-quaternary-background-color-ks-pink: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-pink-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-pink-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-pink-hover: var(--mdx-sys-color-brand-neutral-100);
+
+  --button-quaternary-background-color-ks-orange: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-orange-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-orange-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-orange-hover: var(--mdx-sys-color-brand-neutral-100);
+
+  --button-quaternary-background-color-ks-green: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-green-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-green-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-green-hover: var(--mdx-sys-color-brand-neutral-100);
+
+  --button-quaternary-background-color-ks-companies: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-companies-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-companies-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ks-companies-hover: var(--mdx-sys-color-brand-neutral-100);
+
+  --button-quaternary-background-color-ibaw-turquoise: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ibaw-turquoise-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ibaw-turquoise-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ibaw-turquoise-hover: var(--mdx-sys-color-brand-neutral-100);
+
+  --button-quaternary-background-color-ibaw-lightblue: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ibaw-lightblue-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ibaw-lightblue-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-ibaw-lightblue-hover: var(--mdx-sys-color-brand-neutral-100);
+
+  --button-quaternary-background-color-pro-greengray: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-pro-greengray-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-pro-greengray-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-pro-greengray-hover: var(--mdx-sys-color-brand-neutral-100);
+
+  --button-quaternary-background-color-pro-terracotta: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-pro-terracotta-active: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-pro-terracotta-disabled: var(--mdx-sys-color-brand-neutral-100);
+  --button-quaternary-background-color-pro-terracotta-hover: var(--mdx-sys-color-brand-neutral-100);
+  /* --- Selectable CMS Button colors End --- */
+  
   --color-active: var(--color-hover);
   --color-disabled: var(--mdx-sys-color-brand-neutral-300);
+
+  /* deprecated color variables start *
   --color-quaternary-active: var(--color-quaternary-hover);
   --color-quaternary-disabled: var(--color-disabled);
   --color-quaternary-hover: var(--mdx-sys-color-brand-accent-1-700);
@@ -61,9 +185,13 @@
   --color-quinary-disabled: var(--color-disabled);
   --color-quinary-hover: var(--mdx-sys-color-brand-accent-2-700);
   --color-quinary: var(--mdx-sys-color-brand-accent-2-600);
+  /* deprecated color variables end */
+  
   --color-secondary-active: var(--color-secondary-hover);
   --color-secondary-disabled: var(--color-disabled);
   --color-secondary-hover: var(--color-hover);
+
+  /* deprecated color variables *
   --color-senary-active: var(--color-senary-hover);
   --color-senary-disabled: var(--color-disabled);
   --color-senary-hover: var(--mdx-sys-color-brand-accent-3-700);
@@ -72,10 +200,13 @@
   --color-septenary-disabled: var(--color-disabled);
   --color-septenary-hover: var(--mdx-sys-color-brand-accent-4-700);
   --color-septenary: var(--mdx-sys-color-brand-accent-4-600);
+  /* deprecated color variables end */
+  
   --color-tertiary-active: var(--color-tertiary-hover);
   --color-tertiary-disabled: var(--color-disabled);
   --color-tertiary-hover: var(--mdx-sys-color-brand-neutral-600);
   --color-tertiary: var(--mdx-sys-color-brand-neutral-950);
+  
 
   /* --- Selectable CMS colors Start --- */
   --color-ks-blue: var(--mdx-base-color-klubschule-blue-600);
@@ -113,16 +244,15 @@
   --color-ibaw-turquoise-disabled: var(--color-disabled);
   --color-ibaw-turquoise-hover: var(--mdx-base-color-ibaw-turquoise-700);
 
-  --color-ibaw-light-blue: var(--mdx-base-color-ibaw-light-blue-600);
-  --color-ibaw-light-blue-active: var(--mdx-base-color-ibaw-light-blue-700);
-  --color-ibaw-light-blue-disabled: var(--color-disabled);
-  --color-ibaw-light-blue-hover: var(--mdx-base-color-ibaw-light-blue-700);
-  /* TODO foreground text color */
+  --color-ibaw-lightblue: var(--mdx-base-color-ibaw-light-blue-600);
+  --color-ibaw-lightblue-active: var(--mdx-base-color-ibaw-light-blue-700);
+  --color-ibaw-lightblue-disabled: var(--color-disabled);
+  --color-ibaw-lightblue-hover: var(--mdx-base-color-ibaw-light-blue-700);
 
-  --color-pro-green: var(--mdx-base-color-pro-green-600);
-  --color-pro-green-active: var(--mdx-base-color-pro-green-700);
-  --color-pro-green-disabled: var(--color-disabled);
-  --color-pro-green-hover: var(--mdx-base-color-pro-green-700);
+  --color-pro-greengray: var(--mdx-base-color-pro-green-600);
+  --color-pro-greengray-active: var(--mdx-base-color-pro-green-700);
+  --color-pro-greengray-disabled: var(--color-disabled);
+  --color-pro-greengray-hover: var(--mdx-base-color-pro-green-700);
 
   --color-pro-terracotta: var(--mdx-base-color-pro-terracotta-600);
   --color-pro-terracotta-active: var(--mdx-base-color-pro-terracotta-700);
