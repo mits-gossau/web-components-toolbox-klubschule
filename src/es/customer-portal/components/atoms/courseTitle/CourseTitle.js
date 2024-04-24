@@ -18,7 +18,6 @@ export default class CourseTitle extends Shadow() {
   connectedCallback () {
     this.dataContent = JSON.parse(this.dataset.content)
     this.dataSubscription = JSON.parse(this.dataset.subscription)
-    debugger
     if (this.shouldRenderCSS()) this.renderCSS()
     this.renderHTML()
     this.addEventListener('click', this.clickEventListener)
@@ -30,7 +29,6 @@ export default class CourseTitle extends Shadow() {
 
   clickEventListener = () => {
     const type = this.dataset.listType ? this.dataset.listType : 'detail'
-    debugger
     this.dispatchEvent(new CustomEvent(this.getAttribute('request-detail') || 'request-subscription-course-appointment-detail',
       {
         detail: {

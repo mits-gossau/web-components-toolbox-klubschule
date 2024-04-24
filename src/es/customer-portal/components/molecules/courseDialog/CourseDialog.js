@@ -18,6 +18,7 @@ export default class CourseDialog extends Shadow() {
     this.courseDetail = null
     this.courseId = null
     this.courseSubscription = null
+    this.subscriptionsPdfLink = null
   }
 
   connectedCallback () {
@@ -25,7 +26,6 @@ export default class CourseDialog extends Shadow() {
     this.courseId = this.dataset.id
     this.courseSubscription = JSON.parse(this.dataset.subscription)
     if (this.shouldRenderCSS()) this.renderCSS()
-    debugger
     if (this.shouldRenderHTML()) {
       if (this.dataset.listType === 'subscriptions') {
         this.renderSubscriptionsHTML(this.courseId, this.courseData)
@@ -48,6 +48,12 @@ export default class CourseDialog extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.removeEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
+    this.subscriptionsPdfLink?.removeEventListener('click', this.subscriptionPdfLinkListener)
+  }
+
+  subscriptionPdfLinkListener (event) {
+    event.preventDefault()
+    debugger
   }
 
   /**
@@ -78,7 +84,6 @@ export default class CourseDialog extends Shadow() {
           }
         ))
         const { type } = event.detail
-        debugger
         if (type === actionType.detail) {
           this.renderDialogTitle('Termindetails')
           this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
@@ -94,46 +99,12 @@ export default class CourseDialog extends Shadow() {
         if (type === actionType.subscriptions) {
           this.renderDialogTitle('Abonnementdetails')
           this.viewContent.innerHTML = this.renderDialogContentSubscriptionDetail(this.courseData, this.courseDetail)
+          // TODO: Own fn() ?
+          this.subscriptionsPdfLink = this.viewContent.querySelector('ks-m-link-list')
+          this.subscriptionsPdfLink.addEventListener('click', this.subscriptionPdfLinkListener)
         }
       })
     }
-  }
-
-  renderDialogContentSubscriptionDetail (data, detail = {}) {
-    debugger
-    return /* html */ `
-      <style>
-        .details {
-          display: flex;
-          flex-direction: column;
-          padding-top: 2em;
-          gap:1.5em;
-          margin-bottom: 4em;
-        }
-        .detail {
-          display: flex;
-          flex-direction: column;
-        }
-        .detail > span:first-child {
-          font-weight: 500;
-          line-height: 110%;
-        }
-        .downloads {
-          margin-bottom: 1.5em;
-        }
-      </style>
-      <div id="content">
-        <div class="details">
-          ${this.subscriptionDetailsContent(data)}
-        </div>
-        <div>
-          <h3>Downloads</h3>
-          <div class="downloads">
-            ${this.renderSubscriptionDownloads(data)}
-          </div>
-        </div>
-      </div>
-    `
   }
 
   /**
@@ -143,7 +114,6 @@ export default class CourseDialog extends Shadow() {
    * @returns
    */
   renderDialogContentDetails (data, detail = {}) {
-    debugger
     return /* html */ `
       <style>
         .price-info {
@@ -192,6 +162,48 @@ export default class CourseDialog extends Shadow() {
           <h3>Downloads</h3>
           <div class="downloads">
             ${this.renderDownloads(data, detail)}
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  /**
+   * RENDER subscription detail
+   * @param {*} data
+   * @param {*} detail
+   * @returns
+   */
+  renderDialogContentSubscriptionDetail (data, detail = {}) {
+    return /* html */ `
+      <style>
+        .details {
+          display: flex;
+          flex-direction: column;
+          padding-top: 2em;
+          gap:1.5em;
+          margin-bottom: 4em;
+        }
+        .detail {
+          display: flex;
+          flex-direction: column;
+        }
+        .detail > span:first-child {
+          font-weight: 500;
+          line-height: 110%;
+        }
+        .downloads {
+          margin-bottom: 1.5em;
+        }
+      </style>
+      <div id="content">
+        <div class="details">
+          ${this.subscriptionDetailsContent(data)}
+        </div>
+        <div>
+          <h3>Downloads</h3>
+          <div class="downloads">
+            ${this.renderSubscriptionDownloads(data)}
           </div>
         </div>
       </div>
@@ -462,7 +474,6 @@ export default class CourseDialog extends Shadow() {
       }
     ])
     Promise.all([fetchModules]).then((_) => {
-      debugger
       this.html = /* html */ `
         <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${id}" close-event-name="dialog-close-${id}">
           <div class="container dialog-header">
@@ -486,7 +497,7 @@ export default class CourseDialog extends Shadow() {
             </div>
             <a-tile-status-button data-list-type="subscriptions" id="show-modal" data-id="${id}" data-content="${escapeForHtml(JSON.stringify(data))}" data-subscription="${escapeForHtml(JSON.stringify(data))}"></a-tile-status-button>  
         </m-dialog>
-        `
+      `
     })
   }
 
@@ -555,9 +566,9 @@ export default class CourseDialog extends Shadow() {
   }
 
   subscriptionDetailsContent (detail) {
-    debugger
+    const subscriptionBalance = (subscriptionMode[detail.subscriptionMode] === 'SUBSCRIPTION') ? detail.subscriptionBalance : '-'
     return /* html */ `
-      <div class="detail"><span>Guthaben</span><span>${detail.subscriptionBalance}</span></div>
+      <div class="detail"><span>Guthaben</span><span>${subscriptionBalance}</span></div>
       <div class="detail"><span>Gültigkeitsdauer</span><span>${detail.subscriptionValidFrom} - ${detail.subscriptionValidTo}</span></div>
     `
   }
@@ -596,14 +607,12 @@ export default class CourseDialog extends Shadow() {
   }
 
   renderSubscriptionDownloads (courseData) {
-    debugger
     // @ts-ignore
-    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}`
     return /* html */ `
       <ks-m-link-list namespace="link-list-download-">
         <ul>
           <li>
-            <a href="${pdfLink}">
+            <a id="subscriptionsPdfLink">
               <span>Kursdetails als PDF</span>
               <div>
                 <span>PDF</span>

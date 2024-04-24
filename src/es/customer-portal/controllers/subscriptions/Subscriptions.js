@@ -48,7 +48,8 @@ export default class Subscriptions extends HTMLElement {
       body: JSON.stringify(data),
       signal: this.abortControllerSubscriptions.signal
     }
-    const endpoint = 'https://qual.klubschule.ch/api/customerportal/subscriptions'
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptions}`
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscriptions') || 'update-subscriptions', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
@@ -73,7 +74,6 @@ export default class Subscriptions extends HTMLElement {
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionDetail}`
     const tags = JSON.parse(event.detail.tags)
-    debugger
     const courseId = `${tags[0].subscriptionId}_${tags[0].subscriptionKindId}`
     const data = {
       subscriptionId: tags[0].subscriptionId,
