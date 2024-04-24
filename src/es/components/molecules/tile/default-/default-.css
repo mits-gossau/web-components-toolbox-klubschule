@@ -12,4 +12,8 @@
     --tile-default-icon-box-color: var(--m-white);
     --tile-default-overlay-display: none;
     --tile-default-overlay-background-color: transparent;
+    --tile-default-price-strong-font-family: var(--mdx-sys-font-flex-large-headline3-font-family);
+    --tile-default-price-strong-font-size: var(--mdx-sys-font-flex-large-headline3-font-size);
+    --tile-default-price-strong-line-height: var(--mdx-sys-font-flex-large-headline3-line-height);
+    --tile-default-price-strong-font-weight: var(--mdx-sys-font-flex-large-headline3-font-weight);
 }

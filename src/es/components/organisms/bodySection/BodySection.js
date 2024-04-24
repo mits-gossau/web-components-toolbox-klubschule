@@ -170,6 +170,7 @@ export default class KsBodyStyle extends BodyStyle {
         }
 
         /* centered buttons */
+        :host > ks-a-button,
         :host > .center > ks-a-button {
             width: 100%;
             max-width: calc(400rem/16);

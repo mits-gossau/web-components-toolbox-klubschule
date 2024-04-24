@@ -1,7 +1,7 @@
 <code><a href="https://www.figma.com/file/HrjrCOkZtYdODEUO6qrGij/%F0%9F%8E%A8-MGB-Klubschule%2FMiduca-Design?node-id=2008%3A52807&mode=dev" target="_blank">Figma</a></code>
 <ks-c-with-facet mock>
     <!-- o-body-style is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-    <o-body-style background-color-prop="#F7F4F1">
+    <o-body-style background-color-prop="var(--mdx-sys-color-accent-6-subtle1)">
         <a-input
             inputid="inputSearch"
             placeholder="Suchen..."
@@ -15,7 +15,14 @@
             active-detail-property-name="fetch:searchText"
         ></a-input>
         <o-grid namespace="grid-432-auto-colums-auto-rows-">
-            <ks-a-button namespace="button-primary-" color="septenary">Filter</ks-a-button>
+            <style>
+                :host {
+                  /* filter buttons have the exception of being fully rounded, that's why I am setting border-radius here */
+                  --button-primary-border-radius: 999px;
+                  --button-secondary-border-radius: 999px;
+                }
+            </style>
+            <ks-a-button namespace="button-primary-" color="secondary">Filter</ks-a-button>
             <m-double-button namespace="double-button-default-" width="100%">
                 <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between">
                     <span part="label1">Abend</span>

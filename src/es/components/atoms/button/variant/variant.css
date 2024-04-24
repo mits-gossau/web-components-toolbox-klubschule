@@ -84,7 +84,6 @@
   --button-quaternary-icon-right-margin: 0;
   --button-padding-mobile: var(--button-padding-mobile-custom, 0.75rem);
   --button-padding: var(--mdx-comp-button-primary-medium-padding-vertical-default, 0.75rem);
-  border-radius: 50%;
   padding: var(--button-padding);
   @media only screen and (max-width: _max-width_) {
     padding: var(--button-padding-mobile);
