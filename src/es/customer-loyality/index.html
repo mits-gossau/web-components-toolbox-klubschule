@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../../../src/css/variablesCustom.css" rel="stylesheet" type="text/css">
+        <script async rel=preload as="script" type="text/javascript"
+            src="../../../src/es/components/web-components-toolbox/src/es/helpers/Environment.js"></script>
+        <title>Customer Portal</title>
+    </head>
+
+    <body>
+        <c-fetch-html>
+            <c-fetch-css>
+                <c-fetch-modules>
+                    <p-general>
+                        <o-body>
+                            <div>
+                                <a href="?page=/" route target="_self">
+                                    Voting
+                                </a>
+                            </div>
+                            <main>
+                                <c-router routes="[
+                                    {
+                                        'name': 'p-voting',
+                                        'path': '../../../customer-loyality/pages/Voting.js',
+                                        'regExp': ['/[#=]{1}\/$/', '/^\/$/']
+                                    }
+                                ]">
+                                </c-router>
+                            </main>
+                        </o-body>
+                    </p-general>
+                </c-fetch-modules>
+            </c-fetch-css>
+        </c-fetch-html>
+
+        <script rel="preload" type="module">
+            Promise.all([
+                import('../components/web-components-toolbox/src/es/components/controllers/fetchHtml/FetchHtml.js').then(module => ['c-fetch-html', module.default]),
+                import('../components/web-components-toolbox/src/es/components/controllers/fetchCss/FetchCss.js').then(module => ['c-fetch-css', module.default]),
+                import('../components/web-components-toolbox/src/es/components/controllers/fetchModules/FetchModules.js').then(module => ['c-fetch-modules', module.default]),
+                import('../components/event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default]),
+                import('../components/web-components-toolbox/src/es/components/organisms/body/Body.js').then(module => ['o-body', module.default]),
+                import('../components/web-components-toolbox/src/es/components/pages/general/General.js').then(module => ['p-general', module.default]),
+            ]).then(elements => elements.forEach(element => {
+                if (element && !customElements.get(element[0])) customElements.define(...element)
+            }))
+        </script>
+    </body>
+
+</html>
