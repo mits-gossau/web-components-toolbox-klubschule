@@ -161,6 +161,9 @@ export default class KsFooter extends Footer {
                     padding: var(--content-spacing-mobile) var(--content-spacing-mobile-vertical);
                     width: 100%;
                 }
+                :host > footer .invert.footer-links {
+                    padding: var(--content-spacing-mobile) var(--content-spacing);
+                }
                 :host footer>div:first-child .invert:first-child {
                     padding: var(--wrapper-spacing) var(--content-spacing) 0 var(--content-spacing);
                 }
