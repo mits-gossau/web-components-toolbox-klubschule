@@ -1,0 +1,133 @@
+<h1 id="primary">Input</h1>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Default</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label>Label</label>
+                <input type="text">
+                <div class="hint">
+                    <span>This is a hint.</span>
+                </div>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Required</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label>Label *</label>
+                <input type="text" required>
+                <div class="hint">
+                    <span>This is a hint.</span>
+                </div>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Placeholder</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label>Label</label>
+                <input type="text" placeholder="Placeholder">
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Hint</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label for="input-01">Label</label>
+                <input id="input-01" type="text">
+                <div class="hint">
+                    <span>This is a hint.</span>
+                </div>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Counter</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label for="input-02">Label</label>
+                <input id="input-02" type="text" maxlength="25">
+                <div class="hint">
+                    <span>This is a hint.</span>
+                    <div class="counter">
+                        <span class="current">0</span>
+                        <span class="max"></span>
+                    </div>
+                </div>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Password</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label>Label *</label>
+                <input type="password" maxlength="25" required>
+                <div class="hint">
+                    <span>Maximal 25 Zeichen, Gross- und Kleinschreibung, Zahlen und Sonderzeichen</span>
+                    <div class="counter">
+                        <span class="current">0</span>
+                        <span class="max"></span>
+                    </div>
+                </div>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>E-Mail</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label>Label *</label>
+                <input type="email" pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Disabled</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label for="input-03">Label</label>
+                <input id="input-03" type="text" disabled>
+                <div class="hint">
+                    <span>This is a hint.</span>                
+                </div>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Error</h2>
+    <div>
+        <ks-a-input>
+            <div class="error">
+                <label for="input-04">Label</label>
+                <input id="input-04" type="text">
+                <div class="hint">
+                    <span>This is a hint.</span>                
+                </div>
+                <div class="error">
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left"></a-icon-mdx>
+                    <span>This is an error.</span>                
+                </div>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
