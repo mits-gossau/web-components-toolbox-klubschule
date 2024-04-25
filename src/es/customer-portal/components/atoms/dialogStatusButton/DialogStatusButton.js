@@ -163,7 +163,7 @@ export default class DialogStatusButton extends Shadow() {
 
   /**
    * Generates different action buttons based on the provided parameters such as type, subscription mode, and status.
-   * @param id - `id`
+   * @param {string} id - `id`
    * @param {string} type - `type`
    * @param subscriptionMode - It could be either "FLAT" or "SUBSCRIPTION".
    * @param status - Determine which action button should be rendered based on the type and status of the appointment.
@@ -214,6 +214,8 @@ export default class DialogStatusButton extends Shadow() {
   }
 
   get closeButton () {
-    return /* html */ `<ks-a-button id="close" request-event-name="dialog-close-${this.dataset.id}" namespace="button-tertiary-" color="secondary">Schliessen</ks-a-button>`
+    return /* html */ `
+      <ks-a-button id="close" request-event-name="dialog-close-${this.dataset.id}" namespace="button-tertiary-" color="secondary">Schliessen</ks-a-button>
+    `
   }
 }
