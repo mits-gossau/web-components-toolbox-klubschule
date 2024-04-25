@@ -107,7 +107,7 @@ export default class TileFactory extends Shadow() {
           name: 'ks-o-tile-list'
         },
         {
-          path: `${this.importMetaUrl}../Event/Event.js`,
+          path: `${this.importMetaUrl}../event/Event.js`,
           name: 'ks-m-event'
         }
       ])
