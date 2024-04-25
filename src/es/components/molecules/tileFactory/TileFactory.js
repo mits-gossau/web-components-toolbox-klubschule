@@ -107,7 +107,7 @@ export default class TileFactory extends Shadow() {
           name: 'ks-o-tile-list'
         },
         {
-          path: `${this.importMetaUrl}../Event/Event.js`,
+          path: `${this.importMetaUrl}../event/Event.js`,
           name: 'ks-m-event'
         }
       ])
@@ -124,21 +124,12 @@ export default class TileFactory extends Shadow() {
               data='${JSON.stringify(course)}'
             ></ks-m-event>
           ` : (
-            // course.locations in the future
-            course.children?.length
+            course.locations?.length > 1 && course.filter?.length
               ? /* html */`
                 <ks-o-tile-list data='{
-                  ${JSON.stringify(course)},
-                  "buttonMore": {
-                    "text": "Weitere Standorte",
-                    "iconName": "ArrowDownRight"
-                  },
-                  "tiles": [${course.children.reduce((acc, child, i, arr) => acc + `
-                    {
-                      ${JSON.stringify(child)}
-                    }${i === arr.length - 1 ? "" : ","}
-                  `, '')}
-                  ]
+                  ${this.fillGeneralTileInfo(course)},
+                  "filter": ${JSON.stringify(course.filter) || ""},
+                  "locations": ${JSON.stringify(course.locations) || ""}
                 }'>
                 </ks-o-tile-list>
               `
