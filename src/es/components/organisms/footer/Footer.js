@@ -187,6 +187,7 @@ export default class KsFooter extends Footer {
                 }
                 :host footer>div:last-child {
                     margin: var(--content-spacing);
+                    padding: 0;
                     width: calc(100% - 2 * var(--content-spacing));
                 }
                 :host footer>div:last-child ul.has-copyright {
@@ -194,9 +195,6 @@ export default class KsFooter extends Footer {
                 }
                 :host footer>div:last-child .footer-links > .has-copyright > li:last-child {
                     margin-top: var(--content-accordion-item-spacing);
-                }
-                :host footer>div:last-child .footer-links > ul > li {
-                    margin-left: 51px;
                 }
                 :host footer>div:last-child .footer-links > ul > li:first-child {
                     margin: auto 0 30px;
