@@ -43,7 +43,7 @@ a-picture {
     bottom: 0;
     padding: var(--mdx-sys-spacing-fix-2xl) var(--mdx-sys-spacing-fix-m);
     color: white;
-    background: var(--color-${this.getAttribute('color')});
+    background: var(${this.getAttribute('mdx-color') || '--fullwidth-div-background-color'}, var(--color-${this.getAttribute('color')}));
     margin: var(--mdx-sys-spacing-fix-m);
 }
 
@@ -92,7 +92,7 @@ a-picture {
     bottom: 0;
     mask-repeat: no-repeat;
     mask-size: cover;
-    background: var(--color-${this.getAttribute('color')});
+    background: var(${this.getAttribute('mdx-color') || '--fullwidth-ibaw-ksos-background-color'}, var(--color-${this.getAttribute('color')}));
 }
 
 :host([brand=ibaw][text-position=right]) > div::before {
@@ -129,7 +129,7 @@ a-picture {
     right: 0;
     mask-repeat: no-repeat;
     mask-size: cover;
-    background: var(--color-${this.getAttribute('color')});
+    background: var(${this.getAttribute('mdx-color') || '--fullwidth-background-color'}, var(--color-${this.getAttribute('color')}));
 }
 
 :host([brand=ksos][text-position=left]) > div::after {

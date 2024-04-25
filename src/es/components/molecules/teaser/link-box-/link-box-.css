@@ -23,7 +23,7 @@
     letter-spacing: var(--mdx-sys-font-fix-label2-letter-spacing);
 
     color: white;
-    background: var(--color-${this.getAttribute('color')});
+    background: var(${this.getAttribute('mdx-color') || '--link-box-background-color'}, var(--color-${this.getAttribute('color')}));
 
     min-height: 100%;
 }

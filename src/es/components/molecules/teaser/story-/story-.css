@@ -12,7 +12,7 @@
 
   /* component css vars */
   --teaser-story-color: var(--color);
-  --teaser-story-color-${this.getAttribute('color')}: var(--color-${this.getAttribute('color')});
+  --teaser-story-color-${this.getAttribute('color')}: var(${this.getAttribute('mdx-color') || '--story-figure-color'}, var(--color-${this.getAttribute('color')}));
   --teaser-story-transition: color .3s ease-out , background-color .3s ease-out !important;
   
   --teaser-story-pretitle-font-family: var(--mdx-sys-font-fix-title4-font-family);
@@ -32,12 +32,12 @@
 }
 
 :host figure:hover {
-  --color: var(--color-${this.getAttribute('color')}, black);
+  --color: var(${this.getAttribute('mdx-color') || '--story-figure-color-hover'}, var(--color-${this.getAttribute('color')}, black));
   --picture-teaser-transform: scale(1.05, 1.05);
 }
 
 :host figure:hover {
-  color: var(--color-${this.getAttribute('color')}, black);
+  color: var(${this.getAttribute('mdx-color') || '--story-figure-color-hover'}, var(--color-${this.getAttribute('color')}, black));
 }
 
 :host figcaption {

@@ -141,7 +141,7 @@ export default class KsTeaser extends Teaser {
         :host figcaption > strong:first-child,
         :host article > div > strong:first-child {
           display: block;
-          color: var(--color-${this.getAttribute('color')}, black);
+          color: var(${this.getAttribute('mdx-color')}, var(--color-${this.getAttribute('color')}, black));
           font-family: var(--pretitle-font-family);
           font-size: var(--pretitle-font-size);
           font-weight: var(--pretitle-font-weight);

@@ -28,12 +28,12 @@
   --teaser-tile-content-cta-line-height: var(--mdx-sys-font-fix-label2-line-height);
 
   /* css vars for inverse variant */
-  --pretitle-color: var(--color-${this.getAttribute('color')});
+  --pretitle-color: var(${this.getAttribute('mdx-color') || '--tile-content-pretitle-color'}, var(--color-${this.getAttribute('color')}));
   --pretitle-color-hover: var(--mdx-sys-color-neutral-on-default);
   --text-color: var(--color-neutral-bold4);
   --text-color-hover: var(--mdx-sys-color-neutral-on-default);
   --background-color: var(--mdx-sys-color-neutral-on-default);
-  --background-color-hover: var(--color-${this.getAttribute('color')}, black);
+  --background-color-hover: var(${this.getAttribute('mdx-color') || '--tile-content-background-color-hover'}, var(--color-${this.getAttribute('color')}, black));
 
   /* css vars that are passed to children */
   --picture-teaser-transition: transform .5s ease-out;
@@ -43,10 +43,10 @@
 :host([inverse]) {
   /* css vars for inverse variant */
   --pretitle-color: var(--mdx-sys-color-neutral-on-default);
-  --pretitle-color-hover: var(--color-${this.getAttribute('color')});
+  --pretitle-color-hover: var(${this.getAttribute('mdx-color') || '--tile-content-pretitle-color-hover'}, var(--color-${this.getAttribute('color')}));
   --text-color: var(--mdx-sys-color-neutral-on-default);
   --text-color-hover: var(--color-neutral-bold4);
-  --background-color: var(--color-${this.getAttribute('color')}, black);
+  --background-color: var(${this.getAttribute('mdx-color') || '--tile-content-background-color'}, var(--color-${this.getAttribute('color')}, black));
   --background-color-hover: var(--mdx-sys-color-neutral-on-default);
 }
 
