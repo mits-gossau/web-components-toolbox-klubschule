@@ -13,7 +13,7 @@
     --footer-default-legal-background-color: var(--mdx-sys-color-accent-6-subtle1);
     --footer-default-content-accordion-typography: var(--mdx-sys-font-fix-label2);
     --footer-default-content-accordion-color: var(--mdx-sys-color-neutral-bold4);
-    --footer-default-content-accordion-item-spacing: var(--mdx-sys-spacing-fix-3xs);
+    --footer-default-content-accordion-item-spacing: var(--mdx-sys-spacing-fix-s);
     --footer-default-social-headline-color: var(--mdx-sys-color-accent-6-on-subtle);
     --footer-default-social-headline-typography: var(--mdx-sys-font-flex-large-headline3);
     --footer-default-social-body-color: var(--mdx-sys-color-neutral-default);
