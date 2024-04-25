@@ -37,7 +37,7 @@ a-picture {
     margin-bottom: var(--mdx-sys-spacing-fix-m) !important;
 }
 
-:host p {
+:host(ks-m-teaser) p {
     font-family: var(--mdx-sys-font-flex-large-body2-font-family);
     font-size: var(--mdx-sys-font-flex-large-body2-font-size);
     font-weight: var(--mdx-sys-font-flex-large-body2-font-weight);
