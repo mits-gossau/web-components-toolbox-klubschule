@@ -49,7 +49,6 @@ export default class AppointmentTile extends Tile {
         this.currentTile.classList.add(defaultClass)
         this.currentTile.classList.add(tileState.css.border)
         this.dataset.removable = null
-        debugger
       })
     }
   }
@@ -345,6 +344,8 @@ export default class AppointmentTile extends Tile {
   renderSubscription (subscription) {
     const tileState = getTileState(courseAppointmentStatusMapping[1], subscription)
     const courseId = `${subscription.subscriptionId}_${subscription.subscriptionKindId}`
+    const from = this.formatSubscriptionAppointmentDate(subscription.subscriptionValidFrom)
+    const to = this.formatSubscriptionAppointmentDate(subscription.subscriptionValidTo)
     return /* html */ `
     <m-load-template-tag mode="false">
       <template>
@@ -357,7 +358,7 @@ export default class AppointmentTile extends Tile {
                     </span>
                   </div>
                   <div>
-                    <span class="m-tile__title date">Gültigkeitsdauer ${subscription.subscriptionValidFrom} - ${subscription.subscriptionValidTo} </span>
+                    <span class="m-tile__title date">Gültigkeitsdauer ${from} - ${to} </span>
                   </div> 
                 </div>
                 <!-- --> 
@@ -389,9 +390,17 @@ export default class AppointmentTile extends Tile {
     return formatter.format(dateObject)
   }
 
+  formatSubscriptionAppointmentDate (dateString) {
+    const dateObject = new Date(dateString)
+    const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
+    // @ts-ignore
+    // TODO: locale!
+    const formatter = new Intl.DateTimeFormat('de-DE', options)
+    return formatter.format(dateObject)
+  }
+
   noScrollEventListener (event) {
     if ((!event.detail?.hasNoScroll) && (this.dataset?.listType === 'booked-appointments' && this.dataset?.removable)) {
-      debugger
       this.style.display = 'none'
       if (this.previousElementSibling.tagName === 'KS-A-HEADING') {
         this.previousElementSibling.style.display = 'none'

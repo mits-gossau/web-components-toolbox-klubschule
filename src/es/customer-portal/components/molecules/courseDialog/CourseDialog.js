@@ -576,7 +576,12 @@ export default class CourseDialog extends Shadow() {
    */
   renderPriceInfoContent (courseData, courseDetail) {
     return subscriptionMode[courseDetail.subscriptionMode] === subscriptionMode.WERTABO
-      ? /* html */ `<div class="detail price-info"><h3 class="price">${courseData.lessonPrice}</h3><span> Termin wird über ihr Abonnement gebucht</span></div>`
+      ? /* html */ `
+        <div class="detail price-info">
+          <h3 class="price">${courseData.lessonPrice}</h3>
+          <span> Termin wird über ihr Abonnement gebucht</span>
+        </div>
+      `
       : ''
   }
 
@@ -589,11 +594,19 @@ export default class CourseDialog extends Shadow() {
     titleElement.innerHTML = title
   }
 
-  subscriptionDetailsContent (detail) {
-    const subscriptionBalance = (subscriptionMode[detail.subscriptionMode] === 'SUBSCRIPTION') ? detail.subscriptionBalance : '-'
+  subscriptionDetailsContent (subscription) {
+    const subscriptionBalance = (subscriptionMode[subscription.subscriptionMode] === 'SUBSCRIPTION') ? subscription.subscriptionBalance : '-'
+    const from = this.formatCourseAppointmentDate(subscription.subscriptionValidFrom)
+    const to = this.formatCourseAppointmentDate(subscription.subscriptionValidTo)
     return /* html */ `
-      <div class="detail"><span>Guthaben</span><span>${subscriptionBalance}</span></div>
-      <div class="detail"><span>Gültigkeitsdauer</span><span>${detail.subscriptionValidFrom} - ${detail.subscriptionValidTo}</span></div>
+      <div class="detail">
+        <span>Guthaben</span>
+        <span>${subscriptionBalance}</span>
+      </div>
+      <div class="detail">
+        <span>Gültigkeitsdauer</span>
+        <span>${from} - ${to}</span>
+      </div>
     `
   }
 
