@@ -16,10 +16,27 @@
     </ol>
     <br>
     <h2>Components & Pages</h2>
+    <br>
+    Brand:
+    <select value="Klubschule" id="theme-select">
+      <option value="Klubschule">Klubschule</option>
+      <option value="Ibaw">IBAW</option>
+      <option value="Ksos">KSOS (Pro)</option>
+    </select>
     <div id=pages></div>
     <script>
-      const pageQuery = 'rootFolder=src&css=./src/css/variablesCustom.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html'
-      document.querySelector('#pages').innerHTML = /* HTML */`
+      const defaultTheme = new URL(location.href).searchParams.get('theme') || "Klubschule"; // "Klubschule" | "Ibaw" | "Ksos"
+      const themeSelect = document.querySelector('#theme-select');
+      themeSelect.value = defaultTheme
+      themeSelect.onchange = (event) => {
+        renderPages(event.target.value)
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('theme', event.target.value);
+        window.location.search = urlParams;
+      }
+      const pageQuery = (theme) => 'rootFolder=src&css=./src/css/variablesCustom' + theme + '.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html'
+
+      const pages = (pageQuery) => /* HTML */`
       <section>
         <h3>Atoms</h3>
         <ul>
@@ -30,6 +47,7 @@
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/DoubleButtons.html">DoubleButtons</a></li>      
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/FilterButtons.html">FilterButtons</a></li>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/IconButtons.html">IconButtons</a></li>
+          <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/Links.html">Links</a></li>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/Picture.html">Picture</a></li>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/Videos.html">Videos</a></li>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/atoms/heading/default-/default-.html">Heading</a></li>
@@ -139,6 +157,11 @@
       <li><a href="./src/css/web-components-toolbox-migros-design-experience/">MDX stuff</a></li>
     </ul>
 `
+    const renderPages = (theme) => {
+      document.querySelector('#pages').innerHTML = pages(pageQuery(theme));
+    }
+    renderPages(defaultTheme)
+    
 </script>
   </body>
 

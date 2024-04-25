@@ -13,7 +13,24 @@ export default class AboTile extends Shadow() {
 
   connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
+    if (this.shouldRenderHTML()) {
+      new Promise(resolve => {
+        this.dispatchEvent(new CustomEvent('request-event-detail', {
+          detail: {
+            resolve,
+            language: this.dataAsJson.language,
+            typ: this.dataAsJson.typ,
+            id: this.dataAsJson.id,
+            center_id: this.dataAsJson.center_id
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      }).then((data) => {
+        this.renderHTML(data)
+      })
+    }
   }
 
   disconnectedCallback() {
@@ -34,7 +51,7 @@ export default class AboTile extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML() {
-    return !this.badge
+    return !this.root.querySelector('ks-m-event-detail')
   }
 
   /**
@@ -59,15 +76,28 @@ export default class AboTile extends Shadow() {
     `
   }
 
+  get dataStringified() {
+    return this.getAttribute('data')
+  }
+
+  get dataAsJson() {
+    return AboTile.parseAttribute(this.dataStringified)
+  }
+
+  get details() {
+    return this.root.querySelector("#aboDetails")
+  }
 
   /**
-    * renderHTML
-    * @returns {Promise<void>} The function `renderHTML` returns a Promise.
+  * renderHTML
+  * @param {any} data - An array of course fetch objects.
+  * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  renderHTML() {
-    this.html = /* HTML */ `
+  renderHTML(data) {
+    this.html = ''
+    this.html = /* html */ `
       <ks-m-event-detail
-        data="${this.dataStringified}"
+        data='${JSON.stringify(data)}'
       >
       </ks-m-event-detail>
       <div>
@@ -88,13 +118,5 @@ export default class AboTile extends Shadow() {
         name: 'ks-m-buttons'
       }
     ])
-  }
-
-  get dataStringified() {
-    return this.getAttribute('data')
-  }
-
-  get dataAsJson() {
-    return AboTile.parseAttribute(this.dataStringified)
   }
 }

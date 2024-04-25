@@ -156,7 +156,7 @@ export default class KsFooter extends Footer {
             :host footer>div:last-child a {
                 color: var(--legal-link-color)
             }
-            @media only screen and (max-width: ${(this.getMobileBreakpoint({})) || '_max-width_'}) {
+            @media only screen and (max-width: _max-width_) {
                 :host footer .invert {
                     padding: var(--content-spacing-mobile) var(--content-spacing-mobile-vertical);
                     width: 100%;

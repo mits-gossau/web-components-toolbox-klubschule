@@ -154,12 +154,13 @@ export default class Event extends Shadow() {
       }
 
       :host .link-more {
+        font-family: var(--font-family);
         display: flex;
         flex-direction: row;
         align-items: center;
         border: none;
         background-color: transparent;
-        color: var(--mdx-base-color-klubschule-blue-600);
+        color: var(--mdx-sys-color-primary-default);
         margin: 0;
         padding: 0;
         margin-top: 1rem;
@@ -168,7 +169,7 @@ export default class Event extends Shadow() {
       }
 
       :host .link-more a-icon-mdx {
-        color: var(--mdx-base-color-klubschule-blue-600);
+        color: var(--mdx-sys-color-primary-default);
       }
 
       :host .meta li .link-more {
@@ -199,7 +200,7 @@ export default class Event extends Shadow() {
       }
 
       :host .controls-left a-icon-mdx {
-        color: var(--mdx-base-color-klubschule-blue-600);
+        color: var(--mdx-sys-color-primary-default);
       }
 
       :host .controls-left div + div,
@@ -235,10 +236,10 @@ export default class Event extends Shadow() {
       }
       
       :host .price strong {
-          font-family: 'Graphik';
-          font-size: 1.5rem;
-          line-height: 1.625rem;
-          font-weight: 500;    
+          font-family: var(--mdx-sys-font-flex-large-headline3-font-family);
+          font-size: var(--mdx-sys-font-flex-large-headline3-font-size);
+          line-height: var(--mdx-sys-font-flex-large-headline3-line-height);
+          font-weight: var(--mdx-sys-font-flex-large-headline3-font-weight);   
       }
 
       :host .details {
@@ -342,7 +343,7 @@ export default class Event extends Shadow() {
       :host address a {
         display: flex;
         flex-direction: column;
-        color: var(--mdx-base-color-klubschule-blue-600);
+        color: var(--mdx-sys-color-primary-default);
         text-decoration: none;
         margin-right: 1rem;
         min-width: 11.25rem;
@@ -540,18 +541,29 @@ export default class Event extends Shadow() {
 
   /**
     * renderDetails
-    * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  async renderDetails () {
+  async renderDetails() {
     if (!this.details.children.length) {
       this.fetchModules([
         {
           path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/loading/Loading.js`,
           name: 'a-loading'
+        },
+        {
+          path: `${this.importMetaUrl}../../molecules/eventDetail/EventDetail.js`,
+          name: 'ks-m-event-detail'
         }
       ])
       this.details.classList.add('loading')
       this.details.innerHTML = '<a-loading></a-loading>'
+      if (this.hasAttribute('mock')) {
+        this.details.innerHTML = /* html */`
+          <ks-m-event-detail
+            data='${this.mockData}'
+          ></ks-m-event-detail>
+        `
+      }
+
       new Promise(resolve => this.dispatchEvent(new CustomEvent('request-event-detail', {
         detail: {
           resolve,
@@ -575,12 +587,6 @@ export default class Event extends Shadow() {
             data='${JSON.stringify(data)}'
           ></ks-m-event-detail>
         `
-        return this.fetchModules([
-          {
-            path: `${this.importMetaUrl}../../molecules/eventDetail/EventDetail.js`,
-            name: 'ks-m-event-detail'
-          }
-        ])
       })
     }
   }

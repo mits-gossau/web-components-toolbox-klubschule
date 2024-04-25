@@ -27,7 +27,7 @@ self.Environment = {
       case constructor && typeof constructor.includes === 'function' && constructor.includes('Footer'):
       case constructor && typeof constructor.includes === 'function' && constructor.includes('Login'):
       case constructor && typeof constructor.includes === 'function' && constructor.includes('CarouselTwo') && namespace === 'carousel-two-teaser-':
-        return '1200px'
+        return '1020px'
       default:
         return '767px'
     }
