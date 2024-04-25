@@ -3,6 +3,8 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 import { subscriptionMode, actionType } from '../../../helpers/Mapping.js'
 import { escapeForHtml } from '../../../helpers/Shared.js'
 
+/* global self */
+
 /**
 * @export
 * @class DialogStatusButton
@@ -178,9 +180,17 @@ export default class DialogStatusButton extends Shadow() {
       return `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="[${actionType.reversal}]"  request-event-name="request-show-dialog-reversal-confirmation">Termin stornieren</ks-a-button>`
     }
 
+    if (type === 'subscriptions') {
+      // https://qual.klubschule.ch/Kurse/suche@6A_10401
+      // @ts-ignore
+      const url = `${self.Environment.getApiBaseUrl('customer-portal').subscriptionRenewSearchLinkUrl}/${this.dataContent.subscriptionKindType}_${this.dataContent.subscriptionKindId}`
+      return `<ks-a-button href="${url}" namespace="button-primary-">Abonnement erneuern</ks-a-button>`
+    }
+
     const btnBooking = `<ks-a-button namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'>Jetzt Termin buchen</ks-a-button>`
     const btnReversal = `<ks-a-button color="quaternary" namespace="button-primary-" request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'>Jetzt Termin stornieren</ks-a-button>`
 
+    // TODO: Refactor
     const actionButton = {
       FLAT: {
         1: btnBooking,
