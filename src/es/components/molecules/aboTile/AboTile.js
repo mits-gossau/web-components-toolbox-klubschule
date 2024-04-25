@@ -77,7 +77,7 @@ export default class AboTile extends Shadow() {
   }
 
   get dataStringified() {
-    return this.getAttribute('data')
+    return this.getAttribute('initial-request')
   }
 
   get dataAsJson() {
@@ -98,6 +98,7 @@ export default class AboTile extends Shadow() {
     this.html = /* html */ `
       <ks-m-event-detail
         data='${JSON.stringify(data)}'
+        
       >
       </ks-m-event-detail>
       <div>

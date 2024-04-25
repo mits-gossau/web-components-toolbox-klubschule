@@ -313,7 +313,7 @@ export default class EventDetail extends Shadow() {
                     <div slot="description">
                         <p>${this.data.kantonsbeitrag_label}</p>
                         <a-link namespace="underline-">
-                            <a href="${this.data.kantonsbeitrag_link}">${this.data.kantonsbeitrag_link_label}</a>
+                          <a href="${this.data.kantonsbeitrag_link}">${this.data.kantonsbeitrag_link_label}</a>
                         </a-link>
                     </div>
                 </ks-m-system-notification>
@@ -348,7 +348,7 @@ export default class EventDetail extends Shadow() {
             ` : ''}
           </div>
         ` : ''}
-        ${this.data.abo_typen_label && (this.data.abo_typen?.length || this.data.abo_typen_link) ? /* html */ `
+        ${this.data.abo_typen_label && (this.data.abo_typen?.length || this.data.abo_typen_link_label) ? /* html */ `
           <div>
             <h3>
               <div class="with-border">
@@ -362,15 +362,15 @@ export default class EventDetail extends Shadow() {
                     <div slot="description">
                         <p>${aboType.text}</p>
                         <a-link namespace="underline-">
-                            <a href="${aboType.link}">${aboType.link_label}</a>
+                          <a href="${aboType.link}">${aboType.link_label}</a>
                         </a-link>
                     </div>
                 </ks-m-system-notification>
               </div>
             `, '') : ''}
-            ${this.data.abo_typen_link && this.data.abo_typen_link_label ? /* html */ `
-              <ks-c-abonnements endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Abonnement">
-                <ks-m-abonnements data='{"language":"d","kurs_typ":"6A","kurs_id":"10375","centerid":"10375"}' link-label="${this.data.abo_typen_link_label}" button-close-label="Schliessen">
+            ${this.data.abo_typen_link_label ? /* html */ `
+              <ks-c-abonnements  ${this.abonnementsAPI ? `endpoint="${this.abonnementsAPI}"` : ''}>
+                <ks-m-abonnements ${this.initialRequest ? `initial-request='${this.initialRequest}'` : ''} link-label="${this.data.abo_typen_link_label}" button-close-label="${this.translations.closeButton}">
                 </ks-m-abonnements>
               </ks-c-abonnements>
             ` : ''}
@@ -400,10 +400,6 @@ export default class EventDetail extends Shadow() {
         name: 'ks-m-system-notification'
       },
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
-        name: 'a-link'
-      },
-      {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/button/Button.js`,
         name: 'a-button'
       },
@@ -416,6 +412,10 @@ export default class EventDetail extends Shadow() {
         name: 'ks-a-button'
       },
       {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
+        name: 'a-link'
+      },
+      {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
       }
@@ -424,5 +424,13 @@ export default class EventDetail extends Shadow() {
 
   get data() {
     return EventDetail.parseAttribute(this.getAttribute('data'))
+  }
+
+  get initialRequest() {
+    return EventDetail.parseAttribute(this.getAttribute('initial-request')) || '{"language":"d","typ":"6A","id":"10375","centerid":"10375"}'
+  }
+
+  get abonnementsAPI() {
+    return this.getAttribute('abonnements-api')
   }
 }

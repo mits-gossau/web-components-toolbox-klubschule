@@ -562,6 +562,7 @@ export default class Event extends Shadow() {
             data='${this.mockData}'
           ></ks-m-event-detail>
         `
+        return
       }
 
       new Promise(resolve => this.dispatchEvent(new CustomEvent('request-event-detail', {
@@ -578,11 +579,7 @@ export default class Event extends Shadow() {
       }))).then((data) => {
         this.details.classList.remove('loading')
 
-        this.details.innerHTML = this.hasAttribute('mock') ? /* html */`
-          <ks-m-event-detail
-            data='${this.mockData}'
-          ></ks-m-event-detail>
-        ` : /* html */ `
+        this.details.innerHTML = /* html */ `
           <ks-m-event-detail
             data='${JSON.stringify(data)}'
           ></ks-m-event-detail>
@@ -753,7 +750,8 @@ export default class Event extends Shadow() {
           "link": "#",
           "link_label": "Link Label"
         }
-      ]
+      ],
+      "abo_typen_link_label": "Passende Abonnements finden"
     }
     `
   }

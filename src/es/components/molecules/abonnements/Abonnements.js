@@ -14,10 +14,10 @@ export default class Abonnements extends Shadow() {
         this.dispatchEvent(new CustomEvent('request-abo-list', {
           detail: {
             resolve,
-            language: this.data.language || this.data.parentkey.split('_')[0],
-            typ: this.data.typ || this.data.kurs_typ,
-            id: this.data.id || this.data.kurs_id,
-            center_id: this.data.center_id || this.data.centerid
+            language: this.initialRequest.language || this.initialRequest.parentkey.split('_')[0],
+            typ: this.initialRequest.typ || this.initialRequest.kurs_typ,
+            id: this.initialRequest.id || this.initialRequest.kurs_id,
+            center_id: this.initialRequest.center_id || this.initialRequest.centerid
           },
           bubbles: true,
           cancelable: true,
@@ -32,7 +32,7 @@ export default class Abonnements extends Shadow() {
   connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('open-abonnements-dialog', this.requestAbonnements)
+    this.addEventListener('open-abonnements-dialog', this.requestAbonnements)
   }
 
   disconnectedCallback() {
@@ -89,17 +89,30 @@ export default class Abonnements extends Shadow() {
   }
 
   renderHTML() {
-      this.html = /* html */ `
-        <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="open-abonnements-dialog" id="offers-page-filter-categories" close-event-name="backdrop-clicked">
-        </m-dialog>
-        <ks-a-button
-          namespace="button-transparent-"
-          request-event-name="open-abonnements-dialog"
-          click-no-toggle-active
-        >
-          <span>${this.linkLabel}</span>
-        </ks-a-button>
-      `
+    this.html = /* html */ `
+      <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="open-abonnements-dialog" id="offers-page-filter-categories" close-event-name="backdrop-clicked">
+        <div class="container dialog-header" tabindex="0">
+          <div>
+          </div>
+          <h3 id="total"></h3>
+          <div id="close">
+            <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+          </div>
+        </div>
+        <div id="content" class="container dialog-content">
+        </div>
+        <div class="container dialog-footer">
+          <a-button id="close" namespace="button-secondary-" no-pointer-events>${this.buttonCloseLabel}</a-button>
+        </div>
+      </m-dialog>
+      <ks-a-button
+        namespace="button-transparent-"
+        request-event-name="open-abonnements-dialog"
+        click-no-toggle-active
+      >
+        <span>${this.linkLabel}</span>
+      </ks-a-button>
+    `
   }
 
   /**
@@ -107,35 +120,23 @@ export default class Abonnements extends Shadow() {
     * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
   renderContent(data) {
-    if (!this.data) console.error('Data json attribute is missing or corrupted!', this)
-    this.innerDialog.innerHTML = /* HTML */ `
-      <div class="container dialog-header" tabindex="0">
-        <div>
-        </div>
-        <h3>${data.total_label}</h3>
-        <div id="close">
-          <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-        </div>
-      </div>
-      <div class="container dialog-content">
-        ${data.courses?.length ? 
-          data.courses.reduce(
-            (acc, abonnement) => acc + (
-              abonnement.locations?.length ? /* html */ `
-                <ks-o-tile-list data='${JSON.stringify(abonnement)}'>
-                </ks-o-tile-list>
-              ` : /* html */ `
-                <ks-m-tile namespace="tile-default-" data='${JSON.stringify(abonnement)}'>
-                </ks-m-tile>
-              `
-            ),
-          '')
-        : ''}
-      </div>
-      <div class="container dialog-footer">
-        <a-button id="close" namespace="button-secondary-" no-pointer-events>${this.buttonCloseLabel}</a-button>
-      </div>
-    `
+    if (!this.initialRequest) console.error('Data json attribute is missing or corrupted!', this)
+    console.log("RenderContetn")
+    this.total.innerHTML = data.total_label
+    this.content.innerHTML = data.courses?.length ? 
+      data.courses.reduce(
+        (acc, abonnement) => acc + (
+          abonnement.locations?.length ? /* html */ `
+            <ks-o-tile-list data='${JSON.stringify(abonnement)}'>
+            </ks-o-tile-list>
+          ` : /* html */ `
+            <ks-m-tile namespace="tile-default-" data='${JSON.stringify(abonnement)}'>
+            </ks-m-tile>
+          `
+        ),
+      '')
+    : ''
+
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
@@ -168,8 +169,8 @@ export default class Abonnements extends Shadow() {
     ])
   }
 
-  get data() {
-    return Abonnements.parseAttribute(this.getAttribute('data'))
+  get initialRequest() {
+    return Abonnements.parseAttribute(this.getAttribute('initial-request'))
   }
 
   get buttonCloseLabel() {
@@ -183,8 +184,16 @@ export default class Abonnements extends Shadow() {
   get dialog() {
     return this.root.querySelector('m-dialog')
   }
-
+  
   get innerDialog() {
     return this.dialog.root.querySelector('dialog')
+  }
+
+  get total() {
+    return this.innerDialog.querySelector('#total')
+  }
+
+  get content() {
+    return this.innerDialog.querySelector('#content')
   }
 }
