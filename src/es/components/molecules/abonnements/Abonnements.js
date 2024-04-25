@@ -14,10 +14,7 @@ export default class Abonnements extends Shadow() {
         this.dispatchEvent(new CustomEvent('request-abo-list', {
           detail: {
             resolve,
-            language: this.initialRequest.language || this.initialRequest.parentkey.split('_')[0],
-            typ: this.initialRequest.typ || this.initialRequest.kurs_typ,
-            id: this.initialRequest.id || this.initialRequest.kurs_id,
-            center_id: this.initialRequest.center_id || this.initialRequest.centerid
+            abonnementsAPI: this.abonnementsURL
           },
           bubbles: true,
           cancelable: true,
@@ -120,8 +117,6 @@ export default class Abonnements extends Shadow() {
     * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
   renderContent(data) {
-    if (!this.initialRequest) console.error('Data json attribute is missing or corrupted!', this)
-    console.log("RenderContetn")
     this.total.innerHTML = data.total_label
     this.content.innerHTML = data.courses?.length ? 
       data.courses.reduce(
@@ -169,8 +164,8 @@ export default class Abonnements extends Shadow() {
     ])
   }
 
-  get initialRequest() {
-    return Abonnements.parseAttribute(this.getAttribute('initial-request'))
+  get abonnementsURL() {
+    return this.getAttribute('abonnements-api')
   }
 
   get buttonCloseLabel() {

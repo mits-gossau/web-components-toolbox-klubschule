@@ -368,9 +368,9 @@ export default class EventDetail extends Shadow() {
                 </ks-m-system-notification>
               </div>
             `, '') : ''}
-            ${this.data.abo_typen_link_label ? /* html */ `
-              <ks-c-abonnements  ${this.abonnementsAPI ? `endpoint="${this.abonnementsAPI}"` : ''}>
-                <ks-m-abonnements ${this.initialRequest ? `initial-request='${this.initialRequest}'` : ''} link-label="${this.data.abo_typen_link_label}" button-close-label="${this.translations.closeButton}">
+            ${this.data.abo_typen_link_label && this.data.abo_typen_link ? /* html */ `
+              <ks-c-abonnements>
+                <ks-m-abonnements abonnements-api="${this.data.abo_typen_link}" link-label="${this.data.abo_typen_link_label}" button-close-label="${this.closeButton}">
                 </ks-m-abonnements>
               </ks-c-abonnements>
             ` : ''}
@@ -424,13 +424,5 @@ export default class EventDetail extends Shadow() {
 
   get data() {
     return EventDetail.parseAttribute(this.getAttribute('data'))
-  }
-
-  get initialRequest() {
-    return EventDetail.parseAttribute(this.getAttribute('initial-request')) || '{"language":"d","typ":"6A","id":"10375","centerid":"10375"}'
-  }
-
-  get abonnementsAPI() {
-    return this.getAttribute('abonnements-api')
   }
 }

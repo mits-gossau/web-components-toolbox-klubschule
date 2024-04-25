@@ -751,7 +751,8 @@ export default class Event extends Shadow() {
           "link_label": "Link Label"
         }
       ],
-      "abo_typen_link_label": "Passende Abonnements finden"
+      "abo_typen_link_label": "Passende Abonnements finden",
+      "abo_typen_link": "https://dev.klubschule.ch/Umbraco/Api/CourseApi/Abonnement?lang=d&typ=6A&id=10375&center_id=10375"
     }
     `
   }
