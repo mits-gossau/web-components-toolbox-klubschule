@@ -19,12 +19,14 @@ export default class AppointmentTile extends Tile {
     super.connectedCallback()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
+    this.addEventListener('no-scroll', this.noScrollEventListener)
   }
 
   disconnectedCallback () {
     super.disconnectedCallback()
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
+    this.removeEventListener('no-scroll', this.noScrollEventListener)
   }
 
   // BOOKED - SUCCESS
@@ -41,15 +43,13 @@ export default class AppointmentTile extends Tile {
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(data => {
-        if (this.dataset.listType) {
-          this.hideTileFromList(this.dataset.listType)
-          return
-        }
         const tileState = getTileState(courseAppointmentStatusMapping[data.courseAppointmentStatus], data)
         const defaultClass = this.currentTile.classList[0]
         this.currentTile.classList.remove(...this.currentTile.classList)
         this.currentTile.classList.add(defaultClass)
         this.currentTile.classList.add(tileState.css.border)
+        this.dataset.removable = null
+        debugger
       })
     }
   }
@@ -389,20 +389,13 @@ export default class AppointmentTile extends Tile {
     return formatter.format(dateObject)
   }
 
-  hideTileFromList (type) {
-    if (type === 'booked-appointments') {
-      // this.currentCourseDialog.style.visibility = 'hidden'
-      // this.templateTag.style.minHeight = '0'
-      // this.templateTag.style.visibility = 'hidden'
-      // const placeholder = document.createElement('div')
-      // placeholder.appendChild(this.currentCourseDialog)
-      // this.replaceWith(placeholder)
-      // setTimeout(() => {
-      //   if (this.previousElementSibling.tagName === 'KS-A-HEADING') {
-      //     this.previousElementSibling.style.display = 'none'
-      //   }
-      //   this.style.display = 'none'
-      // }, 3000)
+  noScrollEventListener (event) {
+    if ((!event.detail?.hasNoScroll) && (this.dataset?.listType === 'booked-appointments' && this.dataset?.removable)) {
+      debugger
+      this.style.display = 'none'
+      if (this.previousElementSibling.tagName === 'KS-A-HEADING') {
+        this.previousElementSibling.style.display = 'none'
+      }
     }
   }
 

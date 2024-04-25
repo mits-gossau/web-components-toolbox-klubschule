@@ -38,11 +38,8 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
-    document.body.addEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
+    // document.body.addEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
     document.body.addEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
-    this.addEventListener('no-scroll', (event) => {
-      debugger
-    })
   }
 
   disconnectedCallback () {
@@ -52,7 +49,7 @@ export default class CourseDialog extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.removeEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
-    document.body.removeEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
+    // document.body.removeEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
     this.subscriptionsPdfLink?.removeEventListener('click', this.subscriptionPdfLinkListener)
   }
 
@@ -86,9 +83,9 @@ export default class CourseDialog extends Shadow() {
    * Dialog close button listener
    *
    */
-  dialogCloseListener = () => {
-    this.viewContent.innerHTML = ''
-  }
+  // dialogCloseListener = () => {
+  //   this.viewContent.innerHTML = ''
+  // }
 
   /**
    * SHOW course detail
@@ -634,7 +631,6 @@ export default class CourseDialog extends Shadow() {
   }
 
   renderSubscriptionDownloads (subscriptionData) {
-    debugger
     // @ts-ignore
     return /* html */ `
       <ks-m-link-list data-subscription="${escapeForHtml(JSON.stringify(subscriptionData))}"  namespace="link-list-download-">
