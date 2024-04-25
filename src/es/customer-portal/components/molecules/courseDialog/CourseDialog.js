@@ -12,7 +12,7 @@ import { actionType, subscriptionMode, courseAppointmentStatusMapping } from '..
 * @type {CustomElementConstructor}
 */
 export default class CourseDialog extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.courseData = null
     this.courseDetail = null
@@ -21,7 +21,7 @@ export default class CourseDialog extends Shadow() {
     this.subscriptionsPdfLink = null
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.courseData = JSON.parse(this.dataset.content)
     this.courseId = this.dataset.id
     this.courseSubscription = JSON.parse(this.dataset.subscription)
@@ -39,10 +39,13 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
-    document.body.addEventListener(this.getAttribute(`update-subscription-pdf`) || `update-subscription-pdf`, this.updateSubscriptionListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
+    this.addEventListener('no-scroll', (event) => {
+      debugger
+    })
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('request-show-dialog-booking-confirmation') || 'request-show-dialog-booking-confirmation', this.requestShowDialogBookingConfirmationListener)
     document.body.removeEventListener(this.getAttribute('request-show-dialog-reversal-confirmation') || 'request-show-dialog-reversal-confirmation', this.requestShowDialogReversalConfirmationListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
@@ -53,7 +56,7 @@ export default class CourseDialog extends Shadow() {
     this.subscriptionsPdfLink?.removeEventListener('click', this.subscriptionPdfLinkListener)
   }
 
-  subscriptionPdfLinkListener(event) {
+  subscriptionPdfLinkListener (event) {
     event.preventDefault()
     this.dispatchEvent(new CustomEvent('request-subscription-pdf',
       {
@@ -73,7 +76,7 @@ export default class CourseDialog extends Shadow() {
         const url = URL.createObjectURL(subscriptionPdf)
         const a = document.createElement('a')
         a.href = url
-        a.download = `${this.courseData.subscriptionType}_${this.courseData.subscriptionId}.pdf`;
+        a.download = `${this.courseData.subscriptionType}_${this.courseData.subscriptionId}.pdf`
         a.click()
       })
     }
@@ -137,7 +140,7 @@ export default class CourseDialog extends Shadow() {
    * @param {*} detail
    * @returns
    */
-  renderDialogContentDetails(data, detail = {}) {
+  renderDialogContentDetails (data, detail = {}) {
     return /* html */ `
       <style>
         .price-info {
@@ -198,7 +201,7 @@ export default class CourseDialog extends Shadow() {
    * @param {*} detail
    * @returns
    */
-  renderDialogContentSubscriptionDetail(data, detail = {}) {
+  renderDialogContentSubscriptionDetail (data, detail = {}) {
     return /* html */ `
       <style>
         .details {
@@ -252,7 +255,7 @@ export default class CourseDialog extends Shadow() {
    * @param {*} detail
    * @returns
    */
-  renderDialogContentBookingConfirmation(data, detail = {}) {
+  renderDialogContentBookingConfirmation (data, detail = {}) {
     return /* html */ `
       <style>
         .details {
@@ -303,7 +306,7 @@ export default class CourseDialog extends Shadow() {
    * @param {*} detail
    * @returns
    */
-  renderDialogContentBookingSuccess(data, detail = {}) {
+  renderDialogContentBookingSuccess (data, detail = {}) {
     return /* html */`
       <style>
         .success-message{
@@ -354,7 +357,7 @@ export default class CourseDialog extends Shadow() {
    * @param {*} detail
    * @returns
    */
-  renderDialogContentReversalConfirmation(data, detail = {}) {
+  renderDialogContentReversalConfirmation (data, detail = {}) {
     return /* html */ `
       <style>
         .details {
@@ -411,7 +414,7 @@ export default class CourseDialog extends Shadow() {
    * @param {*} detail
    * @returns
    */
-  renderDialogContentReversalSuccess(data, detail = {}) {
+  renderDialogContentReversalSuccess (data, detail = {}) {
     return /* html */`
       <style>
         .success-message{
@@ -435,7 +438,7 @@ export default class CourseDialog extends Shadow() {
    * evaluates if a render is necessary
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -443,14 +446,14 @@ export default class CourseDialog extends Shadow() {
    * evaluates if a render is necessary
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.dialog
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {}
       @media only screen and (max-width: _max-width_) {
@@ -463,7 +466,7 @@ export default class CourseDialog extends Shadow() {
   /**
    * fetches the template
    */
-  fetchTemplate() {
+  fetchTemplate () {
     /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
@@ -486,7 +489,7 @@ export default class CourseDialog extends Shadow() {
     }
   }
 
-  renderSubscriptionsHTML(id, data) {
+  renderSubscriptionsHTML (id, data) {
     const fetchModules = this.fetchModules([
       {
         path: `${this.importMetaUrl}'../../../../../../components/molecules/linkList/LinkList.js`,
@@ -529,7 +532,7 @@ export default class CourseDialog extends Shadow() {
    * Render HTML
    * @returns void
    */
-  renderHTML(courseId, content, selectedSubscription) {
+  renderHTML (courseId, content, selectedSubscription) {
     const fetchModules = this.fetchModules([
       {
         path: `${this.importMetaUrl}'../../../../../../components/molecules/linkList/LinkList.js`,
@@ -574,7 +577,7 @@ export default class CourseDialog extends Shadow() {
    * @param courseDetail - `courseDetail`
    * @returns {string} Returns an HTML string.
    */
-  renderPriceInfoContent(courseData, courseDetail) {
+  renderPriceInfoContent (courseData, courseDetail) {
     return subscriptionMode[courseDetail.subscriptionMode] === subscriptionMode.WERTABO
       ? /* html */ `<div class="detail price-info"><h3 class="price">${courseData.lessonPrice}</h3><span> Termin wird über ihr Abonnement gebucht</span></div>`
       : ''
@@ -584,12 +587,12 @@ export default class CourseDialog extends Shadow() {
    * Updates element with the ID 'title' in a dialog component with the provided title.
    * @param {string} title - `title`
    */
-  renderDialogTitle(title) {
+  renderDialogTitle (title) {
     const titleElement = this.dialog.shadowRoot.getElementById('title')
     titleElement.innerHTML = title
   }
 
-  subscriptionDetailsContent(detail) {
+  subscriptionDetailsContent (detail) {
     const subscriptionBalance = (subscriptionMode[detail.subscriptionMode] === 'SUBSCRIPTION') ? detail.subscriptionBalance : '-'
     return /* html */ `
       <div class="detail"><span>Guthaben</span><span>${subscriptionBalance}</span></div>
@@ -603,7 +606,7 @@ export default class CourseDialog extends Shadow() {
    * @param detail - `detail`
    * @returns {string} Returning an HTML template string.
    */
-  courseDetailsContent(detail) {
+  courseDetailsContent (detail) {
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
     if (!state) return ''
     const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo)
@@ -620,7 +623,7 @@ export default class CourseDialog extends Shadow() {
    * Generates HTML code for a system notification with a specific message and icon.
    * @returns {string} Returning an HTML template string
    */
-  renderNotification() {
+  renderNotification () {
     return /* html */ `
       <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertTriangle">
         <div slot="description">
@@ -630,7 +633,7 @@ export default class CourseDialog extends Shadow() {
     `
   }
 
-  renderSubscriptionDownloads(subscriptionData) {
+  renderSubscriptionDownloads (subscriptionData) {
     debugger
     // @ts-ignore
     return /* html */ `
@@ -654,7 +657,7 @@ export default class CourseDialog extends Shadow() {
    * Generates HTML code for a list of downloadable items with links and icons.
    * @returns {string} Returning an HTML template string
    */
-  renderDownloads(courseData, courseDetail) {
+  renderDownloads (courseData, courseDetail) {
     // TODO: Refactor
     // @ts-ignore
     const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}`
@@ -684,7 +687,7 @@ export default class CourseDialog extends Shadow() {
    * @param {string} fileBody - The content of the .ics file
    * @returns {string} An link element with the specified filename and fileBody encoded as a data URL.
    */
-  icsDownload(filename, fileBody) {
+  icsDownload (filename, fileBody) {
     const link = document.createElement('a')
     link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileBody))
     link.setAttribute('download', filename)
@@ -703,7 +706,7 @@ export default class CourseDialog extends Shadow() {
    * @param {Number} dt
    * @returns {string} The formatted date string
    */
-  convertToICSDate(dt) {
+  convertToICSDate (dt) {
     const dateTime = new Date(dt)
     const year = dateTime.getFullYear().toString()
     const month = (dateTime.getMonth() + 1) < 10 ? '0' + (dateTime.getMonth() + 1).toString() : (dateTime.getMonth() + 1).toString()
@@ -718,7 +721,7 @@ export default class CourseDialog extends Shadow() {
    * @param {*} course
    * @returns {string}
    */
-  createDownloadICSFile(course) {
+  createDownloadICSFile (course) {
     const { courseType, courseId, courseTitle, courseLocation, courseAppointmentDate, courseAppointmentTimeFrom, courseAppointmentTimeTo, roomDescription } = course
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const courseFromDate = courseAppointmentTimeFrom.split(':').map(Number)
@@ -751,7 +754,7 @@ export default class CourseDialog extends Shadow() {
     return this.icsDownload(summary + '.ics', icsBody)
   }
 
-  formatCourseAppointmentDate(dateString) {
+  formatCourseAppointmentDate (dateString) {
     const dateObject = new Date(dateString)
     const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
     // @ts-ignore
@@ -759,11 +762,11 @@ export default class CourseDialog extends Shadow() {
     return formatter.format(dateObject)
   }
 
-  get dialog() {
+  get dialog () {
     return this.root.querySelector('m-dialog')
   }
 
-  get viewContent() {
+  get viewContent () {
     return this.dialog.shadowRoot.getElementById('view-content')
   }
 }
