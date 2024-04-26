@@ -1,5 +1,4 @@
 // @ts-check
-import { actionType } from '../../helpers/Mapping.js'
 
 /* global AbortController */
 /* global CustomEvent */
@@ -37,29 +36,22 @@ export default class Subscriptions extends HTMLElement {
    * @param {CustomEventInit} event
    */
   requestSubscriptionsListener = async (event) => {
-    console.log('Controller - requestSubscriptionsListener', event)
     if (this.abortControllerSubscriptions) this.abortControllerSubscriptions.abort()
     this.abortControllerSubscriptions = new AbortController()
+    const { userId } = this.dataset
     const data = {
-      userId: '50505A02-2AA4-47AA-9AED-0B759902A0C2'
-    }
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-      signal: this.abortControllerSubscriptions.signal
+      userId
     }
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptions}`
+    const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptions)
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscriptions') || 'update-subscriptions', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
           throw new Error(response.statusText)
         }),
-        type: actionType.subscriptions
+        type: 'subscriptions'
       },
       bubbles: true,
       cancelable: true,
@@ -74,31 +66,25 @@ export default class Subscriptions extends HTMLElement {
   requestSubscriptionDetailListener = async (event) => {
     if (this.abortControllerSubscriptionDetail) this.abortControllerSubscriptionDetail.abort()
     this.abortControllerSubscriptionDetail = new AbortController()
-    // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionDetail}`
     const tags = JSON.parse(event.detail.tags)
-    const courseId = `${tags[0].subscriptionId}_${tags[0].subscriptionKindId}`
+    const { subscriptionId, subscriptionKindId, subscriptionType } = tags[0]
+    const id = `${subscriptionId}_${subscriptionKindId}`
+    const { userId } = this.dataset
     const data = {
-      subscriptionId: tags[0].subscriptionId,
-      subscriptionType: tags[0].subscriptionType,
-      userId: this.dataset.userId
+      subscriptionId,
+      subscriptionType,
+      userId
     }
     const type = tags[2] ? tags[2].type : ''
-    // const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionCourseAppointmentDetail)
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-      signal: this.abortControllerSubscriptionDetail.signal
-    }
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionDetail}`
+    const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionDetail)
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
-        id: courseId,
+        id,
         type
       },
       bubbles: true,
@@ -107,36 +93,51 @@ export default class Subscriptions extends HTMLElement {
     }))
   }
 
+  /**
+   * Get subscriptions as PDF
+   * @param {CustomEventInit} event
+   */
   requestSubscriptionPdfListener = async (event) => {
     if (this.abortControllerSubscriptionPdf) this.abortControllerSubscriptionPdf.abort()
     this.abortControllerSubscriptionPdf = new AbortController()
+    const { subscriptionId, subscriptionKindId, subscriptionType } = JSON.parse(event.detail.subscription)
+    const id = `${subscriptionId}_${subscriptionKindId}`
+    const { userId } = this.dataset
+    const data = {
+      subscriptionId,
+      subscriptionType,
+      userId
+    }
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionPdf}`
-    const subscription = JSON.parse(event.detail.subscription)
-    const courseId = `${subscription.subscriptionId}_${subscription.subscriptionKindId}`
-    const data = {
-      subscriptionId: subscription.subscriptionId,
-      subscriptionType: subscription.subscriptionType,
-      userId: this.dataset.userId
-    }
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-      signal: this.abortControllerSubscriptionPdf.signal
-    }
+    const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionPdf)
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.blob()
         }),
-        id: courseId
+        id
       },
       bubbles: true,
       cancelable: true,
       composed: true
-    })) 
+    }))
+  }
+
+  /**
+   * Returns an object with method, headers, body, and signal properties for making a POST request with fetch.
+   * @param {Object} data - The data that you want to send in the POST request. This data should be in a format that can be converted to JSON.
+   * @param {AbortController} abortController - Abort Fetch requests
+   * @returns {Object} An object is being returned to use as option object for api fetch
+   */
+  fetchPOSTOptions (data, abortController) {
+    return {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      signal: abortController.signal
+    }
   }
 }
