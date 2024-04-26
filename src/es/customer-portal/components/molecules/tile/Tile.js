@@ -270,13 +270,11 @@ export default class AppointmentTile extends Tile {
     Promise.all([fetchModules]).then((_) => {
       this.courseData = Tile.parseAttribute(this.getAttribute('data'))
       this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
-
-      const renderList = {
-        subscriptions: this.renderSubscription(this.courseData)
+      if (this.dataset.listType === 'subscriptions') {
+        this.html = this.renderSubscription(this.courseData)
+      } else {
+        this.html = this.renderTile(this.courseData, this.selectedSubscription)
       }
-      const renderFound = renderList[this.dataset.listType]
-      const render = renderFound || this.renderTile(this.courseData, this.selectedSubscription)
-      this.html += render
     })
   }
 
@@ -402,7 +400,7 @@ export default class AppointmentTile extends Tile {
   noScrollEventListener (event) {
     if ((!event.detail?.hasNoScroll) && (this.dataset?.listType === 'booked-appointments' && this.dataset?.removable)) {
       this.style.display = 'none'
-      if (this.previousElementSibling.tagName === 'KS-A-HEADING') {
+      if (this.previousElementSibling.tagName === 'KS-A-HEADING' && (this.nextElementSibling === null || this.nextElementSibling.tagName === 'KS-A-HEADING')) {
         this.previousElementSibling.style.display = 'none'
       }
     }
