@@ -17,3 +17,4 @@
 - *E-Mail*: Use type `email` on the `input` and the attribute `pattern` with the regex for email validation: `[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+`.
 - *Disabled*: Add attribute `disabled` to the `input`.
 - *Error*: Add `div` with class `error` and two children (`a-icon-mdx` and `span` for the error text).
+- *Textarea*: Use the `textarea` element instead of the `input`.

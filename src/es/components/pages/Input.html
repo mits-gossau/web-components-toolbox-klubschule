@@ -78,7 +78,7 @@
                 <label>Label *</label>
                 <input type="password" maxlength="25" required>
                 <div class="hint">
-                    <span>Maximal 25 Zeichen, Gross- und Kleinschreibung, Zahlen und Sonderzeichen</span>
+                    <span>Max. 25 Zeichen, Gross- und Kleinschreibung, Zahlen und Sonderzeichen</span>
                     <div class="counter">
                         <span class="current">0</span>
                         <span class="max"></span>
@@ -100,6 +100,17 @@
     </div>
 </section>
 <section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Number</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label>Label</label>
+                <input type="number">
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
     <h2>Disabled</h2>
     <div>
         <ks-a-input>
@@ -114,12 +125,48 @@
     </div>
 </section>
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Error</h2>
+    <h2>Input Error</h2>
     <div>
         <ks-a-input>
             <div class="error">
                 <label for="input-04">Label</label>
                 <input id="input-04" type="text">
+                <div class="hint">
+                    <span>This is a hint.</span>                
+                </div>
+                <div class="error">
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left"></a-icon-mdx>
+                    <span>This is an error.</span>                
+                </div>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Textarea</h2>
+    <div>
+        <ks-a-input>
+            <div>
+                <label for="textarea-01">Label</label>
+                <textarea id="textarea-01" rows="4" cols="20" maxlength="150"></textarea>
+                <div class="hint">
+                    <span>This is a hint.</span>
+                    <div class="counter">
+                        <span class="current">0</span>
+                        <span class="max"></span>
+                    </div>
+                </div>
+            </div>
+        </ks-a-input>
+    </div>
+</section>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Textarea Error</h2>
+    <div>
+        <ks-a-input>
+            <div class="error">
+                <label for="textarea-01">Label</label>
+                <textarea id="textarea-01" rows="4" cols="20" maxlength="150"></textarea>
                 <div class="hint">
                     <span>This is a hint.</span>                
                 </div>

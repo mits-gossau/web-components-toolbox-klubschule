@@ -11,20 +11,41 @@ export default class Input extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.input = this.root.querySelector('input');
+    this.textarea = this.root.querySelector('textarea');
     this.counter = this.root.querySelector('.counter');
     this.current = this.root.querySelector('.current');
     this.max = this.root.querySelector('.max');
 
-    this.maxChar = this.input.getAttribute('maxlength');
+    if (this.input) {
+      this.maxCharInput = this.input.getAttribute('maxlength');
 
-    if (this.max) {
-      this.max.innerText = `\u00A0/ ${this.maxChar}`;
+      if (this.max) {
+        this.max.innerText = `\u00A0/ ${this.maxCharInput}`;
+      }
+    }
+
+    if (this.textarea) {
+      this.maxCharTextarea = this.textarea.getAttribute('maxlength');
+
+      if (this.max) {
+        this.max.innerText = `\u00A0/ ${this.maxCharTextarea}`;
+      }
     }
 
     this.inputEventListener = event => {
       let charCount = this.input.value.length;
 
-      if (charCount <= this.maxChar) {
+      if (charCount <= this.maxCharInput) {
+        this.current.innerText = charCount;
+      } else {
+        event.preventDefault();
+      }
+    }
+
+    this.textareaEventListener = event => {
+      let charCount = this.textarea.value.length;
+
+      if (charCount <= this.maxCharTextarea) {
         this.current.innerText = charCount;
       } else {
         event.preventDefault();
@@ -35,13 +56,18 @@ export default class Input extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 
-    if (this.counter) {
-      this.input.addEventListener('input', this.inputEventListener)
+    if (this.counter && this.input) {
+      this.input.addEventListener('input', this.inputEventListener);
+    }
+
+    if (this.counter && this.textarea) {
+      this.textarea.addEventListener('input', this.textareaEventListener);
     }
   }
 
   disconnectedCallback () {
-    this.input.removeEventListener('input', this.inputEventListener)
+    this.input.removeEventListener('input', this.inputEventListener);
+    this.textarea.removeEventListener('input', this.textareaEventListener);
   }
 
   /**
@@ -78,7 +104,8 @@ export default class Input extends Shadow() {
         display: none;
       }
 
-      :host .error input {
+      :host .error input,
+      :host .error textarea {
         border-color: var(--mdx-comp-inputfield-border-color-error);
         background-color: var(--mdx-comp-inputfield-background-color-error);
         color: var(--mdx-comp-error-message-color-default);
@@ -94,7 +121,8 @@ export default class Input extends Shadow() {
         margin-left: var(--mdx-comp-inputfield-gap-content-below);
       }
 
-      :host input {
+      :host input,
+      :host textarea {
         background-color: var(--mdx-base-color-grey-0);
         padding: var(--mdx-comp-inputfield-padding-vertical-default);
         border: var(--mdx-comp-inputfield-border-width-default) solid var(--mdx-comp-inputfield-border-color-default);
@@ -105,18 +133,21 @@ export default class Input extends Shadow() {
         box-sizing: border-box;
       }
 
-      :host input::placeholder {
+      :host input::placeholder,
+      :host textarea::placeholder {
         color: var(--mdx-comp-inputfield-placeholder-color-default);
         font: var(--mdx-comp-inputfield-font-default);
       }
 
-      :host input:focus {
+      :host input:focus,
+      :host textarea:focus {
         color: var(--mdx-comp-inputfield-input-color-focus);
         font: var(--mdx-comp-inputfield-font-default);
         border-color: var(--mdx-comp-inputfield-border-color-focus);
       }
 
-      :host input[disabled] {
+      :host input[disabled],
+      :host textarea[disabled] {
         background-color: var(--mdx-comp-inputfield-background-color-disabled);
         pointer-events: none;
         opacity: 0.5;
