@@ -90,19 +90,18 @@ export default class AboTile extends Shadow() {
 
   /**
   * renderHTML
-  * @param {any} data - An array of course fetch objects.
+  * @param {any} aboDetail - An array of course fetch objects.
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  renderHTML(data) {
+  renderHTML(aboDetail) {
     this.html = ''
     this.html = /* html */ `
       <ks-m-event-detail
-        data='${JSON.stringify(data)}'
-        
+        data='${JSON.stringify(aboDetail)}'
       >
       </ks-m-event-detail>
       <div>
-        <ks-m-buttons data-buttons='${JSON.stringify(this.dataAsJson.buttons)}'></ks-m-buttons>
+        <ks-m-buttons data-buttons='${JSON.stringify(aboDetail.buttons)}'></ks-m-buttons>
       <div>
     `
     return this.fetchModules([
