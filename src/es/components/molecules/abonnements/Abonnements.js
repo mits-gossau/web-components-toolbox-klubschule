@@ -68,6 +68,7 @@ export default class Abonnements extends Shadow() {
         align-items: center;
         margin-bottom: 1rem;
       }
+
       :host a-icon-mdx {
         color: var(--mdx-base-color-grey-950);
       }
@@ -85,6 +86,10 @@ export default class Abonnements extends Shadow() {
     `
   }
 
+  /**
+    * renderHTML
+    * @returns {Promise<void>} The function `renderHTML` returns a Promise.
+  */
   renderHTML() {
     this.html = /* html */ `
       <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="open-abonnements-dialog" id="offers-page-filter-categories" close-event-name="backdrop-clicked">
@@ -102,19 +107,35 @@ export default class Abonnements extends Shadow() {
           <a-button id="close" namespace="button-secondary-" no-pointer-events>${this.buttonCloseLabel}</a-button>
         </div>
       </m-dialog>
-      <ks-a-button
+      <button
+        class="link-more"
         namespace="button-transparent-"
         request-event-name="open-abonnements-dialog"
         click-no-toggle-active
       >
         <span>${this.linkLabel}</span>
-      </ks-a-button>
+      </button>
     `
+    return this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/button/Button.js`,
+        name: 'a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+        name: 'm-dialog'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      }
+    ])
   }
 
   /**
-    * renderHTML
-    * @returns {Promise<void>} The function `renderHTML` returns a Promise.
+    * renderContent
+    * @param data Abonnement Infos
+    * @returns {Promise<void>} The function `renderContent` returns a Promise.
   */
   renderContent(data) {
     this.total.innerHTML = data.total_label
@@ -134,32 +155,12 @@ export default class Abonnements extends Shadow() {
 
     return this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
-        name: 'ks-a-heading'
-      },
-      {
-        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
-        name: 'ks-a-button'
-      },
-      {
         path: `${this.importMetaUrl}../../organisms/tileList/TileList.js`,
         name: 'ks-o-tile-list'
       },
       {
         path: `${this.importMetaUrl}../../molecules/tile/Tile.js`,
         name: 'ks-m-tile'
-      },
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/button/Button.js`,
-        name: 'a-button'
-      },
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
-        name: 'm-dialog'
-      },
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-        name: 'a-icon-mdx'
       }
     ])
   }

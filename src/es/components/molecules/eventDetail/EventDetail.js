@@ -196,13 +196,6 @@ export default class EventDetail extends Shadow() {
       :host a-icon-mdx {
         color: var(--mdx-base-color-grey-950);
       }
-      :host m-dialog {
-        --dialog-left-slide-in-max-width-custom: min(100%, 1020px);
-      }
-      :host m-dialog + ks-a-button {
-        --button-transparent-margin: 0;
-        --button-transparent-padding: 0;
-      }
 
       :host .with-border {
         padding: var(--mdx-sys-spacing-fix-3xs);
@@ -380,10 +373,6 @@ export default class EventDetail extends Shadow() {
     `
     return this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
-        name: 'ks-a-heading'
-      },
-      {
         path: `${this.importMetaUrl}../../molecules/linkList/LinkList.js`,
         name: 'ks-m-link-list'
       },
@@ -400,16 +389,8 @@ export default class EventDetail extends Shadow() {
         name: 'ks-m-system-notification'
       },
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/button/Button.js`,
-        name: 'a-button'
-      },
-      {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
         name: 'm-dialog'
-      },
-      {
-        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
-        name: 'ks-a-button'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
