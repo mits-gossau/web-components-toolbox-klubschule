@@ -176,6 +176,12 @@ export default class KsBodyStyle extends BodyStyle {
             max-width: calc(400rem/16);
         }
 
+        /* responsive tables */
+        :host div:has(>table) {
+            overflow-x: auto;
+            margin-bottom: var(--mdx-sys-spacing-flex-l);
+        }
+
         @media screen and (max-width: _max-width_) {
 
             ${(this.hasAttribute('display-mobile'))
