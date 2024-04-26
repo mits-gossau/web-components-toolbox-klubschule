@@ -66,8 +66,14 @@ export default class Input extends Shadow() {
   }
 
   disconnectedCallback () {
-    this.input.removeEventListener('input', this.inputEventListener);
-    this.textarea.removeEventListener('input', this.textareaEventListener);
+    if (this.input) {
+      this.input.removeEventListener('input', this.inputEventListener);
+
+    }
+
+    if (this.textarea) {
+      this.textarea.removeEventListener('input', this.textareaEventListener);
+    }
   }
 
   /**
@@ -175,10 +181,6 @@ export default class Input extends Shadow() {
         flex-direction: row;
         color: var(--mdx-comp-inputfield-hint-counter-color-focus);
         font: var(--mdx-comp-inputfield-font-supporting);
-      }
-
-      @media only screen and (max-width: _max-width_) {
-        :host {}
       }
     `
   }
