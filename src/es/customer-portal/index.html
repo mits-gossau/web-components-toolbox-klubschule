@@ -22,7 +22,6 @@
             <c-fetch-css>
                 <c-fetch-modules>
                     <c-appointments data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
-                        <c-booked data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
                             <c-subscriptions data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
                                 <p-general>
                                     <o-body-style has-background=""
@@ -50,7 +49,6 @@
                                     </o-body-style>
                                 </p-general>
                             </c-subscriptions>
-                        </c-booked>
                     </c-appointments>
                 </c-fetch-modules>
             </c-fetch-css>
@@ -65,7 +63,6 @@
                 import('../../es/components/web-components-toolbox/src/es/components/pages/general/General.js').then(module => ['p-general', module.default]),
                 import('./event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default]),
                 import('./controllers/appointments/Appointments.js').then(module => ['c-appointments', module.default]),
-                import('./controllers/booked/Booked.js').then(module => ['c-booked', module.default]),
                 import('./controllers/subscriptions/Subscriptions.js').then(module => ['c-subscriptions', module.default]),
             ]).then(elements => elements.forEach(element => {
                 if (element && !customElements.get(element[0])) customElements.define(...element)
