@@ -633,8 +633,7 @@ export default class CourseDialog extends Shadow() {
         <style>
           :host {
             --system-notification-default-icon-border-width: 0 !important;
-            --icon-mdx-ks-svg-height:10em !important;
-            --icon-mdx-ks-svg-width:10em !important;
+            --system-notification-error-icon-size: 1.5em !important;
           }
         </style>
         <div slot="description">

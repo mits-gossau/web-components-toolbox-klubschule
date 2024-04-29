@@ -106,7 +106,7 @@ export default class CourseInfo extends Shadow() {
 
   renderHTML (data) {
     const { icon, css, status, info } = data
-    const dash = (this.dataContent.courseAppointmentStatus === 2 || this.dataContent.courseAppointmentStatus === 4 || this.dataContent.courseAppointmentStatus === 6) ? ' - ' : ''
+    const dash = (status && info) && !Number(status) ? ' - ' : ''
     this.icon = /* html */ `<a-icon-mdx icon-name="${icon}" size="1.5em" tabindex="0" class="${css.status}"></a-icon-mdx>`
     this.html = /* html */`
       ${this.icon}
