@@ -1,0 +1,161 @@
+<!-- Figma Link: Do not copy -->
+<code><a href="https://www.figma.com/file/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?type=design&node-id=3111%3A289674&mode=design&t=QNrJHQav4gyyeVVi-1" target="_blank">figma</a></code>
+
+<!-- 2-spaltige Bühne mit maximaler Ausprägung -->
+<o-grid namespace="grid-2columns-content-stage-" first-container-vertical first-column-with="100%"
+    background-color="var(--mdx-sys-color-accent-4-default)" width="100%">
+    <div class="stage-content">
+        <p class="topline">
+            <a href="" alt="">
+                <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx> <span>A Larger Text inside the back link
+                    lorem ipsum dolor nonumy eirmod tempor invidunt</span>
+            </a>
+            <!-- Merken-Button für Mobile -->
+            <ks-m-favorite-button off-text="Merken" on-text="Gemerkt">
+                <ks-a-button namespace="button-tertiary-" color="secondary" round>
+                    <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>
+                </ks-a-button>
+            </ks-m-favorite-button>
+            <!-- /Merken-Button für Mobile -->
+        </p>
+        <h1>Bodytoning Bauch,<br />Beine, Po</h1>
+        <p class="intro">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+            ut labore et dolore magn.</p>
+    </div>
+    <aside>
+        <div class="aside-image">
+            <!-- Merken-Button für Desktop -->
+            <ks-m-favorite-button off-text="Merken" on-text="Gemerkt">
+                <ks-a-button namespace="button-tertiary-" color="secondary">
+                    <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>
+                    <span>Merken</span>
+                </ks-a-button>
+            </ks-m-favorite-button>
+        </div>
+    </aside>
+</o-grid>
+
+<!-- 2-spaltiger Content -->
+<o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border
+    width="100%" switch-aside-order-mobile>
+    <ks-o-body-section content-width-var="100%" no-margin-y>
+        <!-- Expand -->
+        <mdx-component>
+            <mdx-expand line-clamp="5" label-closed="Mehr anzeigen" label-open="Weniger anzeigen" expanded="false">
+                <p>Wollen Sie Bauch, Beine, Oberschenkel und Po kräftigen, straffen und formen? Einfache und
+                    abwechslungsreiche Übungen mit dem eigenen Körpergewicht sowie mit Handgeräten wie Kleinhanteln oder
+                    Theraband helfen dabei. Das Augenmerk ist auf die Kraft und Kraftausdauer gerichtet. Körperliche
+                    Fitness und ein verbessertes Körpergefühl steigern Ihr Wohlbefinden im Alltag.</p>
+            </mdx-expand>
+        </mdx-component>
+        <!-- /Expand -->
+
+        <!-- CMS Akkordeon Container -->
+        <div class="margin-y-m">
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 1</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <ks-a-heading tag="h3">test title</ks-a-heading>
+                        <div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
+                        </div>
+                    </div>
+                </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 2</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
+                        </div>
+                    </div>
+                </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>accordion 3</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <div>
+                            <ks-a-button namespace="button-primary-" href="/de/" color="secondary" target="_self">
+                                <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left" tabindex="0">
+                                </a-icon-mdx>
+                                <span id="label">btn</span>
+                            </ks-a-button>
+                        </div>
+                    </div>
+                </details>
+            </m-details>
+        </div>
+        <!-- /CMS Akkordeon Container -->
+    </ks-o-body-section>
+    <aside>
+        <ks-a-heading tag="h3">
+            Kontakt
+        </ks-a-heading>
+
+        <!-- CMS Contact Component -->
+        <ks-m-contact-row name="Klubschule Migros Baden" street="Nordhaus 3 / G&#xFC;terstrasse" place="5400 Baden"
+            icon-name="Home" href="https://www.google.com/maps" target="_blank">
+        </ks-m-contact-row>
+        <ks-m-contact-row name="+49 0160 49858582" icon-name="Phone" href="tel:+49016049858582">
+        </ks-m-contact-row>
+        <ks-m-contact-row name="E-Mail senden" icon-name="ArrowUpRight" href="mailto:" target="_blank">
+        </ks-m-contact-row>
+        <!-- /CMS Contact Component -->
+    </aside>
+</o-grid>
+
+<!-- Eventliste -->
+<ks-o-body-section no-margin-y background="var(--mdx-sys-color-accent-6-subtle1)" variant="default" has-background>
+    <ks-o-offers-page endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
+        initial-request='{"filter":[{"id": "17", "visible": false, "children": [{ "id": "D_95072_1016", "selected": true, "visible": false, "hasChilds": false, "eTag": null}],"hasChilds": true,"eTag": null}],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":12}'
+        endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
+        google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s" mock-auto-complete
+        event-detail-url="https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/">
+        <!-- Badge Legend -->
+        <ks-m-badge-legend>
+            <div><ks-m-badge type="primary" icon-name="Key"
+                    tooltip="Lorem Ipsum is simply dummy text of the printing and typesetting industry."></ks-m-badge><span>Bewilligunspflichtig</span>
+            </div>
+            <div><ks-m-badge type="primary" icon-name="Abo"
+                    tooltip="Lorem Ipsum is simply dummy text of the printing and typesetting industry."></ks-m-badge><span>Nur
+                    mit Abonnement buchbar</span></div>
+            <div><ks-m-badge type="primary" icon-name="AboPlus"
+                    tooltip="Lorem Ipsum is simply dummy text of the printing and typesetting industry."></ks-m-badge><span>Auch
+                    mit Abonnement buchbar</span></div>
+            <div>
+                <ks-m-badge type="primary" icon-name="Percent"
+                    tooltip="Lorem Ipsum is simply dummy text of the printing and typesetting industry."></ks-m-badge><span>Subventionen</span>
+            </div>
+        </ks-m-badge-legend>
+        <!-- /Badge Legend -->
+    </ks-o-offers-page>
+</ks-o-body-section>
+<!-- /EventListe -->
