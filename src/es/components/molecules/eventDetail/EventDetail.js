@@ -34,7 +34,7 @@ export default class EventDetail extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML() {
-    return !this.badge
+    return !this.root.querySelector('div')
   }
 
   /**
@@ -306,7 +306,7 @@ export default class EventDetail extends Shadow() {
                     <div slot="description">
                         <p>${this.data.kantonsbeitrag_label}</p>
                         <a-link namespace="underline-">
-                            <a href="${this.data.kantonsbeitrag_link}">${this.data.kantonsbeitrag_link_label}</a>
+                          <a href="${this.data.kantonsbeitrag_link}">${this.data.kantonsbeitrag_link_label}</a>
                         </a-link>
                     </div>
                 </ks-m-system-notification>
@@ -341,7 +341,7 @@ export default class EventDetail extends Shadow() {
             ` : ''}
           </div>
         ` : ''}
-        ${this.data.abo_typen_label && (this.data.abo_typen?.length || this.data.abo_typen_link) ? /* html */ `
+        ${this.data.abo_typen_label && (this.data.abo_typen?.length || this.data.abo_typen_link_label) ? /* html */ `
           <div>
             <h3>
               <div class="with-border">
@@ -349,23 +349,23 @@ export default class EventDetail extends Shadow() {
               </div>
               <span>${this.data.abo_typen_label}</span>
             </h3>
-            ${this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
+            ${this.data.abo_typen?.length ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
               <div>
                 <ks-m-system-notification namespace="system-notification-default-" icon-name="${aboType.typ === "H" ? "AboPlus" : "Abo"}" with-icon-background>
                     <div slot="description">
                         <p>${aboType.text}</p>
                         <a-link namespace="underline-">
-                            <a href="${aboType.link}">${aboType.link_label}</a>
+                          <a href="${aboType.link}">${aboType.link_label}</a>
                         </a-link>
                     </div>
                 </ks-m-system-notification>
               </div>
-            `, '')}
-            ${this.data.abo_typen_link && this.data.abo_typen_link_label ? /* html */ `
-              <button href="${this.data.abo_typen_link}" class="link-more">
-                <span>${this.data.abo_typen_link_label}</span>
-                <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ArrowRight" size="1em"></a-icon-mdx>
-              </button>
+            `, '') : ''}
+            ${this.data.abo_typen_link_label && this.data.abo_typen_link ? /* html */ `
+              <ks-c-abonnements>
+                <ks-m-abonnements abonnements-api="${this.data.abo_typen_link}" link-label="${this.data.abo_typen_link_label}" button-close-label="${this.closeButton}">
+                </ks-m-abonnements>
+              </ks-c-abonnements>
             ` : ''}
           </div>
         ` : ''}
@@ -373,34 +373,34 @@ export default class EventDetail extends Shadow() {
     `
     return this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
-        name: 'ks-a-heading'
-      },
-      {
         path: `${this.importMetaUrl}../../molecules/linkList/LinkList.js`,
         name: 'ks-m-link-list'
+      },
+      {
+        path: `${this.importMetaUrl}../../controllers/abonnements/Abonnements.js`,
+        name: 'ks-c-abonnements'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/abonnements/Abonnements.js`,
+        name: 'ks-m-abonnements'
       },
       {
         path: `${this.importMetaUrl}../../molecules/systemNotification/SystemNotification.js`,
         name: 'ks-m-system-notification'
       },
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
-        name: 'a-link'
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+        name: 'm-dialog'
       },
       {
-        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
-        name: 'ks-a-button'
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
+        name: 'a-link'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
       }
     ])
-  }
-
-  get badge() {
-    return this.root.querySelector('[badge]')
   }
 
   get data() {

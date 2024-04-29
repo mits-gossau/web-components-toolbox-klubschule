@@ -77,7 +77,7 @@ export default class AboTile extends Shadow() {
   }
 
   get dataStringified() {
-    return this.getAttribute('data')
+    return this.getAttribute('initial-request')
   }
 
   get dataAsJson() {
