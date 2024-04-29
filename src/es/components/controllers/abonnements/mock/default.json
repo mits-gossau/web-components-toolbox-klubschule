@@ -1,0 +1,1992 @@
+{
+    "filters": [],
+    "courses": [
+        {
+            "centerid": "2658",
+            "gebaeudeid": "101",
+            "ortid": "120",
+            "parentkey": "D_88449",
+            "location": {
+                "name": "Aarau, Bleichemattstrasse 42",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "258.0 CHF",
+                "price": 258.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "EntspannungskurseSie benötigen Trainingskleidung (bitte aus hygienischen Gründen keine Trägershirts)Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch\tSie suchen nach einem einzigartigen Yoga-Erlebnis.\tSie wünschen sich ein Training, das Körper und Geist aktiviert.Jede Lektion umfasst:\tEinstieg in die Lektion mit Aufwärmübungen\tAsanas (Übungen), die im Yoga-Tuch ausgeführt werden und Ihre Beweglichkeit fördern sowie die Muskulatur stärken\tAusklang mit EntspannungstechnikenMit Leichtigkeit loslassen und Kraft aufbauen – im Aerial Yoga werden Elemente aus dem Yoga und der Luftakrobatik verbunden. Sie pendeln, schweben, dehnen und kräftigen Ihren Körper mithilfe eines an der Decke befestigten Tuchs und erfahren so ein ganz neues Körpergefühl. Im Vergleich zum klassischen Hatha Yoga praktizieren Sie alle Asanas (Übungen) in der Luft. Umkehrhaltungen aus dem Yoga sind dadurch einfacher und Dehnungen werden vertieft. Schweben Sie in die Welt des Aerial Yoga und geniessen Sie das Gefühl von Schwerelosigkeit!\tSie optimieren Ihre Beweglichkeit und stärken die Muskulatur.\tSie verbessern Körpergefühl und Haltung.\tSie können sich mit gezielten Atemübungen tiefer entspannen.Für Aerial Yoga ist eine gewisse Grundspannung im Körper, ein gutes Gleichgewicht sowie eine Grundbeweglichkeit erforderlich. Für das Einsteigen in das Aerial-Yoga- Tuch sollte das Knie bis auf Bauchhöhe angezogen werden können. Aus gesundheitlichen Gründen ist Aerial Yoga ab einem Körpergewicht von 110 Kg nicht zu empfehlen. Sind Sie unsicher, ob Sie diese Voraussetzungen erfüllen, melden Sie sich für eine Einführung für den Kurs \"Aerial Yoga - Workshop für Einsteiger/innen\" an. Mögliche Daten finden Sie hier.",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88449_2658",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Aerial-Yoga--E_1718123_2658/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "Ut2ND48B__2sCEPrzGKj",
+            "kurs_typ": "E",
+            "kurs_id": 1718123,
+            "start_zeit": "19:15",
+            "ende_zeit": "20:30",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 12,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Aerial Yoga",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-06T00:00:00",
+            "gueltig_bis": "2024-07-01T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "12 Lektion(en)",
+            "datum_label": "06.05.2024 - 01.07.2024",
+            "zeit_label": "19:15 - 20:30"
+        },
+        {
+            "centerid": "2661",
+            "gebaeudeid": "951",
+            "ortid": "102",
+            "parentkey": "D_92607",
+            "location": {
+                "name": "Bern, Welle7 / Schanzenstrasse 5",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "31.0 CHF",
+                "price": 31.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "Für Aerial Yoga ist eine gewisse Grundspannung im Körper, ein gutes Gleichgewicht sowie eine Grundbeweglichkeit erforderlich. Für das Einsteigen in das Aerial-Yoga- Tuch sollte das Knie bis auf Bauchhöhe angezogen werden können. Ab einem Körpergewicht von 110 kg ist Aerial Yoga nicht zu empfehlen.Sie erhalten die wichtigsten Informationen zu Aerial YogaSie können problemlos in das Tuch ein- und aussteigenSie kennen die SicherheitshinweiseSie haben ein erstes Mal das Gefühl von Schwerelosigkeit beim Aerial Yoga erlebt.Informationen zu Aerial Yoga und den Vorteilen des SchwebensSicherheitshinweise beim Aerial YogaEin- und Ausstieg in das TuchEinfache GrundhaltungenErste Übungen\tSie suchen nach einem einzigartigen Yoga-Erlebnis.\tSie wünschen sich ein Training, das Körper und Geist aktiviert.Für Personen ab 16 JahrenSie benötigen Trainingskleidung (bitte aus hygienischen Gründen keine Trägershirts)EntspannungskurseMit Leichtigkeit loslassen und Kraft aufbauen – im Aerial Yoga werden Elemente aus dem Yoga und der Luftakrobatik verbunden. Sie pendeln, schweben, dehnen und kräftigen Ihren Körper mithilfe eines an der Decke befestigten Tuchs und erfahren so ein ganz neues Körpergefühl. In diesem Workshop erhalten Sie eine Einführung in das Aerial Yoga. Um im aufgehängten Tuch schweben und pendeln zu können, sollten Sie wissen, wie Sie in das Tuch ein- und aussteigen, welche Sicherheitshinweise beachtet werden müssen und welches die Grundhaltungen sind. Machen Sie sich ein erstes Bild von Aerial Yoga und tauchen Sie in das Gefühl der Schwerelosigkeit ein!",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_92607_2661",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Aerial-Yoga-Workshop-für-Einsteiger*innen--E_1699001_2661/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "td2ND48B__2sCEPrUl6c",
+            "kurs_typ": "E",
+            "kurs_id": 1699001,
+            "start_zeit": "09:30",
+            "ende_zeit": "10:50",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 1,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Aerial Yoga - Workshop für Einsteiger*innen",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-04T00:00:00",
+            "gueltig_bis": "2024-05-04T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "1 Lektion(en)",
+            "datum_label": "04.05.2024 - 04.05.2024",
+            "zeit_label": "09:30 - 10:50"
+        },
+        {
+            "centerid": "2658",
+            "gebaeudeid": "101",
+            "ortid": "120",
+            "parentkey": "D_88594",
+            "location": {
+                "name": "Aarau, Bleichemattstrasse 42",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "117.0 CHF",
+                "price": 117.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "\tSie benötigen Trainingskleidung und ein Handtuch, es wird barfuss oder in rutschfesten Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch\tSie wünschen sich ein gesundes und geschmeidiges Bindegewebe.\tSie möchten Ihre Beweglichkeit verbessern.\tSie wünschen sich ein Training, das Körper und Geist aktiviert.Für Personen ab 16 Jahren\tSie verbessern durch Dehnungen Ihr Bindegewebe und Ihre Beweglichkeit.\tSie stärken die Rumpfmuskulatur.\tSie verbessern Ihr Körpergefühl und Ihre Haltung.\tSie können sich mit gezielten Atemübungen tiefer entspannen.Die Faszien sind ein wichtiger Bestandteil des Muskelgewebes. Sie sind miteinander vernetzt, verbinden die einzelnen Muskeln miteinaner und geben Ihrem Körper seine Form und Spannung. Stress, schlechte Haltung oder Überbelastung führen zum Verkleben der Faszien. Das fühlen Sie in Form von Verspannungen oder Bewegungsschmerzen. Wirken Sie dem mit Faszien-Yoga entgegen. In diesem Training werden die Grundpositionen des Yoga mit innovativen Faszien-Übungen verbunden. Hilfsmittel wie Faszienrolle und Bälle kommen ebenfalls zum Einsatz und revitalisieren Ihr Bindegewebe. So steht einem gesunden, beweglichen und straffen Körper nichts mehr im Weg.Jede Lektion umfasst:\tEinstieg in die Lektion\tLang gehaltene und dynamische Dehnungen\tFedernde und mobilisierende Übungen\tLockernde Übungen für das Bindegewebe, teils auch mit Hilfsmitteln wie zum Beispiel Faszienrollen oder Bällen\tAusklang mit EntspannungstechnikenSie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Die Lehrpersonen gehen auf Ihre individuellen Bedürfnisse ein und können verschiedene Fitnesslevels abholen.Entspannungskurse",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88594_2658",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Faszien-Yoga--E_1717136_2658/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "_d2ND48B__2sCEPrzGGi",
+            "kurs_typ": "E",
+            "kurs_id": 1717136,
+            "start_zeit": "18:00",
+            "ende_zeit": "18:50",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 6,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Faszien Yoga",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-28T00:00:00",
+            "gueltig_bis": "2024-07-02T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "6 Lektion(en)",
+            "datum_label": "28.05.2024 - 02.07.2024",
+            "zeit_label": "18:00 - 18:50"
+        },
+        {
+            "centerid": "2687",
+            "gebaeudeid": "1442",
+            "ortid": "450",
+            "parentkey": "D_91337",
+            "location": {
+                "name": "Online",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "111.0 CHF",
+                "price": 111.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "\tSie wünschen sich ein gesundes und geschmeidiges Bindegewebe.\tSie möchten Ihre Beweglichkeit verbessern.\tSie wünschen sich ein Training, das Körper und Geist aktiviert.Für Personen ab 16 JahrenDie Faszien sind ein wichtiger Bestandteil des Bindegewebes. Sie sind miteinander vernetzt und geben Ihrem Körper seine Form und Spannung. Stress, schlechte Haltung oder Überbelastung führen zum Verkleben der Faszien. Das fühlen Sie in Form von Verspannungen oder Bewegungsschmerzen. Wirken Sie dem mit dem Faszien-Yoga entgegen. In diesem Training werden die Grundpositionen des Yoga mit innovativen Faszien-Übungen verbunden. Hilfsmittel wie Faszienrolle und Bälle kommen ebenfalls zum Einsatz und revitalisieren Ihr Bindegewebe. So steht einem gesunden, beweglichen und straffen Körper nichts mehr im Weg. Dieser Kurs findet ausschliesslich online statt, er eignet sich sowohl für Anfänger/innen als auch für Fortgeschrittene.Dieser Kurs findet ausschliesslich online statt. Sie benötigen eine Yogamatte und genügend Platz, eine gute Sicht auf das Gerät und eine stabile Internetverbindung. Der Link zum Kurs wird Ihnen vor Kursstart zugestellt.EntspannungskurseJede Lektion umfasst:\tEinstieg in die Lektion\tLang gehaltene und dynamische Dehnungen\tFedernde und mobilisierende Übungen\tLockernde Übungen für das Bindegewebe, teils auch mit Hilfsmitteln wie zum Beispiel Faszienrollen oder Bällen\tAusklang mit Entspannungstechniken\tSie verbessern durch Dehnungen Ihr Bindegewebe und Ihre Beweglichkeit.\tSie stärken die Rumpfmuskulatur.\tSie verbessern Ihr Körpergefühl und Ihre Haltung.\tSie können sich mit gezielten Atemübungen tiefer entspannen.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_91337_2687",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Faszien-Yoga-Onlinekurs--E_1725062_2687/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "qd2ND48B__2sCEPr3mXN",
+            "kurs_typ": "E",
+            "kurs_id": 1725062,
+            "start_zeit": "08:10",
+            "ende_zeit": "09:00",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 6,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Faszien Yoga - Onlinekurs",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-06-07T00:00:00",
+            "gueltig_bis": "2024-07-12T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "6 Lektion(en)",
+            "datum_label": "07.06.2024 - 12.07.2024",
+            "zeit_label": "08:10 - 09:00"
+        },
+        {
+            "centerid": "2658",
+            "gebaeudeid": "101",
+            "ortid": "120",
+            "parentkey": "D_88572",
+            "location": {
+                "name": "Aarau, Bleichemattstrasse 42",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "117.0 CHF",
+                "price": 117.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "Sie wünschen sich ein Training, das Körper und Geist aktiviert.Für Personen ab 16 JahrenSie benötigen Trainingskleidung und ein Handtuch. Es wird barfuss oder in Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie dadurch die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch.Sie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Die Lehrpersonen gehen auf Ihr individuelles Level ein.\tSie optimieren Ihre Beweglichkeit und stärken die Muskulatur.\tSie verbessern Ihr Körpergefühl und Ihre Haltung.\tSie können sich mit gezielten Atemübungen tiefer entspannen.Yoga ist eine indische Lehre, die eine Reihe körperlicher und mentaler Übungen umfasst, mit denen vor allem die Beweglichkeit verbessert wird. Im Hatha Yoga führen Sie eine Kombination aus Bewegungs- (Asanas), Atem- (Pranayama) und Entspannungsübungen aus. Verbessern Sie durch das Zusammenspiel von Körper und Geist Ihre Beweglichkeit, Ausgeglichenheit und Leistungsfähigkeit. Rollen Sie Ihre Matte aus und spüren Sie den wohltuenden Effekt des Hatha Yoga.EntspannungskurseJede Lektion umfasst:\tEinstieg in die Lektion\tBewusste Bewegungsausführungen in fliessenden Abläufen oder lange gehaltenen Positionen (Asanas)\tPranayama, mit dem Sie Ihren Atem regulieren\tAusklang mit Entspannungstechniken Wollen Sie mehr über Hatha-Yoga und die anderen Yoga-Stile erfahren? Hier finden Sie eine Übersicht mit allen Yoga- Stilen.",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88572_2658",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Hatha-Yoga--E_1716611_2658/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "8N2ND48B__2sCEPrzGGi",
+            "kurs_typ": "E",
+            "kurs_id": 1716611,
+            "start_zeit": "09:15",
+            "ende_zeit": "10:30",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 6,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Hatha Yoga",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-06-10T00:00:00",
+            "gueltig_bis": "2024-07-01T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "6 Lektion(en)",
+            "datum_label": "10.06.2024 - 01.07.2024",
+            "zeit_label": "09:15 - 10:30"
+        },
+        {
+            "centerid": "2659",
+            "gebaeudeid": "1003",
+            "ortid": "144",
+            "parentkey": "D_92340",
+            "location": {
+                "name": "Zürich-Altstetten, Vulkanplatz 8",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "330.0 CHF",
+                "price": 330.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "Jede Lektion umfasst:\tEinstieg in die Lektion\tBewusste Bewegungsausführungen in fliessenden Abläufen oder lange gehaltenen Positionen (Asanas)\tPranayama, mit dem Sie Ihren Atem regulieren\tAusklang mit Entspannungstechniken Wollen Sie mehr über Hatha-Yoga und die anderen Yoga-Stile erfahren? Hier finden Sie eine Übersicht mit allen Yoga- Stilen.EntspannungskurseSie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Die Lehrpersonen gehen auf Ihr individuelles Level ein.\tSie optimieren Ihre Beweglichkeit und stärken die Muskulatur.\tSie verbessern Ihr Körpergefühl und Ihre Haltung.\tSie können sich mit gezielten Atemübungen tiefer entspannen.Sie benötigen Trainingskleidung und ein Handtuch. Es wird barfuss oder in Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie dadurch die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch.Yoga ist eine indische Lehre, die eine Reihe körperlicher und mentaler Übungen umfasst, mit denen vor allem die Beweglichkeit verbessert wird. Im Hatha Yoga führen Sie eine Kombination aus Bewegungs- (Asanas), Atem- (Pranayama) und Entspannungsübungen aus. Verbessern Sie durch das Zusammenspiel von Körper und Geist Ihre Beweglichkeit, Ausgeglichenheit und Leistungsfähigkeit. Rollen Sie Ihre Matte aus und spüren Sie den wohltuenden Effekt des Hatha Yoga.Sie wünschen sich ein Training, das Körper und Geist aktiviert.Für Personen ab 16 Jahren",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_92340_2659",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Hatha-Yoga--E_1721228_2659/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "vN2ND48B__2sCEPr1WPF",
+            "kurs_typ": "E",
+            "kurs_id": 1721228,
+            "start_zeit": "20:00",
+            "ende_zeit": "21:50",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 15,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Hatha Yoga",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-02T00:00:00",
+            "gueltig_bis": "2024-08-22T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "15 Lektion(en)",
+            "datum_label": "02.05.2024 - 22.08.2024",
+            "zeit_label": "20:00 - 21:50"
+        },
+        {
+            "centerid": "2687",
+            "gebaeudeid": "1442",
+            "ortid": "450",
+            "parentkey": "D_88573",
+            "location": {
+                "name": "Online",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "129.5 CHF",
+                "price": 129.5,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "Sie wünschen sich ein Training das Körper und Geist aktiviert.Für Personen ab 16 JahrenEntspannungskurseDieser Kurs findet ausschliesslich online statt. Sie benötigen eine Yogamatte und genügend Platz, eine gute Sicht auf das Gerät und eine stabile Internetverbindung. Der Link zum Kurs wird Ihnen vor Kursstart zugestellt.Jede Lektion umfasst:\tEinstieg in die Lektion\tBewusste Bewegungsausführungen in fliessenden Abläufen oder lange gehaltenen Positionen (Asanas)\tPranayama, mit dem Sie Ihren Atem regulieren\tAusklang mit EntspannungstechnikenYoga ist eine indische Lehre, die eine Reihe körperlicher und mentaler Übungen umfasst. Im Hatha-Yoga führen Sie eine Kombination aus Bewegungs- (Asanas), Atem- (Pranayama) und Entspannungsübungen aus. Verbessern Sie durch das Zusammenspiel von Körper und Geist Ihre Beweglichkeit, Ausgeglichenheit und Leistungsfähigkeit. Rollen Sie Ihre Matte aus und spüren Sie den wohltuenden Effekt des Hatha-Yoga. Dieser Kurs findet ausschliesslich online statt, er eignet sich sowohl für Anfänger/innen als auch für Fortgeschrittene.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie dadurch die Möglichkeit, über IhreKrankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88573_2687",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Hatha-Yoga-Onlinekurs--E_1724871_2687/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "jN2ND48B__2sCEPr3mXN",
+            "kurs_typ": "E",
+            "kurs_id": 1724871,
+            "start_zeit": "19:30",
+            "ende_zeit": "20:20",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 7,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Hatha Yoga - Onlinekurs",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-27T00:00:00",
+            "gueltig_bis": "2024-07-08T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "7 Lektion(en)",
+            "datum_label": "27.05.2024 - 08.07.2024",
+            "zeit_label": "19:30 - 20:20"
+        },
+        {
+            "centerid": "2684",
+            "gebaeudeid": "488",
+            "ortid": "143",
+            "parentkey": "D_88650",
+            "location": {
+                "name": "Baar, Bachweid 3",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "468.0 CHF",
+                "price": 468.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "Sie haben schon mehrere Jahre Yogaerfahrung und/ oder haben ein tieferes Yoga- Kursniveau besucht.Jede Lektion umfasst:\tEinstieg in die Lektion\tLektion mit eher anspruchsvollen Asanas und mittlerer bis hoher Intensität\tAusklang mit Entspannungstechniken Wollen Sie mehr über Hatha Yoga und die anderen Yoga Stile erfahren? Hier finden Sie eine Übersicht mit allen Yoga- Stilen.\tSie erlernen verschiedene Asanas und können Sie gemäss Ihrem persönlichen Level ausführen.\tSie optimieren Ihre Beweglichkeit und stärken die Muskulatur.\tSie verbessern Körpergefühl und -haltung.\tSie können sich mit gezielten Atemübungen tiefer entspannen.Im Kurs Hatha Yoga für Fortgeschrittene vertiefen und verfeinern Sie Ihre Yogapraxis. Anspruchsvolle Körperhaltungen (Asanas) und Atemtechniken (Pranayama) werden Schritt für Schritt eingeführt und geübt. Die positiven Auswirkungen von Hatha Yoga sind vielfältig: Der Körper wird kräftig und geschmeidig, Sie fühlen sich entspannt und ausgeglichen, die Lebensenergie kann frei fliessen. Rollen Sie Ihre Matte aus und spüren Sie den wohltuenden Effekt des Hatha Yoga.Sie benötigen Trainingskleidung und ein Handtuch. Es wird barfuss oder in Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie dadurch die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch.Sie wünschen sich ein Yogatraining, das Sie herausfordert und Körper und Geist aktiviert.Für Personen ab 16 Jahren.Entspannungskurse",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88650_2684",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Hatha-Yoga-Fortgeschrittene--E_1719282_2684/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "Dd2ND48B__2sCEPr0GOh",
+            "kurs_typ": "E",
+            "kurs_id": 1719282,
+            "start_zeit": "18:00",
+            "ende_zeit": "19:15",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 24,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Hatha Yoga Fortgeschrittene",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-01T00:00:00",
+            "gueltig_bis": "2024-08-14T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "24 Lektion(en)",
+            "datum_label": "01.05.2024 - 14.08.2024",
+            "zeit_label": "18:00 - 19:15"
+        },
+        {
+            "centerid": "2658",
+            "gebaeudeid": "101",
+            "ortid": "120",
+            "parentkey": "D_88606",
+            "location": {
+                "name": "Aarau, Bleichemattstrasse 42",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "78.0 CHF",
+                "price": 78.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "FitnesskurseEntspannungskurseJede Lektion umfasst:\tEinstieg in die Lektion und Aufwärmübungen\tAnspruchsvolle Asanas (Übungen), die Beweglichkeit, Ausdauer und Muskulatur fördern\tAusklang mit EntspannungstechnikenSie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Die Lehrpersonen gehen auf Ihre individuellen Bedürfnisse ein und können verschiedene Fitnesslevels abholen.\tSie suchen ein intensives Yoga-Training.\tSie wünschen sich ein Training, das Körper und Geist aktiviert.Für Personen ab 16 JahrenMöchten Sie sichim Yoga auspowern? Dann kommen Sie im Power Yoga voll zum Zug. Die Übungen, sogenannte Asanas, sind klar, einfach und effizient. Im Gegensatz zum klassischen Hatha Yoga steht im Power Yoga die Fitnesskomponente im Vordergrund. Die klassischen Yoga-Übungen werden zu intensiven Sequenzen zusammengestellt. So wird Yoga zu einem dynamischen Training, das sowohl Kraft als auch Beweglichkeit und Körperkontrolle verbessert.\tSie optimieren Ihre Beweglichkeit und stärken Kraftausdauer und Muskulatur.\tSie verbessern Ihr Körpergefühl und die Haltung.\tSie kombinieren die Bewegungsführung mit bewusster Atmung.\tSie benötigen Trainingskleidung und ein Handtuch, es wird barfuss oder in rutschfesten Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88606_2658",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Power-Yoga--E_1716717_2658/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "9d2ND48B__2sCEPrzGGi",
+            "kurs_typ": "E",
+            "kurs_id": 1716717,
+            "start_zeit": "18:30",
+            "ende_zeit": "19:20",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 4,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Power Yoga",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-06-10T00:00:00",
+            "gueltig_bis": "2024-07-01T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "4 Lektion(en)",
+            "datum_label": "10.06.2024 - 01.07.2024",
+            "zeit_label": "18:30 - 19:20"
+        },
+        {
+            "centerid": "2661",
+            "gebaeudeid": "951",
+            "ortid": "102",
+            "parentkey": "D_88595",
+            "location": {
+                "name": "Bern, Welle7 / Schanzenstrasse 5",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "136.5 CHF",
+                "price": 136.5,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "\tSie benötigen Trainingskleidung und ein Handtuch, es wird barfuss oder in rutschfesten Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.chJede Lektion umfasst:\tEinstieg in die Lektion\tAsanas (Übungen), die fliessend ineinander übergehen und mit der Atmung verbunden werden\tAusklang mit EntspannungstechnikenEntspannungskurseSie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Die Lehrpersonen gehen auf Ihr individuelles Level ein.\tSie optimieren die Beweglichkeit und stärken die Muskulatur.\tSie verbessern Körpergefühl und Haltung.\tSie können die Übungen im Rhythmus der Atmung ausführen.\tSie suchen einen dynamischen Yoga-Stil, der Sie körperlich und geistig fordert.Für Personen ab 16 JahrenVinyasa Yoga ist ein vitaler und kraftvoller Yoga-Stil, der Kontrolle und Koordination im Körper aufbaut. Die klassischen Asanas (Übungen) des Hatha Yoga werden zu einem Fluss von Bewegungen im Rhythmus der Atmung verbunden. Sie halten die Asanas jeweils nur kurze Zeit, und die verschiedenen Positionen gehen fliessend ineinander über. Atmung und Bewegung, Kraft und Beweglichkeit werden miteinander kombiniert. Trauen Sie sich in den Fluss des Vinyasa Yoga und spüren Sie dessen wohltuende Kraft.",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88595_2661",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Vinyasa-Yoga--E_1723439_2661/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "wd2ND48B__2sCEPr2mRk",
+            "kurs_typ": "E",
+            "kurs_id": 1723439,
+            "start_zeit": "12:15",
+            "ende_zeit": "13:05",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 7,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Vinyasa Yoga",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-13T00:00:00",
+            "gueltig_bis": "2024-07-01T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "7 Lektion(en)",
+            "datum_label": "13.05.2024 - 01.07.2024",
+            "zeit_label": "12:15 - 13:05"
+        },
+        {
+            "centerid": "2658",
+            "gebaeudeid": "101",
+            "ortid": "120",
+            "parentkey": "D_88608",
+            "location": {
+                "name": "Aarau, Bleichemattstrasse 42",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "58.5 CHF",
+                "price": 58.5,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "\tSie wünschen sich ein ausgleichendes Yoga-Training\tSie möchten Ihre Beweglichkeit verbessern.\tSie wünschen sich ein Training, das Körper und Geist aktiviert.\tSie benötigen Trainingskleidung und ein Handtuch, es wird barfuss oder in rutschfesten Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch\tSie verbessern durch Dehnungen Ihr Bindegewebe und Ihre Beweglichkeit.\tSie verbessern Ihr Körpergefühl und Ihre Haltung.\tSie können sich mit gezielten Atemübungen tiefer entspannen.Yin Yoga ist ein ruhiger, entspannender und regenerierender Yoga-Stil. Im Vergleich zum eher körperbezogenen und dynamischen Hatha Yoga, in dem Kraft und Atemübungen im Vordergrund stehen, geht es im Yin Yoga vorwiegend um die Dehnung. Im Mittelpunkt des Kurses stehen Asanas, die Sie auf dem Boden ausführen und mehrere Minuten lang halten. Dadurch dehnen Sie Ihren Körper bis in die tiefen Schichten des Bindegewebes, trainieren die Faszien und erweitern Ihre Beweglichkeit.Sie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Die Lehrpersonen gehen auf Ihr individuelles Level ein.Jede Lektion umfasst:\tEinstieg in die Lektion\tLang gehaltene Asanas und Übungen für ein geschmeidiges Bindegewebe\tAusklang mit EntspannungstechnikenEntspannungskurse",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88608_2658",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Yin-Yoga--E_1716715_2658/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "9N2ND48B__2sCEPrzGGi",
+            "kurs_typ": "E",
+            "kurs_id": 1716715,
+            "start_zeit": "18:00",
+            "ende_zeit": "18:50",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 3,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Yin Yoga",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-06-17T00:00:00",
+            "gueltig_bis": "2024-07-01T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "3 Lektion(en)",
+            "datum_label": "17.06.2024 - 01.07.2024",
+            "zeit_label": "18:00 - 18:50"
+        },
+        {
+            "centerid": "2680",
+            "gebaeudeid": "410",
+            "ortid": "133",
+            "parentkey": "D_92347",
+            "location": {
+                "name": "Rapperswil, Zürcherstr. 2",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "396.0 CHF",
+                "price": 396.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "\tSie benötigen Trainingskleidung und ein Handtuch, es wird barfuss oder in rutschfesten Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.chEntspannungskurse\tSie wünschen sich ein ausgleichendes Yoga-Training\tSie möchten Ihre Beweglichkeit verbessern.\tSie wünschen sich ein Training, das Körper und Geist aktiviert.Jede Lektion umfasst:\tEinstieg in die Lektion\tLang gehaltene Asanas und Übungen für ein geschmeidiges Bindegewebe\tAusklang mit EntspannungstechnikenYin Yoga ist ein ruhiger, entspannender und regenerierender Yoga-Stil. Im Vergleich zum eher körperbezogenen und dynamischen Hatha Yoga, in dem Kraft und Atemübungen im Vordergrund stehen, geht es im Yin Yoga vorwiegend um die Dehnung. Im Mittelpunkt des Kurses stehen Asanas, die Sie auf dem Boden ausführen und mehrere Minuten lang halten. Dadurch dehnen Sie Ihren Körper bis in die tiefen Schichten des Bindegewebes, trainieren die Faszien und erweitern Ihre Beweglichkeit.Sie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Die Lehrpersonen gehen auf Ihr individuelles Level ein.\tSie verbessern durch Dehnungen Ihr Bindegewebe und Ihre Beweglichkeit.\tSie verbessern Ihr Körpergefühl und Ihre Haltung.\tSie können sich mit gezielten Atemübungen tiefer entspannen.",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_92347_2680",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Yin-Yoga--E_1722417_2680/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "Fd2ND48B__2sCEPr1WTF",
+            "kurs_typ": "E",
+            "kurs_id": 1722417,
+            "start_zeit": "17:45",
+            "ende_zeit": "18:45",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 18,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Yin Yoga",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-07T00:00:00",
+            "gueltig_bis": "2024-08-13T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "18 Lektion(en)",
+            "datum_label": "07.05.2024 - 13.08.2024",
+            "zeit_label": "17:45 - 18:45"
+        },
+        {
+            "centerid": "2687",
+            "gebaeudeid": "1442",
+            "ortid": "450",
+            "parentkey": "D_91368",
+            "location": {
+                "name": "Online",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "92.5 CHF",
+                "price": 92.5,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch\tSie verbessern durch Dehnungen Ihr Bindegewebe und Ihre Beweglichkeit.\tSie verbessern Ihr Körpergefühl und Ihre Haltung.\tSie können sich mit gezielten Atemübungen tiefer entspannen.Jede Lektion umfasst:\tEinstieg in die Lektion\tLang gehaltene Asanas und Übungen für ein geschmeidiges Bindegewebe\tAusklang mit EntspannungstechnikenDieser Kurs findet ausschliesslich online statt. Sie benötigen eine Yogamatte und genügend Platz, eine gute Sicht auf das Gerät und eine stabile Internetverbindung. Der Link zum Kurs wird Ihnen vor Kursstart zugestellt.Yin Yoga ist ein ruhiger, entspannender und regenerierender Yoga-Stil. Im Vergleich zum eher körperbezogenen und dynamischen Hatha Yoga, in dem Kraft und Atemübungen im Vordergrund stehen, geht es im Yin Yoga vorwiegend um die Dehnung. Im Mittelpunkt des Kurses stehen Asanas, die Sie auf dem Boden ausführen und mehrere Minuten lang halten. Dadurch dehnen Sie Ihren Körper bis in die tiefen Schichten des Bindegewebes, trainieren die Faszien und erweitern Ihre Beweglichkeit. Dieser Kurs findet ausschliesslich online statt, er eignet sich sowohl für Anfänger/innen als auch für Fortgeschrittene.Entspannungskurse\tSie wünschen sich ein ausgleichendes Yoga-Training\tSie möchten Ihre Beweglichkeit verbessern.\tSie wünschen sich ein Training, das Körper und Geist aktiviert.",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_91368_2687",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Yin-Yoga-Onlinekurs--E_1725027_2687/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "nt2ND48B__2sCEPr3mXN",
+            "kurs_typ": "E",
+            "kurs_id": 1725027,
+            "start_zeit": "19:10",
+            "ende_zeit": "20:00",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 5,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Yin Yoga - Onlinekurs",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-08T00:00:00",
+            "gueltig_bis": "2024-06-05T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "5 Lektion(en)",
+            "datum_label": "08.05.2024 - 05.06.2024",
+            "zeit_label": "19:10 - 20:00"
+        },
+        {
+            "centerid": "2684",
+            "gebaeudeid": "423",
+            "ortid": "143",
+            "parentkey": "D_88601",
+            "location": {
+                "name": "Zug, Industriestr. 15b, EKZ Metalli",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "234.0 CHF",
+                "price": 234.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "EntspannungskurseJede Lektion umfasst:\tEinstieg in die Lektion\tBewusste Bewegungsausführungen in fliessenden Abläufen oder lange gehaltenen Positionen (Asanas)\tWohltuende Yogaübungen für Schultern, Hals, Nacken und Rücken\tÜbungen für starke Rücken- und Rumpfmuskeln / vorsichtiges Dehnen der Wirbelsäule\tPranayama, mit dem Sie Ihren Atem regulieren\tAusklang mit EntspannungstechnikenSie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Die Lehrpersonen gehen auf Ihr individuelles Level ein.\tSie möchten etwas für Ihre Rückengesundheit tun und wünschen sich ein Training, das Körper und Geist aktiviert.Für Personen ab 16 Jahren\tSie optimieren Ihre Beweglichkeit und stärken die Rückenmuskulatur.\tSie verbessern Körpergefühl und -haltung.Ein gesunder Rücken tut nicht weh! Yogaübungen bilden die ideale Grundlage für eine aktive Präventionsmassnahme gegen Rückenprobleme und wirken lindernd bei bereits bestehenden Rückenleiden. Ihr Rücken wird kräftig und beweglich. Yoga ist eine indische Lehre, die eine Reihe körperlicher und mentaler Übungen umfasst. Im Yoga führen Sie eine Kombination aus Bewegungs- (Asanas), Atem- (Pranayama) und Entspannungsübungen aus. Verbessern Sie durch das Zusammenspiel von Körper und Geist Ihre Beweglichkeit, Ausgeglichenheit und Leistungsfähigkeit.\tSie benötigen Trainingskleidung und ein Handtuch, es wird barfuss oder in rutschfesten Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88601_2684",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Yoga-für-den-Rücken--E_1722537_2684/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "J92ND48B__2sCEPr1WTF",
+            "kurs_typ": "E",
+            "kurs_id": 1722537,
+            "start_zeit": "14:30",
+            "ende_zeit": "15:20",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 12,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Yoga für den Rücken",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-02T00:00:00",
+            "gueltig_bis": "2024-08-08T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "12 Lektion(en)",
+            "datum_label": "02.05.2024 - 08.08.2024",
+            "zeit_label": "14:30 - 15:20"
+        },
+        {
+            "centerid": "2687",
+            "gebaeudeid": "1442",
+            "ortid": "450",
+            "parentkey": "D_92354",
+            "location": {
+                "name": "Online",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "129.5 CHF",
+                "price": 129.5,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "\tSie möchten etwas für Ihre Rückengesundheit tun und wünschen sich ein Training, das Körper und Geist aktiviert.Für Personen ab 16 JahrenEntspannungskurseEin gesunder Rücken tut nicht weh! Yogaübungen bilden die ideale Grundlage für eine aktive Präventionsmassnahme gegen Rückenprobleme und wirken lindernd bei bereits bestehenden Rückenleiden. Ihr Rücken wird kräftig und beweglich. Yoga ist eine indische Lehre, die eine Reihe körperlicher und mentaler Übungen umfasst. Im Yoga führen Sie eine Kombination aus Bewegungs- (Asanas), Atem- (Pranayama) und Entspannungsübungen aus. Verbessern Sie durch das Zusammenspiel von Körper und Geist Ihre Beweglichkeit, Ausgeglichenheit und Leistungsfähigkeit.Dieser Kurs findet ausschliesslich online statt. Sie benötigen eine Yogamatte und genügend Platz, eine gute Sicht auf das Gerät und eine stabile Internetverbindung. Der Link zum Kurs wird Ihnen vor Kursstart zugestellt.Jede Lektion umfasst:\tEinstieg in die Lektion\tBewusste Bewegungsausführungen in fliessenden Abläufen oder lange gehaltenen Positionen (Asanas)\tWohltuende Yogaübungen für Schultern, Hals, Nacken und Rücken\tÜbungen für starke Rücken- und Rumpfmuskeln / vorsichtiges Dehnen der Wirbelsäule\tPranayama, mit dem Sie Ihren Atem regulieren\tAusklang mit Entspannungstechniken\tSie optimieren Ihre Beweglichkeit und stärken die Rückenmuskulatur.\tSie verbessern Körpergefühl und -haltung.\tSie benötigen Trainingskleidung und ein Handtuch, es wird barfuss oder in rutschfesten Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_92354_2687",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Yoga-für-den-Rücken-Onlinekurs--E_1724903_2687/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "kN2ND48B__2sCEPr3mXN",
+            "kurs_typ": "E",
+            "kurs_id": 1724903,
+            "start_zeit": "10:10",
+            "ende_zeit": "11:00",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 7,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Yoga für den Rücken - Onlinekurs",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-27T00:00:00",
+            "gueltig_bis": "2024-07-08T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "7 Lektion(en)",
+            "datum_label": "27.05.2024 - 08.07.2024",
+            "zeit_label": "10:10 - 11:00"
+        },
+        {
+            "centerid": "2658",
+            "gebaeudeid": "101",
+            "ortid": "120",
+            "parentkey": "D_88652",
+            "location": {
+                "name": "Aarau, Bleichemattstrasse 42",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "117.0 CHF",
+                "price": 117.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "Jede Lektion umfasst:\tEinstieg in die Lektion\tBewusste Bewegungsausführungen in fliessenden Abläufen oder lange gehaltenen Positionen (Asanas)\tPranayama, mit dem Sie Ihren Atem regulieren\tAusklang mit EntspannungstechnikenYoga eignet sich vorzüglich als sanftes Körpertraining, das niemanden überfordert. Yoga ist eine indische Lehre, die eine Reihe körperlicher und mentaler Übungen umfasst. Im Hatha-Yoga führen Sie eine Kombination aus Bewegungs- (Asanas), Atem- (Pranayama) und Entspannungsübungen aus. Verbessern Sie durch das Zusammenspiel von Körper und Geist Ihre Beweglichkeit, Ausgeglichenheit und Leistungsfähigkeit. Rollen Sie Ihre Matte aus und spüren Sie den wohltuenden Effekt des Hatha-Yoga.\tSie optimieren Ihre Beweglichkeit und stärken die Muskulatur.\tDurch das Zusammenspiel von Körper, Geist und Bewusstsein fördern Sie Ihre Harmonie und Ausgeglichenheit, die richtige Atmung, Beweglichkeit und Kraft sowie der bewusste Umgang mit den körperlichen und geistigen Kräften.Sie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Die Lehrpersonen gehen auf Ihr individuelles Level ein.\tSie wünschen sich ein Training, das Körper und Geist aktiviert.Dieser Kurs ist für Senior*innen geeignet.Sie benötigen Trainingskleidung und ein Handtuch. Es wird barfuss oder in Socken trainiert.Dieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie dadurch die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch.Entspannungskurse",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88652_2658",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Yoga-für-Senior*innen--E_1716615_2658/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "8d2ND48B__2sCEPrzGGi",
+            "kurs_typ": "E",
+            "kurs_id": 1716615,
+            "start_zeit": "10:40",
+            "ende_zeit": "11:55",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 6,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Yoga für Senior*innen",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-06-10T00:00:00",
+            "gueltig_bis": "2024-07-01T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "6 Lektion(en)",
+            "datum_label": "10.06.2024 - 01.07.2024",
+            "zeit_label": "10:40 - 11:55"
+        },
+        {
+            "centerid": "2661",
+            "gebaeudeid": "951",
+            "ortid": "102",
+            "parentkey": "D_88597",
+            "location": {
+                "name": "Bern, Welle7 / Schanzenstrasse 5",
+                "badge": ""
+            },
+            "locations": [],
+            "days": [],
+            "price": {
+                "amount": "195.0 CHF",
+                "price": 195.0,
+                "isper": null,
+                "ispre": null,
+                "per": "",
+                "pre": ""
+            },
+            "infotextshort": "\tSie suchen einen Kurse, in dem Sie sich ganz auf sich konzentrieren und dabei entspannen können.Für Personen ab 16 JahrenYoga Nidra bedeutet \"bewusster Schlaf\". Mit einfachen Atmungs- und Visualisierungsübungen ist es möglich, tiefe Entspannung auf körperlicher, mentaler und emotionaler Ebene zu erfahren. Ein 30- minütiges Praktizieren von Yoga Nidra kann die Wirkung von drei bis vier Stunden Schlaf haben. Diese Form von Tiefenentspannungstechnik kann von jeder Person praktiziert werden.\tSie kennen die Entspannungsmethode Yoga Nidra und erfahren eine tiefe und systematische Entspannung auf körperlicher, mentaler und emotionaler Ebene.\tSie können stressbedingte Symptome wie Schlafprobleme, Verspannungen, Lustlosigkeit, usw. vorbeugen oder lindern und geniessen bei regelmässiger Anwendung mehr Ruhe und Gelassenheit.Sie können einfach loslegen: Sie benötigen keine Vorkenntnisse. Sie sollten 35 Minuten auf dem Rücken liegen können.EntspannungskurseJede Lektion enthält:\tVorbereitung, Atemübungen\tKörperreise - Wahrnehmung durch den Körper\tVisualisierungen mit persönlichen Vorsätzen (Affirmationen)\tAbschlussDieser Kurs ist von Qualitop anerkannt. Wenn Sie über eine entsprechende Zusatzversicherung verfügen, haben Sie dadurch die Möglichkeit, über Ihre Krankenkasse einen Beitrag an die Kurskosten geltend zu machen. Weitere Infos: qualitop.ch.",
+            "score": 1,
+            "count": null,
+            "atyp": [
+                "H"
+            ],
+            "filter": [
+                {
+                    "label": null,
+                    "id": "17",
+                    "typ": "",
+                    "level": null,
+                    "count": null,
+                    "color": null,
+                    "urlpara": null,
+                    "selected": null,
+                    "disabled": null,
+                    "visible": false,
+                    "sort": null,
+                    "children": [
+                        {
+                            "label": null,
+                            "id": "D_88597_2661",
+                            "typ": "",
+                            "level": null,
+                            "count": null,
+                            "color": null,
+                            "urlpara": null,
+                            "selected": true,
+                            "disabled": null,
+                            "visible": false,
+                            "sort": null,
+                            "children": null,
+                            "hasChilds": false
+                        }
+                    ],
+                    "hasChilds": true
+                }
+            ],
+            "detail_label_more": "Mehr Details",
+            "detail_label_less": "Weniger Details",
+            "timelabel": "",
+            "buttons": [
+                {
+                    "text": "Merken",
+                    "link": "",
+                    "typ": "secondary",
+                    "event": "bookmark",
+                    "iconName": "Heart",
+                    "filters": null
+                },
+                {
+                    "text": "Buchen",
+                    "link": "kurse/kurs/Yoga-Nidra--E_1723591_2661/Configuration",
+                    "typ": "primary",
+                    "event": "book",
+                    "iconName": "ArrowRight",
+                    "filters": null
+                }
+            ],
+            "icons": [
+                {
+                    "price": null,
+                    "title": "Abonnements",
+                    "text": "Mit einem Abonnement können Sie bei diesem oder bei anderen Abo-Kursen auch flexibel einzelne Termine Buchen. Weitere Infos unter",
+                    "link": "https://www.klubschule.ch/abokurse",
+                    "typ": null,
+                    "event": null,
+                    "iconName": "PlusA",
+                    "filters": null
+                }
+            ],
+            "key": "4N2ND48B__2sCEPr2mRk",
+            "kurs_typ": "E",
+            "kurs_id": 1723591,
+            "start_zeit": "12:00",
+            "ende_zeit": "12:50",
+            "kategorie_code": 0,
+            "anzahl_lektionen": 10,
+            "ist_abo": null,
+            "ist_abokurs": null,
+            "ist_abokurs_offen": false,
+            "sprache_id": null,
+            "status": 0,
+            "bezeichnung": "Yoga Nidra",
+            "bezeichnung_escape": null,
+            "gueltig_ab": "2024-05-01T00:00:00",
+            "gueltig_bis": "2024-07-03T00:00:00",
+            "kantonsbeitrag": false,
+            "kantonsbeitrag_preis_ab": 0.0,
+            "ist_kurs_bewilligungspflichtig": false,
+            "ist_zeit_unregelmaessig": false,
+            "status_label": "",
+            "lektionen_label": "10 Lektion(en)",
+            "datum_label": "01.05.2024 - 03.07.2024",
+            "zeit_label": "12:00 - 12:50"
+        }
+    ],
+    "sorting": 1,
+    "ppage": 1,
+    "psize": 200,
+    "pnext": 0,
+    "clat": null,
+    "clong": null,
+    "cdist": null,
+    "contentItems": [],
+    "portalId": 29,
+    "sprachid": "d",
+    "mandantId": 111,
+    "total": 151,
+    "success": true,
+    "searchText": "",
+    "total_label": "Passsende Abonnemente"
+}
