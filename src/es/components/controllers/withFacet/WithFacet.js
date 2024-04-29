@@ -96,6 +96,8 @@ export default class WithFacet extends Shadow() {
 
         this.updateURLParams()
 
+        console.log(this.params.get('q'))
+
         let hasSearchTerm = false
         let hasSearchLocation = false
         const filterRequest = `{
@@ -104,6 +106,7 @@ export default class WithFacet extends Shadow() {
           "PortalId": ${this.getAttribute('portal-id') || initialRequestObjFrozen.PortalId || 29},
           "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}"
           ${(hasSearchTerm = event.detail?.key === 'input-search') ? `,"searchText": "${event.detail.value}"` : ''}
+          ${(hasSearchTerm = this.params.get('q') !== '' ) ? `,"searchText": "${this.params.get('q')}"` : ''}
           ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lat) ? `,"clat": "${event.detail.lat}"` : ''}
           ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lng) ? `,"clong": "${event.detail.lng}"` : ''}
         }`
@@ -147,7 +150,12 @@ export default class WithFacet extends Shadow() {
                 this.lastResponse = json
               }
 
-              // url kung fu
+              // url search text kung fu
+              if (json.searchText) {
+                this.params.set('q', json.searchText)
+              }
+
+              // url filter kung fu
               json.filters.forEach(filterItem => {
                 if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                   const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
