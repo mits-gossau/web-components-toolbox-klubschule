@@ -38,10 +38,25 @@ export default class AutoComplete extends Shadow() {
     }, ...args)
 
     this.abortController = null
+
     this.requestAutoCompleteListener = event => {
       // reset home page input search
-      if (event.detail.key === "home-page-input-search" && event.detail.value === "") {
-        console.log('request-auto-complete', event)
+      if (event.detail.key === 'home-page-input-search' && event.detail.value === "") {
+        console.log('reset home page input search', event.detail.value)
+        return this.dispatchEvent(new CustomEvent('auto-complete', {
+          detail: {
+            fetch: Promise.resolve({
+              total: 0,
+              success: true,
+              searchText: '',
+              items: [],
+              contentItems: []
+            })
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
       }
       const token = event.detail.value
       if (!token || token.length < 3) {
@@ -78,6 +93,8 @@ export default class AutoComplete extends Shadow() {
       }))
     }
     this.clickOnPredictionListener = event => {
+      // home search input
+      this.homeSearchInput(event.detail.description)
       // close dialog
       this.dispatchEvent(new CustomEvent('close-search-dialog', {
         bubbles: true,
@@ -107,6 +124,25 @@ export default class AutoComplete extends Shadow() {
   disconnectedCallback () {
     this.removeEventListener('request-auto-complete', this.requestAutoCompleteListener)
     this.removeEventListener('auto-complete-selection', this.clickOnPredictionListener)
+  }
+
+  homeSearchInput (searchText) {
+    console.log('homeSearchInput', searchText)
+    const searchUrl = this.getAttribute('search-url')
+    // redirect to search page
+    if (searchText !== "") {
+      // create url object to check if searchUrl has query params
+      const url = new URL(searchUrl)
+      let searchParam = '?q='
+      if (url.searchParams.toString()) {
+        searchParam = '&q='
+      }
+      const searchUrlWithParam = searchUrl + searchParam + searchText
+      if (searchUrl) {
+        console.log('searchUrlWithParam', searchUrlWithParam)
+        window.location.href = searchUrlWithParam
+      }
+    }
   }
 
   dispatchMock () {

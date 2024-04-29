@@ -234,7 +234,6 @@ export default class AutoCompleteList extends Shadow() {
             */
             { total, success, searchText, items, cms }
           ) => {
-            if (total === 0) return
             const listItems = items.map(item => {
               const listElement = document.createElement('li')
               listElement.innerHTML = `
