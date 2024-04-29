@@ -58,25 +58,26 @@ export default class CourseInfo extends Shadow() {
 
   renderCSS () {
     this.css = /* css */`
-      :host {
-        display: flex;
-        align-items: center;
-      }
-      :host .content {
-        padding: 0 0.75em;
-      }
-      :host .success {
-        color: var(--success, green);
-      }
-      :host .alert {
-        color: var(--alert, red);
-      }
-      :host a-icon-mdx {
-        color: var(--icon-color, black);
-      }
-      @media only screen and (max-width: _max-width_) {
-        :host {}
-      }
+    :host {
+      --svg-height: ${this.dataset.iconSize || 'auto'};
+      display: flex;
+      align-items: center;
+    }
+    :host .content {
+      padding: 0 0.75em;
+    }
+    :host .success {
+      color: var(--success, green);
+    }
+    :host .alert {
+      color: var(--alert, red);
+    }
+    :host a-icon-mdx {
+      color: var(--icon-color, black);
+    }
+    @media only screen and (max-width: _max-width_) {
+      :host {}
+    }
     `
     return this.fetchTemplate()
   }
@@ -107,7 +108,7 @@ export default class CourseInfo extends Shadow() {
   renderHTML (data) {
     const { icon, css, status, info } = data
     const dash = (status && info) && !Number(status) ? ' - ' : ''
-    this.icon = /* html */ `<a-icon-mdx icon-name="${icon}" size="1.5em" tabindex="0" class="${css.status}"></a-icon-mdx>`
+    this.icon = /* html */ `<a-icon-mdx icon-name="${icon}" size="${'var(--course-info-default-svg-height)'}" class="${css.status}"></a-icon-mdx>`
     this.html = /* html */`
       ${this.icon}
       <span class="content">

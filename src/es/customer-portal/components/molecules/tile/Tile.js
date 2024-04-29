@@ -306,7 +306,7 @@ export default class AppointmentTile extends Tile {
               <div class="course-info course-execution-info">
                 <ul class="meta">
                   <li>
-                    <a-course-info namespace="course-info-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}"></a-course-info>
+                    <a-course-info data-icon-size="1.5em" data-icon-size-mobile="40em" namespace="course-info-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}"></a-course-info>
                   </li>
                   <li> 
                     <a-icon-mdx icon-name="User" size="1.5em" tabindex="0"></a-icon-mdx>
