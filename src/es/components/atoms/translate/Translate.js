@@ -14,7 +14,14 @@ export default class Translate extends Shadow() {
 
     this.setTranslations = async (event) => {
       const translations = await event.detail.fetch
-      this.innerHTML = translations[this.key] || this.key
+      const params = this.dataset.params ? JSON.parse(this.dataset.params) : {}
+      let translation = translations[this.key] || this.key
+
+      Object.keys(params).forEach(key => {
+        translation = translation.replace(`{${key}}`, params[key])
+      })
+
+      this.innerHTML = translation
     }
   }
 
