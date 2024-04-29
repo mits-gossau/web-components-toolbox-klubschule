@@ -12,7 +12,7 @@ import { Shadow } from '../../components/web-components-toolbox/src/es/component
  */
 export default class VotingController extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
 
     const endpoint = 'http://localhost:3001/api/Voting/data'
     const fetchOptions = {

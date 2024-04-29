@@ -28,11 +28,11 @@ export default class Option extends Shadow() {
     this.html = ''
     this.html = /* html */ `
         <ks-a-heading tag="h3">
-            <a-translate>${dictKey}.Title</a-translate>
+          <a-translate>${dictKey}.Title</a-translate>
         </ks-a-heading>
         <p><a-translate>${dictKey}.Text</a-translate></p>
         <div class="option-content">
-            ${content}
+          ${content}
         </div>
         <p><a-translate data-params="${escapeForHtml(JSON.stringify({ amount: option.currentVotes, of: option.maxVotes }))}">CustomerLoyality.PickedByParticipants</a-translate></p>
     `
@@ -48,42 +48,44 @@ export default class Option extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
-        :host {
-            --table-even-background-color: transparent;
-            --table-padding: 0.5rem;
-            --table-width: auto;
-            --mdx-sys-spacing-flex-l: 0;
+      :host {
+        --table-even-background-color: transparent;
+        --table-padding: 0.5rem;
+        --table-width: auto;
+        --mdx-sys-spacing-flex-l: 0;
 
-            margin-bottom: var(--content-spacing, 1.5rem);
-            display: block;
-            padding: 1.25rem;
-            background: #fff;
-            border: 1px solid #ccc;
-        }
+        margin-bottom: var(--content-spacing, 1.5rem);
+        display: block;
+        padding: 1.25rem;
+        background: #fff;
+        border: 1px solid #ccc;
+      }
 
-        :host .option-content {
-            margin: 0;
-            // display: flex;
-        }
+      /* overriding inherited styles */
+      :host div.option-content:has(table) {
+        margin: 0;
+        overflow: visible;
+        // display: flex;
+      }
 
-        table tbody td:last-child {
-            text-align: right;
-        }
+      table tbody td:last-child {
+        text-align: right;
+      }
 
-        .bold {
-            font-weight: bold;
-        }
+      .bold {
+        font-weight: bold;
+      }
 
-        .option-content > * {
-            flex: 1 1 50%;
-        }
+      .option-content > * {
+        flex: 1 1 50%;
+      }
 
-        ks-a-heading {
-            --h3-margin: 0;
-        }
-        @media only screen and (max-width: _max-width_) {
-            :host {}
-        }
+      ks-a-heading {
+        --h3-margin: 0;
+      }
+      @media only screen and (max-width: _max-width_) {
+        :host {}
+      }
     `
   }
 }

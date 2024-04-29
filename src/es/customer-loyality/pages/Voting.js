@@ -19,16 +19,19 @@ export default class Voting extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-
+    console.log('connectedCallback')
     document.body.addEventListener('voting-data', this.votingDataListener)
-    document.body.dispatchEvent(new CustomEvent('request-voting-data', {
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
+    document.body.dispatchEvent(
+      new CustomEvent('request-voting-data', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      })
+    )
   }
 
   disconnectedCallback () {
+    console.log('disconnectedCallback')
     document.body.removeEventListener('voting-data', this.votingDataListener)
   }
 
@@ -55,13 +58,13 @@ export default class Voting extends Shadow() {
     this.renderLoading()
     this.modules
       .then(() => votingFetch)
-      .then(voting => {
+      .then((voting) => {
         this.html = ''
         this.html = /* html */ `
           ${this.renderHeadline()}
           <ks-o-body-section variant="default">
-              ${this.renderCourseTable(voting)}
-              ${this.renderNotification()}
+            ${this.renderCourseTable(voting)}
+            ${this.renderNotification()}
           </ks-o-body-section>
           ${this.renderVoting(voting)}
         `
@@ -71,42 +74,41 @@ export default class Voting extends Shadow() {
   renderHeadline () {
     return /* html */ `
       <ks-o-body-section variant="default">
-          <ks-a-heading tag="h1">
-            <a-translate>CustomerLoyality.PageTitle</a-translate>
-          </ks-a-heading>
-      </ks-o-body-section>
-      `
+        <ks-a-heading tag="h1">
+          <a-translate>CustomerLoyality.PageTitle</a-translate>
+        </ks-a-heading>
+      </ks-o-body-section>`
   }
 
   renderCourseTable (data) {
     return /* html */ `
       <div>
         <table>
-            <tbody>
-                <tr>
-                    <td><a-translate>CustomerLoyality.Table.CourseTitle</a-translate></td>
-                    <td>${data.course.title}</td>
-                </tr>
-                <tr>
-                    <td><a-translate>CustomerLoyality.Table.CourseId</a-translate></td>
-                    <td>${data.course.id}</td>
-                </tr>
-                <tr>
-                    <td><a-translate>CustomerLoyality.Table.Date</a-translate></td>
-                    <td>${data.course.beginDate} - ${data.course.endDate}</td>
-                </tr>
-                <tr>
-                    <td><a-translate>CustomerLoyality.Table.Location</a-translate></td>
-                    <td>${data.course.location}</td>
-                </tr>
-                <tr>
-                    <td><a-translate>CustomerLoyality.Table.NumberOfLessons</a-translate></td>
-                    <td>${data.course.lessons} Lektionen</td>
-                </tr>
-                <tr>
-                    <td><a-translate>CustomerLoyality.Table.CoursePrice</a-translate></td>
-                    <td>${data.course.price}</td>
-                </tr>
+          <tbody>
+            <tr>
+              <td><a-translate>CustomerLoyality.Table.CourseTitle</a-translate></td>
+              <td>${data.course.title}</td>
+            </tr>
+            <tr>
+              <td><a-translate>CustomerLoyality.Table.CourseId</a-translate></td>
+              <td>${data.course.id}</td>
+            </tr>
+            <tr>
+              <td><a-translate>CustomerLoyality.Table.Date</a-translate></td>
+              <td>${data.course.beginDate} - ${data.course.endDate}</td>
+            </tr>
+            <tr>
+              <td><a-translate>CustomerLoyality.Table.Location</a-translate></td>
+              <td>${data.course.location}</td>
+            </tr>
+            <tr>
+              <td><a-translate>CustomerLoyality.Table.NumberOfLessons</a-translate></td>
+              <td>${data.course.lessons} Lektionen</td>
+            </tr>
+            <tr>
+              <td><a-translate>CustomerLoyality.Table.CoursePrice</a-translate></td>
+              <td>${data.course.price}</td>
+            </tr>
         </table>
       </div>`
   }
@@ -114,11 +116,10 @@ export default class Voting extends Shadow() {
   renderNotification () {
     return /* html */ `
       <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
-          <div slot="description">
-              <p>Wegen fehlender Anmeldungen können wir nicht garantieren, dass Ihr Kurs in der ursprünglichen Form stattfinden kann. Es besteht jedoch die Möglichkeit, dass er mit kleinen Änderungen durchgeführt wird.</p>
-          </div>
-      </ks-m-system-notification>
-    `
+        <div slot="description">
+          <p>Wegen fehlender Anmeldungen können wir nicht garantieren, dass Ihr Kurs in der ursprünglichen Form stattfinden kann. Es besteht jedoch die Möglichkeit, dass er mit kleinen Änderungen durchgeführt wird.</p>
+        </div>
+      </ks-m-system-notification>`
   }
 
   renderVoting (data) {
@@ -132,7 +133,7 @@ export default class Voting extends Shadow() {
   }
 
   renderForm (voting) {
-    return /* html */`
+    return /* html */ `
       <ks-o-body-section variant="default">
         <ks-a-heading tag="h2">
           <a-translate>CustomerLoyality.FormIntroTitle</a-translate>
@@ -143,29 +144,37 @@ export default class Voting extends Shadow() {
         <ks-a-heading tag="h3" style-as="h2">
           <a-translate>CustomerLoyality.FormTitle</a-translate>
         </ks-a-heading>
-        <p><a-translate data-params="${escapeForHtml(JSON.stringify({ date: voting.responseUntilDate }))}">CustomerLoyality.FormText</a-translate></p>
+        <p><a-translate data-params="${escapeForHtml(
+          JSON.stringify({ date: voting.responseUntilDate })
+        )}">CustomerLoyality.FormText</a-translate></p>
         <m-form>
-          ${this.renderOptionPrice(voting.optionPrice)}
-          ${this.renderOptionLessons(voting.optionLessons)}
+          <form>
+            ${this.renderOptionPrice(voting.optionPrice)}
+            ${this.renderOptionLessons(voting.optionLessons)}
+            <fieldset>
+              <label>Kommentar</label>
+              <textarea placeholder="Hier ist Platz für Ihre Fragen und Anliegen. Sie erreichen uns auch telefonisch unter +41 44 278 62 62."></textarea>
+          </form>
         </m-form>
       </ks-o-body-section>`
   }
 
   renderLoading () {
-    this.html = /* html */`
+    this.html = /* html */ `
       <ks-o-body-section variant="default">
         <p>Loading...</p>
-      </ks-o-body-section>
-    `
+      </ks-o-body-section>`
   }
 
   renderOptionPrice (option) {
     if (!option.available) {
       return ''
     }
-    console.log(escapeForHtml(JSON.stringify(option)))
+
     return /* html */ `
-      <m-option data-option="${escapeForHtml(JSON.stringify(option))}" data-dictionary-key="CustomerLoyality.OptionPrice">
+      <m-option data-option="${escapeForHtml(
+        JSON.stringify(option)
+      )}" data-dictionary-key="CustomerLoyality.OptionPrice">
         <table>
           <tbody>
             <tr class="bold">
@@ -182,13 +191,15 @@ export default class Voting extends Shadow() {
             </tr>
           </tbody>
         </table>
-        <div class="radiobuttonlist">
-          <input type="radio" name="optionPrice" id="optionPriceYes" />
-          <label for="optionPriceYes"><a-translate>Yes</a-translate></label>
-          <br />
-          <input type="radio" name="optionPrice" id="optionPriceNo" />
-          <label for="optionPriceNo"><a-translate>No</a-translate></label>
-        </div>
+        <ks-a-checkbox namespace="checkbox-default-" data="price">
+          <div class="wrap">
+            <label for="cb-01">Checkbox Label</label>
+            <input id="cb-01" type="checkbox" name="checkbox">
+            <div class="box">
+              <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
+            </div>
+          </div>
+        </ks-a-checkbox>
       </m-option>`
   }
 
@@ -198,7 +209,9 @@ export default class Voting extends Shadow() {
     }
 
     return /* html */ `
-      <m-option data-option="${escapeForHtml(JSON.stringify(option))}" data-dictionary-key="CustomerLoyality.OptionLessons">
+      <m-option data-option="${escapeForHtml(
+        JSON.stringify(option)
+      )}" data-dictionary-key="CustomerLoyality.OptionLessons">
         <table>
           <tbody>
             <tr class="bold">
@@ -215,13 +228,15 @@ export default class Voting extends Shadow() {
             </tr>
           </tbody>
         </table>
-        <div class="radiobuttonlist">
-          <input type="radio" name="optionLessons" id="optionLessonsYes" />
-          <label for="optionLessonsYes"><a-translate>Yes</a-translate></label>
-          <br />
-          <input type="radio" name="optionLessons" id="optionLessonsNo" />
-          <label for="optionLessonsNo"><a-translate>No</a-translate></label>
-        </div>
+        <ks-a-checkbox namespace="checkbox-default-" data="lesso">
+          <div class="wrap">
+            <label for="cb-01">Checkbox Label</label>
+            <input id="cb-01" type="checkbox" name="lesson">
+            <div class="box">
+                <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
+            </div>
+          </div>
+        </ks-a-checkbox>
       </m-option>`
   }
 
@@ -240,37 +255,45 @@ export default class Voting extends Shadow() {
   }
 
   get modules () {
-    console.log(this.importMetaUrl)
-    return Promise.all([this.fetchModules([
-      {
-        path: `${this.importMetaUrl}../../components/atoms/heading/Heading.js`,
-        name: 'ks-a-heading'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/organisms/bodySection/BodySection.js`,
-        name: 'ks-o-body-section'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/molecules/systemNotification/systemNotification.js`,
-        name: 'ks-m-system-notification'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/atoms/translate/translate.js`,
-        name: 'a-translate'
-      },
-      {
-        path: `${this.importMetaUrl}../molecules/option/option.js`,
-        name: 'm-option'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/molecules/form/form.js`,
-        name: 'm-form'
-      }
-    ])])
+    return Promise.all([
+      this.fetchModules([
+        {
+          path: `${this.importMetaUrl}../../components/atoms/heading/Heading.js`,
+          name: 'ks-a-heading'
+        },
+        {
+          path: `${this.importMetaUrl}../../components/organisms/bodySection/BodySection.js`,
+          name: 'ks-o-body-section'
+        },
+        {
+          path: `${this.importMetaUrl}../../components/molecules/systemNotification/systemNotification.js`,
+          name: 'ks-m-system-notification'
+        },
+        {
+          path: `${this.importMetaUrl}../../components/atoms/translate/translate.js`,
+          name: 'a-translate'
+        },
+        {
+          path: `${this.importMetaUrl}../molecules/option/option.js`,
+          name: 'm-option'
+        },
+        {
+          path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/molecules/form/form.js`,
+          name: 'm-form'
+        },
+        {
+          path: `${this.importMetaUrl}../../components/atoms/checkbox/Checkbox.js`,
+          name: 'ks-a-checkbox'
+        },
+        {
+          path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+          name: 'a-icon-mdx'
+        }
+      ])
+    ])
   }
 
   get votingWrapper () {
-    console.log(this.root)
     return this.root.querySelector('div')
   }
 }
