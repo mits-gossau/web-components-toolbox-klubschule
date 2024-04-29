@@ -39,6 +39,10 @@ export default class AutoComplete extends Shadow() {
 
     this.abortController = null
     this.requestAutoCompleteListener = event => {
+      // reset home page input search
+      if (event.detail.key === "home-page-input-search" && event.detail.value === "") {
+        console.log('request-auto-complete', event)
+      }
       const token = event.detail.value
       if (!token || token.length < 3) {
         // update results
