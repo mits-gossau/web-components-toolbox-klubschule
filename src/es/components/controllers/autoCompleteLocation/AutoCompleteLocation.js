@@ -112,24 +112,47 @@ export default class AutoCompleteLocation extends Shadow() {
     }))
   }
 
-  setCoordinationFilter (lat, lng) {
+  setCoordinationFilter (lat, lng, description) {
     this.dispatchEvent(new CustomEvent('close-location-dialog', {
       bubbles: true,
       cancelable: true,
       composed: true
     }))
-    this.dispatchEvent(new CustomEvent('request-with-facet',
-      {
-        detail: {
-          key: 'location-search',
-          lat,
-          lng
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
+    if (description) {
+      this.dispatchEvent(new CustomEvent('request-with-facet',
+        {
+          detail: {
+            key: 'location-search',
+            lat,
+            lng,
+            description
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        })
+      )
+    } else {
+      this.geocoder.geocode({location: {
+          lat: parseFloat(lat),
+          lng: parseFloat(lng),
+        }
+      }, (responses, status) => {
+        this.dispatchEvent(new CustomEvent('request-with-facet',
+          {
+            detail: {
+              key: 'location-search',
+              lat,
+              lng,
+              description: responses[0]?.formatted_address || ''
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          })
+        )
       })
-    )
+    }
   }
 
   get apiKey () {
@@ -145,7 +168,7 @@ export default class AutoCompleteLocation extends Shadow() {
         if (status == 'OK') {
           const lat = responses[0].geometry.location.lat()
           const lng = responses[0].geometry.location.lng()
-          this.setCoordinationFilter(lat, lng)
+          this.setCoordinationFilter(lat, lng, event.detail.description)
         }
       }
     )
@@ -167,7 +190,7 @@ export default class AutoCompleteLocation extends Shadow() {
         {
           detail: {
             key: 'location-search'
-          },
+        },
           bubbles: true,
           cancelable: true,
           composed: true
