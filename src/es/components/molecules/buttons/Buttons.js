@@ -82,18 +82,20 @@ export default class Buttons extends Shadow() {
   renderHTML () {
     const dataButtons = JSON.parse(this.getAttribute('data-buttons')) || [{}]
 
-    const buttons = dataButtons?.reduce((acc, button) => acc + /* html */`
-      <ks-a-button 
-        ${button.iconName && !button.text ? 'icon' : ''} 
-        namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
-        color="secondary" 
-        ${button.link ? `href=${button.link}` : ''}
-      >
-        ${button.text ? '<span>' + button.text + '</span>' : ''}
-        ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
-        ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
-      </ks-a-button>
-    `, '')
+    const buttons = dataButtons?.reduce((acc, button) => acc + (
+      button.event === "bookmark" ? '' : /* html */`
+        <ks-a-button 
+          ${button.iconName && !button.text ? 'icon' : ''} 
+          namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
+          color="secondary" 
+          ${button.link ? `href=${button.link}` : ''}
+        >
+          ${button.text ? '<span>' + button.text + '</span>' : ''}
+          ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
+          ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
+        </ks-a-button>
+      `
+    ), '')
 
     this.html = /* html */`
       <div class="buttons-container">

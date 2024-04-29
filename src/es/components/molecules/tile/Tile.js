@@ -309,8 +309,8 @@ export default class Tile extends Shadow() {
             <div class="m-tile__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="m-tile__icon-box">
-                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.iconTooltip}">
-                    ${icon.name === 'A' || icon.name === 'PlusA' ? `${icon.name === 'PlusA' ? iconPlusA : icon.name === 'A' ? iconA : icon.name}` : `<a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.name}" size="1em"></a-icon-mdx>`}
+                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.text}">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName}" size="1em"></a-icon-mdx>
                   </ks-m-tooltip>
                 </div>
               `, '')}           
