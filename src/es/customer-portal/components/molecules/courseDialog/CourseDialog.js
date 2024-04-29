@@ -1,7 +1,7 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 import { escapeForHtml, getTileState } from '../../../helpers/Shared.js'
-import { actionType, subscriptionMode, courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
+import { subscriptionMode, courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
 
 /* global CustomEvent */
 /* global self */
@@ -38,7 +38,6 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
-    // document.body.addEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
     document.body.addEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
   }
 
@@ -49,7 +48,6 @@ export default class CourseDialog extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.removeEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
-    // document.body.removeEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
     this.subscriptionsPdfLink?.removeEventListener('click', this.subscriptionPdfLinkListener)
   }
 
@@ -67,6 +65,11 @@ export default class CourseDialog extends Shadow() {
     ))
   }
 
+  /**
+   * Download subscriptions PDF
+   *
+   * @param {CustomEventInit} event
+   */
   updateSubscriptionListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(subscriptionPdf => {
@@ -78,14 +81,6 @@ export default class CourseDialog extends Shadow() {
       })
     }
   }
-
-  /**
-   * Dialog close button listener
-   *
-   */
-  // dialogCloseListener = () => {
-  //   this.viewContent.innerHTML = ''
-  // }
 
   /**
    * SHOW course detail
@@ -107,23 +102,22 @@ export default class CourseDialog extends Shadow() {
           }
         ))
         const { type } = event.detail
-        if (type === actionType.detail) {
+        if (type === 'detail') {
           this.renderDialogTitle('Termindetails')
           this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
         }
-        if (type === actionType.booking) {
+        if (type === 'booking') {
           this.renderDialogTitle('Termin buchen')
           this.viewContent.innerHTML = this.renderDialogContentBookingConfirmation(this.courseData, this.courseDetail)
         }
-        if (type === actionType.reversal) {
+        if (type === 'reversal') {
           this.renderDialogTitle('Termin stornieren')
           this.viewContent.innerHTML = this.renderDialogContentReversalConfirmation(this.courseData, this.courseDetail)
         }
-        if (type === actionType.subscriptions) {
+        if (type === 'subscriptions') {
           this.renderDialogTitle('Abonnementdetails')
           this.viewContent.innerHTML = this.renderDialogContentSubscriptionDetail(this.courseData, this.courseDetail)
           // TODO: Own fn() ?
-          debugger
           this.subscriptionsPdfLink = this.viewContent.querySelector('ks-m-link-list')
           this.subscriptionsPdfLink.addEventListener('click', this.subscriptionPdfLinkListener)
         }
@@ -635,7 +629,14 @@ export default class CourseDialog extends Shadow() {
    */
   renderNotification () {
     return /* html */ `
-      <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertTriangle">
+      <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" tabindex="0">
+        <style>
+          :host {
+            --system-notification-default-icon-border-width: 0 !important;
+            --icon-mdx-ks-svg-height:10em !important;
+            --icon-mdx-ks-svg-width:10em !important;
+          }
+        </style>
         <div slot="description">
           <p>Eine Stornierung ist nur bis zwei Stunden vor Terminbeginn möglich!</p>
         </div>

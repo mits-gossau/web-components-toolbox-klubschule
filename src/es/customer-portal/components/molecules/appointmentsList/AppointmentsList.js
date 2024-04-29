@@ -220,6 +220,13 @@ export default class AppointmentsList extends Shadow() {
     return title
   }
 
+  /**
+   * Make course tile component
+   * @param {*} tile
+   * @param {*} appointment
+   * @param {*} selectedSubscription
+   * @returns
+   */
   makeTileComponent (tile, appointment, selectedSubscription) {
     const appointmentData = this.cleanAndStringifyData(appointment)
     const selectedSubscriptionData = this.cleanAndStringifyData(selectedSubscription)
@@ -228,7 +235,6 @@ export default class AppointmentsList extends Shadow() {
     tileComponent.setAttribute('data-id', `${makeUniqueCourseId(appointment)}`)
     tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
     tileComponent.setAttribute('data-list-type', this.dataset.listType || '')
-
     return tileComponent
   }
 
