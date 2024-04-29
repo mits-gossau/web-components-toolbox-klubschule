@@ -14,7 +14,7 @@ export default class VotingController extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    const endpoint = 'https://a6d80c71-2328-4530-8b65-ae0d6c23abb2.mock.pstmn.io/api/Voting/data'
+    const endpoint = 'http://localhost:3001/api/Voting/data'
     const fetchOptions = {
       method: 'POST',
       headers: {
