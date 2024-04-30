@@ -135,6 +135,9 @@ export default class KsBodyStyle extends BodyStyle {
             margin-top: var(--mdx-sys-spacing-flex-m);
             margin-bottom: var(--mdx-sys-spacing-flex-m);
         }
+        :host > .align-center {
+            text-align: center;
+        }
         :host > .margin-top-m {
             margin-top: var(--mdx-sys-spacing-flex-m);
         }
