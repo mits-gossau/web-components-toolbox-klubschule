@@ -119,6 +119,8 @@ export default class KsGoogleMaps extends GoogleMaps {
             new markerClusterer.MarkerClusterer({ markers, map, renderer: clusterRenderer })
           })
 
+          this.createControls(map, googleMap)
+
           // set map bounds to switerland
           const switzerlandBounds = new googleMap.LatLngBounds({ lat: 45.817995, lng: 5.9559113 }, { lat: 47.8084648, lng: 10.4922941 })
           map.fitBounds(switzerlandBounds)
@@ -300,5 +302,57 @@ export default class KsGoogleMaps extends GoogleMaps {
       }
       this.html = markerClustererScript
     })
+  }
+
+  createMap (googleMap, mapTarget, lat, lng) {
+    return new googleMap.Map(mapTarget, {
+      center: { lat, lng },
+      zoom: 15,
+      scrollwheel: false,
+      mapTypeControl: false,
+      streetViewControl: false,
+      zoomControl: false,
+      panControl: true
+    })
+  }
+
+  createControls (map, googleMapsLibrary) {
+    const buttons = /* html */`
+    <ks-a-button icon namespace="button-primary-" color="secondary" id="gm-btn-center"><a-icon-mdx icon-name="Navigation" size="1em"></a-icon-mdx></ks-a-button>
+    <ks-a-button icon namespace="button-primary-" color="secondary" id="gm-btn-zoom-in"><a-icon-mdx icon-name="Plus" size="1em"></a-icon-mdx></ks-a-button>
+    <ks-a-button icon namespace="button-primary-" color="secondary" id="gm-btn-zoom-out"><a-icon-mdx icon-name="Minus" size="1em"></a-icon-mdx></ks-a-button>
+    `
+    const container = document.createElement('div')
+    container.style.margin = '1rem'
+    container.style.display = 'flex'
+    container.style.flexDirection = 'column'
+    container.style.gap = '0.5rem'
+
+    container.innerHTML = buttons
+
+    const centerButton = container.querySelector('#gm-btn-center')
+    const zoomInButton = container.querySelector('#gm-btn-zoom-in')
+    const zoomOutButton = container.querySelector('#gm-btn-zoom-out')
+
+    zoomInButton?.addEventListener('click', () => {
+      map.setZoom(map.getZoom() + 1)
+    })
+    zoomOutButton?.addEventListener('click', () => {
+      map.setZoom(map.getZoom() - 1)
+    })
+    centerButton?.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          const userLocation = new googleMapsLibrary.LatLng(position.coords.latitude, position.coords.longitude);
+          map.setCenter(userLocation)
+          map.setZoom(14)
+        })
+      } else {
+        /* Browser doesn't support Geolocation */
+        console.error('Browser does not support geolocation')
+      }
+    })
+
+    map.controls[googleMapsLibrary.ControlPosition.RIGHT_BOTTOM].push(container)
   }
 }
