@@ -181,9 +181,8 @@ export default class DialogStatusButton extends Shadow() {
     }
 
     if (type === 'subscriptions') {
-      // https://qual.klubschule.ch/Kurse/suche@6A_10401
       // @ts-ignore
-      const url = `${self.Environment.getApiBaseUrl('customer-portal').subscriptionRenewSearchLinkUrl}/${this.dataContent.subscriptionKindType}_${this.dataContent.subscriptionKindId}`
+      const url = `${self.Environment.getApiBaseUrl('customer-portal').subscriptionRenewSearchLinkUrl}${this.dataContent.subscriptionKindType}_${this.dataContent.subscriptionKindId}`
       return `<ks-a-button href="${url}" namespace="button-primary-">Abonnement erneuern</ks-a-button>`
     }
 
