@@ -2,4 +2,8 @@
     --checkbox-default-border-color: var(--m-gray-700);
     --checkbox-default-box-background-color: var(--m-white);
     --checkbox-default-color: #0053A6;
+    --checkbox-default-padding-top: var(--mdx-comp-checkbox-padding-vertical-default);
+    --checkbox-default-padding-bottom: var(--mdx-comp-checkbox-padding-vertical-default);
+    --checkbox-default-padding-right: var(--mdx-comp-checkbox-padding-horizontal-default);
+    --checkbox-default-background: var(--mdx-comp-checkbox-unchecked-background-color-hover);
 }

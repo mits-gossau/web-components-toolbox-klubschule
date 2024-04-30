@@ -59,7 +59,9 @@
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 40.4%, #000 100%);
 }
 
-:host a-input {
+:host a-input,
+:host ks-c-with-facet,
+:host ks-c-auto-complete {
     width: 100%;
     max-width: calc(528/16 * 1rem);
 }
