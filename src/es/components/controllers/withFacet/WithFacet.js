@@ -96,17 +96,17 @@ export default class WithFacet extends Shadow() {
 
         this.updateURLParams()
 
-        console.log(this.params.get('q'))
-
-        let hasSearchTerm = false
+        let hasSearchTerm = event.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSearchLocation = false
         const filterRequest = `{
           "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
           "MandantId": ${this.getAttribute('mandant-id') || initialRequestObjFrozen.MandantId || 110},
           "PortalId": ${this.getAttribute('portal-id') || initialRequestObjFrozen.PortalId || 29},
           "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}"
-          ${(hasSearchTerm = event.detail?.key === 'input-search') ? `,"searchText": "${event.detail.value}"` : ''}
-          ${(hasSearchTerm = this.params.get('q') !== ('' || null) ) ? `,"searchText": "${this.params.get('q')}"` : ''}
+          ${hasSearchTerm ? `,"searchText": "${event.detail?.key === 'input-search'
+            ? event.detail.value
+            : this.params.get('q')
+          }"` : ''}
           ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lat) ? `,"clat": "${event.detail.lat}"` : ''}
           ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lng) ? `,"clong": "${event.detail.lng}"` : ''}
         }`
@@ -144,14 +144,15 @@ export default class WithFacet extends Shadow() {
               }
               throw new Error(response.statusText)
             }).then(json => {
-              console.log('----------json', json)
               // store initial response
               if (!this.filters.length || this.filters.length === 0) {
                 this.lastResponse = json
               }
 
               // url search text kung fu
-              if (json.searchText) {
+              if (!json.searchText) {
+                this.params.delete('q')
+              } else {
                 this.params.set('q', json.searchText)
               }
 

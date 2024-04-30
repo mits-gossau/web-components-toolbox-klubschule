@@ -5,62 +5,46 @@
 <ks-m-stage namespace="stage-default-">
     <a-picture picture-load defaultSource="https://dev.klubschule.ch/media/odxlz5kr/aspectratio.png?width=1920&amp;height=1080&amp;format=png&amp;quality=80&amp;v=1da76af23c21fd0"></a-picture>
     <ks-a-heading tag="h1" display-2>So vielf&#xE4;ltig wie Du</ks-a-heading>
-    <!-- <a-input 
-        inputid="searchField" 
-        placeholder="Label" 
-        icon-name="Search" 
-        icon-size="1.25em" 
-        force 
-        submit-search="open-main-search" 
-        search 
-        delete-listener 
-        type="search"
-    ></a-input> -->
-    <!-- <ks-c-with-facet
-        endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
-        initial-request='{"filter":[],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":6}'
-    > -->
-        <ks-c-auto-complete
-            endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
-            search-url="http://localhost:3000/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=.%2Fsrc%2Fcss%2FvariablesCustomKlubschule.css&login=.%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2Flogin%2Fdefault-%2Fdefault-.html&logo=.%2Fsrc%2Fes%2Fcomponents%2Fatoms%2Flogo%2Fdefault-%2Fdefault-.html&nav=.%2Fsrc%2Fes%2Fcomponents%2Fweb-components-toolbox%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2FmultiLevelNavigation%2Fdefault-%2Fdefault-.html&footer=.%2Fsrc%2Fes%2Fcomponents%2Forganisms%2Ffooter%2Fdefault-%2Fdefault-.html&content=.%2Fsrc%2Fes%2Fcomponents%2Fpages%2FAngebotsliste-Suchergebnis.html"
-        >
-            <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
-            <div class="container">
-                <a-input
-                    inputid="home-page-input-search"
-                    autofocus
-                    placeholder="Suchen..."
-                    icon-name="Search" 
-                    icon-size="1.25em"
-                    submit-search="request-auto-complete"
-                    any-key-listener
-                    type="search"
-                    answer-event-name="search-change"
-                    delete-listener
-                    search
-                >
-                </a-input>
-                <div id="close">
-                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                </div>
-            </div>
-            <div class="container">
-                <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
-                </ks-m-auto-complete-list>
-            </div>
+    <ks-c-auto-complete
+        endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
+        search-url="http://localhost:3000/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=.%2Fsrc%2Fcss%2FvariablesCustomKlubschule.css&login=.%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2Flogin%2Fdefault-%2Fdefault-.html&logo=.%2Fsrc%2Fes%2Fcomponents%2Fatoms%2Flogo%2Fdefault-%2Fdefault-.html&nav=.%2Fsrc%2Fes%2Fcomponents%2Fweb-components-toolbox%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2FmultiLevelNavigation%2Fdefault-%2Fdefault-.html&footer=.%2Fsrc%2Fes%2Fcomponents%2Forganisms%2Ffooter%2Fdefault-%2Fdefault-.html&content=.%2Fsrc%2Fes%2Fcomponents%2Fpages%2FAngebotsliste-Suchergebnis.html"
+    >
+        <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
+        <div class="container">
             <a-input
-                id="show-modal"
-                inputid="show-modal"
-                placeholder="Ihr Angebot"
-                icon-name="Search"
+                inputid="home-page-input-search"
+                autofocus
+                placeholder="Suchen..."
+                icon-name="Search" 
                 icon-size="1.25em"
-                search type="search"
+                submit-search="request-auto-complete"
+                any-key-listener
+                type="search"
                 answer-event-name="search-change"
+                delete-listener
+                search
             >
             </a-input>
-            </m-dialog>
-        </ks-c-auto-complete>
-    <!-- </ks-c-with-facet> -->
+            <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+            </div>
+        </div>
+        <div class="container">
+            <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+            </ks-m-auto-complete-list>
+        </div>
+        <a-input
+            id="show-modal"
+            inputid="show-modal"
+            placeholder="Ihr Angebot"
+            icon-name="Search"
+            icon-size="1.25em"
+            search type="search"
+            answer-event-name="search-change"
+        >
+        </a-input>
+        </m-dialog>
+    </ks-c-auto-complete>
 </ks-m-stage>
 <!-- /Stage -->
 
