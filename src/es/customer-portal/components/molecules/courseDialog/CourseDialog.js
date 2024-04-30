@@ -395,6 +395,17 @@ export default class CourseDialog extends Shadow() {
       event.detail.fetch.then(() => {
         this.viewContent.innerHTML = ''
         this.viewContent.innerHTML = this.renderDialogContentReversalSuccess(this.courseData, this.courseDetail)
+        this.dispatchEvent(new CustomEvent('update-counter',
+          {
+            detail: {
+              counter: 0,
+              type: 'decrement'
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }
+        ))
       })
     }
   }

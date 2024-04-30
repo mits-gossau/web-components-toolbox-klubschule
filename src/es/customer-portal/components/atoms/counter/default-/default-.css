@@ -1,0 +1,3 @@
+:host {
+    --counter-default-h1-margin:0 0 var(--h1-margin, 0) 0;
+}

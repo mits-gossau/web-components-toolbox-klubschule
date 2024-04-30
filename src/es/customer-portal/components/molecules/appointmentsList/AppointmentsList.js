@@ -13,6 +13,7 @@ export default class AppointmentsList extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.select = null
+    this.numberOfAppointments = 0
   }
 
   connectedCallback () {
@@ -42,6 +43,17 @@ export default class AppointmentsList extends Shadow() {
         this.select = this.root.querySelector('o-grid').root.querySelector('select')
         this.select.addEventListener('change', this.selectEventListener)
       }
+      this.dispatchEvent(new CustomEvent('update-counter',
+        {
+          detail: {
+            counter: this.numberOfAppointments,
+            type: 'init'
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }
+      ))
     })
   }
 
@@ -132,22 +144,23 @@ export default class AppointmentsList extends Shadow() {
           name: 'o-grid'
         },
         {
-          path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
-          name: 'm-dialog'
-        },
-        {
           path: `${this.importMetaUrl}'../../../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
           name: 'mdx-component'
+        },
+        {
+          path: `${this.importMetaUrl}'../../../../atoms/counter/Counter.js`,
+          name: 'ks-a-counter'
         }
       ])
       return Promise.all([fetchModules]).then((children) => {
         this.html = ''
         const filter = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
         const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
+        this.numberOfAppointments = dayList.counter
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
             <div col-lg="12" col-md="12" col-sm="12">
-              <ks-a-heading tag="h1">${dayList.counter} Angebote</ks-a-heading>
+              <ks-a-heading tag="h1"><ks-a-counter namespace="counter-default-" data-list-type="${this.dataset.listType}" data-heading-type="h1" data-booked-subscriptions-text="gebuchte Termine" data-appointments-text="Angebote"></ks-a-counter></ks-a-heading>
             </div>
             ${(!this.dataset.showFilters || this.dataset.showFilters === 'true')
             ? `<div col-lg="12" col-md="12" col-sm="12">
@@ -157,7 +170,7 @@ export default class AppointmentsList extends Shadow() {
                   [[ Filter ]]
                   <hr>
                   <br>
-                </div>`
+              </div>`
           : ''}         
           </o-grid>
           <div id="list-wrapper">
@@ -246,18 +259,18 @@ export default class AppointmentsList extends Shadow() {
   getDayListData (data) {
     let booked = {}
     if (!data.selectedSubscription) {
-      booked = data.dayList[0].subscriptionCourseAppointments[0]
+      booked = data.dayList[0]?.subscriptionCourseAppointments[0]
     }
     const selectedSubscription = data.selectedSubscription
       ? data.selectedSubscription
       : {
-          subscriptionBalance: booked.subscriptionBalance,
-          subscriptionDescription: booked.subscriptionDescription,
-          subscriptionId: booked.subscriptionId,
-          subscriptionMode: booked.subscriptionMode,
-          subscriptionType: booked.subscriptionType,
-          subscriptionValidFrom: booked.subscriptionValidFrom,
-          subscriptionValidTo: booked.subscriptionValidTo
+          subscriptionBalance: booked?.subscriptionBalance,
+          subscriptionDescription: booked?.subscriptionDescription,
+          subscriptionId: booked?.subscriptionId,
+          subscriptionMode: booked?.subscriptionMode,
+          subscriptionType: booked?.subscriptionType,
+          subscriptionValidFrom: booked?.subscriptionValidFrom,
+          subscriptionValidTo: booked?.subscriptionValidTo
         }
     const dayList = data.selectedSubscription ? data.selectedSubscription.dayList : data.dayList
     delete selectedSubscription.dayList
