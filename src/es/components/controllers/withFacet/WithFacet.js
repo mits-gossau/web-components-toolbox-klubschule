@@ -214,9 +214,11 @@ export default class WithFacet extends Shadow() {
           cancelable: true,
           composed: true
         }))
+        const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
         this.dispatchEvent(new CustomEvent('location-change', {
           detail: {
-            searchTerm: !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
+            searchTerm: event.detail?.description || searchCoordinates || '',
+            searchCoordinates
           },
           bubbles: true,
           cancelable: true,

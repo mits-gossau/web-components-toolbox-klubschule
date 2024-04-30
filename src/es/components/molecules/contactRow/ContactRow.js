@@ -50,8 +50,15 @@ export default class Contact extends Shadow() {
         --icon-mdx-ks-color: var(--a-color-hover);
       }
       :host a {
+        --a-text-decoration: none !important;
+        text-decoration: var(--a-text-decoration) !important;
+        text-decoration-line: var(--a-text-decoration) !important;
         display: flex !important;
         gap: var(--mdx-sys-spacing-fix-m, 24px);
+      }
+      :host a:hover {
+        text-decoration: var(--a-text-decoration-hover) !important;
+        text-decoration-line: var(--a-text-decoration-hover) !important;
       }
       :host address span {
         display: block;
