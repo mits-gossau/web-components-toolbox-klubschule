@@ -29,7 +29,7 @@ export default class Abonnements extends Shadow() {
   connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.addEventListener(`open-abonnements-dialog-${this.aboId}`, this.requestAbonnements)
+    this.addEventListener(`open-abonnements-dialog-${this.aboId}`, this.requestAbonnements)
   }
 
   disconnectedCallback() {
