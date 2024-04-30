@@ -29,11 +29,11 @@ export default class Abonnements extends Shadow() {
   connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    this.addEventListener('open-abonnements-dialog', this.requestAbonnements)
+    this.addEventListener(`open-abonnements-dialog-${this.aboId}`, this.requestAbonnements)
   }
 
   disconnectedCallback() {
-    this.removeEventListener('open-abonnements-dialog', this.requestAbonnements)
+    this.removeEventListener(`open-abonnements-dialog-${this.aboId}`, this.requestAbonnements)
   }
 
   /**
@@ -75,6 +75,12 @@ export default class Abonnements extends Shadow() {
       :host m-dialog {
         --dialog-left-slide-in-max-width-custom: min(100%, 1020px);
       }
+      :host m-dialog + a-button {
+        --button-transparent-padding: 0;
+        width: fit-content;
+        margin-top: 1rem;
+        --button-transparent-font-size: 1.125rem;
+      }
 
       @media only screen and (max-width: _max-width_) {
         :host {
@@ -92,7 +98,7 @@ export default class Abonnements extends Shadow() {
   */
   renderHTML() {
     this.html = /* html */ `
-      <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="open-abonnements-dialog" id="offers-page-filter-categories" close-event-name="backdrop-clicked">
+      <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="open-abonnements-dialog-${this.aboId}" id="offers-page-filter-categories" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <div>
           </div>
@@ -107,14 +113,13 @@ export default class Abonnements extends Shadow() {
           <a-button id="close" namespace="button-secondary-" no-pointer-events>${this.buttonCloseLabel}</a-button>
         </div>
       </m-dialog>
-      <button
-        class="link-more"
+      <a-button
         namespace="button-transparent-"
-        request-event-name="open-abonnements-dialog"
+        request-event-name="open-abonnements-dialog-${this.aboId}"
         click-no-toggle-active
       >
         <span>${this.linkLabel}</span>
-      </button>
+      </a-button>
     `
     return this.fetchModules([
       {
@@ -175,6 +180,10 @@ export default class Abonnements extends Shadow() {
 
   get linkLabel() {
     return this.getAttribute('link-label')
+  }
+
+  get aboId() {
+    return this.getAttribute('abo-id')
   }
 
   get dialog() {
