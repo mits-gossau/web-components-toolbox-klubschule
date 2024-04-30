@@ -17,6 +17,24 @@ export default class KsGoogleMaps extends GoogleMaps {
     this.currentPopup = null
   }
 
+  renderCSS () {
+    super.renderCSS()
+
+    this.css = /* css */ `
+      :host {
+        --pop-up-window-top: -2em;
+        --pop-up-window-left: auto;
+        --pop-up-window-right: 4rem;
+        --pop-up-window-bottom: auto;
+        --pop-up-window-before-top: 2em;
+        --pop-up-window-before-left: auto;
+        --pop-up-window-before-right: -1.75em;
+        --pop-up-window-before-bottom: auto;
+        --pop-up-window-before-rotation: 90deg;
+      }
+    `
+  }
+
   renderHTML () {
     this.fetchModules([
       {
@@ -34,6 +52,10 @@ export default class KsGoogleMaps extends GoogleMaps {
       {
         path: `${this.importMetaUrl}../../molecules/contactRow/ContactRow.js`,
         name: 'ks-m-contact-row'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
       }
     ]).then(() => {
       let element = null
@@ -55,6 +77,8 @@ export default class KsGoogleMaps extends GoogleMaps {
         element = iframe
         htmlContent += element.outerHTML // Add the iframe to the HTML content
       } else {
+        const color = self.getComputedStyle(this.root.querySelector('*')).getPropertyValue('--color-secondary')
+
         const mapDiv = document.createElement('div')
         mapDiv.setAttribute('id', 'map')
         this.loadDependency().then(googleMap => {
@@ -63,13 +87,36 @@ export default class KsGoogleMaps extends GoogleMaps {
 
           const Popup = this.createPopupClass(googleMap)
 
-          locations.forEach((location) => {
-            this.addMarkerWithPopup({
+          const markers = locations.map((location) => {
+            return this.addMarkerWithPopup({
               googleMap,
               map,
               location,
               Popup
             })
+          })
+
+          const clusterRenderer = {
+            render ({ count, position }) {
+              return new googleMap.Marker({
+                label: { text: String(count), color: "white", fontSize: "20px" },
+                position,
+                icon: {
+                  path: googleMap.SymbolPath.CIRCLE,
+                  scale: 18,
+                  fillColor: color,
+                  fillOpacity: 1,
+                  strokeWeight: 0
+                },
+                // adjust zIndex to be above other markers
+                zIndex: Number(googleMap.Marker.MAX_ZINDEX) + count
+              })
+            }
+          }
+
+          // Add a marker clusterer to manage the markers.
+          this.loadMarkerClustererDependency().then(markerClusterer => {
+            new markerClusterer.MarkerClusterer({ markers, map, renderer: clusterRenderer })
           })
 
           // set map bounds to switerland
@@ -94,9 +141,17 @@ export default class KsGoogleMaps extends GoogleMaps {
     location,
     Popup
   }) {
+    // css vars don't seem to work directly inside the icon so I am getting the color via js
+    const color = self.getComputedStyle(this.root.querySelector('*')).getPropertyValue('--color-secondary')
+
     const marker = new googleMap.Marker({
       position: { lat: location.lat, lng: location.lng },
-      // icon: this.markerIcon
+      icon: {
+        path: 'M11.5 32C11.5 32 23 20.4803 23 11.5203V11.5197C23 8.46445 21.7885 5.53431 19.632 3.37399C17.4754 1.21368 14.5511 0 11.5006 0C8.45014 0 5.52516 1.21368 3.36805 3.37459C1.21154 5.53491 0 8.46505 0 11.5203C0 20.4797 11.5 32 11.5 32ZM14.3409 8.94203C15.7626 10.5142 15.6425 12.9427 14.0738 14.3663C12.5044 15.7905 10.0807 15.6708 8.65906 14.0986C7.2374 12.5265 7.35687 10.0986 8.92623 8.6744C10.4956 7.25022 12.9193 7.36991 14.3409 8.94203Z',
+        fillColor: color,
+        fillOpacity: 1,
+        strokeWeight: 0
+      },
       map,
       title: location.title
     })
@@ -113,7 +168,6 @@ export default class KsGoogleMaps extends GoogleMaps {
           name="${location.name}"
           street="${location.address}"
           icon-name="Home"
-          href="#"
         >
         </ks-m-contact-row>
         <ks-m-contact-row
@@ -122,7 +176,10 @@ export default class KsGoogleMaps extends GoogleMaps {
           href="tel:${location.phone}"
         >
         </ks-m-contact-row>
-        <ks-a-button namespace="button-primary-" color="secondary" href="${location.href}" style="width: 100%">Zum Center</ks-a-button>
+        <ks-a-button namespace="button-primary-" color="secondary" href="${location.href}" style="width: 100%">
+          Zum Center
+          <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx>
+        </ks-a-button>
       </div>`,
       false,
       this.root.querySelector('#mobile-maps-popup-container')
@@ -130,15 +187,20 @@ export default class KsGoogleMaps extends GoogleMaps {
     popup.setMap(map)
 
     marker.addListener('click', () => {
+      map.panTo(marker.getPosition())
       if (this.currentPopup) {
         this.currentPopup.hide()
       }
       this.currentPopup = popup
       popup.show()
     })
+
+    return marker
   }
 
   createPopupClass (googleMap) {
+    const mobileBreakpoint = parseInt(this.mobileBreakpoint)
+
     return class Popup extends googleMap.OverlayView {
       position
       containerDiv
@@ -155,12 +217,14 @@ export default class KsGoogleMaps extends GoogleMaps {
 
         bubbleAnchor.classList.add('popup-bubble-anchor')
         bubbleAnchor.innerHTML = this.popupInnerHTML
+        bubbleAnchor.style.marginLeft = '40px'
         // This zero-height div is positioned at the bottom of the tip.
         this.containerDiv = document.createElement('div')
         this.containerDiv.classList.add('popup-container')
         this.containerDiv.appendChild(bubbleAnchor)
         this.containerDiv.style.position = 'absolute'
         this.containerDiv.style.width = '200px'
+        this.containerDiv.style.width = '0px'
 
         // Optionally stop clicks, etc., from bubbling up to the map.
         Popup.preventMapHitsAndGesturesFrom(this.containerDiv)
@@ -200,10 +264,13 @@ export default class KsGoogleMaps extends GoogleMaps {
       }
 
       show () {
-        const popupElement = this.containerDiv.querySelector('ks-m-pop-up-window')
-        popupElement?.setAttribute('show', 'true')
-        this.mobilePopupContainer.innerHTML = this.popupInnerHTML
-        this.mobilePopupContainer.querySelector('ks-m-pop-up-window')?.setAttribute('show', 'true')
+        if (window.innerWidth < mobileBreakpoint) {
+          this.mobilePopupContainer.innerHTML = this.popupInnerHTML
+          this.mobilePopupContainer.querySelector('ks-m-pop-up-window')?.setAttribute('show', 'true')
+        } else {
+          const popupElement = this.containerDiv.querySelector('ks-m-pop-up-window')
+          popupElement?.setAttribute('show', 'true')
+        }
       }
 
       hide () {
@@ -211,5 +278,27 @@ export default class KsGoogleMaps extends GoogleMaps {
         this.mobilePopupContainer.innerHTML = ''
       }
     }
+  }
+
+  /**
+   * fetch dependency
+   *
+   * @returns {Promise<{components: any}>}
+   */
+  loadMarkerClustererDependency () {
+    // @ts-ignore
+    self.initMap = () => { }
+
+    return new Promise(resolve => {
+      const markerClustererScript = document.createElement('script')
+      markerClustererScript.setAttribute('type', 'text/javascript')
+      markerClustererScript.setAttribute('async', '')
+      markerClustererScript.setAttribute('src', 'https://unpkg.com/@googlemaps/markerclusterer@2.5.3/dist/index.min.js')
+      markerClustererScript.onload = () => {
+        // @ts-ignore
+        if ('google' in self) resolve(self.markerClusterer)
+      }
+      this.html = markerClustererScript
+    })
   }
 }

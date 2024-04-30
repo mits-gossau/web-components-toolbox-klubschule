@@ -34,7 +34,7 @@ export default class Contact extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.a
+    return !this.contactRow
   }
 
   /**
@@ -53,8 +53,14 @@ export default class Contact extends Shadow() {
         --a-text-decoration: none !important;
         text-decoration: var(--a-text-decoration) !important;
         text-decoration-line: var(--a-text-decoration) !important;
+      }
+      :host .contact-row {
         display: flex !important;
         gap: var(--mdx-sys-spacing-fix-m, 24px);
+        margin-bottom: var(--mdx-sys-spacing-fix-xs);
+      }
+      :host .contact-row > *:nth-child(2) {
+        flex: 1;
       }
       :host a:hover {
         text-decoration: var(--a-text-decoration-hover) !important;
@@ -63,6 +69,9 @@ export default class Contact extends Shadow() {
       :host address span {
         display: block;
         font-style: normal;
+      }
+      :host a-icon-mdx {
+        flex-shrink: 0;
       }
     `
     return this.fetchCSS([
@@ -88,11 +97,13 @@ export default class Contact extends Shadow() {
     const isAddress = secondRow && thirdRow
     const id = this.getAttribute('id')
     const target = this.getAttribute('target')
+    const tag = this.hasAttribute('href') ? 'a' : 'div'
+    const href = this.getAttribute('href')
 
     this.html =   /* HTML */ `
-      <a href="${this.getAttribute('href')}" ${id ? `id="${id}"` : ''} ${target ? `target="${target}"` : ''} >
+      <${tag} ${href ? `href="${this.getAttribute('href')}"` : ''} ${id ? `id="${id}"` : ''} ${target ? `target="${target}"` : ''} class="contact-row">
         <a-icon-mdx 
-          namespace="icon-mdx-ks-" 
+          ${href ? 'namespace="icon-mdx-ks-"' : ''}
           size="${this.getAttribute('icon-size') || '1em'}"
           ${this.getAttribute('icon-url') ? `icon-url="${this.getAttribute('icon-url')}"` : `icon-name="${this.getAttribute('icon-name')}"`} 
         >
@@ -104,7 +115,7 @@ export default class Contact extends Shadow() {
           ${secondRow ? /* html */ `<span>${secondRow}</span>` : ''}
           ${thirdRow ? /* html */ `<span>${thirdRow}</span>` : ''}
         ${isAddress ? /* html */ '</address>' : /* html */ '</div>'}
-      </a>
+      </${tag}>
     `
 
     return this.fetchModules([
@@ -123,7 +134,7 @@ export default class Contact extends Shadow() {
     return Contact.parseAttribute(this.getAttribute('data'))
   }
 
-  get a () {
-    return this.root.querySelector('a')
+  get contactRow () {
+    return this.root.querySelector('.contact-row')
   }
 }

@@ -18,7 +18,6 @@ export default class PopUpWindow extends Shadow() {
     if (this.shouldRenderHTML()) this.renderHTML()
 
     this.closeBtn.addEventListener('click', () => {
-        console.log(this)
       this.closeListener()
     })
   }
@@ -69,10 +68,10 @@ export default class PopUpWindow extends Shadow() {
         padding: 1em;
         width: 23em;
         position: absolute;
-        top: var(--top);
-        left: var(--left);
-        right: var(--right);
-        bottom: var(--bottom);
+        top: var(--pop-up-window-top);
+        left: var(--pop-up-window-left);
+        right: var(--pop-up-window-right);
+        bottom: var(--pop-up-window-bottom);
       }
 
       :host .pop-up-window::before {
@@ -87,10 +86,12 @@ export default class PopUpWindow extends Shadow() {
         border-right: 1.25em solid transparent;
         border-bottom: 1.25em solid #FFFFFF;
 
-        top: var(--before-top);
-        left: var(--before-left);
-        right: var(--before-right);
-        bottom: var(--before-bottom);
+        top: var(--pop-up-window-before-top);
+        left: var(--pop-up-window-before-left);
+        right: var(--pop-up-window-before-right);
+        bottom: var(--pop-up-window-before-bottom);
+
+        transform: rotate(var(--pop-up-window-before-rotation, 0));
       }
 
       :host .close {
@@ -101,9 +102,9 @@ export default class PopUpWindow extends Shadow() {
 
       @media only screen and (max-width: _max-width_) {
         :host .pop-up-window {
-          // position: fixed;
+          position: fixed;
           z-index: 1000;
-          height: 18.75em;
+          min-height: 18.75em;
           width: 100%;
           top: auto;
           bottom: 0;
@@ -137,7 +138,6 @@ export default class PopUpWindow extends Shadow() {
   renderHTML () {
     const innerHTML = Array.from(this.root.children)
 
-    // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
       <div class="pop-up-window">
         <div class="close">
