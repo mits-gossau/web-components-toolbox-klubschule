@@ -2,7 +2,7 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class Checkbox extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
@@ -10,7 +10,7 @@ export default class Checkbox extends Shadow() {
     }
   }
 
-  connectedCallback () {
+  connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
 
     this.box = this.root.querySelector('.box')
@@ -22,27 +22,30 @@ export default class Checkbox extends Shadow() {
     this.box.addEventListener('click', this.clickEventListener)
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     this.box.removeEventListener('click', this.clickEventListener)
   }
 
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
   }
 
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */ `
         :host {
             display: flex;
         }
 
         :host .wrap {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: flex-start;
-            align-items: center;  
+          display: flex;
+          flex-direction: row-reverse;
+          justify-content: flex-start;
+          align-items: center;
+          padding-top: var(--padding-top);
+          padding-bottom: var(--padding-bottom);
+          padding-right: var(--padding-right);
         }
 
         :host .wrap.disabled {
@@ -52,14 +55,15 @@ export default class Checkbox extends Shadow() {
 
         :host .wrap:hover,
         :host label:hover {
-            cursor: pointer;
+          background-color: var(--background);
+          cursor: pointer;
         }
 
         :host label {
-            font-size: 1em;
-            line-height: 1.25em;
-            font-weight: 400;
-            padding: var(--label-padding, 0);   
+          font-size: 1em;
+          line-height: 1.25em;
+          font-weight: 400;
+          padding: var(--label-padding, 0);   
         }
 
         :host input[type='checkbox'] {
@@ -94,7 +98,7 @@ export default class Checkbox extends Shadow() {
   /**
    * fetches the template
    */
-  fetchTemplate () {
+  fetchTemplate() {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     switch (this.getAttribute('namespace')) {
       case 'checkbox-default-':
