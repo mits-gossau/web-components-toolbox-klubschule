@@ -447,37 +447,52 @@ export default class Event extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
+    const {
+      datum_label,
+      timelabel,
+      badge,
+      status,
+      status_label,
+      lektionen_label,
+      location,
+      detail_label_more,
+      detail_label_less,
+      buttons,
+      icons,
+      price
+    } = this.data.course
+
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
       <div class="event">
         <div class="head">
           <div class="dates">
-            <span class="date">${this.data.datum_label}</span>
+            <span class="date">${datum_label}</span>
             <div class="time">
-              <span class="days">${this.data.timelabel}</span>
-              ${this.data.badge ? /* html */ `<div class="badge">${this.data.badge}</div>` : ''}
+              <span class="days">${timelabel}</span>
+              ${badge ? /* html */ `<div class="badge">${badge}</div>` : ''}
             </div>
           </div>
           <ul class="meta">
-            ${this.data.status && this.data.status > 0 ? /* html */`<li>
+            ${status && status > 0 ? /* html */`<li>
               <div>
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(this.data)}" size="1.5em"></a-icon-mdx>
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(this.data.course)}" size="1.5em"></a-icon-mdx>
               </div>
-              <span>${this.data.status_label}</span>
+              <span>${status_label}</span>
             </li>` : ''}
-            ${this.data.lektionen_label ? /* html */ `<li>
+            ${lektionen_label ? /* html */ `<li>
               <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/event-list.svg" size="1.5em"></a-icon-mdx>
-              <span>${this.data.lektionen_label}</span>
+              <span>${lektionen_label}</span>
             </li>` : ''}
-            ${this.data.location?.name ? /* html */ `<li>
+            ${location?.name ? /* html */ `<li>
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
-              <span>${this.data.location.name}</span>
+              <span>${location.name}</span>
             </li>` : ''}
             <li>
               <button class="link-more expand">
-                <span class="more show">${this, this.data.detail_label_more}</span>
-                <span class="less">${this, this.data.detail_label_less}</span>
+                <span class="more show">${this, detail_label_more}</span>
+                <span class="less">${this, detail_label_less}</span>
                 <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em"></a-icon-mdx>
               </button>
             </li>
@@ -488,16 +503,16 @@ export default class Event extends Shadow() {
         </div>
         <div class="controls">
           <div class="controls-left">
-            <ks-m-buttons data-buttons='${JSON.stringify(this.data.buttons)}'></ks-m-buttons>
+            <ks-m-buttons data-buttons='${JSON.stringify(buttons)}'></ks-m-buttons>
           </div>
           <div class="controls-right">
             <div class="icons">
-              ${this.data.icons?.length ? this.data.icons.reduce((acc, icon) => acc + /* html */ `
+              ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
                 <ks-m-badge type="primary" icon-name="${icon.iconName}" tooltip="${icon.text}">
                 </ks-m-badge>
               `, '') : ''}
             </div>
-            <span class="price">${this.data.price?.pre ? this.data.price?.pre + ' ' : ''}<strong>${this.data.price?.amount || ''}</strong>${this.data.price?.per ? ' / ' + this.data.price?.per : ''}</span>
+            <span class="price">${price?.pre ? price?.pre + ' ' : ''}<strong>${price?.amount || ''}</strong>${price?.per ? ' / ' + price?.per : ''}</span>
           </div>
         </div>
       </div>
@@ -568,10 +583,10 @@ export default class Event extends Shadow() {
       new Promise(resolve => this.dispatchEvent(new CustomEvent('request-event-detail', {
         detail: {
           resolve,
-          language: this.data.language || this.data.parentkey.split('_')[0],
-          typ: this.data.typ || this.data.kurs_typ,
-          id: this.data.id || this.data.kurs_id,
-          center_id: this.data.center_id || this.data.centerid
+          language: this.data.course.language || this.data.sprachid,
+          typ: this.data.course.typ || this.data.course.kurs_typ,
+          id: this.data.course.id || this.data.course.kurs_id,
+          center_id: this.data.course.center_id || this.data.course.centerid
         },
         bubbles: true,
         cancelable: true,

@@ -121,7 +121,10 @@ export default class TileFactory extends Shadow() {
         (acc, course) => {
           const tile = this.isEventSearch ? /* html */ `
             <ks-m-event
-              data='${JSON.stringify(course)}'
+              data='{
+                "course": ${JSON.stringify(course)},
+                "sprachid": "${data.sprachid}"
+              }'
             ></ks-m-event>
           ` : (
             course.locations?.length > 1 && course.filter?.length
