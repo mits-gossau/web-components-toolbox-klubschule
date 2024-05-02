@@ -29,8 +29,9 @@ export default class Form extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host h1 {
-        color: red;
+      :host .legend {
+        color: var(--mdx-sys-color-neutral-default);
+        font: var(--mdx-sys-font-flex-large-custom1);
       }
     `
   }

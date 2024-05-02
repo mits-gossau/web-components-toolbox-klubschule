@@ -4,19 +4,7 @@
 <!-- 2-spaltige Bühne mit maximaler Ausprägung -->
 <o-grid namespace="grid-2columns-content-stage-" first-container-vertical first-column-with="66%" background-color="var(--mdx-sys-color-accent-4-default)" image-src="https://mits-gossau.github.io/web-components-toolbox-klubschule/src/img/content-stage/a59843713cfd9aefb7e8d172513e4bea.png" width="100%">
     <div class="stage-content">
-        <p class="topline">
-            <a href="" alt="">
-                <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx> <span>A Larger Text inside the back link lorem ipsum dolor nonumy eirmod tempor invidunt</span>
-            </a>
-            <!-- Merken-Button für Mobile -->
-            <ks-m-favorite-button off-text="Merken" on-text="Gemerkt">
-                <ks-a-button namespace="button-tertiary-" color="secondary" round>
-                    <a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>
-                </ks-a-button>
-            </ks-m-favorite-button>
-        </p>
-        <h1>Bodytoning Bauch,<br />Beine, Po</h1>
-        <p class="intro">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magn.</p>
+        <h1>Kontaktformular</h1>
     </div>
     <aside>
         <div class="aside-image">
@@ -32,51 +20,186 @@
 </o-grid>
 
 <!-- Angebotsliste -->
-<ks-o-body-section background="var(--mdx-sys-color-accent-6-subtle1)" variant="default" has-background>
+<ks-o-body-section variant="default">
     <ks-c-with-facet mock>
         <o-body-style content-width-var="100%" background="transparent">
             <o-grid namespace="grid-12er-">
                 <div col-lg="12" col-md="12" col-sm="12">
                     <ks-o-form>
-                        <form>
-                            <o-grid namespace="grid-12er-">
-                                <div col-lg="12" col-md="12" col-sm="12">
-                                    <ks-a-heading tag="h1">Ihre Anfrage</ks-a-heading>
-                                </div>
-                                <div col-lg="12" col-md="12" col-sm="12">
-                                    <ks-a-input>
-                                        <div>
-                                            <label>Betreff *</label>
-                                            <input type="text" required>
-                                        </div>
-                                    </ks-a-input>
-                                </div>
-                                <div col-lg="12" col-md="12" col-sm="12">
-                                    <ks-a-input>
-                                        <div>
-                                            <label for="textarea-01">Ihre Nachricht *</label>
-                                            <textarea id="textarea-01" rows="8" cols="20" maxlength="350" required></textarea>
-                                            <div class="hint">
-                                                <span></span>
-                                                <div class="counter">
-                                                    <span class="current">0</span>
-                                                    <span class="max"></span>
+                        <m-simple-form load-form-styles namespace="simple-form-default-">
+                            <form action="../pages/Badge.html" method="get">
+                                <o-grid namespace="grid-12er-">
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-a-heading tag="h3">Ihre Anfrage</ks-a-heading>
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label>Betreff *</label>
+                                                <input type="text" required>
+                                            </div>
+                                        </ks-a-input>
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label for="textarea-01">Ihre Nachricht *</label>
+                                                <textarea id="textarea-01" rows="8" cols="20" maxlength="350" required></textarea>
+                                                <div class="hint">
+                                                    <span></span>
+                                                    <div class="counter">
+                                                        <span class="current">0</span>
+                                                        <span class="max"></span>
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </ks-a-input>
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-m-select>
+                                            <div>
+                                                <label for="select-01">Center *</label>
+                                                <select name="options" id="select-01" required>
+                                                    <option value="" disabled selected>Center auswählen</option>
+                                                    <option value="o1">Center 1</option>
+                                                    <option value="o2">Center 2</option>
+                                                    <option value="o3">Center 3</option>
+                                                </select>
+                                            </div>
+                                        </ks-m-select>                                    
+                                    </div>
+                                </o-grid>
+                                <div class="spacer-three"></div>
+                                <o-grid namespace="grid-12er-">
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-a-heading tag="h3">Ihre Kontaktdaten</ks-a-heading>
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-a-radio>
+                                            <span>Anrede *</span>
+                                            <div class="horizontal">
+                                                <div class="wrap">
+                                                    <label for="rb-01-01">Herr</label>
+                                                    <input id="rb-01-01" type="radio" name="rg-01" required>
+                                                    <div class="box"></div>
+                                                </div>
+                                                <div class="wrap">
+                                                    <label for="rb-01-02">Frau</label>
+                                                    <input id="rb-01-02" type="radio" name="rg-01">
+                                                    <div class="box"></div>
+                                                </div>
+                                            </div>
+                                        </ks-a-radio>                                   
+                                    </div>
+                                    <div col-lg="6" col-md="6" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label>Vorname *</label>
+                                                <input type="text" required>
+                                            </div>
+                                        </ks-a-input>
+                                    </div>
+                                    <div col-lg="6" col-md="6" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label>Nachname *</label>
+                                                <input type="text" required>
+                                            </div>
+                                        </ks-a-input>
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label>Firma</label>
+                                                <input type="text">
+                                            </div>
+                                        </ks-a-input>                                    
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label>Strasse / Nr.</label>
+                                                <input type="text">
+                                            </div>
+                                        </ks-a-input>                                    
+                                    </div>
+                                    <div col-lg="4" col-md="4" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label>PLZ</label>
+                                                <input type="number">
+                                            </div>
+                                        </ks-a-input>                                     
+                                    </div>
+                                    <div col-lg="8" col-md="8" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label>Ort</label>
+                                                <input type="number">
+                                            </div>
+                                        </ks-a-input>                                     
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-m-select>
+                                            <div>
+                                                <label for="select-01">Center</label>
+                                                <select name="options" id="select-01">
+                                                    <option value="" disabled selected>Land auswählen</option>
+                                                    <option value="o1">Schweiz</option>
+                                                    <option value="o2">Deutschland</option>
+                                                    <option value="o3">Österreich</option>
+                                                </select>
+                                            </div>
+                                        </ks-m-select>                                     
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label>Telefon *</label>
+                                                <input type="text" required>
+                                            </div>
+                                        </ks-a-input>
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <ks-a-input>
+                                            <div>
+                                                <label>E-Mail *</label>
+                                                <input type="email" pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+                                            </div>
+                                        </ks-a-input>
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <p class="legend">* Diese Felder müssen ausgefüllt werden</p>
+                                    </div>
+                                    <div col-lg="12" col-md="12" col-sm="12">
+                                        <style>
+                                            :host .submit {
+                                                display: flex;
+                                                justify-content: center;
+                                            }
+
+                                            :host input[type="submit"] {
+                                                padding: var(--mdx-comp-button-primary-large-padding-vertical-default) var(--mdx-comp-button-primary-large-padding-horizontal-default);
+                                                background-color: var(--mdx-comp-button-primary-large-background-color-default);
+                                                border-radius: var(--mdx-comp-button-primary-large-border-radius-default);
+                                                border-color: var(--mdx-comp-button-primary-large-border-color-default);
+                                                color: var(--mdx-comp-button-primary-large-color-default);
+                                                font: var(--mdx-comp-button-primary-large-font-default);
+                                                width: 50%;
+                                                cursor: pointer;
+                                            }
+                                        </style>
+                                        <div class="submit">
+                                            <input type="submit" value="Senden" />
                                         </div>
-                                    </ks-a-input>
-                                </div>
-                                <div col-lg="6" col-md="6" col-sm="12">test</div>
-                                <div col-lg="6" col-md="6" col-sm="12">test</div>
-                            </o-grid>
-                        </form>
+                                    </div>
+                                    <div class="spacer-four"></div>
+                                </o-grid>                               
+                            </form>
+                        </m-simple-form>
                     </ks-o-form>
                 </div>
             </o-grid>
-            <ks-a-button namespace="button-primary-" color="secondary">
-                <span>Senden</span>
-                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-            </ks-a-button>
         </o-body-style>
     </ks-c-with-facet>
 </ks-o-body-section>
