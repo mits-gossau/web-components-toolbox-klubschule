@@ -333,7 +333,7 @@ export default class EventDetail extends Shadow() {
                 </tr>
               ` : ''), '')}              
             </table>
-            ${this.data.termin_alle_label ? /* html */ `
+            ${this.data.termine?.length > 5 && this.data.termin_label ? /* html */ `
               <button class="link-more">
                 <span>${this.data.termin_alle_label}</span>
                 <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em"></a-icon-mdx>
