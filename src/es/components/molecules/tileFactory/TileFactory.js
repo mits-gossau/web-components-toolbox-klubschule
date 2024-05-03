@@ -159,7 +159,7 @@ export default class TileFactory extends Shadow() {
       "iconTooltip": "Das ist ein sinnvoller Tooltip-Text",
       "location": {
         "iconName": "Location",
-        "name": "${course.locations ? course.locations.join(",") : ""}",
+        "name": "${course.locations ? course.locations.join(", ") : ""}",
         "badge": "${course.eTyp ? course.eTyp : ""}"
       },
       "buttons": ${JSON.stringify(course.buttons) || ""},
