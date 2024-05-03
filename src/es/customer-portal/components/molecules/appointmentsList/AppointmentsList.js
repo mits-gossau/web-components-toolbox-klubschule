@@ -167,15 +167,17 @@ export default class AppointmentsList extends Shadow() {
               <ks-a-heading tag="h1"><ks-a-counter namespace="counter-default-" data-list-type="${this.dataset.listType}" data-heading-type="h1" data-booked-subscriptions-text="gebuchte Termine" data-appointments-text="Angebote"></ks-a-counter></ks-a-heading>
             </div>
             ${(!this.dataset.showFilters || this.dataset.showFilters === 'true')
-            ? `<div col-lg="12" col-md="12" col-sm="12">
-                  ${filter}
-                </div>
-                <div col-lg="12" col-md="12" col-sm="12">
-                  [[ Filter ]]
-                  <hr>
-                  <br>
-              </div>`
-          : ''}         
+            ? /* html */ `
+            <div col-lg="6" col-md="6" col-sm="12">
+              ${filter}
+            </div>
+            <div col-lg="12" col-md="12" col-sm="12">
+              [[ Filter ]]
+              <hr>
+              <br>
+            </div>
+            `
+            : ''}         
           </o-grid>
           <div id="list-wrapper">
             ${dayList.list.join('')}

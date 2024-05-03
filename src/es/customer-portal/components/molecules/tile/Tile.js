@@ -11,7 +11,7 @@ import { makeUniqueCourseId, escapeForHtml, getTileState } from '../../../helper
 export default class AppointmentTile extends Tile {
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
-    this.courseData = null
+    //this.courseData = null
     this.selectedSubscription = null
   }
 
@@ -186,7 +186,16 @@ export default class AppointmentTile extends Tile {
         margin-left: 0.75rem;
       }
       @media only screen and (max-width: _max-width_) {
-        :host  {}
+        :host .parent-body, .parent-footer{
+          flex-direction: column;
+        }
+        :host .parent-footer {
+          flex-direction: column-reverse;
+          align-items: flex-end;
+        }
+        :host .course-price {
+          margin-bottom: 2.5em;
+        }
       }
     `
   }
@@ -268,12 +277,12 @@ export default class AppointmentTile extends Tile {
       }
     ])
     Promise.all([fetchModules]).then((_) => {
-      this.courseData = Tile.parseAttribute(this.getAttribute('data'))
+      const courseData = Tile.parseAttribute(this.getAttribute('data'))
       this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
       if (this.dataset.listType === 'subscriptions') {
-        this.html = this.renderSubscription(this.courseData)
+        this.html = this.renderSubscription(courseData)
       } else {
-        this.html = this.renderTile(this.courseData, this.selectedSubscription)
+        this.html = this.renderTile(courseData, this.selectedSubscription)
       }
     })
   }
@@ -298,7 +307,6 @@ export default class AppointmentTile extends Tile {
                 <div>
                   <span class="m-tile__title date time">
                     ${content.courseAppointmentTimeFrom} - ${content.courseAppointmentTimeTo} 
-                    <!--<ks-a-button badge="" namespace="button-secondary-" color="tertiary">Blended</ks-a-button>-->
                   </span>
                 </div>
               </div>
