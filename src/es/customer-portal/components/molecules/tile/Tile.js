@@ -193,8 +193,11 @@ export default class AppointmentTile extends Tile {
           flex-direction: column-reverse;
           align-items: flex-end;
         }
-        :host .course-price {
-          margin-bottom: 2.5em;
+        :host .course-booking {
+          margin-top: 2.5em;
+        }
+        :host .course-info {
+          margin-bottom: 1.5em;
         }
       }
     `
@@ -290,6 +293,8 @@ export default class AppointmentTile extends Tile {
   renderTile (content, selectedSubscription) {
     const tileState = getTileState(courseAppointmentStatusMapping[content.courseAppointmentStatus], content)
     const courseId = makeUniqueCourseId(content)
+    const { courseAppointmentStatus } = content
+   console.log(courseAppointmentStatus);
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
@@ -331,10 +336,13 @@ export default class AppointmentTile extends Tile {
               </div>
             </div><!-- parent body END -->
             <div class="parent-footer">
-              <div class="course-booking">
-                <!-- !!! -->
-                <m-course-dialog namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></m-course-dialog>
-              </div>
+                ${(courseAppointmentStatus === 5 || courseAppointmentStatus === 1)
+                ? /* html */ `
+                  <div class="course-booking">
+                    <m-course-dialog namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></m-course-dialog>
+                  </div>
+                  `
+                : ''}
               <div class="course-price">
                 <span class="m-tile__title">
                   ${content.lessonPrice}
