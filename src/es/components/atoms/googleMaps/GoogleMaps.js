@@ -22,9 +22,9 @@ export default class KsGoogleMaps extends GoogleMaps {
 
     this.css = /* css */ `
       :host {
-        --pop-up-window-top: -2em;
+        --pop-up-window-top: -3.5em;
         --pop-up-window-left: auto;
-        --pop-up-window-right: 4rem;
+        --pop-up-window-right: 5rem;
         --pop-up-window-bottom: auto;
         --pop-up-window-before-top: 2em;
         --pop-up-window-before-left: auto;
@@ -44,10 +44,6 @@ export default class KsGoogleMaps extends GoogleMaps {
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
         name: 'ks-a-button'
-      },
-      {
-        path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
-        name: 'ks-a-heading'
       },
       {
         path: `${this.importMetaUrl}../../molecules/contactRow/ContactRow.js`,
@@ -133,7 +129,7 @@ export default class KsGoogleMaps extends GoogleMaps {
 
       // As I need to render the popup as a "bottom sheet" outside of the map on mobile
       // additionally add a popup container for mobile
-      this.html = '<div id="mobile-maps-popup-container"></div>'
+      this.html = /* html */`<div id="mobile-maps-popup-container"></div>`
     })
   }
 
@@ -152,7 +148,11 @@ export default class KsGoogleMaps extends GoogleMaps {
         path: 'M11.5 32C11.5 32 23 20.4803 23 11.5203V11.5197C23 8.46445 21.7885 5.53431 19.632 3.37399C17.4754 1.21368 14.5511 0 11.5006 0C8.45014 0 5.52516 1.21368 3.36805 3.37459C1.21154 5.53491 0 8.46505 0 11.5203C0 20.4797 11.5 32 11.5 32ZM14.3409 8.94203C15.7626 10.5142 15.6425 12.9427 14.0738 14.3663C12.5044 15.7905 10.0807 15.6708 8.65906 14.0986C7.2374 12.5265 7.35687 10.0986 8.92623 8.6744C10.4956 7.25022 12.9193 7.36991 14.3409 8.94203Z',
         fillColor: color,
         fillOpacity: 1,
-        strokeWeight: 0
+        strokeWeight: 0,
+        anchor: new googleMap.Point(
+          12,
+          32
+        )
       },
       map,
       title: location.title
@@ -163,13 +163,12 @@ export default class KsGoogleMaps extends GoogleMaps {
     const popup = new Popup(
       latLng,
       /* html */`<div>
-        <strong>${location.name}</strong>
+        <h4>${location.name}</h4>
         <hr />
-        <br />
         <ks-m-contact-row
           name="${location.name}"
           street="${location.address}"
-          icon-name="Home"
+          icon-name="Location"
         >
         </ks-m-contact-row>
         <ks-m-contact-row
@@ -180,7 +179,7 @@ export default class KsGoogleMaps extends GoogleMaps {
         </ks-m-contact-row>
         <ks-a-button namespace="button-primary-" color="secondary" href="${location.href}" style="width: 100%">
           Zum Center
-          <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx>
+          <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right" icon-size="16x16"></a-icon-mdx>
         </ks-a-button>
       </div>`,
       false,

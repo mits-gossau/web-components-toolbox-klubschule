@@ -100,7 +100,32 @@ export default class PopUpWindow extends Shadow() {
         margin-bottom: 1.5em;
       }
 
+      :host hr {
+        background: var(--mdx-sys-color-neutral-subtle4, black);
+        height: 1px;
+        border: none;
+        margin: var(--mdx-sys-spacing-flex-large-2xs) 0;
+      }
+
+      :host h4 {
+        font-family: var(--mdx-sys-font-fix-label1-font-family);
+        font-size: var(--mdx-sys-font-fix-label1-font-size);
+        font-weight: var(--mdx-sys-font-fix-label1-font-weight);
+        line-height: var(--mdx-sys-font-fix-label1-line-height);
+        letter-spacing: var(--mdx-sys-font-fix-label1-letter-spacing);
+        margin: 0;
+      }
+
+      :host .overlay {
+          display: none;
+      }
+
       @media only screen and (max-width: _max-width_) {
+        @keyframes slide-up {
+          from {transform: translateY(100%)}
+          to {transform: translateY(0%)}
+        }
+
         :host .pop-up-window {
           position: fixed;
           z-index: 1000;
@@ -111,6 +136,7 @@ export default class PopUpWindow extends Shadow() {
           left: 0;
           right: 0;
           padding: 0;
+          animation: slide-up .5s;
         }
 
         :host .pop-up-window::before {
@@ -121,12 +147,14 @@ export default class PopUpWindow extends Shadow() {
         :host .text {
           padding: 1em 1em 0 1em;
         }
-      }
 
-      hr {
-        background: var(--mdx-sys-color-neutral-subtle4, black);
-        height: 1px;
-        border: none;
+        :host .overlay {
+          display: block;
+          position: fixed;
+          inset: 0;
+          background: black;
+          opacity: 0.5;
+        }
       }
     `
   }
@@ -139,6 +167,7 @@ export default class PopUpWindow extends Shadow() {
     const innerHTML = Array.from(this.root.children)
 
     this.html = /* HTML */`
+      <div class="overlay"></div>
       <div class="pop-up-window">
         <div class="close">
           <a-icon-mdx icon-name="X" size="1.5em" class="icon-right"></a-icon-mdx>
