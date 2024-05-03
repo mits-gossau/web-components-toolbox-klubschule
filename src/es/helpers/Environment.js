@@ -35,7 +35,8 @@ self.Environment = {
           apiSubscriptions: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptions' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptions',
           apiSubscriptionDetail: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscription' : 'https://qual.klubschule.ch/api/CustomerPortal/subscription',
           apiSubscriptionPdf: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptionpdf' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptionpdf',
-          subscriptionRenewSearchLinkUrl: this.isTestingEnv ? 'https://qual.klubschule.ch/Kurse/suche@' : 'https://qual.klubschule.ch/Kurse/suche@'
+          subscriptionRenewSearchLinkUrl: this.isTestingEnv ? 'https://qual.klubschule.ch/Kurse/suche@' : 'https://qual.klubschule.ch/Kurse/suche@',
+          translations: this.isTestingEnv ? 'https://dev.klubschule.ch/umbraco/api/1/Dictionaries/all/de/CP' : 'https://dev.klubschule.ch/umbraco/api/1/Dictionaries/all/de/CP'
         }
       }
       default:
