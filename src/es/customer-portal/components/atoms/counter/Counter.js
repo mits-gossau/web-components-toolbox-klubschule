@@ -90,6 +90,7 @@ export default class Counter extends Shadow() {
 
   /**
    * Render HTML
+   * @param {Number} counter
    * @returns void
    */
   renderHTML (counter) {

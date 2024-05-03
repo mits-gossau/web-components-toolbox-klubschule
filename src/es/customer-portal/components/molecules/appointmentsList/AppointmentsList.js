@@ -40,7 +40,7 @@ export default class AppointmentsList extends Shadow() {
   subscriptionCourseAppointmentsListener = (event) => {
     this.renderHTML(event.detail.fetch).then(() => {
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
-        this.select = this.root.querySelector('o-grid').root.querySelector('select')
+        this.select = this.root.querySelector('o-grid').root.querySelector('ks-m-select').root.querySelector('div').querySelector('select')
         this.select.addEventListener('change', this.selectEventListener)
       }
       this.dispatchEvent(new CustomEvent('update-counter',
@@ -150,6 +150,10 @@ export default class AppointmentsList extends Shadow() {
         {
           path: `${this.importMetaUrl}'../../../../atoms/counter/Counter.js`,
           name: 'ks-a-counter'
+        },
+        {
+          path: `${this.importMetaUrl}'../../../../../../components/molecules/Select/Select.js`,
+          name: 'ks-m-select'
         }
       ])
       return Promise.all([fetchModules]).then((children) => {
@@ -201,9 +205,17 @@ export default class AppointmentsList extends Shadow() {
       if (item.selected) option.setAttribute('selected', 'selected')
       select.appendChild(option)
     })
-    const sortWrapper = document.createElement('div')
-    sortWrapper.innerHTML = select.outerHTML
-    return sortWrapper.innerHTML
+    const html = /* html */ `
+    <div>
+      <ks-m-select>
+        <div>
+          ${select.outerHTML}
+        </div>
+      </ks-m-select>
+    </div>
+    `
+
+    return html
   }
 
   renderDayList (appointments, tileComponent, heading) {
