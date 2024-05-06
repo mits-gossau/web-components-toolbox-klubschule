@@ -8,12 +8,18 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 */
 export default class Translation extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)    
 
-    this.translation = JSON.parse(this.getAttribute('translation') || '[]').reduce((acc, curr) => {
-        acc[curr.key] = curr.value
-        return acc
-      }, {})
+    // Check if each object in translation has "key" and "value" properties
+    const translationData = JSON.parse(this.getAttribute('translation') || '[]')
+    const isValid = translationData.every(item => {
+      return item.hasOwnProperty('key') && item.hasOwnProperty('value')
+    })
+
+    this.translation = isValid ? translationData.reduce((acc, curr) => {
+      acc[curr.key] = curr.value
+      return acc
+    }, {}) : {}
 
     this.requestTranslationListener = () => {
       this.dispatchEvent(new CustomEvent('translation', {
