@@ -54,8 +54,6 @@ export default class WithFacet extends Shadow() {
       // mdx prevent double event
       if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-      console.log('---------------------------------event', event, event.type === 'reset-all-filters' ? 'reset-all-filters' : 'request')
-
       let request
       const shouldResetAllFilters = event.type === 'reset-all-filters'
       const shouldResetFilter = event.type === 'reset-filter'

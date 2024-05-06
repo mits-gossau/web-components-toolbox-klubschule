@@ -10,13 +10,11 @@ export default class OffersPage extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.translation = JSON.parse(this.getAttribute('translation') || []).reduce((acc, curr) => {
-      acc[curr.key] = curr.value
-      return acc
-    }, {})
+    // this.translation = JSON.parse(this.getAttribute('translation') || []).reduce((acc, curr) => {
+    //   acc[curr.key] = curr.value
+    //   return acc
+    // }, {})
 
-    console.log('translation', this.translation)
-    
     this.setTotalListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
@@ -24,6 +22,18 @@ export default class OffersPage extends Shadow() {
           bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
         }
       })
+    }
+
+    this.translation = {}
+    this.translationListener = (event) => { 
+      console.log('translationListener', event)
+      const translation = JSON.parse(event.detail.translation)
+      console.log('translation', translation)
+      this.translation = translation.reduce((acc, curr) => {
+        acc[curr.key] = curr.value
+        return acc
+      }, {})
+      console.log('this.translation', this.translation)
     }
   }
 
@@ -36,10 +46,18 @@ export default class OffersPage extends Shadow() {
       this.hidden = false
     })
     this.addEventListener('with-facet', this.setTotalListener)
+    document.body.addEventListener('translation', this.translationListener)
+    this.dispatchEvent(new CustomEvent('request-translation',
+      {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
   }
 
   disconnectedCallback () {
     this.removeEventListener('with-facet', this.setTotalListener)
+    document.body.removeEventListener('translation', this.translationListener)
   }
 
   shouldRenderCSS () {
