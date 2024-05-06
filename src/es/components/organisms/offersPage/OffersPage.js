@@ -10,11 +10,37 @@ export default class OffersPage extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.setTotalListener = (event) => {
+    this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
+        this.data = data
+        const bodySection = this.eventDetailURL ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
-          const bodySection = this.eventDetailURL || this.hasAttribute('no-search-tab') ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
           bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
+        }
+
+        // Set Sort
+        const sort = bodySection.shadowRoot.querySelector('#sort-options')
+        if (sort) {
+          this.fetchModules([
+            {
+              path: `${this.importMetaUrl}../../molecules/sort/Sort.js`,
+              name: 'ks-m-sort'
+            }
+          ])
+          const listElements = this.data.sort.items.reduce((acc, data) => acc + /* html */ `
+            <li ${this.data.sort.sort === data.id ? 'active' : ''} id="${data.id}">
+              ${data.label}
+            </li>
+          `, '') 
+          sort.innerHTML = /* html */ `
+            <ks-m-sort namespace="sort-right-" with-facet>
+              ${this.data?.sort?.items?.length ? /* html */ `
+                <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort).label}">
+                  ${listElements}
+                </ul>
+              ` : ''}
+            </ks-m-sort>
+          `
         }
       })
     }
@@ -41,13 +67,11 @@ export default class OffersPage extends Shadow() {
     Promise.all(showPromises).then(() => {
       this.hidden = false
     })
-
-    this.addEventListener('with-facet', this.setTotalListener)
+    this.addEventListener('with-facet', this.withFacetListener)
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('translation', this.translationListener)
-    this.removeEventListener('with-facet', this.setTotalListener)
+    this.removeEventListener('with-facet', this.withFacetListener)
   }
 
   shouldRenderCSS () {
@@ -410,8 +434,7 @@ export default class OffersPage extends Shadow() {
                   </ks-a-button>
                   <ks-m-filter-select></ks-m-filter-select>
               </o-grid>
-              <section>
-                  <ks-m-sort namespace="sort-right-"></ks-m-sort>
+              <section id="sort-options">
               </section>
               <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}></ks-m-tile-factory>
               ${this.badgeContainer ? /* HTML */ `
