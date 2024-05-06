@@ -275,7 +275,7 @@ export default class Tile extends Shadow() {
           <span class="m-tile__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
           ${data.iconTooltip
             ? `
-              <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
+              <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
                 <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
               </ks-m-tooltip>
             `
