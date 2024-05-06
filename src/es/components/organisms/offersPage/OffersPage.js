@@ -13,7 +13,7 @@ export default class OffersPage extends Shadow() {
     this.setTotalListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
-          const bodySection = this.eventDetailURL ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+          const bodySection = this.eventDetailURL || this.hasAttribute('no-search-tab') ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
           bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
         }
       })
@@ -94,7 +94,7 @@ export default class OffersPage extends Shadow() {
    * @return Promise<void>
    */
   renderHTML () {
-    this.html = this.eventDetailURL ? this.tabContentOne : /* html */`
+    this.html = this.eventDetailURL || this.hasAttribute('no-search-tab') ? this.tabContentOne : /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
             <li>
