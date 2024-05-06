@@ -7,24 +7,27 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 * @type {CustomElementConstructor}
 */
 export default class Translation extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML('welcome default value')
+    if (this.shouldRenderHTML()) this.renderHTML()
     document.body.addEventListener(this.getAttribute('update-translations') || 'update-translations', this.updateTranslationsListener)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-translations') || 'update-translations', this.updateTranslationsListener)
   }
 
   updateTranslationsListener = (event) => {
-    debugger
-    this.renderHTML('value')
-
+    const { keys } = event.detail
+    event.detail.fetch.then(translations => {
+      const t = translations[keys]
+      debugger
+      this.renderHTML(t)
+    })
   }
 
   /**
@@ -32,7 +35,7 @@ export default class Translation extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -41,14 +44,14 @@ export default class Translation extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.span
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {}
       @media only screen and (max-width: _max-width_) {
@@ -61,7 +64,7 @@ export default class Translation extends Shadow() {
   /**
    * fetches the template
    */
-  fetchTemplate() {
+  fetchTemplate () {
     /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
@@ -89,9 +92,12 @@ export default class Translation extends Shadow() {
    * @param {String} text
    * @returns void
    */
-  renderHTML(text) {
+  renderHTML (text) {
+    if (!text) return
+    debugger
+    this.html = ''
     this.span = this.root.querySelector('span') || document.createElement('span')
-    this.span.textContent = text
+    this.span.innerHTML = text || ''
     this.html = this.span
   }
 }

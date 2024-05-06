@@ -157,7 +157,7 @@ export default class AppointmentsList extends Shadow() {
         },
         {
           path: `${this.importMetaUrl}../appointmentsFilter/AppointmentsFilter.js`,
-          name: 'm-appointments-filter' 
+          name: 'm-appointments-filter'
         }
       ])
       return Promise.all([fetchModules]).then((children) => {
@@ -168,7 +168,10 @@ export default class AppointmentsList extends Shadow() {
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
             <div col-lg="12" col-md="12" col-sm="12">
-              <ks-a-heading tag="h1"><ks-a-counter namespace="counter-default-" data-list-type="${this.dataset.listType}" data-heading-type="h1" data-booked-subscriptions-text="gebuchte Termine" data-appointments-text="Angebote"></ks-a-counter></ks-a-heading>
+              <ks-a-heading tag="h1">
+                <ks-a-counter namespace="counter-default-" data-list-type="${this.dataset.listType}" data-heading-type="h1" data-booked-subscriptions-text="gebuchte Termine" data-appointments-text="Angebote">
+                </ks-a-counter>
+              </ks-a-heading>
             </div>
             ${(!this.dataset.showFilters || this.dataset.showFilters === 'true')
             ? /* html */ `

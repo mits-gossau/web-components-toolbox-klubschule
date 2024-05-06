@@ -1,6 +1,8 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/* global CustomEvent */
+
 /**
 * @export
 * @class Counter
@@ -10,6 +12,7 @@ export default class Counter extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.counter = 0
+    this.rendered = false
   }
 
   connectedCallback () {
@@ -46,7 +49,7 @@ export default class Counter extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.element
+    return !this.rendered
   }
 
   /**
@@ -96,9 +99,38 @@ export default class Counter extends Shadow() {
   renderHTML (counter) {
     const { headingType, listType, bookedSubscriptionsText, appointmentsText } = this.dataset
     this.element = this.root.querySelector(headingType) || document.createElement(headingType)
-    let txt = appointmentsText
-    if (listType === 'booked-appointments') txt = bookedSubscriptionsText
-    this.element.innerText = `${counter} ${txt}`
-    this.html = this.element
+    const fetchModules = this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../../components/atoms/translation/Translation.js`,
+        name: 'a-translation'
+      }
+    ])
+    Promise.all([fetchModules]).then((child) => {
+      let txt = appointmentsText
+      if (listType === 'booked-appointments') txt = bookedSubscriptionsText
+
+      debugger
+      // TRANS
+      const translation = new child[0][0].constructorClass() // eslint-disable-line
+      translation.dataset.transKey = txt
+      this.element.innerText = `${counter}`
+      this.element.append(translation)
+      //
+      this.html = this.element
+      //
+      if (!this.rendered) {
+        this.dispatchEvent(new CustomEvent('request-translations',
+          {
+            detail: {
+              keys: ['CP.cpAppointmentDwnPDF']
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }
+        ))
+      }
+      this.rendered = true
+    })
   }
 }
