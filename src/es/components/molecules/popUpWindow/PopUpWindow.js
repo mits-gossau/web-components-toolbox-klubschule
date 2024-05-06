@@ -17,9 +17,11 @@ export default class PopUpWindow extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.closeBtn.addEventListener('click', () => {
-      this.closeListener()
-    })
+    this.closeBtn.addEventListener('click', this.closeListener)
+  }
+
+  disconnectedCallback () {
+    this.closeBtn.removeEventListener('click', this.closeListener)
   }
 
   closeListener () {
