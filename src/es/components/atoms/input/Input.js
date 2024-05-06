@@ -10,45 +10,45 @@ export default class Input extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.input = this.root.querySelector('input');
-    this.textarea = this.root.querySelector('textarea');
-    this.counter = this.root.querySelector('.counter');
-    this.current = this.root.querySelector('.current');
-    this.max = this.root.querySelector('.max');
+    this.input = this.root.querySelector('input')
+    this.textarea = this.root.querySelector('textarea')
+    this.counter = this.root.querySelector('.counter')
+    this.current = this.root.querySelector('.current')
+    this.max = this.root.querySelector('.max')
 
     if (this.input) {
-      this.maxCharInput = this.input.getAttribute('maxlength');
+      this.maxCharInput = this.input.getAttribute('maxlength')
 
       if (this.max) {
-        this.max.innerText = `\u00A0/ ${this.maxCharInput}`;
+        this.max.innerText = `\u00A0/ ${this.maxCharInput}`
       }
     }
 
     if (this.textarea) {
-      this.maxCharTextarea = this.textarea.getAttribute('maxlength');
+      this.maxCharTextarea = this.textarea.getAttribute('maxlength')
 
       if (this.max) {
-        this.max.innerText = `\u00A0/ ${this.maxCharTextarea}`;
+        this.max.innerText = `\u00A0/ ${this.maxCharTextarea}`
       }
     }
 
     this.inputEventListener = event => {
-      let charCount = this.input.value.length;
+      const charCount = this.input.value.length
 
       if (charCount <= this.maxCharInput) {
-        this.current.innerText = charCount;
+        this.current.innerText = charCount
       } else {
-        event.preventDefault();
+        event.preventDefault()
       }
     }
 
     this.textareaEventListener = event => {
-      let charCount = this.textarea.value.length;
+      const charCount = this.textarea.value.length
 
       if (charCount <= this.maxCharTextarea) {
-        this.current.innerText = charCount;
+        this.current.innerText = charCount
       } else {
-        event.preventDefault();
+        event.preventDefault()
       }
     }
   }
@@ -57,22 +57,21 @@ export default class Input extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
 
     if (this.counter && this.input) {
-      this.input.addEventListener('input', this.inputEventListener);
+      this.input.addEventListener('input', this.inputEventListener)
     }
 
     if (this.counter && this.textarea) {
-      this.textarea.addEventListener('input', this.textareaEventListener);
+      this.textarea.addEventListener('input', this.textareaEventListener)
     }
   }
 
   disconnectedCallback () {
     if (this.input) {
-      this.input.removeEventListener('input', this.inputEventListener);
-
+      this.input.removeEventListener('input', this.inputEventListener)
     }
 
     if (this.textarea) {
-      this.textarea.removeEventListener('input', this.textareaEventListener);
+      this.textarea.removeEventListener('input', this.textareaEventListener)
     }
   }
 

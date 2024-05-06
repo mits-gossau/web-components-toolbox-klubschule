@@ -133,9 +133,10 @@ export default class AutoCompleteLocation extends Shadow() {
         })
       )
     } else {
-      this.geocoder.geocode({location: {
+      this.geocoder.geocode({
+        location: {
           lat: parseFloat(lat),
-          lng: parseFloat(lng),
+          lng: parseFloat(lng)
         }
       }, (responses, status) => {
         this.dispatchEvent(new CustomEvent('request-with-facet',
@@ -190,7 +191,7 @@ export default class AutoCompleteLocation extends Shadow() {
         {
           detail: {
             key: 'location-search'
-        },
+          },
           bubbles: true,
           cancelable: true,
           composed: true

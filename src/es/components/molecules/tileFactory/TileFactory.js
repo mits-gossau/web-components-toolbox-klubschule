@@ -9,13 +9,13 @@ export default class TileFactory extends Shadow() {
   * @param options
   * @param {any} args
   */
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('with-facet', this.withFacetEventNameListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
@@ -27,11 +27,11 @@ export default class TileFactory extends Shadow() {
     ))
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.body.removeEventListener('with-facet', this.withFacetEventNameListener)
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -40,7 +40,7 @@ export default class TileFactory extends Shadow() {
   *
   * @return {Promise<void>}
   */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */ `
     :host> section {
       display: flex;
@@ -66,7 +66,7 @@ export default class TileFactory extends Shadow() {
   *
   * @return {Promise<void>}
   */
-  fetchTemplate() {
+  fetchTemplate () {
     switch (this.getAttribute('namespace')) {
       case 'course-list-default-':
         return this.fetchCSS([{
@@ -83,7 +83,7 @@ export default class TileFactory extends Shadow() {
   * @param {any} fetch - An array of course fetch objects.
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  async renderHTML(fetch) {
+  async renderHTML (fetch) {
     /*
     // TODO: If needed do the loading animation
     this.fetchModules([
@@ -131,8 +131,8 @@ export default class TileFactory extends Shadow() {
               ? /* html */`
                 <ks-o-tile-list data='{
                   ${this.fillGeneralTileInfo(course)},
-                  "filter": ${JSON.stringify(course.filter) || ""},
-                  "locations": ${JSON.stringify(course.locations) || ""}
+                  "filter": ${JSON.stringify(course.filter) || ''},
+                  "locations": ${JSON.stringify(course.locations) || ''}
                 }'>
                 </ks-o-tile-list>
               `
@@ -153,16 +153,16 @@ export default class TileFactory extends Shadow() {
     })
   }
 
-  fillGeneralTileInfo(course) {
+  fillGeneralTileInfo (course) {
     return `
       "title": "${course.bezeichnung}",
       "iconTooltip": "Das ist ein sinnvoller Tooltip-Text",
       "location": {
         "iconName": "Location",
-        "name": "${course.locations ? course.locations.join(", ") : ""}",
-        "badge": "${course.eTyp ? course.eTyp : ""}"
+        "name": "${course.locations ? course.locations.join(', ') : ''}",
+        "badge": "${course.eTyp ? course.eTyp : ''}"
       },
-      "buttons": ${JSON.stringify(course.buttons) || ""},
+      "buttons": ${JSON.stringify(course.buttons) || ''},
       "icons": [
         {
           "name": "Percent",
@@ -181,13 +181,13 @@ export default class TileFactory extends Shadow() {
     `
   }
 
-  fillGeneralTileInfoEvents(event) {
-    const aboTypes = event.abo_typen?.reduce((acc, abo, index) => acc + `{"text": "${abo.text}","typ": "${abo.typ}","title": "${abo.title}","link": "${abo.link}"}${index >= event.buttons.length - 1 ? "" : ","}`, "")
+  fillGeneralTileInfoEvents (event) {
+    const aboTypes = event.abo_typen?.reduce((acc, abo, index) => acc + `{"text": "${abo.text}","typ": "${abo.typ}","title": "${abo.title}","link": "${abo.link}"}${index >= event.buttons.length - 1 ? '' : ','}`, '')
     const aboTypesAsJson = aboTypes ? `"abo_typen": [${aboTypes}],` : undefined
     return `{
       "id": "${event.id}",
       "center_id": "${event.centerid}",
-      "language": "${event.parentkey.split("_")[0]}",
+      "language": "${event.parentkey.split('_')[0]}",
       "typ": "${event.typ}",
       "location": "${event.location.name}",
       "datum_label": "${event.datum_label}",
@@ -209,13 +209,13 @@ export default class TileFactory extends Shadow() {
       "lektionen_label": "${event.lektionen_label}",
       "price": ${JSON.stringify(event.price)},
       "icons": ${JSON.stringify(event.icons)},
-      "buttons": ${JSON.stringify(event.buttons) || "[]"},
-      ${aboTypesAsJson ? aboTypesAsJson : ``}
-      "deletable": ${event.deletable || "false"}
+      "buttons": ${JSON.stringify(event.buttons) || '[]'},
+      ${aboTypesAsJson || ''}
+      "deletable": ${event.deletable || 'false'}
     }`
   }
 
-  get isEventSearch() {
+  get isEventSearch () {
     return this.hasAttribute('is-event')
   }
 }

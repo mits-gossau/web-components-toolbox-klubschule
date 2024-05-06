@@ -56,7 +56,7 @@ export default class Event extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.root.querySelector('.event')
   }
 
@@ -539,16 +539,16 @@ export default class Event extends Shadow() {
    * @param {*} data
    * @returns icon path
    */
-  setIconUrl(data) {
-    let iconName = '';
-    if (data.status == "1") {
-      iconName = 'garanteed';
-    } else if (data.status == "2") {
-      iconName = 'started';
-    } else if (data.status == "3") {
-      iconName = 'await';
-    } else if (data.status == "4") {
-      iconName = 'almost';
+  setIconUrl (data) {
+    let iconName = ''
+    if (data.status == '1') {
+      iconName = 'garanteed'
+    } else if (data.status == '2') {
+      iconName = 'started'
+    } else if (data.status == '3') {
+      iconName = 'await'
+    } else if (data.status == '4') {
+      iconName = 'almost'
     }
 
     return `../../../../../../../img/icons/event-state-${iconName}.svg`
@@ -557,7 +557,7 @@ export default class Event extends Shadow() {
   /**
     * renderDetails
   */
-  async renderDetails() {
+  async renderDetails () {
     if (!this.details.children.length) {
       this.fetchModules([
         {
