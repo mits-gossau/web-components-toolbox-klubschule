@@ -508,7 +508,7 @@ export default class Event extends Shadow() {
           <div class="controls-right">
             <div class="icons">
               ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
-                <ks-m-badge type="primary" icon-name="${icon.iconName}" tooltip="${icon.text}">
+                <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}" tooltip="${icon.text}">
                 </ks-m-badge>
               `, '') : ''}
             </div>
