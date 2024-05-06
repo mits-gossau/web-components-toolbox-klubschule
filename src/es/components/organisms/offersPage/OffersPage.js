@@ -234,6 +234,7 @@ export default class OffersPage extends Shadow() {
                   <div col-lg="6" col-md="6" col-sm="12">
                     <ks-c-auto-complete
                       ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+                      ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
                       ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
                     >
                       <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
