@@ -384,6 +384,9 @@
   --icon-mdx-ks-event-tick-color: var(--mdx-base-color-grey-0);
   --icon-mdx-ks-event-color: var(--mdx-base-color-grey-950);
   --icon-mdx-ks-event-link-color: var(--mdx-base-color-klubschule-blue-600);
+
+  /* google maps */
+  --map-height-mobile: 120vw;
 }
 
 @media screen and (min-width: 1441px) {
