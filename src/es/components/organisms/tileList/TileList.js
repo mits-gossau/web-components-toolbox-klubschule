@@ -165,22 +165,14 @@ export default class TileList extends Shadow() {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: start;
         padding-top: 3.5em;
+        gap: 1em;
       }
 
       :host ks-m-tile {
-        margin-right: 1em;
-        margin-bottom: 2em;
+        margin-bottom: 1em;
         width: 32%;
-      }
-
-      :host ks-m-tile:nth-child(3n) {
-        margin-right: 0;
-      }
-
-      :host ks-m-tile:last-child {
-        margin-right: 0;
       }
 
       :host .o-tile-list__foot {

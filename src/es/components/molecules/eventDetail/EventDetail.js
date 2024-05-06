@@ -9,14 +9,43 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class EventDetail extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
+
+    /**
+     * Handle expand rows
+     */
+    this.clickEventListener = () => {
+      let hiddenRows = this.root.querySelectorAll('.overlap');
+
+      hiddenRows.forEach((row) => {
+        row.classList.toggle('hidden');
+      });
+      
+      if (this.icon) {
+        if (this.icon.getAttribute('icon-name') === 'ChevronDown') {
+          this.icon.setAttribute('icon-name', 'ChevronUp')
+        } else {
+          this.icon.setAttribute('icon-name', 'ChevronDown')
+        }
+      }
+    }
   }
 
   connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+
+    this.linkMore = this.root.querySelector('.link-more');
+    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
+    
+    if (this.linkMore) {
+      this.linkMore.addEventListener('click', this.clickEventListener)
+    }
   }
 
   disconnectedCallback() {
+    if (this.linkMore) {
+      this.linkMore.removeEventListener('click', this.clickEventListener)
+    }
   }
 
   /**
@@ -204,6 +233,10 @@ export default class EventDetail extends Shadow() {
         border-radius: 3px;
       }
 
+      :host tr.hidden {
+        display: none;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host {
           grid-template-columns: 100%;
@@ -331,9 +364,15 @@ export default class EventDetail extends Shadow() {
                   <td>${termin.termin}</td>                
                   <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
                 </tr>
-              ` : ''), '')}              
+              ` : /* html */`
+                <tr class="overlap hidden">
+                  <td>${termin.wochentaglabel}</td>                
+                  <td>${termin.termin}</td>                
+                  <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
+                </tr>              
+              `), '')}              
             </table>
-            ${this.data.termin_alle_label ? /* html */ `
+            ${this.data.termine?.length > 5 && this.data.termin_label ? /* html */ `
               <button class="link-more">
                 <span>${this.data.termin_alle_label}</span>
                 <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em"></a-icon-mdx>
