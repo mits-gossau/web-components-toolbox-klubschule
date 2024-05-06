@@ -21,11 +21,7 @@ export default class OffersPage extends Shadow() {
 
     this.translation = {}
     this.translationListener = (event) => {
-      const translation = JSON.parse(event.detail.translation)
-      this.translation = translation.reduce((acc, curr) => {
-        acc[curr.key] = curr.value
-        return acc
-      }, {})
+      this.translation = event.detail.translation
     }
   }
 

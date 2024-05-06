@@ -10,10 +10,15 @@ export default class Translation extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
 
+    this.translation = JSON.parse(this.getAttribute('translation') || '[]').reduce((acc, curr) => {
+        acc[curr.key] = curr.value
+        return acc
+      }, {})
+
     this.requestTranslationListener = () => {
       this.dispatchEvent(new CustomEvent('translation', {
         detail: {
-          translation: this.getAttribute('translation') || '[]'
+          translation: this.translation
         },
         bubbles: true,
         cancelable: true,
