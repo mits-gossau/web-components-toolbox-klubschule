@@ -39,6 +39,20 @@ export default class Radio extends Shadow() {
           flex-direction: column;
         }
 
+        :host span {
+          color: var(--mdx-comp-select-label-color-default);
+          font: var(--mdx-comp-dropdown-font-label);
+        }
+
+        :host .horizontal {
+          display: flex;
+          flex-direction: row;
+        }
+
+        :host .horizontal .wrap + .wrap {
+          margin-left: var(--mdx-sys-spacing-fix-m);
+        }
+
         :host .wrap {
           display: flex;
           flex-direction: row-reverse;
