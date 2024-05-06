@@ -89,7 +89,7 @@ export default class Contact extends Shadow() {
     const id = this.getAttribute('id')
     const target = this.getAttribute('target')
 
-    this.html =   /* HTML */ `
+    this.html = /* HTML */ `
       <a href="${this.getAttribute('href')}" ${id ? `id="${id}"` : ''} ${target ? `target="${target}"` : ''} >
         <a-icon-mdx 
           namespace="icon-mdx-ks-" 

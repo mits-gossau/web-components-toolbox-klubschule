@@ -41,7 +41,7 @@ export default class AutoComplete extends Shadow() {
 
     this.requestAutoCompleteListener = event => {
       // reset home page input search
-      if (event.detail.key === 'home-page-input-search' && event.detail.value === "") {
+      if (event.detail.key === 'home-page-input-search' && event.detail.value === '') {
         return this.dispatchEvent(new CustomEvent('auto-complete', {
           detail: {
             fetch: Promise.resolve({
@@ -128,7 +128,7 @@ export default class AutoComplete extends Shadow() {
   homeSearchInput (searchText) {
     const searchUrl = this.getAttribute('search-url')
     // redirect to search page
-    if (searchText !== "") {
+    if (searchText !== '') {
       // create url object to check if searchUrl has query params
       const url = new URL(searchUrl)
       let searchParam = '?q='

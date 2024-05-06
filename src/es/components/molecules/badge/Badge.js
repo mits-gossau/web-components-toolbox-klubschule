@@ -7,11 +7,11 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class Badge extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.text = this.getAttribute('text') || null
     this.type = this.getAttribute('type') || 'default'
     this.iconName = this.getAttribute('icon-name')
@@ -26,12 +26,12 @@ export default class Badge extends Shadow() {
     }
   }
 
-  disconnectedCallback() { }
+  disconnectedCallback () { }
 
   /**
    * Toggle tooltip
    */
-  toggleTooltip() {
+  toggleTooltip () {
     const toggle = this.root.querySelector('.m-badge')
     toggle.addEventListener('click', () => {
       const tooltip = this.root.querySelector('.m-badge__tooltip')
@@ -44,7 +44,7 @@ export default class Badge extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -53,14 +53,14 @@ export default class Badge extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.badge
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
         display: block;
@@ -128,7 +128,7 @@ export default class Badge extends Shadow() {
   /**
    * fetches the template
    */
-  fetchTemplate() {
+  fetchTemplate () {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
@@ -156,7 +156,7 @@ export default class Badge extends Shadow() {
    * Render HTML
    * @returns Promise<void>
    */
-  renderHTML() {
+  renderHTML () {
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = ''
     this.html = /* HTML */`
@@ -170,7 +170,7 @@ export default class Badge extends Shadow() {
         : `${this.text}`
       }
             ${this.iconName || this.iconURL ? /* html */ `
-              <a-icon-mdx ${this.iconName ? `icon-name="${this.iconName}"` : ""} ${this.iconURL ? `icon-url="${this.iconURL}"` : ""} ${this.iconSize ? `size="${this.iconSize}"` : ''} class="icon-right"></a-icon-mdx>
+              <a-icon-mdx ${this.iconName ? `icon-name="${this.iconName}"` : ''} ${this.iconURL ? `icon-url="${this.iconURL}"` : ''} ${this.iconSize ? `size="${this.iconSize}"` : ''} class="icon-right"></a-icon-mdx>
             ` : ''}
         </ks-a-button>
         ${this.tooltip ? /* html */ `

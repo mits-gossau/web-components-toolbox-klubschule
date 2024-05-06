@@ -42,11 +42,11 @@ export default class Link extends Shadow() {
 
   renderHTML () {
     this.fetchModules([{
-        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
-        name: 'mdx-component'
-    },{
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-        name: 'a-icon-mdx'
+      path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+      name: 'mdx-component'
+    }, {
+      path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+      name: 'a-icon-mdx'
     }])
 
     this.html = /* html */`

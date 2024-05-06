@@ -2,7 +2,7 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /**
-* @export 
+* @export
 * @class Translation
 * @type {CustomElementConstructor}
 */

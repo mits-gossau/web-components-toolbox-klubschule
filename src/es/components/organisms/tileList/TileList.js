@@ -32,7 +32,7 @@ export default class TileList extends Shadow() {
             bubbles: true,
             cancelable: true,
             composed: true
-          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, {tiles: tileData.courses}).tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '')))
+          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '')))
         }
       }
     }

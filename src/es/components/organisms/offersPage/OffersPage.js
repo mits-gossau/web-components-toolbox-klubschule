@@ -20,7 +20,7 @@ export default class OffersPage extends Shadow() {
     }
 
     this.translation = {}
-    this.translationListener = (event) => { 
+    this.translationListener = (event) => {
       const translation = JSON.parse(event.detail.translation)
       this.translation = translation.reduce((acc, curr) => {
         acc[curr.key] = curr.value
@@ -45,9 +45,8 @@ export default class OffersPage extends Shadow() {
     Promise.all(showPromises).then(() => {
       this.hidden = false
     })
-    
+
     this.addEventListener('with-facet', this.setTotalListener)
-    
   }
 
   disconnectedCallback () {
@@ -342,7 +341,7 @@ export default class OffersPage extends Shadow() {
                       <div id="back">
                           &nbsp;
                       </div>
-                      <h3>${this.translation['Filter']}</h3>
+                      <h3>${this.translation.Filter}</h3>
                       <div id="close">
                           <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
                       </div>
@@ -461,7 +460,7 @@ export default class OffersPage extends Shadow() {
     return this.root.querySelector('ks-m-tab')
   }
 
-  get badgeContainer() {
+  get badgeContainer () {
     return this.root.querySelector('ks-m-badge-legend')
   }
 
