@@ -10,11 +10,6 @@ export default class OffersPage extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    // this.translation = JSON.parse(this.getAttribute('translation') || []).reduce((acc, curr) => {
-    //   acc[curr.key] = curr.value
-    //   return acc
-    // }, {})
-
     this.setTotalListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
@@ -26,26 +21,15 @@ export default class OffersPage extends Shadow() {
 
     this.translation = {}
     this.translationListener = (event) => { 
-      console.log('translationListener', event)
       const translation = JSON.parse(event.detail.translation)
-      console.log('translation', translation)
       this.translation = translation.reduce((acc, curr) => {
         acc[curr.key] = curr.value
         return acc
       }, {})
-      console.log('this.translation', this.translation)
     }
   }
 
   connectedCallback () {
-    this.hidden = true
-    const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-    Promise.all(showPromises).then(() => {
-      this.hidden = false
-    })
-    this.addEventListener('with-facet', this.setTotalListener)
     document.body.addEventListener('translation', this.translationListener)
     this.dispatchEvent(new CustomEvent('request-translation',
       {
@@ -53,11 +37,22 @@ export default class OffersPage extends Shadow() {
         cancelable: true,
         composed: true
       }))
+
+    this.hidden = true
+    const showPromises = []
+    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+    Promise.all(showPromises).then(() => {
+      this.hidden = false
+    })
+    
+    this.addEventListener('with-facet', this.setTotalListener)
+    
   }
 
   disconnectedCallback () {
-    this.removeEventListener('with-facet', this.setTotalListener)
     document.body.removeEventListener('translation', this.translationListener)
+    this.removeEventListener('with-facet', this.setTotalListener)
   }
 
   shouldRenderCSS () {
