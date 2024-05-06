@@ -12,6 +12,11 @@ export default class Tooltip extends Shadow() {
 
     this.clickEventListener = event => {
       this.tooltip.classList.toggle('tooltip-open')
+      if (this.tooltip.classList.contains('tooltip-open')) {
+        this.classList.add('open')
+      } else {
+        this.classList.remove('open')
+      }
     }
   }
 
@@ -60,6 +65,10 @@ export default class Tooltip extends Shadow() {
         z-index: 10;
         display: flex;
         align-items: center;
+      }
+
+      :host(.open) {
+        z-index: 11;
       }
 
       :host .tooltip {

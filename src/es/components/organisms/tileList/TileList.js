@@ -32,7 +32,12 @@ export default class TileList extends Shadow() {
             bubbles: true,
             cancelable: true,
             composed: true
-          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '')))
+          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, {tiles: tileData.courses}).tiles.reduce((acc, tile) => {
+            // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
+            tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
+            if (tile.bezeichnung) tile.location.name = ''
+            return acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`
+          }, '')))
         }
       }
     }
