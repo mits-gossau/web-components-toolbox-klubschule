@@ -29,9 +29,9 @@ export default class CourseDialog extends Shadow() {
     if (this.shouldRenderHTML()) {
       if (this.dataset.listType === 'subscriptions') {
         this.renderSubscriptionsHTML(this.courseId, this.courseData)
-      } else {
-        this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
+        return
       }
+      this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
     }
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking-confirmation') || 'request-show-dialog-booking-confirmation', this.requestShowDialogBookingConfirmationListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-reversal-confirmation') || 'request-show-dialog-reversal-confirmation', this.requestShowDialogReversalConfirmationListener)
@@ -51,12 +51,16 @@ export default class CourseDialog extends Shadow() {
     this.subscriptionsPdfLink?.removeEventListener('click', this.subscriptionPdfLinkListener)
   }
 
+  /**
+   * Trigger Subscription PDF Download
+   * @param {any} event 
+   */
   subscriptionPdfLinkListener (event) {
     event.preventDefault()
     this.dispatchEvent(new CustomEvent('request-subscription-pdf',
       {
         detail: {
-          subscription: event.target.dataset.subscription
+          subscription: event.target?.dataset.subscription
         },
         bubbles: true,
         cancelable: true,

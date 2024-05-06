@@ -154,6 +154,10 @@ export default class AppointmentsList extends Shadow() {
         {
           path: `${this.importMetaUrl}'../../../../../../components/molecules/Select/Select.js`,
           name: 'ks-m-select'
+        },
+        {
+          path: `${this.importMetaUrl}../appointmentsFilter/AppointmentsFilter.js`,
+          name: 'm-appointments-filter' 
         }
       ])
       return Promise.all([fetchModules]).then((children) => {
@@ -172,7 +176,7 @@ export default class AppointmentsList extends Shadow() {
               ${filter}
             </div>
             <div col-lg="12" col-md="12" col-sm="12">
-              [[ Filter ]]
+              <m-appointments-filter></m-appointments-filter>
               <hr>
               <br>
             </div>

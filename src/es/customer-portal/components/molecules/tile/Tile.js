@@ -294,7 +294,6 @@ export default class AppointmentTile extends Tile {
     const tileState = getTileState(courseAppointmentStatusMapping[content.courseAppointmentStatus], content)
     const courseId = makeUniqueCourseId(content)
     const { courseAppointmentStatus } = content
-   console.log(courseAppointmentStatus);
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
