@@ -34,10 +34,10 @@ export default class Translation extends Shadow() {
   }
 
   connectedCallback () {
-    this.addEventListener('request-translation', this.requestTranslationListener)
+    document.body.addEventListener('request-translation', this.requestTranslationListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener('request-translation', this.requestTranslationListener)
+    document.body.removeEventListener('request-translation', this.requestTranslationListener)
   }
 }
