@@ -247,7 +247,7 @@ export default class TileList extends Shadow() {
             <span class="o-tile-list__title">${data.title || warnMandatory + 'title'}</span>
             ${data.iconTooltip
               ? `
-                <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
+                <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
                   <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
                 </ks-m-tooltip>
                   `
