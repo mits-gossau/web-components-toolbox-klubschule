@@ -34,11 +34,14 @@ export default class Translation extends Shadow() {
       console.error('Error parsing translation data', error)
     }
 
-    this.requestTranslationListener = () => {
+    this.requestTranslationListener = event => {
+      const result = {
+        translation: this.translation,
+        getTranslation: key => this.translation[key] || key
+      }
+      if (event.detail?.resolve) return event.detail.resolve(result)
       this.dispatchEvent(new CustomEvent('translation', {
-        detail: {
-          translation: this.translation
-        },
+        detail: result,
         bubbles: true,
         cancelable: true,
         composed: true
@@ -47,10 +50,12 @@ export default class Translation extends Shadow() {
   }
 
   connectedCallback () {
+    // Would be better if this component listens to "this" instead of "document.body" but that would require that it is on a higher level wrapping all components requiring translation. Analog c-fetch-css, etc.
     document.body.addEventListener('request-translation', this.requestTranslationListener)
   }
 
   disconnectedCallback () {
+    // Would be better if this component listens to "this" instead of "document.body" but that would require that it is on a higher level wrapping all components requiring translation. Analog c-fetch-css, etc.
     document.body.removeEventListener('request-translation', this.requestTranslationListener)
   }
 }
