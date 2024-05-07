@@ -282,8 +282,8 @@ export default class TileList extends Shadow() {
               <div class="o-tile-list__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="o-tile-list__icon-box">
-                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.iconTooltip}">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.text}">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
                   </ks-m-tooltip>
                 </div>
               `, '')}           
