@@ -11,7 +11,7 @@ import GoogleMaps from '../../web-components-toolbox/src/es/components/atoms/goo
  * @css {}
  */
 export default class KsGoogleMaps extends GoogleMaps {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.currentPopup = null
@@ -95,7 +95,7 @@ export default class KsGoogleMaps extends GoogleMaps {
           const clusterRenderer = {
             render ({ count, position }) {
               return new googleMap.Marker({
-                label: { text: String(count), color: "white", fontSize: "20px" },
+                label: { text: String(count), color: 'white', fontSize: '20px' },
                 position,
                 icon: {
                   path: googleMap.SymbolPath.CIRCLE,
@@ -129,7 +129,7 @@ export default class KsGoogleMaps extends GoogleMaps {
 
       // As I need to render the popup as a "bottom sheet" outside of the map on mobile
       // additionally add a popup container for mobile
-      this.html = /* html */`<div id="mobile-maps-popup-container"></div>`
+      this.html = /* html */'<div id="mobile-maps-popup-container"></div>'
     })
   }
 
@@ -342,7 +342,7 @@ export default class KsGoogleMaps extends GoogleMaps {
     centerButton?.addEventListener('click', () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-          const userLocation = new googleMapsLibrary.LatLng(position.coords.latitude, position.coords.longitude);
+          const userLocation = new googleMapsLibrary.LatLng(position.coords.latitude, position.coords.longitude)
           map.setCenter(userLocation)
           map.setZoom(14)
         })

@@ -8,18 +8,32 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 */
 export default class Translation extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)    
+    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)  
+    
+    this.translation = {}
 
-    // Check if each object in translation has "key" and "value" properties
-    const translationData = JSON.parse(this.getAttribute('translation') || '[]')
-    const isValid = translationData.every(item => {
-      return item.hasOwnProperty('key') && item.hasOwnProperty('value')
-    })
+    // check if translation data is provided
+    console.log(this.getAttribute('translation'))
+    if (!this.getAttribute('translation')) {
+      console.error('Translation data is wrong or missing')
+    }
 
-    this.translation = isValid ? translationData.reduce((acc, curr) => {
-      acc[curr.key] = curr.value
-      return acc
-    }, {}) : {}
+    // check if each object in translation has "key" and "value" properties
+    let translationData = {}
+    try {
+      translationData = JSON.parse(this.getAttribute('translation'))
+
+      const isValid = translationData.every(item => {
+        return item.hasOwnProperty('key') && item.hasOwnProperty('value')
+      })
+  
+      this.translation = isValid ? translationData.reduce((acc, curr) => {
+        acc[curr.key] = curr.value
+        return acc
+      }, {}) : {}
+    } catch (error) {
+      console.error('Error parsing translation data', error)
+    }
 
     this.requestTranslationListener = () => {
       this.dispatchEvent(new CustomEvent('translation', {

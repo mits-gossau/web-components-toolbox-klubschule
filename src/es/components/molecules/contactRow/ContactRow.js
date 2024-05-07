@@ -100,7 +100,7 @@ export default class Contact extends Shadow() {
     const tag = this.hasAttribute('href') ? 'a' : 'div'
     const href = this.getAttribute('href')
 
-    this.html =   /* HTML */ `
+    this.html = /* HTML */ `
       <${tag} ${href ? `href="${this.getAttribute('href')}"` : ''} ${id ? `id="${id}"` : ''} ${target ? `target="${target}"` : ''} class="contact-row">
         <a-icon-mdx 
           ${href ? 'namespace="icon-mdx-ks-"' : ''}
