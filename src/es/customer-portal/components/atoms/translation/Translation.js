@@ -24,6 +24,7 @@ export default class Translation extends Shadow() {
   updateTranslationsListener = (event) => {
     const { keys } = event.detail
     event.detail.fetch.then(translations => {
+      // TODO
       const t = translations[keys]
       this.renderHTML(t)
     })
@@ -94,7 +95,6 @@ export default class Translation extends Shadow() {
    */
   renderHTML (text = 'TRANS') {
     this.span = this.root.querySelector('span') || document.createElement('span')
-    this.span = document.createElement('span')
     this.span.textContent = text
     this.html = this.span
   }

@@ -112,9 +112,9 @@ export default class Counter extends Shadow() {
       // TRANS
       const translation = new child[0][0].constructorClass() // eslint-disable-line
       translation.dataset.transKey = txt
+      //
       this.element.innerText = `${counter}`
       this.element.append(translation)
-      //
       this.html = this.element
       //
       this.dispatchEvent(new CustomEvent('request-translations',
