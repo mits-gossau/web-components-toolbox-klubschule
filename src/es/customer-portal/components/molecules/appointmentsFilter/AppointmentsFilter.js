@@ -1,25 +1,23 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
-/* global CustomEvent */
-
 /**
  * @export
  * @class AppointmentsFilter
  * @type {CustomElementConstructor}
  */
 export default class AppointmentsFilter extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.renderedHTML = false
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
   }
 
   /**
@@ -27,25 +25,24 @@ export default class AppointmentsFilter extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
-        display:flex;
+        display: flex;
+        align-items: center;
+        gap: 1em;
         justify-content: space-between;
+        margin: 1em 0;
       }
       :host > div {
         width:100%;
-      }
-
-      :host > div > ks-a-button {
-        width: 100%;
       }
       @media only screen and (max-width: _max-width_) {
         :host  {}
@@ -57,7 +54,7 @@ export default class AppointmentsFilter extends Shadow() {
   /**
    * fetches the template
    */
-  fetchTemplate() {
+  fetchTemplate () {
     const styles = [
       {
         path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`,
@@ -84,11 +81,11 @@ export default class AppointmentsFilter extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.renderedHTML
   }
 
-  renderHTML() {
+  renderHTML () {
     this.renderedHTML = true
     this.fetchModules([
       {
@@ -117,7 +114,7 @@ export default class AppointmentsFilter extends Shadow() {
     })
   }
 
-  renderWeekDayFilter() {
+  renderWeekDayFilter () {
     return /* html */ `
       <m-dialog namespace="dialog-left-slide-in-">
         <div class="container dialog-header">
@@ -149,7 +146,7 @@ export default class AppointmentsFilter extends Shadow() {
     `
   }
 
-  renderDayTimeFilter() {
+  renderDayTimeFilter () {
     return /* html */ `
       <m-dialog namespace="dialog-left-slide-in-">
         <div class="container dialog-header">
@@ -168,12 +165,13 @@ export default class AppointmentsFilter extends Shadow() {
           <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
           <a-button namespace="button-primary-">Angebote anzeigen</a-button>
         </div>
+        ${this.setButtonStyle()}
         <ks-a-button id="show-modal" namespace="button-secondary-" color="tertiary" justify-content="flex-start">Tageszeit</ks-a-button>
       </m-dialog>
     `
   }
 
-  renderCenterFilter() {
+  renderCenterFilter () {
     return /* html */ `
       <m-dialog namespace="dialog-left-slide-in-">
         <div class="container dialog-header">
@@ -192,8 +190,21 @@ export default class AppointmentsFilter extends Shadow() {
           <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
           <a-button namespace="button-primary-">Angebote anzeigen</a-button>
         </div>
+        ${this.setButtonStyle()}
         <ks-a-button id="show-modal" namespace="button-secondary-" color="tertiary" justify-content="flex-start">Center</ks-a-button>
       </m-dialog>
-    ` 
+    `
+  }
+
+  setButtonStyle () {
+    return /* css */ `
+      <style>
+        :host {
+          --button-secondary-width:100%;
+        }
+        :host >  ks-a-button {
+          width:100%;
+        }
+      </style>`
   }
 }
