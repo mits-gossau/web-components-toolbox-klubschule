@@ -7,16 +7,45 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class EventDetail extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
+
+    /**
+     * Handle expand rows
+     */
+    this.clickEventListener = () => {
+      const hiddenRows = this.root.querySelectorAll('.overlap')
+
+      hiddenRows.forEach((row) => {
+        row.classList.toggle('hidden')
+      })
+
+      if (this.icon) {
+        if (this.icon.getAttribute('icon-name') === 'ChevronDown') {
+          this.icon.setAttribute('icon-name', 'ChevronUp')
+        } else {
+          this.icon.setAttribute('icon-name', 'ChevronDown')
+        }
+      }
+    }
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+
+    this.linkMore = this.root.querySelector('.link-more')
+    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
+
+    if (this.linkMore) {
+      this.linkMore.addEventListener('click', this.clickEventListener)
+    }
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
+    if (this.linkMore) {
+      this.linkMore.removeEventListener('click', this.clickEventListener)
+    }
   }
 
   /**
@@ -24,7 +53,7 @@ export default class EventDetail extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -33,14 +62,14 @@ export default class EventDetail extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.root.querySelector('div')
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
         display: grid !important;
@@ -204,6 +233,10 @@ export default class EventDetail extends Shadow() {
         border-radius: 3px;
       }
 
+      :host tr.hidden {
+        display: none;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host {
           grid-template-columns: 100%;
@@ -218,12 +251,11 @@ export default class EventDetail extends Shadow() {
     `
   }
 
-
   /**
     * renderHTML
     * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  renderHTML() {
+  renderHTML () {
     if (!this.data) console.error('Data json attribute is missing or corrupted!', this)
     this.html = /* HTML */ `
       <div class="details-left">
@@ -331,9 +363,15 @@ export default class EventDetail extends Shadow() {
                   <td>${termin.termin}</td>                
                   <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
                 </tr>
-              ` : ''), '')}              
+              ` : /* html */`
+                <tr class="overlap hidden">
+                  <td>${termin.wochentaglabel}</td>                
+                  <td>${termin.termin}</td>                
+                  <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
+                </tr>              
+              `), '')}              
             </table>
-            ${this.data.termin_alle_label ? /* html */ `
+            ${this.data.termine?.length > 5 && this.data.termin_label ? /* html */ `
               <button class="link-more">
                 <span>${this.data.termin_alle_label}</span>
                 <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em"></a-icon-mdx>
@@ -351,7 +389,7 @@ export default class EventDetail extends Shadow() {
             </h3>
             ${this.data.abo_typen?.length ? this.data.abo_typen.reduce((acc, aboType) => acc + /* html */ `
               <div>
-                <ks-m-system-notification namespace="system-notification-default-" icon-name="${aboType.typ === "H" ? "AboPlus" : "Abo"}" with-icon-background>
+                <ks-m-system-notification namespace="system-notification-default-" icon-name="${aboType.typ === 'H' ? 'AboPlus' : 'Abo'}" with-icon-background>
                     <div slot="description">
                         <p>${aboType.text}</p>
                         <a-link namespace="underline-">
@@ -403,7 +441,7 @@ export default class EventDetail extends Shadow() {
     ])
   }
 
-  get data() {
+  get data () {
     return EventDetail.parseAttribute(this.getAttribute('data'))
   }
 }

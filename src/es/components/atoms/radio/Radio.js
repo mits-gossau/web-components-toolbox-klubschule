@@ -2,7 +2,7 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class Radio extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
@@ -10,7 +10,7 @@ export default class Radio extends Shadow() {
     }
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 
     this.box = this.root.querySelector('.box')
@@ -22,17 +22,17 @@ export default class Radio extends Shadow() {
     this.box.addEventListener('click', this.clickEventListener)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.box.removeEventListener('click', this.clickEventListener)
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(
       `:host > style[_css], ${this.tagName} > style[_css]`
     )
   }
 
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */ `
         :host {
           display: flex;

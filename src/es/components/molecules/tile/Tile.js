@@ -259,12 +259,6 @@ export default class Tile extends Shadow() {
     const warnMandatory = 'data attribute requires: '
     const data = Tile.parseAttribute(this.getAttribute('data'))
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
-    const iconA = /* HTML */`<svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2.622 8.98093V6.15293H0.00400003V5.17293H2.622V2.34493H3.644V5.17293H6.262V6.15293H3.644V8.98093H2.622ZM7.12705 10.4509L10.571 0.440927H12.167L15.555 10.4509H14.351L13.371 7.56693H9.24105L8.27505 10.4509H7.12705ZM11.313 1.44893L9.57705 6.60093H13.049L11.313 1.44893Z" fill="white"/>
-      </svg>`
-    const iconPlusA = /* HTML */`<svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0.504 10.4509L3.948 0.440927H5.544L8.932 10.4509H7.728L6.748 7.56693H2.618L1.652 10.4509H0.504ZM4.69 1.44893L2.954 6.60093H6.426L4.69 1.44893Z" fill="white"/>
-      </svg>`
 
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
@@ -275,7 +269,7 @@ export default class Tile extends Shadow() {
           <span class="m-tile__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
           ${data.iconTooltip
             ? `
-              <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
+              <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
                 <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
               </ks-m-tooltip>
             `
@@ -310,7 +304,7 @@ export default class Tile extends Shadow() {
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="m-tile__icon-box">
                   <ks-m-tooltip namespace="tooltip-right-" text="${icon.text}">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName}" size="1em"></a-icon-mdx>
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
                   </ks-m-tooltip>
                 </div>
               `, '')}           

@@ -56,7 +56,7 @@ export default class Event extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.root.querySelector('.event')
   }
 
@@ -508,7 +508,7 @@ export default class Event extends Shadow() {
           <div class="controls-right">
             <div class="icons">
               ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
-                <ks-m-badge type="primary" icon-name="${icon.iconName}" tooltip="${icon.text}">
+                <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}" tooltip="${icon.text}">
                 </ks-m-badge>
               `, '') : ''}
             </div>
@@ -539,16 +539,16 @@ export default class Event extends Shadow() {
    * @param {*} data
    * @returns icon path
    */
-  setIconUrl(data) {
-    let iconName = '';
-    if (data.status == "1") {
-      iconName = 'garanteed';
-    } else if (data.status == "2") {
-      iconName = 'started';
-    } else if (data.status == "3") {
-      iconName = 'await';
-    } else if (data.status == "4") {
-      iconName = 'almost';
+  setIconUrl (data) {
+    let iconName = ''
+    if (data.status == '1') {
+      iconName = 'garanteed'
+    } else if (data.status == '2') {
+      iconName = 'started'
+    } else if (data.status == '3') {
+      iconName = 'await'
+    } else if (data.status == '4') {
+      iconName = 'almost'
     }
 
     return `../../../../../../../img/icons/event-state-${iconName}.svg`
@@ -557,7 +557,7 @@ export default class Event extends Shadow() {
   /**
     * renderDetails
   */
-  async renderDetails() {
+  async renderDetails () {
     if (!this.details.children.length) {
       this.fetchModules([
         {

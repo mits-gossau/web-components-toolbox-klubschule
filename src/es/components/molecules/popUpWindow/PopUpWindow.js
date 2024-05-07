@@ -3,37 +3,29 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 
 /**
 * @export
-* @class Tooltip
+* @class PopUpWindow
 * @type {CustomElementConstructor}
 */
-export default class Tooltip extends Shadow() {
+export default class PopUpWindow extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.clickEventListener = event => {
-      this.tooltip.classList.toggle('tooltip-open')
-      if (this.tooltip.classList.contains('tooltip-open')) {
-        this.classList.add('open')
-      } else {
-        this.classList.remove('open')
-      }
-    }
+    this.closeListener = this.closeListener.bind(this)
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-
-    this.text = this.getAttribute('text') || 'This is a fallback tooltip text!'
-
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.tooltip = this.root.querySelector('.tooltip')
-
-    this.root.addEventListener('click', this.clickEventListener)
+    this.closeBtn.addEventListener('click', this.closeListener)
   }
 
   disconnectedCallback () {
-    this.root.removeEventListener('click', this.clickEventListener)
+    this.closeBtn.removeEventListener('click', this.closeListener)
+  }
+
+  closeListener () {
+    this.setAttribute('show', 'false')
   }
 
   /**
@@ -61,30 +53,30 @@ export default class Tooltip extends Shadow() {
     this.css = /* css */`
       :host {
         position: relative;
-        cursor: pointer;
         z-index: 10;
         display: flex;
         align-items: center;
+        font-size: 1rem;
       }
 
-      :host(.open) {
-        z-index: 11;
-      }
-
-      :host .tooltip {
+      :host([show=false]) {
         display: none;
+      }
+
+      :host .pop-up-window {
+        display: block;
         background-color: white;
         box-shadow: 0px 0px 12px 0px rgba(51, 51, 51, 0.1);
         padding: 1em;
         width: 23em;
         position: absolute;
-        top: var(--top);
-        left: var(--left);
-        right: var(--right);
-        bottom: var(--bottom);
+        top: var(--pop-up-window-top);
+        left: var(--pop-up-window-left);
+        right: var(--pop-up-window-right);
+        bottom: var(--pop-up-window-bottom);
       }
 
-      :host .tooltip::before {
+      :host .pop-up-window::before {
         content: '';
         display: block;
 
@@ -96,14 +88,12 @@ export default class Tooltip extends Shadow() {
         border-right: 1.25em solid transparent;
         border-bottom: 1.25em solid #FFFFFF;
 
-        top: var(--before-top);
-        left: var(--before-left);
-        right: var(--before-right);
-        bottom: var(--before-bottom);
-      }
+        top: var(--pop-up-window-before-top);
+        left: var(--pop-up-window-before-left);
+        right: var(--pop-up-window-before-right);
+        bottom: var(--pop-up-window-before-bottom);
 
-      :host .tooltip-open {
-        display: block;
+        transform: rotate(var(--pop-up-window-before-rotation, 0));
       }
 
       :host .close {
@@ -112,20 +102,46 @@ export default class Tooltip extends Shadow() {
         margin-bottom: 1.5em;
       }
 
+      :host hr {
+        background: var(--mdx-sys-color-neutral-subtle4, black);
+        height: 1px;
+        border: none;
+        margin: var(--mdx-sys-spacing-flex-large-2xs) 0;
+      }
+
+      :host h4 {
+        font-family: var(--mdx-sys-font-fix-label1-font-family);
+        font-size: var(--mdx-sys-font-fix-label1-font-size);
+        font-weight: var(--mdx-sys-font-fix-label1-font-weight);
+        line-height: var(--mdx-sys-font-fix-label1-line-height);
+        letter-spacing: var(--mdx-sys-font-fix-label1-letter-spacing);
+        margin: 0;
+      }
+
+      :host .overlay {
+          display: none;
+      }
+
       @media only screen and (max-width: _max-width_) {
-        :host .tooltip {
+        @keyframes slide-up {
+          from {transform: translateY(100%)}
+          to {transform: translateY(0%)}
+        }
+
+        :host .pop-up-window {
           position: fixed;
           z-index: 1000;
-          height: 18.75em;
+          min-height: 18.75em;
           width: 100%;
           top: auto;
           bottom: 0;
           left: 0;
           right: 0;
           padding: 0;
+          animation: slide-up .5s;
         }
 
-        :host .tooltip::before {
+        :host .pop-up-window::before {
           display: none;
         }
 
@@ -133,37 +149,16 @@ export default class Tooltip extends Shadow() {
         :host .text {
           padding: 1em 1em 0 1em;
         }
+
+        :host .overlay {
+          display: block;
+          position: fixed;
+          inset: 0;
+          background: black;
+          opacity: 0.5;
+        }
       }
     `
-    return this.fetchTemplate()
-  }
-
-  /**
-   * fetches the template
-   */
-  fetchTemplate () {
-    /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
-    switch (this.getAttribute('namespace')) {
-      case 'tooltip-default-':
-        return this.fetchCSS(
-          {
-            path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-            namespace: false
-          })
-      case 'tooltip-right-':
-        return this.fetchCSS([{
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-          namespace: false,
-          replaces: [{
-            pattern: '--tooltip-default-',
-            flags: 'g',
-            replacement: '--tooltip-right-'
-          }]
-        }, {
-          path: `${this.importMetaUrl}./right-/right-.css`, // apply namespace since it is specific and no fallback
-          namespace: false
-        }])
-    }
   }
 
   /**
@@ -171,17 +166,24 @@ export default class Tooltip extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
-    // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
+    const innerHTML = Array.from(this.root.children)
+
     this.html = /* HTML */`
-      <div class="tooltip">
+      <div class="overlay"></div>
+      <div class="pop-up-window">
         <div class="close">
           <a-icon-mdx icon-name="X" size="1.5em" class="icon-right"></a-icon-mdx>
         </div>
         <p class="text">
-          ${this.text}
+        ${/* innerHTML... */''}
         </p>
       </div>
     `
+
+    innerHTML.forEach(child => {
+      this.root.querySelector('.text').appendChild(child)
+    })
+
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
@@ -191,6 +193,10 @@ export default class Tooltip extends Shadow() {
   }
 
   get hasTooltip () {
-    return this.root.querySelector('.tooltip')
+    return this.root.querySelector('.pop-up-window')
+  }
+
+  get closeBtn () {
+    return this.root.querySelector('.close')
   }
 }

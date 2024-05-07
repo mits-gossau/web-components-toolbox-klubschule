@@ -32,7 +32,12 @@ export default class TileList extends Shadow() {
             bubbles: true,
             cancelable: true,
             composed: true
-          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, {tiles: tileData.courses}).tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '')))
+          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
+            // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
+            tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
+            if (tile.bezeichnung) tile.location.name = ''
+            return acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`
+          }, '')))
         }
       }
     }
@@ -165,22 +170,14 @@ export default class TileList extends Shadow() {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: start;
         padding-top: 3.5em;
+        gap: 1em;
       }
 
       :host ks-m-tile {
-        margin-right: 1em;
-        margin-bottom: 2em;
+        margin-bottom: 1em;
         width: 32%;
-      }
-
-      :host ks-m-tile:nth-child(3n) {
-        margin-right: 0;
-      }
-
-      :host ks-m-tile:last-child {
-        margin-right: 0;
       }
 
       :host .o-tile-list__foot {
@@ -255,7 +252,7 @@ export default class TileList extends Shadow() {
             <span class="o-tile-list__title">${data.title || warnMandatory + 'title'}</span>
             ${data.iconTooltip
               ? `
-                <ks-m-tooltip namespace="tooltip-right-" text="${data.iconTooltip}">
+                <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
                   <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
                 </ks-m-tooltip>
                   `
@@ -285,8 +282,8 @@ export default class TileList extends Shadow() {
               <div class="o-tile-list__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="o-tile-list__icon-box">
-                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.iconTooltip}">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.text}">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
                   </ks-m-tooltip>
                 </div>
               `, '')}           

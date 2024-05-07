@@ -13,14 +13,27 @@ export default class OffersPage extends Shadow() {
     this.setTotalListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
-          const bodySection = this.eventDetailURL ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+          const bodySection = this.eventDetailURL || this.hasAttribute('no-search-tab') ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
           bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
         }
       })
     }
+
+    this.translation = {}
+    this.translationListener = (event) => {
+      this.translation = event.detail.translation
+    }
   }
 
   connectedCallback () {
+    document.body.addEventListener('translation', this.translationListener)
+    this.dispatchEvent(new CustomEvent('request-translation',
+      {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+
     this.hidden = true
     const showPromises = []
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
@@ -28,10 +41,12 @@ export default class OffersPage extends Shadow() {
     Promise.all(showPromises).then(() => {
       this.hidden = false
     })
+
     this.addEventListener('with-facet', this.setTotalListener)
   }
 
   disconnectedCallback () {
+    document.body.removeEventListener('translation', this.translationListener)
     this.removeEventListener('with-facet', this.setTotalListener)
   }
 
@@ -75,16 +90,16 @@ export default class OffersPage extends Shadow() {
    * @return Promise<void>
    */
   renderHTML () {
-    this.html = this.eventDetailURL ? this.tabContentOne : /* html */`
+    this.html = this.eventDetailURL || this.hasAttribute('no-search-tab') ? this.tabContentOne : /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
             <li>
-              <ks-a-with-facet-counter>
+              <ks-a-with-facet-counter label="${this.translation['Search.TabCourse']}">
                 <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
               </ks-a-with-facet-counter>
             </li>
             <li>
-              <ks-a-with-facet-counter label=" Story & Informationen" total="contentItems.length">
+              <ks-a-with-facet-counter label="${this.translation['Search.TabContent']}" total="contentItems.length">
                 <button tab-target="content2" id="total-stories-tab-heading"></button>
               </ks-a-with-facet-counter>
             </li>
@@ -227,6 +242,7 @@ export default class OffersPage extends Shadow() {
                   <div col-lg="6" col-md="6" col-sm="12">
                     <ks-c-auto-complete
                       ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+                      ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
                       ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
                     >
                       <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
@@ -234,7 +250,7 @@ export default class OffersPage extends Shadow() {
                           <a-input
                             inputid="offers-page-input-search"
                             autofocus
-                            placeholder="Suchen..."
+                            placeholder="${this.translation['Search.InputPlaceholder']}"
                             icon-name="Search" 
                             icon-size="1.5em"
                             submit-search="request-auto-complete"
@@ -256,7 +272,7 @@ export default class OffersPage extends Shadow() {
                         <a-input
                           id="show-modal"
                           inputid="show-modal"
-                          placeholder="Ihr Angebot"
+                          placeholder="${this.translation['CourseList.YourOfferPlaceholder']}"
                           icon-name="Search"
                           icon-size="1.25em"
                           search type="search"
@@ -273,7 +289,7 @@ export default class OffersPage extends Shadow() {
                                   <a-input 
                                     id="offers-page-location-search-input"
                                     inputid="offers-page-location-search" 
-                                    placeholder="Ihr Standort?" 
+                                    placeholder="${this.translation['CourseList.YourLocationPlaceholder']}" 
                                     icon-name="Location" 
                                     icon-size="1.5em" 
                                     search
@@ -294,7 +310,7 @@ export default class OffersPage extends Shadow() {
                                       <ul>
                                           <li id="user-location">
                                               <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
-                                              <span>Aktueller Standort</span>
+                                              <span>${this.translation['Search.CurrentLocation']}</span>
                                           </li>
                                       </ul>
                                   </ks-m-auto-complete-list>
@@ -302,7 +318,7 @@ export default class OffersPage extends Shadow() {
                               <a-input 
                                 id="show-modal-location"
                                 inputid="show-modal"
-                                placeholder="Ihr Standort"
+                                placeholder="${this.translation['CourseList.YourLocationPlaceholder']}"
                                 icon-name="Location"
                                 icon-size="1.25em"
                                 search
@@ -321,14 +337,14 @@ export default class OffersPage extends Shadow() {
                       <div id="back">
                           &nbsp;
                       </div>
-                      <h3>Filter</h3>
+                      <h3>${this.translation.Filter}</h3>
                       <div id="close">
                           <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
                       </div>
                   </div>
                   <div class="container dialog-content">
                       <p class="reset-link">
-                          <a-button namespace="button-transparent-" request-event-name="reset-all-filters">Alles zur&uuml;cksetzen <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                          <a-button namespace="button-transparent-" request-event-name="reset-all-filters">${this.translation['Filter.ResetAllFilter']} <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
                           </a-button>
                       </p>
                       <div class="sub-content">
@@ -342,7 +358,7 @@ export default class OffersPage extends Shadow() {
                                 <a-input
                                   inputid="offers-page-input-search"
                                   autofocus
-                                  placeholder="Angebot suchen"
+                                  placeholder="${this.translation['Search.InputPlaceholder']}"
                                   icon-name="Search" 
                                   icon-size="calc(20rem/18)"
                                   submit-search="request-auto-complete"
@@ -364,7 +380,7 @@ export default class OffersPage extends Shadow() {
                               <a-input
                                 id="show-modal"
                                 inputid="show-modal"
-                                placeholder="Ihr Angebot"
+                                placeholder="${this.translation['CourseList.YourOfferPlaceholder']}"
                                 icon-name="Search"
                                 icon-size="1.25em"
                                 search type="search"
@@ -373,12 +389,12 @@ export default class OffersPage extends Shadow() {
                               </a-input>
                             </m-dialog>
                           </ks-c-auto-complete>
-                          <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="Schliessen" translation-key-reset="zur&uuml;cksetzen"></ks-m-filter-categories>
+                          <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="${this.translation['Filter.closeOverlayer']}" translation-key-reset="${this.translation['Filter.ResetFilter']}"></ks-m-filter-categories>
                       </div>
                   </div>
                   <div class="container dialog-footer">
-                      <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
-                      <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="Angebote">Angebote</ks-a-number-of-offers-button>
+                      <a-button id="close" namespace="button-secondary-" no-pointer-events>${this.translation['Filter.closeOverlayer']}</a-button>
+                      <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="${this.translation['CourseList.OffersPlaceholder']}">${this.translation['CourseList.OffersPlaceholder']}</ks-a-number-of-offers-button>
                   </div>
               </m-dialog>
               <o-grid namespace="grid-432-auto-colums-auto-rows-">
@@ -390,7 +406,7 @@ export default class OffersPage extends Shadow() {
                     }
                   </style>
                   <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
-                      <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>Alle Filter
+                      <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.translation['CourseList.FilterAllPlaceholder']}
                   </ks-a-button>
                   <ks-m-filter-select></ks-m-filter-select>
               </o-grid>
@@ -405,7 +421,7 @@ export default class OffersPage extends Shadow() {
               ` : ''}
               <ks-a-with-facet-pagination class="hidden" id="pagination">
                 <ks-a-button namespace="button-primary-" color="secondary">
-                    <span>Weitere Angebote</span>
+                    <span>${this.translation['CourseList.MoreOffersPlaceholder']}</span>
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                 </ks-a-button>
               </ks-a-with-facet-pagination>
@@ -429,67 +445,6 @@ export default class OffersPage extends Shadow() {
                 </div>
                 <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
               </a>
-            </ks-m-content-search-item>
-            <ks-m-content-search-item>
-              <a href="#">
-                <div>
-                  <h3>Lorem Ipsum Headline</h3>
-                  <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-                <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
-              </a>
-            </ks-m-content-search-item>
-            <ks-m-content-search-item>
-              <a href="#">
-                <div>
-                  <h3>Lorem Ipsum Headline</h3>
-                  <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-              </a>
-            </ks-m-content-search-item>
-            <ks-m-content-search-item>
-              <a href="#">
-                <div>
-                  <h3>Lorem Ipsum Headline</h3>
-                  <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-                <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
-              </a>
-            </ks-m-content-search-item>
-            <ks-m-content-search-item>
-              <a href="#">
-                <div>
-                  <h3>Lorem Ipsum Headline</h3>
-                  <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-                <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
-              </a>
-            </ks-m-content-search-item>
-            <ks-m-content-search-item>
-              <a href="#">
-                <div>
-                  <h3>Lorem Ipsum Headline</h3>
-                  <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-                <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
-              </a>
-            </ks-m-content-search-item>
-            <ks-m-content-search-item>
-              <a href="#">
-                <div>
-                  <h3>Lorem Ipsum Headline</h3>
-                  <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-                <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
-              </a>
-            </ks-m-content-search-item>
-            <ks-m-content-search-item>
-              <a href="#">
-                <div>
-                  <h3>Lorem Ipsum Headline</h3>
-                  <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-              </a>
             </ks-m-content-search-item>-->
           </div>
         </o-grid>
@@ -501,7 +456,7 @@ export default class OffersPage extends Shadow() {
     return this.root.querySelector('ks-m-tab')
   }
 
-  get badgeContainer() {
+  get badgeContainer () {
     return this.root.querySelector('ks-m-badge-legend')
   }
 

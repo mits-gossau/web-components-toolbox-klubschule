@@ -7,11 +7,11 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class AboTile extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) {
       new Promise(resolve => {
@@ -33,7 +33,7 @@ export default class AboTile extends Shadow() {
     }
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
   }
 
   /**
@@ -41,7 +41,7 @@ export default class AboTile extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -50,14 +50,14 @@ export default class AboTile extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.root.querySelector('ks-m-event-detail')
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
         display: flex;
@@ -76,16 +76,16 @@ export default class AboTile extends Shadow() {
     `
   }
 
-  get dataStringified() {
+  get dataStringified () {
     return this.getAttribute('initial-request')
   }
 
-  get dataAsJson() {
+  get dataAsJson () {
     return AboTile.parseAttribute(this.dataStringified)
   }
 
-  get details() {
-    return this.root.querySelector("#aboDetails")
+  get details () {
+    return this.root.querySelector('#aboDetails')
   }
 
   /**
@@ -93,7 +93,7 @@ export default class AboTile extends Shadow() {
   * @param {any} aboDetail - An array of course fetch objects.
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  renderHTML(aboDetail) {
+  renderHTML (aboDetail) {
     this.html = ''
     this.html = /* html */ `
       <ks-m-event-detail

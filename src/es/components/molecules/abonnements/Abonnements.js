@@ -7,7 +7,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class Abonnements extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
     this.requestAbonnements = () => {
       new Promise(resolve => {
@@ -26,13 +26,13 @@ export default class Abonnements extends Shadow() {
     }
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
     this.addEventListener(`open-abonnements-dialog-${this.aboId}`, this.requestAbonnements)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.removeEventListener(`open-abonnements-dialog-${this.aboId}`, this.requestAbonnements)
   }
 
@@ -41,7 +41,7 @@ export default class Abonnements extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
@@ -50,14 +50,14 @@ export default class Abonnements extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.dialog
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host h3 {
         font-size: 1.25rem;
@@ -96,7 +96,7 @@ export default class Abonnements extends Shadow() {
     * renderHTML
     * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  renderHTML() {
+  renderHTML () {
     this.html = /* html */ `
       <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="open-abonnements-dialog-${this.aboId}" id="offers-page-filter-categories" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
@@ -142,10 +142,10 @@ export default class Abonnements extends Shadow() {
     * @param data Abonnement Infos
     * @returns {Promise<void>} The function `renderContent` returns a Promise.
   */
-  renderContent(data) {
+  renderContent (data) {
     this.total.innerHTML = data.total_label
-    this.content.innerHTML = data.courses?.length ? 
-      data.courses.reduce(
+    this.content.innerHTML = data.courses?.length
+      ? data.courses.reduce(
         (acc, abonnement) => acc + (
           abonnement.locations?.length ? /* html */ `
             <ks-o-tile-list data='${JSON.stringify(abonnement)}'>
@@ -155,8 +155,8 @@ export default class Abonnements extends Shadow() {
             </ks-m-tile>
           `
         ),
-      '')
-    : ''
+        '')
+      : ''
 
     return this.fetchModules([
       {
@@ -170,35 +170,35 @@ export default class Abonnements extends Shadow() {
     ])
   }
 
-  get abonnementsURL() {
+  get abonnementsURL () {
     return this.getAttribute('abonnements-api')
   }
 
-  get buttonCloseLabel() {
-    return this.getAttribute('button-close-label') || "Schliessen"
+  get buttonCloseLabel () {
+    return this.getAttribute('button-close-label') || 'Schliessen'
   }
 
-  get linkLabel() {
+  get linkLabel () {
     return this.getAttribute('link-label')
   }
 
-  get aboId() {
+  get aboId () {
     return this.getAttribute('abo-id')
   }
 
-  get dialog() {
+  get dialog () {
     return this.root.querySelector('m-dialog')
   }
-  
-  get innerDialog() {
+
+  get innerDialog () {
     return this.dialog.root.querySelector('dialog')
   }
 
-  get total() {
+  get total () {
     return this.innerDialog.querySelector('#total')
   }
 
-  get content() {
+  get content () {
     return this.innerDialog.querySelector('#content')
   }
 }
