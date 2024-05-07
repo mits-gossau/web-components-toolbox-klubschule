@@ -120,7 +120,7 @@ export default class Contact extends Shadow() {
 
     return this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/Link/Link.js`,
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
         name: 'a-link'
       },
       {
