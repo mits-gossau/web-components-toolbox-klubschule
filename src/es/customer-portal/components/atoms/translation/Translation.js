@@ -25,7 +25,6 @@ export default class Translation extends Shadow() {
     const { keys } = event.detail
     event.detail.fetch.then(translations => {
       const t = translations[keys]
-      debugger
       this.renderHTML(t)
     })
   }
@@ -53,7 +52,9 @@ export default class Translation extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host {}
+      :host span {
+        background:red;
+      }
       @media only screen and (max-width: _max-width_) {
         :host {}
       }
@@ -89,15 +90,12 @@ export default class Translation extends Shadow() {
 
   /**
    * Render HTML
-   * @param {String} text
    * @returns void
    */
-  renderHTML (text) {
-    if (!text) return
-    debugger
-    this.html = ''
+  renderHTML (text = 'TRANS') {
     this.span = this.root.querySelector('span') || document.createElement('span')
-    this.span.innerHTML = text || ''
+    this.span = document.createElement('span')
+    this.span.textContent = text
     this.html = this.span
   }
 }

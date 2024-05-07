@@ -17,7 +17,7 @@ export default class Counter extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML(0)
+    // if (this.shouldRenderHTML()) this.renderHTML(0)
     document.body.addEventListener(this.getAttribute('update-counter') || 'update-counter', this.updateCounterListener)
   }
 
@@ -109,7 +109,6 @@ export default class Counter extends Shadow() {
       let txt = appointmentsText
       if (listType === 'booked-appointments') txt = bookedSubscriptionsText
 
-      debugger
       // TRANS
       const translation = new child[0][0].constructorClass() // eslint-disable-line
       translation.dataset.transKey = txt
@@ -118,18 +117,16 @@ export default class Counter extends Shadow() {
       //
       this.html = this.element
       //
-      if (!this.rendered) {
-        this.dispatchEvent(new CustomEvent('request-translations',
-          {
-            detail: {
-              keys: ['CP.cpAppointmentDwnPDF']
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }
-        ))
-      }
+      this.dispatchEvent(new CustomEvent('request-translations',
+        {
+          detail: {
+            keys: ['CP.cpAppointmentDwnPDF']
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }
+      ))
       this.rendered = true
     })
   }

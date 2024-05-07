@@ -37,7 +37,8 @@ export default class Translations extends HTMLElement {
       signal: this.abortControllerTranslations.signal
     }
     // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').translations}`
+    // const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').translations}`
+    const endpoint = '../../../../src/es/customer-portal/controllers/translations/dummy.json'
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-translations') || 'update-translations', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
