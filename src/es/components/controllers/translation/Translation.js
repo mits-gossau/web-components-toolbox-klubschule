@@ -13,7 +13,6 @@ export default class Translation extends Shadow() {
     this.translation = {}
 
     // check if translation data is provided
-    console.log(this.getAttribute('translation'))
     if (!this.getAttribute('translation')) {
       console.error('Translation data is wrong or missing')
     }
