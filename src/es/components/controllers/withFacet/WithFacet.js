@@ -247,7 +247,8 @@ export default class WithFacet extends Shadow() {
           "filter": ${JSON.stringify(event.detail.filter)},
           "MandantId": ${this.getAttribute('mandant-id') || initialRequestObjFrozen.MandantId || 110},
           "PortalId": ${this.getAttribute('portal-id') || initialRequestObjFrozen.PortalId || 29},
-          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}"
+          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}",
+          "onlycourse": true
         }`
       }
       // @ts-ignore
