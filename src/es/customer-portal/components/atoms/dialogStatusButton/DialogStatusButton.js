@@ -124,6 +124,7 @@ export default class DialogStatusButton extends Shadow() {
     this.css = /* css */`
       :host {
         display: flex;
+        align-items: center;
         flex-direction: row-reverse;
         justify-content: space-between;
         width: 100%;

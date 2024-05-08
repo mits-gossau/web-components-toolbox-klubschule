@@ -45,7 +45,9 @@ export default class AppointmentsFilter extends Shadow() {
         width:100%;
       }
       @media only screen and (max-width: _max-width_) {
-        :host  {}
+        :host  {
+          flex-direction: column;
+        }
       }
     `
     return this.fetchTemplate()
