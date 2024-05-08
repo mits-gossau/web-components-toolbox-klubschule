@@ -99,6 +99,9 @@ export default class KsBodyStyle extends BodyStyle {
         :host([variant=narrow]) > [namespace="teaser-fullwidth-"] {
             width: calc(var(--body-section-default-width, 86.666%) + var(--mdx-sys-spacing-fix-m) * 2);
         }
+        :host > [namespace="teaser-text-image-"][image-size="small"] {
+            width: var(--body-section-narrow-width);
+        }
 
         /* custom element spacings */
         :host > ks-m-figure,

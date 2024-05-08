@@ -47,6 +47,20 @@ a-picture {
     min-height: unset;
 }
 
+:host([image-size="small"]) a-picture {
+    max-width: 240px;
+    --picture-teaser-transition: transform .5s ease-out;
+    --picture-teaser-img-object-fit: contain;
+    --picture-teaser-aspect-ratio: none;
+    --picture-teaser-img-max-height: none;
+    --picture-teaser-img-max-width: 100%;
+    --picture-teaser-img-width: unset;
+}
+
+:host([image-size="small"][href]:hover) {
+    --picture-teaser-transform: scale(1.0);
+}
+
 @media only screen and (max-width: _max-width_ ) {
     :host {
         flex-direction: column;
