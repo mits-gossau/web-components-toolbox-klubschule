@@ -334,7 +334,7 @@ export default class OffersPage extends Shadow() {
                       <div id="back">
                           &nbsp;
                       </div>
-                      <h3>${this.translation.Filter}</h3>
+                      <h3>${this.getTranslation('Filter')}</h3>
                       <div id="close">
                           <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
                       </div>
