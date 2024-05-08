@@ -65,7 +65,19 @@ export default class Navigation extends Shadow() {
     this.css = /* css */`
       :host {
         display:flex;
-        background-color:#dfdfdf;
+        margin:0;
+      }
+      :host ul {
+        overflow-x: auto;
+      }
+      :host li {
+        padding:1em 0;
+      }
+      :host ul li + li {
+        margin-left: 1.5em;
+      }
+      :host .active {
+        border-bottom: var(--active-border-bottom, 0);
       }
       @media only screen and (max-width: _max-width_) {
         :host {}
@@ -105,18 +117,27 @@ export default class Navigation extends Shadow() {
    * @returns void
    */
   renderHTML () {
+    const fetchModules = this.fetchModules([
+      {
+        path: `${this.importMetaUrl}'../../../../../../../es/components/molecules/tab/Tab.js`,
+        name: 'ks-m-tab'
+      }
+    ])
     this.navigationWrapper = this.root.querySelector('div') || document.createElement('div')
-    this.html = /* html */ `
-      <div>
-        <a href="/" route target="_self">
-          Abo-Termine buchen
-        </a> -
-        <a href="/booked" route target="_self">
-          Gebuchte Termine
-        </a> -
-        <a href="/subscriptions" route target="_self">
-          Meine Abonnemente
-        </a>
-      </div>`
+    Promise.all([fetchModules]).then(() => {
+      this.html = /* html */ `
+          <ul>
+            <li class="active">
+              <a href="/" route target="_self">Abo-Termine buchen</a>
+            </li>
+            <li>
+              <a href="/booked" route target="_self">Gebuchte Termine</a>
+            </li>
+            <li>
+              <a href="/subscriptions" route target="_self">Meine Abonnemente</a>
+            </li>
+          </ul>
+      `
+    })
   }
 }

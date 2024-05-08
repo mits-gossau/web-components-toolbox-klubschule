@@ -22,37 +22,40 @@
             <c-fetch-css>
                 <c-fetch-modules>
                     <c-translations>
-                    <c-appointments data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
-                            <c-subscriptions data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
-                                <p-general>
-                                    <o-body-style has-background=""
-                                        background-color="var(--mdx-sys-color-accent-6-subtle1)" tabindex="0"
-                                        aria-label="Section">
-                                         <div>
-                                            <cp-m-navigation></cp-m-navigation>
-                                         </div>
-                                        <c-router routes="[
-                                            {
-                                                'name': 'p-appointments',
-                                                'path': '../../pages/Appointments.js',
-                                                'regExp': ['/[#=]{1}\/$/', '/^\/$/']
-                                            },
-                                            {
-                                                'name': 'p-booked',
-                                                'path': '../../pages/Booked.js',
-                                                'regExp': ['/[#=]{1}\/booked/']
-                                            },
-                                            {
-                                                'name': 'p-subscriptions',
-                                                'path': '../../pages/Subscriptions.js',
-                                                'regExp': ['/[#=]{1}\/subscriptions/']
-                                            }
-                                            ]">
-                                        </c-router>
-                                    </o-body-style>
-                                </p-general>
-                            </c-subscriptions>
-                    </c-appointments>
+                        <c-appointments data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
+                                <c-subscriptions data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
+                                    <p-general>
+                                        <o-body-style 
+                                            has-background=""
+                                            background-color="var(--mdx-sys-color-accent-6-subtle1)" 
+                                            tabindex="0"
+                                            aria-label="Section"
+                                            >
+                                                
+                                                    <cp-m-navigation namespace="navigation-default-"></cp-m-navigation>
+                                               
+                                            <c-router routes="[
+                                                {
+                                                    'name': 'p-appointments',
+                                                    'path': '../../pages/Appointments.js',
+                                                    'regExp': ['/[#=]{1}\/$/', '/^\/$/']
+                                                },
+                                                {
+                                                    'name': 'p-booked',
+                                                    'path': '../../pages/Booked.js',
+                                                    'regExp': ['/[#=]{1}\/booked/']
+                                                },
+                                                {
+                                                    'name': 'p-subscriptions',
+                                                    'path': '../../pages/Subscriptions.js',
+                                                    'regExp': ['/[#=]{1}\/subscriptions/']
+                                                }
+                                                ]">
+                                            </c-router>
+                                        </o-body-style>
+                                    </p-general>
+                                </c-subscriptions>
+                        </c-appointments>
                     </c-translations>
                 </c-fetch-modules>
             </c-fetch-css>
