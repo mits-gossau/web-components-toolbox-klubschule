@@ -230,6 +230,11 @@ export default class AppointmentsList extends Shadow() {
     return html
   }
 
+  /**
+   * @param {any} appointments
+   * @param {any} tileComponent
+   * @param {any} heading
+   */
   renderDayList (appointments, tileComponent, heading) {
     const { selectedSubscription, dayList } = this.getDayListData(appointments)
     const list = []
@@ -250,11 +255,19 @@ export default class AppointmentsList extends Shadow() {
     }
   }
 
-  renderDayHeading (data, heading) {
-    const title = new heading.constructorClass() // eslint-disable-line
-    title.setAttribute('tag', 'h2')
-    title.innerHTML = data
-    return title
+  /**
+   * Render Day Heading
+   * Example: Heute: Mittwoch, 08. Mai
+   * @param {string} headingText Heading Text
+   * @param {{ constructorClass: new () => any; }} headingComponent Heading Component
+   * @param {string} headingType Heading Type - H1, H2, etc.
+   * @returns {HTMLElement} Heading Element
+   */
+  renderDayHeading (headingText, headingComponent, headingType = 'h2') {
+    const heading = new headingComponent.constructorClass() // eslint-disable-line
+    heading.setAttribute('tag', headingType)
+    heading.innerHTML = headingText
+    return heading
   }
 
   /**
@@ -275,11 +288,20 @@ export default class AppointmentsList extends Shadow() {
     return tileComponent
   }
 
-  cleanAndStringifyData (data) {
-    const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
-    return escapeForHtml(JSON.stringify(data))
+  /**
+   * Clean/Escape HTML String
+   * @param {string} htmlString HTML String
+   * @returns {string} Cleaned/Escaped HTML String
+   */
+  cleanAndStringifyData (htmlString) {
+    const escapeForHtml = (/** @type {any} */ string) => string.replaceAll(/'/g, '&#39;')
+    return escapeForHtml(JSON.stringify(htmlString))
   }
 
+  /**
+   * Get day list data
+   * @param {object} data
+   */
   getDayListData (data) {
     let booked = {}
     if (!data.selectedSubscription) {
