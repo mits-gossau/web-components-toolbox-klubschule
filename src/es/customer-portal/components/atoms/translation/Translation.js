@@ -1,6 +1,8 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/* global CustomEvent */
+
 /**
 * @export
 * @class Translation
@@ -15,6 +17,16 @@ export default class Translation extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
     document.body.addEventListener(this.getAttribute('update-translations') || 'update-translations', this.updateTranslationsListener)
+    this.dispatchEvent(new CustomEvent('request-translations',
+      {
+        detail: {
+          keys: [this.dataset.transKey]
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }
+    ))
   }
 
   disconnectedCallback () {
@@ -24,7 +36,6 @@ export default class Translation extends Shadow() {
   updateTranslationsListener = (event) => {
     const { keys } = event.detail
     event.detail.fetch.then(translations => {
-      // TODO
       const t = translations[keys]
       this.renderHTML(t)
     })
@@ -93,7 +104,7 @@ export default class Translation extends Shadow() {
    * Render HTML
    * @returns void
    */
-  renderHTML (text = 'TRANS') {
+  renderHTML (text = '[TRANSLATION MISSING]') {
     this.span = this.root.querySelector('span') || document.createElement('span')
     this.span.textContent = text
     this.html = this.span

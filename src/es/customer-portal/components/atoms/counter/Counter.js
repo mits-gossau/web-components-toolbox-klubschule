@@ -1,8 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
-/* global CustomEvent */
-
 /**
 * @export
 * @class Counter
@@ -25,6 +23,10 @@ export default class Counter extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-counter') || 'update-counter', this.updateCounterListener)
   }
 
+  /**
+   * Listen to counter update event
+   * @param {{ detail: { counter: any; type: string; }}} event
+   */
   updateCounterListener = (event) => {
     let counter = event.detail.counter
     if (event.detail.type === 'decrement') {
@@ -93,7 +95,7 @@ export default class Counter extends Shadow() {
 
   /**
    * Render HTML
-   * @param {Number} counter
+   * @param {number} counter
    * @returns void
    */
   renderHTML (counter) {
@@ -108,25 +110,13 @@ export default class Counter extends Shadow() {
     Promise.all([fetchModules]).then((child) => {
       let txt = appointmentsText
       if (listType === 'booked-appointments') txt = bookedSubscriptionsText
-
+      this.element.innerText = `${counter} `
       // TRANS
       const translation = new child[0][0].constructorClass() // eslint-disable-line
-      translation.dataset.transKey = txt // TODO: For what?
+      translation.dataset.transKey = txt
       //
-      this.element.innerText = `${counter}`
       this.element.append(translation)
       this.html = this.element
-      //
-      this.dispatchEvent(new CustomEvent('request-translations',
-        {
-          detail: {
-            keys: ['CP.cpAppointmentDwnPDF']
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }
-      ))
       this.rendered = true
     })
   }

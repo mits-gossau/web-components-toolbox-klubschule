@@ -169,8 +169,13 @@ export default class AppointmentsList extends Shadow() {
           <o-grid namespace="grid-12er-">
             <div col-lg="12" col-md="12" col-sm="12">
               <ks-a-heading tag="h1">
-                <ks-a-counter namespace="counter-default-" data-list-type="${this.dataset.listType}" data-heading-type="h1" data-booked-subscriptions-text="gebuchte Termine" data-appointments-text="Angebote">
-                </ks-a-counter>
+                <ks-a-counter
+                  namespace="counter-default-"
+                  data-list-type="${this.dataset.listType}" 
+                  data-heading-type="h1" 
+                  data-booked-subscriptions-text="CP.cpMenuBookedAppointments" 
+                  data-appointments-text="CP.cpAppointmentDwnPDF"
+                ></ks-a-counter>
               </ks-a-heading>
             </div>
             ${(!this.dataset.showFilters || this.dataset.showFilters === 'true')
