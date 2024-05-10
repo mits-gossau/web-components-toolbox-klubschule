@@ -10,7 +10,7 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 */
 export default class Translation extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
   }
 
   connectedCallback () {

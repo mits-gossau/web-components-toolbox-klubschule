@@ -146,13 +146,6 @@ export default class SubscriptionsList extends Shadow() {
     }
   }
 
-  // renderDayHeading (data, heading) {
-  //   const title = new heading.constructorClass() // eslint-disable-line
-  //   title.setAttribute('tag', 'h2')
-  //   title.innerHTML = data
-  //   return title
-  // }
-
   makeTileComponent (tile, subscription) {
     const subscriptionData = this.cleanAndStringifyData(subscription)
     const tileComponent = new tile.constructorClass({ namespace: 'tile-subscriptions-' }) // eslint-disable-line
@@ -167,28 +160,4 @@ export default class SubscriptionsList extends Shadow() {
     const escapeForHtml = (htmlString) => htmlString.replaceAll(/'/g, '&#39;')
     return escapeForHtml(JSON.stringify(data))
   }
-
-  // getDayListData (data) {
-  //   let booked = {}
-  //   if (!data.selectedSubscription) {
-  //     booked = data.dayList[0].subscriptionCourseAppointments[0]
-  //   }
-  //   const selectedSubscription = data.selectedSubscription
-  //     ? data.selectedSubscription
-  //     : {
-  //         subscriptionBalance: booked.subscriptionBalance,
-  //         subscriptionDescription: booked.subscriptionDescription,
-  //         subscriptionId: booked.subscriptionId,
-  //         subscriptionMode: booked.subscriptionMode,
-  //         subscriptionType: booked.subscriptionType,
-  //         subscriptionValidFrom: booked.subscriptionValidFrom,
-  //         subscriptionValidTo: booked.subscriptionValidTo
-  //       }
-  //   const dayList = data.selectedSubscription ? data.selectedSubscription.dayList : data.dayList
-  //   delete selectedSubscription.dayList
-  //   return {
-  //     selectedSubscription,
-  //     dayList
-  //   }
-  // }
 }

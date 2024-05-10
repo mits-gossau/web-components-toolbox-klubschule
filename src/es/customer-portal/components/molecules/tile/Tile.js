@@ -11,7 +11,6 @@ import { makeUniqueCourseId, escapeForHtml, getTileState } from '../../../helper
 export default class AppointmentTile extends Tile {
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
-    //this.courseData = null
     this.selectedSubscription = null
   }
 
@@ -283,7 +282,7 @@ export default class AppointmentTile extends Tile {
       const courseData = Tile.parseAttribute(this.getAttribute('data'))
       this.selectedSubscription = Tile.parseAttribute(this.dataset.selectedSubscription)
       if (this.dataset.listType === 'subscriptions') {
-        this.html = this.renderSubscription(courseData)
+        this.html = this.renderTileSubscription(courseData)
       } else {
         this.html = this.renderTile(courseData, this.selectedSubscription)
       }
@@ -293,7 +292,6 @@ export default class AppointmentTile extends Tile {
   renderTile (content, selectedSubscription) {
     const tileState = getTileState(courseAppointmentStatusMapping[content.courseAppointmentStatus], content)
     const courseId = makeUniqueCourseId(content)
-    const { courseAppointmentStatus } = content
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
@@ -335,13 +333,9 @@ export default class AppointmentTile extends Tile {
               </div>
             </div><!-- parent body END -->
             <div class="parent-footer">
-                ${(courseAppointmentStatus === 5 || courseAppointmentStatus === 1)
-                ? /* html */ `
-                  <div class="course-booking">
-                    <m-course-dialog namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></m-course-dialog>
-                  </div>
-                  `
-                : ''}
+              <div class="course-booking">
+                <m-course-dialog namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></m-course-dialog>
+              </div>
               <div class="course-price">
                 <span class="m-tile__title">
                   ${content.lessonPrice}
@@ -354,7 +348,7 @@ export default class AppointmentTile extends Tile {
     `
   }
 
-  renderSubscription (subscription) {
+  renderTileSubscription (subscription) {
     const tileState = getTileState(courseAppointmentStatusMapping[1], subscription)
     const courseId = `${subscription.subscriptionId}_${subscription.subscriptionKindId}`
     const from = this.formatSubscriptionAppointmentDate(subscription.subscriptionValidFrom)
@@ -367,7 +361,7 @@ export default class AppointmentTile extends Tile {
                 <div class="subscription-info">
                   <div>
                     <span class="m-tile__title title">
-                      <a-course-title request-detail="request-subscription-detail" data-list-type="subscriptions" namespace="course-title-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></a-course-title>
+                      <a-course-title data-list-type="subscriptions" namespace="course-title-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></a-course-title>
                     </span>
                   </div>
                   <div>

@@ -127,7 +127,7 @@ export default class Navigation extends Shadow() {
     Promise.all([fetchModules]).then(() => {
       this.html = /* html */ `
           <ul>
-            <li class="active">
+            <li>
               <a href="/" route target="_self">Abo-Termine buchen</a>
             </li>
             <li>

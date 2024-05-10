@@ -27,11 +27,12 @@ export default class CourseDialog extends Shadow() {
     this.courseSubscription = JSON.parse(this.dataset.subscription)
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) {
+      debugger
       if (this.dataset.listType === 'subscriptions') {
         this.renderSubscriptionsHTML(this.courseId, this.courseData)
-        return
+      } else {
+        this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
       }
-      this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
     }
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking-confirmation') || 'request-show-dialog-booking-confirmation', this.requestShowDialogBookingConfirmationListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-reversal-confirmation') || 'request-show-dialog-reversal-confirmation', this.requestShowDialogReversalConfirmationListener)
@@ -39,6 +40,7 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
+    document.body.addEventListener('update-subscription-detail', this.updateSubscriptionCourseAppointmentDetailListener)
   }
 
   disconnectedCallback () {
@@ -47,13 +49,15 @@ export default class CourseDialog extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
     document.body.removeEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
     this.subscriptionsPdfLink?.removeEventListener('click', this.subscriptionPdfLinkListener)
+    document.body.removeEventListener('update-subscription-detail', this.updateSubscriptionCourseAppointmentDetailListener)
   }
 
   /**
    * Trigger Subscription PDF Download
-   * @param {any} event 
+   * @param {any} event
    */
   subscriptionPdfLinkListener (event) {
     event.preventDefault()
@@ -96,6 +100,7 @@ export default class CourseDialog extends Shadow() {
       this.viewContent.innerHTML = ''
       event.detail.fetch.then(courseDetail => {
         this.courseDetail = courseDetail
+        debugger
         // open dialog
         this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
           {

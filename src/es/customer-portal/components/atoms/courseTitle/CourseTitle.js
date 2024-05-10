@@ -28,8 +28,15 @@ export default class CourseTitle extends Shadow() {
   }
 
   clickEventListener = () => {
+    // this.dispatchEvent(new CustomEvent(this.getAttribute('request-detail') || 'request-subscription-course-appointment-detail',
+    console.log(this.getAttribute('request-detail'))
     const type = this.dataset.listType ? this.dataset.listType : 'detail'
-    this.dispatchEvent(new CustomEvent(this.getAttribute('request-detail') || 'request-subscription-course-appointment-detail',
+    let evtName = 'request-subscription-course-appointment-detail'
+    if (type === 'subscriptions') {
+      evtName = 'request-subscription-detail'
+    }
+    debugger
+    this.dispatchEvent(new CustomEvent(evtName,
       {
         detail: {
           tags: `[${this.dataset.content}, ${this.dataset.subscription}, ${JSON.stringify({ type })}]`

@@ -240,9 +240,9 @@ export default class AppointmentsList extends Shadow() {
     const list = []
     let counter = 0
     dayList.forEach(day => {
+      counter += day.subscriptionCourseAppointments.length
       const dayWrapper = document.createElement('div')
       dayWrapper.appendChild(this.renderDayHeading(day.weekday, heading))
-      counter += day.subscriptionCourseAppointments.length
       day.subscriptionCourseAppointments.forEach(appointment => {
         const tile = this.makeTileComponent(tileComponent, appointment, selectedSubscription)
         dayWrapper.appendChild(tile)

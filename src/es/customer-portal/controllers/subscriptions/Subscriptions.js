@@ -79,6 +79,7 @@ export default class Subscriptions extends HTMLElement {
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionDetail}`
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionDetail)
+    debugger
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
@@ -91,6 +92,30 @@ export default class Subscriptions extends HTMLElement {
       cancelable: true,
       composed: true
     }))
+    // this.dispatchEvent(new CustomEvent('xxx', {
+    //   detail: {
+    //     fetch: fetch(endpoint, fetchOptions).then(async response => {
+    //       if (response.status >= 200 && response.status <= 299) return await response.json()
+    //     }),
+    //     id,
+    //     type
+    //   },
+    //   bubbles: true,
+    //   cancelable: true,
+    //   composed: true
+    // }))
+    // this.dispatchEvent(new CustomEvent('update-subscription-detail', {
+    //   detail: {
+    //     fetch: fetch(endpoint, fetchOptions).then(async response => {
+    //       if (response.status >= 200 && response.status <= 299) return await response.json()
+    //     }),
+    //     id,
+    //     type
+    //   },
+    //   bubbles: true,
+    //   cancelable: true,
+    //   composed: true
+    // }))
   }
 
   /**
