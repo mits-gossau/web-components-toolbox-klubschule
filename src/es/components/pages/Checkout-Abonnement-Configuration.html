@@ -7,3 +7,31 @@
         <p>Bitte beachten Sie, dass das Abonnement nach dem Kauf zuerst durch die Klubschule manuell freigeschalten werden muss. Dieser Prozess wird nur innerhalb der normalen Arbeitszeiten durchgeführt.</p>
     </div>
 </ks-m-system-notification>
+
+<style>
+    :host {
+        --h1-margin: var(--mdx-sys-spacing-flex-large-s) auto var(--mdx-sys-spacing-flex-large-xs) auto;
+    }
+</style>
+<h1>Ab wann soll Ihr Abonnement gültig sein?</h1>
+
+<m-simple-form load-form-styles namespace="simple-form-default-">
+    <style>
+        :host {
+            --simple-form-default-color: var(--mdx-comp-inputfield-placeholder-color-default);
+        }
+        :host label {
+            display: inline-block;
+            color: var(--mdx-comp-inputfield-label-color-default);
+            font: var(--mdx-comp-inputfield-font-label);
+            margin-bottom: var(--mdx-sys-spacing-flex-small-2xs);
+        }
+        :host input {
+            font: var(--mdx-comp-inputfield-font-default);
+        }
+    </style>
+    <form action="#">
+        <label for="abo-date-config">Start der Gültigkeit *</label>
+        <input type="date" id="abo-date-config" name="start-date" required onfocus="this.min=new Date().toISOString().split('T')[0]">
+    </form>
+</m-simple-form>
