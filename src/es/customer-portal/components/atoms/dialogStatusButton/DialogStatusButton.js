@@ -1,6 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { subscriptionMode, actionType } from '../../../helpers/Mapping.js'
+import { subscriptionMode } from '../../../helpers/Mapping.js'
 import { escapeForHtml } from '../../../helpers/Shared.js'
 
 /* global self */
@@ -174,11 +174,11 @@ export default class DialogStatusButton extends Shadow() {
    */
   renderDialogActionButton (id, type, subscriptionMode, status, content, selectedSubscription) {
     if (type === 'detail' && status === 1) {
-      return `<ks-a-button tag="${id}" namespace="button-primary-" tag="[${actionType.bookingFinal}]"  request-event-name="request-show-dialog-booking-confirmation">Termin buchen</ks-a-button>`
+      return `<ks-a-button tag="${id}" namespace="button-primary-" tag="['bookingFinal']"  request-event-name="request-show-dialog-booking-confirmation">Termin buchen</ks-a-button>`
     }
 
     if (type === 'detail' && status === 5) {
-      return `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="[${actionType.reversal}]"  request-event-name="request-show-dialog-reversal-confirmation">Termin stornieren</ks-a-button>`
+      return `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="['reversal']"  request-event-name="request-show-dialog-reversal-confirmation">Termin stornieren</ks-a-button>`
     }
 
     if (type === 'subscriptions') {

@@ -83,11 +83,3 @@ export const subscriptionMode = {
   PAUSCHALABO: 'FLAT',
   WERTABO: 'SUBSCRIPTION'
 }
-
-export const actionType = {
-  detail: 'detail',
-  booking: 'booking',
-  bookingFinal: 'bookingFinal',
-  reversal: 'reversal',
-  subscriptions: 'subscriptions'
-}

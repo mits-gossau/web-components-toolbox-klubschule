@@ -1,5 +1,4 @@
 // @ts-check
-import { actionType } from '../../helpers/Mapping.js'
 import { makeUniqueCourseId } from '../../helpers/Shared.js'
 
 /* global AbortController */
@@ -96,7 +95,7 @@ export default class Appointments extends HTMLElement {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
         id: courseId,
-        type: actionType.booking
+        type: 'booking'
       },
       bubbles: true,
       cancelable: true,
@@ -167,7 +166,7 @@ export default class Appointments extends HTMLElement {
           if (response.status >= 200 && response.status <= 299) return await response.json()
         }),
         id: courseId,
-        type: actionType.reversal
+        type: 'reversal'
       },
       bubbles: true,
       cancelable: true,

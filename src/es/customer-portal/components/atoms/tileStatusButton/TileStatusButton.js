@@ -1,6 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { subscriptionMode, actionType } from '../../../helpers/Mapping.js'
+import { subscriptionMode } from '../../../helpers/Mapping.js'
 import { escapeForHtml } from '../../../helpers/Shared.js'
 
 /**
@@ -114,15 +114,15 @@ export default class StatusButton extends Shadow() {
     // TODO: Remove
     this.wrapper = this.root.querySelector('div') || document.createElement('div')
     if (this.dataset.listType === 'subscriptions') {
-      this.html = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-detail" tag='[${escapeForHtml(JSON.stringify(content))}, ${escapeForHtml(JSON.stringify(content))}, ${JSON.stringify({ type: actionType.subscriptions })}]' color="secondary">Abonnement erneuern</ks-a-button>`
+      this.html = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-detail" tag='[${escapeForHtml(JSON.stringify(content))}, ${escapeForHtml(JSON.stringify(content))}, ${JSON.stringify({ type: 'subscriptions' })}]' color="secondary">Abonnement erneuern</ks-a-button>`
     } else {
       this.html = this.renderTileActionButton(subscriptionMode[subscription.subscriptionMode], content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
     }
   }
 
   renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {
-    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: actionType.booking })}]' color="secondary">Termin buchen</ks-a-button>`
-    const btnReversal = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: actionType.reversal })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
+    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary">Termin buchen</ks-a-button>`
+    const btnReversal = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'reversal' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
 
     const actionButton = {
       FLAT: {
