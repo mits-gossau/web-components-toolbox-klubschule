@@ -107,6 +107,10 @@ export default class SubscriptionsList extends Shadow() {
         {
           path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
           name: 'm-dialog'
+        },
+        {
+          path: `${this.importMetaUrl}../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+          name: 'mdx-component'
         }
       ])
       Promise.all([fetchModules]).then((children) => {
@@ -131,7 +135,8 @@ export default class SubscriptionsList extends Shadow() {
   }
 
   renderLoading () {
-    this.html = '<img src="../customer-portal/img/loading.gif" alt="Loading">'
+    // this.html = '<img src="../customer-portal/img/loading.gif" alt="Loading">'
+    this.html = '<mdx-component><mdx-spinner size="large"></mdx-spinner></mdx-component>'
   }
 
   renderSubscriptionsList (subscriptions, tileComponent) {

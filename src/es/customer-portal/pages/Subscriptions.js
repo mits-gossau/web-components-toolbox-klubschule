@@ -40,11 +40,6 @@ export default class SubscriptionList extends Index {
     this.html = '<m-subscriptions-list namespace="subscriptions-list-default-" data-request-subscription="request-subscriptions" data-list-type="subscriptions"></m-subscriptions-list>'
   }
 
-  /**
-   * renders the css
-   *
-   * @return void
-  */
   renderCSS () {
     this.css = /* css */`
     :host {}

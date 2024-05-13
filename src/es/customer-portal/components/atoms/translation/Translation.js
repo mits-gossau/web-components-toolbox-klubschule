@@ -17,16 +17,19 @@ export default class Translation extends Shadow() {
     this.hidden = true
     this.key = this.getAttribute('data-trans-key') || this.getAttribute('key')
     this.renderHTML();
-    (new Promise(resolve => this.dispatchEvent(new CustomEvent('request-translations',
-      {
-        detail: {
-          resolve
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }
-    )))).then(async ({ getTranslation }) => this.renderHTML(await getTranslation(this.key))).finally(() => (this.hidden = false))
+    (new Promise(resolve => this.dispatchEvent(new CustomEvent('request-translations', {
+      detail: {
+        resolve
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }
+    )))).then(async ({ getTranslation }) => {
+      this.renderHTML(await getTranslation(this.key))
+    }).finally(() => {
+      this.hidden = false
+    })
   }
 
   /**

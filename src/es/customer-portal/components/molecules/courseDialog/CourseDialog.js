@@ -58,7 +58,8 @@ export default class CourseDialog extends Shadow() {
    * Trigger Subscription PDF Download
    * @param {any} event
    */
-  subscriptionPdfLinkListener (event) {
+  subscriptionPdfLinkListener = (event) => {
+    this.subscriptionPdfLinkLoading('inline')
     event.preventDefault()
     this.dispatchEvent(new CustomEvent('request-subscription-pdf',
       {
@@ -70,6 +71,10 @@ export default class CourseDialog extends Shadow() {
         composed: true
       }
     ))
+  }
+
+  subscriptionPdfLinkLoading = (display = 'none') => {
+    this.mdxComponent.style.display = display
   }
 
   /**
@@ -85,6 +90,7 @@ export default class CourseDialog extends Shadow() {
         a.href = url
         a.download = `${this.courseData.subscriptionType}_${this.courseData.subscriptionId}.pdf`
         a.click()
+        this.subscriptionPdfLinkLoading()
       })
     }
   }
@@ -127,6 +133,8 @@ export default class CourseDialog extends Shadow() {
           // TODO: Own fn() ?
           this.subscriptionsPdfLink = this.viewContent.querySelector('ks-m-link-list')
           this.subscriptionsPdfLink.addEventListener('click', this.subscriptionPdfLinkListener)
+          // hide pdf downloading spinner
+          this.subscriptionPdfLinkLoading()
         }
       })
     }
@@ -550,6 +558,11 @@ export default class CourseDialog extends Shadow() {
       {
         path: `${this.importMetaUrl}'../../../../../../components/molecules/systemNotification/SystemNotification.js`,
         name: 'ks-m-system-notification'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+        name: 'mdx-component'
+
       }
     ])
     Promise.all([fetchModules]).then((_) => {
@@ -668,7 +681,7 @@ export default class CourseDialog extends Shadow() {
         <ul>
           <li>
             <a id="subscriptionsPdfLink">
-              <span>Kursdetails als PDF</span>
+              <span>Kursdetails als PDF <mdx-component><mdx-spinner size="small"></mdx-spinner></mdx-component></span>
               <div>
                 <span>PDF</span>
                 <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
@@ -685,7 +698,6 @@ export default class CourseDialog extends Shadow() {
    * @returns {string} Returning an HTML template string
    */
   renderDownloads (courseData, courseDetail) {
-    // TODO: Refactor
     // @ts-ignore
     const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}`
     return /* html */ `
@@ -795,5 +807,9 @@ export default class CourseDialog extends Shadow() {
 
   get viewContent () {
     return this.dialog.shadowRoot.getElementById('view-content')
+  }
+
+  get mdxComponent () {
+    return this.dialog.root.querySelector('ks-m-link-list').root.querySelector('mdx-component')
   }
 }

@@ -111,7 +111,6 @@ export default class StatusButton extends Shadow() {
    * @returns void
    */
   renderHTML (content, subscription) {
-    // TODO: Remove
     this.wrapper = this.root.querySelector('div') || document.createElement('div')
     if (this.dataset.listType === 'subscriptions') {
       this.html = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-detail" tag='[${escapeForHtml(JSON.stringify(content))}, ${escapeForHtml(JSON.stringify(content))}, ${JSON.stringify({ type: 'subscriptions' })}]' color="secondary">Abonnement erneuern</ks-a-button>`

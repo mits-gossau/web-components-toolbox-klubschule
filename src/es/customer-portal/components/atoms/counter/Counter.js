@@ -51,10 +51,9 @@ export default class Counter extends Shadow() {
       let txt = appointmentsText
       if (listType === 'booked-appointments') txt = bookedSubscriptionsText
       this.element.innerText = `${counter} `
-      // TRANS
+      // translation atom component
       const translation = new child[0][0].constructorClass() // eslint-disable-line
       translation.dataset.transKey = txt
-      //
       this.element.append(translation)
       this.html = this.element
     })

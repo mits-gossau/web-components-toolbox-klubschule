@@ -19,14 +19,14 @@ export default class DialogStatusButton extends Shadow() {
   }
 
   connectedCallback () {
-    this.dataContent = JSON.parse(this.dataset.content)
-    this.dataSubscription = JSON.parse(this.dataset.subscription)
-    if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking-confirmation') || 'request-show-dialog-booking-confirmation', this.requestShowDialogBookingConfirmationListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-reversal-confirmation') || 'request-show-dialog-reversal-confirmation', this.requestShowDialogReversalConfirmationListener)
+    this.dataContent = JSON.parse(this.dataset.content)
+    this.dataSubscription = JSON.parse(this.dataset.subscription)
+    if (this.shouldRenderCSS()) this.renderCSS()
   }
 
   disconnectedCallback () {
@@ -190,7 +190,6 @@ export default class DialogStatusButton extends Shadow() {
     const btnBooking = `<ks-a-button namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'>Jetzt Termin buchen</ks-a-button>`
     const btnReversal = `<ks-a-button color="quaternary" namespace="button-primary-" request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'>Jetzt Termin stornieren</ks-a-button>`
 
-    // TODO: Refactor
     const actionButton = {
       FLAT: {
         1: btnBooking,
