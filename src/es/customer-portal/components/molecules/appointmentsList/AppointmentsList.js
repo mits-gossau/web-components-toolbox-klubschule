@@ -203,7 +203,7 @@ export default class AppointmentsList extends Shadow() {
 
   renderLoading () {
     this.html = '<img src="../customer-portal/img/loading.gif" alt="Loading">'
-    // this.html = '<mdx-component">111<mdx-spinner size="small"></mdx-spinner></mdx-component">'
+    // this.html = '<mdx-component>111<mdx-spinner size="small"></mdx-spinner></mdx-component>'
   }
 
   renderFilterSubscriptions (subscriptionsData) {
@@ -226,7 +226,6 @@ export default class AppointmentsList extends Shadow() {
       </ks-m-select>
     </div>
     `
-
     return html
   }
 

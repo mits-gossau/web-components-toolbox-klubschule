@@ -69,7 +69,7 @@
                 import('./event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default]),
                 import('./controllers/appointments/Appointments.js').then(module => ['c-appointments', module.default]),
                 import('./controllers/subscriptions/Subscriptions.js').then(module => ['c-subscriptions', module.default]),
-                import('./controllers/translations/Translations.js').then(module => ['c-translations', module.default]),
+                import('../../es/components/web-components-toolbox/src/es/components/controllers/translations/Translations.js').then(module => ['c-translations', module.default]),
             ]).then(elements => elements.forEach(element => {
                 if (element && !customElements.get(element[0])) customElements.define(...element)
             }))
