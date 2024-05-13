@@ -32,7 +32,7 @@ export default class TileList extends Shadow() {
             bubbles: true,
             cancelable: true,
             composed: true
-          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, {tiles: tileData.courses}).tiles.reduce((acc, tile) => {
+          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
             // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
             tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
             if (tile.bezeichnung) tile.location.name = ''
@@ -282,8 +282,8 @@ export default class TileList extends Shadow() {
               <div class="o-tile-list__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="o-tile-list__icon-box">
-                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.iconTooltip}">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.name}" size="1em"></a-icon-mdx>
+                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.text}">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
                   </ks-m-tooltip>
                 </div>
               `, '')}           

@@ -100,7 +100,7 @@ export default class Contact extends Shadow() {
     const tag = this.hasAttribute('href') ? 'a' : 'div'
     const href = this.getAttribute('href')
 
-    this.html =   /* HTML */ `
+    this.html = /* HTML */ `
       <${tag} ${href ? `href="${this.getAttribute('href')}"` : ''} ${id ? `id="${id}"` : ''} ${target ? `target="${target}"` : ''} class="contact-row">
         <a-icon-mdx 
           ${href ? 'namespace="icon-mdx-ks-"' : ''}
@@ -120,7 +120,7 @@ export default class Contact extends Shadow() {
 
     return this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/Link/Link.js`,
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
         name: 'a-link'
       },
       {

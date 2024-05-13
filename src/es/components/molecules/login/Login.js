@@ -60,7 +60,7 @@ export default class Login extends Shadow() {
         width: var(--login-width, max(calc(_max-width_ - var(--content-spacing) * 2), 55%)); /* Environment.js mobileBreakpoint must correspond to the calc 1200px */
       }
       :host > section {
-        display: flex;
+        display: var(--section-display, flex);
         align-items: center;
         justify-content: end;
         gap: calc(var(--content-spacing, 1em) * 2);

@@ -156,18 +156,18 @@ export default class TileFactory extends Shadow() {
   fillGeneralTileInfo (course) {
     return `
       "title": "${course.bezeichnung}",
-      "iconTooltip": ${JSON.stringify(course.infotextshort) || ""},
+      "iconTooltip": ${JSON.stringify(course.infotextshort) || ''},
       "location": {
         "iconName": "Location",
         "name": "${course.location?.name
           ? course.location.name
           : course.locations
-            ? course.locations.join(", ")
-            : ""}",
-        "badge": "${course.badge ? course.badge : ""}"
+            ? course.locations.join(', ')
+            : ''}",
+        "badge": "${course.badge ? course.badge : ''}"
       },
-      "buttons": ${JSON.stringify(course.buttons) || ""},
-      "icons": ${JSON.stringify(course.icons) || ""},
+      "buttons": ${JSON.stringify(course.buttons) || ''},
+      "icons": ${JSON.stringify(course.icons) || ''},
       "price": {
         "from": "${course.price.pre}",
         "amount": "${course.price.amount}",
