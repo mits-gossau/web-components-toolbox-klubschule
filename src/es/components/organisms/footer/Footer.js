@@ -98,7 +98,7 @@ export default class KsFooter extends Footer {
                 margin: 64px 0 0 0;
             }
             :host footer>div:first-child .footer-links>div:last-child>div,
-            :host footer>div:first-child>div.invert>o-wrapper+div>ul>li>a {
+            :host footer>div:first-child>div.invert>o-wrapper+div>ul>li a {
                 color: var(--social-body-color);
                 font: var(--social-body-typography);
             }
