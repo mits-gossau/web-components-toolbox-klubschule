@@ -35,7 +35,6 @@ export default class CourseTitle extends Shadow() {
     if (type === 'subscriptions') {
       evtName = 'request-subscription-detail'
     }
-    debugger
     this.dispatchEvent(new CustomEvent(evtName,
       {
         detail: {

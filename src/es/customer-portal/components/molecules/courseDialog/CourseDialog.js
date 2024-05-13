@@ -25,15 +25,6 @@ export default class CourseDialog extends Shadow() {
     this.courseData = JSON.parse(this.dataset.content)
     this.courseId = this.dataset.id
     this.courseSubscription = JSON.parse(this.dataset.subscription)
-    if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) {
-      debugger
-      if (this.dataset.listType === 'subscriptions') {
-        this.renderSubscriptionsHTML(this.courseId, this.courseData)
-      } else {
-        this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
-      }
-    }
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking-confirmation') || 'request-show-dialog-booking-confirmation', this.requestShowDialogBookingConfirmationListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-reversal-confirmation') || 'request-show-dialog-reversal-confirmation', this.requestShowDialogReversalConfirmationListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
@@ -41,6 +32,14 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
     document.body.addEventListener('update-subscription-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    if (this.shouldRenderCSS()) this.renderCSS()
+    if (this.shouldRenderHTML()) {
+      if (this.dataset.listType === 'subscriptions') {
+        this.renderSubscriptionsHTML(this.courseId, this.courseData)
+      } else {
+        this.renderHTML(this.courseId, this.courseData, this.courseSubscription)
+      }
+    }
   }
 
   disconnectedCallback () {
@@ -100,7 +99,6 @@ export default class CourseDialog extends Shadow() {
       this.viewContent.innerHTML = ''
       event.detail.fetch.then(courseDetail => {
         this.courseDetail = courseDetail
-        debugger
         // open dialog
         this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
           {
