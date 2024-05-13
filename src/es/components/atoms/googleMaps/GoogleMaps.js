@@ -32,6 +32,10 @@ export default class KsGoogleMaps extends GoogleMaps {
         --pop-up-window-before-bottom: auto;
         --pop-up-window-before-rotation: 90deg;
       }
+
+      :host(ks-a-google-maps) {
+        margin: 0 !important;
+      }
     `
   }
 
