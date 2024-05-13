@@ -387,6 +387,11 @@
 
   /* google maps */
   --map-height-mobile: 120vw;
+
+  /* form */
+  --simple-form-default-h1-margin: var(--mdx-sys-spacing-flex-large-s) auto var(--mdx-sys-spacing-flex-large-xs) auto;
+  --simple-form-default-h1-color: var(--mdx-sys-color-neutral-bold4);
+  --simple-form-default-color: var(--mdx-comp-inputfield-placeholder-color-default);
 }
 
 @media screen and (min-width: 1441px) {
