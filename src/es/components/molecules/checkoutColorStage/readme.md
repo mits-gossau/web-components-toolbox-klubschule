@@ -1,6 +1,6 @@
-# Contact Row
+# Checkout Color Stage
 
-> Contact Row component.
+> Checkout Color Stage component.
 
 - [JIRA](https://jira.migros.net/browse/MIDUWEB-735)
 - [Examples](../../pages/CheckoutColorStage.html)
