@@ -2,6 +2,7 @@
     --system-notification-default-background-color: var(--mdx-sys-color-primary-subtle1);
     --system-notification-default-icon-background-color: ${this.hasAttribute('with-icon-background') ? 'var(--mdx-sys-color-primary-default)' : 'transparent'};
     --icon-mdx-ks-color: ${this.hasAttribute('with-icon-background') ? 'var(--m-white)' : 'var(--mdx-sys-color-neutral-bold4)'};
+    --icon-mdx-ks-blue-color: var(--mdx-sys-color-primary-default);
     --system-notification-default-icon-border-color: ${this.hasAttribute('with-icon-background') ? 'var(--mdx-sys-color-primary-default)' : 'var(--mdx-sys-color-neutral-bold4)'};
 
     --system-notification-default-icon-spacing: var(--mdx-sys-spacing-fix-s);

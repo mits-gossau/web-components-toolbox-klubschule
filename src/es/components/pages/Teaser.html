@@ -11,7 +11,7 @@
     </li>
 </ul>
 
-<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem">
+<ks-o-body-section variant="default">
     <h2 id="teaser-tile-content">Teaser Tile Content</h2>
     <o-grid namespace="grid-12er-">
         <div col-sm="12" col-lg="4">
@@ -240,8 +240,8 @@
             </ks-m-teaser>
         </div>
     </o-grid>
-</o-body-style>
-<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem">
+</ks-o-body-section>
+<ks-o-body-section variant="default">
     <h2 id="teaser-tile-content-inverse">Teaser Tile Content Inverse</h2>
     <o-grid namespace="grid-12er-">
         <div col-sm="12" col-lg="4">
@@ -432,8 +432,8 @@
             </ks-m-teaser>
         </div>
     </o-grid>
-</o-body-style>
-<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem" background-color="var(--mdx-sys-color-accent-6-subtle1)">
+</ks-o-body-section>
+<ks-o-body-section variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
     <h2 id="teaser-story">Teaser Story</h2>
     <o-grid namespace="grid-12er-" gap="1rem">
         <ks-m-teaser col-sm="12" col-lg="4" namespace=teaser-story- color="secondary">
@@ -507,8 +507,8 @@
             </figure>
         </ks-m-teaser>
     </o-grid>
-</o-body-style>
-<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem">
+</ks-o-body-section>
+<ks-o-body-section variant="default">
     <h2 id="teaser-text-image">Teaser Text Image (Text Position Left)</h2>
     <ks-m-teaser namespace=teaser-text-image- color="secondary" text-position="left" href="#">
         <a-picture 
@@ -523,8 +523,8 @@
             <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
         </div>
     </ks-m-teaser>
-</o-body-style>
-<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem" background-color="var(--mdx-sys-color-accent-6-subtle1)">
+</ks-o-body-section>
+<ks-o-body-section variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
     <h2>Teaser Text Image (Text Position Right)</h2>
     <ks-m-teaser namespace=teaser-text-image- color="secondary" text-position="right" href="#">
         <a-picture 
@@ -539,8 +539,36 @@
             <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
         </div>
     </ks-m-teaser>
-</o-body-style>
-<o-body-style any-content-width-var="min(1920px, 66%)" padding="1rem">
+</ks-o-body-section>
+<ks-o-body-section variant="narrow">
+    <h2>Teaser Text Image (Small Image)</h2>
+    <p><code>[image-size="small"]</code></p>
+    <ks-m-teaser namespace=teaser-text-image- image-size="small" text-position="right" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/100x100"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <ks-m-teaser namespace=teaser-text-image- image-size="small" text-position="left" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/400x400"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+</ks-o-body-section>
+<ks-o-body-section variant="default">
     <br />
     <h2 id="teaser-fullwidth">Teaser Fullwidth (Text Position Right & Color secondary)</h2>
     <br />
@@ -649,7 +677,7 @@
         </div>
     </ks-m-teaser>
     <br />
-</o-body-style>
+</ks-o-body-section>
 
 <ks-o-body-section variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
     <ks-a-heading tag="h2" section-title>Link Boxen</ks-a-heading>
