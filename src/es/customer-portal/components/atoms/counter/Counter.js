@@ -43,7 +43,7 @@ export default class Counter extends Shadow() {
     this.element = this.root.querySelector(headingType) || document.createElement(headingType)
     const fetchModules = this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../../components/atoms/translation/Translation.js`,
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
         name: 'a-translation'
       }
     ])

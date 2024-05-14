@@ -24,7 +24,6 @@ export default class Navigation extends Shadow() {
       if (target.tagName === 'A') {
         const url = new URL(location.href)
         url.searchParams.set('page', target.getAttribute('href'))
-        console.log('changed', new URL(url.href))
         history.pushState(history.state, document.title, url.href)
       }
     }
@@ -40,27 +39,14 @@ export default class Navigation extends Shadow() {
     this.removeEventListener('click', this.clickEventListener)
   }
 
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
   shouldRenderHTML () {
     return !this.navigationWrapper
   }
 
-  /**
-   * renders the css
-   */
   renderCSS () {
     this.css = /* css */`
       :host {
@@ -86,9 +72,6 @@ export default class Navigation extends Shadow() {
     return this.fetchTemplate()
   }
 
-  /**
-   * fetches the template
-   */
   fetchTemplate () {
     /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
@@ -112,10 +95,6 @@ export default class Navigation extends Shadow() {
     }
   }
 
-  /**
-   * Render HTML
-   * @returns void
-   */
   renderHTML () {
     const fetchModules = this.fetchModules([
       {

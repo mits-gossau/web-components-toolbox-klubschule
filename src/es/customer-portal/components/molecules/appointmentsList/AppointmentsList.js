@@ -178,7 +178,7 @@ export default class AppointmentsList extends Shadow() {
                   data-list-type="${this.dataset.listType}" 
                   data-heading-type="h1" 
                   data-booked-subscriptions-text="CP.cpMenuBookedAppointments" 
-                  data-appointments-text="CP.cpAppointmentDwnPDF"
+                  data-appointments-text="CP.cpAppointmentListCoursesFound"
                 ></ks-a-counter>
               </ks-a-heading>
             </div>

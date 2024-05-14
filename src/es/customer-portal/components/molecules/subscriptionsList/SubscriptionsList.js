@@ -111,6 +111,14 @@ export default class SubscriptionsList extends Shadow() {
         {
           path: `${this.importMetaUrl}../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
           name: 'mdx-component'
+        },
+        {
+          path: `${this.importMetaUrl}../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+          name: 'mdx-component'
+        },
+        {
+          path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+          name: 'a-translation'
         }
       ])
       Promise.all([fetchModules]).then((children) => {
@@ -119,7 +127,9 @@ export default class SubscriptionsList extends Shadow() {
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
             <div col-lg="12" col-md="12" col-sm="12">
-              <ks-a-heading tag="h1">Aktive Abonnements</ks-a-heading>
+              <ks-a-heading tag="h1" mode="false">
+                <a-translation data-trans-key="CP.cpActiveSubscription"></a-translation>
+              </ks-a-heading>
             </div>    
           </o-grid>
           <div id="list-wrapper">

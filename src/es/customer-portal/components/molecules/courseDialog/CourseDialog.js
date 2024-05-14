@@ -22,9 +22,6 @@ export default class CourseDialog extends Shadow() {
   }
 
   connectedCallback () {
-    this.courseData = JSON.parse(this.dataset.content)
-    this.courseId = this.dataset.id
-    this.courseSubscription = JSON.parse(this.dataset.subscription)
     document.body.addEventListener(this.getAttribute('request-show-dialog-booking-confirmation') || 'request-show-dialog-booking-confirmation', this.requestShowDialogBookingConfirmationListener)
     document.body.addEventListener(this.getAttribute('request-show-dialog-reversal-confirmation') || 'request-show-dialog-reversal-confirmation', this.requestShowDialogReversalConfirmationListener)
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
@@ -32,6 +29,9 @@ export default class CourseDialog extends Shadow() {
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     document.body.addEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
     document.body.addEventListener('update-subscription-detail', this.updateSubscriptionCourseAppointmentDetailListener)
+    this.courseData = JSON.parse(this.dataset.content)
+    this.courseId = this.dataset.id
+    this.courseSubscription = JSON.parse(this.dataset.subscription)
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) {
       if (this.dataset.listType === 'subscriptions') {
@@ -71,10 +71,6 @@ export default class CourseDialog extends Shadow() {
         composed: true
       }
     ))
-  }
-
-  subscriptionPdfLinkLoading = (display = 'none') => {
-    this.mdxComponent.style.display = display
   }
 
   /**
@@ -799,6 +795,15 @@ export default class CourseDialog extends Shadow() {
     // @ts-ignore
     const formatter = new Intl.DateTimeFormat('de-DE', options)
     return formatter.format(dateObject)
+  }
+
+  /**
+   * Show/Hide loading spinner
+   *
+   * @param {string} display css display property
+  */
+  subscriptionPdfLinkLoading = (display = 'none') => {
+    this.mdxComponent.style.display = display
   }
 
   get dialog () {
