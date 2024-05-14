@@ -88,12 +88,7 @@ export default class DialogStatusButton extends Shadow() {
    * @param {CustomEventInit} event
    */
   requestShowDialogBookingConfirmationListener = event => {
-    if (this.dataset.id === event.detail.tags[0]) {
-      this.html = ''
-      let btn = this.renderDialogActionButton(this.dataset.id, '', subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
-      btn += this.closeButton
-      this.html = btn
-    }
+    if (this.dataset.id === event.detail.tags[0]) this.renderConfirmation()
   }
 
   /**
@@ -101,12 +96,14 @@ export default class DialogStatusButton extends Shadow() {
    * @param {CustomEventInit} event
    */
   requestShowDialogReversalConfirmationListener = event => {
-    if (this.dataset.id === event.detail.tags[0]) {
-      this.html = ''
-      let btn = this.renderDialogActionButton(this.dataset.id, '', subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
-      btn += this.closeButton
-      this.html = btn
-    }
+    if (this.dataset.id === event.detail.tags[0]) this.renderConfirmation()
+  }
+
+  renderConfirmation () {
+    this.html = ''
+    let btn = this.renderDialogActionButton(this.dataset.id, '', subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
+    btn += this.closeButton
+    this.html = btn
   }
 
   /**
