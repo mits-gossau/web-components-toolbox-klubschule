@@ -32,7 +32,7 @@ export default class StatusButton extends Shadow() {
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
-        const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
+        const btn = this.renderTileActionButton(courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         this.html = btn
       })
@@ -42,7 +42,7 @@ export default class StatusButton extends Shadow() {
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
-        const btn = this.renderTileActionButton(subscriptionMode[this.dataSubscription.subscriptionMode], courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
+        const btn = this.renderTileActionButton(courseDetail.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
         this.html = ''
         this.html = btn
       })
@@ -113,34 +113,27 @@ export default class StatusButton extends Shadow() {
   renderHTML (content, subscription) {
     this.wrapper = this.root.querySelector('div') || document.createElement('div')
     if (this.dataset.listType === 'subscriptions') {
-      this.html = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-detail" tag='[${escapeForHtml(JSON.stringify(content))}, ${escapeForHtml(JSON.stringify(content))}, ${JSON.stringify({ type: 'subscriptions' })}]' color="secondary">Abonnement erneuern</ks-a-button>`
+      this.html = /* html */ `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-detail" tag='[${escapeForHtml(JSON.stringify(content))}, ${escapeForHtml(JSON.stringify(content))}, ${JSON.stringify({ type: 'subscriptions' })}]' color="secondary"><a-translation data-trans-key='CP.cpSubscriptionRenew'/></a-translation></ks-a-button>`
     } else {
-      this.html = this.renderTileActionButton(subscriptionMode[subscription.subscriptionMode], content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
+      this.html = this.renderTileActionButton(content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
     }
   }
 
-  renderTileActionButton (subscriptionMode, status, content, selectedSubscription) {
-    const btnBooking = `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary">Termin buchen</ks-a-button>`
-    const btnReversal = `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'reversal' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>Stornieren</ks-a-button>`
-
-    const actionButton = {
-      FLAT: {
-        1: btnBooking,
-        2: '',
-        3: '',
-        4: '',
-        5: btnReversal,
-        6: ''
-      },
-      SUBSCRIPTION: {
-        1: btnBooking,
-        2: '',
-        3: '',
-        4: '',
-        5: btnReversal,
-        6: ''
-      }
+  /**
+   * Generates HTML code for a button - based on the provided status, content, and selected subscription.
+   * @param {number} status - Appointment status (1-6).
+   * @param {string} content - Tag data
+   * @param {string} selectedSubscription - Tag data
+   * @returns {string} Returns an HTML button element
+   */
+  renderTileActionButton (status, content, selectedSubscription) {
+    switch (status) {
+      case 1:
+        return /* html */ `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary"><a-translation data-trans-key='CP.cpBookAppointment'/></a-translation></ks-a-button>`
+      case 5:
+        return /* html */ `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'reversal' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx><a-translation data-trans-key='CP.cpBookedStatus5'/></a-translation></ks-a-button>`
+      default:
+        return ''
     }
-    return actionButton[subscriptionMode][status]
   }
 }
