@@ -112,11 +112,7 @@ export default class CourseTitle extends Shadow() {
    * @returns void
    */
   renderHTML () {
-    const titlesList = {
-      subscriptions: `${this.dataContent.subscriptionDescription}`
-    }
-    const titleFound = titlesList[this.dataset.listType]
-    const title = titleFound || `${this.dataContent.courseTitle} (${this.dataContent.courseType}_${this.dataContent.courseId})`
+    const title = this.dataContent.subscriptionDescription || `${this.dataContent.courseTitle} (${this.dataContent.courseType}_${this.dataContent.courseId})`
     const wrapper = document.createElement('div')
     wrapper.innerHTML = title
     this.html = wrapper
