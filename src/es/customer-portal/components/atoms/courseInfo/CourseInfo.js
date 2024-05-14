@@ -15,12 +15,12 @@ export default class CourseInfo extends Shadow() {
   }
 
   connectedCallback () {
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     this.dataContent = JSON.parse(this.dataset.content)
     const tileState = getTileState(courseAppointmentStatusMapping[this.dataContent.courseAppointmentStatus], this.dataContent)
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML(tileState)
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   }
 
   disconnectedCallback () {
@@ -106,14 +106,21 @@ export default class CourseInfo extends Shadow() {
   }
 
   renderHTML (data) {
-    const { icon, css, status, info } = data
+    const { icon, css, status, info, infoTransKey, statusTransKey } = data
     const hasDash = (status && info) && !Number(status) ? ' - ' : ''
+    const freeSeats = Number(status) ? status : ''
     this.icon = this.root.querySelector('a-icon-mdx') || /* html */ `<a-icon-mdx icon-name="${icon}" size="var(--course-info-default-svg-height)" class="${css.status}"></a-icon-mdx>`
+    this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
+      }
+    ])
     this.html = /* html */`
       ${this.icon}
       <span class="content">
-        <span class="${css.status}">${status}</span>
-        <span class="${css.info}">${hasDash}${info}</span>
+        <span class="${css.status}">${statusTransKey && freeSeats ? `${freeSeats} <a-translation data-trans-key='${statusTransKey}' />` : `${status}`}</span>
+        <span class="${css.info}">${hasDash}<a-translation data-trans-key="${infoTransKey}"></a-translation></span>
       </span>`
   }
 }

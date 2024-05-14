@@ -33,6 +33,8 @@ export const getTileState = (type, data) => {
     css,
     status: courseAppointmentStatus === 1 ? courseAppointmentFreeSeats * 1 : content.status,
     info: content.info,
-    icon: content.icon
+    icon: content.icon,
+    statusTransKey: content.statusTransKey,
+    infoTransKey: content.infoTransKey
   }
 }

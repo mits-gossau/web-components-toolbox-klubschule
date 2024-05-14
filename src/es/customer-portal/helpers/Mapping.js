@@ -9,7 +9,9 @@ export const courseAppointmentStatusMapping = {
     content: {
       icon: 'Users',
       status: '',
-      info: 'freie Plätze'
+      info: 'freie Plätze',
+      statusTransKey: '',
+      infoTransKey: 'CP.cpAppointmentListStatusFreePlaces'
     }
   },
   2: {
@@ -22,7 +24,9 @@ export const courseAppointmentStatusMapping = {
     content: {
       icon: 'X',
       status: 'Keine Buchung möglich',
-      info: 'Vorhandes Abo hat zu wenig Guthaben'
+      info: 'Vorhandes Abo hat zu wenig Guthaben',
+      statusTransKey: 'CP.cpAppointmentNote2',
+      infoTransKey: '[[Vorhandes Abo hat zu wenig Guthaben]]'
     }
   },
   3: {
@@ -35,7 +39,9 @@ export const courseAppointmentStatusMapping = {
     content: {
       icon: 'X',
       status: 'Ausgebucht',
-      info: ''
+      info: '',
+      statusTransKey: 'CP.cpAppointmentStatus3',
+      infoTransKey: ''
     }
   },
   4: {
@@ -48,7 +54,9 @@ export const courseAppointmentStatusMapping = {
     content: {
       icon: 'X',
       status: 'Geschlossen',
-      info: 'Keine Buchung bis 30 Minuten vor Terminbeginn möglich'
+      info: 'Keine Buchung bis 30 Minuten vor Terminbeginn möglich',
+      statusTransKey: 'CP.cpAppointmentStatus4',
+      infoTransKey: 'CP.cpAppointmentNote1'
     }
   },
   5: {
@@ -61,7 +69,9 @@ export const courseAppointmentStatusMapping = {
     content: {
       icon: 'Check',
       status: 'Gebucht',
-      info: ''
+      info: '',
+      statusTransKey: 'CP.cpAppointmentListStatusBooked',
+      infoTransKey: ''
     }
   },
   6: {
@@ -74,7 +84,9 @@ export const courseAppointmentStatusMapping = {
     content: {
       icon: 'Check',
       status: 'Gebucht',
-      info: 'Keine Stornierung mehr möglich'
+      info: 'Keine Stornierung mehr möglich',
+      statusTransKey: 'CP.cpAppointmentListStatusBooked',
+      infoTransKey: '[[Keine Stornierung mehr möglich]]'
     }
   }
 }
