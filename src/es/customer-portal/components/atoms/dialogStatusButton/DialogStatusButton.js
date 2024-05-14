@@ -164,49 +164,30 @@ export default class DialogStatusButton extends Shadow() {
    * @param {string} id - `id`
    * @param {string} type - `type`
    * @param subscriptionMode - It could be either "FLAT" or "SUBSCRIPTION".
-   * @param status - Determine which action button should be rendered based on the type and status of the appointment.
+   * @param {number} status - Determine which action button should be rendered based on the type and status of the appointment.
    * @param content - `content`
    * @param selectedSubscription - `selectedSubscription`
    * @returns Returns a button element based on the provided parameters
    */
   renderDialogActionButton (id, type, subscriptionMode, status, content, selectedSubscription) {
-    if (type === 'detail' && status === 1) {
-      return `<ks-a-button tag="${id}" namespace="button-primary-" tag="['bookingFinal']"  request-event-name="request-show-dialog-booking-confirmation">Termin buchen</ks-a-button>`
-    }
-
-    if (type === 'detail' && status === 5) {
-      return `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="['reversal']"  request-event-name="request-show-dialog-reversal-confirmation">Termin stornieren</ks-a-button>`
-    }
-
-    if (type === 'subscriptions') {
-      // @ts-ignore
-      const url = `${self.Environment.getApiBaseUrl('customer-portal').subscriptionRenewSearchLinkUrl}${this.dataContent.subscriptionKindType}_${this.dataContent.subscriptionKindId}`
-      return `<ks-a-button href="${url}" namespace="button-primary-">Abonnement erneuern</ks-a-button>`
-    }
-
-    const btnBooking = `<ks-a-button namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'>Jetzt Termin buchen</ks-a-button>`
-    const btnReversal = `<ks-a-button color="quaternary" namespace="button-primary-" request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'>Jetzt Termin stornieren</ks-a-button>`
-
-    const actionButton = {
-      FLAT: {
-        1: btnBooking,
-        2: '',
-        3: '',
-        4: '',
-        5: btnReversal,
-        6: ''
-      },
-      SUBSCRIPTION: {
-        1: btnBooking,
-        2: '',
-        3: '',
-        4: '',
-        5: btnReversal,
-        6: ''
+    switch (true) {
+      case (type === 'detail' && status === 1):
+        return `<ks-a-button tag="${id}" namespace="button-primary-" tag="['bookingFinal']"  request-event-name="request-show-dialog-booking-confirmation">Termin buchen</ks-a-button>`
+      case (type === 'detail' && status === 5):
+        return `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="['reversal']"  request-event-name="request-show-dialog-reversal-confirmation">Termin stornieren</ks-a-button>`
+      case (type === 'subscriptions'): {
+        // @ts-ignore
+        const url = `${self.Environment.getApiBaseUrl('customer-portal').subscriptionRenewSearchLinkUrl}${this.dataContent.subscriptionKindType}_${this.dataContent.subscriptionKindId}`
+        return `<ks-a-button href="${url}" namespace="button-primary-">Abonnement erneuern</ks-a-button>`
       }
-    }
+      case (type === 'reversal' || status === 5):
+        return `<ks-a-button color="quaternary" namespace="button-primary-" request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'>Jetzt Termin stornieren</ks-a-button>`
+      case (type === 'booking' || status === 1):
+        return `<ks-a-button namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'>Jetzt Termin buchen</ks-a-button>`
 
-    return actionButton[subscriptionMode][status]
+      default:
+        return ''
+    }
   }
 
   get closeButton () {

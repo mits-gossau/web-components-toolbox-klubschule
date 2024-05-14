@@ -26,7 +26,7 @@ export const courseAppointmentStatusMapping = {
       status: 'Keine Buchung möglich',
       info: 'Vorhandes Abo hat zu wenig Guthaben',
       statusTransKey: 'CP.cpAppointmentNote2',
-      infoTransKey: '[[Vorhandes Abo hat zu wenig Guthaben]]'
+      infoTransKey: '[NO TRANSLATION | Vorhandes Abo hat zu wenig Guthaben]'
     }
   },
   3: {
@@ -86,7 +86,7 @@ export const courseAppointmentStatusMapping = {
       status: 'Gebucht',
       info: 'Keine Stornierung mehr möglich',
       statusTransKey: 'CP.cpAppointmentListStatusBooked',
-      infoTransKey: '[[Keine Stornierung mehr möglich]]'
+      infoTransKey: '[NO TRANSLATION | Keine Stornierung mehr möglich]'
     }
   }
 }
