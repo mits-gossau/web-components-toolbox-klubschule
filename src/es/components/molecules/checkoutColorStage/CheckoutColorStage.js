@@ -26,7 +26,7 @@ export default class Contact extends Shadow() {
   }
 
   disconnectedCallback () {
-    this.backButton.removeEvenetListener('click', this.backLinkListener)
+    if (this.backButton) this.backButton.removeEvenetListener('click', this.backLinkListener)
   }
 
   backLinkListener (event) {
@@ -102,7 +102,7 @@ export default class Contact extends Shadow() {
                 <ks-a-heading tag="h1" color="white" content-stage>${this.getAttribute('title')}</ks-a-heading>
             </div>
         </o-grid>
-    `
+      `
     })
   }
 
