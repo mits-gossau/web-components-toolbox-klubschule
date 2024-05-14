@@ -30,8 +30,11 @@ export default class Contact extends Shadow() {
   }
 
   backLinkListener (event) {
-    event.preventDefault()
-    window.history.back()
+    // only if there is no back-link url set
+    if (!this.hasAttribute('back-link')) {
+      event.preventDefault()
+      window.history.back()
+    }
   }
 
   /**
@@ -92,7 +95,7 @@ export default class Contact extends Shadow() {
                 <p class="topline link-underline">
                     ${(window.history.length > 1)
                         ? /* html */`
-                            <a class="back-button" href="#">
+                            <a class="back-button" href="${this.getAttribute('back-link') || '#'}">
                                 <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx>
                                 <span>${this.getAttribute('back-label')}</span>
                             </a>`
