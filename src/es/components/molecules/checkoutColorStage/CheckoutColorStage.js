@@ -93,7 +93,7 @@ export default class Contact extends Shadow() {
         >
             <div class="stage-content">
                 <p class="topline link-underline">
-                    ${(window.history.length > 1)
+                    ${(window.history.length > 1 || this.hasAttribute('back-link'))
                         ? /* html */`
                             <a class="back-button" href="${this.getAttribute('back-link') || '#'}">
                                 <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx>
