@@ -72,18 +72,10 @@ export default class AppointmentsList extends Shadow() {
     ))
   }
 
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * renders the css
-   */
   renderCSS () {
     this.css = /* css */`
       :host #list-wrapper {
@@ -98,9 +90,6 @@ export default class AppointmentsList extends Shadow() {
     return this.fetchTemplate()
   }
 
-  /**
-   * fetches the template
-   */
   fetchTemplate () {
     const styles = [
       {
@@ -166,7 +155,7 @@ export default class AppointmentsList extends Shadow() {
       ])
       return Promise.all([fetchModules]).then((children) => {
         this.html = ''
-        const filter = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
+        const subscriptionSelect = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
         const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
         this.numberOfAppointments = dayList.counter
         this.html = /* html */ `
@@ -185,7 +174,7 @@ export default class AppointmentsList extends Shadow() {
             ${(!this.dataset.showFilters || this.dataset.showFilters === 'true')
             ? /* html */ `
             <div col-lg="6" col-md="6" col-sm="12">
-              ${filter}
+              ${subscriptionSelect}
             </div>
             <div col-lg="12" col-md="12" col-sm="12">
               <m-appointments-filter></m-appointments-filter>
@@ -206,7 +195,6 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderLoading () {
-    // this.html = '<img src="../customer-portal/img/loading.gif" alt="Loading">'
     this.html = '<mdx-component><mdx-spinner size="large"></mdx-spinner></mdx-component>'
   }
 

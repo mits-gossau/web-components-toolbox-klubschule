@@ -104,14 +104,10 @@ export default class AppointmentsFilter extends Shadow() {
       }
     ]).then(() => {
       this.html = /* html */ `
-        <div>
-         ${this.renderWeekDayFilter()} 
-        </div>
+        <div>${this.renderWeekDayFilter()}</div>
         <div>${this.renderDayTimeFilter()}</div>
         <div>${this.renderCenterFilter()}</div>
-        <div>
-          444
-        </div>
+        <div></div>
       `
     })
   }
