@@ -75,7 +75,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * Download subscriptions PDF
-   *
    * @param {CustomEventInit} event
    */
   updateSubscriptionListener = event => {
@@ -93,7 +92,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * SHOW course detail
-   *
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentDetailListener = event => {
@@ -447,25 +445,14 @@ export default class CourseDialog extends Shadow() {
     `
   }
 
-  /**
-   * evaluates if a render is necessary
-   * @return {boolean}
-   */
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * evaluates if a render is necessary
-   * @return {boolean}
-   */
   shouldRenderHTML () {
     return !this.dialog
   }
 
-  /**
-   * renders the css
-   */
   renderCSS () {
     this.css = /* css */`
       :host {}
@@ -476,11 +463,7 @@ export default class CourseDialog extends Shadow() {
     return this.fetchTemplate()
   }
 
-  /**
-   * fetches the template
-   */
   fetchTemplate () {
-    /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
         path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`,
@@ -541,10 +524,6 @@ export default class CourseDialog extends Shadow() {
     })
   }
 
-  /**
-   * Render HTML
-   * @returns void
-   */
   renderHTML (courseId, content, selectedSubscription) {
     const fetchModules = this.fetchModules([
       {
@@ -607,8 +586,8 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   * Updates element with the ID 'title' in a dialog component with the provided title.
-   * @param {string} title - `title`
+   * Updates the dialog title.
+   * @param {string} title
    */
   renderDialogTitle (title) {
     const titleElement = this.dialog.shadowRoot.getElementById('title')
@@ -799,7 +778,6 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * Show/Hide loading spinner
-   *
    * @param {string} display css display property
   */
   subscriptionPdfLinkLoading = (display = 'none') => {
