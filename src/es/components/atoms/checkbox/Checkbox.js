@@ -67,7 +67,7 @@ export default class Checkbox extends Shadow() {
         }
 
         :host input[type='checkbox'] {
-            display: none;
+            width: 0;
         }
 
         :host input[type='checkbox']:checked + .box {
@@ -90,6 +90,13 @@ export default class Checkbox extends Shadow() {
 
         :host .box a-icon-mdx {
             display: none;
+        }
+        .wrap > .message {
+          display: none;
+        }
+
+        [dirty] .wrap > input:invalid ~ .message {
+          display: block;
         }
     `
     return this.fetchTemplate()
