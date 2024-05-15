@@ -101,10 +101,9 @@ export default class WithFacet extends Shadow() {
           "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
           "MandantId": ${this.getAttribute('mandant-id') || initialRequestObjFrozen.MandantId || 110},
           "PortalId": ${this.getAttribute('portal-id') || initialRequestObjFrozen.PortalId || 29},
-          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}",
-          ${(hasSorting = event.detail?.key === 'sorting' && !!event.detail.id) ? `"sorting": "${event.detail.id}",` : ''}
-          ${hasSearchTerm ? `
-            ,"searchText": "${event.detail?.key === 'input-search'
+          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}"
+          ${(hasSorting = event.detail?.key === 'sorting' && !!event.detail.id) ? `,"sorting": "${event.detail.id}"` : ''}
+          ${hasSearchTerm ? `,"searchText": "${event.detail?.key === 'input-search'
               ? event.detail.value
               : this.params.get('q')
             }"
