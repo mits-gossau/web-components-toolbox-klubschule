@@ -65,6 +65,7 @@ export default class Contact extends Shadow() {
         margin-left: 0 !important;
         margin-right: 0 !important;
         background-color: var(--mdx-sys-color-primary-default);
+        display: block;
       }
     `
   }
