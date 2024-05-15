@@ -3,10 +3,10 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 
 /**
 * @export
-* @class Contact
+* @class CheckoutColorStage
 * @type {CustomElementConstructor}
 */
-export default class Contact extends Shadow() {
+export default class CheckoutColorStage extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
 
