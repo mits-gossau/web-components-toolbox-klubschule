@@ -99,6 +99,9 @@ export default class DialogStatusButton extends Shadow() {
     if (this.dataset.id === event.detail.tags[0]) this.renderConfirmation()
   }
 
+  /**
+   * Render confirmation button for booking and reversal state
+   */
   renderConfirmation () {
     this.html = ''
     let btn = this.renderDialogActionButton(this.dataset.id, '', subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
@@ -106,17 +109,10 @@ export default class DialogStatusButton extends Shadow() {
     this.html = btn
   }
 
-  /**
-   * evaluates if a render is necessary
-   * @return {boolean}
-   */
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * renders the css
-   */
   renderCSS () {
     this.css = /* css */`
       :host {
@@ -133,9 +129,6 @@ export default class DialogStatusButton extends Shadow() {
     return this.fetchTemplate()
   }
 
-  /**
-   * fetches the template
-   */
   fetchTemplate () {
     /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
@@ -172,18 +165,56 @@ export default class DialogStatusButton extends Shadow() {
   renderDialogActionButton (id, type, subscriptionMode, status, content, selectedSubscription) {
     switch (true) {
       case (type === 'detail' && status === 1):
-        return /* html */ `<ks-a-button tag="${id}" namespace="button-primary-" tag="['bookingFinal']"  request-event-name="request-show-dialog-booking-confirmation"><a-translation data-trans-key='CP.cpBookAppointment'/></a-translation></ks-a-button>`
+        return /* html */ `
+          <ks-a-button
+            namespace="button-primary-" 
+            request-event-name="request-show-dialog-booking-confirmation"
+            tag="['bookingFinal']" 
+            tag="${id}">
+              <a-translation data-trans-key='CP.cpBookAppointment'/></a-translation>
+          </ks-a-button>
+        `
       case (type === 'detail' && status === 5):
-        return /* html */ `<ks-a-button tag="${id}" namespace="button-primary-" color="quaternary" tag="['reversal']"  request-event-name="request-show-dialog-reversal-confirmation"><a-translation data-trans-key='CP.cpCancelAppointment'/></a-translation></ks-a-button>`
+        return /* html */ `
+          <ks-a-button
+            color="quaternary" 
+            namespace="button-primary-" 
+            request-event-name="request-show-dialog-reversal-confirmation"
+            tag="['reversal']" 
+            tag="${id}">
+              <a-translation data-trans-key='CP.cpCancelAppointment'/></a-translation>
+          </ks-a-button>
+        `
       case (type === 'subscriptions'): {
         // @ts-ignore
         const url = `${self.Environment.getApiBaseUrl('customer-portal').subscriptionRenewSearchLinkUrl}${this.dataContent.subscriptionKindType}_${this.dataContent.subscriptionKindId}`
-        return /* html */ `<ks-a-button href="${url}" namespace="button-primary-"><a-translation data-trans-key='CP.cpSubscriptionRenew'/></a-translation></ks-a-button>`
+        return /* html */ `
+          <ks-a-button
+            href="${url}" 
+            namespace="button-primary-">
+              <a-translation data-trans-key='CP.cpSubscriptionRenew'/></a-translation>
+          </ks-a-button>
+        `
       }
       case (type === 'reversal' || status === 5):
-        return /* html */ `<ks-a-button color="quaternary" namespace="button-primary-" request-event-name="request-subscription-course-appointment-reversal" tag='[${content},${selectedSubscription}]'><a-translation data-trans-key='CP.cpCancelAppointmentNow'/></a-translation></ks-a-button>`
+        return /* html */ `
+          <ks-a-button
+            color="quaternary"
+            namespace="button-primary-"
+            request-event-name="request-subscription-course-appointment-reversal"
+            tag='[${content},${selectedSubscription}]'>
+              <a-translation data-trans-key='CP.cpCancelAppointmentNow'/></a-translation>
+          </ks-a-button>
+        `
       case (type === 'booking' || status === 1):
-        return /* html */ `<ks-a-button namespace="button-primary-"  request-event-name="request-subscription-course-appointment-booking" tag='[${content},${selectedSubscription}]'><a-translation data-trans-key='CP.cpBookAppointmentNow'/></a-translation></ks-a-button>`
+        return /* html */ `
+          <ks-a-button
+            namespace="button-primary-"
+            request-event-name="request-subscription-course-appointment-booking"
+            tag='[${content},${selectedSubscription}]'>
+              <a-translation data-trans-key='CP.cpBookAppointmentNow'/></a-translation>
+          </ks-a-button>
+        `
       default:
         return ''
     }
@@ -191,7 +222,13 @@ export default class DialogStatusButton extends Shadow() {
 
   get closeButton () {
     return /* html */ `
-      <ks-a-button id="close" request-event-name="dialog-close-${this.dataset.id}" namespace="button-tertiary-" color="secondary"><a-translation data-trans-key='CP.cpAppointmentClose'/></a-translation></ks-a-button>
+      <ks-a-button
+        color="secondary"
+        id="close"
+        namespace="button-tertiary-" 
+        request-event-name="dialog-close-${this.dataset.id}">
+          <a-translation data-trans-key='CP.cpAppointmentClose'/></a-translation>
+      </ks-a-button>
     `
   }
 }
