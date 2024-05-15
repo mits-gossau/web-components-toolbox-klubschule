@@ -15,7 +15,7 @@ export default class OffersPage extends Shadow() {
     this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
-        const bodySection = this.eventDetailURL ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+        const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
           bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
         }
@@ -96,7 +96,7 @@ export default class OffersPage extends Shadow() {
   withFacetListener(event) {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
-      const bodySection = this.eventDetailURL ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+      const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
       if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
         bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
       }
