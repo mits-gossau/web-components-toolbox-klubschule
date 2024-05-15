@@ -3,7 +3,14 @@
 <h2 style="margin-top: 8rem">Color Stage Checkout</h2>
 
 <ks-m-checkout-color-stage 
-    back-label="Zurück" 
+    back-label="Zurück (fallback browser back)" 
+    title="Konfiguration: {{ Angebotstitel }}"
+>
+</ks-m-checkout-color-stage>
+
+<ks-m-checkout-color-stage 
+    back-label="Google (NOT browser back)"
+    back-link="https://www.google.com" 
     title="Konfiguration: {{ Angebotstitel }}"
 >
 </ks-m-checkout-color-stage>
