@@ -1,5 +1,5 @@
 // @ts-check
-import { Shadow } from '../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import Index from './Index.js'
 
 /**
  * Login
@@ -8,10 +8,7 @@ import { Shadow } from '../../components/web-components-toolbox/src/es/component
  * @class Login
  * @type {CustomElementConstructor}
  */
-export default class Login extends Shadow() {
-  /**
-   * @param {any} args
-   */
+export default class Login extends Index {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
@@ -20,13 +17,9 @@ export default class Login extends Shadow() {
     this.renderHTML()
   }
 
-  /**
-   * renders the html
-   * @return {Promise<void>}
-   */
   renderHTML () {
-    this.html = /* html */`
-        <h1>LOGIN</h1>
-      `
+    this.html = /* html */ `
+      <h1>LOGIN</h1>
+    `
   }
 }

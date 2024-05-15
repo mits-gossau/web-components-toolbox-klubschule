@@ -1,6 +1,8 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/* global CustomEvent */
+
 /**
 * @export
 * @class OffersPage
@@ -49,7 +51,7 @@ export default class OffersPage extends Shadow() {
   connectedCallback () {
     this.hidden = true
     new Promise(resolve => {
-      this.dispatchEvent(new CustomEvent('request-translation',
+      this.dispatchEvent(new CustomEvent('request-translations',
         {
           detail: {
             resolve
@@ -58,9 +60,9 @@ export default class OffersPage extends Shadow() {
           cancelable: true,
           composed: true
         }))
-    }).then(result => {
-      this.translation = result.translation
-      this.getTranslation = result.getTranslation
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
       const showPromises = []
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
@@ -151,7 +153,10 @@ export default class OffersPage extends Shadow() {
    * @return Promise<void>
    */
   renderHTML () {
-    this.html = this.eventDetailURL || this.hasAttribute('no-search-tab') ? this.tabContentOne : /* html */`
+    this.html = this.eventDetailURL ||
+      this.hasAttribute('no-search-tab')
+      ? this.tabContentOne
+      : /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
             <li>
@@ -299,7 +304,9 @@ export default class OffersPage extends Shadow() {
                 <div col-lg="12" col-md="12" col-sm="12">
                   <ks-a-with-facet-counter></ks-a-with-facet-counter>
                 </div>
-                ${this.eventDetailURL ? '' : /* HTML */ `
+                ${this.eventDetailURL
+                  ? ''
+                  : /* HTML */ `
                   <div col-lg="6" col-md="6" col-sm="12">
                     <ks-c-auto-complete
                       no-forwarding
@@ -475,11 +482,13 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options">
               </section>
               <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}></ks-m-tile-factory>
-              ${this.badgeContainer ? /* HTML */ `
-                <ks-m-badge-legend>
-                  ${this.badgeContainer.innerHTML}
-                </ks-m-badge-legend>
-              ` : ''}
+              ${this.badgeContainer
+                ? /* HTML */ `
+                  <ks-m-badge-legend>
+                    ${this.badgeContainer.innerHTML}
+                  </ks-m-badge-legend>
+                `
+                : ''}
               <ks-a-with-facet-pagination class="hidden" id="pagination">
                 <ks-a-button namespace="button-primary-" color="secondary">
                     <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>

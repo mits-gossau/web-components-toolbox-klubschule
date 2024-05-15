@@ -1,0 +1,5 @@
+:host {
+    --course-info-default-alert: #F4001B;
+    --course-info-default-icon-color: var(--mdx-sys-color-primary-default);
+    --course-info-default-success: #00997F;
+}

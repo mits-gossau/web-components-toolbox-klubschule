@@ -1,0 +1,3 @@
+:host {
+    --course-title-default-color: var(--color-secondary, black);
+}

@@ -2,13 +2,13 @@
 import Index from './Index.js'
 
 /**
- * Subscriptions
+ * Appointment List
  *
  * @export
- * @class SubscriptionList
+ * @class AppointmentList
  * @type {CustomElementConstructor}
  */
-export default class SubscriptionList extends Index {
+export default class AppointmentList extends Index {
   /**
    * @param {Object} options
    * @param {any} args
@@ -23,7 +23,7 @@ export default class SubscriptionList extends Index {
   }
 
   shouldRenderHTML () {
-    return !this.subscriptionsList
+    return !this.appointmentList
   }
 
   shouldRenderCSS () {
@@ -33,23 +33,23 @@ export default class SubscriptionList extends Index {
   renderHTML () {
     this.fetchModules([
       {
-        path: `${this.importMetaUrl}../components/molecules/subscriptionsList/SubscriptionsList.js`,
-        name: 'm-subscriptions-list'
+        path: `${this.importMetaUrl}../components/molecules/appointmentsList/AppointmentsList.js`,
+        name: 'm-appointments-list'
       }
     ])
-    this.html = '<m-subscriptions-list namespace="subscriptions-list-default-" data-request-subscription="request-subscriptions" data-list-type="subscriptions"></m-subscriptions-list>'
+    this.html = '<m-appointments-list namespace="appointments-list-default-" data-request-subscription="request-subscription-course-appointments"></m-appointments-list>'
   }
 
   renderCSS () {
     this.css = /* css */`
-    :host {}
-    @media only screen and (max-width: _max-width_) {
       :host {}
-    }
+      @media only screen and (max-width: _max-width_) {
+        :host {}
+      }
     `
   }
 
-  get subscriptionsList () {
-    return this.root.querySelector('m-subscriptions-list')
+  get appointmentList () {
+    return this.root.querySelector('m-appointments-list')
   }
 }

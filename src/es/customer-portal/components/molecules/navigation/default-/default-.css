@@ -1,0 +1,13 @@
+:host {
+    --navigation-default-a-font-size:var(--mdx-comp-tabs-font-label-default-font-size, 1.125em);
+    --navigation-default-a-font-weight:var(--mdx-comp-tabs-font-label-default-font-weight, 500);
+    --navigation-default-a-text-decoration-hover: 0.125em solid var(--mdx-sys-color-primary-default);
+    --navigation-default-active-border-bottom: 0.125em solid var(--mdx-sys-color-primary-default);
+    --navigation-default-line-height:1.25em;
+    --navigation-default-ul-display:flex;
+    --navigation-default-ul-flex-direction:row;
+    --navigation-default-ul-list-style:none;
+    --navigation-default-ul-margin-mobile: 0;
+    --navigation-default-ul-margin:0;
+    --navigation-default-ul-padding-left:0;
+}
