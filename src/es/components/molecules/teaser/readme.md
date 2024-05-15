@@ -32,3 +32,4 @@ Available colors are:
 `ibaw-lightblue`: ibaw lightblue  
 `pro-greengray`: pro greengray  
 `pro-terracotta`: pro terracotta  
+- `image-size=small`: Can be used for `teaser-text-image-`

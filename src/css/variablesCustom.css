@@ -387,6 +387,16 @@
 
   /* google maps */
   --map-height-mobile: 120vw;
+
+  /* form */
+  --simple-form-default-h1-margin: var(--mdx-sys-spacing-flex-large-s) auto var(--mdx-sys-spacing-flex-large-xs) auto;
+  --simple-form-default-h1-color: var(--mdx-sys-color-neutral-bold4);
+  --simple-form-default-color: var(--mdx-comp-inputfield-placeholder-color-default);
+  --simple-form-default-label-color: var(--mdx-comp-inputfield-label-color-default);
+  --simple-form-default-label-display: inline-block;
+  --simple-form-default-label-font: var(--mdx-comp-inputfield-font-label);
+  --simple-form-default-label-margin-bottom: var(--mdx-sys-spacing-flex-small-2xs);
+  --simple-form-default-input-font: var(--mdx-comp-inputfield-font-default);
 }
 
 @media screen and (min-width: 1441px) {

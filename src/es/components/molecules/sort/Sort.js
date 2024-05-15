@@ -78,7 +78,7 @@ export default class Sort extends Shadow() {
         background-color: #FFFFFF;
         border-radius: 0.5em;
         box-shadow: 0em 0em 0.75em 0em rgba(51, 51, 51, 0.1);
-        z-index: 10;
+        z-index: 11;
       }
 
       :host .m-sort__list {
@@ -170,9 +170,29 @@ export default class Sort extends Shadow() {
     const buttonSpanPadding = this.getAttribute('button-span-padding') || '0 0 0 0'
 
     ul.classList.add('m-sort__list')
-    Array.from(ul.children).forEach(li => li.classList.add('m-sort__item'))
+    Array.from(ul.children).forEach(li => {
+      li.classList.add('m-sort__item')
+      if (this.hasAttribute('with-facet')) {
+        li.addEventListener('click', 
+          (event) => this.dispatchEvent(
+            new CustomEvent('request-with-facet',
+              {
+                detail: {
+                  key: 'sorting',
+                  id: event.currentTarget?.id
+                },
+                bubbles: true,
+                cancelable: true,
+                composed: true
+              }
+            )
+          )
+        )
+      }
+    })
     Array.from(ul.querySelectorAll('[active]')).forEach(li => li.classList.add('m-sort__item-active'))
 
+    this.html = ``
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="m-sort">

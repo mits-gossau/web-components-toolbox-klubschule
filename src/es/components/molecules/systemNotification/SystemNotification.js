@@ -44,11 +44,25 @@ export default class KsSystemNotification extends SystemNotification {
         width: var(--icon-size);
         box-sizing: content-box;
         padding: var(--icon-padding);
-        background-color: ${this.hasAttribute('with-icon-background') ? 'var(--icon-background-color)' : 'tranparent'};
+        background-color: ${this.hasAttribute('with-icon-background') ? 'var(--icon-background-color)' : 'transparent'};
         border: var(--icon-border-width) solid var(--icon-border-color);
         border-radius: 3px;
         color: var(--icon-color);
         display: flex;
+      }
+      :host([icon-blue]) .icon {
+        height: var(--icon-size-custom, var(--icon-size));
+        width: var(--icon-size-custom, var(--icon-size));
+        padding: 0;
+        background-color: transparent;
+        border: 0 none;
+        border-radius: 0;        
+      }
+      :host([icon-blue]) .icon a-icon-mdx {
+        cursor: auto;
+      }
+      :host([icon-blue]) .icon a-icon-mdx svg {
+        fill: var(--mdx-sys-color-primary-subtle1);
       }
     `
     return this.fetchTemplate()
@@ -129,6 +143,8 @@ export default class KsSystemNotification extends SystemNotification {
   renderHTML () {
     const iconName = this.getAttribute('icon-name') || ''
     const iconBadge = this.getAttribute('icon-badge') || ''
+    const iconSize = this.getAttribute('icon-size') || '1em'
+    const iconNamespace = this.hasAttribute('icon-blue') ? 'icon-mdx-ks-blue-' : 'icon-mdx-ks-'
     const description = this.innerHTML || ''
     this.html = /* html */ `
     <div class="system-notification" role="alert">
@@ -137,7 +153,7 @@ export default class KsSystemNotification extends SystemNotification {
           /* html */ `<span>${iconBadge}</span>`
       ) : ''}
         ${iconName ? (
-          /* html */ `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${iconName}" />`
+          /* html */ `<a-icon-mdx namespace="${iconNamespace}" icon-name="${iconName}" size="${iconSize}" />`
       ) : ''}
       </div>
       ${description ? /* html */ `
