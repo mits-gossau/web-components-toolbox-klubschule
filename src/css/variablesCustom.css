@@ -397,6 +397,11 @@
   --simple-form-default-label-font: var(--mdx-comp-inputfield-font-label);
   --simple-form-default-label-margin-bottom: var(--mdx-sys-spacing-flex-small-2xs);
   --simple-form-default-input-font: var(--mdx-comp-inputfield-font-default);
+
+  /* basics */
+  --simple-form-default-p-margin: var(--mdx-sys-spacing-flex-small-s) auto;
+  --simple-form-default-hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-subtle4);
+  --simple-form-default-hr-margin: var(--mdx-sys-spacing-flex-small-s) auto;
 }
 
 @media screen and (min-width: 1441px) {
