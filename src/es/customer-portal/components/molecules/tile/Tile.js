@@ -390,7 +390,7 @@ export default class AppointmentTile extends Tile {
                     </span>
                   </div>
                   <div>
-                    <span class="m-tile__title date">Gültigkeitsdauer ${from} - ${to} </span>
+                    <span class="m-tile__title date"><a-translation data-trans-key='CP.cpSubscriptionColumnValidity'/></a-translation> ${from} - ${to} </span>
                   </div> 
                 </div>
               </div>
