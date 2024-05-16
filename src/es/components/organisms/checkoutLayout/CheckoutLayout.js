@@ -38,10 +38,33 @@ export default class CheckoutLayout extends Shadow() {
         width: 100% !important;
         margin: 0 !important;
       }
+
+      @media screen and (max-width: _max-width_) {
+        .checkout-layout__aside {
+          border-top: 1px solid var(--mdx-sys-color-brand-neutral-300);
+        }
+      }
     `
   }
 
   renderHTML () {
+    this.html = /* html */`
+        <div class="checkout-layout">
+            <slot name="top"></slot>
+            <o-grid mode="false" namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border>
+                <div>
+                    <slot name="main"></slot>
+                </div>
+                <aside class="checkout-layout__aside">
+                    <slot name="sidebar"></slot>
+                </aside>
+            </o-grid>
+            <ks-o-body-section variant="default" mode="false" has-background>
+                <slot name="bottom"></slot>
+            </ks-o-body-section>
+        </div>
+      `
+
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
@@ -55,27 +78,6 @@ export default class CheckoutLayout extends Shadow() {
         path: `${this.importMetaUrl}../../organisms/bodySection/BodySection.js`,
         name: 'ks-o-body-section'
       }
-    ]).then(() => {
-      const template = document.createElement('template')
-
-      template.innerHTML = /* html */`
-        <div class="checkout-layout">
-            <slot name="top"></slot>
-            <o-grid mode="false" namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" switch-aside-order-mobile>
-                <div>
-                    <slot name="main"></slot>
-                </div>
-                <div>
-                    <slot name="sidebar"></slot>
-                </div>
-            </o-grid>
-            <ks-o-body-section variant="default" mode="false" has-background>
-                <slot name="bottom"></slot>
-            </ks-o-body-section>
-        </div>
-      `
-
-      this.root.appendChild(template.content.cloneNode(true))
-    })
+    ])
   }
 }
