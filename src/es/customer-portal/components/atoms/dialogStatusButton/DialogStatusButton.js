@@ -169,7 +169,7 @@ export default class DialogStatusButton extends Shadow() {
           <ks-a-button
             namespace="button-primary-" 
             request-event-name="request-show-dialog-booking-confirmation"
-            tags="${id}">
+            tag="${id}">
               <a-translation data-trans-key='CP.cpBookAppointment'/></a-translation>
           </ks-a-button>
         `
