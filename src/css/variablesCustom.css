@@ -402,7 +402,7 @@
   --simple-form-default-label-margin-bottom: var(--mdx-sys-spacing-flex-small-2xs);
   --simple-form-default-input-font: var(--mdx-comp-inputfield-font-default);
 
-  --simple-form-miduweb-p-margin: var(--hr-form-border-margin);
+  --simple-form-miduweb-p-margin: var(--simple-form-miduweb-hr-margin);
 }
 
 @media screen and (min-width: 1441px) {
