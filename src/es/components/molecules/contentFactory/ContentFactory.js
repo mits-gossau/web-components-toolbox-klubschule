@@ -122,8 +122,8 @@ export default class ContentFactory extends Shadow() {
             ${content.image ? /* html */`<a-picture picture-load defaultSource="${content.image.src}" alt="${content.image.alt}"></a-picture>` : ''}
           </a>
         </ks-m-content-search-item>
-        `), 
-        '<section>'
+        `),
+      '<section>'
       ) + '</section>'
     }).catch(error => {
       console.error(error)
@@ -137,12 +137,14 @@ export default class ContentFactory extends Shadow() {
       'link': '${content.link}',
       'title': '${content.title}'
       'text': '${content.text}',
-      ${content.image ? `
+      ${content.image
+? `
         'image': {
           'alt': '${content.image.alt}',
           'src': ${content.image.src}
         }    
-        ` : ''
+        `
+: ''
       }
     }`
   }

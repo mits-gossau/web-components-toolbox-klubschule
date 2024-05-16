@@ -79,7 +79,7 @@ export default class AutoComplete extends Shadow() {
         composed: true
       }))
       // trigger search when enter or icon click
-      if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({detail: {description: event.detail.value}})
+      if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { description: event.detail.value } })
     }
     this.clickOnPredictionListener = event => {
       // home search input

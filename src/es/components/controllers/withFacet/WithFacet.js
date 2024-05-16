@@ -94,7 +94,7 @@ export default class WithFacet extends Shadow() {
 
         this.updateURLParams()
 
-        let hasSearchTerm = event.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
+        const hasSearchTerm = event.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
         let hasSearchLocation = false
         const filterRequest = `{
@@ -103,7 +103,8 @@ export default class WithFacet extends Shadow() {
           "PortalId": ${this.getAttribute('portal-id') || initialRequestObjFrozen.PortalId || 29},
           "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}"
           ${(hasSorting = event.detail?.key === 'sorting' && !!event.detail.id) ? `,"sorting": "${event.detail.id}"` : ''}
-          ${hasSearchTerm ? `,"searchText": "${event.detail?.key === 'input-search'
+          ${hasSearchTerm
+? `,"searchText": "${event.detail?.key === 'input-search'
               ? event.detail.value
               : this.params.get('q')
             }"

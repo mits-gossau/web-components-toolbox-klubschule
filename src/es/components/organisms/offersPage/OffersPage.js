@@ -33,7 +33,7 @@ export default class OffersPage extends Shadow() {
             <li ${this.data.sort.sort === data.id ? 'active' : ''} id="${data.id}">
               ${data.label}
             </li>
-          `, '') 
+          `, '')
           sort.innerHTML = /* html */ `
             <ks-m-sort namespace="sort-right-" with-facet>
               ${this.data?.sort?.items?.length ? /* html */ `
@@ -93,7 +93,7 @@ export default class OffersPage extends Shadow() {
   /**
    * Fill markup with none static data
    */
-  withFacetListener(event) {
+  withFacetListener (event) {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
       const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
@@ -114,7 +114,7 @@ export default class OffersPage extends Shadow() {
           <li ${this.data.sort.sort === data.id ? 'active' : ''} id="${data.id}">
             ${data.label}
           </li>
-        `, '') 
+        `, '')
         sort.innerHTML = /* html */ `
           <ks-m-sort namespace="sort-right-" with-facet>
             ${this.data?.sort?.items?.length ? /* html */ `
@@ -159,24 +159,24 @@ export default class OffersPage extends Shadow() {
       : /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
-            <li>
-              <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
-                <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
-              </ks-a-with-facet-counter>
-            </li>
-            <li>
-              <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
-                <button tab-target="content2" id="total-stories-tab-heading"></button>
-              </ks-a-with-facet-counter>
-            </li>
+          <li>
+            <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
+              <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
+            </ks-a-with-facet-counter>
+          </li>
+          <li>
+            <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
+              <button tab-target="content2" id="total-stories-tab-heading"></button>
+            </ks-a-with-facet-counter>
+          </li>
         </ul>
-          <div>
-            <div id="content1" tab-content-target>
-                ${this.tabContentOne}
-            </div>
-            <div id="content2" tab-content-target>
-                ${this.tabContentTwo}
-            </div>
+        <div>
+          <div id="content1" tab-content-target>
+            ${this.tabContentOne}
+          </div>
+          <div id="content2" tab-content-target>
+            ${this.tabContentTwo}
+          </div>
         </div>
       </ks-m-tab>
     `

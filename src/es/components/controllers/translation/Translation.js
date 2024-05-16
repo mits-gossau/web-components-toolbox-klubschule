@@ -8,8 +8,8 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 */
 export default class Translation extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)  
-    
+    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
+
     this.translation = {}
 
     // check if translation data is provided
@@ -25,11 +25,13 @@ export default class Translation extends Shadow() {
       const isValid = translationData.every(item => {
         return item.hasOwnProperty('key') && item.hasOwnProperty('value')
       })
-  
-      this.translation = isValid ? translationData.reduce((acc, curr) => {
-        acc[curr.key] = curr.value
-        return acc
-      }, {}) : {}
+
+      this.translation = isValid
+        ? translationData.reduce((acc, curr) => {
+          acc[curr.key] = curr.value
+          return acc
+        }, {})
+        : {}
     } catch (error) {
       console.error('Error parsing translation data', error)
     }
