@@ -403,6 +403,7 @@
   --simple-form-default-input-font: var(--mdx-comp-inputfield-font-default);
 
   --simple-form-miduweb-p-margin: var(--simple-form-miduweb-hr-margin);
+  --mdx-comp–inputfield-label-color-default: var(--mdx-comp-inputfield-label-color-default);
 }
 
 @media screen and (min-width: 1441px) {
