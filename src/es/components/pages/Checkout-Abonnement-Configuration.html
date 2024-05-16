@@ -2,17 +2,33 @@
 <p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?node-id=6179-53770&m=dev" target="_blank">figma</a></code></p>
 <hr />
 
-<m-simple-form load-form-styles namespace="simple-form-default-">
-    <form action="#">
-        <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="26px" icon-blue>
-            <div slot="description">
-                <p>Bitte beachten Sie, dass das Abonnement nach dem Kauf zuerst durch die Klubschule manuell freigeschalten werden muss. Dieser Prozess wird nur innerhalb der normalen Arbeitszeiten durchgeführt.</p>
-            </div>
-        </ks-m-system-notification>
+<o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" switch-aside-order-mobile>
+    <ks-o-body-section content-width-var="100%" no-margin-y>
+        <m-simple-form-validation 
+            load-form-styles 
+            namespace="simple-form-miduweb-"
+        >
+            <form>
+                <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="26px" icon-blue>
+                    <div slot="description">
+                        <p>Bitte beachten Sie, dass das Abonnement nach dem Kauf zuerst durch die Klubschule manuell freigeschalten werden muss. Dieser Prozess wird nur innerhalb der normalen Arbeitszeiten durchgeführt.</p>
+                    </div>
+                </ks-m-system-notification>
 
-        <h1>Ab wann soll Ihr Abonnement gültig sein?</h1>
+                <h1>Ab wann soll Ihr Abonnement gültig sein?</h1>
 
-        <label for="abo-date-config">Start der Gültigkeit *</label>
-        <input type="date" id="abo-date-config" name="start-date" required onfocus="this.min=new Date().toISOString().split('T')[0]">
-    </form>
-</m-simple-form>
+                <label for="abo-date-config">Start der Gültigkeit *</label>
+                <input 
+                    type="date" 
+                    id="abo-date-config" 
+                    name="start-date" 
+                    onfocus="this.min=new Date().toISOString().split('T')[0]"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Datum angeben."}}'
+                >
+            </form>
+        </m-simple-form-validation>
+    </ks-o-body-section>
+    <aside>
+        <!-- side content here -->
+    </aside>
+</o-grid>
