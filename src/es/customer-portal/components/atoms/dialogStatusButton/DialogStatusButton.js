@@ -169,8 +169,7 @@ export default class DialogStatusButton extends Shadow() {
           <ks-a-button
             namespace="button-primary-" 
             request-event-name="request-show-dialog-booking-confirmation"
-            tag="['bookingFinal']" 
-            tag="${id}">
+            tags="${id}">
               <a-translation data-trans-key='CP.cpBookAppointment'/></a-translation>
           </ks-a-button>
         `
@@ -180,8 +179,7 @@ export default class DialogStatusButton extends Shadow() {
             color="quaternary" 
             namespace="button-primary-" 
             request-event-name="request-show-dialog-reversal-confirmation"
-            tag="['reversal']" 
-            tag="${id}">
+            tag="${id}"> 
               <a-translation data-trans-key='CP.cpCancelAppointment'/></a-translation>
           </ks-a-button>
         `
