@@ -11,6 +11,7 @@
 - `forward-label=string`: localized label for back link (required)
 - `submit?`: add this attribute if a submit button is needed
 - `forward-link?=string`
+- `forward-disabled`: if this attribute exists, forward button will be disabled
 
 ## Markup Examples
 

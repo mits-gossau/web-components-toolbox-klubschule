@@ -41,9 +41,10 @@ export default class BackForward extends Shadow() {
           gap: 1rem;
         }
 
-        ks-a-button {
+        :host ks-a-button {
           width: 100%;
         }
+
       }
     `
   }
@@ -61,9 +62,11 @@ export default class BackForward extends Shadow() {
         ${this.hasAttribute('forward-label')
           ? /* html */`
             <ks-a-button 
+              class="back-forward__forward-btn"
               big 
               ${this.hasAttribute('submit') ? 'type="submit" mode="false"' : ''} 
               ${this.hasAttribute('forward-link') ? `href="${this.getAttribute('forward-link')}"` : ''} 
+              ${this.hasAttribute('forward-disabled') ? 'disabled' : ''}
               namespace="button-primary-" 
               color="secondary"
             >
