@@ -316,8 +316,8 @@
   --hr-secondary-opacity: 1;
   --hr-secondary-margin: var(--mdx-sys-spacing-flex-xs) auto;
 
-  --hr-form-border-bottom: 1px solid var(--mdx-sys-color-neutral-subtle3);
-  --hr-form-margin: var(--mdx-sys-spacing-flex-small-s) auto;
+  --simple-form-miduweb-hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-subtle3);
+  --simple-form-miduweb-hr-margin: var(--mdx-sys-spacing-flex-small-s) auto;
 
   /* Tables */
   --table-th-font-weight: 500;
@@ -402,9 +402,7 @@
   --simple-form-default-label-margin-bottom: var(--mdx-sys-spacing-flex-small-2xs);
   --simple-form-default-input-font: var(--mdx-comp-inputfield-font-default);
 
-  --simple-form-default-p-margin: var(--hr-form-border-margin);
-  --simple-form-default-hr-border-bottom: var(--hr-form-border-bottom);
-  --simple-form-default-hr-margin: var(--mdx-sys-spacing-flex-small-s) auto;
+  --simple-form-miduweb-p-margin: var(--hr-form-border-margin);
 }
 
 @media screen and (min-width: 1441px) {
