@@ -227,8 +227,6 @@
   --header-nav-right-height-custom: calc(100rem/18);
   --header-nav-right-margin-custom: 0 0 1rem 0;
   --header-nav-right-padding: 0;
-  --hr-border-width: 0 0 2px;
-  --hr-secondary-opacity: 1;
   --label-letter-spacing: 0;
   --menu-color-custom: white;
   --login-width: var(--header-default-content-width);
@@ -295,6 +293,7 @@
   --p-line-height: var(--mdx-sys-font-flex-body3-line-height);
   --p-font-weight: var(--mdx-sys-font-flex-body3-font-weight);
   --p-margin: 0 auto var(--mdx-sys-spacing-flex-s);
+  --p-form-margin: 0 auto var(--mdx-sys-spacing-flex-small-s);
 
   /* links */
   --a-color: var(--mdx-comp-link-color-default);
@@ -304,7 +303,9 @@
   --a-color-hover: var(--mdx-comp-link-color-hover);
   --a-text-decoration-hover: none;
 
-  /* hr */
+  /* hr */  
+  --hr-border-width: 0 0 2px;
+  --hr-secondary-opacity: 1;
   --hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-bold1);
   --hr-opacity: 1;
   --hr-border-width: 1px;
@@ -314,6 +315,9 @@
   --hr-secondary-border-width: 1px;
   --hr-secondary-opacity: 1;
   --hr-secondary-margin: var(--mdx-sys-spacing-flex-xs) auto;
+
+  --hr-form-border-bottom: 1px solid var(--mdx-sys-color-neutral-subtle3);
+  --hr-form-margin: var(--mdx-sys-spacing-flex-small-s) auto;
 
   /* Tables */
   --table-th-font-weight: 500;
@@ -398,9 +402,8 @@
   --simple-form-default-label-margin-bottom: var(--mdx-sys-spacing-flex-small-2xs);
   --simple-form-default-input-font: var(--mdx-comp-inputfield-font-default);
 
-  /* basics */
-  --simple-form-default-p-margin: var(--mdx-sys-spacing-flex-small-s) auto;
-  --simple-form-default-hr-border-bottom: 1px solid var(--mdx-sys-color-neutral-subtle4);
+  --simple-form-default-p-margin: var(--hr-form-border-margin);
+  --simple-form-default-hr-border-bottom: var(--hr-form-border-bottom);
   --simple-form-default-hr-margin: var(--mdx-sys-spacing-flex-small-s) auto;
 }
 
