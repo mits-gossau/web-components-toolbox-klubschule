@@ -8,7 +8,8 @@
 ## Attributes
 - `headline`: Headline string
 - `name`: Offering title/name string
-- `status`: JSON with code and label `{'code': '1', 'label': 'Garantiert Durchgeführt'}`
+- `status`: JSON with code and label `{'code': '1', 'label': 'Garantiert Durchgeführt'}`.  
+Code can be `1` (guaranteed), `2` (started), `3` (await) or `4` (almost)
 - `date`: Date string
 - `street`: Street string
 - `city`: City string
@@ -19,7 +20,7 @@
 
 ### Example
 
-```
+```html
 <ks-m-checkout-booked-offer
     headline="Headline"
     name="Angebotsname"
