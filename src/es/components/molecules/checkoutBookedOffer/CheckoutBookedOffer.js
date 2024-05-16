@@ -16,10 +16,6 @@ export default class CheckoutBookedOffer extends Shadow() {
     if (this.shouldRenderHTML()) this.renderHTML()
   }
 
-  disconnectedCallback () {
-    if (this.backButton) this.backButton.removeEvenetListener('click', this.backLinkListener)
-  }
-
   /**
    * evaluates if a render is necessary
    *
