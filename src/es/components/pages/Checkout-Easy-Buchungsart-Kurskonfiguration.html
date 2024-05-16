@@ -1,0 +1,33 @@
+<h1>Checkout Easy Buchungsart Kurskonfiguration</h1>
+<p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?node-id=6255-177521&m=dev" target="_blank">figma</a></code></p>
+<hr />
+
+<o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" switch-aside-order-mobile>
+    <ks-o-body-section content-width-var="100%" no-margin-y>
+        <m-simple-form-validaton 
+            load-form-styles 
+            namespace="simple-form-default-"
+        >
+            <form class="form">
+                <ks-a-heading tag="h2" style-as="h1">Buchungsart</ks-a-heading>
+                <p>Bitte geben Sie an, ob diese Buchung ihre Firma bezahlt oder ob Sie die Kurskosten privat tragen.</p>
+                <ks-a-radio>
+                    <div class="wrap">
+                        <label for="booking-type-course-config-company">Bezahlung durch Firma</label>
+                        <input id="booking-type-course-config-company" type="radio" name="booking-type" required>
+                        <div class="box"></div>
+                    </div>
+                    <div class="wrap">
+                        <label for="booking-type-course-config-private">Ich bezahle selbst</label>
+                        <input id="booking-type-course-config-private" type="radio" name="booking-type" required>
+                        <div class="box"></div>
+                    </div>
+                </ks-a-radio>
+                <hr  />
+            </form>
+        </m-simple-form-validaton>
+    </ks-o-body-section>
+    <aside>
+        <!-- side content here -->
+    </aside>
+</o-grid>
