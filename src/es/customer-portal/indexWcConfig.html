@@ -15,6 +15,7 @@
         <link href="../../css/variablesCustomKlubschule.css" rel=stylesheet type="text/css">
         <script async rel=preload as="script" type="text/javascript"
             src="../../../src/es/helpers/Environment.js"></script>
+        <script src="../../../wc-config.js"></script>
         <title>Customer Portal</title>
     </head>
     <body>
@@ -22,8 +23,8 @@
             <c-fetch-css>
                 <c-fetch-modules>
                     <c-translations translation-api-url="./controllers/dummy.json">
-                        <c-appointments data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
-                                <c-subscriptions data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
+                        <cp-c-appointments data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
+                                <cp-c-subscriptions data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
                                     <p-general>
                                         <o-body-style 
                                             has-background=""
@@ -52,13 +53,14 @@
                                             </c-router>
                                         </o-body-style>
                                     </p-general>
-                                </c-subscriptions>
-                        </c-appointments>
+                                </cp-c-subscriptions>
+                        </cp-c-appointments>
                     </c-translations>
                 </c-fetch-modules>
             </c-fetch-css>
         </c-fetch-html>
-        <script rel="preload" type="module">
+        
+        <!-- <script rel="preload" type="module">
             Promise.all([
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchHtml/FetchHtml.js').then(module => ['c-fetch-html', module.default]),
                 import('../components/web-components-toolbox/src/es/components/controllers/fetchCss/FetchCss.js').then(module => ['c-fetch-css', module.default]),
@@ -66,13 +68,12 @@
                 import('./components/molecules/navigation/Navigation.js').then(module => ['cp-m-navigation', module.default]),
                 import('../../es/components/web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js').then(module => ['o-body-style', module.default]),
                 import('../../es/components/web-components-toolbox/src/es/components/pages/general/General.js').then(module => ['p-general', module.default]),
-                import('./event-driven-web-components-router/src/Router.js').then(module => ['c-router', module.default]),
                 import('./controllers/appointments/Appointments.js').then(module => ['c-appointments', module.default]),
                 import('./controllers/subscriptions/Subscriptions.js').then(module => ['c-subscriptions', module.default]),
                 import('../../es/components/web-components-toolbox/src/es/components/controllers/translations/Translations.js').then(module => ['c-translations', module.default]),
             ]).then(elements => elements.forEach(element => {
                 if (element && !customElements.get(element[0])) customElements.define(...element)
             }))
-        </script>
+        </script> -->
     </body>
 </html>
