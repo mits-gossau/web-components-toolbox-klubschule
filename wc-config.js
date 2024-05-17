@@ -248,6 +248,20 @@
     {
       selector: 'mdx-login',
       url: './src/css/web-components-toolbox-migros-design-experience/src/es/components/atoms/login/Login.js'
+    },
+    {
+      selector: 'c-router',
+      url: '../src/es/customer-portal/event-driven-web-components-router/src/Router.js'
+    },
+    {
+      selector: 'cp-c-',
+      separateFolder: true,
+      url: './src/es/customer-portal/controllers/'
+    },
+    {
+      selector: 'cp-m-',
+      separateFolder: true,
+      url: './src/es/customer-portal/components/molecules/'
     }
   ] // directories
   // ↑↑↑ adjustable ↑↑↑

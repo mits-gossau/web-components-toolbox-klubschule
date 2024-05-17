@@ -1,8 +1,7 @@
 // @ts-check
+import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /* global CustomEvent */
-
-import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class ContentFactory extends Shadow() {
   /**
@@ -42,20 +41,17 @@ export default class ContentFactory extends Shadow() {
   */
   renderCSS () {
     this.css = /* css */ `
-    :host> section {
+    :host > section {
       display: flex;
       flex-direction: column;
       gap: 1em;
       margin-bottom: 1em;
     }
-    :host> section:last-child {
+    :host > section:last-child {
       margin-bottom: 0;
     }
-    : host > .error {
+    :host > .error {
       color: var(--color-error);
-    }
-    @media only screen and (max-width: _max-width_) {
-      
     }
     `
     return this.fetchTemplate()
@@ -120,18 +116,15 @@ export default class ContentFactory extends Shadow() {
         <ks-m-content-search-item>
           <a href="${content.link}">
             <div>
-              <h3>${content.text}</h3>
-              <p>${content.title}</p>
+              ${content.text ? /* html */`<h3>${content.text}</h3>` : ''}
+              ${content.title ? /* html */`<p>${content.title}</p>` : ''}
             </div>
-            ${content.image
-              ? /* html */`
-              <a-picture picture-load defaultSource="${content.image.src}" alt="${content.image.alt}"></a-picture>
-              `
-              : ''
-            }
+            ${content.image ? /* html */`<a-picture picture-load defaultSource="${content.image.src}" alt="${content.image.alt}"></a-picture>` : ''}
           </a>
         </ks-m-content-search-item>
-        `), '<section>') + '</section>'
+        `),
+      '<section>'
+      ) + '</section>'
     }).catch(error => {
       console.error(error)
       this.html = ''
@@ -146,12 +139,12 @@ export default class ContentFactory extends Shadow() {
       'text': '${content.text}',
       ${content.image
 ? `
-      'image': {
-        'alt': '${content.image.alt}',
-        'src': ${content.image.src}
-      }    
-      `
-      : ''
+        'image': {
+          'alt': '${content.image.alt}',
+          'src': ${content.image.src}
+        }    
+        `
+: ''
       }
     }`
   }

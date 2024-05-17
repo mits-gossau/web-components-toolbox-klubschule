@@ -14,14 +14,19 @@
 
                 <ks-a-heading tag="h2" style-as="h1">Ab wann soll Ihr Abonnement gültig sein?</ks-a-heading>
 
-                <label for="abo-date-config">Start der Gültigkeit *</label>
-                <input 
-                    type="date" 
-                    id="abo-date-config" 
-                    name="start-date" 
-                    onfocus="this.min=new Date().toISOString().split('T')[0]"
-                    data-m-v-rules='{"required": {"error-message": "Bitte Datum angeben."}}'
-                >
+                <ks-a-input>
+                    <div>
+                        <label>Start der Gültigkeit *</label>
+                        <input 
+                            type="date" 
+                            id="abo-date-config" 
+                            name="start-date" 
+                            onfocus="this.min=new Date().toISOString().split('T')[0]"
+                            data-m-v-rules='{"required": {"error-message": "Bitte Datum angeben."}}'
+                            required
+                        >
+                    </div>
+                </ks-a-input>
             </form>
         </m-simple-form-validation>
     </ks-o-body-section>

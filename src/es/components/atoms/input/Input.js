@@ -144,6 +144,14 @@ export default class Input extends Shadow() {
         font: var(--mdx-comp-inputfield-font-default);
       }
 
+      :host input[type="date"]::-webkit-datetime-edit-text,
+      :host input[type="date"]::-webkit-datetime-edit-month-field,
+      :host input[type="date"]::-webkit-datetime-edit-day-field,
+      :host input[type="date"]::-webkit-datetime-edit-year-field {
+          color: var(--mdx-comp-inputfield-placeholder-color-default);
+          font: var(--mdx-comp-inputfield-font-default);
+      }
+
       :host input:focus,
       :host textarea:focus {
         color: var(--mdx-comp-inputfield-input-color-focus);

@@ -173,7 +173,7 @@ export default class Sort extends Shadow() {
     Array.from(ul.children).forEach(li => {
       li.classList.add('m-sort__item')
       if (this.hasAttribute('with-facet')) {
-        li.addEventListener('click', 
+        li.addEventListener('click',
           (event) => this.dispatchEvent(
             new CustomEvent('request-with-facet',
               {
@@ -192,7 +192,7 @@ export default class Sort extends Shadow() {
     })
     Array.from(ul.querySelectorAll('[active]')).forEach(li => li.classList.add('m-sort__item-active'))
 
-    this.html = ``
+    this.html = ''
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="m-sort">
