@@ -51,7 +51,7 @@ export default class SubscriptionsList extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host #list-wrapper {
+      :host .list-wrapper {
         display: flex;
         flex-direction: column;
         gap: 1em;
@@ -132,7 +132,7 @@ export default class SubscriptionsList extends Shadow() {
               </ks-a-heading>
             </div>    
           </o-grid>
-          <div id="list-wrapper">
+          <div class="list-wrapper">
             ${subscriptionList.list.join('')}
           </div>
         `

@@ -15,12 +15,12 @@ export default class StatusButton extends Shadow() {
   }
 
   connectedCallback () {
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
     this.dataContent = JSON.parse(this.dataset.content)
     this.dataSubscription = JSON.parse(this.dataset.subscription)
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML(this.dataContent, this.dataSubscription)
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
-    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
   }
 
   disconnectedCallback () {
@@ -46,27 +46,14 @@ export default class StatusButton extends Shadow() {
     }
   }
 
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
   shouldRenderHTML () {
     return !this.wrapper
   }
 
-  /**
-   * renders the css
-   */
   renderCSS () {
     this.css = /* css */`
       :host {}
@@ -77,11 +64,7 @@ export default class StatusButton extends Shadow() {
     return this.fetchTemplate()
   }
 
-  /**
-   * fetches the template
-   */
   fetchTemplate () {
-    /** @type {import("../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
         path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
@@ -110,7 +93,7 @@ export default class StatusButton extends Shadow() {
   renderHTML (content, subscription) {
     this.wrapper = this.root.querySelector('div') || document.createElement('div')
     if (this.dataset.listType === 'subscriptions') {
-      this.html = /* html */ `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-detail" tag='[${escapeForHtml(JSON.stringify(content))}, ${escapeForHtml(JSON.stringify(content))}, ${JSON.stringify({ type: 'subscriptions' })}]' color="secondary"><a-translation data-trans-key='CP.cpSubscriptionRenew'/></a-translation></ks-a-button>`
+      this.html = this.renderTileActionButton(999, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(content)))
     } else {
       this.html = this.renderTileActionButton(content.courseAppointmentStatus, escapeForHtml(JSON.stringify(content)), escapeForHtml(JSON.stringify(subscription)))
     }
@@ -126,9 +109,39 @@ export default class StatusButton extends Shadow() {
   renderTileActionButton (status, content, selectedSubscription) {
     switch (status) {
       case 1:
-        return /* html */ `<ks-a-button namespace="button-primary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]' color="secondary"><a-translation data-trans-key='CP.cpBookAppointment'/></a-translation></ks-a-button>`
+        return /* html */ `
+          <ks-a-button
+            color="secondary"
+            id="show-modal"
+            namespace="button-primary-"
+            request-event-name="request-subscription-course-appointment-detail"
+            tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'booking' })}]'>
+              <a-translation data-trans-key='CP.cpBookAppointment'/></a-translation>
+            </ks-a-button>
+        `
       case 5:
-        return /* html */ `<ks-a-button namespace="button-secondary-" id="show-modal" request-event-name="request-subscription-course-appointment-detail" tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'reversal' })}]' color="secondary"><a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx><a-translation data-trans-key='CP.cpBookedStatus5'/></a-translation></ks-a-button>`
+        return /* html */ `
+          <ks-a-button
+            color="secondary"
+            id="show-modal"
+            namespace="button-secondary-"
+            request-event-name="request-subscription-course-appointment-detail"
+            tag='[${content},${selectedSubscription}, ${JSON.stringify({ type: 'reversal' })}]'>
+              <a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>
+              <a-translation data-trans-key='CP.cpBookedStatus5'/></a-translation>
+            </ks-a-button>
+        `
+      case 999:
+        return /* html */ `
+          <ks-a-button
+            color="secondary"
+            id="show-modal"
+            namespace="button-primary-"
+            request-event-name="request-subscription-detail"
+            tag='[${content},${content},${JSON.stringify({ type: 'subscriptions' })}]'>
+              <a-translation data-trans-key='CP.cpSubscriptionRenew'/></a-translation>
+          </ks-a-button>
+        `
       default:
         return ''
     }

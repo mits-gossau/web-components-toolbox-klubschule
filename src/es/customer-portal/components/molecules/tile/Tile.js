@@ -276,6 +276,10 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/customer-portal/components/molecules/courseDialog/CourseDialog.js`,
         name: 'm-course-dialog'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
       }
     ])
     Promise.all([fetchModules]).then((_) => {
@@ -300,7 +304,12 @@ export default class AppointmentTile extends Tile {
               <div class="course-info">
                 <div>
                   <span class="m-tile__title title">
-                    <a-course-title namespace="course-title-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-course-title>
+                    <a-course-title
+                      data-content="${escapeForHtml(JSON.stringify(content))}" 
+                      data-id="${courseId}" 
+                      data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"
+                      namespace="course-title-default-">
+                    </a-course-title>
                   </span>
                 </div>
                 <div>
@@ -312,11 +321,16 @@ export default class AppointmentTile extends Tile {
                   </span>
                 </div>
               </div>
-              <!-- --> 
               <div class="course-info course-execution-info">
                 <ul class="meta">
                   <li>
-                    <a-course-info data-icon-size="1.5em" data-icon-size-mobile="40em" namespace="course-info-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}"></a-course-info>
+                    <a-course-info
+                      data-content="${escapeForHtml(JSON.stringify(content))}"
+                      data-icon-size-mobile="40em"
+                      data-icon-size="1.5em"
+                      data-id="${courseId}" 
+                      namespace="course-info-default-">
+                    </a-course-info>
                   </li>
                   <li> 
                     <a-icon-mdx icon-name="User" size="1.5em" tabindex="0"></a-icon-mdx>
@@ -326,22 +340,27 @@ export default class AppointmentTile extends Tile {
                     <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
                     <div class="location-room">
                       <span>${content.courseLocation}</span>
-                      <span>Raum: ${content.roomDescription}</span>
+                      <span><a-translation data-trans-key='CP.cpAppointmentIcsRoom'/></a-translation> ${content.roomDescription}</span>
                     </div>
                   </li>
                 </ul>
               </div>
-            </div><!-- parent body END -->
+            </div>
             <div class="parent-footer">
               <div class="course-booking">
-                <m-course-dialog namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></m-course-dialog>
+                <m-course-dialog
+                  data-content="${escapeForHtml(JSON.stringify(content))}" 
+                  data-id="${courseId}" 
+                  data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"
+                  namespace="course-dialog-default-">
+                </m-course-dialog>
               </div>
               <div class="course-price">
                 <span class="m-tile__title">
                   ${content.lessonPrice}
                 </span>
               </div>
-            </div><!-- parent footer END -->
+            </div>
           </div>
         </template>
       </m-load-template-tag>
@@ -361,21 +380,31 @@ export default class AppointmentTile extends Tile {
                 <div class="subscription-info">
                   <div>
                     <span class="m-tile__title title">
-                      <a-course-title data-list-type="subscriptions" namespace="course-title-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></a-course-title>
+                      <a-course-title
+                        data-content="${escapeForHtml(JSON.stringify(subscription))}" 
+                        data-id="${courseId}" 
+                        data-list-type="subscriptions"
+                        data-subscription="${escapeForHtml(JSON.stringify(subscription))}"
+                        namespace="course-title-default-">
+                      </a-course-title>
                     </span>
                   </div>
                   <div>
-                    <span class="m-tile__title date">Gültigkeitsdauer ${from} - ${to} </span>
+                    <span class="m-tile__title date"><a-translation data-trans-key='CP.cpSubscriptionColumnValidity'/></a-translation> ${from} - ${to} </span>
                   </div> 
                 </div>
-                <!-- --> 
-              </div><!-- parent body END -->
+              </div>
               <div class="parent-footer">
                 <div class="course-booking">
-                  <!-- !!! -->
-                  <m-course-dialog data-list-type="subscriptions" namespace="course-dialog-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(subscription))}" data-subscription="${escapeForHtml(JSON.stringify(subscription))}"></m-course-dialog>
+                  <m-course-dialog
+                    data-content="${escapeForHtml(JSON.stringify(subscription))}" 
+                    data-id="${courseId}" 
+                    data-list-type="subscriptions"
+                    data-subscription="${escapeForHtml(JSON.stringify(subscription))}"
+                    namespace="course-dialog-default-">
+                  </m-course-dialog>
                 </div>
-              </div><!-- parent footer END -->
+              </div>
             </div>
           </template>
         </m-load-template-tag> 

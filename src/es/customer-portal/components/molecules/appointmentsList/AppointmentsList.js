@@ -78,7 +78,7 @@ export default class AppointmentsList extends Shadow() {
 
   renderCSS () {
     this.css = /* css */`
-      :host #list-wrapper {
+      :host .list-wrapper {
         display: flex;
         flex-direction: column;
         gap: 1em;
@@ -182,7 +182,7 @@ export default class AppointmentsList extends Shadow() {
             `
             : ''}         
           </o-grid>
-          <div id="list-wrapper">
+          <div class="list-wrapper">
             ${dayList.list.join('')}
           </div>
         `
@@ -210,13 +210,13 @@ export default class AppointmentsList extends Shadow() {
       select.appendChild(option)
     })
     const html = /* html */ `
-    <div>
-      <ks-m-select>
-        <div>
-          ${select.outerHTML}
-        </div>
-      </ks-m-select>
-    </div>
+      <div>
+        <ks-m-select>
+          <div>
+            ${select.outerHTML}
+          </div>
+        </ks-m-select>
+      </div>
     `
     return html
   }

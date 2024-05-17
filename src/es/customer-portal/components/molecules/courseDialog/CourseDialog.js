@@ -97,6 +97,7 @@ export default class CourseDialog extends Shadow() {
   updateSubscriptionCourseAppointmentDetailListener = event => {
     if (this.dataset.id === event.detail.id) {
       this.viewContent.innerHTML = ''
+      const { type } = event.detail
       event.detail.fetch.then(courseDetail => {
         this.courseDetail = courseDetail
         // open dialog
@@ -108,7 +109,6 @@ export default class CourseDialog extends Shadow() {
             composed: true
           }
         ))
-        const { type } = event.detail
         if (type === 'detail') {
           this.renderDialogTitle('Termindetails')
           this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
