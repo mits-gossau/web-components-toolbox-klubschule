@@ -621,11 +621,31 @@ export default class CourseDialog extends Shadow() {
     if (!state) return ''
     const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo)
     return /* html */ `
-      <div class="detail"><span>Datum, Zeit</span><span>${detail.courseAppointmentDateFormatted}</span><span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span></div>
-      <div class="detail"><span>Ort/Raum</span><span>${detail.courseLocation} / Raum ${detail.roomDescription}</span></div>
-      <div class="detail"><span>Kursleitung</span><span>${detail.instructorDescription}</span></div>
-      <div class="detail"><span>Status</span><div><span class="${state.css.status}">${state.status}</span> <span class="${state.css.info}">${state.info}</span></div></div>
-      <div class="detail"><span>Abonnement</span><span>${detail.subscriptionDescription}</span><span>Gültig bis ${validTo} / Aktuelles Guthaben ${detail.subscriptionBalance}</span></div> 
+      <div class="detail">
+        <span>Datum, Zeit</span>
+        <span>${detail.courseAppointmentDateFormatted}</span>
+        <span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span>
+      </div>
+      <div class="detail">
+        <span>Ort/Raum</span>
+        <span>${detail.courseLocation} / Raum ${detail.roomDescription}</span>
+      </div>
+      <div class="detail">
+        <span>Kursleitung</span>
+        <span>${detail.instructorDescription}</span>
+      </div>
+      <div class="detail">
+        <span>Status</span>
+        <div>
+          <span class="${state.css.status}">${state.status}</span> 
+          <span class="${state.css.info}">${state.info}</span>
+        </div>
+      </div>
+      <div class="detail">
+        <span>Abonnement</span>
+        <span>${detail.subscriptionDescription}</span>
+        <span>Gültig bis ${validTo} / Aktuelles Guthaben ${detail.subscriptionBalance}</span>
+      </div> 
     `
   }
 
@@ -731,7 +751,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   *
+   * Create .ics file
    * @param {*} course
    * @returns {string}
    */
