@@ -15,6 +15,7 @@ export default class VotingController extends Shadow() {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
 
     const endpoint = 'http://localhost:3001/api/Voting'
+    // const endpoint = 'https://miducaexportapivotingdev.azurewebsites.net/api/Voting'
     const fetchOptions = {
       method: 'POST',
       headers: {
@@ -23,6 +24,7 @@ export default class VotingController extends Shadow() {
     }
 
     this.requestVotingData = (event) => {
+      fetchOptions.body = JSON.stringify(event.detail)
       document.body.dispatchEvent(new CustomEvent('voting-data', {
         detail: fetch(`${endpoint}/data`, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) {
@@ -38,11 +40,12 @@ export default class VotingController extends Shadow() {
     }
 
     this.submitListener = (event) => {
+      console.log('submitListener', event)
       fetch(`${endpoint}/voting`, {
         ...fetchOptions,
         body: JSON.stringify(event.detail)
-      })
-      console.log('event', event)
+      }).then(res => res.json())
+        .then(response => console.log('submitListener response', response))
     }
   }
 

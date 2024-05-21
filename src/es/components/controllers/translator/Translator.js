@@ -21,7 +21,7 @@ export default class Translator extends Shadow() {
     this.storage = []
 
     this.requestTranslationsListener = (event) => {
-      const endpoint = this.getAttribute('endpoint') || 'https://devadmin.klubschule.ch/umbraco/api/1/Dictionaries/all'
+      const endpoint = this.getAttribute('endpoint') || 'https://devadmin.klubschule.ch/umbraco/api/v1/Dictionaries/all'
       const lang = this.getAttribute('language') || document.documentElement.lang
       const key = this.getAttribute('key') || ''
       const target = event.detail || document.body

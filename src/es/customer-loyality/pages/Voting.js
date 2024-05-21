@@ -20,12 +20,17 @@ export default class Voting extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     console.log('connectedCallback')
+    const params = new URLSearchParams(window.location.search)
     document.body.addEventListener('voting-data', this.votingDataListener)
     document.body.dispatchEvent(
       new CustomEvent('request-voting-data', {
         bubbles: true,
         cancelable: true,
-        composed: true
+        composed: true,
+        detail: {
+          courseId: params.get('kursId'),
+          customerId: params.get('teilnehmerId')
+        }
       })
     )
   }
@@ -68,6 +73,17 @@ export default class Voting extends Shadow() {
           </ks-o-body-section>
           ${this.renderVoting(voting)}
         `
+      })
+      .catch(error => {
+        this.html = ''
+        this.html = /* html */ `
+        <ks-o-body-section variant="default">
+          <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
+            <div slot="description">
+              <p>Failed to load data. (error: ${error.message})</p>
+            </div>
+          </ks-m-system-notification>
+        </ks-o-body-section>`
       })
   }
 
