@@ -162,9 +162,13 @@ export default class AutoCompleteLocation extends Shadow() {
 
   clickOnPredictionListener = event => {
     this.geocoder.geocode(
-      {
-        placeId: event.detail.selected
-      },
+      event.detail.selected
+        ? {
+            placeId: event.detail.selected
+          }
+        : {
+            address: event.detail.address
+          },
       (responses, status) => {
         if (status == 'OK') {
           const lat = responses[0].geometry.location.lat()
@@ -221,6 +225,8 @@ export default class AutoCompleteLocation extends Shadow() {
         }))
       })
     }
+    // trigger search when enter or icon click
+    if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { address: event.detail.value } })
   }
 
   clickOnLocateMe = (event) => {

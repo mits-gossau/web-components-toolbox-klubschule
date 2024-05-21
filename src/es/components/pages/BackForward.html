@@ -1,0 +1,53 @@
+<h1>Back Forward</h1>
+<p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?node-id=3111%3A397761&t=YlIxOSGjKpmiap55-1" target="_blank">figma</a></code></p>
+<hr />
+
+<h2>With Submit</h2>
+<m-simple-form
+  load-form-styles
+  namespace="simple-form-default-"
+  endpoint="/api/test"
+  method="POST"
+  schema="{
+    'value': {
+      'gender': ''
+    },
+    'more': {
+      'duden': '',
+      'cb-01': 'text',
+      'key': '54325435436534'
+    }
+  }"
+>
+  <form>
+    <ks-m-back-forward
+        back-label="Zurück"
+        back-link="#back"
+        forward-label="Weiter"
+        submit
+    ></ks-m-back-forward>
+  </form>
+</m-simple-form>
+
+<h2>Forward Link (no Submit)</h2>
+<!-- example inside ks-o-body-section -->
+<ks-o-body-section variant="default">
+    <ks-m-back-forward
+        back-label="Zurück"
+        back-link="#back"
+        forward-label="Weiter"
+        forward-link="/"
+    ></ks-m-back-forward>
+</ks-o-body-section>
+
+<h2>Forward Link disabled</h2>
+<!-- example inside ks-o-body-section -->
+<ks-o-body-section variant="default">
+    <ks-m-back-forward
+        back-label="Zurück"
+        back-link="#back"
+        forward-label="Weiter"
+        forward-link="/"
+        forward-disabled
+    ></ks-m-back-forward>
+</ks-o-body-section>

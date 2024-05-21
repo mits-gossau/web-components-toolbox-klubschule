@@ -1,0 +1,3 @@
+:host {
+    --tile-course-appointment-default-tile-border-color:var(--border-color);
+}

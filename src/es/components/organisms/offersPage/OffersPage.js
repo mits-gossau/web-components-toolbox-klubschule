@@ -1,6 +1,8 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/* global CustomEvent */
+
 /**
 * @export
 * @class OffersPage
@@ -13,7 +15,7 @@ export default class OffersPage extends Shadow() {
     this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
-        const bodySection = this.eventDetailURL ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+        const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
           bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
         }
@@ -31,7 +33,7 @@ export default class OffersPage extends Shadow() {
             <li ${this.data.sort.sort === data.id ? 'active' : ''} id="${data.id}">
               ${data.label}
             </li>
-          `, '') 
+          `, '')
           sort.innerHTML = /* html */ `
             <ks-m-sort namespace="sort-right-" with-facet>
               ${this.data?.sort?.items?.length ? /* html */ `
@@ -49,7 +51,7 @@ export default class OffersPage extends Shadow() {
   connectedCallback () {
     this.hidden = true
     new Promise(resolve => {
-      this.dispatchEvent(new CustomEvent('request-translation',
+      this.dispatchEvent(new CustomEvent('request-translations',
         {
           detail: {
             resolve
@@ -58,9 +60,9 @@ export default class OffersPage extends Shadow() {
           cancelable: true,
           composed: true
         }))
-    }).then(result => {
-      this.translation = result.translation
-      this.getTranslation = result.getTranslation
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
       const showPromises = []
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
@@ -91,10 +93,10 @@ export default class OffersPage extends Shadow() {
   /**
    * Fill markup with none static data
    */
-  withFacetListener(event) {
+  withFacetListener (event) {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
-      const bodySection = this.eventDetailURL ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+      const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
       if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
         bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
       }
@@ -112,7 +114,7 @@ export default class OffersPage extends Shadow() {
           <li ${this.data.sort.sort === data.id ? 'active' : ''} id="${data.id}">
             ${data.label}
           </li>
-        `, '') 
+        `, '')
         sort.innerHTML = /* html */ `
           <ks-m-sort namespace="sort-right-" with-facet>
             ${this.data?.sort?.items?.length ? /* html */ `
@@ -151,27 +153,30 @@ export default class OffersPage extends Shadow() {
    * @return Promise<void>
    */
   renderHTML () {
-    this.html = this.eventDetailURL || this.hasAttribute('no-search-tab') ? this.tabContentOne : /* html */`
+    this.html = this.eventDetailURL ||
+      this.hasAttribute('no-search-tab')
+      ? this.tabContentOne
+      : /* html */`
       <ks-m-tab>
         <ul class="tab-search-result">
-            <li>
-              <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
-                <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
-              </ks-a-with-facet-counter>
-            </li>
-            <li>
-              <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
-                <button tab-target="content2" id="total-stories-tab-heading"></button>
-              </ks-a-with-facet-counter>
-            </li>
+          <li>
+            <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
+              <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
+            </ks-a-with-facet-counter>
+          </li>
+          <li>
+            <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
+              <button tab-target="content2" id="total-stories-tab-heading"></button>
+            </ks-a-with-facet-counter>
+          </li>
         </ul>
-          <div>
-            <div id="content1" tab-content-target>
-                ${this.tabContentOne}
-            </div>
-            <div id="content2" tab-content-target>
-                ${this.tabContentTwo}
-            </div>
+        <div>
+          <div id="content1" tab-content-target>
+            ${this.tabContentOne}
+          </div>
+          <div id="content2" tab-content-target>
+            ${this.tabContentTwo}
+          </div>
         </div>
       </ks-m-tab>
     `
@@ -286,6 +291,100 @@ export default class OffersPage extends Shadow() {
 
   get tabContentOne () {
     const initialRequest = this.getAttribute('initial-request')
+    const searchInput = this.hasAttribute('with-search-input') ? /* html */`
+      <div col-lg="6" col-md="6" col-sm="12">
+        <ks-c-auto-complete
+          no-forwarding
+          ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+          ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
+          ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
+        >
+          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
+            <div class="container">
+              <a-input
+                inputid="offers-page-input-search"
+                autofocus
+                placeholder="${this.getTranslation('Search.InputPlaceholder')}"
+                icon-name="Search" 
+                icon-size="1.5em"
+                submit-search="request-auto-complete"
+                any-key-listener
+                type="search"
+                answer-event-name="search-change"
+                delete-listener
+                search
+              >
+              </a-input>
+              <div id="close">
+                  <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+              </div>
+            </div>
+            <div class="container">
+              <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+              </ks-m-auto-complete-list>
+            </div>
+            <a-input
+              id="show-modal"
+              inputid="show-modal"
+              placeholder="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
+              icon-name="Search"
+              icon-size="1.25em"
+              search type="search"
+              answer-event-name="search-change"
+            >
+            </a-input>
+          </m-dialog>
+        </ks-c-auto-complete>
+      </div>` : ''
+    const locationSearch = this.hasAttribute('no-location-search') ? '' : /* html */`
+      <div col-lg="6" col-md="6" col-sm="12">
+        <ks-c-auto-complete-location ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
+            <m-dialog namespace="dialog-top-slide-in-" id="location-search" close-event-name="close-location-dialog">
+                <div class="container">
+                    <a-input 
+                      id="offers-page-location-search-input"
+                      inputid="offers-page-location-search" 
+                      placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}" 
+                      icon-name="Location" 
+                      icon-size="1.5em" 
+                      search
+                      autofocus 
+                      submit-search="request-auto-complete-location" 
+                      any-key-listener 
+                      type="search"
+                      delete-listener
+                      answer-event-name="location-change"
+                    >
+                    </a-input>
+                    <div id="close">
+                        <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                    </div>
+                </div>
+                <div class="container">
+                    <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
+                        <ul>
+                            <li id="user-location">
+                                <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
+                                <span>${this.getTranslation('Search.CurrentLocation')}</span>
+                            </li>
+                        </ul>
+                    </ks-m-auto-complete-list>
+                </div>
+                <a-input 
+                  id="show-modal-location"
+                  inputid="show-modal"
+                  placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}"
+                  icon-name="Location"
+                  icon-size="1.25em"
+                  search
+                  type="search"
+                  answer-event-name="location-change"
+                >
+                </a-input>
+            </m-dialog>
+        </ks-c-auto-complete-location>
+      </div>`
+
     return /* html */ `
       <ks-c-with-facet
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
@@ -299,98 +398,8 @@ export default class OffersPage extends Shadow() {
                 <div col-lg="12" col-md="12" col-sm="12">
                   <ks-a-with-facet-counter></ks-a-with-facet-counter>
                 </div>
-                ${this.eventDetailURL ? '' : /* HTML */ `
-                  <div col-lg="6" col-md="6" col-sm="12">
-                    <ks-c-auto-complete
-                      ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
-                      ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
-                      ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
-                    >
-                      <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
-                        <div class="container">
-                          <a-input
-                            inputid="offers-page-input-search"
-                            autofocus
-                            placeholder="${this.getTranslation('Search.InputPlaceholder')}"
-                            icon-name="Search" 
-                            icon-size="1.5em"
-                            submit-search="request-auto-complete"
-                            any-key-listener
-                            type="search"
-                            answer-event-name="search-change"
-                            delete-listener
-                            search
-                          >
-                          </a-input>
-                          <div id="close">
-                              <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                          </div>
-                        </div>
-                        <div class="container">
-                          <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
-                          </ks-m-auto-complete-list>
-                        </div>
-                        <a-input
-                          id="show-modal"
-                          inputid="show-modal"
-                          placeholder="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
-                          icon-name="Search"
-                          icon-size="1.25em"
-                          search type="search"
-                          answer-event-name="search-change"
-                        >
-                        </a-input>
-                      </m-dialog>
-                    </ks-c-auto-complete>
-                  </div>
-                  <div col-lg="6" col-md="6" col-sm="12">
-                      <ks-c-auto-complete-location ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
-                          <m-dialog namespace="dialog-top-slide-in-" id="location-search" close-event-name="close-location-dialog">
-                              <div class="container">
-                                  <a-input 
-                                    id="offers-page-location-search-input"
-                                    inputid="offers-page-location-search" 
-                                    placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}" 
-                                    icon-name="Location" 
-                                    icon-size="1.5em" 
-                                    search
-                                    autofocus 
-                                    submit-search="request-auto-complete-location" 
-                                    any-key-listener 
-                                    type="search"
-                                    delete-listener
-                                    answer-event-name="location-change"
-                                  >
-                                  </a-input>
-                                  <div id="close">
-                                      <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                                  </div>
-                              </div>
-                              <div class="container">
-                                  <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
-                                      <ul>
-                                          <li id="user-location">
-                                              <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
-                                              <span>${this.getTranslation('Search.CurrentLocation')}</span>
-                                          </li>
-                                      </ul>
-                                  </ks-m-auto-complete-list>
-                              </div>
-                              <a-input 
-                                id="show-modal-location"
-                                inputid="show-modal"
-                                placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}"
-                                icon-name="Location"
-                                icon-size="1.25em"
-                                search
-                                type="search"
-                                answer-event-name="location-change"
-                              >
-                              </a-input>
-                          </m-dialog>
-                      </ks-c-auto-complete-location>
-                    </div>
-                `}
+                ${this.eventDetailURL ? '' : searchInput}
+                ${locationSearch}
               </o-grid>
               <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
                   <!-- overlayer -->
@@ -474,11 +483,13 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options">
               </section>
               <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}></ks-m-tile-factory>
-              ${this.badgeContainer ? /* HTML */ `
-                <ks-m-badge-legend>
-                  ${this.badgeContainer.innerHTML}
-                </ks-m-badge-legend>
-              ` : ''}
+              ${this.badgeContainer
+                ? /* HTML */ `
+                  <ks-m-badge-legend>
+                    ${this.badgeContainer.innerHTML}
+                  </ks-m-badge-legend>
+                `
+                : ''}
               <ks-a-with-facet-pagination class="hidden" id="pagination">
                 <ks-a-button namespace="button-primary-" color="secondary">
                     <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
@@ -497,15 +508,6 @@ export default class OffersPage extends Shadow() {
         <o-grid namespace="grid-12er-">
           <div col-lg="12" col-md="12" col-sm="12">
             <ks-m-content-factory></ks-m-content-factory>
-            <!--<ks-m-content-search-item>
-              <a href="#">
-                <div>
-                    <h3>Lorem Ipsum Headline</h3>
-                    <p>Lorem ipsum dolor sit amet, <strong>consectetur</strong> adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
-                <a-picture picture-load defaultSource="http://via.placeholder.com/150x100" alt="more content"></a-picture>
-              </a>
-            </ks-m-content-search-item>-->
           </div>
         </o-grid>
       </ks-o-body-section>

@@ -1,15 +1,16 @@
 // @ts-check
-import { Shadow } from '../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import Index from './Index.js'
 
 /**
  * Subscriptions
  *
  * @export
- * @class Subscriptions
+ * @class SubscriptionList
  * @type {CustomElementConstructor}
  */
-export default class Subscriptions extends Shadow() {
+export default class SubscriptionList extends Index {
   /**
+   * @param {Object} options
    * @param {any} args
    */
   constructor (options = {}, ...args) {
@@ -17,16 +18,38 @@ export default class Subscriptions extends Shadow() {
   }
 
   connectedCallback () {
-    this.renderHTML()
+    if (this.shouldRenderHTML()) this.renderHTML()
+    if (this.shouldRenderCSS()) this.renderCSS()
   }
 
-  /**
-   * renders the html
-   * @return {Promise<void>}
-   */
+  shouldRenderHTML () {
+    return !this.subscriptionsList
+  }
+
+  shouldRenderCSS () {
+    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+  }
+
   renderHTML () {
-    this.html = /* html */`
-        <h1>Meine Abonnemente</h1>
-      `
+    this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../components/molecules/subscriptionsList/SubscriptionsList.js`,
+        name: 'm-subscriptions-list'
+      }
+    ])
+    this.html = '<m-subscriptions-list namespace="subscriptions-list-default-" data-request-subscription="request-subscriptions" data-list-type="subscriptions"></m-subscriptions-list>'
+  }
+
+  renderCSS () {
+    this.css = /* css */`
+    :host {}
+    @media only screen and (max-width: _max-width_) {
+      :host {}
+    }
+    `
+  }
+
+  get subscriptionsList () {
+    return this.root.querySelector('m-subscriptions-list')
   }
 }

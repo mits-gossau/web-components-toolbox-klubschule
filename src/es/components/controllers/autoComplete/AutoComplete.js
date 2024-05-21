@@ -42,23 +42,11 @@ export default class AutoComplete extends Shadow() {
     this.requestAutoCompleteListener = event => {
       // reset home page input search
       if (event.detail.key === 'home-page-input-search' && event.detail.value === '') {
-        return this.dispatchEvent(new CustomEvent('auto-complete', {
-          detail: {
-            fetch: Promise.resolve({
-              total: 0,
-              success: true,
-              searchText: '',
-              items: [],
-              contentItems: []
-            })
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }))
+        return this.clearAutocomplete()
       }
       const token = event.detail.value
       if (!token || token.length < 3) {
+        this.clearAutocomplete()
         // update results
         return this.dispatchEvent(new CustomEvent('request-with-facet',
           {
@@ -90,10 +78,12 @@ export default class AutoComplete extends Shadow() {
         cancelable: true,
         composed: true
       }))
+      // trigger search when enter or icon click
+      if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { description: event.detail.value } })
     }
     this.clickOnPredictionListener = event => {
       // home search input
-      this.homeSearchInput(event.detail.description)
+      if (!this.hasAttribute('no-forwarding')) this.homeSearchInput(event.detail.description)
       // close dialog
       this.dispatchEvent(new CustomEvent('close-search-dialog', {
         bubbles: true,
@@ -140,6 +130,23 @@ export default class AutoComplete extends Shadow() {
         window.location.href = searchUrlWithParam
       }
     }
+  }
+
+  clearAutocomplete () {
+    this.dispatchEvent(new CustomEvent('auto-complete', {
+      detail: {
+        fetch: Promise.resolve({
+          total: 0,
+          success: true,
+          searchText: '',
+          items: [],
+          contentItems: []
+        })
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
   }
 
   dispatchMock () {
