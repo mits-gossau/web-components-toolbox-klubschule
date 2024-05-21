@@ -147,15 +147,7 @@ export default class Voting extends Shadow() {
         <p><a-translate data-params="${escapeForHtml(
           JSON.stringify({ date: voting.responseUntilDate })
         )}">CustomerLoyality.FormText</a-translate></p>
-        <m-form>
-          <form>
-            ${this.renderOptionPrice(voting.optionPrice)}
-            ${this.renderOptionLessons(voting.optionLessons)}
-            <fieldset>
-              <label>Kommentar</label>
-              <textarea placeholder="Hier ist Platz für Ihre Fragen und Anliegen. Sie erreichen uns auch telefonisch unter +41 44 278 62 62."></textarea>
-          </form>
-        </m-form>
+        <o-form data-voting="${escapeForHtml(JSON.stringify(voting))}"></o-form>
       </ks-o-body-section>`
   }
 
@@ -166,80 +158,6 @@ export default class Voting extends Shadow() {
       </ks-o-body-section>`
   }
 
-  renderOptionPrice (option) {
-    if (!option.available) {
-      return ''
-    }
-
-    return /* html */ `
-      <m-option data-option="${escapeForHtml(
-        JSON.stringify(option)
-      )}" data-dictionary-key="CustomerLoyality.OptionPrice">
-        <table>
-          <tbody>
-            <tr class="bold">
-              <td><a-translate>CustomerLoyality.OptionPrice.PriceNew</a-translate></td>
-              <td>${option.newPrice}</td>
-            </tr>
-            <tr>
-              <td><a-translate>CustomerLoyality.OptionPrice.PriceOld</a-translate></td>
-              <td>${option.oldPrice}</td>
-            </tr>
-            <tr>
-              <td><a-translate>CustomerLoyality.Table.NumberOfLessons</a-translate></td>
-              <td>${option.lesssons}</td>
-            </tr>
-          </tbody>
-        </table>
-        <ks-a-checkbox namespace="checkbox-default-" data="price">
-          <div class="wrap">
-            <label for="cb-01">Checkbox Label</label>
-            <input id="cb-01" type="checkbox" name="checkbox">
-            <div class="box">
-              <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
-            </div>
-          </div>
-        </ks-a-checkbox>
-      </m-option>`
-  }
-
-  renderOptionLessons (option) {
-    if (!option.available) {
-      return ''
-    }
-
-    return /* html */ `
-      <m-option data-option="${escapeForHtml(
-        JSON.stringify(option)
-      )}" data-dictionary-key="CustomerLoyality.OptionLessons">
-        <table>
-          <tbody>
-            <tr class="bold">
-              <td><a-translate>CustomerLoyality.OptionLessons.LessonsNew</a-translate></td>
-              <td>${option.newLesssons}</td>
-            </tr>
-            <tr>
-              <td><a-translate>CustomerLoyality.OptionLessons.LessonsOld</a-translate></td>
-              <td>${option.oldLesssons}</td>
-            </tr>
-            <tr>
-              <td><a-translate>CustomerLoyality.OptionLessons.Price</a-translate></td>
-              <td>${option.price}</td>
-            </tr>
-          </tbody>
-        </table>
-        <ks-a-checkbox namespace="checkbox-default-" data="lesso">
-          <div class="wrap">
-            <label for="cb-01">Checkbox Label</label>
-            <input id="cb-01" type="checkbox" name="lesson">
-            <div class="box">
-                <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
-            </div>
-          </div>
-        </ks-a-checkbox>
-      </m-option>`
-  }
-
   /**
    * renders the css
    *
@@ -247,10 +165,19 @@ export default class Voting extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */ `
-    :host {}
-    @media only screen and (max-width: _max-width_) {
       :host {}
-    }
+      :host .options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--content-spacing, 1.5rem);
+      }
+      @media only screen and (max-width: _max-width_) {
+        :host {}
+
+        .options {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
     `
   }
 
@@ -274,20 +201,8 @@ export default class Voting extends Shadow() {
           name: 'a-translate'
         },
         {
-          path: `${this.importMetaUrl}../molecules/option/option.js`,
-          name: 'm-option'
-        },
-        {
-          path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/molecules/form/form.js`,
-          name: 'm-form'
-        },
-        {
-          path: `${this.importMetaUrl}../../components/atoms/checkbox/Checkbox.js`,
-          name: 'ks-a-checkbox'
-        },
-        {
-          path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-          name: 'a-icon-mdx'
+          path: `${this.importMetaUrl}../organisms/form/Form.js`,
+          name: 'o-form'
         }
       ])
     ])

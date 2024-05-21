@@ -31,10 +31,8 @@ export default class Option extends Shadow() {
           <a-translate>${dictKey}.Title</a-translate>
         </ks-a-heading>
         <p><a-translate>${dictKey}.Text</a-translate></p>
-        <div class="option-content">
-          ${content}
-        </div>
-        <p><a-translate data-params="${escapeForHtml(JSON.stringify({ amount: option.currentVotes, of: option.maxVotes }))}">CustomerLoyality.PickedByParticipants</a-translate></p>
+        ${content}
+        <p><small><a-translate data-params="${escapeForHtml(JSON.stringify({ amount: option.currentVotes, of: option.maxVotes }))}">CustomerLoyality.PickedByParticipants</a-translate></small></p>
     `
   }
 
@@ -50,34 +48,39 @@ export default class Option extends Shadow() {
     this.css = /* css */ `
       :host {
         --table-even-background-color: transparent;
-        --table-padding: 0.5rem;
-        --table-width: auto;
+        --table-padding: 0.5rem 0;
+        // --table-width: auto;
         --mdx-sys-spacing-flex-l: 0;
 
-        margin-bottom: var(--content-spacing, 1.5rem);
         display: block;
         padding: 1.25rem;
         background: #fff;
         border: 1px solid #ccc;
+
+        display: flex;
+        flex-direction: column;
       }
 
-      /* overriding inherited styles */
-      :host div.option-content:has(table) {
-        margin: 0;
-        overflow: visible;
-        // display: flex;
+      :host:last-child {
+        margin-bottom: 0;
+      }
+
+      :host table {
+        margin-top: auto !important;
+        margin-bottom: 1.5em !important;
       }
 
       table tbody td:last-child {
         text-align: right;
       }
 
-      .bold {
-        font-weight: bold;
+      :host p {
+        margin-left: 0 !important;
+        marign-right: 0 !important;
       }
 
-      .option-content > * {
-        flex: 1 1 50%;
+      .bold {
+        font-weight: bold;
       }
 
       ks-a-heading {

@@ -14,7 +14,7 @@ export default class VotingController extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
 
-    const endpoint = 'http://localhost:3001/api/Voting/data'
+    const endpoint = 'http://localhost:3001/api/Voting'
     const fetchOptions = {
       method: 'POST',
       headers: {
@@ -24,7 +24,7 @@ export default class VotingController extends Shadow() {
 
     this.requestVotingData = (event) => {
       document.body.dispatchEvent(new CustomEvent('voting-data', {
-        detail: fetch(endpoint, fetchOptions).then(async response => {
+        detail: fetch(`${endpoint}/data`, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) {
             const result = await response.json()
             return result
@@ -36,6 +36,14 @@ export default class VotingController extends Shadow() {
         composed: true
       }))
     }
+
+    this.submitListener = (event) => {
+      fetch(`${endpoint}/voting`, {
+        ...fetchOptions,
+        body: JSON.stringify(event.detail)
+      })
+      console.log('event', event)
+    }
   }
 
   connectedCallback () {
@@ -43,6 +51,7 @@ export default class VotingController extends Shadow() {
       'request-voting-data',
       this.requestVotingData
     )
+    document.body.addEventListener('submit-voting', this.submitListener)
   }
 
   disconnectedCallback () {

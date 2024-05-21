@@ -41,12 +41,50 @@
         }
       ],
       "responseMode": null
+    },
+    {
+      "uuid": "3a5a5833-69f1-48e4-b514-96065a39efd1",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "api/Voting/voting",
+      "responses": [
+        {
+          "uuid": "20eb6162-ebb4-4922-b505-44f0f7593495",
+          "body": "{\n  \"course\": {\n    \"id\": \"E_1275889\",\n    \"title\": \"Mock Kurs\",\n    \"beginDate\": \"string\",\n    \"endDate\": \"string\",\n    \"location\": \"string\",\n    \"price\": \"string\",\n    \"lessons\": 0\n  },\n  \"center\": {\n    \"name\": \"string\",\n    \"street\": \"string\",\n    \"location\": \"string\",\n    \"phone\": \"string\",\n    \"email\": \"string\",\n    \"openingTimeMon01\": \"string\",\n    \"openingTimeMon02\": \"string\",\n    \"openingTimeTue01\": \"string\",\n    \"openingTimeTue02\": \"string\",\n    \"openingTimeWed01\": \"string\",\n    \"openingTimeWed02\": \"string\",\n    \"openingTimeThu01\": \"string\",\n    \"openingTimeThu02\": \"string\",\n    \"openingTimeFri01\": \"string\",\n    \"openingTimeFri02\": \"string\",\n    \"openingTimeSat01\": \"string\",\n    \"openingTimeSat02\": \"string\",\n    \"openingTimeSun01\": \"string\",\n    \"openingTimeSun02\": \"string\"\n  },\n  \"responseUntilDate\": \"string\",\n  \"alreadyVote\": false,\n  \"voteExpired\": false,\n  \"optionPrice\": {\n    \"available\": true,\n    \"oldPrice\": \"string\",\n    \"newPrice\": \"string\",\n    \"lesssons\": 0,\n    \"currentVotes\": 0,\n    \"maxVotes\": 0,\n    \"value\": true\n  },\n  \"optionLessons\": {\n    \"available\": true,\n    \"oldLesssons\": 0,\n    \"newLesssons\": 0,\n    \"price\": \"string\",\n    \"currentVotes\": 0,\n    \"maxVotes\": 0,\n    \"value\": true\n  },\n  \"preferredVariant\": \"string\"\n}\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
     }
   ],
   "rootChildren": [
     {
       "type": "route",
       "uuid": "7ccbcca3-1998-449e-83cf-db4dd09f953f"
+    },
+    {
+      "type": "route",
+      "uuid": "3a5a5833-69f1-48e4-b514-96065a39efd1"
     }
   ],
   "proxyMode": false,

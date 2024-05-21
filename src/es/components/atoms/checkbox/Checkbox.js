@@ -84,6 +84,7 @@ export default class Checkbox extends Shadow() {
             height: 1.25em;
             width: 1.25em;
             margin-right: 0.75em;
+            flex: 1 0 1.25em;
         }
 
         :host .box a-icon-mdx {
