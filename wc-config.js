@@ -251,7 +251,7 @@
     },
     {
       selector: 'c-router',
-      url: '../src/es/customer-portal/event-driven-web-components-router/src/Router.js'
+      url: './src/es/customer-portal/event-driven-web-components-router/src/Router.js'
     },
     {
       selector: 'cp-c-',
