@@ -22,7 +22,7 @@ export default class Voting extends Shadow() {
     console.log('connectedCallback')
     const params = new URLSearchParams(window.location.search)
     document.body.addEventListener('voting-data', this.votingDataListener)
-    document.body.dispatchEvent(
+    this.dispatchEvent(
       new CustomEvent('request-voting-data', {
         bubbles: true,
         cancelable: true,
@@ -35,7 +35,7 @@ export default class Voting extends Shadow() {
     )
 
     this.submittedListener = (event) => {
-      event.detail.then((res) => {
+      event.detail.fetch.then((res) => {
         this.html = ''
         this.html = /* HTML */ `
           ${this.renderHeadline()}
@@ -58,7 +58,6 @@ export default class Voting extends Shadow() {
             )}">CustomerLoyality.Voted.ContinueText</a-translate></p>
           </ks-o-body-section>
         `
-        console.log('submit-voting-response', res)
       }).catch(error => {
         console.log('submit-voting-response error', error)
       })
@@ -67,13 +66,12 @@ export default class Voting extends Shadow() {
   }
 
   disconnectedCallback () {
-    console.log('disconnectedCallback')
     document.body.removeEventListener('voting-data', this.votingDataListener)
     document.body.removeEventListener('submit-voting-response', this.submittedListener)
   }
 
   votingDataListener = async (event) => {
-    this.renderHTML(event.detail)
+    this.renderHTML(event.detail.fetch)
   }
 
   shouldRenderHTML () {

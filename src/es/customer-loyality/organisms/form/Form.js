@@ -59,6 +59,7 @@ export default class Form extends Shadow() {
 
   renderHTML (voting) {
     this.modules.then(() => {
+      this.html = ''
       this.html = /* html */ `
         <m-form>
           <form>

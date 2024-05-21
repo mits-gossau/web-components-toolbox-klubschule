@@ -25,14 +25,16 @@ export default class VotingController extends Shadow() {
 
     this.requestVotingData = (event) => {
       fetchOptions.body = JSON.stringify(event.detail)
-      document.body.dispatchEvent(new CustomEvent('voting-data', {
-        detail: fetch(`${endpoint}/data`, fetchOptions).then(async response => {
-          if (response.status >= 200 && response.status <= 299) {
-            const result = await response.json()
-            return result
-          }
-          throw new Error(response.statusText)
-        }),
+      this.dispatchEvent(new CustomEvent('voting-data', {
+        detail: {
+          fetch: fetch(`${endpoint}/data`, fetchOptions).then(async response => {
+            if (response.status >= 200 && response.status <= 299) {
+              const result = await response.json()
+              return result
+            }
+            throw new Error(response.statusText)
+          })
+        },
         bubbles: true,
         cancelable: true,
         composed: true
@@ -40,14 +42,16 @@ export default class VotingController extends Shadow() {
     }
 
     this.submitListener = (event) => {
-      document.body.dispatchEvent(new CustomEvent('submit-voting-response', {
-        detail: fetch(`${endpoint}/voting`, { ...fetchOptions, body: JSON.stringify(event.detail) }).then(async response => {
-          if (response.status >= 200 && response.status <= 299) {
-            const result = await response.json()
-            return result
-          }
-          throw new Error(response.statusText)
-        }),
+      this.dispatchEvent(new CustomEvent('submit-voting-response', {
+        detail: {
+          fetch: fetch(`${endpoint}/voting`, { ...fetchOptions, body: JSON.stringify(event.detail) }).then(async response => {
+            if (response.status >= 200 && response.status <= 299) {
+              const result = await response.json()
+              return result
+            }
+            throw new Error(response.statusText)
+          })
+        },
         bubbles: true,
         cancelable: true,
         composed: true
@@ -56,17 +60,21 @@ export default class VotingController extends Shadow() {
   }
 
   connectedCallback () {
-    document.body.addEventListener(
+    this.addEventListener(
       'request-voting-data',
       this.requestVotingData
     )
-    document.body.addEventListener('submit-voting', this.submitListener)
+    this.addEventListener('submit-voting', this.submitListener)
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener(
+    this.removeEventListener(
       'request-voting-data',
       this.requestVotingData
+    )
+    this.removeEventListener(
+      'submit-voting',
+      this.submitListener
     )
   }
 }
