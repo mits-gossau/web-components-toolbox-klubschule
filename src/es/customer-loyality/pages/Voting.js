@@ -45,17 +45,17 @@ export default class Voting extends Shadow() {
           </ks-o-body-section>
           <ks-o-body-section class="already-voted-section" variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
             <ks-a-heading tag="h3" style-as="h2">
-              <a-translate>CustomerLoyality.Voted.Title</a-translate>
+              <a-translation key="CustomerLoyality.Voted.Title"></a-translation>
             </ks-a-heading>
             ${this.renderVotedOptions(res)}
           </ks-o-body-section>
           <ks-o-body-section variant="default">
             <ks-a-heading tag="h3" style-as="h2">
-              <a-translate>CustomerLoyality.Voted.ContinueTitle</a-translate>
+              <a-translation key="CustomerLoyality.Voted.ContinueTitle"></a-translation>
             </ks-a-heading>
-            <p><a-translate replace-line-breaks data-params="${escapeForHtml(
+            <p><a-translation replace-line-breaks params="${escapeForHtml(
               JSON.stringify({ deadline: res.responseUntilDate })
-            )}">CustomerLoyality.Voted.ContinueText</a-translate></p>
+            )}" key="CustomerLoyality.Voted.ContinueText"></a-translation></p>
           </ks-o-body-section>
         `
       }).catch(error => {
@@ -107,13 +107,13 @@ export default class Voting extends Shadow() {
       .catch((error) => {
         this.html = ''
         this.html = /* html */ `
-        <ks-o-body-section variant="default">
-          <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
-            <div slot="description">
-              <p>Failed to load data. (error: ${error.message})</p>
-            </div>
-          </ks-m-system-notification>
-        </ks-o-body-section>`
+          <ks-o-body-section variant="default">
+            <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
+              <div slot="description">
+                <p>Failed to load data. (error: ${error.message})</p>
+              </div>
+            </ks-m-system-notification>
+          </ks-o-body-section>`
       })
   }
 
@@ -121,7 +121,7 @@ export default class Voting extends Shadow() {
     return /* html */ `
       <ks-o-body-section variant="default">
         <ks-a-heading tag="h1">
-          <a-translate>CustomerLoyality.PageTitle</a-translate>
+          <a-translation key="CustomerLoyality.PageTitle"></a-translation>
         </ks-a-heading>
       </ks-o-body-section>`
   }
@@ -132,27 +132,27 @@ export default class Voting extends Shadow() {
         <table>
           <tbody>
             <tr>
-              <td><a-translate>CustomerLoyality.Table.CourseTitle</a-translate></td>
+              <td><a-translation key="CustomerLoyality.Table.CourseTitle"></a-translation></td>
               <td>${data.course.title}</td>
             </tr>
             <tr>
-              <td><a-translate>CustomerLoyality.Table.CourseId</a-translate></td>
+              <td><a-translation key="CustomerLoyality.Table.CourseId"></a-translation></td>
               <td>${data.course.id}</td>
             </tr>
             <tr>
-              <td><a-translate>CustomerLoyality.Table.Date</a-translate></td>
+              <td><a-translation key="CustomerLoyality.Table.Date"></a-translation></td>
               <td>${data.course.beginDate} - ${data.course.endDate}</td>
             </tr>
             <tr>
-              <td><a-translate>CustomerLoyality.Table.Location</a-translate></td>
+              <td><a-translation key="CustomerLoyality.Table.Location"></a-translation></td>
               <td>${data.course.location}</td>
             </tr>
             <tr>
-              <td><a-translate>CustomerLoyality.Table.NumberOfLessons</a-translate></td>
+              <td><a-translation key="CustomerLoyality.Table.NumberOfLessons"></a-translation></td>
               <td>${data.course.lessons} Lektionen</td>
             </tr>
             <tr>
-              <td><a-translate>CustomerLoyality.Table.CoursePrice</a-translate></td>
+              <td><a-translation key="CustomerLoyality.Table.CoursePrice"></a-translation></td>
               <td>${data.course.price}</td>
             </tr>
         </table>
@@ -182,17 +182,17 @@ export default class Voting extends Shadow() {
     return /* html */ `
       <ks-o-body-section variant="default">
         <ks-a-heading tag="h2">
-          <a-translate>CustomerLoyality.FormIntroTitle</a-translate>
+          <a-translation key="CustomerLoyality.FormIntroTitle"></a-translation>
         </ks-a-heading>
-        <p><a-translate>CustomerLoyality.FormIntroText</a-translate></p>
+        <p><a-translation key="CustomerLoyality.FormIntroText"></a-translation></p>
       </ks-o-body-section>
       <ks-o-body-section variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
         <ks-a-heading tag="h3" style-as="h2">
-          <a-translate>CustomerLoyality.FormTitle</a-translate>
+          <a-translation key="CustomerLoyality.FormTitle"></a-translation>
         </ks-a-heading>
-        <p><a-translate data-params="${escapeForHtml(
+        <p><a-translation params="${escapeForHtml(
           JSON.stringify({ date: voting.responseUntilDate })
-        )}">CustomerLoyality.FormText</a-translate></p>
+        )}" key="CustomerLoyality.FormText"></a-translation></p>
         <o-form data-voting="${escapeForHtml(JSON.stringify(voting))}"></o-form>
       </ks-o-body-section>`
   }
@@ -201,9 +201,9 @@ export default class Voting extends Shadow() {
     return /* html */ `
       <ks-o-body-section variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
         <ks-a-heading tag="h3" style-as="h2">
-          <a-translate>CustomerLoyality.ExpiredTitle</a-translate>
+          <a-translation key="CustomerLoyality.ExpiredTitle"></a-translation>
         </ks-a-heading>
-        <p><a-translate replace-line-breaks>CustomerLoyality.ExpiredText</a-translate></p>
+        <p><a-translation key="CustomerLoyality.ExpiredText" replace-line-breaks></a-translation></p>
       </ks-o-body-section>`
   }
 
@@ -211,7 +211,7 @@ export default class Voting extends Shadow() {
     return /* html */ `
       <ks-o-body-section class="already-voted-section" variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
         <ks-a-heading tag="h3" style-as="h2">
-          <a-translate>CustomerLoyality.AlreadyVoted.Title</a-translate>
+          <a-translation key="CustomerLoyality.AlreadyVoted.Title"></a-translation>
         </ks-a-heading>
         ${this.renderVotedOptions(voting)}
       </ks-o-body-section>`
@@ -221,11 +221,11 @@ export default class Voting extends Shadow() {
     return /* html */ `
       <div class="already-voted-item">
         <a-icon-mdx icon-name="${voting.optionPrice.value ? 'CheckCircle' : 'X'}" size="1em"></a-icon-mdx>
-        <p><a-translate replace-line-breaks>${voting.optionPrice.value ? 'CustomerLoyality.AlreadyVoted.OptionPriceAccepted' : 'CustomerLoyality.AlreadyVoted.OptionPriceRejected'}</a-translate></p>
+        <p><a-translation replace-line-breaks key="${voting.optionPrice.value ? 'CustomerLoyality.AlreadyVoted.OptionPriceAccepted' : 'CustomerLoyality.AlreadyVoted.OptionPriceRejected'}"></a-translation></p>
       </div>
       <div class="already-voted-item">
         <a-icon-mdx icon-name="${voting.optionLessons.value ? 'CheckCircle' : 'X'}" size="1em"></a-icon-mdx>
-        <p><a-translate replace-line-breaks>${voting.optionLessons.value ? 'CustomerLoyality.AlreadyVoted.OptionLessonsAccepted' : 'CustomerLoyality.AlreadyVoted.OptionLessonsRejected'}</a-translate></p>
+        <p><a-translation replace-line-breaks key="${voting.optionLessons.value ? 'CustomerLoyality.AlreadyVoted.OptionLessonsAccepted' : 'CustomerLoyality.AlreadyVoted.OptionLessonsRejected'}"></a-translation></p>
       </div>`
   }
 
@@ -281,12 +281,12 @@ export default class Voting extends Shadow() {
           name: 'ks-m-system-notification'
         },
         {
-          path: `${this.importMetaUrl}../../components/atoms/translate/translate.js`,
-          name: 'a-translate'
-        },
-        {
           path: `${this.importMetaUrl}../organisms/form/Form.js`,
           name: 'o-form'
+        },
+        {
+          path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/atoms/translation/translation.js`,
+          name: 'a-translation'
         }
       ])
     ])

@@ -28,11 +28,11 @@ export default class Option extends Shadow() {
     this.html = ''
     this.html = /* html */ `
         <ks-a-heading tag="h3">
-          <a-translate>${dictKey}.Title</a-translate>
+          <a-translation key="${dictKey}.Title"></a-translation>
         </ks-a-heading>
-        <p><a-translate>${dictKey}.Text</a-translate></p>
+        <p><a-translation key="${dictKey}.Text"></a-translation></p>
         ${content}
-        <p><small><a-translate data-params="${escapeForHtml(JSON.stringify({ amount: option.currentVotes, of: option.maxVotes }))}">CustomerLoyality.PickedByParticipants</a-translate></small></p>
+        <p><small><a-translation key="CustomerLoyality.PickedByParticipants" params="${escapeForHtml(JSON.stringify({ amount: option.currentVotes, of: option.maxVotes }))}"></a-translation></small></p>
     `
   }
 

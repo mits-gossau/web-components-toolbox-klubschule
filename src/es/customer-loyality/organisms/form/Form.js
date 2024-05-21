@@ -91,22 +91,22 @@ export default class Form extends Shadow() {
         <table>
           <tbody>
             <tr class="bold">
-              <td><a-translate>CustomerLoyality.OptionPrice.PriceNew</a-translate></td>
+              <td><a-translation key="CustomerLoyality.OptionPrice.PriceNew"></a-translation></td>
               <td>${option.newPrice}</td>
             </tr>
             <tr>
-              <td><a-translate>CustomerLoyality.OptionPrice.PriceOld</a-translate></td>
+              <td><a-translation key="CustomerLoyality.OptionPrice.PriceOld"></a-translation></td>
               <td>${option.oldPrice}</td>
             </tr>
             <tr>
-              <td><a-translate>CustomerLoyality.Table.NumberOfLessons</a-translate></td>
+              <td><a-translation key="CustomerLoyality.Table.NumberOfLessons"></a-translation></td>
               <td>${option.lesssons}</td>
             </tr>
           </tbody>
         </table>
         <ks-a-checkbox namespace="checkbox-default-" mode="false">
           <div class="wrap">
-            <label for="optionPrice"><strong><a-translate>CustomerLoyality.OptionPrice.CheckboxLabel</a-translate></strong></label>
+            <label for="optionPrice"><strong><a-translation key="CustomerLoyality.OptionPrice.CheckboxLabel"></a-translation></strong></label>
             <input id="optionPrice" type="checkbox" name="optionPrice">
             <div class="box">
               <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
@@ -128,22 +128,22 @@ export default class Form extends Shadow() {
         <table>
           <tbody>
             <tr class="bold">
-              <td><a-translate>CustomerLoyality.OptionLessons.LessonsNew</a-translate></td>
+              <td><a-translation key="CustomerLoyality.OptionLessons.LessonsNew"></a-translation></td>
               <td>${option.newLesssons}</td>
             </tr>
             <tr>
-              <td><a-translate>CustomerLoyality.OptionLessons.LessonsOld</a-translate></td>
+              <td><a-translation key="CustomerLoyality.OptionLessons.LessonsOld"></a-translation></td>
               <td>${option.oldLesssons}</td>
             </tr>
             <tr>
-              <td><a-translate>CustomerLoyality.OptionLessons.Price</a-translate></td>
+              <td><a-translation key="CustomerLoyality.OptionLessons.Price"></a-translation></td>
               <td>${option.price}</td>
             </tr>
           </tbody>
         </table>
         <ks-a-checkbox namespace="checkbox-default-" mode="false">
           <div class="wrap">
-            <label for="optionLessons"><strong><a-translate>CustomerLoyality.OptionLessons.CheckboxLabel</a-translate></strong></label>
+            <label for="optionLessons"><strong><a-translation key="CustomerLoyality.OptionLessons.CheckboxLabel"></a-translation></strong></label>
             <input id="optionLessons" type="checkbox" name="optionLessons">
             <div class="box">
                 <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
@@ -187,10 +187,6 @@ export default class Form extends Shadow() {
   get modules () {
     return Promise.all([
       this.fetchModules([
-        {
-          path: `${this.importMetaUrl}../../../components/atoms/translate/translate.js`,
-          name: 'a-translate'
-        },
         {
           path: `${this.importMetaUrl}../../molecules/option/option.js`,
           name: 'm-option'
