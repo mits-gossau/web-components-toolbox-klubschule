@@ -33,11 +33,43 @@ export default class Voting extends Shadow() {
         }
       })
     )
+
+    this.submittedListener = (event) => {
+      event.detail.then((res) => {
+        this.html = ''
+        this.html = /* HTML */ `
+          ${this.renderHeadline()}
+          <ks-o-body-section variant="default">
+            ${this.renderCourseTable(res)}
+            ${this.renderNotification()}
+          </ks-o-body-section>
+          <ks-o-body-section class="already-voted-section" variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
+            <ks-a-heading tag="h3" style-as="h2">
+              <a-translate>CustomerLoyality.Voted.Title</a-translate>
+            </ks-a-heading>
+            ${this.renderVotedOptions(res)}
+          </ks-o-body-section>
+          <ks-o-body-section variant="default">
+            <ks-a-heading tag="h3" style-as="h2">
+              <a-translate>CustomerLoyality.Voted.ContinueTitle</a-translate>
+            </ks-a-heading>
+            <p><a-translate replace-line-breaks data-params="${escapeForHtml(
+              JSON.stringify({ deadline: res.responseUntilDate })
+            )}">CustomerLoyality.Voted.ContinueText</a-translate></p>
+          </ks-o-body-section>
+        `
+        console.log('submit-voting-response', res)
+      }).catch(error => {
+        console.log('submit-voting-response error', error)
+      })
+    }
+    document.body.addEventListener('submit-voting-response', this.submittedListener)
   }
 
   disconnectedCallback () {
     console.log('disconnectedCallback')
     document.body.removeEventListener('voting-data', this.votingDataListener)
+    document.body.removeEventListener('submit-voting-response', this.submittedListener)
   }
 
   votingDataListener = async (event) => {
@@ -74,7 +106,7 @@ export default class Voting extends Shadow() {
           ${this.renderVoting(voting)}
         `
       })
-      .catch(error => {
+      .catch((error) => {
         this.html = ''
         this.html = /* html */ `
         <ks-o-body-section variant="default">
@@ -140,9 +172,9 @@ export default class Voting extends Shadow() {
 
   renderVoting (data) {
     if (data.alreadyVote) {
-      return 'already voted'
+      return this.renderAlreadyVoted(data)
     } else if (data.voteExpired) {
-      return 'vote expired'
+      return this.renderVoteExpired()
     } else {
       return this.renderForm(data)
     }
@@ -167,6 +199,38 @@ export default class Voting extends Shadow() {
       </ks-o-body-section>`
   }
 
+  renderVoteExpired () {
+    return /* html */ `
+      <ks-o-body-section variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
+        <ks-a-heading tag="h3" style-as="h2">
+          <a-translate>CustomerLoyality.ExpiredTitle</a-translate>
+        </ks-a-heading>
+        <p><a-translate replace-line-breaks>CustomerLoyality.ExpiredText</a-translate></p>
+      </ks-o-body-section>`
+  }
+
+  renderAlreadyVoted (voting) {
+    return /* html */ `
+      <ks-o-body-section class="already-voted-section" variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
+        <ks-a-heading tag="h3" style-as="h2">
+          <a-translate>CustomerLoyality.AlreadyVoted.Title</a-translate>
+        </ks-a-heading>
+        ${this.renderVotedOptions(voting)}
+      </ks-o-body-section>`
+  }
+
+  renderVotedOptions (voting) {
+    return /* html */ `
+      <div class="already-voted-item">
+        <a-icon-mdx icon-name="${voting.optionPrice.value ? 'CheckCircle' : 'X'}" size="1em"></a-icon-mdx>
+        <p><a-translate replace-line-breaks>${voting.optionPrice.value ? 'CustomerLoyality.AlreadyVoted.OptionPriceAccepted' : 'CustomerLoyality.AlreadyVoted.OptionPriceRejected'}</a-translate></p>
+      </div>
+      <div class="already-voted-item">
+        <a-icon-mdx icon-name="${voting.optionLessons.value ? 'CheckCircle' : 'X'}" size="1em"></a-icon-mdx>
+        <p><a-translate replace-line-breaks>${voting.optionLessons.value ? 'CustomerLoyality.AlreadyVoted.OptionLessonsAccepted' : 'CustomerLoyality.AlreadyVoted.OptionLessonsRejected'}</a-translate></p>
+      </div>`
+  }
+
   renderLoading () {
     this.html = /* html */ `
       <ks-o-body-section variant="default">
@@ -187,6 +251,12 @@ export default class Voting extends Shadow() {
         grid-template-columns: repeat(2, 1fr);
         gap: var(--content-spacing, 1.5rem);
       }
+
+      .already-voted-section {
+        --any-display: flex;
+        --p-margin: 0 0 0 .5em;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host {}
 

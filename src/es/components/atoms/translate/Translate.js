@@ -21,6 +21,10 @@ export default class Translate extends Shadow() {
         translation = translation.replace(`{${key}}`, params[key])
       })
 
+      if (this.hasAttribute('replace-line-breaks')) {
+        translation = translation.replaceAll('\n', '<br />')
+      }
+
       this.innerHTML = translation
     }
   }

@@ -40,12 +40,18 @@ export default class VotingController extends Shadow() {
     }
 
     this.submitListener = (event) => {
-      console.log('submitListener', event)
-      fetch(`${endpoint}/voting`, {
-        ...fetchOptions,
-        body: JSON.stringify(event.detail)
-      }).then(res => res.json())
-        .then(response => console.log('submitListener response', response))
+      document.body.dispatchEvent(new CustomEvent('submit-voting-response', {
+        detail: fetch(`${endpoint}/voting`, { ...fetchOptions, body: JSON.stringify(event.detail) }).then(async response => {
+          if (response.status >= 200 && response.status <= 299) {
+            const result = await response.json()
+            return result
+          }
+          throw new Error(response.statusText)
+        }),
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
     }
   }
 
