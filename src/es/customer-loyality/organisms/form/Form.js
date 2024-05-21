@@ -37,9 +37,9 @@ export default class Form extends Shadow() {
           kursId: voting.course.id,
           teilnehmerId: params.get('teilnehmerId'),
           optionPriceAvailable: voting.optionPrice.available,
-          optionPriceValue: formData.get('optionPrice') === 'true',
+          optionPriceValue: formData.get('optionPrice') === 'on',
           optionLessonsAvailable: voting.optionPrice.available,
-          optionLessonsValue: formData.get('optionLessons') === 'true',
+          optionLessonsValue: formData.get('optionLessons') === 'on',
           comment: formData.get('comment')
           // preferredVariant: 'string', // TODO: get preferred variant from form?
         }
@@ -103,10 +103,10 @@ export default class Form extends Shadow() {
             </tr>
           </tbody>
         </table>
-        <ks-a-checkbox namespace="checkbox-default-" name="optionPrice">
+        <ks-a-checkbox namespace="checkbox-default-" mode="false">
           <div class="wrap">
-            <label for="optionPriceInput"><strong><a-translate>CustomerLoyality.OptionPrice.CheckboxLabel</a-translate></strong></label>
-            <input id="optionPriceInput" type="checkbox" name="optionPriceInput">
+            <label for="optionPrice"><strong><a-translate>CustomerLoyality.OptionPrice.CheckboxLabel</a-translate></strong></label>
+            <input id="optionPrice" type="checkbox" name="optionPrice">
             <div class="box">
               <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
             </div>
@@ -140,10 +140,10 @@ export default class Form extends Shadow() {
             </tr>
           </tbody>
         </table>
-        <ks-a-checkbox namespace="checkbox-default-" name="optionLessons">
+        <ks-a-checkbox namespace="checkbox-default-" mode="false">
           <div class="wrap">
-            <label for="optionLessonsInput"><strong><a-translate>CustomerLoyality.OptionLessons.CheckboxLabel</a-translate></strong></label>
-            <input id="optionLessonsInput" type="checkbox" name="optionLessonsInput">
+            <label for="optionLessons"><strong><a-translate>CustomerLoyality.OptionLessons.CheckboxLabel</a-translate></strong></label>
+            <input id="optionLessons" type="checkbox" name="optionLessons">
             <div class="box">
                 <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
             </div>

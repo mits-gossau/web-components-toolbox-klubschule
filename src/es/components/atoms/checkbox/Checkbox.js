@@ -2,17 +2,11 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class Checkbox extends Shadow() {
-  static formAssociated = true
-
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, keepCloneOutsideShadowRoot: true, ...options }, ...args)
-    this.internals = this.attachInternals()
+    super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
       this.input.click()
-    }
-    this.inputClickEventListener = event => {
-      this.internals.setFormValue(this.input.checked)
     }
   }
 
@@ -26,7 +20,6 @@ export default class Checkbox extends Shadow() {
      * Handle checked on box
      */
     this.box.addEventListener('click', this.clickEventListener)
-    this.input.addEventListener('click', this.inputClickEventListener)
   }
 
   disconnectedCallback () {
@@ -75,6 +68,7 @@ export default class Checkbox extends Shadow() {
 
         :host input[type='checkbox'] {
             width: 0;
+            min-width: unset;
         }
 
         :host input[type='checkbox']:checked + .box {
