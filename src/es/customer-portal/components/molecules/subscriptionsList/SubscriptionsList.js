@@ -145,7 +145,6 @@ export default class SubscriptionsList extends Shadow() {
   }
 
   renderLoading () {
-    // this.html = '<img src="../customer-portal/img/loading.gif" alt="Loading">'
     this.html = '<mdx-component><mdx-spinner size="large"></mdx-spinner></mdx-component>'
   }
 
