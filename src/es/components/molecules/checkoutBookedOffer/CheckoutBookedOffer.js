@@ -32,13 +32,7 @@ export default class CheckoutBookedOffer extends Shadow() {
 
   checkoutConfigurationListener (event) {
     event.detail.fetch.then(priceData => {
-      this.configurationPriceData = []
-      Object.keys(priceData).forEach(key => {
-        this.configurationPriceData?.push({
-          label: key,
-          price: priceData[key] + ' CHF'
-        })
-      })
+      this.configurationPriceData = priceData
 
       this.html = ''
       this.renderHTML()
@@ -156,15 +150,13 @@ export default class CheckoutBookedOffer extends Shadow() {
   renderHTML () {
     const headline = this.getAttribute('headline')
     const name = this.getAttribute('name')
-    const totalPrice = this.getAttribute('total-price')
     const date = this.getAttribute('date')
     const time = this.getAttribute('time')
     const street = this.getAttribute('street')
     const city = this.getAttribute('city')
-    // const priceData = CheckoutBookedOffer.parseAttribute(this.getAttribute('price-data'))
     const priceData = this.configurationPriceData
-
-    // if (!priceData) return console.error('Data json attribute is missing or corrupted!', this)
+    const withAnnulationsKosten = false
+    const totalPrice = withAnnulationsKosten ? priceData?.totalPreisMitAnnulation : priceData?.totalPreisOhneAnnulation
 
     this.html = /* HTML */ `
         <div class="checkout-booked-offer">
@@ -191,13 +183,28 @@ export default class CheckoutBookedOffer extends Shadow() {
             </li>
             <li>
               <a-icon-mdx icon-name="Wallet" size="1.5rem"></a-icon-mdx>
-              <div class="checkout-booked-offer__price-info">
-                ${priceData
-                    ? priceData.map(item => {
-                    return /* html */`<div class="checkout-booked-offer__price-info-line"><span>${item.label}</span><span>${item.price}</span></div>`
-                  }).join('')
+              ${/* Price Data Configuration */
+                priceData
+                  ? /* html */`
+                    <div class='checkout-booked-offer__price-info'>
+                      <div class='checkout-booked-offer__price-info-line'>
+                        <span><a-translation data-trans-key='Checkout.Lehrmittel' /></span>
+                        <span>CHF ${priceData.lehrmittelPreis}</span>
+                      </div>
+                      <div class='checkout-booked-offer__price-info-line'>
+                        <span><a-translation data-trans-key='Checkout.Material' /></span>
+                        <span>CHF ${priceData.materialPreis}</span>
+                      </div>
+                      ${withAnnulationsKosten
+                        ? /* html */`
+                          <div class='checkout-booked-offer__price-info-line'>
+                            <span><a-translation data-trans-key='Checkout.Annulationskostenversicherung' /></span>
+                            <span>CHF ${priceData.annulationskostenversicherungPreis}</span>
+                          </div>`
+                        : ''
+                    }
+                    </div>`
                   : ''}
-              </div>
             </li>
           </ul>
           <hr />
@@ -206,7 +213,7 @@ export default class CheckoutBookedOffer extends Shadow() {
               <a-translation data-trans-key="Checkout.Total"></a-translation>
             </span>
             <div class="checkout-booked-offer__total-price">
-              <span class="checkout-booked-offer__total">${totalPrice}</span>
+              <span class="checkout-booked-offer__total">CHF ${totalPrice}</span>
               <span class="checkout-booked-offer__total-desc"><a-translation data-trans-key="Checkout.Tax"></a-translation></span>
             </div>
           </div>
