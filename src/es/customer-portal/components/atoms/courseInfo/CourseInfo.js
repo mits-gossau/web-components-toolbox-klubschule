@@ -1,4 +1,5 @@
 // @ts-check
+/** @typedef {import('../../../helpers/Typedefs.js').TileStatus} TileStatus */
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 import { courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
 import { getTileState } from '../../../helpers/Shared.js'
@@ -105,6 +106,10 @@ export default class CourseInfo extends Shadow() {
     }
   }
 
+  /**
+   * Render HTML
+   * @param {TileStatus} data
+   */
   renderHTML (data) {
     const { icon, css, status, info, infoTransKey, statusTransKey } = data
     const hasDash = (status && info) && !Number(status) ? ' - ' : ''
