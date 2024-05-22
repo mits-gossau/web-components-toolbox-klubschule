@@ -117,8 +117,10 @@ export default class Abonnements extends Shadow() {
         namespace="button-transparent-"
         request-event-name="open-abonnements-dialog-${this.aboId}"
         click-no-toggle-active
+        icon-right="ArrowRight"
       >
         <span>${this.linkLabel}</span>
+        <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>
       </a-button>
     `
     return this.fetchModules([
