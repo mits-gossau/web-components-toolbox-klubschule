@@ -23,12 +23,12 @@ export default class Translation extends Shadow() {
       translationData = JSON.parse(this.getAttribute('translation'))
 
       const isValid = translationData.every(item => {
-        return item.hasOwnProperty('key') && item.hasOwnProperty('value') || item.hasOwnProperty('Key') && item.hasOwnProperty('Value')
+        return item.hasOwnProperty('Key') && item.hasOwnProperty('Value')
       })
 
       this.translation = isValid
         ? translationData.reduce((acc, curr) => {
-          acc[curr.key || curr.Key] = curr.value || curr.Value
+          acc[curr.Key] = curr.Value
           return acc
         }, {})
         : {}
