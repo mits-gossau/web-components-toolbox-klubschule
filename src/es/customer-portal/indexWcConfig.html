@@ -59,21 +59,5 @@
                 </c-fetch-modules>
             </c-fetch-css>
         </c-fetch-html>
-        
-        <!-- <script rel="preload" type="module">
-            Promise.all([
-                import('../components/web-components-toolbox/src/es/components/controllers/fetchHtml/FetchHtml.js').then(module => ['c-fetch-html', module.default]),
-                import('../components/web-components-toolbox/src/es/components/controllers/fetchCss/FetchCss.js').then(module => ['c-fetch-css', module.default]),
-                import('../components/web-components-toolbox/src/es/components/controllers/fetchModules/FetchModules.js').then(module => ['c-fetch-modules', module.default]),
-                import('./components/molecules/navigation/Navigation.js').then(module => ['cp-m-navigation', module.default]),
-                import('../../es/components/web-components-toolbox/src/es/components/organisms/bodyStyle/BodyStyle.js').then(module => ['o-body-style', module.default]),
-                import('../../es/components/web-components-toolbox/src/es/components/pages/general/General.js').then(module => ['p-general', module.default]),
-                import('./controllers/appointments/Appointments.js').then(module => ['c-appointments', module.default]),
-                import('./controllers/subscriptions/Subscriptions.js').then(module => ['c-subscriptions', module.default]),
-                import('../../es/components/web-components-toolbox/src/es/components/controllers/translations/Translations.js').then(module => ['c-translations', module.default]),
-            ]).then(elements => elements.forEach(element => {
-                if (element && !customElements.get(element[0])) customElements.define(...element)
-            }))
-        </script> -->
     </body>
 </html>
