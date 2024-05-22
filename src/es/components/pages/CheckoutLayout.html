@@ -1,0 +1,33 @@
+<div>Layout Wrapper for Checkout Pages</div>
+<hr>
+
+<ks-o-checkout-layout>
+
+    <section slot="top">
+        <ks-m-checkout-color-stage 
+            back-label="Zurück (fallback browser back)" 
+            title="Konfiguration: {{ Angebotstitel }}"
+        >
+        </ks-m-checkout-color-stage>
+    </section>
+
+    <section slot="main">
+        <h2>Main Content</h2>
+        <p>(Desktop auf linker Seite)</p>
+    </section>
+
+    <section slot="sidebar">
+        <h2>Sidebar</h2>
+        <p>(Desktop rechts)</p>
+    </section>
+
+    <section slot="bottom">
+        <ks-m-back-forward
+            back-label="Zurück"
+            back-link="#back"
+            forward-label="Weiter"
+            forward-link="/"
+        ></ks-m-back-forward>
+    </section>
+
+</ks-o-checkout-layout>
