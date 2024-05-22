@@ -28,7 +28,7 @@ export default class Translation extends Shadow() {
 
       this.translation = isValid
         ? translationData.reduce((acc, curr) => {
-          acc[curr.key] = curr.value
+          acc[curr.key || curr.Key] = curr.value || curr.Value
           return acc
         }, {})
         : {}
