@@ -35,14 +35,14 @@ export default class AppointmentsFilter extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        display: flex;
         align-items: center;
+        display: flex;
         gap: 1em;
         justify-content: space-between;
         margin: 1em 0;
       }
       :host > div {
-        width:100%;
+        width: 100%;
       }
       @media only screen and (max-width: _max-width_) {
         :host  {
