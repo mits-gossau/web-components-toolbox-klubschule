@@ -16,39 +16,42 @@ export default class Form extends Shadow() {
    */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-  }
 
-  connectedCallback () {
-    const voting = this.dataset.voting ? JSON.parse(this.dataset.voting) : null
-    if (voting) {
-      if (this.shouldRenderCSS()) this.renderCSS()
-      this.renderHTML(voting)
-    }
-
+    this.voting = this.dataset.voting ? JSON.parse(this.dataset.voting) : null
     this.submitListener = (evt) => {
       evt.preventDefault()
       const formData = new FormData(this.form)
       const params = new URLSearchParams(window.location.search)
-      this.form.dispatchEvent(new CustomEvent('submit-voting', {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-        detail: {
-          kursId: voting.course.id,
-          teilnehmerId: params.get('teilnehmerId'),
-          optionPriceAvailable: voting.optionPrice.available,
-          optionPriceValue: formData.get('optionPrice') === 'on',
-          optionLessonsAvailable: voting.optionPrice.available,
-          optionLessonsValue: formData.get('optionLessons') === 'on',
-          comment: formData.get('comment')
-          // preferredVariant: 'string', // TODO: get preferred variant from form?
-        }
-      }))
+      this.form.dispatchEvent(
+        new CustomEvent('submit-voting', {
+          bubbles: true,
+          cancelable: true,
+          composed: true,
+          detail: {
+            kursId: this.voting.course.id,
+            teilnehmerId: params.get('teilnehmerId'),
+            optionPriceAvailable: this.voting.optionPrice.available,
+            optionPriceValue: formData.get('optionPrice') === 'on',
+            optionLessonsAvailable: this.voting.optionPrice.available,
+            optionLessonsValue: formData.get('optionLessons') === 'on',
+            comment: formData.get('comment')
+            // preferredVariant: 'string', // TODO: get preferred variant from form?
+          }
+        })
+      )
+    }
+  }
+
+  connectedCallback () {
+    if (this.voting) {
+      if (this.shouldRenderCSS()) this.renderCSS()
+      this.renderHTML(this.voting)
     }
   }
 
   disconnectedCallback () {
-    this.form.addEventListener('submit', this.submitListener)
+    this.form.removeEventListener('submit', this.submitListener)
+    this.button.removeEventListener('click', this.submitListener)
   }
 
   shouldRenderCSS () {
@@ -58,7 +61,7 @@ export default class Form extends Shadow() {
   }
 
   renderHTML (voting) {
-    this.modules.then(() => {
+    Promise.all([this.translate('CustomerLoyality.Comment.Placeholder'), this.modules]).then(([translation]) => {
       this.html = ''
       this.html = /* html */ `
         <m-form>
@@ -68,10 +71,10 @@ export default class Form extends Shadow() {
               ${this.renderOptionLessons(voting.optionLessons)}
             </div>
             <fieldset>
-              <label>Kommentar</label>
-              <textarea name="comment" placeholder="Hier ist Platz für Ihre Fragen und Anliegen. Sie erreichen uns auch telefonisch unter +41 44 278 62 62."></textarea>
+              <label><a-translation key="CustomerLoyality.Comment"></a-translation></label>
+              <textarea name="comment" placeholder="${translation}"></textarea>
             </fieldset>
-            <ks-a-button namespace="button-primary-" color="secondary" type="submit">Rückmeldung abschicken</ks-a-button>
+            <ks-a-button namespace="button-primary-" color="secondary" type="submit"><a-translation key="CustomerLoyality.Submit"></a-translation></ks-a-button>
           </form>
         </m-form>`
       this.form.addEventListener('submit', this.submitListener)
@@ -100,7 +103,7 @@ export default class Form extends Shadow() {
             </tr>
             <tr>
               <td><a-translation key="CustomerLoyality.Table.NumberOfLessons"></a-translation></td>
-              <td>${option.lesssons}</td>
+              <td>${option.lessons}</td>
             </tr>
           </tbody>
         </table>
@@ -129,11 +132,11 @@ export default class Form extends Shadow() {
           <tbody>
             <tr class="bold">
               <td><a-translation key="CustomerLoyality.OptionLessons.LessonsNew"></a-translation></td>
-              <td>${option.newLesssons}</td>
+              <td>${option.newLessons}</td>
             </tr>
             <tr>
               <td><a-translation key="CustomerLoyality.OptionLessons.LessonsOld"></a-translation></td>
-              <td>${option.oldLesssons}</td>
+              <td>${option.oldLessons}</td>
             </tr>
             <tr>
               <td><a-translation key="CustomerLoyality.OptionLessons.Price"></a-translation></td>
@@ -209,5 +212,27 @@ export default class Form extends Shadow() {
         }
       ])
     ])
+  }
+
+  async translate (key) {
+    return new Promise((resolve) =>
+      this.dispatchEvent(
+        new CustomEvent('request-translations', {
+          detail: {
+            resolve
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        })
+      )
+    )
+      .then(async ({ getTranslation }) => {
+        if (key) {
+          return await getTranslation(key)
+        } else {
+          return 'no key'
+        }
+      })
   }
 }

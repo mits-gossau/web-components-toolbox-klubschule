@@ -264,7 +264,7 @@
       url: './src/es/customer-portal/components/molecules/'
     },
     {
-      selector: 'cl-c-',
+      selector: 'cl-c-voting',
       url: './src/es/customer-loyality/controllers/VotingController.js'
     }
   ] // directories

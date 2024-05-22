@@ -15,24 +15,6 @@ export default class Voting extends Shadow() {
    */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-  }
-
-  connectedCallback () {
-    if (this.shouldRenderCSS()) this.renderCSS()
-    console.log('connectedCallback')
-    const params = new URLSearchParams(window.location.search)
-    document.body.addEventListener('voting-data', this.votingDataListener)
-    this.dispatchEvent(
-      new CustomEvent('request-voting-data', {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-        detail: {
-          courseId: params.get('kursId'),
-          customerId: params.get('teilnehmerId')
-        }
-      })
-    )
 
     this.submittedListener = (event) => {
       event.detail.fetch.then((res) => {
@@ -62,7 +44,25 @@ export default class Voting extends Shadow() {
         console.log('submit-voting-response error', error)
       })
     }
+  }
+
+  connectedCallback () {
+    if (this.shouldRenderCSS()) this.renderCSS()
+
+    const params = new URLSearchParams(window.location.search)
+    document.body.addEventListener('voting-data', this.votingDataListener)
     document.body.addEventListener('submit-voting-response', this.submittedListener)
+    this.dispatchEvent(
+      new CustomEvent('request-voting-data', {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+        detail: {
+          courseId: params.get('kursId'),
+          customerId: params.get('teilnehmerId')
+        }
+      })
+    )
   }
 
   disconnectedCallback () {
@@ -149,7 +149,7 @@ export default class Voting extends Shadow() {
             </tr>
             <tr>
               <td><a-translation key="CustomerLoyality.Table.NumberOfLessons"></a-translation></td>
-              <td>${data.course.lessons} Lektionen</td>
+              <td><a-translation key="CustomerLoyality.Table.NumberOfLessons.Value" params="${escapeForHtml(JSON.stringify({ lessons: data.course.lessons }))}"></a-translation></td>
             </tr>
             <tr>
               <td><a-translation key="CustomerLoyality.Table.CoursePrice"></a-translation></td>
@@ -163,7 +163,7 @@ export default class Voting extends Shadow() {
     return /* html */ `
       <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
         <div slot="description">
-          <p>Wegen fehlender Anmeldungen können wir nicht garantieren, dass Ihr Kurs in der ursprünglichen Form stattfinden kann. Es besteht jedoch die Möglichkeit, dass er mit kleinen Änderungen durchgeführt wird.</p>
+          <p><a-translation key="CustomerLoyality.Warnings.ReasonForVoting"></a-translation></p>
         </div>
       </ks-m-system-notification>`
   }
