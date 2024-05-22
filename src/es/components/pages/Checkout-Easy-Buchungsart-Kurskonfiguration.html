@@ -4,11 +4,19 @@
 
 <o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" switch-aside-order-mobile>
     <ks-o-body-section content-width-var="100%" no-margin-y>
-        <m-simple-form-validation namespace="simple-form-miduweb-">
+        <m-simple-form-validation 
+            namespace="simple-form-miduweb-"
+            no-validation-error-css
+            endpoint="/api/test"
+            method="POST"
+            schema="{
+                'booking-type': '',
+            }"
+        >
             <form>
                 <ks-a-heading tag="h2" style-as="h1">Buchungsart</ks-a-heading>
                 <p>Bitte geben Sie an, ob diese Buchung ihre Firma bezahlt oder ob Sie die Kurskosten privat tragen.</p>
-                <ks-a-radio>
+                <ks-a-radio mode="false">
                     <div class="wrap">
                         <label for="booking-type-course-config-company">Bezahlung durch Firma</label>
                         <input 
@@ -16,8 +24,8 @@
                             id="booking-type-course-config-company" 
                             name="booking-type" 
                             value="company"
-                            data-m-v-rules='{"required": {"error-message": "Bitte angeben."}}'
                             required
+                            data-m-v-rules='{"required": {"error-message": "Bitte angeben."}}'
                         >
                         <div class="box"></div>
                     </div>
@@ -28,13 +36,14 @@
                             id="booking-type-course-config-private" 
                             name="booking-type" 
                             value="private"
-                            data-m-v-rules='{"required": {"error-message": "Bitte angeben."}}'
                             required
+                            data-m-v-rules='{"required": {"error-message": "Bitte angeben."}}'
                         >
                         <div class="box"></div>
                     </div>
                 </ks-a-radio>
                 <hr />
+                <input type="submit" value="Submit" />
             </form>
         </m-simple-form-validation>
     </ks-o-body-section>
