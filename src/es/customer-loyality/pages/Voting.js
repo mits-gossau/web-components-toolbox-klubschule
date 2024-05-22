@@ -214,6 +214,11 @@ export default class Voting extends Shadow() {
   renderCSS () {
     this.css = /* css */ `
       :host {}
+
+      .already-voted-section {
+        --any-display: flex;
+        --p-margin: 0 0 0 .5em;
+      }
     `
   }
 
@@ -246,12 +251,5 @@ export default class Voting extends Shadow() {
 
   get votingWrapper () {
     return this.root.querySelector('div')
-  }
-
-  get form () {
-    console.log(this.root.querySelector('#form-wrapper'))
-    return this.root
-      .querySelector('#form-wrapper')
-      .shadowRoot.querySelector('o-form').shadowRoot
   }
 }
