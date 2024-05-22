@@ -141,7 +141,7 @@ export default class AppointmentsList extends Shadow() {
           name: 'ks-a-counter'
         },
         {
-          path: `${this.importMetaUrl}'../../../../../../components/molecules/Select/Select.js`,
+          path: `${this.importMetaUrl}'../../../../../../components/molecules/select/Select.js`,
           name: 'ks-m-select'
         },
         {
