@@ -39,7 +39,7 @@ export default class Translation extends Shadow() {
     this.requestTranslationListener = event => {
       const result = {
         translation: this.translation,
-        getTranslation: key => this.translation[key] || key
+        getTranslation: Key => this.translation[Key] || Key
       }
       if (event.detail?.resolve) return event.detail.resolve(result)
       this.dispatchEvent(new CustomEvent('translation', {
