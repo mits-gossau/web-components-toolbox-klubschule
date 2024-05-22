@@ -157,28 +157,34 @@ export default class OffersPage extends Shadow() {
       this.hasAttribute('no-search-tab')
       ? this.tabContentOne
       : /* html */`
-      <ks-m-tab>
-        <ul class="tab-search-result">
-          <li>
-            <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
-              <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
-            </ks-a-with-facet-counter>
-          </li>
-          <li>
-            <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
-              <button tab-target="content2" id="total-stories-tab-heading"></button>
-            </ks-a-with-facet-counter>
-          </li>
-        </ul>
-        <div>
-          <div id="content1" tab-content-target>
-            ${this.tabContentOne}
+      <ks-c-with-facet
+        ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
+        ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
+        ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
+      >
+        <ks-m-tab>
+          <ul class="tab-search-result">
+            <li>
+              <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
+                <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
+              </ks-a-with-facet-counter>
+            </li>
+            <li>
+              <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
+                <button tab-target="content2" id="total-stories-tab-heading"></button>
+              </ks-a-with-facet-counter>
+            </li>
+          </ul>
+          <div>
+            <div id="content1" tab-content-target>
+              ${this.tabContentOne}
+            </div>
+            <div id="content2" tab-content-target>
+              ${this.tabContentTwo}
+            </div>
           </div>
-          <div id="content2" tab-content-target>
-            ${this.tabContentTwo}
-          </div>
-        </div>
-      </ks-m-tab>
+        </ks-m-tab>
+      </ks-c-with-facet>
     `
 
     if (this.badgeContainer) {
@@ -290,7 +296,6 @@ export default class OffersPage extends Shadow() {
   }
 
   get tabContentOne () {
-    const initialRequest = this.getAttribute('initial-request')
     const searchInput = this.hasAttribute('with-search-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
         <ks-c-auto-complete
@@ -386,11 +391,7 @@ export default class OffersPage extends Shadow() {
       </div>`
 
     return /* html */ `
-      <ks-c-with-facet
-        ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
-        ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
-        ${this.hasAttribute('initial-request') ? ` initial-request='${initialRequest}'` : ''}
-      >
+      
         ${this.eventDetailURL ? `<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
@@ -498,7 +499,6 @@ export default class OffersPage extends Shadow() {
               </ks-a-with-facet-pagination>
           </ks-o-body-section>
         ${this.eventDetailURL ? '</ks-c-event-detail>' : ''}
-      </ks-c-with-facet>
     `
   }
 
