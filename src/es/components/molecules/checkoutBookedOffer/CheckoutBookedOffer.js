@@ -1,6 +1,8 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/* global CustomEvent */
+
 /**
 * @export
 * @class CheckoutBookedOffer
@@ -14,6 +16,9 @@ export default class CheckoutBookedOffer extends Shadow() {
   }
 
   connectedCallback () {
+    // initially set the price configuration, this will be overwritten when the user changes his selection
+    this.configurationPriceData = CheckoutBookedOffer.parseAttribute(this.getAttribute('initial-configuration-price-data'))
+
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
@@ -34,6 +39,8 @@ export default class CheckoutBookedOffer extends Shadow() {
     event.detail.fetch.then(priceData => {
       this.configurationPriceData = priceData
 
+      // rerendering the whole component, not ideal but leaves the code cleaner
+      // consider refactoring if real performance issues appear
       this.html = ''
       this.renderHTML()
     })
@@ -154,9 +161,9 @@ export default class CheckoutBookedOffer extends Shadow() {
     const time = this.getAttribute('time')
     const street = this.getAttribute('street')
     const city = this.getAttribute('city')
+    const coursePrice = this.getAttribute('course-price')
     const priceData = this.configurationPriceData
-    const withAnnulationsKosten = false
-    const totalPrice = withAnnulationsKosten ? priceData?.totalPreisMitAnnulation : priceData?.totalPreisOhneAnnulation
+    const totalPrice = priceData?.totalPreisMitAnnulation
 
     this.html = /* HTML */ `
         <div class="checkout-booked-offer">
@@ -188,21 +195,25 @@ export default class CheckoutBookedOffer extends Shadow() {
                   ? /* html */`
                     <div class='checkout-booked-offer__price-info'>
                       <div class='checkout-booked-offer__price-info-line'>
+                        <span><a-translation data-trans-key='Checkout.CoursePrice' /></span>
+                        <span>${coursePrice}</span>
+                      </div>
+                      <div class='checkout-booked-offer__price-info-line'>
                         <span><a-translation data-trans-key='Checkout.Lehrmittel' /></span>
-                        <span>CHF ${priceData.lehrmittelPreis}</span>
+                        <span>${priceData.lehrmittelPreis}</span>
                       </div>
                       <div class='checkout-booked-offer__price-info-line'>
                         <span><a-translation data-trans-key='Checkout.Material' /></span>
-                        <span>CHF ${priceData.materialPreis}</span>
+                        <span>${priceData.materialPreis}</span>
                       </div>
-                      ${withAnnulationsKosten
+                      ${priceData.annulationskostenversicherungPreis
                         ? /* html */`
                           <div class='checkout-booked-offer__price-info-line'>
                             <span><a-translation data-trans-key='Checkout.Annulationskostenversicherung' /></span>
-                            <span>CHF ${priceData.annulationskostenversicherungPreis}</span>
+                            <span>${priceData.annulationskostenversicherungPreis}</span>
                           </div>`
                         : ''
-                    }
+                      }
                     </div>`
                   : ''}
             </li>
@@ -213,7 +224,7 @@ export default class CheckoutBookedOffer extends Shadow() {
               <a-translation data-trans-key="Checkout.Total"></a-translation>
             </span>
             <div class="checkout-booked-offer__total-price">
-              <span class="checkout-booked-offer__total">CHF ${totalPrice}</span>
+              <span class="checkout-booked-offer__total">${this.formatPrice(totalPrice)}</span>
               <span class="checkout-booked-offer__total-desc"><a-translation data-trans-key="Checkout.Tax"></a-translation></span>
             </div>
           </div>
