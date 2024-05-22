@@ -66,7 +66,7 @@ export default class AutoComplete extends Shadow() {
       this.dispatchEvent(new CustomEvent('auto-complete', {
         detail: {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
-          fetch: fetch(`${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
+          fetch: fetch(`${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
             method: 'GET',
             signal: this.abortController.signal
           }).then(response => {
