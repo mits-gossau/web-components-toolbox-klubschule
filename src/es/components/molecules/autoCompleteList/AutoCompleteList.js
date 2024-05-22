@@ -241,7 +241,7 @@ export default class AutoCompleteList extends Shadow() {
                   ? 'Search'
                   : item.typ === 2
                     ? 'ArrowRight'
-                    : 'Location'}" size="1em"></a-icon-mdx><span>${item.term}</span>
+                    : 'Location'}" size="1em"></a-icon-mdx><span>${item.text}</span>
               `
               if (this.hasAttribute('auto-complete-selection')) {
                 listElement.addEventListener('click', () => this.clickOnListElement(item))
