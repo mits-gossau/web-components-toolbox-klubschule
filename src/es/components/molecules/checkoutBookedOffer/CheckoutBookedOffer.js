@@ -9,11 +9,40 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class CheckoutBookedOffer extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.checkoutConfigurationListener = this.checkoutConfigurationListener.bind(this)
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+
+    document.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
+
+    this.dispatchEvent(new CustomEvent('request-checkout-configuration', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+
+  disconnectedCallback () {
+    document.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
+  }
+
+  checkoutConfigurationListener (event) {
+    event.detail.fetch.then(priceData => {
+      this.configurationPriceData = []
+      Object.keys(priceData).forEach(key => {
+        this.configurationPriceData?.push({
+          label: key,
+          price: priceData[key] + ' CHF'
+        })
+      })
+
+      this.html = ''
+      this.renderHTML()
+    })
   }
 
   /**
@@ -132,9 +161,10 @@ export default class CheckoutBookedOffer extends Shadow() {
     const time = this.getAttribute('time')
     const street = this.getAttribute('street')
     const city = this.getAttribute('city')
-    const priceData = CheckoutBookedOffer.parseAttribute(this.getAttribute('price-data'))
+    // const priceData = CheckoutBookedOffer.parseAttribute(this.getAttribute('price-data'))
+    const priceData = this.configurationPriceData
 
-    if (!priceData) return console.error('Data json attribute is missing or corrupted!', this)
+    // if (!priceData) return console.error('Data json attribute is missing or corrupted!', this)
 
     this.html = /* HTML */ `
         <div class="checkout-booked-offer">
