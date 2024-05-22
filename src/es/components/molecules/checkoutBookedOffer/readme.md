@@ -13,8 +13,11 @@ Code can be `1` (guaranteed), `2` (started), `3` (await) or `4` (almost)
 - `date`: Date string
 - `street`: Street string
 - `city`: City string
-- `price-data`: JSON array with objects `{'label': 'Kursgeld', 'price': 'CHF 12.30'}`
-- `total-price`: Total price string
+- `course-price`: Course price (withou additional costs)
+- `initial-configuration-price-data`: initial price data, that will change after user selection. JSON as documented [here](https://wiki.migros.net/pages/viewpage.action?pageId=754811121)
+
+## Event Listeners
+- `checkout-configuration`: listens for this event emitted by checkout controller to update the configuration price data.
 
 ## Markup Examples
 
@@ -29,25 +32,14 @@ Code can be `1` (guaranteed), `2` (started), `3` (await) or `4` (almost)
     time="Mo, 18:00 - 20:00 Uhr"
     street="Hofwiesenstrasse 350"
     city="8050 Zürich"
-    price-data="[
-        {
-            'label': 'Kursgeld',
-            'price': 'CHF 12.30'
-        },
-        {
-            'label': 'Lehrmittel',
-            'price': 'CHF 12.30'
-        },
-        {
-            'label': 'Material',
-            'price': 'CHF 12.30'
-        },
-        {
-            'label': 'Annullationskosten-versicherung',
-            'price': 'CHF 12.30'
-        }
-    ]"
-    total-price="20.00 CHF"
+    course-price="CHF 630.00"
+    initial-configuration-price-data='{
+        "annulationskostenversicherungPreis": "CHF 16.75",
+        "lehrmittelPreis": "CHF 16.90",
+        "materialPreis": "CHF 0.00",
+        "totalPreisOhneAnnulation": "CHF 646.90",
+        "totalPreisMitAnnulation": "CHF 663.65"
+    }'
 >
 </ks-m-checkout-booked-offer>
 ```
