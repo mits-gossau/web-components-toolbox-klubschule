@@ -20,6 +20,9 @@ export default class Form extends Shadow() {
     this.voting = this.dataset.voting ? JSON.parse(this.dataset.voting) : null
     this.submitListener = (evt) => {
       evt.preventDefault()
+      if (this.errorMessage) {
+        this.errorMessage.remove()
+      }
       const formData = new FormData(this.form)
       const params = new URLSearchParams(window.location.search)
       this.form.dispatchEvent(
@@ -40,18 +43,75 @@ export default class Form extends Shadow() {
         })
       )
     }
+
+    this.submitResponseListener = (event) => {
+      event.detail.fetch
+        .then((res) => {
+          this.html = ''
+          this.html = /* HTML */ `
+            <ks-o-body-section
+              class="already-voted-section"
+              variant="default"
+              has-background
+              background="var(--mdx-sys-color-accent-6-subtle1)"
+            >
+              <ks-a-heading tag="h3" style-as="h2">
+                <a-translation
+                  key="CustomerLoyality.Voted.Title"
+                ></a-translation>
+              </ks-a-heading>
+              ${this.renderVotedOptions(res)}
+            </ks-o-body-section>
+            <ks-o-body-section variant="default">
+              <ks-a-heading tag="h3" style-as="h2">
+                <a-translation
+                  key="CustomerLoyality.Voted.ContinueTitle"
+                ></a-translation>
+              </ks-a-heading>
+              <p>
+                <a-translation
+                  replace-line-breaks
+                  params="${escapeForHtml(
+                    JSON.stringify({ deadline: res.responseUntilDate })
+                  )}"
+                  key="CustomerLoyality.Voted.ContinueText"
+                ></a-translation>
+              </p>
+            </ks-o-body-section>
+          `
+        })
+        .catch((error) => {
+          const el = document.createElement('div')
+          el.id = 'submit-error-message'
+          el.innerHTML = /* html */ `
+          <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
+            <div slot="description">
+              <p>${error?.message ?? 'Something went wrong...'}</p>
+            </div>
+          </ks-m-system-notification>`
+          this.form.appendChild(el)
+        })
+    }
   }
 
   connectedCallback () {
     if (this.voting) {
       if (this.shouldRenderCSS()) this.renderCSS()
       this.renderHTML(this.voting)
+      document.body.addEventListener(
+        'submit-voting-response',
+        this.submitResponseListener
+      )
     }
   }
 
   disconnectedCallback () {
     this.form.removeEventListener('submit', this.submitListener)
     this.button.removeEventListener('click', this.submitListener)
+    document.body.removeEventListener(
+      'submit-voting-response',
+      this.submitResponseListener
+    )
   }
 
   shouldRenderCSS () {
@@ -60,23 +120,40 @@ export default class Form extends Shadow() {
     )
   }
 
-  renderHTML (voting) {
-    Promise.all([this.translate('CustomerLoyality.Comment.Placeholder'), this.modules]).then(([translation]) => {
+  renderHTML (voting, error) {
+    Promise.all([
+      this.translate('CustomerLoyality.Comment.Placeholder'),
+      this.modules
+    ]).then(([translation]) => {
       this.html = ''
       this.html = /* html */ `
-        <m-form>
-          <form>
-            <div class="options">
-              ${this.renderOptionPrice(voting.optionPrice)}
-              ${this.renderOptionLessons(voting.optionLessons)}
-            </div>
-            <fieldset>
-              <label><a-translation key="CustomerLoyality.Comment"></a-translation></label>
-              <textarea name="comment" placeholder="${translation}"></textarea>
-            </fieldset>
-            <ks-a-button namespace="button-primary-" color="secondary" type="submit"><a-translation key="CustomerLoyality.Submit"></a-translation></ks-a-button>
-          </form>
-        </m-form>`
+        <ks-o-body-section variant="default">
+          <ks-a-heading tag="h2">
+            <a-translation key="CustomerLoyality.FormIntroTitle"></a-translation>
+          </ks-a-heading>
+          <p><a-translation key="CustomerLoyality.FormIntroText"></a-translation></p>
+        </ks-o-body-section>
+        <ks-o-body-section  id="form-wrapper" variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)" mode="false">
+          <ks-a-heading tag="h3" style-as="h2">
+            <a-translation key="CustomerLoyality.FormTitle"></a-translation>
+          </ks-a-heading>
+          <p><a-translation params="${escapeForHtml(
+            JSON.stringify({ date: voting.responseUntilDate })
+          )}" key="CustomerLoyality.FormText"></a-translation></p>
+          <m-form>
+            <form>
+              <div class="options">
+                ${this.renderOptionPrice(voting.optionPrice)}
+                ${this.renderOptionLessons(voting.optionLessons)}
+              </div>
+              <fieldset>
+                <label><a-translation key="CustomerLoyality.Comment"></a-translation></label>
+                <textarea name="comment" placeholder="${translation}"></textarea>
+              </fieldset>
+              <ks-a-button namespace="button-primary-" color="secondary" type="submit"><a-translation key="CustomerLoyality.Submit"></a-translation></ks-a-button>
+            </form>
+          </m-form>
+        </ks-o-body-section>`
       this.form.addEventListener('submit', this.submitListener)
       this.button.addEventListener('click', this.submitListener)
     })
@@ -156,6 +233,30 @@ export default class Form extends Shadow() {
       </m-option>`
   }
 
+  renderVotedOptions (voting) {
+    return /* html */ `
+      <div class="already-voted-item">
+        <a-icon-mdx icon-name="${
+          voting.optionPrice.value ? 'CheckCircle' : 'X'
+        }" size="1em"></a-icon-mdx>
+        <p><a-translation replace-line-breaks key="${
+          voting.optionPrice.value
+            ? 'CustomerLoyality.AlreadyVoted.OptionPriceAccepted'
+            : 'CustomerLoyality.AlreadyVoted.OptionPriceRejected'
+        }"></a-translation></p>
+      </div>
+      <div class="already-voted-item">
+        <a-icon-mdx icon-name="${
+          voting.optionLessons.value ? 'CheckCircle' : 'X'
+        }" size="1em"></a-icon-mdx>
+        <p><a-translation replace-line-breaks key="${
+          voting.optionLessons.value
+            ? 'CustomerLoyality.AlreadyVoted.OptionLessonsAccepted'
+            : 'CustomerLoyality.AlreadyVoted.OptionLessonsRejected'
+        }"></a-translation></p>
+      </div>`
+  }
+
   renderCSS () {
     this.css = /* css */ `
       :host {}
@@ -167,6 +268,16 @@ export default class Form extends Shadow() {
 
       :host fieldset {
         margin-bottom: var(--content-spacing)
+      }
+
+      .already-voted-section {
+        --any-display: flex;
+        --p-margin: 0 0 0 .5em;
+      }
+
+      #submit-error-message {
+        padding: 0;
+        margin-top: var(--content-spacing)
       }
 
       @media only screen and (max-width: _max-width_) {
@@ -209,9 +320,25 @@ export default class Form extends Shadow() {
         {
           path: `${this.importMetaUrl}../../../components/atoms/button/Button.js`,
           name: 'ks-a-button'
+        },
+        {
+          path: `${this.importMetaUrl}../../../components/molecules/systemNotification/systemNotification.js`,
+          name: 'ks-m-system-notification'
+        },
+        {
+          path: `${this.importMetaUrl}../../../components/organisms/bodySection/BodySection.js`,
+          name: 'ks-o-body-section'
+        },
+        {
+          path: `${this.importMetaUrl}../../../components/atoms/heading/Heading.js`,
+          name: 'ks-a-heading'
         }
       ])
     ])
+  }
+
+  get errorMessage () {
+    return this.root.querySelector('#submit-error-message')
   }
 
   async translate (key) {
@@ -226,13 +353,12 @@ export default class Form extends Shadow() {
           composed: true
         })
       )
-    )
-      .then(async ({ getTranslation }) => {
-        if (key) {
-          return await getTranslation(key)
-        } else {
-          return 'no key'
-        }
-      })
+    ).then(async ({ getTranslation }) => {
+      if (key) {
+        return await getTranslation(key)
+      } else {
+        return 'no key'
+      }
+    })
   }
 }

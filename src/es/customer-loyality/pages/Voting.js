@@ -15,35 +15,6 @@ export default class Voting extends Shadow() {
    */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-
-    this.submittedListener = (event) => {
-      event.detail.fetch.then((res) => {
-        this.html = ''
-        this.html = /* HTML */ `
-          ${this.renderHeadline()}
-          <ks-o-body-section variant="default">
-            ${this.renderCourseTable(res)}
-            ${this.renderNotification()}
-          </ks-o-body-section>
-          <ks-o-body-section class="already-voted-section" variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
-            <ks-a-heading tag="h3" style-as="h2">
-              <a-translation key="CustomerLoyality.Voted.Title"></a-translation>
-            </ks-a-heading>
-            ${this.renderVotedOptions(res)}
-          </ks-o-body-section>
-          <ks-o-body-section variant="default">
-            <ks-a-heading tag="h3" style-as="h2">
-              <a-translation key="CustomerLoyality.Voted.ContinueTitle"></a-translation>
-            </ks-a-heading>
-            <p><a-translation replace-line-breaks params="${escapeForHtml(
-              JSON.stringify({ deadline: res.responseUntilDate })
-            )}" key="CustomerLoyality.Voted.ContinueText"></a-translation></p>
-          </ks-o-body-section>
-        `
-      }).catch(error => {
-        console.log('submit-voting-response error', error)
-      })
-    }
   }
 
   connectedCallback () {
@@ -51,7 +22,6 @@ export default class Voting extends Shadow() {
 
     const params = new URLSearchParams(window.location.search)
     document.body.addEventListener('voting-data', this.votingDataListener)
-    document.body.addEventListener('submit-voting-response', this.submittedListener)
     this.dispatchEvent(
       new CustomEvent('request-voting-data', {
         bubbles: true,
@@ -67,7 +37,6 @@ export default class Voting extends Shadow() {
 
   disconnectedCallback () {
     document.body.removeEventListener('voting-data', this.votingDataListener)
-    document.body.removeEventListener('submit-voting-response', this.submittedListener)
   }
 
   votingDataListener = async (event) => {
@@ -149,7 +118,9 @@ export default class Voting extends Shadow() {
             </tr>
             <tr>
               <td><a-translation key="CustomerLoyality.Table.NumberOfLessons"></a-translation></td>
-              <td><a-translation key="CustomerLoyality.Table.NumberOfLessons.Value" params="${escapeForHtml(JSON.stringify({ lessons: data.course.lessons }))}"></a-translation></td>
+              <td><a-translation key="CustomerLoyality.Table.NumberOfLessons.Value" params="${escapeForHtml(
+                JSON.stringify({ lessons: data.course.lessons })
+              )}"></a-translation></td>
             </tr>
             <tr>
               <td><a-translation key="CustomerLoyality.Table.CoursePrice"></a-translation></td>
@@ -179,22 +150,9 @@ export default class Voting extends Shadow() {
   }
 
   renderForm (voting) {
-    return /* html */ `
-      <ks-o-body-section variant="default">
-        <ks-a-heading tag="h2">
-          <a-translation key="CustomerLoyality.FormIntroTitle"></a-translation>
-        </ks-a-heading>
-        <p><a-translation key="CustomerLoyality.FormIntroText"></a-translation></p>
-      </ks-o-body-section>
-      <ks-o-body-section variant="default" has-background background="var(--mdx-sys-color-accent-6-subtle1)">
-        <ks-a-heading tag="h3" style-as="h2">
-          <a-translation key="CustomerLoyality.FormTitle"></a-translation>
-        </ks-a-heading>
-        <p><a-translation params="${escapeForHtml(
-          JSON.stringify({ date: voting.responseUntilDate })
-        )}" key="CustomerLoyality.FormText"></a-translation></p>
-        <o-form data-voting="${escapeForHtml(JSON.stringify(voting))}"></o-form>
-      </ks-o-body-section>`
+    return /* html */ `<o-form data-voting="${escapeForHtml(
+      JSON.stringify(voting)
+    )}"></o-form>`
   }
 
   renderVoteExpired () {
@@ -220,12 +178,24 @@ export default class Voting extends Shadow() {
   renderVotedOptions (voting) {
     return /* html */ `
       <div class="already-voted-item">
-        <a-icon-mdx icon-name="${voting.optionPrice.value ? 'CheckCircle' : 'X'}" size="1em"></a-icon-mdx>
-        <p><a-translation replace-line-breaks key="${voting.optionPrice.value ? 'CustomerLoyality.AlreadyVoted.OptionPriceAccepted' : 'CustomerLoyality.AlreadyVoted.OptionPriceRejected'}"></a-translation></p>
+        <a-icon-mdx icon-name="${
+          voting.optionPrice.value ? 'CheckCircle' : 'X'
+        }" size="1em"></a-icon-mdx>
+        <p><a-translation replace-line-breaks key="${
+          voting.optionPrice.value
+            ? 'CustomerLoyality.AlreadyVoted.OptionPriceAccepted'
+            : 'CustomerLoyality.AlreadyVoted.OptionPriceRejected'
+        }"></a-translation></p>
       </div>
       <div class="already-voted-item">
-        <a-icon-mdx icon-name="${voting.optionLessons.value ? 'CheckCircle' : 'X'}" size="1em"></a-icon-mdx>
-        <p><a-translation replace-line-breaks key="${voting.optionLessons.value ? 'CustomerLoyality.AlreadyVoted.OptionLessonsAccepted' : 'CustomerLoyality.AlreadyVoted.OptionLessonsRejected'}"></a-translation></p>
+        <a-icon-mdx icon-name="${
+          voting.optionLessons.value ? 'CheckCircle' : 'X'
+        }" size="1em"></a-icon-mdx>
+        <p><a-translation replace-line-breaks key="${
+          voting.optionLessons.value
+            ? 'CustomerLoyality.AlreadyVoted.OptionLessonsAccepted'
+            : 'CustomerLoyality.AlreadyVoted.OptionLessonsRejected'
+        }"></a-translation></p>
       </div>`
   }
 
@@ -244,24 +214,6 @@ export default class Voting extends Shadow() {
   renderCSS () {
     this.css = /* css */ `
       :host {}
-      :host .options {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--content-spacing, 1.5rem);
-      }
-
-      .already-voted-section {
-        --any-display: flex;
-        --p-margin: 0 0 0 .5em;
-      }
-
-      @media only screen and (max-width: _max-width_) {
-        :host {}
-
-        .options {
-          grid-template-columns: repeat(1, 1fr);
-        }
-      }
     `
   }
 
@@ -294,5 +246,12 @@ export default class Voting extends Shadow() {
 
   get votingWrapper () {
     return this.root.querySelector('div')
+  }
+
+  get form () {
+    console.log(this.root.querySelector('#form-wrapper'))
+    return this.root
+      .querySelector('#form-wrapper')
+      .shadowRoot.querySelector('o-form').shadowRoot
   }
 }
