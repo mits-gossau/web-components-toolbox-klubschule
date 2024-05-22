@@ -1,7 +1,7 @@
 // @ts-check
 
 /** @typedef {{
-  term: string,
+  text: string,
   typ: 1|2 // TYP 1 ist Kurs, TYP 2 ist Sparte
   placeId?: string,
 }} Item */
@@ -66,7 +66,7 @@ export default class AutoComplete extends Shadow() {
       this.dispatchEvent(new CustomEvent('auto-complete', {
         detail: {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
-          fetch: fetch(`${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
+          fetch: fetch(`${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
             method: 'GET',
             signal: this.abortController.signal
           }).then(response => {
@@ -159,43 +159,43 @@ export default class AutoComplete extends Shadow() {
           searchText: 'englisch',
           items: [
             {
-              term: 'englisch',
+              text: 'englisch',
               typ: 1
             },
             {
-              term: 'englisch   privatunterricht  wann und wo sie wolle',
+              text: 'englisch   privatunterricht  wann und wo sie wolle',
               typ: 1
             },
             {
-              term: 'englisch a1 ganz entspannt',
+              text: 'englisch a1 ganz entspannt',
               typ: 1
             },
             {
-              term: 'englisch anfanger innen',
+              text: 'englisch anfanger innen',
               typ: 1
             },
             {
-              term: 'englisch anfanger innen   onlinekurs',
+              text: 'englisch anfanger innen   onlinekurs',
               typ: 1
             },
             {
-              term: 'Englisch Business',
+              text: 'Englisch Business',
               typ: 2
             },
             {
-              term: 'Englisch Diplome',
+              text: 'Englisch Diplome',
               typ: 2
             },
             {
-              term: 'Englisch Konversation',
+              text: 'Englisch Konversation',
               typ: 2
             },
             {
-              term: 'Englisch Konversation B1',
+              text: 'Englisch Konversation B1',
               typ: 2
             },
             {
-              term: 'Englisch Konversation B2',
+              text: 'Englisch Konversation B2',
               typ: 2
             }
           ],

@@ -23,12 +23,12 @@ export default class Translation extends Shadow() {
       translationData = JSON.parse(this.getAttribute('translation'))
 
       const isValid = translationData.every(item => {
-        return item.hasOwnProperty('key') && item.hasOwnProperty('value')
+        return item.hasOwnProperty('Key') && item.hasOwnProperty('Value')
       })
 
       this.translation = isValid
         ? translationData.reduce((acc, curr) => {
-          acc[curr.key] = curr.value
+          acc[curr.Key] = curr.Value
           return acc
         }, {})
         : {}
@@ -39,7 +39,7 @@ export default class Translation extends Shadow() {
     this.requestTranslationListener = event => {
       const result = {
         translation: this.translation,
-        getTranslation: key => this.translation[key] || key
+        getTranslation: Key => this.translation[Key] || Key
       }
       if (event.detail?.resolve) return event.detail.resolve(result)
       this.dispatchEvent(new CustomEvent('translation', {
