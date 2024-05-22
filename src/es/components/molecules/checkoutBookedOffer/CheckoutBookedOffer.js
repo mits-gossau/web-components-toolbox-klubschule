@@ -224,7 +224,7 @@ export default class CheckoutBookedOffer extends Shadow() {
               <a-translation data-trans-key="Checkout.Total"></a-translation>
             </span>
             <div class="checkout-booked-offer__total-price">
-              <span class="checkout-booked-offer__total">${this.formatPrice(totalPrice)}</span>
+              <span class="checkout-booked-offer__total">${totalPrice}</span>
               <span class="checkout-booked-offer__total-desc"><a-translation data-trans-key="Checkout.Tax"></a-translation></span>
             </div>
           </div>
