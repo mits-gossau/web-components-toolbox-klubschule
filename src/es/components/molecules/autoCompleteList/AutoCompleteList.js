@@ -50,7 +50,7 @@ export default class AutoCompleteList extends Shadow() {
     this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', {
       /** @type {import("../../controllers/autoCompleteLocation/AutoCompleteLocation.js").LocationSelectionItem} */
       detail: {
-        description: item.text,
+        description: item.term,
         selected: item.placeId
       },
       bubbles: true,
