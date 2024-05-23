@@ -61,10 +61,7 @@ export default class DialogStatusButton extends Shadow() {
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentReversalListener = event => {
-    if (this.dataset.id === event.detail.id) {
-      this.html = ''
-      this.html = this.closeButton
-    }
+    if (this.dataset.id === event.detail.id) this.renderOnlyCloseButton()
   }
 
   /**
@@ -73,10 +70,7 @@ export default class DialogStatusButton extends Shadow() {
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentBookingListener = event => {
-    if (this.dataset.id === event.detail.id) {
-      this.html = ''
-      this.html = this.closeButton
-    }
+    if (this.dataset.id === event.detail.id) this.renderOnlyCloseButton()
   }
 
   /**
@@ -112,8 +106,8 @@ export default class DialogStatusButton extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        display: flex;
         align-items: center;
+        display: flex;
         flex-direction: row-reverse;
         justify-content: space-between;
         width: 100%;
@@ -212,6 +206,11 @@ export default class DialogStatusButton extends Shadow() {
       default:
         return ''
     }
+  }
+
+  renderOnlyCloseButton () {
+    this.html = ''
+    this.html = this.closeButton
   }
 
   get closeButton () {
