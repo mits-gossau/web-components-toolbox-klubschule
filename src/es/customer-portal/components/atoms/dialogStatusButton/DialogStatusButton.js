@@ -62,10 +62,8 @@ export default class DialogStatusButton extends Shadow() {
    */
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(() => {
-        this.html = ''
-        this.html = this.closeButton
-      })
+      this.html = ''
+      this.html = this.closeButton
     }
   }
 
@@ -76,10 +74,8 @@ export default class DialogStatusButton extends Shadow() {
    */
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(() => {
-        this.html = ''
-        this.html = this.closeButton
-      })
+      this.html = ''
+      this.html = this.closeButton
     }
   }
 
