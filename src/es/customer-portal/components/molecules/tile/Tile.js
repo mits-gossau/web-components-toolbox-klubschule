@@ -437,10 +437,10 @@ export default class AppointmentTile extends Tile {
 
   noScrollEventListener (event) {
     if ((!event.detail?.hasNoScroll) && (this.dataset?.listType === 'booked-appointments' && this.dataset?.removable)) {
-      this.style.display = 'none'
       if (this.previousElementSibling.tagName === 'KS-A-HEADING' && (this.nextElementSibling === null || this.nextElementSibling.tagName === 'KS-A-HEADING')) {
         this.previousElementSibling.style.display = 'none'
       }
+      this.remove()
     }
   }
 
