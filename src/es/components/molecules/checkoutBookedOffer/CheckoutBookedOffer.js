@@ -163,7 +163,7 @@ export default class CheckoutBookedOffer extends Shadow() {
     const city = this.getAttribute('city')
     const coursePrice = this.getAttribute('course-price')
     const priceData = this.configurationPriceData
-    const totalPrice = priceData?.totalPreisMitAnnulation
+    const totalPrice = priceData?.totalPreis
 
     this.html = /* HTML */ `
         <div class="checkout-booked-offer">

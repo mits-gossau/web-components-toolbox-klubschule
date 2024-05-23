@@ -32,13 +32,12 @@ Code can be `1` (guaranteed), `2` (started), `3` (await) or `4` (almost)
     time="Mo, 18:00 - 20:00 Uhr"
     street="Hofwiesenstrasse 350"
     city="8050 Zürich"
-    course-price="CHF 630.00"
+    course-price="630.00 CHF"
     initial-configuration-price-data='{
-        "annulationskostenversicherungPreis": "CHF 16.75",
-        "lehrmittelPreis": "CHF 16.90",
-        "materialPreis": "CHF 0.00",
-        "totalPreisOhneAnnulation": "CHF 646.90",
-        "totalPreisMitAnnulation": "CHF 663.65"
+        "annulationskostenversicherungPreis": "16.75 CHF",
+        "lehrmittelPreis": "16.90 CHF",
+        "materialPreis": "0.00 CHF",
+        "totalPreis": "646.90 CHF",
     }'
 >
 </ks-m-checkout-booked-offer>
