@@ -29,6 +29,8 @@ export default class CheckoutBookedOffer extends Shadow() {
       cancelable: true,
       composed: true
     }))
+
+    this.mitAnnulationskostenversicherung = this.getAttribute('mit-annulationskostenversicherung') === 'true'
   }
 
   disconnectedCallback () {
@@ -44,6 +46,8 @@ export default class CheckoutBookedOffer extends Shadow() {
       this.html = ''
       this.renderHTML()
     })
+
+    this.mitAnnulationskostenversicherung = event.detail.mitAnnulationskostenversicherung
   }
 
   /**
@@ -206,7 +210,7 @@ export default class CheckoutBookedOffer extends Shadow() {
                         <span><a-translation data-trans-key='Checkout.Material' /></span>
                         <span>${priceData.materialPreis}</span>
                       </div>
-                      ${priceData.annulationskostenversicherungPreis
+                      ${this.mitAnnulationskostenversicherung
                         ? /* html */`
                           <div class='checkout-booked-offer__price-info-line'>
                             <span><a-translation data-trans-key='Checkout.Annulationskostenversicherung' /></span>

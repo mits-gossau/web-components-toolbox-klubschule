@@ -52,5 +52,16 @@ export default class Checkout extends Shadow() {
         ))
       })
     })
+
+    const radioInputs = this.root.querySelectorAll('input[type=radio]')
+    Array.from(radioInputs).forEach(input => {
+      input.addEventListener('change', () => {
+        this.dispatchEvent(new CustomEvent('request-checkout-configuration', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      })
+    })
   }
 }

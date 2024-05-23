@@ -58,6 +58,8 @@ export default class Checkout extends Shadow() {
         })
       }
 
+      const mitAnnulationskostenversicherung = this.querySelector('#mit-annulationskostenversicherung')?.checked
+
       // todo emit event with changed data
       this.dispatchEvent(
         new CustomEvent(
@@ -72,14 +74,17 @@ export default class Checkout extends Shadow() {
                 mode: 'cors',
                 body: this.selectedOptions.length ? `{
                     ${basicRequest},
+                    "mitVersicherung": ${mitAnnulationskostenversicherung.toString()},
                     "selectedLehrmittel": [${this.selectedOptions.reduce((acc, selectedOption, index) => acc + `${JSON.stringify(selectedOption)}${this.selectedOptions.length - 1 === index ? "" : ","}`, "")}]
                   }` : `{
+                    "mitVersicherung": ${mitAnnulationskostenversicherung.toString()},
                     ${basicRequest}
                   }`
               }).then(response => {
                 if (response.status >= 200 && response.status <= 299) return response.json()
                 throw new Error(response.statusText)
-              })
+              }),
+              mitAnnulationskostenversicherung
             },
             bubbles: true,
             cancelable: true,
