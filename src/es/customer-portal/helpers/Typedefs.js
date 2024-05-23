@@ -18,8 +18,15 @@
  */
 
 /**
+ * @typedef {Object} TileCss
+ * @property {string} border
+ * @property {string} status
+ * @property {string} info
+ */
+
+/**
  * @typedef {Object} TileStatus
- * @property {string} css
+ * @property {TileCss} css
  * @property {string} status
  * @property {string} info
  * @property {string} icon
