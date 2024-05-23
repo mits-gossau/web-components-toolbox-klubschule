@@ -153,39 +153,39 @@ export default class OffersPage extends Shadow() {
    * @return Promise<void>
    */
   renderHTML () {
-    this.html = this.eventDetailURL ||
-      this.hasAttribute('no-search-tab')
-      ? this.tabContentOne
-      : /* html */`
-      <ks-c-with-facet
+    this.html = `<ks-c-with-facet
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
       >
-        <ks-m-tab>
-          <ul class="tab-search-result">
-            <li>
-              <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
-                <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
-              </ks-a-with-facet-counter>
-            </li>
-            <li>
-              <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
-                <button tab-target="content2" id="total-stories-tab-heading"></button>
-              </ks-a-with-facet-counter>
-            </li>
-          </ul>
-          <div>
-            <div id="content1" tab-content-target>
-              ${this.tabContentOne}
+      ${this.eventDetailURL || this.hasAttribute('no-search-tab')
+        ? this.tabContentOne
+        : /* html */`
+          <ks-m-tab>
+            <ul class="tab-search-result">
+              <li>
+                <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
+                  <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
+                </ks-a-with-facet-counter>
+              </li>
+              <li>
+                <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
+                  <button tab-target="content2" id="total-stories-tab-heading"></button>
+                </ks-a-with-facet-counter>
+              </li>
+            </ul>
+            <div>
+              <div id="content1" tab-content-target>
+                ${this.tabContentOne}
+              </div>
+              <div id="content2" tab-content-target>
+                ${this.tabContentTwo}
+              </div>
             </div>
-            <div id="content2" tab-content-target>
-              ${this.tabContentTwo}
-            </div>
-          </div>
-        </ks-m-tab>
-      </ks-c-with-facet>
-    `
+          </ks-m-tab>
+        `
+      }
+    </ks-c-with-facet>`
 
     if (this.badgeContainer) {
       this.badgeContainer.remove()

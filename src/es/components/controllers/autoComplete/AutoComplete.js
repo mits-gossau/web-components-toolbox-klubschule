@@ -2,6 +2,7 @@
 
 /** @typedef {{
   term: string,
+  text: string,
   typ: 1|2 // TYP 1 ist Kurs, TYP 2 ist Sparte
   placeId?: string,
 }} Item */
