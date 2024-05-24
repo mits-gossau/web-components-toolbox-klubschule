@@ -37,18 +37,10 @@ export default class SubscriptionsList extends Shadow() {
     this.renderHTML(event.detail.fetch)
   }
 
-  /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
   shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 
-  /**
-   * renders the css
-   */
   renderCSS () {
     this.css = /* css */`
       :host .list-wrapper {
@@ -63,9 +55,6 @@ export default class SubscriptionsList extends Shadow() {
     return this.fetchTemplate()
   }
 
-  /**
-   * fetches the template
-   */
   fetchTemplate () {
     const styles = [
       {
@@ -145,7 +134,6 @@ export default class SubscriptionsList extends Shadow() {
   }
 
   renderLoading () {
-    // this.html = '<img src="../customer-portal/img/loading.gif" alt="Loading">'
     this.html = '<mdx-component><mdx-spinner size="large"></mdx-spinner></mdx-component>'
   }
 

@@ -23,7 +23,7 @@ export const escapeForHtml = htmlString => {
  * Returns an object with css, status, info, and icon properties based on the type and data provided.
  * @param {Object} type Object that contains `css`, `content`, and other properties.
  * @param {Object} data Course data
- * @returns {Object} Returns the object contains tile and state information
+ * @returns {import('../helpers/Typedefs.js').TileStatus} Returns the object contains tile and state information
  */
 export const getTileState = (type, data) => {
   if (type === undefined) return
