@@ -5,7 +5,9 @@ export default class Checkbox extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.clickEventListener = event => this.input.click()
+    this.clickEventListener = event => {
+      this.input.click()
+    }
   }
 
   connectedCallback () {
@@ -66,6 +68,7 @@ export default class Checkbox extends Shadow() {
 
         :host input[type='checkbox'] {
             width: 0;
+            min-width: unset;
         }
 
         :host input[type='checkbox']:checked + .box {
@@ -84,6 +87,7 @@ export default class Checkbox extends Shadow() {
             height: 1.25em;
             width: 1.25em;
             margin-right: 0.75em;
+            flex: 1 0 1.25em;
         }
 
         :host .box a-icon-mdx {
