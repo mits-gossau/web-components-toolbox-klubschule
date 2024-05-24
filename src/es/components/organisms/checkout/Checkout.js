@@ -18,7 +18,7 @@ export default class Checkout extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
+    document.body.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
 
   disconnectedCallback () {

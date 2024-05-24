@@ -40,9 +40,12 @@ export default class Checkout extends Shadow() {
 
     this.requestCheckoutListener = (event) => {
       // get value from select
-      let initialRequest = this.getAttribute('initial-request')
+      const initialRequest = this.getAttribute('initial-request')
       const initialRequestObjFrozen = Object.freeze(JSON.parse(initialRequest.replaceAll("'", '"')))
+      const withInsurance = event.detail?.withInsurance ? `"mitVersicherung": ${!!event.detail?.withInsurance},` : ''
+
       const basicRequest = `
+        ${withInsurance}
         "portalId": ${initialRequestObjFrozen.portalId},
         "mandantId": ${initialRequestObjFrozen.mandantId},
         "kursTyp": "${initialRequestObjFrozen.kursTyp}",
@@ -50,6 +53,7 @@ export default class Checkout extends Shadow() {
         "centerId": ${initialRequestObjFrozen.centerId},
         "spracheId": "${initialRequestObjFrozen.spracheId}"
       `
+
       if (event.detail?.id && event.detail?.value) {
         const hadActiveSelection = this.selectedOptions.find(({ lehrmittelId }) => event.detail.id === lehrmittelId)
         hadActiveSelection ? hadActiveSelection.lehrmittelOption = event.detail.value : this.selectedOptions.push({
@@ -58,7 +62,6 @@ export default class Checkout extends Shadow() {
         })
       }
 
-      const mitAnnulationskostenversicherung = this.querySelector('#mit-annulationskostenversicherung')?.checked
 
       // todo emit event with changed data
       this.dispatchEvent(
@@ -74,17 +77,15 @@ export default class Checkout extends Shadow() {
                 mode: 'cors',
                 body: this.selectedOptions.length ? `{
                     ${basicRequest},
-                    "mitVersicherung": ${!!mitAnnulationskostenversicherung},
                     "selectedLehrmittel": [${this.selectedOptions.reduce((acc, selectedOption, index) => acc + `${JSON.stringify(selectedOption)}${this.selectedOptions.length - 1 === index ? "" : ","}`, "")}]
                   }` : `{
-                    "mitVersicherung": ${!!mitAnnulationskostenversicherung},
                     ${basicRequest}
                   }`
               }).then(response => {
                 if (response.status >= 200 && response.status <= 299) return response.json()
                 throw new Error(response.statusText)
               }),
-              mitAnnulationskostenversicherung
+              withInsurance: !!event.detail?.withInsurance
             },
             bubbles: true,
             cancelable: true,

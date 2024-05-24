@@ -16,10 +16,8 @@ export default class CheckoutInsurance extends Shadow() {
     })
 
     // Inside Click listener
+
     this.dispatchEvent(new CustomEvent('request-checkout-configuration', {
-      detail: {
-        withInsurance: true,
-      },
       bubbles: true,
       cancelable: true,
       composed: true

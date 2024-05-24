@@ -22,7 +22,7 @@ export default class CheckoutBookedOffer extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    document.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
+    document.body.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
 
     this.dispatchEvent(new CustomEvent('request-checkout-configuration', {
       bubbles: true,
@@ -47,7 +47,7 @@ export default class CheckoutBookedOffer extends Shadow() {
       this.renderHTML()
     })
 
-    this.mitAnnulationskostenversicherung = event.detail.mitAnnulationskostenversicherung
+    this.mitAnnulationskostenversicherung = event.detail.withInsurance
   }
 
   /**
