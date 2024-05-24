@@ -89,7 +89,7 @@ export default class Input extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host div {
+      :host > div {
         display: flex;
         flex-direction: column;
       }
@@ -101,7 +101,7 @@ export default class Input extends Shadow() {
         font: var(--mdx-comp-inputfield-font-label);
       }
 
-      :host div .error {
+      :host > div .error {
         display: none;
       }
 
@@ -110,7 +110,9 @@ export default class Input extends Shadow() {
       }
 
       :host .error input,
-      :host .error textarea {
+      :host .error textarea,
+      :host input.has-error,
+      :host textarea.has-error {
         border-color: var(--mdx-comp-inputfield-border-color-error);
         background-color: var(--mdx-comp-inputfield-background-color-error);
         color: var(--mdx-comp-error-message-color-default);
@@ -126,12 +128,26 @@ export default class Input extends Shadow() {
         margin-left: var(--mdx-comp-inputfield-gap-content-below);
       }
 
+      :host .custom-error-text p {
+        color: var(--mdx-comp-error-message-color-default);
+        font: var(--mdx-comp-error-message-font-default);
+        margin-top: var(--mdx-comp-inputfield-gap-content-below) !important;
+      }
+
+      :host .custom-error-text p::before {
+        content: var(--ks-input-error-icon, url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="alert_circle" clip-path="url(%23clip0_16648_89214)"><path id="Vector" d="M7.99967 5.33398V8.00065M7.99967 10.6673H8.00634M14.6663 8.00065C14.6663 11.6825 11.6816 14.6673 7.99967 14.6673C4.31778 14.6673 1.33301 11.6825 1.33301 8.00065C1.33301 4.31875 4.31778 1.33398 7.99967 1.33398C11.6816 1.33398 14.6663 4.31875 14.6663 8.00065Z" stroke="%23E02805" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="clip0_16648_89214"><rect width="16" height="16" fill="white" transform="translate(0 0.000610352)"/></clipPath></defs></svg>'));
+        margin-right: var(--mdx-comp-inputfield-gap-content-below);
+        position: relative;
+        top: var(--ks-input-error-icon-position-top, 3px);
+      }
+
       :host input,
       :host textarea {
         background-color: var(--mdx-base-color-grey-0);
         padding: var(--mdx-comp-inputfield-padding-vertical-default);
         border: var(--mdx-comp-inputfield-border-width-default) solid var(--mdx-comp-inputfield-border-color-default);
         border-radius: var(--mdx-comp-inputfield-border-radius-default);
+        font: var(--mdx-comp-inputfield-font-default);
         margin-top: var(--mdx-comp-inputfield-gap-label-inputfield);
         outline: none;
         width: 100%;
@@ -155,8 +171,12 @@ export default class Input extends Shadow() {
       :host input:focus,
       :host textarea:focus {
         color: var(--mdx-comp-inputfield-input-color-focus);
-        font: var(--mdx-comp-inputfield-font-default);
         border-color: var(--mdx-comp-inputfield-border-color-focus);
+      }
+
+      :host input:focus-visible,
+      :host textarea:focus-visible {
+        outline: var(--ks-input-outline-focus-visible, none);
       }
 
       :host input[disabled],
@@ -166,7 +186,7 @@ export default class Input extends Shadow() {
         opacity: 0.5;
       }
 
-      :host div .hint {
+      :host > div .hint {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
