@@ -6,7 +6,7 @@
 - [Examples](../../pages/CheckoutColorStage.html)
 
 ## Attributes
-- `back-label`: localized label for back link (required)
+- `back-label`: localized label for back link - if there is no back-label set, the button will not be displayed
 - `back-link?`: url for the back link - if it is not set, browser history.back() will be the fallback behavior
 - `title`: headline (required)
 
