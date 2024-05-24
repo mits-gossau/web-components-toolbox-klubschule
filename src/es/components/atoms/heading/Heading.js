@@ -26,8 +26,8 @@ export default class Heading extends Shadow() {
     }
 
     // copy children to heading
-    while (this.firstChild) {
-      this.heading.appendChild(this.firstChild)
+    while (this.root.firstElementChild) {
+      this.heading.appendChild(this.root.firstElementChild)
     }
   }
 

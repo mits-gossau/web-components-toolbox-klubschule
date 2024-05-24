@@ -5,5 +5,5 @@
 	path = src/css/web-components-toolbox-migros-design-experience
 	url = https://github.com/mits-gossau/web-components-toolbox-migros-design-experience.git
 [submodule "src/es/customer-portal/event-driven-web-components-router"]
-	path = src/es/customer-portal/event-driven-web-components-router
+	path = src/es/components/event-driven-web-components-router
 	url = https://github.com/Weedshaker/event-driven-web-components-router.git
