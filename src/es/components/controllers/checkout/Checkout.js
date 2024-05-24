@@ -74,10 +74,10 @@ export default class Checkout extends Shadow() {
                 mode: 'cors',
                 body: this.selectedOptions.length ? `{
                     ${basicRequest},
-                    "mitVersicherung": ${mitAnnulationskostenversicherung.toString()},
+                    "mitVersicherung": ${!!mitAnnulationskostenversicherung},
                     "selectedLehrmittel": [${this.selectedOptions.reduce((acc, selectedOption, index) => acc + `${JSON.stringify(selectedOption)}${this.selectedOptions.length - 1 === index ? "" : ","}`, "")}]
                   }` : `{
-                    "mitVersicherung": ${mitAnnulationskostenversicherung.toString()},
+                    "mitVersicherung": ${!!mitAnnulationskostenversicherung},
                     ${basicRequest}
                   }`
               }).then(response => {

@@ -8,6 +8,22 @@ export default class CheckoutInsurance extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
+
+    document.addEventListener('checkout-configuration', (customEvent) => {
+      // @ts-ignore
+      console.log(customEvent.detail?.fetch)
+      // todo update price according
+    })
+
+    // Inside Click listener
+    this.dispatchEvent(new CustomEvent('request-checkout-configuration', {
+      detail: {
+        withInsurance: true,
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
   }
 
   disconnectedCallback () {}
