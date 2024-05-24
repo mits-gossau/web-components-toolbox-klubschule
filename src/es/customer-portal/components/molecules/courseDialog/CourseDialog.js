@@ -191,9 +191,7 @@ export default class CourseDialog extends Shadow() {
         </div>
         <div>
           <h3>Downloads</h3>
-          <div class="downloads">
-            ${this.renderDownloads(data, detail)}
-          </div>
+          <div class="downloads">${this.renderDownloads(data, detail)}</div>
         </div>
       </div>
     `
