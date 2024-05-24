@@ -317,11 +317,13 @@ export default class CourseDialog extends Shadow() {
   renderDialogContentBookingSuccess (data, detail = {}) {
     return /* html */`
       <style>
-        .success-message{
+        .success-message {
           display: flex;
-          flex-direction: row;
           align-items: flex-start;
+          flex-direction: row;
+          flex-wrap: wrap;
           gap: 1em;
+          width: fit-content;
         }
         .success {
           color: #00997F;
@@ -444,9 +446,11 @@ export default class CourseDialog extends Shadow() {
       <style>
         .success-message{
           display: flex;
-          flex-direction: row;
           align-items: flex-start;
+          flex-direction: row;
+          flex-wrap: wrap;
           gap: 1em;
+          width: fit-content;
         }
         .success {
           color: #00997F;
@@ -698,7 +702,7 @@ export default class CourseDialog extends Shadow() {
         <span>${detail.subscriptionDescription}</span>
         <span>
           <!-- trans value = Gültig bis -->
-          <a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${validTo}/ 
+          <a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${validTo} / 
           <!-- trans value = Aktuelles Guthaben -->
           <a-translation data-trans-key="CP.cpBookingActualSubscriptionBalance"></a-translation> ${detail.subscriptionBalance}
         </span>
@@ -792,7 +796,11 @@ export default class CourseDialog extends Shadow() {
     link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileBody))
     link.setAttribute('download', filename)
     link.innerHTML = /* html */ `
-      <span>Termin in persönlichen Kalender</span><div>
+      <span>
+        <!-- trans value = Termin in Kalender exportieren -->
+        <a-translation data-trans-key="CP.cpAppointmentDwnCalendar"></a-translation>
+      </span>
+      <div>
         <span>ICS</span>
         <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
       </div>

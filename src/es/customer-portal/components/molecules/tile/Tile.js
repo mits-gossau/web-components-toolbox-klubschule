@@ -57,15 +57,15 @@ export default class AppointmentTile extends Tile {
     this.css = /* css */`
       :host {
         --success-color: #00997F;
-        --alert-color:
+        --alert-color: #F4001B;
       }
       :host > div {
-        display:flex;
+        display: flex;
         flex-direction: column;
       }
       :host .parent-body, .parent-footer {
-        display:flex;
-        padding:1.5em;
+        display: flex;
+        padding: 1.5em;
       }
       :host .parent-footer {
         align-items: center;
@@ -74,7 +74,7 @@ export default class AppointmentTile extends Tile {
         flex-basis: 50%;
       }
       :host .subscription-info {
-        display:flex;
+        display: flex;
         flex-direction: column;
       }
       :host .course-admin, .course-price {
@@ -82,86 +82,67 @@ export default class AppointmentTile extends Tile {
         flex-shrink: 1;
       }
       :host .course-info {
-        display:flex;
-        flex-direction:column;
+        display: flex;
+        flex-direction: column;
       }
       :host .course-execution-info{
-        gap:0.5em;
+        gap: 0.5em;
       }
       :host .course-price {
-        text-align:right;
+        text-align: right;
       }
       :host .title {
-        color:var(--title-color);
+        color: var(--title-color);
       }
       :host .date, .time {
-        font-weight:400;
+        font-weight: 400;
       }
       :host .time {
-        display:flex;
-        gap:0.5em;
+        display: flex;
+        gap: 0.5em;
         align-items: center;
       }
-      :host .vacancies {
-        display:flex;
-        padding-bottom:0.75em;
-      }
+
       :host .body, .footer {
+        align-items: center;
         display: grid;
+        gap: 0.25em;
         grid-template-columns: 50% 50%;
         grid-template-rows: auto auto auto;
-        align-items: center;
-        padding:1.5em 1.5em 0.75em 1.5em;
-        gap:0.25em;
+        padding: 1.5em 1.5em 0.75em 1.5em;
       }
       :host .info {
-        display:flex;
-        align-items:center;
-      }
-      :host .location-room {
-        display:flex;
-        flex-direction:column;
-      }
-      :host .icon-info {
-        display:flex;
+        display: flex;
         align-items: center;
       }
       :host m-load-template-tag {
-          min-height:16em;
-          display:block;
-      }
-      :host .sub-content {
-        padding-top:1.5em;
+          min-height: 16em;
+          display: block;
       }
       :host .status-not-bookable {
-        border: 1px solid #F4001B;
+        border: 1px solid var(--alert-color);
       }
       :host .status-booked-out {
-        border: 1px solid #F4001B;
+        border: 1px solid var(--alert-color);
       }
       :host .status-closed {
-        border: 1px solid #F4001B;
+        border: 1px solid var(--alert-color);
       }
       :host .status-booked-reversal-possible {
-        border: 1px solid #00997F;
+        border: 1px solid var(--success-color);
       }
       :host .status-booked-reversal-not-possible {
-        border: 1px solid #00997F;
+        border: 1px solid  var(--success-color);
       }
       :host .success {
-        color:#00997F;
+        color: var(--success-color);
       }
       :host .alert {
-        color:#F4001B;
-      }
-      :host .hide-dialog-action-btn{
-        display:none;
-      }
-      :host .location-room-info {
-        align-items: stretch;
+        color: var(--alert-color);
       }
       :host .location-room {
         display:flex;
+        flex-direction: column;
       }
       :host .meta {
         list-style: none;
@@ -170,8 +151,8 @@ export default class AppointmentTile extends Tile {
       }
       :host .meta li {
         display: flex;
-        flex-direction: row;
         align-items: center;
+        flex-direction: row;
       }
       :host .meta li + li {
         margin-top: 1rem;
