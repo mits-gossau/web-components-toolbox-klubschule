@@ -39,6 +39,8 @@ export default class AutoComplete extends Shadow() {
     }, ...args)
 
     this.abortController = null
+    const apiUrl = `${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}`
+    const apiUrlObj = new URL(apiUrl, apiUrl.charAt(0) === '/' ? location.origin : apiUrl.charAt(0) === '.' ? this.importMetaUrl : undefined)
 
     this.requestAutoCompleteListener = event => {
       // reset home page input search
@@ -64,10 +66,11 @@ export default class AutoComplete extends Shadow() {
       if (this.hasAttribute('mock')) return this.dispatchMock()
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
+      apiUrlObj.searchParams.set('token', token)
       this.dispatchEvent(new CustomEvent('auto-complete', {
         detail: {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
-          fetch: fetch(`${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
+          fetch: fetch(apiUrlObj.toString(), {
             method: 'GET',
             signal: this.abortController.signal
           }).then(response => {
