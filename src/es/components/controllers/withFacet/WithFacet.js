@@ -94,6 +94,8 @@ export default class WithFacet extends Shadow() {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
         }
 
+        // TODO: @Alex, the location has to be kept in the URL
+
         // keep the last search location inside initialRequestObj
         if (event.detail?.key === 'location-search') {
           if (!!event.detail.lat && !!event.detail.lng ) {
