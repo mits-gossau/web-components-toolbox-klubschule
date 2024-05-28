@@ -1,6 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { makeUniqueCourseId } from '../../../helpers/Shared.js'
+import { makeUniqueCourseId, escapeForHtml } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 
@@ -157,6 +157,7 @@ export default class AppointmentsList extends Shadow() {
         this.html = ''
         const subscriptionSelect = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
         const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
+        console.log('appointments', { appointments, dayList })
         this.numberOfAppointments = dayList.counter
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
@@ -177,7 +178,7 @@ export default class AppointmentsList extends Shadow() {
               ${subscriptionSelect}
             </div>
             <div col-lg="12" col-md="12" col-sm="12">
-              <!-- <m-appointments-filter></m-appointments-filter> -->
+              <m-appointments-filter data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
             </div>
             `
             : ''}         
@@ -257,7 +258,7 @@ export default class AppointmentsList extends Shadow() {
   renderDayHeading (headingText, headingComponent, headingType = 'h2') {
     const heading = new headingComponent.constructorClass() // eslint-disable-line
     heading.setAttribute('tag', headingType)
-    heading.innerHTML = headingText
+    heading.html = headingText
     return heading
   }
 
@@ -298,7 +299,8 @@ export default class AppointmentsList extends Shadow() {
     if (!data.selectedSubscription) {
       booked = data.dayList[0]?.subscriptionCourseAppointments[0]
     }
-    const selectedSubscription = data.selectedSubscription
+    // @ts-ignore
+    const selectedSubscription = structuredClone(data.selectedSubscription
       ? data.selectedSubscription
       : {
           subscriptionBalance: booked?.subscriptionBalance,
@@ -308,7 +310,7 @@ export default class AppointmentsList extends Shadow() {
           subscriptionType: booked?.subscriptionType,
           subscriptionValidFrom: booked?.subscriptionValidFrom,
           subscriptionValidTo: booked?.subscriptionValidTo
-        }
+        })
     const dayList = data.selectedSubscription ? data.selectedSubscription.dayList : data.dayList
     delete selectedSubscription.dayList
     return {

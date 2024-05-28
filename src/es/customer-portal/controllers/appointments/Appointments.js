@@ -16,6 +16,7 @@ import { makeUniqueCourseId } from '../../helpers/Shared.js'
 export default class Appointments extends HTMLElement {
   constructor () {
     super()
+
     this.abortControllerSubscriptionCourseAppointments = null
     this.abortControllerSubscriptionCourseAppointmentDetail = null
     this.abortControllerSubscriptionCourseAppointmentBooking = null
@@ -29,6 +30,7 @@ export default class Appointments extends HTMLElement {
     this.addEventListener(this.getAttribute('request-subscription-course-appointment-reversal') || 'request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.addEventListener(this.getAttribute('request-subscription-course-appointment-booking') || 'request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.addEventListener(this.getAttribute('request-booked-subscription-course-appointments') || 'request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
+    this.addEventListener(this.getAttribute('request-subscription-filter') || 'request-subscription-filter', this.requestSubscriptionFilterListener)
   }
 
   disconnectedCallback () {
@@ -37,6 +39,7 @@ export default class Appointments extends HTMLElement {
     this.removeEventListener(this.getAttribute('request-subscription-course-appointment-reversal') || 'request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.removeEventListener(this.getAttribute('request-subscription-course-appointment-booking') || 'request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.removeEventListener(this.getAttribute('request-booked-subscription-course-appointments') || 'request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
+    this.removeEventListener(this.getAttribute('request-subscription-filter') || 'request-subscription-filter', this.requestSubscriptionFilterListener)
   }
 
   /**
@@ -58,14 +61,38 @@ export default class Appointments extends HTMLElement {
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionCourseAppointments)
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
       detail: {
-        fetch: fetch(endpoint, fetchOptions).then(async response => {
+        fetch: (this.subscriptionCourseAppointments = fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
-        })
+        }))
       },
       bubbles: true,
       cancelable: true,
       composed: true
     }))
+  }
+
+  requestSubscriptionFilterListener = event => {
+    // mdx prevent double event
+    if ((event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) return
+    const subscriptionCourseAppointmentsFiltered = this.subscriptionCourseAppointments.then(appointments => {
+      const appointmentsClone = structuredClone(appointments)
+      appointmentsClone.selectedSubscription.dayList.forEach(day => {
+        day.subscriptionCourseAppointments = day.subscriptionCourseAppointments.filter(appointment => {
+          return appointment.courseAppointmentDayCode === Number(event.detail.target.value)
+        })
+        return day.subscriptionCourseAppointments.length ? day : null
+      })
+      return appointmentsClone
+    })
+    this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
+      detail: {
+        fetch: subscriptionCourseAppointmentsFiltered
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+    console.log('changed', subscriptionCourseAppointmentsFiltered)
   }
 
   /**
