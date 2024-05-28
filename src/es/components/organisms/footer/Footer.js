@@ -236,7 +236,11 @@ export default class KsFooter extends Footer {
       icon.setAttribute('size', '1rem')
 
       toTheTopButton.root.appendChild(icon)
-      toTheTopButton.addEventListener('click', () => window.scrollTo(0, 0))
+      toTheTopButton.addEventListener('click', () => window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      }))
 
       this.root.appendChild(toTheTopButton)
       // Overwrite ordering by super footer.js
@@ -257,7 +261,6 @@ export default class KsFooter extends Footer {
             :host m-details {
                 --details-default-icon-right-border-bottom-last: var(--footer-default-border-width) solid;
                 --details-default-icon-right-border-color-last: var(--footer-default-border-color);
-                --details-default-icon-right-summary-padding-mobile: 8px;
             }
             :host .footer-links-row ul {
                 margin-bottom: 0;
@@ -282,10 +285,19 @@ export default class KsFooter extends Footer {
       
         :host {
             --details-default-icon-right-font-weight-strong: normal;
-            --details-default-icon-right-icon-width-mobile: var(--footer-default-content-spacing);
+            --details-default-icon-right-icon-width-mobile: var(--details-default-icon-right-icon-width-mobile-custom, var(--footer-default-content-spacing));
         }
         :host .footer-links-row li:not(:last-child) {
             margin-bottom: var(--footer-default-list-item-spacing);
+        }
+        :host .footer-links-row li > a {
+            display: flex;
+            align-items: center;
+            gap: 0.125em;
+            flex-wrap: nowrap;
+        }
+        :host .footer-links-row li > a > a-icon-mdx {
+            display: block;
         }
     `
   }
