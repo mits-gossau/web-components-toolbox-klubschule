@@ -36,7 +36,7 @@ export default class ContentList extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.badge
+    return !this.contentList
   }
 
   /**
@@ -118,7 +118,7 @@ export default class ContentList extends Shadow() {
     ])
   }
 
-  get badge () {
-    return true
+  get contentList () {
+    return this.root.querySelector('.o-content-list')
   }
 }

@@ -92,6 +92,7 @@ export default class Contact extends Shadow() {
             first-column-with="66%" 
             width="100%"
         >
+          <section>
             <div class="stage-content">
                 <p class="topline link-underline">
                     ${(this.hasAttribute('back-label') && (window.history.length > 1 || this.hasAttribute('back-link')))
@@ -105,6 +106,7 @@ export default class Contact extends Shadow() {
                 </p>
                 <ks-a-heading tag="h1" color="white" content-stage>${this.getAttribute('title')}</ks-a-heading>
             </div>
+          </section>
         </o-grid>
       `
     })

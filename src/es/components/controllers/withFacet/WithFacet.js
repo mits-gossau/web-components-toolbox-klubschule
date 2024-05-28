@@ -37,8 +37,10 @@ export default class WithFacet extends Shadow() {
     }, ...args)
 
     const withFacetCache = new Map()
-    let initialRequest = this.getAttribute('initial-request')
-    const initialRequestObjFrozen = Object.freeze(JSON.parse(initialRequest))
+    const timeoutIds = new Map()
+    const coordinatesToTerm = new Map()
+    // additional setting for initial request
+    let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(this.url.search)
     this.isMocked = this.hasAttribute('mock')
@@ -66,7 +68,7 @@ export default class WithFacet extends Shadow() {
         isNextPage = true
       } else {
         // new request
-        const initialFilters = JSON.parse(initialRequest)?.filter
+        const initialFilters = initialRequestObj?.filter
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
         this.filters = []
@@ -79,17 +81,28 @@ export default class WithFacet extends Shadow() {
         }
 
         if (shouldResetAllFilters) {
-          initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetAllFilters }))
+          initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
           this.removeAllFilterParamsFromURL()
         }
 
         if (shouldResetFilter) {
-          initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetFilter }))
+          initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
           this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
-          initialRequest = JSON.stringify(Object.assign(JSON.parse(initialRequest), { shouldResetFilterFromFilterSelectButton }))
+          initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
+        }
+
+        // keep the last search location inside initialRequestObj
+        if (event.detail?.key === 'location-search') {
+          if (!!event.detail.lat && !!event.detail.lng ) {
+            initialRequestObj.clat = event.detail.lat
+            initialRequestObj.clong = event.detail.lng
+          } else {
+            if (initialRequestObj.clat) delete initialRequestObj.clat
+            if (initialRequestObj.clong) delete initialRequestObj.clong
+          }
         }
 
         this.updateURLParams()
@@ -100,15 +113,16 @@ export default class WithFacet extends Shadow() {
         let hasSearchLocation = false
         const filterRequest = `{
           "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
-          "MandantId": ${this.getAttribute('mandant-id') || initialRequestObjFrozen.MandantId || 110},
-          "PortalId": ${this.getAttribute('portal-id') || initialRequestObjFrozen.PortalId || 29},
-          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}"
+          "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
+          "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
+          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
+          "searchcontent": ${!this.hasAttribute('no-search-tab')}
           ${(hasSorting = event.detail?.key === 'sorting' && !!event.detail.id) ? `,"sorting": "${event.detail.id}"` : ''}
           ${hasSearchTerm ? `,"searchText": "${event.detail?.key === 'input-search' ? event.detail.value : this.params.get('q')}"`: ''}
-          ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lat) ? `,"clat": "${event.detail.lat}"` : ''}
-          ${(hasSearchLocation = event.detail?.key === 'location-search' && !!event.detail.lng) ? `,"clong": "${event.detail.lng}"` : ''}
+          ${(hasSearchLocation = !!initialRequestObj.clat) ? `,"clat": "${initialRequestObj.clat}"` : ''}
+          ${(hasSearchLocation = !!initialRequestObj.clong) ? `,"clong": "${initialRequestObj.clong}"` : ''}
         }`
-        request = this.lastRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : initialRequest
+        request = this.lastRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
       }
 
       let requestInit = {}
@@ -127,110 +141,115 @@ export default class WithFacet extends Shadow() {
         }
       }
 
-      let fetchPromise = null
-      this.dispatchEvent(new CustomEvent('with-facet', {
-        detail: {
-          /** @type {Promise<fetchAutoCompleteEventDetail>} */
-          fetch: (fetchPromise = withFacetCache.has(request)
-            ? withFacetCache.get(request)
-            // TODO: withFacetCache key must include all variants as well as future payloads
-            // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
-            : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
-              if (response.status >= 200 && response.status <= 299) {
-                return response.json()
-              }
-              throw new Error(response.statusText)
-            }).then(json => {
-              // store initial response
-              if (!this.filters.length || this.filters.length === 0) {
-                this.lastResponse = json
-              }
+      // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
+      if (timeoutIds.has(request)) clearTimeout(timeoutIds.get(request))
+      timeoutIds.set(request, setTimeout(() => {
+        let fetchPromise = null
+        this.dispatchEvent(new CustomEvent('with-facet', {
+          detail: {
+            /** @type {Promise<fetchAutoCompleteEventDetail>} */
+            fetch: (fetchPromise = withFacetCache.has(request)
+              ? withFacetCache.get(request)
+              // TODO: withFacetCache key must include all variants as well as future payloads
+              // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
+              : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
+                if (response.status >= 200 && response.status <= 299) {
+                  return response.json()
+                }
+                throw new Error(response.statusText)
+              }).then(json => {
+                // store initial response
+                if (!this.filters.length || this.filters.length === 0) {
+                  this.lastResponse = json
+                }
 
-              // url search text kung fu
-              if (!json.searchText) {
-                this.params.delete('q')
-              } else {
-                this.params.set('q', json.searchText)
-              }
+                // url search text kung fu
+                if (!json.searchText) {
+                  this.params.delete('q')
+                } else {
+                  this.params.set('q', json.searchText)
+                }
 
-              // url filter kung fu
-              json.filters.forEach(filterItem => {
-                if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                  const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                  const selectedChildren = []
+                // url filter kung fu
+                json.filters.forEach(filterItem => {
+                  if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+                    const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+                    const selectedChildren = []
 
-                  filterItem.children.forEach(child => {
-                    // check if the child is already in the url params
-                    const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
+                    filterItem.children.forEach(child => {
+                      // check if the child is already in the url params
+                      const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
 
-                    if (containsChild) {
-                      selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                    }
-
-                    // if selected, add it to the url params
-                    if (child.selected) {
-                      if (!containsChild && !shouldResetAllFilters) {
+                      if (containsChild) {
                         selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
                       }
 
-                      if (selectedChildren.length > 0) {
-                        this.params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
-                      }
+                      // if selected, add it to the url params
+                      if (child.selected) {
+                        if (!containsChild && !shouldResetAllFilters) {
+                          selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
+                        }
 
-                    // if unselected, remove it from the url params
-                    } else {
-                      if (containsChild) {
-                        const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                        selectedChildren.splice(index, 1)
+                        if (selectedChildren.length > 0) {
+                          this.params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
+                        }
 
-                        this.params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
+                      // if unselected, remove it from the url params
+                      } else {
+                        if (containsChild) {
+                          const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
+                          selectedChildren.splice(index, 1)
 
-                        if (this.params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
-                          this.params.delete(`${filterItem.urlpara}_${filterItem.id}`)
+                          this.params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
+
+                          if (this.params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
+                            this.params.delete(`${filterItem.urlpara}_${filterItem.id}`)
+                          }
                         }
                       }
-                    }
-                  })
+                    })
 
-                  self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
-                }
-              })
+                    self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+                  }
+                })
 
-              if (isNextPage) json = Object.assign(json, { isNextPage })
-              if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
-              if (shouldResetFilter) json = Object.assign(json, { shouldResetFilter })
-              if (shouldResetFilterFromFilterSelectButton) json = Object.assign(json, { shouldResetFilterFromFilterSelectButton })
+                if (isNextPage) json = Object.assign(json, { isNextPage })
+                if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
+                if (shouldResetFilter) json = Object.assign(json, { shouldResetFilter })
+                if (shouldResetFilterFromFilterSelectButton) json = Object.assign(json, { shouldResetFilterFromFilterSelectButton })
 
-              return json
-            })).get(request))
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
-
-      fetchPromise.finally(json => {
-        const requestObj = JSON.parse(request)
-        // update inputs
-        this.dispatchEvent(new CustomEvent('search-change', {
-          detail: {
-            searchTerm: (json || requestObj)?.searchText
+                return json
+              })).get(request))
           },
           bubbles: true,
           cancelable: true,
           composed: true
         }))
-        const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
-        this.dispatchEvent(new CustomEvent('location-change', {
-          detail: {
-            searchTerm: event.detail?.description || searchCoordinates || '',
-            searchCoordinates
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }))
-      })
+
+        fetchPromise.finally(json => {
+          const requestObj = JSON.parse(request)
+          // update inputs
+          this.dispatchEvent(new CustomEvent('search-change', {
+            detail: {
+              searchTerm: (json || requestObj)?.searchText
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+          const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
+          if (event.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+          this.dispatchEvent(new CustomEvent('location-change', {
+            detail: {
+              searchTerm: event.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
+              searchCoordinates
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+        })
+      }, 50))
     }
 
     this.requestLocations = event => {
@@ -242,10 +261,12 @@ export default class WithFacet extends Shadow() {
         mode: 'cors',
         body: `{
           "filter": ${JSON.stringify(event.detail.filter)},
-          "MandantId": ${this.getAttribute('mandant-id') || initialRequestObjFrozen.MandantId || 110},
-          "PortalId": ${this.getAttribute('portal-id') || initialRequestObjFrozen.PortalId || 29},
-          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObjFrozen.sprachid || 'd'}",
+          "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
+          "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
+          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
           "onlycourse": true
+          ${initialRequestObj.clat ? `,"clat": "${initialRequestObj.clat}"` : ''}
+          ${initialRequestObj.clong ? `,"clong": "${initialRequestObj.clong}"` : ''}
         }`
       }
       // @ts-ignore
