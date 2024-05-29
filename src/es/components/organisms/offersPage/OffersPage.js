@@ -157,6 +157,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
+        ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
       >
       ${this.eventDetailURL || this.hasAttribute('no-search-tab')
         ? this.tabContentOne
@@ -396,11 +397,15 @@ export default class OffersPage extends Shadow() {
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
               <o-grid namespace="grid-12er-">
-                <div col-lg="12" col-md="12" col-sm="12">
-                  <ks-a-with-facet-counter></ks-a-with-facet-counter>
-                </div>
-                ${this.eventDetailURL ? '' : searchInput}
-                ${locationSearch}
+                <section>
+                  ${this.hasAttribute('no-search-tab')
+                    ? `<div col-lg="12" col-md="12" col-sm="12">
+                        <ks-a-with-facet-counter></ks-a-with-facet-counter>
+                      </div>`
+                    : ''}
+                  ${this.eventDetailURL ? '' : searchInput}
+                  ${locationSearch}
+                </section>
               </o-grid>
               <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
                   <!-- overlayer -->
@@ -469,6 +474,7 @@ export default class OffersPage extends Shadow() {
                   </div>
               </m-dialog>
               <o-grid namespace="grid-432-auto-colums-auto-rows-">
+                <section>
                   <style>
                     :host {
                       /* filter buttons have the exception of being fully rounded, that's why I am setting border-radius here */
@@ -480,6 +486,7 @@ export default class OffersPage extends Shadow() {
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.getTranslation('CourseList.FilterAllPlaceholder')}
                   </ks-a-button>
                   <ks-m-filter-select></ks-m-filter-select>
+                </section>
               </o-grid>
               <section id="sort-options">
               </section>
@@ -506,9 +513,11 @@ export default class OffersPage extends Shadow() {
     return /* HTML */ `
       <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)"">
         <o-grid namespace="grid-12er-">
-          <div col-lg="12" col-md="12" col-sm="12">
-            <ks-m-content-factory></ks-m-content-factory>
-          </div>
+          <section>
+            <div col-lg="12" col-md="12" col-sm="12">
+              <ks-m-content-factory></ks-m-content-factory>
+            </div>
+          </section>
         </o-grid>
       </ks-o-body-section>
     `

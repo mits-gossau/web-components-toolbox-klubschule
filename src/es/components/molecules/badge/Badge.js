@@ -194,4 +194,8 @@ export default class Badge extends Shadow() {
       }
     ])
   }
+
+  get badge () {
+    return this.root.querySelector('.m-badge')
+  }
 }

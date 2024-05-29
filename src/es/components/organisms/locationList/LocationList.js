@@ -114,6 +114,7 @@ export default class LocationList extends Anchor() {
                         <div id="${data[letter].id || warnMandatory('id')}" class="location-list__letter-wrapper">
                             <ks-a-heading tag="h2" style-as="h1" class="location-list__letter">${letter.toUpperCase()}</ks-a-heading>
                             <o-grid namespace="grid-12er-" gap="3rem" gap-mobile="1rem">
+                              <section>
                                 ${data[letter].locations
                                     ? data[letter].locations.map(location => {
                                         return /* html */`
@@ -129,6 +130,7 @@ export default class LocationList extends Anchor() {
                                     }).join('')
                                     : warnMandatory('locations (in letter object)')
                                 }
+                              </section>
                             </o-grid>
                         </div>
                     `

@@ -270,6 +270,7 @@
   --footer-default-footer-width-mobile: 100%;
   --footer-default-footer-margin-mobile: 0;
   --footer-default-align-items: center;
+  --footer-default-ul-li-padding-left: 0;
 
   --double-button-default-border-radius: 999px;
   
@@ -358,6 +359,11 @@
   --details-default-icon-right-h4-font-size: 1em;
   --details-default-icon-right-h4-line-height: 1.125em;
   --details-default-icon-right-text-align: start;
+  --details-default-icon-right-summary-border-bottom-open-custom: 1px solid transparent;
+  --details-default-icon-right-icon-align-items-custom: center;
+  --details-default-icon-right-ul-li-padding-left: 0;
+  --details-default-icon-right-icon-width-mobile: 1em;
+  --details-default-icon-right-icon-width-mobile-custom: var(--details-default-icon-right-icon-width-mobile);
 
   /* content stage */
   --grid-2columns-content-stage-stage-content-margin-custom: 3rem 6rem 2rem 1.5rem; 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../../../src/css/variablesCustom.css" rel="stylesheet" type="text/css">
+        <link href="../../../src/css/variablesCustomKlubschule.css" rel="stylesheet" type="text/css">
+        <link href="../../../src/es/components/web-components-toolbox/src/css/colors.css" rel="stylesheet" type="text/css">
+        <script async rel=preload as="script" type="text/javascript"
+            src="../../../src/es/components/web-components-toolbox/src/es/helpers/Environment.js"></script>
+        <script type="text/javascript" src="../../../../wc-config.js"></script>
+        <title>Customer Portal</title>
+    </head>
+
+    <body>
+        <c-fetch-html>
+            <c-fetch-css>
+                <c-fetch-modules>
+                    <c-translations translation-api-url="https://devadmin.klubschule.ch/umbraco/api/v1/Dictionaries/all/de/CustomerLoyality">
+                        <cl-c-voting endpoint="http://localhost:3001/api/Voting">
+                            <p-general>
+                                <o-body>
+                                    <main>
+                                        <c-router routes="[
+                                            {
+                                                'name': 'p-voting',
+                                                'path': '../../../customer-loyality/pages/Voting.js',
+                                                'regExp': ['/[#=]{1}\/$/', '/^\/$/']
+                                            }
+                                        ]">
+                                        </c-router>
+                                    </main>
+                                </o-body>
+                            </p-general>
+                        </cl-c-voting>
+                    </c-translations>
+                </c-fetch-modules>
+            </c-fetch-css>
+        </c-fetch-html>
+    </body>
+
+</html>
