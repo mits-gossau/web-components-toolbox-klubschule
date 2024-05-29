@@ -52,12 +52,14 @@ export default class CheckoutLayout extends Shadow() {
         <div class="checkout-layout">
             <slot name="top"></slot>
             <o-grid mode="false" namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border>
+              <section>
                 <div>
                     <slot name="main"></slot>
                 </div>
                 <aside class="checkout-layout__aside">
                     <slot name="sidebar"></slot>
                 </aside>
+              </section>
             </o-grid>
             <ks-o-body-section variant="default" mode="false" has-background>
                 <slot name="bottom"></slot>

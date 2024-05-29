@@ -212,10 +212,10 @@ export default class AutoCompleteLocation extends Shadow() {
         this.dispatchEvent(new CustomEvent('auto-complete-location', {
           detail: {
             fetch: Promise.resolve({
-              total: this.predictions.length,
+              total: this.predictions?.length || 0,
               success: true,
               searchText: token,
-              items: this.predictions.map(({ description, place_id }) => ({ term: description, placeId: place_id })),
+              items: this.predictions?.map(({ description, place_id }) => ({ term: description, placeId: place_id })) || [],
               cms: []
             })
           },

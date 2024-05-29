@@ -66,7 +66,7 @@ export default class TileList extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.badge
+    return !this.tileList
   }
 
   /**
@@ -339,7 +339,7 @@ export default class TileList extends Shadow() {
     ])
   }
 
-  get badge () {
-    return this.root.querySelector('[badge]')
+  get tileList () {
+    return this.root.querySelector('.o-tile-list')
   }
 }

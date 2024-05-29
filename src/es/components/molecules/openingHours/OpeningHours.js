@@ -33,7 +33,7 @@ export default class OpeningHours extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.badge
+    return !this.table
   }
 
   /**
@@ -116,6 +116,6 @@ export default class OpeningHours extends Shadow() {
   }
 
   get table () {
-    return this.root.querySelector('[table]')
+    return this.root.querySelector('table')
   }
 }

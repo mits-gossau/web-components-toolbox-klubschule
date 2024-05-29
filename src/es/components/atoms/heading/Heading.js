@@ -24,11 +24,6 @@ export default class Heading extends Shadow() {
         this.heading.setAttribute(attrib.name, attrib.value)
       }
     }
-
-    // copy children to heading
-    while (this.firstChild) {
-      this.heading.appendChild(this.firstChild)
-    }
   }
 
   connectedCallback () {
@@ -303,6 +298,15 @@ export default class Heading extends Shadow() {
    * @returns void
    */
   renderHTML () {
+    Array.from(this.childNodes).forEach(node => {
+      if (node.nodeName === '#text') {
+        this.heading.appendChild(node)
+      }
+    })
+    Array.from(this.root.children).forEach(node => {
+      if (node === this.heading || node.getAttribute('slot') || node.nodeName === 'STYLE') return false
+      this.heading.appendChild(node)
+    })
     this.html = this.heading
   }
 }

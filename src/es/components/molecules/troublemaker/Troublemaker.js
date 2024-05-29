@@ -33,7 +33,7 @@ export default class Troublemaker extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.badge
+    return !this.troublemaker
   }
 
   /**
@@ -152,5 +152,9 @@ export default class Troublemaker extends Shadow() {
         name: 'a-icon-mdx'
       }
     ])
+  }
+
+  get troublemaker () {
+    return this.root.querySelector('.m-troublemaker')
   }
 }

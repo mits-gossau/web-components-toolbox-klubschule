@@ -176,7 +176,7 @@ export default class Badge extends Shadow() {
         ${this.tooltip ? /* html */ `
           <div class="m-badge__tooltip">
             <div class="m-badge__icon">
-              <a-icon-mdx icon-name="x" size="1.5em" class="icon-right"></a-icon-mdx>
+              <a-icon-mdx icon-name="X" size="1.5em" class="icon-right"></a-icon-mdx>
             </div>
             <span>${this.tooltip}</span>
           </div>
@@ -193,5 +193,9 @@ export default class Badge extends Shadow() {
         name: 'a-icon-mdx'
       }
     ])
+  }
+
+  get badge () {
+    return this.root.querySelector('.m-badge')
   }
 }

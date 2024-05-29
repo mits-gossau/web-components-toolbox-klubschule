@@ -1,6 +1,7 @@
 // @ts-check
 
 /** @typedef {{
+  term: string,
   text: string,
   typ: 1|2 // TYP 1 ist Kurs, TYP 2 ist Sparte
   placeId?: string,
@@ -38,6 +39,8 @@ export default class AutoComplete extends Shadow() {
     }, ...args)
 
     this.abortController = null
+    const apiUrl = `${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}`
+    const apiUrlObj = new URL(apiUrl, apiUrl.charAt(0) === '/' ? location.origin : apiUrl.charAt(0) === '.' ? this.importMetaUrl : undefined)
 
     this.requestAutoCompleteListener = event => {
       // reset home page input search
@@ -63,10 +66,11 @@ export default class AutoComplete extends Shadow() {
       if (this.hasAttribute('mock')) return this.dispatchMock()
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
+      apiUrlObj.searchParams.set('token', token)
       this.dispatchEvent(new CustomEvent('auto-complete', {
         detail: {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
-          fetch: fetch(`${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}?token=${token}`, {
+          fetch: fetch(apiUrlObj.toString(), {
             method: 'GET',
             signal: this.abortController.signal
           }).then(response => {
@@ -159,43 +163,43 @@ export default class AutoComplete extends Shadow() {
           searchText: 'englisch',
           items: [
             {
-              text: 'englisch',
+              term: 'englisch',
               typ: 1
             },
             {
-              text: 'englisch   privatunterricht  wann und wo sie wolle',
+              term: 'englisch   privatunterricht  wann und wo sie wolle',
               typ: 1
             },
             {
-              text: 'englisch a1 ganz entspannt',
+              term: 'englisch a1 ganz entspannt',
               typ: 1
             },
             {
-              text: 'englisch anfanger innen',
+              term: 'englisch anfanger innen',
               typ: 1
             },
             {
-              text: 'englisch anfanger innen   onlinekurs',
+              term: 'englisch anfanger innen   onlinekurs',
               typ: 1
             },
             {
-              text: 'Englisch Business',
+              term: 'Englisch Business',
               typ: 2
             },
             {
-              text: 'Englisch Diplome',
+              term: 'Englisch Diplome',
               typ: 2
             },
             {
-              text: 'Englisch Konversation',
+              term: 'Englisch Konversation',
               typ: 2
             },
             {
-              text: 'Englisch Konversation B1',
+              term: 'Englisch Konversation B1',
               typ: 2
             },
             {
-              text: 'Englisch Konversation B2',
+              term: 'Englisch Konversation B2',
               typ: 2
             }
           ],

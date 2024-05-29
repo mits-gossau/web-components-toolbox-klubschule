@@ -33,11 +33,6 @@ export default class Counter extends Shadow() {
     this.renderHTML(this.counter)
   }
 
-  /**
-   * Render HTML
-   * @param {number} counter
-   * @returns void
-   */
   renderHTML (counter) {
     const { headingType, listType, bookedSubscriptionsText, appointmentsText } = this.dataset
     this.element = this.root.querySelector(headingType) || document.createElement(headingType)

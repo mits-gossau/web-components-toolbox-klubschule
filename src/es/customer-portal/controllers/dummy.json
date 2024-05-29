@@ -116,5 +116,11 @@
     "CP.cpBookAppointment": "[DE | Termin buchen]",
     "CP.cpBookAppointmentNow": "[DE | Jetzt Termin buchen]",
     "CP.cpCancelAppointment": "[DE | Termin stornieren]",
-    "CP.cpCancelAppointmentNow": "[DE | Jetzt Termin stornieren]"
+    "CP.cpCancelAppointmentNow": "[DE | Jetzt Termin stornieren]",
+    "CP.cpAppointmentDetails": "[DE | Termindetails]",
+    "CP.cpSubscriptionDetails": "[DE | Abonnementdetails]",
+    "CP.cpAppointmentBookedViaSubscription":"[DE | Termin wird über ihr Abonnement gebucht]",
+    "CP.cpYouHaveBookedTheAppointmentSuccessfully":"[DE | Sie haben den Termin erfolgreich gebucht]",
+    "CP.cpHerebyYouCancelThisAppointment":"[DE | Hiermit stornieren sie diesen Termin]",
+    "CP.cpYouHaveSuccessfullyCanceledTheAppointment":"[DE | Sie haben den Termin erfolgreich storniert]"
 }

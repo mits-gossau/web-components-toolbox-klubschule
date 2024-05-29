@@ -53,7 +53,7 @@ export default class Sort extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.badge
+    return !this.sort
   }
 
   /**
@@ -215,5 +215,9 @@ export default class Sort extends Shadow() {
         name: 'a-icon-mdx'
       }
     ])
+  }
+
+  get sort () {
+    return this.root.querySelector('.m-sort')
   }
 }

@@ -360,13 +360,13 @@ export default class EventDetail extends Shadow() {
               ${this.data.termine.reduce((acc, termin, index) => acc + (index < 5 ? /* html */ `
                 <tr>
                   <td>${termin.wochentaglabel}</td>                
-                  <td>${termin.termin}</td>                
+                  <td>${termin.termin_label}</td>                
                   <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
                 </tr>
               ` : /* html */`
                 <tr class="overlap hidden">
                   <td>${termin.wochentaglabel}</td>                
-                  <td>${termin.termin}</td>                
+                  <td>${termin.termin_label}</td>                
                   <td>${termin.start_zeit} - ${termin.ende_zeit}</td>                
                 </tr>              
               `), '')}              

@@ -40,9 +40,13 @@ export default class EventDetail extends Shadow() {
     const apiUrl = this.isMocked
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/'}`
-
+    const apiUrlObj = new URL(apiUrl, apiUrl.charAt(0) === '/' ? location.origin : apiUrl.charAt(0) === '.' ? this.importMetaUrl : undefined)
     this.requestEventDetailListener = (event) => {
-      event.detail.resolve(fetch(`${apiUrl}?lang=${event.detail.language}&typ=${event.detail.typ}&id=${event.detail.id}&center_id=${event.detail.center_id}`, {
+      apiUrlObj.searchParams.set('lang', event.detail.language)
+      apiUrlObj.searchParams.set('typ', event.detail.typ)
+      apiUrlObj.searchParams.set('id', event.detail.id)
+      apiUrlObj.searchParams.set('center_id', event.detail.center_id)
+      event.detail.resolve(fetch(apiUrlObj.toString(), {
         method: 'GET'
       }).then(response => {
         if (response.status >= 200 && response.status <= 299) {

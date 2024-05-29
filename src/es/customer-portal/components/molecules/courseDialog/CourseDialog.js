@@ -110,19 +110,23 @@ export default class CourseDialog extends Shadow() {
           }
         ))
         if (type === 'detail') {
-          this.renderDialogTitle('Termindetails')
+          // trans value = Termindetails
+          this.renderDialogTitle('CP.cpAppointmentDetails')
           this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
         }
         if (type === 'booking') {
-          this.renderDialogTitle('Termin buchen')
+          // trans value = Termin buchen
+          this.renderDialogTitle('CP.cpBookAppointment')
           this.viewContent.innerHTML = this.renderDialogContentBookingConfirmation(this.courseData, this.courseDetail)
         }
         if (type === 'reversal') {
-          this.renderDialogTitle('Termin stornieren')
+          // trans value = Termin stornieren
+          this.renderDialogTitle('CP.cpCancelAppointment')
           this.viewContent.innerHTML = this.renderDialogContentReversalConfirmation(this.courseData, this.courseDetail)
         }
         if (type === 'subscriptions') {
-          this.renderDialogTitle('Abonnementdetails')
+          // trans value = Abonnementdetails
+          this.renderDialogTitle('CP.cpSubscriptionDetails')
           this.viewContent.innerHTML = this.renderDialogContentSubscriptionDetail(this.courseData, this.courseDetail)
           // TODO: Own fn() ?
           this.subscriptionsPdfLink = this.viewContent.querySelector('ks-m-link-list')
@@ -187,9 +191,7 @@ export default class CourseDialog extends Shadow() {
         </div>
         <div>
           <h3>Downloads</h3>
-          <div class="downloads">
-            ${this.renderDownloads(data, detail)}
-          </div>
+          <div class="downloads">${this.renderDownloads(data, detail)}</div>
         </div>
       </div>
     `
@@ -243,7 +245,8 @@ export default class CourseDialog extends Shadow() {
    */
   requestShowDialogBookingConfirmationListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
-      this.renderDialogTitle('Termin buchen')
+      // trans value = Termin buchen
+      this.renderDialogTitle('CP.cpBookAppointment')
       this.viewContent.innerHTML = ''
       this.viewContent.innerHTML = this.renderDialogContentBookingConfirmation(this.courseData, this.courseDetail)
     }
@@ -275,7 +278,10 @@ export default class CourseDialog extends Shadow() {
       </style>
       <div id="content">
         <div>
-          <span>Termin wird über ihr Abonnement gebucht</span>
+          <span>
+            <!-- trans value = Termin wird über ihr Abonnement gebucht -->
+            <a-translation data-trans-key="CP.cpAppointmentBookedViaSubscription"></a-translation>
+          </span>
         </div>
         <div class="details">
           ${this.courseDetailsContent(detail)}
@@ -309,11 +315,13 @@ export default class CourseDialog extends Shadow() {
   renderDialogContentBookingSuccess (data, detail = {}) {
     return /* html */`
       <style>
-        .success-message{
+        .success-message {
           display: flex;
-          flex-direction: row;
           align-items: flex-start;
+          flex-direction: row;
+          flex-wrap: wrap;
           gap: 1em;
+          width: fit-content;
         }
         .success {
           color: #00997F;
@@ -327,7 +335,10 @@ export default class CourseDialog extends Shadow() {
       </style>
       <div class="success-message">
         <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>
-        <h2 class="success">Sie haben den Termin erfolgreich gebucht</h2>
+        <h2 class="success">
+          <!-- trans value = Sie haben den Termin erfolgreich gebucht -->
+          <a-translation data-trans-key="CP.cpYouHaveBookedTheAppointmentSuccessfully"></a-translation>
+        </h2>
       </div>
       <div class="downloads">
         <h3>Downloads</h3>
@@ -387,7 +398,10 @@ export default class CourseDialog extends Shadow() {
       </style>
       <div id="content">
         <div>
-          <h2 class="alert">Hiermit stornieren sie diesen Termin</h2>
+        <h2 class="alert">
+            <!-- trans value = Hiermit stornieren sie diesen Termin -->
+            <a-translation data-trans-key="CP.cpHerebyYouCancelThisAppointment"></a-translation>
+        </h2>
         </div>
         <div class="details">
           ${this.courseDetailsContent(detail)}
@@ -430,17 +444,25 @@ export default class CourseDialog extends Shadow() {
       <style>
         .success-message{
           display: flex;
+          align-items: flex-start;
           flex-direction: row;
-          align-items: center;
+          flex-wrap: wrap;
           gap: 1em;
+          width: fit-content;
         }
         .success {
           color: #00997F;
         }
+        h2.success {
+          color: #00997F !important;
+        }
       </style>
       <div class="success-message">
         <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>
-        <ks-a-heading tag="h2" color="#00997F">Sie haben den Termin erfolgreich storniert</ks-a-heading>
+          <h2 class="success">
+            <!-- trans value = Sie haben den Termin erfolgreich storniert -->
+            <a-translation data-trans-key="CP.cpYouHaveSuccessfullyCanceledTheAppointment"></a-translation>
+          </h2>   
       </div>
     `
   }
@@ -538,6 +560,10 @@ export default class CourseDialog extends Shadow() {
         path: `${this.importMetaUrl}../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
         name: 'mdx-component'
 
+      },
+      {
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
       }
     ])
     Promise.all([fetchModules]).then((_) => {
@@ -579,7 +605,10 @@ export default class CourseDialog extends Shadow() {
       ? /* html */ `
         <div class="detail price-info">
           <h3 class="price">${courseData.lessonPrice}</h3>
-          <span> Termin wird über ihr Abonnement gebucht</span>
+          <span>
+            <!-- trans value = Termin wird über ihr Abonnement gebucht -->
+            <a-translation data-trans-key="CP.cpAppointmentBookedViaSubscription"></a-translation>
+          </span>
         </div>
       `
       : ''
@@ -591,7 +620,7 @@ export default class CourseDialog extends Shadow() {
    */
   renderDialogTitle (title) {
     const titleElement = this.dialog.shadowRoot.getElementById('title')
-    titleElement.innerHTML = title
+    titleElement.innerHTML = `<a-translation data-trans-key="${title}"></a-translation>`
   }
 
   subscriptionDetailsContent (subscription) {
@@ -600,11 +629,17 @@ export default class CourseDialog extends Shadow() {
     const to = this.formatCourseAppointmentDate(subscription.subscriptionValidTo)
     return /* html */ `
       <div class="detail">
-        <span>Guthaben</span>
+        <span>
+          <!-- trans value = Guthaben -->
+          <a-translation data-trans-key="CP.cpSubscriptionColumnBalance"></a-translation>
+        </span>
         <span>${subscriptionBalance}</span>
       </div>
       <div class="detail">
-        <span>Gültigkeitsdauer</span>
+        <span>
+          <!-- trans value = Gültigkeitsdauer -->
+          <a-translation data-trans-key="CP.cpSubscriptionColumnValidity"></a-translation>
+        </span>
         <span>${from} - ${to}</span>
       </div>
     `
@@ -621,11 +656,55 @@ export default class CourseDialog extends Shadow() {
     if (!state) return ''
     const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo)
     return /* html */ `
-      <div class="detail"><span>Datum, Zeit</span><span>${detail.courseAppointmentDateFormatted}</span><span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span></div>
-      <div class="detail"><span>Ort/Raum</span><span>${detail.courseLocation} / Raum ${detail.roomDescription}</span></div>
-      <div class="detail"><span>Kursleitung</span><span>${detail.instructorDescription}</span></div>
-      <div class="detail"><span>Status</span><div><span class="${state.css.status}">${state.status}</span> <span class="${state.css.info}">${state.info}</span></div></div>
-      <div class="detail"><span>Abonnement</span><span>${detail.subscriptionDescription}</span><span>Gültig bis ${validTo} / Aktuelles Guthaben ${detail.subscriptionBalance}</span></div> 
+      <div class="detail">
+        <span>
+          <!-- trans value = Datum -->
+          <a-translation data-trans-key="CP.cpAppointmentListColumnDate"></a-translation>,
+          <!-- trans value = Zeit -->
+          <a-translation data-trans-key="CP.cpAppointmentListColumnTime"></a-translation>
+        </span>
+        <span>${detail.courseAppointmentDateFormatted}</span>
+        <span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span>
+      </div>
+      <div class="detail">
+        <span>
+          <!-- trans value = Ort -->
+          <a-translation data-trans-key="CP.cpAppointmentListColumnCity"></a-translation>/
+          <!-- trans value = Raum -->
+          <a-translation data-trans-key="CP.cpAppointmentIcsRoom"></a-translation>
+        </span>
+        <span>${detail.courseLocation} / Raum ${detail.roomDescription}</span>
+      </div>
+      <div class="detail">
+        <span>
+          <!-- trans value = Kursleitung -->
+          <a-translation data-trans-key="CP.cpAppointmentListFilterByInstructor"></a-translation>
+        </span>
+        <span>${detail.instructorDescription}</span>
+      </div>
+      <div class="detail">
+        <span>
+          <!-- trans value = Status -->
+          <a-translation data-trans-key="CP.cpAppointmentListColumnStatus"></a-translation>
+        </span>
+        <div>
+          <span class="${state.css.status}">${state.status}</span> 
+          <span class="${state.css.info}">${state.info}</span>
+        </div>
+      </div>
+      <div class="detail">
+        <span>
+          <!-- trans value = Abonnement -->
+          <a-translation data-trans-key="CP.cpSubscriptionColumnDescription"></a-translation>
+        </span>
+        <span>${detail.subscriptionDescription}</span>
+        <span>
+          <!-- trans value = Gültig bis -->
+          <a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${validTo} / 
+          <!-- trans value = Aktuelles Guthaben -->
+          <a-translation data-trans-key="CP.cpBookingActualSubscriptionBalance"></a-translation> ${detail.subscriptionBalance}
+        </span>
+      </div> 
     `
   }
 
@@ -643,7 +722,10 @@ export default class CourseDialog extends Shadow() {
           }
         </style>
         <div slot="description">
-          <p>Eine Stornierung ist nur bis zwei Stunden vor Terminbeginn möglich!</p>
+          <p>
+            <!-- trans value = Eine Stornierung ist nur bis zwei Stunden vor Terminbeginn möglich! -->
+            <a-translation data-trans-key="CP.cpInfoCancelFlatSubscriptionInBooking"></a-translation>
+          </p>
         </div>
       </ks-m-system-notification>
     `
@@ -656,7 +738,10 @@ export default class CourseDialog extends Shadow() {
         <ul>
           <li>
             <a id="subscriptionsPdfLink">
-              <span>Kursdetails als PDF <mdx-component><mdx-spinner size="small"></mdx-spinner></mdx-component></span>
+              <span>
+                <!-- trans value = Kursdetails als PDF downloaden -->
+                <a-translation data-trans-key="CP.cpAppointmentDwnPDF"></a-translation> <mdx-component><mdx-spinner size="small"></mdx-spinner></mdx-component>
+              </span>
               <div>
                 <span>PDF</span>
                 <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
@@ -674,13 +759,16 @@ export default class CourseDialog extends Shadow() {
    */
   renderDownloads (courseData, courseDetail) {
     // @ts-ignore
-    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}`
+    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseDetail.centerId}`
     return /* html */ `
       <ks-m-link-list namespace="link-list-download-">
         <ul>
           <li>
             <a href="${pdfLink}">
-              <span>Kursdetails als PDF</span>
+              <span>
+                <!-- trans value = Kursdetails als PDF downloaden -->
+                <a-translation data-trans-key="CP.cpAppointmentDwnPDF"></a-translation>
+              </span>
               <div>
                 <span>PDF</span>
                 <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
@@ -706,7 +794,11 @@ export default class CourseDialog extends Shadow() {
     link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileBody))
     link.setAttribute('download', filename)
     link.innerHTML = /* html */ `
-      <span>Termin in persönlichen Kalender</span><div>
+      <span>
+        <!-- trans value = Termin in Kalender exportieren -->
+        <a-translation data-trans-key="CP.cpAppointmentDwnCalendar"></a-translation>
+      </span>
+      <div>
         <span>ICS</span>
         <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
       </div>
@@ -731,7 +823,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   *
+   * Create .ics file
    * @param {*} course
    * @returns {string}
    */
