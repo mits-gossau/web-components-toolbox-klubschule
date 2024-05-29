@@ -96,14 +96,13 @@ export default class AppointmentsFilter extends Shadow() {
         name: 'mdx-component'
       }
     ]).then(() => {
-      console.log(JSON.parse(this.dataset.filter))
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations } = filter
       this.html = /* html */ `
         <div>${this.renderDayFilter(dayCodes)}</div>
         <div>${this.renderTimeFilter(timeCodes)}</div>
         <div>${this.renderLocationFilter(locations)}</div>
-        <div>time</div>
+        <!--<div>time</div>-->
       `
     })
   }
@@ -160,7 +159,7 @@ export default class AppointmentsFilter extends Shadow() {
           </div>
       </m-dialog>
       ${dayCodes.some(dayCode => dayCode.selected)
-      ? /* html */`
+        ? /* html */`
         <m-double-button
           id="show-modal"
           namespace="double-button-default-">
@@ -186,7 +185,7 @@ export default class AppointmentsFilter extends Shadow() {
             </ks-a-button>
           </m-double-button>
         `
-      : /* html */ `
+        : /* html */ `
       <ks-a-button
         id="show-modal"
         namespace="button-secondary-"
@@ -252,7 +251,7 @@ export default class AppointmentsFilter extends Shadow() {
         </div>
       </m-dialog>
       ${timeCodes.some(timeCode => timeCode.selected)
-      ? /* html */`
+        ? /* html */`
         <m-double-button id="show-modal" namespace="double-button-default-">
           <ks-a-button
             filter
@@ -276,7 +275,7 @@ export default class AppointmentsFilter extends Shadow() {
             </ks-a-button>
           </m-double-button>
       `
-      : /* html */ `
+        : /* html */ `
         <ks-a-button
           id="show-modal"
           namespace="button-secondary-"
@@ -352,7 +351,7 @@ export default class AppointmentsFilter extends Shadow() {
             click-no-toggle-active
             request-event-name="dialog-open-location">
               <span part="label1">
-                ${locations.reduce((acc, location) => (location.selected ? acc ? `${acc}, ${location.locationDescription}` : location.timeCodeDescription : acc), '')}
+                ${locations.reduce((acc, location) => (location.selected ? acc ? `${acc}, ${location.locationDescription}` : location.locationDescription : acc), '')}
               </span>
               <span part="label2" dynamic></span>
             </ks-a-button>
@@ -378,17 +377,5 @@ export default class AppointmentsFilter extends Shadow() {
       `
       }
     `
-  }
-
-  setButtonStyle () {
-    return /* css */ `
-      <style>
-        :host {
-          --button-secondary-width:100%;
-        }
-        :host >  ks-a-button {
-          width:100%;
-        }
-      </style>`
   }
 }
