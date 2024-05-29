@@ -27,11 +27,7 @@ export default class AppointmentsFilter extends Shadow() {
         align-items: center;
         display: flex;
         gap: 1em;
-        justify-content: space-between;
-        margin: 1em 0;
-      }
-      :host > div {
-        width: 100%;
+        margin: 2em 0;
       }
       @media only screen and (max-width: _max-width_) {
         :host  {
@@ -115,7 +111,7 @@ export default class AppointmentsFilter extends Shadow() {
     return /* html */`
       ${this.renderDialog('dialog-open-day', 'request-subscription-day-filter', 'request-subscription-day-filter', dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay')}
       ${dayCodes.some(dayCode => dayCode.selected)
-        ? /* html */`
+      ? /* html */`
         <m-double-button
           id="show-modal"
           namespace="double-button-default-">
@@ -141,14 +137,14 @@ export default class AppointmentsFilter extends Shadow() {
             </ks-a-button>
           </m-double-button>
         `
-        : /* html */ `
-      <ks-a-button
-        id="show-modal"
-        namespace="button-secondary-"
-        color="tertiary"
-        justify-content="flex-start"
-        request-event-name="dialog-open-day">
-          TODO: Add Translation "Open Filter Name"
+      : /* html */ `
+        <ks-a-button
+          id="show-modal"
+          namespace="button-secondary-"
+          color="tertiary"
+          justify-content="flex-start"
+          request-event-name="dialog-open-day">
+            <a-translation data-trans-key='CP.cpFilterTitleDay'/></a-translation>
         </ks-a-button>
       `
       }
@@ -159,7 +155,7 @@ export default class AppointmentsFilter extends Shadow() {
     return /* html */`
       ${this.renderDialog('dialog-open-time', 'request-subscription-time-filter', 'request-subscription-time-filter', timeCodes, 'timeCode', 'timeCodeDescription', 'CP.cpFilterTitleTime')}
       ${timeCodes.some(timeCode => timeCode.selected)
-        ? /* html */`
+      ? /* html */`
         <m-double-button id="show-modal" namespace="double-button-default-">
           <ks-a-button
             filter
@@ -183,14 +179,14 @@ export default class AppointmentsFilter extends Shadow() {
             </ks-a-button>
           </m-double-button>
       `
-        : /* html */ `
+      : /* html */ `
         <ks-a-button
           id="show-modal"
           namespace="button-secondary-"
           color="tertiary"
           justify-content="flex-start"
           request-event-name="dialog-open-time">
-            TODO: Add Translation "Open Filter Name"
+            <a-translation data-trans-key='CP.cpFilterTitleTime'/></a-translation>
         </ks-a-button>
       `
       }
@@ -201,7 +197,7 @@ export default class AppointmentsFilter extends Shadow() {
     return /* html */`
       ${this.renderDialog('dialog-open-location', 'request-subscription-location-filter', 'request-subscription-location-filter', locations, 'locationId', 'locationDescription', 'CP.cpFilterTitleLocation')}
       ${locations.some(location => location.selected)
-        ? /* html */ `
+      ? /* html */ `
         <m-double-button id="show-modal" namespace="double-button-default-">
           <ks-a-button
             filter
@@ -224,15 +220,15 @@ export default class AppointmentsFilter extends Shadow() {
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
             </ks-a-button>
           </m-double-button>
-        `
-        : /* html */ `
+      `
+      : /* html */ `
         <ks-a-button
           id="show-modal"
           namespace="button-secondary-"
           color="tertiary"
           justify-content="flex-start"
           request-event-name="dialog-open-location">
-            TODO: Add Translation "Open Filter Name"
+            <a-translation data-trans-key='CP.cpFilterTitleLocation'/></a-translation>
         </ks-a-button>
       `
       }
