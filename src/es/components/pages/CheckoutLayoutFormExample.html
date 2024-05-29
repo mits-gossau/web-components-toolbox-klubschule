@@ -1,55 +1,43 @@
 <div>Layout Wrapper for Checkout Pages</div>
 <hr>
-
-<!-- inline style necessary to make it truly full width-->
-<div style="width: 100%">
-    <m-simple-form
+<m-simple-form-validation
     namespace="simple-form-miduweb-"
-    width="100%"
+    no-validation-error-css
     endpoint="/api/test"
     method="POST"
     schema="{
-        'value': {
-        'gender': ''
-        },
         'more': {
-        'duden': '',
-        'cb-01': 'text',
-        'key': '54325435436534'
+            'input-01': '',
+            'cb-01': 'text',
+            'key': '54325435436534'
         }
     }"
-    >
+>
     <form>
         <ks-o-checkout-layout>
-
-            <section slot="top">
+            <!-- <section slot="top">
                 <ks-m-checkout-color-stage 
                     back-label="Zurück (fallback browser back)" 
                     title="Konfiguration: {{ Angebotstitel }}"
                 >
                 </ks-m-checkout-color-stage>
-            </section>
+            </section> -->
 
             <section slot="main">
                 <h2 id="response"></h2>
-
-                <div class="inline">
-                <label for="gender1">männlich</label>
-                <input id="gender1" name="gender" type="radio" value="m" checked />
-                <label for="gender2">weiblich</label>
-                <input id="gender2" name="gender" type="radio" value="w" />
-                <label for="gender3">divers</label>
-                <input id="gender3" name="gender" type="radio" value="d" />
-                </div>
-                <div class="inline">
-                <label validation-message="Name ist ungültig" for="duden">dude</label>
-                <input id="duden" name="duden" required type="text" value="" data-m-v-rules='{"required": {"error-message": "Bitte angeben."}}' />
-                </div>
-                <div>
+                <ks-a-input mode="false">
+                    <div class="wrap">
+                        <label validation-message="Name ist ungültig" for="input-01">Label</label>
+                        <input id="input-01" required type="text" error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span" data-m-v-rules='{"required": {"error-message": "Bitte angeben."}}'>
+                        <div class="message">
+                            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                        </div>
+                    </div>
+                </ks-a-input>
                 <ks-a-checkbox namespace="checkbox-default-" mode="false">
                     <div class="wrap">
-                    <label for="cb-01">Checkbox Label</label>
-                    <input id="cb-01" type="checkbox" name="checkbox" error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span" data-m-v-rules='{"required": {"error-message": "Bitte Policy akzeptieren."}}'>
+                        <label for="cb-01">Checkbox Label</label>
+                        <input id="cb-01" type="checkbox" name="checkbox" error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span" data-m-v-rules='{"required": {"error-message": "Bitte Policy akzeptieren."}}'>
                     <div class="box">
                         <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
                     </div>
@@ -58,10 +46,7 @@
                     </div>
                     </div>
                 </ks-a-checkbox>
-                </div>
                 <input type="submit" value="Submit" />
-                
-                
             </section>
 
             <section slot="sidebar">
@@ -79,6 +64,76 @@
             </section>
 
         </ks-o-checkout-layout>
+    </form>    
+</m-simple-form-validation>
+
+<!-- inline style necessary to make it truly full width-->
+<!-- <div style="width: 100%">
+    <m-simple-form
+    namespace="simple-form-miduweb-"
+    width="100%"
+    endpoint="/api/test"
+    method="POST"
+    schema="{
+        'input-04': '',
+        'cb-01': 'text',
+        'key': '54325435436534'
+        }
+    }"
+    >
+    <form>
+        <ks-o-checkout-layout>
+            <section slot="top">
+                <ks-m-checkout-color-stage 
+                    back-label="Zurück (fallback browser back)" 
+                    title="Konfiguration: {{ Angebotstitel }}"
+                >
+                </ks-m-checkout-color-stage>
+            </section>
+
+            <section slot="main">
+                <h2 id="response"></h2>
+                <ks-a-input mode="false">
+                    <div>
+                        <label validation-message="Name ist ungültig" for="input-04">Label</label>
+                        <input id="input-04" value="" required type="text" data-m-v-rules='{"required": {"error-message": "Bitte angeben."}}'>
+                        <div class="hint">
+                            <span>This is a hint.</span>                
+                        </div>
+                        <div class="message">
+                            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                        </div>
+                    </div>
+                </ks-a-input>
+                <ks-a-checkbox namespace="checkbox-default-" mode="false">
+                    <div class="wrap">
+                        <label for="cb-01">Checkbox Label</label>
+                        <input id="cb-01" type="checkbox" name="checkbox" error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span" data-m-v-rules='{"required": {"error-message": "Bitte Policy akzeptieren."}}'>
+                    <div class="box">
+                        <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
+                    </div>
+                    <div class="message">
+                        <a-icon-mdx icon-name="AlertCircle" size="1.25em" rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
+                    </div>
+                    </div>
+                </ks-a-checkbox>
+                <input type="submit" value="Submit" />
+            </section>
+
+            <section slot="sidebar">
+                <h2>Sidebar</h2>
+                <p>(Desktop rechts)</p>
+            </section>
+
+            <section slot="bottom">
+                <ks-m-back-forward
+                    back-label="Zurück"
+                    back-link="#back"
+                    forward-label="Weiter"
+                    submit
+                ></ks-m-back-forward>
+            </section>
+        </ks-o-checkout-layout>
     </form>
     </m-simple-form>
-</div>
+</div> -->

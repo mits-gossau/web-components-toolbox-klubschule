@@ -34,12 +34,13 @@ export default class Checkbox extends Shadow() {
     this.css = /* css */ `
         :host {
             display: flex;
+            flex-direction: column;
         }
 
         :host .wrap {
           display: flex;
           flex-direction: row-reverse;
-          justify-content: flex-start;
+          justify-content: flex-end;
           align-items: center;
           padding-top: var(--padding-top);
           padding-bottom: var(--padding-bottom);
@@ -66,6 +67,7 @@ export default class Checkbox extends Shadow() {
 
         :host input[type='checkbox'] {
             width: 0;
+            opacity: 0;
         }
 
         :host input[type='checkbox']:checked + .box {
@@ -83,7 +85,6 @@ export default class Checkbox extends Shadow() {
             border-radius: var(--border-radius, 0);
             height: 1.25em;
             width: 1.25em;
-            margin-right: 0.75em;
         }
 
         :host .box a-icon-mdx {
@@ -93,6 +94,7 @@ export default class Checkbox extends Shadow() {
         .wrap:not(:has(.has-error)) > .message {
           display: none;
         }
+
         [dirty] .wrap > input:invalid ~ .message {
           display: block;
         }

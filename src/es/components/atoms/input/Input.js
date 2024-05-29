@@ -189,6 +189,14 @@ export default class Input extends Shadow() {
         color: var(--mdx-comp-inputfield-hint-counter-color-focus);
         font: var(--mdx-comp-inputfield-font-supporting);
       }
+
+      .wrap:not(:has(.has-error)) > .message {
+        display: none;
+      }
+      
+      [dirty] .wrap > input:invalid ~ .message {
+        display: block;
+      }
     `
   }
 }
