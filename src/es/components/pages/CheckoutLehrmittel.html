@@ -4,26 +4,21 @@
 <hr />
 
 <div style="width: 100%">
-    <m-simple-form-validation load-form-styles namespace="simple-form-miduweb-" no-validation-error-css
-        endpoint="/api/test" method="POST" schema="{
-            'value': {
-                '20416': '',
-                'pets': '',
-            },
-        }">
+    <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css
+        endpoint="/api/test" method="POST">
         <form>
             <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate"
                 initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
                 <ks-o-checkout mode="false">
                     <ks-o-checkout-layout>
 
-                        <section slot="top">
+                        <section id="top">
                             <ks-m-checkout-color-stage back-label="Zurück (fallback browser back)"
                                 title="Konfiguration: {{ Angebotstitel }}">
                             </ks-m-checkout-color-stage>
                         </section>
 
-                        <section slot="main">
+                        <section id="main">
 
                             <ks-a-heading tag="h3">Speakout 2nd Edition Pre-Intermediate Workbook with key
                                 Bundle</ks-a-heading>
@@ -78,7 +73,7 @@
                             </div>
                         </section>
 
-                        <section slot="sidebar">
+                        <section id="sidebar">
                             <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
                                 status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
                                 time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
@@ -91,7 +86,7 @@
                             </ks-m-checkout-booked-offer>
                         </section>
 
-                        <section slot="bottom">
+                        <section id="bottom">
 
                             <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
                                 submit></ks-m-back-forward>

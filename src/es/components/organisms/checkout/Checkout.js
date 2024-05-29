@@ -22,7 +22,7 @@ export default class Checkout extends Shadow() {
   }
 
   disconnectedCallback () {
-    // this.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
+    document.body.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
 
   shouldRenderCSS () {

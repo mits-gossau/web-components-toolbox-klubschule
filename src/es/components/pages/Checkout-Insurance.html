@@ -1,7 +1,8 @@
 <h1 id="primary">Select</h1>
 <section style="padding: 1em;">
     <div>
-        <ks-m-checkout-insurance>
+        <!-- NOTE: In mode="false" :host becomes tagName as a selector (eg. :host a {... -> KS-M-CHECKOUT-INSURANCE a {...). But to make the css selector more specific, give the node an id (eg. :host a {... -> #ks-m-checkout-insurance a {...).-->
+        <ks-m-checkout-insurance mode="false" id="ks-m-checkout-insurance">
             <h2>Kurskosten absichern?</h2>
             <p>Mit einer Annullationskostenversicherung erhalten Sie in folgenden Fällen Ihr Kursgeld zurück:</p>
             <ul>

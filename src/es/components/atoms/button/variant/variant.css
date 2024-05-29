@@ -101,7 +101,6 @@
 }
 
 :host([big]) button {
-  --button-primary-height: 3.25rem;
   --button-primary-font-weight: 500;
   --button-primary-font-size: 1.25rem;
   --button-primary-icon-height: auto;

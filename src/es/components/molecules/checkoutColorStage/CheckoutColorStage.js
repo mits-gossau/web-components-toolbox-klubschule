@@ -19,14 +19,14 @@ export default class CheckoutColorStage extends Shadow() {
       this.renderHTML().then(() => {
         if (!this.backButton) {
           this.backButton = this.root.querySelector('o-grid').shadowRoot.querySelector('.back-button')
-          this.backButton.addEventListener('click', this.backLinkListener)
+          if (this.backButton) this.backButton.addEventListener('click', this.backLinkListener)
         }
       })
     }
   }
 
   disconnectedCallback () {
-    if (this.backButton) this.backButton.removeEvenetListener('click', this.backLinkListener)
+    if (this.backButton) this.backButton.removeEventListener('click', this.backLinkListener)
   }
 
   backLinkListener (event) {
