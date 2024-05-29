@@ -105,7 +105,7 @@ export default class Input extends Shadow() {
         display: none;
       }
 
-      :host .error .hint {
+      .wrap:has(.has-error) .hint {
         display: none;
       }
 
@@ -118,13 +118,13 @@ export default class Input extends Shadow() {
         color: var(--mdx-comp-error-message-color-default);
       }
 
-      :host .error span,
-      :host .error a-icon-mdx {
+      :host .message span,
+      :host .message a-icon-mdx {
         color: var(--mdx-comp-error-message-color-default);
         display: flex;
       }
 
-      :host .error span {
+      :host .message span {
         margin-left: var(--mdx-comp-inputfield-gap-content-below);
       }
 
@@ -192,7 +192,7 @@ export default class Input extends Shadow() {
         justify-content: space-between;
       }
 
-      :host .error .error {
+      :host .message {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -215,7 +215,7 @@ export default class Input extends Shadow() {
       }
       
       [dirty] .wrap > input:invalid ~ .message {
-        display: block;
+        display: flex;
       }
     `
   }

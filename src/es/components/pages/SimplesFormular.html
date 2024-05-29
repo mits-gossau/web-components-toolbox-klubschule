@@ -1,0 +1,66 @@
+<!-- setting style width to 100% is currently necessary as I can't make the checkout layout full width otherwise -->
+<m-simple-form-validation
+  namespace="simple-form-miduweb-"
+  no-validation-error-css
+  endpoint="/api/test"
+  method="POST"
+  schema="{
+    'more': {
+      'input-01': '',
+      'cb-01': 'text'
+    }
+  }"
+>
+  <form>
+    <ks-o-checkout mode="false">
+      <ks-o-checkout-layout>
+        <section id="main">
+          <h2>Example Form with Validation</h2>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                  <label for="input-01">Name *</label>
+                  <input id="input-01" name="input-01" type="text" required
+                    error-message-reference-point-changed="true"
+                    no-error-text-p
+                    error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Namen angeben."}}'
+                  >
+                  <div class="hint">
+                      <span>This is a hint.</span>                
+                  </div>
+                  <div class="message">
+                      <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>                
+                  </div>
+              </div>
+            </ks-a-input>
+          </div>
+          <div>
+            <ks-a-checkbox mode="false" namespace="checkbox-default-">
+              <div class="wrap">
+                  <div class="control">
+                    <label for="cb-01">Checkbox Label</label>
+                    <input id="cb-01" name="cb-01" type="checkbox" required
+                      error-message-reference-point-changed="true"
+                      no-error-text-p
+                      error-text-tag-name="span"
+                      data-m-v-rules='{"required": {"error-message": "Bitte Policy akzeptieren."}}'                  
+                    >
+                    <div class="box">
+                      <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
+                    </div>
+                  </div>
+                  <div class="message">
+                    <a-icon-mdx icon-name="AlertCircle" size="1.25em" rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
+                  </div>
+              </div>
+            </ks-a-checkbox>
+          </div>
+          <br>
+          <br>
+          <input type="submit" value="Submit" />
+        </section>
+      </ks-o-checkout-layout>
+    </ks-o-checkout>
+  </form>
+</m-simple-form-validation>
