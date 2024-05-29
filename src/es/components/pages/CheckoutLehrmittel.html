@@ -3,47 +3,99 @@
 </p>
 <hr />
 
-<m-simple-form-validation
-    namespace="simple-form-miduweb-"
-    no-validation-error-css 
-    endpoint="/api/test" 
-    method="POST" 
-    schema="{
-        'value': {
-            'lehrmittel': '',
-            'pets': '',
-        },
-    }"
->
-    <form>
-        <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate" initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
-            <ks-o-checkout mode="false">
-                <ks-a-heading tag="h3">Speakout 2nd Edition Pre-Intermediate Workbook with key Bundle</ks-a-heading>
-                <div>
-                    <label validation-message="Select a pet!" for="20416">Lehrmittel</label>
-                    <select name="20416" required="" id="20416"
-                        data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'>
-                        <option value="">Lehrmittel wählen...</option>
-                        <option value="1">E-Book / CHF 22.40</option>
-                        <option value="2">E-Book / CHF 23.40</option>
-                        <option value="3">E-Book / CHF 24.40</option>
-                        <option value="4">E-Book / CHF 25.40</option>
-                    </select>
-                </div>
-                <ks-a-heading tag="h3">Speakout 2nd Edition Pre-Intermediate Student Book mit DVD Rom</ks-a-heading>
-                <div>
-                    <label validation-message="Select a pet!" for="21786">Lehrmittel</label>
-                    <select name="21786" required="" id="21786"
-                        data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'>
-                        <option value="">Lehrmittel wählen...</option>
-                        <option value="0">E-Book / CHF 22.40</option>
-                        <option value="1">E-Book / CHF 23.40</option>
-                        <option value="2">E-Book / CHF 24.40</option>
-                        <option value="3">E-Book / CHF 25.40</option>
-                    </select>
-                </div>
-            </ks-o-checkout>
-        </ks-c-checkout>
-        <input type="submit" value="Submit" />
-    </form>
-</m-simple-form-validation>
+<div style="width: 100%">
+    <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css
+        endpoint="/api/test" method="POST">
+        <form>
+            <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate"
+                initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
+                <ks-o-checkout mode="false">
+                    <ks-o-checkout-layout>
+
+                        <section id="top">
+                            <ks-m-checkout-color-stage back-label="Zurück (fallback browser back)"
+                                title="Konfiguration: {{ Angebotstitel }}">
+                            </ks-m-checkout-color-stage>
+                        </section>
+
+                        <section id="main">
+
+                            <ks-a-heading tag="h3">Speakout 2nd Edition Pre-Intermediate Workbook with key
+                                Bundle</ks-a-heading>
+                            <div>
+                                <label validation-message="Select a pet!" for="20416">Lehrmittel</label>
+                                <select name="20416" required="" id="20416"
+                                    data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'>
+                                    <option value="">Lehrmittel wählen...</option>
+                                    <option value="1">E-Book / CHF 22.40</option>
+                                    <option value="2">E-Book / CHF 23.40</option>
+                                    <option value="3">E-Book / CHF 24.40</option>
+                                    <option value="4">E-Book / CHF 25.40</option>
+                                </select>
+                            </div>
+                            <ks-a-heading tag="h3">Speakout 2nd Edition Pre-Intermediate Student Book mit DVD
+                                Rom</ks-a-heading>
+                            <div>
+                                <label validation-message="Select a pet!" for="21786">Lehrmittel</label>
+                                <select name="21786" required="" id="21786"
+                                    data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'>
+                                    <option value="">Lehrmittel wählen...</option>
+                                    <option value="0">E-Book / CHF 22.40</option>
+                                    <option value="1">E-Book / CHF 23.40</option>
+                                    <option value="2">E-Book / CHF 24.40</option>
+                                    <option value="3">E-Book / CHF 25.40</option>
+                                </select>
+                            </div>
+                            <div>
+                                <ks-m-checkout-insurance>
+                                    <h2>Kurskosten absichern?</h2>
+                                    <p>Mit einer Annullationskostenversicherung erhalten Sie in folgenden Fällen Ihr Kursgeld
+                                        zurück:</p>
+                                    <ul>
+                                        <li>Krankheit, Verletzung, Tod</li>
+                                        <li>unvorhergesehener Wechsel des Arbeitsplatzes</li>
+                                        <li>unverschuldete Kündigung des Arbeitsplatzes</li>
+                                        <li>beruflich bedingter Wohnort-wechsel</li>
+                                    </ul>
+                                    <ks-a-radio>
+                                        <div class="wrap">
+                                            <label for="rb-01-01">Mit Versicherung</label>
+                                            <input id="rb-01-01" type="radio" name="rg-01">
+                                            <div class="box"></div>
+                                        </div>
+                                        <div class="wrap">
+                                            <label for="rb-01-02">Ohne Versicherung</label>
+                                            <input id="rb-01-02" type="radio" name="rg-01">
+                                            <div class="box"></div>
+                                        </div>
+                                    </ks-a-radio>
+                                </ks-m-checkout-insurance>
+                            </div>
+                        </section>
+
+                        <section id="sidebar">
+                            <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
+                                status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
+                                time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
+                                course-price="630.00 CHF" initial-configuration-price-data='{
+                                        "annulationskostenversicherungPreis": "16.75 CHF",
+                                        "lehrmittelPreis": "16.90 CHF",
+                                        "materialPreis": "0.00 CHF",
+                                        "totalPreis": "646.90 CHF",
+                                    }'>
+                            </ks-m-checkout-booked-offer>
+                        </section>
+
+                        <section id="bottom">
+
+                            <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
+                                submit></ks-m-back-forward>
+                        </section>
+
+                    </ks-o-checkout-layout>
+
+                </ks-o-checkout>
+            </ks-c-checkout>
+        </form>
+    </m-simple-form-validation>
+</div>

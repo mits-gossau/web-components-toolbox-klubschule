@@ -1,139 +1,140 @@
-<div>Layout Wrapper for Checkout Pages</div>
-<hr>
-<m-simple-form-validation
+<!-- setting style width to 100% is currently necessary as I can't make the checkout layout full width otherwise -->
+<div style="width: 100%">
+  <m-simple-form-validation
     namespace="simple-form-miduweb-"
     no-validation-error-css
     endpoint="/api/test"
     method="POST"
-    schema="{
-        'more': {
-            'input-01': '',
-            'cb-01': 'text',
-            'key': '54325435436534'
-        }
-    }"
->
+  >
     <form>
-        <ks-o-checkout-layout mode="false">
-            <!-- <section slot="top">
-                <ks-m-checkout-color-stage 
-                    back-label="Zurück (fallback browser back)" 
-                    title="Konfiguration: {{ Angebotstitel }}"
+      <ks-c-checkout
+        endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate"
+        initial-request="{
+            'portalId': 29,
+            'mandantId': 111,
+            'kursTyp': 'E',
+            'kursId': 1725969,
+            'centerId': 1016,
+            'spracheId': 'D'
+        }"
+      >
+        <ks-o-checkout mode="false">
+          <ks-o-checkout-layout>
+            <section id="top">
+              <ks-m-checkout-color-stage
+                back-label="Zurück (fallback browser back)"
+                title="Konfiguration: {{ Angebotstitel }}"
+              >
+              </ks-m-checkout-color-stage>
+            </section>
+
+            <section id="main">
+              <h2>Lehrmittel</h2>
+
+              <ks-a-heading tag="h3"
+                >Speakout 2nd Edition Pre-Intermediate Workbook with key
+                Bundle</ks-a-heading
+              >
+              <div>
+                <label validation-message="Select a pet!" for="20416"
+                  >Lehrmittel</label
                 >
-                </ks-m-checkout-color-stage>
-            </section> -->
-
-            <section slot="main">
-                <h2 id="response"></h2>
-                <ks-a-input mode="false">
-                    <div class="wrap">
-                        <label validation-message="Name ist ungültig" for="input-01">Label</label>
-                        <input id="input-01" name="input-01" required type="text" error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span" data-m-v-rules='{"required": {"error-message": "Bitte angeben."}}'>
-                        <div class="message">
-                            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
-                        </div>
-                    </div>
-                </ks-a-input>
-                <ks-a-checkbox namespace="checkbox-default-" mode="false">
-                    <div class="wrap">
-                        <label for="cb-01">Checkbox Label</label>
-                        <input id="cb-01" name="cb-01" type="checkbox" error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span" data-m-v-rules='{"required": {"error-message": "Bitte Policy akzeptieren."}}'>
-                    <div class="box">
-                        <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
-                    </div>
-                    <div class="message">
-                        <a-icon-mdx icon-name="AlertCircle" size="1.25em" rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
-                    </div>
-                    </div>
-                </ks-a-checkbox>
-                <input type="submit" value="Submit" />
-            </section>
-
-            <section slot="sidebar">
-                <h2>Sidebar</h2>
-                <p>(Desktop rechts)</p>
-            </section>
-
-            <section slot="bottom">
-                <ks-m-back-forward
-                    back-label="Zurück"
-                    back-link="#back"
-                    forward-label="Weiter"
-                    submit
-                ></ks-m-back-forward>
-            </section>
-
-        </ks-o-checkout-layout>
-    </form>    
-</m-simple-form-validation>
-
-<!-- inline style necessary to make it truly full width-->
-<!-- <div style="width: 100%">
-    <m-simple-form
-    namespace="simple-form-miduweb-"
-    width="100%"
-    endpoint="/api/test"
-    method="POST"
-    schema="{
-        'input-04': '',
-        'cb-01': 'text',
-        'key': '54325435436534'
-        }
-    }"
-    >
-    <form>
-        <ks-o-checkout-layout>
-            <section slot="top">
-                <ks-m-checkout-color-stage 
-                    back-label="Zurück (fallback browser back)" 
-                    title="Konfiguration: {{ Angebotstitel }}"
+                <select
+                  name="20416"
+                  required=""
+                  id="20416"
+                  data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'
                 >
-                </ks-m-checkout-color-stage>
+                  <option value="">Lehrmittel wählen...</option>
+                  <option value="1">E-Book / CHF 22.40</option>
+                  <option value="2">E-Book / CHF 23.40</option>
+                  <option value="3">E-Book / CHF 24.40</option>
+                  <option value="4">E-Book / CHF 25.40</option>
+                </select>
+              </div>
+              <ks-a-heading tag="h3"
+                >Speakout 2nd Edition Pre-Intermediate Student Book mit DVD
+                Rom</ks-a-heading
+              >
+              <div>
+                <label validation-message="Select a pet!" for="21786"
+                  >Lehrmittel</label
+                >
+                <select
+                  name="21786"
+                  required=""
+                  id="21786"
+                  data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'
+                >
+                  <option value="">Lehrmittel wählen...</option>
+                  <option value="0">E-Book / CHF 22.40</option>
+                  <option value="1">E-Book / CHF 23.40</option>
+                  <option value="2">E-Book / CHF 24.40</option>
+                  <option value="3">E-Book / CHF 25.40</option>
+                </select>
+              </div>
+
+              <br />
+
+              <ks-m-checkout-insurance mode="false">
+                <h2>Kurskosten absichern?</h2>
+                <p>
+                  Mit einer Annullationskostenversicherung erhalten Sie in
+                  folgenden Fällen Ihr Kursgeld zurück:
+                </p>
+                <ul>
+                  <li>Krankheit, Verletzung, Tod</li>
+                  <li>unvorhergesehener Wechsel des Arbeitsplatzes</li>
+                  <li>unverschuldete Kündigung des Arbeitsplatzes</li>
+                  <li>beruflich bedingter Wohnort-wechsel</li>
+                </ul>
+                <ks-a-radio mode="false">
+                  <div class="wrap">
+                    <label for="mit-annulationskostenversicherung">Mit Versicherung</label>
+                    <input id="mit-annulationskostenversicherung" type="radio" name="annulationskostenversicherung" required/>
+                    <div class="box"></div>
+                  </div>
+                  <div class="wrap">
+                    <label for="ohne-annulationskostenversicherung">Ohne Versicherung</label>
+                    <input id="ohne-annulationskostenversicherung" type="radio" name="annulationskostenversicherung" required/>
+                    <div class="box"></div>
+                  </div>
+                </ks-a-radio>
+              </ks-m-checkout-insurance>
             </section>
 
-            <section slot="main">
-                <h2 id="response"></h2>
-                <ks-a-input mode="false">
-                    <div>
-                        <label validation-message="Name ist ungültig" for="input-04">Label</label>
-                        <input id="input-04" value="" required type="text" data-m-v-rules='{"required": {"error-message": "Bitte angeben."}}'>
-                        <div class="hint">
-                            <span>This is a hint.</span>                
-                        </div>
-                        <div class="message">
-                            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
-                        </div>
-                    </div>
-                </ks-a-input>
-                <ks-a-checkbox namespace="checkbox-default-" mode="false">
-                    <div class="wrap">
-                        <label for="cb-01">Checkbox Label</label>
-                        <input id="cb-01" type="checkbox" name="checkbox" error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span" data-m-v-rules='{"required": {"error-message": "Bitte Policy akzeptieren."}}'>
-                    <div class="box">
-                        <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
-                    </div>
-                    <div class="message">
-                        <a-icon-mdx icon-name="AlertCircle" size="1.25em" rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
-                    </div>
-                    </div>
-                </ks-a-checkbox>
-                <input type="submit" value="Submit" />
+            <section id="sidebar">
+              <ks-m-checkout-booked-offer
+                headline="Headline"
+                name="Angebotsname"
+                status="{'code': '1', 'label': 'Garantiert Durchgeführt'}"
+                date="22.4.2023 - 19.6.2023"
+                time="Mo, 18:00 - 20:00 Uhr"
+                street="Hofwiesenstrasse 350"
+                city="8050 Zürich"
+                course-price="630.00 CHF"
+                initial-configuration-price-data='{
+                                        "annulationskostenversicherungPreis": "16.75 CHF",
+                                        "lehrmittelPreis": "16.90 CHF",
+                                        "materialPreis": "0.00 CHF",
+                                        "totalPreis": "646.90 CHF",
+                                    }'
+              >
+              </ks-m-checkout-booked-offer>
             </section>
 
-            <section slot="sidebar">
-                <h2>Sidebar</h2>
-                <p>(Desktop rechts)</p>
+            <section id="bottom">
+              <ks-m-back-forward
+                mode="false"
+                back-label="Zurück"
+                back-link="#back"
+                forward-label="Weiter"
+                submit
+              ></ks-m-back-forward>
             </section>
-
-            <section slot="bottom">
-                <ks-m-back-forward
-                    back-label="Zurück"
-                    back-link="#back"
-                    forward-label="Weiter"
-                    submit
-                ></ks-m-back-forward>
-            </section>
-        </ks-o-checkout-layout>
+          </ks-o-checkout-layout>
+        </ks-o-checkout>
+      </ks-c-checkout>
     </form>
-    </m-simple-form>
-</div> -->
+  </m-simple-form-validation>
+</div>

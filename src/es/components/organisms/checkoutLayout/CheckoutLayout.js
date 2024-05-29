@@ -8,7 +8,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 */
 export default class CheckoutLayout extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
   }
 
   connectedCallback () {
@@ -26,7 +26,7 @@ export default class CheckoutLayout extends Shadow() {
   }
 
   shouldRenderHTML () {
-    return !this.root.querySelector('div')
+    return !this.root.querySelector('.checkout-layout')
   }
 
   /**
@@ -48,25 +48,34 @@ export default class CheckoutLayout extends Shadow() {
   }
 
   renderHTML () {
-    this.html = /* html */`
-        <div class="checkout-layout">
-            <slot name="top"></slot>
-            <o-grid mode="false" namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border>
+    const div = document.createElement('div')
+    div.innerHTML = /* html */`
+      <div class="checkout-layout">
+          <slot name="top"></slot>
+          <o-grid mode="false" namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border>
               <section>
-                <div>
-                    <slot name="main"></slot>
-                </div>
-                <aside class="checkout-layout__aside">
-                    <slot name="sidebar"></slot>
-                </aside>
+                  <div>
+                      <slot name="main"></slot>
+                  </div>
+                  <aside class="checkout-layout__aside">
+                      <slot name="sidebar"></slot>
+                  </aside>
               </section>
-            </o-grid>
-            <ks-o-body-section variant="default" mode="false" has-background>
-                <slot name="bottom"></slot>
-            </ks-o-body-section>
-        </div>
-      `
-
+          </o-grid>
+          <ks-o-body-section variant="default" mode="false" has-background>
+              <slot name="bottom"></slot>
+          </ks-o-body-section>
+      </div>
+    `
+    let top
+    if ((top = this.root.querySelector('#top'))) div.querySelector('slot[name=top]')?.replaceWith(top)
+    let main
+    if ((main = this.root.querySelector('#main'))) div.querySelector('slot[name=main]')?.replaceWith(main)
+    let sidebar
+    if ((sidebar = this.root.querySelector('#sidebar'))) div.querySelector('slot[name=sidebar]')?.replaceWith(sidebar)
+    let bottom
+    if ((bottom = this.root.querySelector('#bottom'))) div.querySelector('slot[name=bottom]')?.replaceWith(bottom)
+    this.html = div.children
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,

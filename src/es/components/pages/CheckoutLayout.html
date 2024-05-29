@@ -3,7 +3,7 @@
 
 <ks-o-checkout-layout>
 
-    <section slot="top">
+    <section id="top">
         <ks-m-checkout-color-stage 
             back-label="Zurück (fallback browser back)" 
             title="Konfiguration: {{ Angebotstitel }}"
@@ -11,17 +11,17 @@
         </ks-m-checkout-color-stage>
     </section>
 
-    <section slot="main">
+    <section id="main">
         <h2>Main Content</h2>
         <p>(Desktop auf linker Seite)</p>
     </section>
 
-    <section slot="sidebar">
+    <section id="sidebar">
         <h2>Sidebar</h2>
         <p>(Desktop rechts)</p>
     </section>
 
-    <section slot="bottom">
+    <section id="bottom">
         <ks-m-back-forward
             back-label="Zurück"
             back-link="#back"
