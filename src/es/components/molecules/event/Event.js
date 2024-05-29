@@ -450,7 +450,7 @@ export default class Event extends Shadow() {
     const {
       datum_label,
       timelabel,
-      badge,
+      zusatztitel,
       status,
       status_label,
       lektionen_label,
@@ -471,7 +471,7 @@ export default class Event extends Shadow() {
             <span class="date">${datum_label}</span>
             <div class="time">
               <span class="days">${timelabel}</span>
-              ${badge ? /* html */ `<div class="badge">${badge}</div>` : ''}
+              ${zusatztitel ? /* html */ `<div class="badge">${zusatztitel}</div>` : ''}
             </div>
           </div>
           <ul class="meta">
@@ -614,7 +614,7 @@ export default class Event extends Shadow() {
   get mockData () {
     return `{
       "preis_info": "Ich bin die Preis Info",
-      "badge": "Blended",
+      "zusatztitel": "Blended",
       "termine": [
         {
           "wochentag": 1,

@@ -33,7 +33,7 @@ export default class Tile extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.badge
+    return !this.title
   }
 
   /**
@@ -259,7 +259,6 @@ export default class Tile extends Shadow() {
     const warnMandatory = 'data attribute requires: '
     const data = Tile.parseAttribute(this.getAttribute('data'))
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
-
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="m-tile">
@@ -346,7 +345,7 @@ export default class Tile extends Shadow() {
     ])
   }
 
-  get badge () {
-    return this.root.querySelector('[badge]')
+  get title () {
+    return this.root.querySelector('.m-tile')
   }
 }

@@ -18,11 +18,11 @@ export default class Checkout extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    this.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
+    document.body.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
 
   disconnectedCallback () {
-    // this.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
+    document.body.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
 
   shouldRenderCSS () {
@@ -50,6 +50,17 @@ export default class Checkout extends Shadow() {
             composed: true
           }
         ))
+      })
+    })
+
+    const radioInputs = this.root.querySelectorAll('input[type=radio]')
+    Array.from(radioInputs).forEach(input => {
+      input.addEventListener('change', () => {
+        this.dispatchEvent(new CustomEvent('request-checkout-configuration', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
       })
     })
   }
