@@ -45,7 +45,7 @@ export default class KsSystemNotification extends SystemNotification {
         box-sizing: content-box;
         padding: var(--icon-padding);
         background-color: ${this.hasAttribute('with-icon-background') ? 'var(--icon-background-color)' : 'transparent'};
-        border: var(--icon-border-width) solid var(--icon-border-color);
+        border: var(--icon-border-width) solid ${this.hasAttribute('no-border') ? 'transparent' : 'var(--icon-border-color)'};
         border-radius: 3px;
         color: var(--icon-color);
         display: flex;
