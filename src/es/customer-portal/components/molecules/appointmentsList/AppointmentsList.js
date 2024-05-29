@@ -258,7 +258,7 @@ export default class AppointmentsList extends Shadow() {
   renderDayHeading (headingText, headingComponent, headingType = 'h2') {
     const heading = new headingComponent.constructorClass() // eslint-disable-line
     heading.setAttribute('tag', headingType)
-    heading.html = headingText
+    heading.innerHTML = headingText
     return heading
   }
 

@@ -108,7 +108,7 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderWeekDayFilter (dayCodes) {
     return /* html */`
-      <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-time">
+      <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-time" close-event-name="request-subscription-filter">
         <div class="container dialog-header" tabindex="0">
             <div id="back">
                 &nbsp;
@@ -135,8 +135,21 @@ export default class AppointmentsFilter extends Shadow() {
             <a-button id="close" namespace="button-secondary-" no-pointer-events>TODO: Add Translation "Close Overlay" </a-button>
             <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="TODO: Add Translation 'CTA'">Schliessen</ks-a-number-of-offers-button>
         </div>
-        <ks-a-button id="show-modal" namespace="button-secondary-" color="tertiary" justify-content="flex-start">TODO: Add Translation "Open Filter Name"</ks-a-button>
       </m-dialog>
+      ${dayCodes.some(dayCode => dayCode.selected)
+        ? /* html */`
+            <m-double-button id="show-modal" namespace="double-button-default-" width="100%">
+              <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between" click-no-toggle-active request-event-name="dialog-open-time">
+                <span part="label1">${dayCodes.reduce((acc, dayCode) => (dayCode.selected ? acc ? `${acc}, ${dayCode.dayCodeDescription}` : dayCode.dayCodeDescription : acc), '')}</span>
+                <span part="label2" dynamic></span>
+              </ks-a-button>
+              <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter-time">
+                <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+              </ks-a-button>
+            </m-double-button>
+          `
+        : '<ks-a-button id="show-modal" namespace="button-secondary-" color="tertiary" justify-content="flex-start" request-event-name="dialog-open-time">TODO: Add Translation "Open Filter Name"</ks-a-button>'
+      }
     `
   }
 
