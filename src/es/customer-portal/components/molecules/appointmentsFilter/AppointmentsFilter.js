@@ -51,6 +51,10 @@ export default class AppointmentsFilter extends Shadow() {
       {
         path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`,
         namespaceFallback: true
+      },
+      {
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
       }
     ]
     switch (this.getAttribute('namespace')) {
@@ -109,55 +113,7 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderDayFilter (dayCodes) {
     return /* html */`
-      <m-dialog
-        namespace="dialog-left-slide-in-"
-        show-event-name="dialog-open-day"
-        close-event-name="request-subscription-day-filter">
-          <div class="container dialog-header" tabindex="0">
-              <div id="back">&nbsp;</div>
-              <h3>TODO: Add Translation "Filter Name"</h3>
-              <div id="close">
-                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-              </div>
-          </div>
-          <div class="container dialog-content">
-              <p class="reset-link">
-                  <a-button
-                    namespace="button-transparent-"
-                    request-event-name="reset-all-filters">
-                      TODO: Add Translation "Reset All Filters" <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
-                  </a-button>
-              </p>
-            <div class="sub-level margin-bottom">
-                ${dayCodes.reduce((acc, dayCode) => acc + /* html */`
-                  <mdx-component mutation-callback-event-name="request-subscription-day-filter">
-                    <mdx-checkbox
-                      ${dayCode.selected ? ' checked' : ''} 
-                      variant="no-border"
-                      value="${dayCode.dayCode}" 
-                      label="${dayCode.dayCodeDescription}">
-                    </mdx-checkbox>
-                  </mdx-component>
-                `, '')}
-              </div>
-          </div>
-          <div class="container dialog-footer">
-            <a-button 
-              id="close" 
-              namespace="button-secondary-" 
-              no-pointer-events>
-                TODO: Add Translation "Close Overlay"
-            </a-button>
-            <ks-a-number-of-offers-button 
-              id="close" 
-              class="button-show-all-offers" 
-              namespace="button-primary-" 
-              no-pointer-events 
-              translation-key-cta="TODO: Add Translation 'CTA'">
-                Schliessen
-            </ks-a-number-of-offers-button>
-          </div>
-      </m-dialog>
+      ${this.renderDialog('dialog-open-day', 'request-subscription-day-filter', 'request-subscription-day-filter', dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay')}
       ${dayCodes.some(dayCode => dayCode.selected)
         ? /* html */`
         <m-double-button
@@ -201,55 +157,7 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderTimeFilter (timeCodes) {
     return /* html */`
-      <m-dialog
-        namespace="dialog-left-slide-in-"
-        show-event-name="dialog-open-time"
-        close-event-name="request-subscription-time-filter">
-          <div class="container dialog-header" tabindex="0">
-              <div id="back">&nbsp;</div>
-              <h3>TODO: Add Translation "Filter Name"</h3>
-              <div id="close">
-                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-              </div>
-          </div>
-          <div class="container dialog-content">
-              <p class="reset-link">
-                  <a-button
-                    namespace="button-transparent-"
-                    request-event-name="reset-all-filters">
-                      TODO: Add Translation "Reset All Filters" <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
-                  </a-button>
-              </p>
-            <div class="sub-level margin-bottom">
-              ${timeCodes.reduce((acc, timeCode) => acc + /* html */`
-                <mdx-component mutation-callback-event-name="request-subscription-time-filter">
-                  <mdx-checkbox
-                    ${timeCode.selected ? ' checked' : ''} 
-                    variant="no-border"
-                    value="${timeCode.timeCode}" 
-                    label="${timeCode.timeCodeDescription}">
-                  </mdx-checkbox>
-                </mdx-component>
-              `, '')}
-            </div>
-        </div>
-        <div class="container dialog-footer">
-          <a-button 
-            id="close" 
-            namespace="button-secondary-" 
-            no-pointer-events>
-              TODO: Add Translation "Close Overlay"
-          </a-button>
-          <ks-a-number-of-offers-button 
-            id="close" 
-            class="button-show-all-offers" 
-            namespace="button-primary-" 
-            no-pointer-events 
-            translation-key-cta="TODO: Add Translation 'CTA'">
-              Schliessen
-          </ks-a-number-of-offers-button>
-        </div>
-      </m-dialog>
+      ${this.renderDialog('dialog-open-time', 'request-subscription-time-filter', 'request-subscription-time-filter', timeCodes, 'timeCode', 'timeCodeDescription', 'CP.cpFilterTitleTime')}
       ${timeCodes.some(timeCode => timeCode.selected)
         ? /* html */`
         <m-double-button id="show-modal" namespace="double-button-default-">
@@ -291,57 +199,9 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderLocationFilter (locations) {
     return /* html */`
-      <m-dialog
-        namespace="dialog-left-slide-in-"
-        show-event-name="dialog-open-location"
-        close-event-name="request-subscription-location-filter">
-          <div class="container dialog-header" tabindex="0">
-              <div id="back">&nbsp;</div>
-              <h3>TODO: Add Translation "Filter Name"</h3>
-              <div id="close">
-                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-              </div>
-          </div>
-          <div class="container dialog-content">
-              <p class="reset-link">
-                  <a-button
-                    namespace="button-transparent-"
-                    request-event-name="reset-all-filters">
-                      TODO: Add Translation "Reset All Filters" <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
-                  </a-button>
-              </p>
-            <div class="sub-level margin-bottom">
-              ${locations.reduce((acc, location) => acc + /* html */`
-                <mdx-component mutation-callback-event-name="request-subscription-location-filter">
-                  <mdx-checkbox
-                    ${location.selected ? ' checked' : ''} 
-                    variant="no-border"
-                    value="${location.locationId}" 
-                    label="${location.locationDescription}">
-                  </mdx-checkbox>
-                </mdx-component>
-              `, '')}
-            </div>
-        </div>
-        <div class="container dialog-footer">
-          <a-button 
-            id="close" 
-            namespace="button-secondary-" 
-            no-pointer-events>
-              TODO: Add Translation "Close Overlay"
-          </a-button>
-          <ks-a-number-of-offers-button 
-            id="close" 
-            class="button-show-all-offers" 
-            namespace="button-primary-" 
-            no-pointer-events 
-            translation-key-cta="TODO: Add Translation 'CTA'">
-              Schliessen
-          </ks-a-number-of-offers-button>
-        </div>
-      </m-dialog>
+      ${this.renderDialog('dialog-open-location', 'request-subscription-location-filter', 'request-subscription-location-filter', locations, 'locationId', 'locationDescription', 'CP.cpFilterTitleLocation')}
       ${locations.some(location => location.selected)
-        ? /* html */`
+        ? /* html */ `
         <m-double-button id="show-modal" namespace="double-button-default-">
           <ks-a-button
             filter
@@ -364,7 +224,7 @@ export default class AppointmentsFilter extends Shadow() {
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
             </ks-a-button>
           </m-double-button>
-      `
+        `
         : /* html */ `
         <ks-a-button
           id="show-modal"
@@ -376,6 +236,73 @@ export default class AppointmentsFilter extends Shadow() {
         </ks-a-button>
       `
       }
+    `
+  }
+
+  /**
+   * Render dialog window
+   * @param {String} showDialogEventName
+   * @param {String} closeDialogEventName
+   * @param {String} mutationCallbackEventName
+   * @param {Object} checkboxDataCollection
+   * @param {String} ckeckboxValueKey
+   * @param {String} checkboxLabelKey
+   * @param {String} translationKeyTitle
+   * @returns {String} Dialog window
+   */
+  renderDialog (showDialogEventName, closeDialogEventName, mutationCallbackEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle) {
+    return /* html */ `
+      <m-dialog
+        namespace="dialog-left-slide-in-"
+        show-event-name="${showDialogEventName}"
+        close-event-name="${closeDialogEventName}">
+          <div class="container dialog-header" tabindex="0">
+              <div id="back">&nbsp;</div>
+              <h3>
+                <a-translation data-trans-key="${translationKeyTitle}"></a-translation>
+              </h3>
+              <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+              </div>
+          </div>
+          <div class="container dialog-content">
+              <!--<p class="reset-link">
+                  <a-button
+                    namespace="button-transparent-"
+                    request-event-name="reset-all-filters">
+                      TODO: Add Translation "Reset All Filters" <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                  </a-button>
+              </p>-->
+            <div class="sub-level margin-bottom">
+                ${checkboxDataCollection.reduce((acc, checkbox) => acc + /* html */ `
+                  <mdx-component mutation-callback-event-name="${mutationCallbackEventName}">
+                    <mdx-checkbox
+                      ${checkbox.selected ? ' checked' : ''} 
+                      variant="no-border"
+                      value="${checkbox[ckeckboxValueKey]}" 
+                      label="${checkbox[checkboxLabelKey]}">
+                    </mdx-checkbox>
+                  </mdx-component>
+                `, '')}
+              </div>
+          </div>
+          <div class="container dialog-footer">
+            <a-button 
+              id="close" 
+              namespace="button-secondary-" 
+              no-pointer-events>
+                TODO: Add Translation "Close Overlay"
+            </a-button>
+            <ks-a-number-of-offers-button 
+              id="close" 
+              class="button-show-all-offers" 
+              namespace="button-primary-" 
+              no-pointer-events 
+              translation-key-cta="TODO: Add Translation 'CTA'">
+                Numbers
+            </ks-a-number-of-offers-button>
+          </div>
+      </m-dialog> 
     `
   }
 }

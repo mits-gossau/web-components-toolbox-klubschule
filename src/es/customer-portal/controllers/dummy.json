@@ -122,5 +122,8 @@
     "CP.cpAppointmentBookedViaSubscription":"[DE | Termin wird über ihr Abonnement gebucht]",
     "CP.cpYouHaveBookedTheAppointmentSuccessfully":"[DE | Sie haben den Termin erfolgreich gebucht]",
     "CP.cpHerebyYouCancelThisAppointment":"[DE | Hiermit stornieren sie diesen Termin]",
-    "CP.cpYouHaveSuccessfullyCanceledTheAppointment":"[DE | Sie haben den Termin erfolgreich storniert]"
+    "CP.cpYouHaveSuccessfullyCanceledTheAppointment":"[DE | Sie haben den Termin erfolgreich storniert]",
+    "CP.cpFilterTitleLocation": "[DE | Standorte]",
+    "CP.cpFilterTitleTime": "[DE | Zeit]",
+    "CP.cpFilterTitleDay": "[DE | Tag]"
 }
