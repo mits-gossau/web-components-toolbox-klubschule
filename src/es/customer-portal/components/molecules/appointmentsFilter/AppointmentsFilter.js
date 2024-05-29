@@ -241,6 +241,7 @@ export default class AppointmentsFilter extends Shadow() {
 
   /**
    * Render dialog window
+   *
    * @param {String} showDialogEventName
    * @param {String} closeDialogEventName
    * @param {String} mutationCallbackEventName
@@ -248,7 +249,7 @@ export default class AppointmentsFilter extends Shadow() {
    * @param {String} ckeckboxValueKey
    * @param {String} checkboxLabelKey
    * @param {String} translationKeyTitle
-   * @returns {String} Dialog window
+   * @returns {String} Dialog Window HTML
    */
   renderDialog (showDialogEventName, closeDialogEventName, mutationCallbackEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle) {
     return /* html */ `
@@ -256,6 +257,13 @@ export default class AppointmentsFilter extends Shadow() {
         namespace="dialog-left-slide-in-"
         show-event-name="${showDialogEventName}"
         close-event-name="${closeDialogEventName}">
+          <style>
+            :host .close-button-wrapper {
+              display: flex;
+              width: 100%;
+              justify-content: flex-end;
+            }
+          </style>
           <div class="container dialog-header" tabindex="0">
               <div id="back">&nbsp;</div>
               <h3>
@@ -266,41 +274,39 @@ export default class AppointmentsFilter extends Shadow() {
               </div>
           </div>
           <div class="container dialog-content">
-              <!--<p class="reset-link">
-                  <a-button
-                    namespace="button-transparent-"
-                    request-event-name="reset-all-filters">
-                      TODO: Add Translation "Reset All Filters" <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
-                  </a-button>
-              </p>-->
-            <div class="sub-level margin-bottom">
-                ${checkboxDataCollection.reduce((acc, checkbox) => acc + /* html */ `
-                  <mdx-component mutation-callback-event-name="${mutationCallbackEventName}">
-                    <mdx-checkbox
-                      ${checkbox.selected ? ' checked' : ''} 
-                      variant="no-border"
-                      value="${checkbox[ckeckboxValueKey]}" 
-                      label="${checkbox[checkboxLabelKey]}">
-                    </mdx-checkbox>
-                  </mdx-component>
-                `, '')}
+            <p class="reset-link"></p>
+            <div class="sub-content">
+              <div>
+                  ${checkboxDataCollection.reduce((acc, checkbox) => acc + /* html */ `
+                    <mdx-component mutation-callback-event-name="${mutationCallbackEventName}">
+                      <mdx-checkbox
+                        ${checkbox.selected ? ' checked' : ''} 
+                        variant="no-border"
+                        value="${checkbox[ckeckboxValueKey]}" 
+                        label="${checkbox[checkboxLabelKey]}">
+                      </mdx-checkbox>
+                    </mdx-component>
+                  `, '')}
               </div>
+            </div>
           </div>
           <div class="container dialog-footer">
-            <a-button 
-              id="close" 
-              namespace="button-secondary-" 
-              no-pointer-events>
-                TODO: Add Translation "Close Overlay"
-            </a-button>
-            <ks-a-number-of-offers-button 
+            <div class="close-button-wrapper">
+              <ks-a-button 
+                color="secondary"
+                id="close"
+                namespace="button-tertiary-">
+                  <a-translation data-trans-key='CP.cpAppointmentClose'/></a-translation>
+              </ks-a-button>
+            </div>
+            <!--<ks-a-number-of-offers-button 
               id="close" 
               class="button-show-all-offers" 
               namespace="button-primary-" 
               no-pointer-events 
               translation-key-cta="TODO: Add Translation 'CTA'">
                 Numbers
-            </ks-a-number-of-offers-button>
+            </ks-a-number-of-offers-button>-->
           </div>
       </m-dialog> 
     `
