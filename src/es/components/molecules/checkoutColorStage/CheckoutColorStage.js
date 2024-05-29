@@ -3,10 +3,10 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 
 /**
 * @export
-* @class Contact
+* @class CheckoutColorStage
 * @type {CustomElementConstructor}
 */
-export default class Contact extends Shadow() {
+export default class CheckoutColorStage extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
 
@@ -19,14 +19,14 @@ export default class Contact extends Shadow() {
       this.renderHTML().then(() => {
         if (!this.backButton) {
           this.backButton = this.root.querySelector('o-grid').shadowRoot.querySelector('.back-button')
-          this.backButton.addEventListener('click', this.backLinkListener)
+          if (this.backButton) this.backButton.addEventListener('click', this.backLinkListener)
         }
       })
     }
   }
 
   disconnectedCallback () {
-    if (this.backButton) this.backButton.removeEvenetListener('click', this.backLinkListener)
+    if (this.backButton) this.backButton.removeEventListener('click', this.backLinkListener)
   }
 
   backLinkListener (event) {
