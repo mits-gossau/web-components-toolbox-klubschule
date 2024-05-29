@@ -16,34 +16,39 @@ import { makeUniqueCourseId } from '../../helpers/Shared.js'
 export default class Appointments extends HTMLElement {
   constructor () {
     super()
-
     this.abortControllerSubscriptionCourseAppointments = null
     this.abortControllerSubscriptionCourseAppointmentDetail = null
     this.abortControllerSubscriptionCourseAppointmentBooking = null
     this.abortControllerSubscriptionCourseAppointmentReversalListener = null
     this.abortControllerBookedSubscriptionCourseAppointments = null
-    this.lastFilters = null
+    this.lastDayFilters = null
+    this.lastTimeFilters = null
   }
 
   connectedCallback () {
-    this.addEventListener(this.getAttribute('request-subscription-course-appointments') || 'request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
-    this.addEventListener(this.getAttribute('request-subscription-course-appointment-detail') || 'request-subscription-course-appointment-detail', this.requestSubscriptionCourseAppointmentDetailListener)
-    this.addEventListener(this.getAttribute('request-subscription-course-appointment-reversal') || 'request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
-    this.addEventListener(this.getAttribute('request-subscription-course-appointment-booking') || 'request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
-    this.addEventListener(this.getAttribute('request-booked-subscription-course-appointments') || 'request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
-    this.addEventListener(this.getAttribute('request-subscription-filter') || 'request-subscription-filter', this.requestSubscriptionFilterListener)
-    this.addEventListener(this.getAttribute('reset-filter-time') || 'reset-filter-time', this.resetFilterTimeListener)
+    this.addEventListener('request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
+    this.addEventListener('request-subscription-course-appointment-detail', this.requestSubscriptionCourseAppointmentDetailListener)
+    this.addEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
+    this.addEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
+    this.addEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
+    // day filter
+    this.addEventListener('request-subscription-day-filter', this.requestSubscriptionDayFilterListener)
+    this.addEventListener('reset-filter-day', this.resetFilterDayListener)
+    // time filter
+    this.addEventListener('request-subscription-time-filter', this.requestSubscriptionTimeFilterListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener(this.getAttribute('request-subscription-course-appointments') || 'request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
-    this.removeEventListener(this.getAttribute('request-subscription-course-appointment-detail') || 'request-subscription-course-appointment-detail', this.requestSubscriptionCourseAppointmentDetailListener)
-    this.removeEventListener(this.getAttribute('request-subscription-course-appointment-reversal') || 'request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
-    this.removeEventListener(this.getAttribute('request-subscription-course-appointment-booking') || 'request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
-    this.removeEventListener(this.getAttribute('request-booked-subscription-course-appointments') || 'request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
-    this.removeEventListener(this.getAttribute('request-subscription-filter') || 'request-subscription-filter', this.requestSubscriptionFilterListener)
-    this.removeEventListener(this.getAttribute('request-subscription-filter') || 'request-subscription-filter', this.requestSubscriptionFilterListener)
-    this.removeEventListener(this.getAttribute('reset-filter-time') || 'reset-filter-time', this.resetFilterTimeListener)
+    this.removeEventListener('request-subscription-course-appointments', this.requestSubscriptionCourseAppointmentsListener)
+    this.removeEventListener('request-subscription-course-appointment-detail', this.requestSubscriptionCourseAppointmentDetailListener)
+    this.removeEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
+    this.removeEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
+    this.removeEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
+    // day filter
+    this.removeEventListener('request-subscription-day-filter', this.requestSubscriptionDayFilterListener)
+    this.removeEventListener('reset-filter-day', this.resetFilterDayListener)
+    // time filter
+    this.removeEventListener('request-subscription-time-filter', this.requestSubscriptionTimeFilterListener)
   }
 
   /**
@@ -63,7 +68,7 @@ export default class Appointments extends HTMLElement {
       subscriptionId
     }
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionCourseAppointments)
-    this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
+    this.dispatchEvent(new CustomEvent('update-subscription-course-appointments', {
       detail: {
         fetch: (this.subscriptionCourseAppointments = fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) return await response.json()
@@ -75,13 +80,65 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
-  requestSubscriptionFilterListener = (event, force = false) => {
+  requestSubscriptionTimeFilterListener = (event, force = false) => {
     // mdx prevent double event
     if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) return
     const subscriptionCourseAppointmentsFiltered = this.subscriptionCourseAppointments.then(async (appointments) => {
       const appointmentsClone = structuredClone(appointments)
       // keep last filters
-      if (this.lastFilters) appointmentsClone.filters = this.lastFilters
+      if (this.lastTimeFilters) appointmentsClone.filters = this.lastTimeFilters
+
+      // TODO: Find not only timeCodes but also the other two possible filters regarding the event target
+      if (event?.detail?.target) {
+        // find checkbox event target dayCode
+        const newTimeCode = appointmentsClone.filters.timeCodes.find(timeCode => {
+          return timeCode.timeCode === Number(event.detail.target.value)
+        })
+        // sync filter selected with checkbox checked
+        if (newTimeCode) newTimeCode.selected = event.detail.target.checked
+        // keep this filter for next request
+        this.lastTimeFilters = structuredClone(appointmentsClone.filters)
+      }
+      // timeCode
+      // filter all appointments (time in dayList) by all possible selected filters
+      if (appointmentsClone.filters.timeCodes.some(dayCode => dayCode.selected)) {
+        appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(time => {
+          time.subscriptionCourseAppointments = time.subscriptionCourseAppointments.filter(appointment => {
+            return !!appointmentsClone.filters.timeCodes.find(timeCode => {
+              return appointment.courseAppointmentTimeCode.some(time => time === timeCode.timeCode && timeCode.selected)
+            })
+          })
+          return time.subscriptionCourseAppointments.length ? time : null
+        })
+      }
+
+      // filter out empty time
+      appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(time => time)
+      return appointmentsClone
+    })
+    console.log('TIME', subscriptionCourseAppointmentsFiltered)
+    this.dispatchEvent(new CustomEvent('update-subscription-course-appointments', {
+      detail: {
+        fetch: subscriptionCourseAppointmentsFiltered
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+
+  /**
+   * Filter Appointments by day
+   * @param {CustomEventInit} event
+   * @param {Boolean} force
+   */
+  requestSubscriptionDayFilterListener = (event, force = false) => {
+    // mdx prevent double event
+    if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) return
+    const subscriptionCourseAppointmentsFiltered = this.subscriptionCourseAppointments.then(async (appointments) => {
+      const appointmentsClone = structuredClone(appointments)
+      // keep last filters
+      if (this.lastDayFilters) appointmentsClone.filters = this.lastDayFilters
 
       // TODO: Find not only dayCodes but also the other two possible filters regarding the event target
       if (event?.detail?.target) {
@@ -90,7 +147,7 @@ export default class Appointments extends HTMLElement {
         // sync filter selected with checkbox checked
         if (newDayCode) newDayCode.selected = event.detail.target.checked
         // keep this filter for next request
-        this.lastFilters = structuredClone(appointmentsClone.filters)
+        this.lastDayFilters = structuredClone(appointmentsClone.filters)
       }
 
       // dayCode
@@ -110,8 +167,8 @@ export default class Appointments extends HTMLElement {
       appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(day => day)
       return appointmentsClone
     })
-    console.log(subscriptionCourseAppointmentsFiltered)
-    this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
+    console.log('DAY', subscriptionCourseAppointmentsFiltered)
+    this.dispatchEvent(new CustomEvent('update-subscription-course-appointments', {
       detail: {
         fetch: subscriptionCourseAppointmentsFiltered
       },
@@ -121,9 +178,13 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
-  resetFilterTimeListener = event => {
-    this.lastFilters.dayCodes.forEach(dayCode => (dayCode.selected = false))
-    this.requestSubscriptionFilterListener(undefined, true)
+  /**
+   * Reset day filter
+   * @param {CustomEventInit} event
+   */
+  resetFilterDayListener = event => {
+    this.lastDayFilters.dayCodes.forEach(dayCode => (dayCode.selected = false))
+    this.requestSubscriptionDayFilterListener(event, true)
   }
 
   /**
