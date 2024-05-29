@@ -54,15 +54,15 @@ export default class WithFacet extends Shadow() {
 
     this.requestWithFacetListener = (event) => {
       // mdx prevent double event
-      if (event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
+      if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
       let request
-      const shouldResetAllFilters = event.type === 'reset-all-filters'
-      const shouldResetFilter = event.type === 'reset-filter'
-      const shouldResetFilterFromFilterSelectButton = event.detail?.this?.hasAttribute('filter')
+      const shouldResetAllFilters = event?.type === 'reset-all-filters'
+      const shouldResetFilter = event?.type === 'reset-filter'
+      const shouldResetFilterFromFilterSelectButton = event?.detail?.this?.hasAttribute('filter')
       let isNextPage = false
 
-      if (event.detail?.ppage && this.lastRequest) {
+      if (event?.detail?.ppage && this.lastRequest) {
         // ppage reuse last request
         request = JSON.stringify(Object.assign(JSON.parse(this.lastRequest), { ppage: event.detail.ppage }))
         isNextPage = true
@@ -97,7 +97,7 @@ export default class WithFacet extends Shadow() {
         // TODO: @Alex, the location has to be kept in the URL
 
         // keep the last search location inside initialRequestObj
-        if (event.detail?.key === 'location-search') {
+        if (event?.detail?.key === 'location-search') {
           if (!!event.detail.lat && !!event.detail.lng ) {
             initialRequestObj.clat = event.detail.lat
             initialRequestObj.clong = event.detail.lng
@@ -110,7 +110,7 @@ export default class WithFacet extends Shadow() {
         this.updateURLParams()
 
         
-        const hasSearchTerm = event.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
+        const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
         let hasSearchLocation = false
         const filterRequest = `{
@@ -119,8 +119,8 @@ export default class WithFacet extends Shadow() {
           "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
           "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
           "searchcontent": ${!this.hasAttribute('no-search-tab')}
-          ${(hasSorting = event.detail?.key === 'sorting' && !!event.detail.id) ? `,"sorting": "${event.detail.id}"` : ''}
-          ${hasSearchTerm ? `,"searchText": "${event.detail?.key === 'input-search' ? event.detail.value : this.params.get('q')}"`: ''}
+          ${(hasSorting = event?.detail?.key === 'sorting' && !!event.detail.id) ? `,"sorting": "${event.detail.id}"` : ''}
+          ${hasSearchTerm ? `,"searchText": "${event?.detail?.key === 'input-search' ? event.detail.value : this.params.get('q')}"`: ''}
           ${(hasSearchLocation = !!initialRequestObj.clat) ? `,"clat": "${initialRequestObj.clat}"` : ''}
           ${(hasSearchLocation = !!initialRequestObj.clong) ? `,"clong": "${initialRequestObj.clong}"` : ''}
         }`
@@ -210,8 +210,7 @@ export default class WithFacet extends Shadow() {
                         }
                       }
                     })
-
-                    self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+                    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
                   }
                 })
 
@@ -240,10 +239,10 @@ export default class WithFacet extends Shadow() {
             composed: true
           }))
           const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
-          if (event.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+          if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
           this.dispatchEvent(new CustomEvent('location-change', {
             detail: {
-              searchTerm: event.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
+              searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
               searchCoordinates
             },
             bubbles: true,
@@ -280,9 +279,10 @@ export default class WithFacet extends Shadow() {
       }))
     }
 
-    window.addEventListener('popstate', () => {
+    this.popstateListener = event => {
       this.params = this.catchURLParams()
-    })
+      this.requestWithFacetListener()
+    }
   }
 
   connectedCallback () {
@@ -290,13 +290,15 @@ export default class WithFacet extends Shadow() {
     this.addEventListener('reset-all-filters', this.requestWithFacetListener)
     this.addEventListener('reset-filter', this.requestWithFacetListener)
     this.addEventListener('request-locations', this.requestLocations)
+    self.addEventListener('popstate', this.popstateListener)
   }
-
+  
   disconnectedCallback () {
     this.removeEventListener('request-with-facet', this.requestWithFacetListener)
     this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
     this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.removeEventListener('request-locations', this.requestLocations)
+    self.removeEventListener('popstate', this.popstateListener)
   }
 
   catchURLParams () {
@@ -343,19 +345,19 @@ export default class WithFacet extends Shadow() {
         }
       })
 
-      self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
   removeFilterParamsFromURL (filterParent) {
     if (this.params) {
       this.params.delete(`${filterParent}`)
-      self.history.pushState({}, '', `${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
   constructFilterItem (event) {
-    const filterItem = event.detail?.wrapper?.filterItem
+    const filterItem = event?.detail?.wrapper?.filterItem
 
     return filterItem
       ? `{
@@ -401,5 +403,13 @@ export default class WithFacet extends Shadow() {
         "visible": ${filterItem.visible || true}
       }`
       : ''
+  }
+
+  static historyPushState (...args) {
+    // Avoid multiple empty pushes, otherwise the navigation history becomes jammed
+    if ((new URL(args[2])).search !== location.search) {
+      // @ts-ignore
+      self.history.pushState(...args)
+    }
   }
 }
