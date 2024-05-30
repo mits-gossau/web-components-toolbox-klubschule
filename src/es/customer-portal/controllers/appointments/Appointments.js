@@ -85,7 +85,13 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
+  /**
+   * Filter Appointments by Location
+   * @param {CustomEventInit} event
+   * @param {Boolean} force
+   */
   requestSubscriptionLocationFilterListener = (event, force = false) => {
+    debugger
     // mdx prevent double event
     if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) return
     const subscriptionCourseAppointmentsFiltered = this.subscriptionCourseAppointments.then(async (appointments) => {
@@ -136,6 +142,7 @@ export default class Appointments extends HTMLElement {
    * @param {Boolean} force
    */
   requestSubscriptionTimeFilterListener = (event, force = false) => {
+    debugger
     // mdx prevent double event
     if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) return
     const subscriptionCourseAppointmentsFiltered = this.subscriptionCourseAppointments.then(async (appointments) => {
@@ -188,8 +195,11 @@ export default class Appointments extends HTMLElement {
    * @param {Boolean} force
    */
   requestSubscriptionDayFilterListener = (event, force = false) => {
+    debugger
     // mdx prevent double event
-    if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) return
+    if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) {
+      return
+    }
     const subscriptionCourseAppointmentsFiltered = this.subscriptionCourseAppointments.then(async (appointments) => {
       const appointmentsClone = structuredClone(appointments)
       // keep last filters
