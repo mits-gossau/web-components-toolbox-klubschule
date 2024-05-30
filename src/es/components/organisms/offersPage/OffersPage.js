@@ -16,7 +16,7 @@ export default class OffersPage extends Shadow() {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-        bodySection.shadowRoot.querySelector('#pagination').style.display = data.ppage === -1 || data.total <= data.psize * data.ppage ? 'none': 'block'
+        bodySection.shadowRoot.querySelector('#pagination').style.display = data.ppage === -1 ? 'none': 'block'
 
         // Set Sort
         const sort = bodySection.shadowRoot.querySelector('#sort-options')

@@ -371,7 +371,7 @@ export default class TileList extends Shadow() {
 
   renderTile (tileData, add = false) {
     this.ppage = tileData.ppage || this.ppage
-    this.loadMore.style.display = tileData.ppage === -1 || tileData.total <= tileData.psize * tileData.ppage ? 'none': 'flex'
+    this.loadMore.style.display = tileData.ppage === -1 ? 'none': 'flex'
     const tileString = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
       // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
       tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
