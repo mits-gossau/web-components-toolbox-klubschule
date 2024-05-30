@@ -109,7 +109,7 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderDayFilter (dayCodes) {
     return /* html */`
-      ${this.renderDialog('dialog-open-day', 'request-subscription-day-filter', 'request-subscription-day-filter', dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay')}
+      ${this.renderDialog('dialog-open-day', 'request-subscription-location-filter', 'request-subscription-location-filter', dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day')}
       ${dayCodes.some(dayCode => dayCode.selected)
       ? /* html */`
         <m-double-button
@@ -153,7 +153,7 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderTimeFilter (timeCodes) {
     return /* html */`
-      ${this.renderDialog('dialog-open-time', 'request-subscription-time-filter', 'request-subscription-time-filter', timeCodes, 'timeCode', 'timeCodeDescription', 'CP.cpFilterTitleTime')}
+      ${this.renderDialog('dialog-open-time', 'request-subscription-location-filter', 'request-subscription-location-filter', timeCodes, 'timeCode', 'timeCodeDescription', 'CP.cpFilterTitleTime', 'time')}
       ${timeCodes.some(timeCode => timeCode.selected)
       ? /* html */`
         <m-double-button id="show-modal" namespace="double-button-default-">
@@ -195,7 +195,7 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderLocationFilter (locations) {
     return /* html */`
-      ${this.renderDialog('dialog-open-location', 'request-subscription-location-filter', 'request-subscription-location-filter', locations, 'locationId', 'locationDescription', 'CP.cpFilterTitleLocation')}
+      ${this.renderDialog('dialog-open-location', 'request-subscription-location-filter', 'request-subscription-location-filter', locations, 'locationId', 'locationDescription', 'CP.cpFilterTitleLocation', 'location')}
       ${locations.some(location => location.selected)
       ? /* html */ `
         <m-double-button id="show-modal" namespace="double-button-default-">
@@ -247,7 +247,7 @@ export default class AppointmentsFilter extends Shadow() {
    * @param {String} translationKeyTitle
    * @returns {String} Dialog Window HTML
    */
-  renderDialog (showDialogEventName, closeDialogEventName, mutationCallbackEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle) {
+  renderDialog (showDialogEventName, closeDialogEventName, mutationCallbackEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle, type) {
     return /* html */ `
       <m-dialog
         namespace="dialog-left-slide-in-"
@@ -279,7 +279,8 @@ export default class AppointmentsFilter extends Shadow() {
                         ${checkbox.selected ? ' checked' : ''} 
                         variant="no-border"
                         value="${checkbox[ckeckboxValueKey]}" 
-                        label="${checkbox[checkboxLabelKey]}">
+                        label="${checkbox[checkboxLabelKey]}"
+                        type="${type}">
                       </mdx-checkbox>
                     </mdx-component>
                   `, '')}
