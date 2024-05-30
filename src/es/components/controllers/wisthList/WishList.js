@@ -1,17 +1,49 @@
 // @ts-check
 
-/** @typedef {{
-  term: string,
-  typ: 1|2 // TYP 1 ist Kurs, TYP 2 ist Sparte
-}} Item */
+/*
+id assembly: kurstyp_kursid_centerid
 
-/** @typedef {{
-  total: number,
-  success: boolean,
-  searchText: string,
-  items: Item[],
-  cms: []
-}} fetchAutoCompleteEventDetail */
+GET MULTIPLE SPECIFIC COURSES:
+
+"filter": [
+  {
+      "hasChilds": false,
+      "label": "",
+      "id": "26",
+      "typ": "",
+      "level": "",
+      "color": "",
+      "selected": false,
+      "disabled": false,
+      "hideCount": false,
+      "children": [
+          {
+              "hasChilds": false,
+              "label": "",
+              "id": "D_101312",
+              "typ": "",
+              "level": "",
+              "color": "",
+              "selected": true,
+              "disabled": false,
+              "hideCount": false
+          },
+          {
+              "hasChilds": false,
+              "label": "",
+              "id": "D_88449",
+              "typ": "",
+              "level": "",
+              "color": "",
+              "selected": true,
+              "disabled": false,
+              "hideCount": false
+          }
+      ]
+    }
+  ]
+  
+*/
 
 /* global fetch */
 /* global self */
@@ -22,7 +54,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 /**
  * WishList are retrieved via the corresponding endpoint as set as an attribute
  * As a controller, this component communicates exclusively through events
- * Example: web-components-toolbox-klubschule
+ * Definition: https://wiki.migros.net/pages/viewpage.action?pageId=731830238
  *
  * @export
  * @class WishList
