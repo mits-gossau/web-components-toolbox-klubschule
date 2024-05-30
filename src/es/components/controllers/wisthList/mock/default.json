@@ -1,0 +1,27 @@
+{
+    "watchlistGuid": "efd98564-f728-483b-86ac-a4af24ffcdc9",
+    "portalId": 29,
+    "watchlistTitle": "Mein Titel",
+    "watchlistEntries": [
+        {
+        "course": null,
+        "aktiv": true,
+        "mandantId": 111,
+        "centerId": 2667,
+        "kursTyp": "D",
+        "kursId": 90478,
+        "sprache": "DE"
+        },
+        {
+        "course": null,
+        "aktiv": true,
+        "mandantId": 111,
+        "centerId": 1016,
+        "kursTyp": "D",
+        "kursId": 98314,
+        "sprache": "DE"
+        }
+    ],
+    "code": 0,
+    "message": ""
+}
