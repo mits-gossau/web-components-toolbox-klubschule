@@ -44,6 +44,7 @@ export default class Select extends Shadow() {
           box-shadow: var(--mdx-comp-select-box-shadow-default);
           color: var(--mdx-comp-select-placeholder-color-default);
           font: var(--mdx-comp-select-font-default);
+          margin-top: var(--mdx-comp-select-gap-label-select);
           width: 100%;
         }
 

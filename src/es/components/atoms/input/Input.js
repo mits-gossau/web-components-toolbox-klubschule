@@ -101,10 +101,6 @@ export default class Input extends Shadow() {
         font: var(--mdx-comp-inputfield-font-label);
       }
 
-      :host > div .error {
-        display: none;
-      }
-
       .wrap:has(.has-error) .hint {
         display: none;
       }
