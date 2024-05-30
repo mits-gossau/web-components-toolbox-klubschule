@@ -20,16 +20,12 @@ export default class Select extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
-        :host div {
+        :host .wrap {
           display: flex;
           flex-direction: column;
         }
-
-        :host div .error {
-          display: none;
-        }
   
-        :host .error .hint {
+        .wrap:has(.has-error) .hint {
           display: none;
         }
 
@@ -59,31 +55,36 @@ export default class Select extends Shadow() {
           opacity: 0.5;
         }
 
-        :host .error span,
-        :host .error a-icon-mdx {
+        :host .message span,
+        :host .message a-icon-mdx {
           color: var(--mdx-comp-error-message-color-default);
           display: flex;
         }
 
-        :host .error span {
+        :host .message span {
           margin-left: var(--mdx-comp-error-message-gap-icon-text-default);
+          font: var(--mdx-comp-error-message-font-default);
         }
 
-        :host div .hint {
+        :host .wrap .hint {
           display: flex;
           flex-direction: row;
           justify-content: space-between;
         }
 
-        :host .error .error {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-        }
-
         :host .hint span:first-child {
           color: var(--mdx-comp-select-hint-color-default);
           font: var(--mdx-comp-select-font-supporting);
+        }
+
+        .wrap:not(:has(.has-error)) > .message {
+          display: none;
+        }
+        
+        [dirty] .wrap > select:invalid ~ .message {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
         }
     `
   }

@@ -109,8 +109,6 @@ export default class Input extends Shadow() {
         display: none;
       }
 
-      :host .error input,
-      :host .error textarea,
       :host input.has-error,
       :host textarea.has-error {
         border-color: var(--mdx-comp-inputfield-border-color-error);

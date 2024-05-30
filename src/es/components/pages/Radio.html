@@ -1,46 +1,80 @@
 <h1 id="primary">Radio</h1>
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Default</h2>
     <div>
-        <ks-a-radio>
-            <div class="wrap">
-                <label for="rb-01-01">Radio Label</label>
-                <input id="rb-01-01" type="radio" name="rg-01" checked>
-                <div class="box"></div>
-            </div>
-            <div class="wrap">
-                <label for="rb-01-02">Radio Label</label>
-                <input id="rb-01-02" type="radio" name="rg-01">
-                <div class="box"></div>
-            </div>
-            <div class="wrap">
-                <label for="rb-01-03">Radio Label</label>
-                <input id="rb-01-03" type="radio" name="rg-01">
-                <div class="box"></div>
-            </div>
-        </ks-a-radio>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'rg-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Default (Required)</h2>
+                    <div>
+                        <p>Bitte geben Sie an, ob diese Buchung ihre Firma bezahlt oder ob Sie die Kurskosten privat
+                            tragen. *</p>
+                        <ks-a-radio mode="false">
+                            <div class="wrap">
+                                <label for="checkout-form-booking-type-company">Bezahlung durch Firma</label>
+                                <input type="radio" id="checkout-form-booking-type-company" name="rg-01" value="company"
+                                    required error-message-reference-point-changed="true" no-error-text-p
+                                    error-text-tag-name="span"
+                                    data-m-v-rules='{"required": {"error-message": "Bitte Buchungsart angeben."}}'>
+                                <div class="box"></div>
+                            </div>
+                            <div class="wrap">
+                                <label for="checkout-form-booking-type-private">Ich bezahle selbst</label>
+                                <input type="radio" id="checkout-form-booking-type-private" name="rg-01" value="private"
+                                    error-message-reference-point-changed="true" no-error-text-p
+                                    error-text-tag-name="span"
+                                    data-m-v-rules='{"required": {"error-message": "Bitte Buchungsart angeben."}}'>
+                                <div class="box"></div>
+                            </div>
+                        </ks-a-radio>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>
 
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Disabled</h2>
     <div>
-        <ks-a-radio>
-            <div class="wrap disabled">
-                <label for="rb-02-01">Radio Label</label>
-                <input id="rb-02-01" type="radio" name="rg-02" checked>
-                <div class="box"></div>
-            </div>
-            <div class="wrap disabled">
-                <label for="rb-02-02">Radio Label</label>
-                <input id="rb-02-02" type="radio" name="rg-02">
-                <div class="box"></div>
-            </div>
-            <div class="wrap disabled">
-                <label for="rb-02-03">Radio Label</label>
-                <input id="rb-02-03" type="radio" name="rg-02">
-                <div class="box"></div>
-            </div>
-        </ks-a-radio>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'rg-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Disabled</h2>
+                    <div>
+                        <p>Bitte geben Sie an, ob diese Buchung ihre Firma bezahlt oder ob Sie die Kurskosten privat
+                            tragen. *</p>
+                        <ks-a-radio mode="false">
+                            <div class="wrap disabled">
+                                <label for="checkout-form-booking-type-company">Bezahlung durch Firma</label>
+                                <input type="radio" id="checkout-form-booking-type-company" name="rg-01" value="company"
+                                    required error-message-reference-point-changed="true" no-error-text-p
+                                    error-text-tag-name="span"
+                                    data-m-v-rules='{"required": {"error-message": "Bitte Buchungsart angeben."}}'>
+                                <div class="box"></div>
+                            </div>
+                            <div class="wrap disabled">
+                                <label for="checkout-form-booking-type-private">Ich bezahle selbst</label>
+                                <input type="radio" id="checkout-form-booking-type-private" name="rg-01" value="private"
+                                    error-message-reference-point-changed="true" no-error-text-p
+                                    error-text-tag-name="span"
+                                    data-m-v-rules='{"required": {"error-message": "Bitte Buchungsart angeben."}}'>
+                                <div class="box"></div>
+                            </div>
+                        </ks-a-radio>
+                    </div>
+                </section>
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>
