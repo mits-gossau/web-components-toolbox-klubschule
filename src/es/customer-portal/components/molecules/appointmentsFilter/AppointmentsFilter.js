@@ -132,7 +132,8 @@ export default class AppointmentsFilter extends Shadow() {
               namespace="button-primary-" 
               color="tertiary" 
               justify-content="flex-start" 
-              request-event-name="reset-appointments-filter">
+              request-event-name="reset-appointments-filter"
+              tag="dayCodes">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
             </ks-a-button>
           </m-double-button>
@@ -174,7 +175,8 @@ export default class AppointmentsFilter extends Shadow() {
               namespace="button-primary-" 
               color="tertiary" 
               justify-content="flex-start" 
-              request-event-name="reset-appointments-filter">
+              request-event-name="reset-appointments-filter"
+              tag="timeCodes">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
             </ks-a-button>
           </m-double-button>
@@ -216,7 +218,8 @@ export default class AppointmentsFilter extends Shadow() {
               namespace="button-primary-" 
               color="tertiary" 
               justify-content="flex-start" 
-              request-event-name="reset-appointments-filter">
+              request-event-name="reset-appointments-filter"
+              tag="locations">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
             </ks-a-button>
           </m-double-button>

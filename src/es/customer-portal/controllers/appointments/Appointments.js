@@ -148,9 +148,11 @@ export default class Appointments extends HTMLElement {
       // filter by day
       if (appointmentsClone.filters.dayCodes.some(dayCode => dayCode.selected)) {
         appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(day => {
-          day.subscriptionCourseAppointments = day.subscriptionCourseAppointments.filter(appointment => {
-            return !!appointmentsClone.filters.dayCodes.find(dayCode => (appointment.courseAppointmentDayCode === dayCode.dayCode && dayCode.selected))
-          })
+          if (day) {
+            day.subscriptionCourseAppointments = day.subscriptionCourseAppointments.filter(appointment => {
+              return !!appointmentsClone.filters.dayCodes.find(dayCode => (appointment.courseAppointmentDayCode === dayCode.dayCode && dayCode.selected))
+            })
+          }
           return day.subscriptionCourseAppointments.length ? day : null
         })
       }
@@ -201,7 +203,8 @@ export default class Appointments extends HTMLElement {
    * @param {CustomEventInit} event
    */
   resetFilterDayListener = event => {
-    this.lastDayFilters.dayCodes.forEach(dayCode => (dayCode.selected = false))
+    const type = event.detail.tags[0]
+    this.lastFilters[type].forEach(filter => (filter.selected = false))
     this.requestAppointmentsFilterListener(event, true)
   }
 
