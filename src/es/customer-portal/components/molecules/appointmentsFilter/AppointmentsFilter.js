@@ -121,118 +121,60 @@ export default class AppointmentsFilter extends Shadow() {
   }
 
   renderDayFilter (dayCodes) {
+    const openDialogEventName = 'dialog-open-day'
     return /* html */`
-      ${this.renderDialog('dialog-open-day', dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day')}
+      ${this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day')}
       ${dayCodes.some(dayCode => dayCode.selected)
-      ? /* html */`
-        <m-double-button id="show-modal" namespace="double-button-default-" width="100%">  
-            <ks-a-button
-              filter
-              namespace="button-primary-"
-              color="tertiary"
-              justify-content="space-between"
-              click-no-toggle-active
-              request-event-name="dialog-open-day">
-                <span part="label1">
-                  ${dayCodes.reduce((acc, dayCode) => (dayCode.selected ? acc ? `${acc}, ${dayCode.dayCodeDescription}` : dayCode.dayCodeDescription : acc), '')}
-                </span>
-                <span part="label2" dynamic></span>
-            </ks-a-button>
-            <ks-a-button 
-              filter 
-              namespace="button-primary-" 
-              color="tertiary" 
-              justify-content="flex-start" 
-              request-event-name="reset-appointments-filter"
-              tag="dayCodes">
-                <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-            </ks-a-button>
-          </m-double-button>
-        `
-      : /* html */ `
-        <style>
-          :host {
-            --button-secondary-width: 100% !important;
-          }
-        </style>
-        <ks-a-button
-          id="show-modal"
-          namespace="button-secondary-"
-          color="tertiary"
-          justify-content="flex-start"
-          request-event-name="dialog-open-day">
-            <a-translation data-trans-key='CP.cpFilterTitleDay'/></a-translation>
-        </ks-a-button>
-      `
+        ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
+        : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
       }
     `
   }
 
   renderTimeFilter (timeCodes) {
-    return /* html */`
+    const openDialogEventName = 'dialog-open-time'
+    return /* html */ `
       ${this.renderDialog('dialog-open-time', timeCodes, 'timeCode', 'timeCodeDescription', 'CP.cpFilterTitleTime', 'time')}
       ${timeCodes.some(timeCode => timeCode.selected)
-      ? /* html */`
-        <m-double-button id="show-modal" namespace="double-button-default-" width="100%">
-          <ks-a-button
-            filter
-            namespace="button-primary-"
-            color="tertiary"
-            justify-content="space-between"
-            click-no-toggle-active
-            request-event-name="dialog-open-time">
-              <span part="label1">
-                ${timeCodes.reduce((acc, timeCode) => (timeCode.selected ? acc ? `${acc}, ${timeCode.timeCodeDescription}` : timeCode.timeCodeDescription : acc), '')}
-              </span>
-              <span part="label2" dynamic></span>
-            </ks-a-button>
-            <ks-a-button 
-              filter 
-              namespace="button-primary-" 
-              color="tertiary" 
-              justify-content="flex-start" 
-              request-event-name="reset-appointments-filter"
-              tag="timeCodes">
-                <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-            </ks-a-button>
-          </m-double-button>
-      `
-      : /* html */ `
-        <style>
-          :host {
-            --button-secondary-width: 100% !important;
-          }
-        </style>
-        <ks-a-button
-          color="tertiary"
-          id="show-modal"
-          justify-content="flex-start"
-          namespace="button-secondary-"
-          request-event-name="dialog-open-time">
-            <a-translation data-trans-key='CP.cpFilterTitleTime'/></a-translation>
-        </ks-a-button>
-      `
+        ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, timeCodes, 'timeCodeDescription', 'timeCodes')}`
+        : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleTime')}`
       }
     `
   }
 
   renderLocationFilter (locations) {
-    return /* html */`
+    const openDialogEventName = 'dialog-open-location'
+    return /* html */ `
       ${this.renderDialog('dialog-open-location', locations, 'locationId', 'locationDescription', 'CP.cpFilterTitleLocation', 'location')}
       ${locations.some(location => location.selected)
-      ? /* html */ `
-        <m-double-button id="show-modal" namespace="double-button-default-" width="100%">
-          <ks-a-button
-            filter
-            namespace="button-primary-"
-            color="tertiary"
-            justify-content="space-between"
-            click-no-toggle-active
-            request-event-name="dialog-open-location">
-              <span part="label1">
-                ${locations.reduce((acc, location) => (location.selected ? acc ? `${acc}, ${location.locationDescription}` : location.locationDescription : acc), '')}
-              </span>
-              <span part="label2" dynamic></span>
+        ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, locations, 'locationDescription', 'locations')}`
+        : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleLocation')}`
+      }
+    `
+  }
+
+  /**
+   * Render double button with filtered values
+   * @param {string} dialogOpenEventName
+   * @param {Object} filterStringCollection
+   * @param {string} filterStringDisplayValue
+   * @param {string} closeEventTag
+   * @returns {string} HTML string
+   */
+  renderFilterDoubleButton (dialogOpenEventName, filterStringCollection, filterStringDisplayValue, closeEventTag) {
+    return /* html */ `
+      <m-double-button id="show-modal" namespace="double-button-default-" width="100%">
+        <ks-a-button
+          filter
+          namespace="button-primary-"
+          color="tertiary"
+          justify-content="space-between"
+          click-no-toggle-active
+          request-event-name="${dialogOpenEventName}">
+            <span part="label1">
+              ${filterStringCollection.reduce((acc, dayCode) => (dayCode.selected ? acc ? `${acc}, ${dayCode[filterStringDisplayValue]}` : dayCode[filterStringDisplayValue] : acc), '')}
+            </span>
+            <span part="label2" dynamic></span>
             </ks-a-button>
             <ks-a-button 
               filter 
@@ -240,46 +182,54 @@ export default class AppointmentsFilter extends Shadow() {
               color="tertiary" 
               justify-content="flex-start" 
               request-event-name="reset-appointments-filter"
-              tag="locations">
+              tag="${closeEventTag}">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
             </ks-a-button>
           </m-double-button>
-      `
-      : /* html */ `
-        <style>
-          :host {
-            --button-secondary-width: 100% !important;
-          }
-        </style>
-        <ks-a-button
-          id="show-modal"
-          namespace="button-secondary-"
-          color="tertiary"
-          justify-content="flex-start"
-          request-event-name="dialog-open-location">
-            <a-translation data-trans-key='CP.cpFilterTitleLocation'/></a-translation>
-        </ks-a-button>
-      `
-      }
+    `
+  }
+
+  /**
+   * Renders initial filter button
+   * @param {string} dialogOpenEventName
+   * @param {string} transKey
+   * @returns {string} HTML string
+   */
+  renderFilterInitialButton (dialogOpenEventName, transKey) {
+    return /* html */ `
+      <style>
+        :host {
+          --button-secondary-width: 100% !important;
+        }
+      </style>
+      <ks-a-button
+        id="show-modal"
+        namespace="button-secondary-"
+        color="tertiary"
+        justify-content="flex-start"
+        request-event-name="${dialogOpenEventName}">
+          <a-translation data-trans-key="${transKey}"/></a-translation>
+      </ks-a-button>
     `
   }
 
   /**
    * Render dialog window
-   * @param {String} showDialogEventName
+   * @param {string} showDialogEventName
    * @param {Object} checkboxDataCollection
-   * @param {String} ckeckboxValueKey
-   * @param {String} checkboxLabelKey
-   * @param {String} translationKeyTitle
-   * @returns {String} Dialog Window HTML
+   * @param {string} ckeckboxValueKey
+   * @param {string} checkboxLabelKey
+   * @param {string} translationKeyTitle
+   * @param {string} type
+   * @returns {string} Dialog Window HTML
    */
   renderDialog (showDialogEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle, type) {
-    const eventName = 'request-appointments-filter'
+    const requestEventName = 'request-appointments-filter'
     return /* html */ `
       <m-dialog
         namespace="dialog-left-slide-in-"
         show-event-name="${showDialogEventName}"
-        close-event-name="${eventName}">
+        close-event-name="${requestEventName}">
           <div class="container dialog-header" tabindex="0">
               <div id="back">&nbsp;</div>
               <h3>
@@ -294,7 +244,7 @@ export default class AppointmentsFilter extends Shadow() {
             <div class="sub-content">
               <div>
                   ${checkboxDataCollection.reduce((acc, checkbox) => acc + /* html */ `
-                    <mdx-component mutation-callback-event-name="${eventName}">
+                    <mdx-component mutation-callback-event-name="${requestEventName}">
                       <mdx-checkbox
                         ${checkbox.selected ? ' checked' : ''} 
                         variant="no-border"
