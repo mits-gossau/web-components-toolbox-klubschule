@@ -23,14 +23,21 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderCSS () {
     this.css = /* css */`
-      :host {
+      :host > div {
         align-items: center;
         display: flex;
         gap: 1em;
         margin: 2em 0;
+        width: 100%;
+      }
+      :host > div > div {
+        width:100%;
+      }
+      :host * ks-a-button {
+        width:100%;
       }
       @media only screen and (max-width: _max-width_) {
-        :host  {
+        :host > div  {
           flex-direction: column;
         }
       }
@@ -94,15 +101,21 @@ export default class AppointmentsFilter extends Shadow() {
       {
         path: `${this.importMetaUrl}../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
         name: 'mdx-component'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+        name: 'o-grid'
       }
     ]).then(() => {
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations } = filter
       this.html = /* html */ `
-        <div>${this.renderDayFilter(dayCodes)}</div>
-        <div>${this.renderTimeFilter(timeCodes)}</div>
-        <div>${this.renderLocationFilter(locations)}</div>
-        <!--<div>time</div>-->
+        <div>
+          <div>${this.renderDayFilter(dayCodes)}</div>
+          <div>${this.renderTimeFilter(timeCodes)}</div>
+          <div>${this.renderLocationFilter(locations)}</div>
+          <!--<div>time</div>-->
+        </div>
       `
     })
   }
@@ -112,9 +125,7 @@ export default class AppointmentsFilter extends Shadow() {
       ${this.renderDialog('dialog-open-day', dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day')}
       ${dayCodes.some(dayCode => dayCode.selected)
       ? /* html */`
-        <m-double-button
-          id="show-modal"
-          namespace="double-button-default-">
+        <m-double-button id="show-modal" namespace="double-button-default-" width="100%">  
             <ks-a-button
               filter
               namespace="button-primary-"
@@ -139,6 +150,11 @@ export default class AppointmentsFilter extends Shadow() {
           </m-double-button>
         `
       : /* html */ `
+        <style>
+          :host {
+            --button-secondary-width: 100% !important;
+          }
+        </style>
         <ks-a-button
           id="show-modal"
           namespace="button-secondary-"
@@ -157,7 +173,7 @@ export default class AppointmentsFilter extends Shadow() {
       ${this.renderDialog('dialog-open-time', timeCodes, 'timeCode', 'timeCodeDescription', 'CP.cpFilterTitleTime', 'time')}
       ${timeCodes.some(timeCode => timeCode.selected)
       ? /* html */`
-        <m-double-button id="show-modal" namespace="double-button-default-">
+        <m-double-button id="show-modal" namespace="double-button-default-" width="100%">
           <ks-a-button
             filter
             namespace="button-primary-"
@@ -182,11 +198,16 @@ export default class AppointmentsFilter extends Shadow() {
           </m-double-button>
       `
       : /* html */ `
+        <style>
+          :host {
+            --button-secondary-width: 100% !important;
+          }
+        </style>
         <ks-a-button
-          id="show-modal"
-          namespace="button-secondary-"
           color="tertiary"
+          id="show-modal"
           justify-content="flex-start"
+          namespace="button-secondary-"
           request-event-name="dialog-open-time">
             <a-translation data-trans-key='CP.cpFilterTitleTime'/></a-translation>
         </ks-a-button>
@@ -200,7 +221,7 @@ export default class AppointmentsFilter extends Shadow() {
       ${this.renderDialog('dialog-open-location', locations, 'locationId', 'locationDescription', 'CP.cpFilterTitleLocation', 'location')}
       ${locations.some(location => location.selected)
       ? /* html */ `
-        <m-double-button id="show-modal" namespace="double-button-default-">
+        <m-double-button id="show-modal" namespace="double-button-default-" width="100%">
           <ks-a-button
             filter
             namespace="button-primary-"
@@ -225,6 +246,11 @@ export default class AppointmentsFilter extends Shadow() {
           </m-double-button>
       `
       : /* html */ `
+        <style>
+          :host {
+            --button-secondary-width: 100% !important;
+          }
+        </style>
         <ks-a-button
           id="show-modal"
           namespace="button-secondary-"
@@ -254,13 +280,6 @@ export default class AppointmentsFilter extends Shadow() {
         namespace="dialog-left-slide-in-"
         show-event-name="${showDialogEventName}"
         close-event-name="${eventName}">
-          <style>
-            :host .close-button-wrapper {
-              display: flex;
-              width: 100%;
-              justify-content: flex-end;
-            }
-          </style>
           <div class="container dialog-header" tabindex="0">
               <div id="back">&nbsp;</div>
               <h3>
@@ -291,20 +310,21 @@ export default class AppointmentsFilter extends Shadow() {
           <div class="container dialog-footer">
             <div class="close-button-wrapper">
               <ks-a-button 
+                click-no-toggle-active
+                no-pointer-events
                 color="secondary"
                 id="close"
-                namespace="button-tertiary-">
+                namespace="button-secondary-">
                   <a-translation data-trans-key='CP.cpAppointmentClose'/></a-translation>
               </ks-a-button>
             </div>
-            <!--<ks-a-number-of-offers-button 
+            <!-- <ks-a-number-of-offers-button 
               id="close" 
               class="button-show-all-offers" 
               namespace="button-primary-" 
-              no-pointer-events 
-              translation-key-cta="TODO: Add Translation 'CTA'">
-                Numbers
-            </ks-a-number-of-offers-button>-->
+              no-pointer-events>
+              (XY) Kurse
+            </ks-a-number-of-offers-button> -->
           </div>
       </m-dialog> 
     `

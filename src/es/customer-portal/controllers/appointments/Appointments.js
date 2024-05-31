@@ -21,23 +21,12 @@ export default class Appointments extends HTMLElement {
     this.abortControllerSubscriptionCourseAppointmentBooking = null
     this.abortControllerSubscriptionCourseAppointmentReversalListener = null
     this.abortControllerBookedSubscriptionCourseAppointments = null
-    //
-    this.lastDayFilters = null
-    this.lastTimeFilters = null
-    this.lastLocationFilters = null
-    // filtered?
-    this.dayFiltered = false
-    this.locationFiltered = false
-    this.timeFiltered = false
-    // filtered list
-    this.filteredDayList = null
-    //
-    this.filteredDays = null
-    this.filteredLocation = null
-    // search
-    this.daySearch = []
-    this.timeSearch = []
-    this.locationSearch = []
+    this.lastFilters = null
+    this.filterCounter = {
+      days: 0,
+      time: 0,
+      location: 0
+    }
   }
 
   connectedCallback () {
