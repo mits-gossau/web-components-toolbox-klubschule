@@ -46,8 +46,8 @@ export default class Appointments extends HTMLElement {
     this.addEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.addEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.addEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
-    this.addEventListener('request-subscription-filter', this.requestSubscriptionFilterListener)
-    this.addEventListener('reset-filter-day', this.resetFilterDayListener)
+    this.addEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
+    this.addEventListener('reset-appointments-filter', this.resetFilterDayListener)
   }
 
   disconnectedCallback () {
@@ -56,8 +56,8 @@ export default class Appointments extends HTMLElement {
     this.removeEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.removeEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.removeEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
-    this.removeEventListener('request-subscription-filter', this.requestSubscriptionFilterListener)
-    this.removeEventListener('reset-filter-day', this.resetFilterDayListener)
+    this.removeEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
+    this.removeEventListener('reset-appointments-filter', this.resetFilterDayListener)
   }
 
   /**
@@ -94,7 +94,7 @@ export default class Appointments extends HTMLElement {
    * @param {CustomEventInit} event
    * @param {Boolean} force
    */
-  requestSubscriptionFilterListener = (event, force = false) => {
+  requestAppointmentsFilterListener = (event, force = false) => {
     // mdx prevent double event
     if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) {
       return

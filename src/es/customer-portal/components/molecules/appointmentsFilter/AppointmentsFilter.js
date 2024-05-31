@@ -132,7 +132,7 @@ export default class AppointmentsFilter extends Shadow() {
               namespace="button-primary-" 
               color="tertiary" 
               justify-content="flex-start" 
-              request-event-name="reset-filter-day">
+              request-event-name="reset-appointments-filter">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
             </ks-a-button>
           </m-double-button>
@@ -174,7 +174,7 @@ export default class AppointmentsFilter extends Shadow() {
               namespace="button-primary-" 
               color="tertiary" 
               justify-content="flex-start" 
-              request-event-name="reset-filter-time">
+              request-event-name="reset-appointments-filter">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
             </ks-a-button>
           </m-double-button>
@@ -216,7 +216,7 @@ export default class AppointmentsFilter extends Shadow() {
               namespace="button-primary-" 
               color="tertiary" 
               justify-content="flex-start" 
-              request-event-name="reset-filter-location">
+              request-event-name="reset-appointments-filter">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
             </ks-a-button>
           </m-double-button>
@@ -245,7 +245,7 @@ export default class AppointmentsFilter extends Shadow() {
    * @returns {String} Dialog Window HTML
    */
   renderDialog (showDialogEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle, type) {
-    const eventName = 'request-subscription-filter'
+    const eventName = 'request-appointments-filter'
     return /* html */ `
       <m-dialog
         namespace="dialog-left-slide-in-"
