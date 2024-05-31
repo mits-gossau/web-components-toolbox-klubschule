@@ -156,33 +156,33 @@ export default class Appointments extends HTMLElement {
       }
 
       // filter by time
-      if (appointmentsClone.filters.timeCodes.some(time => time.selected)) {
-        appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(day => {
-          if (day) {
-            day.subscriptionCourseAppointments = day.subscriptionCourseAppointments.filter(appointment => {
-              return !!appointmentsClone.filters.timeCodes.find(dayCode => {
-                return appointment.courseAppointmentTimeCode.includes(dayCode.timeCode) && dayCode.selected
+      if (appointmentsClone.filters.timeCodes.some(timeCode => timeCode.selected)) {
+        appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(time => {
+          if (time) {
+            time.subscriptionCourseAppointments = time.subscriptionCourseAppointments.filter(appointment => {
+              return !!appointmentsClone.filters.timeCodes.find(timeCode => {
+                return appointment.courseAppointmentTimeCode.includes(timeCode.timeCode) && timeCode.selected
               })
             })
           }
-          return day?.subscriptionCourseAppointments.length ? day : null
+          return time?.subscriptionCourseAppointments.length ? time : null
         })
       }
 
       // filter by location
       if (appointmentsClone.filters.locations.some(centerLocation => centerLocation.selected)) {
-        appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(day => {
-          if (day) {
-            day.subscriptionCourseAppointments = day.subscriptionCourseAppointments.filter(appointment => {
-              return !!appointmentsClone.filters.locations.find(dayCode => (appointment.centerId === dayCode.locationId && dayCode.selected))
+        appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(center => {
+          if (center) {
+            center.subscriptionCourseAppointments = center.subscriptionCourseAppointments.filter(appointment => {
+              return !!appointmentsClone.filters.locations.find(centerLocation => (appointment.centerId === centerLocation.locationId && centerLocation.selected))
             })
           }
-          return day?.subscriptionCourseAppointments.length ? day : null
+          return center?.subscriptionCourseAppointments.length ? center : null
         })
       }
 
       // filter out empty values
-      appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(day => day)
+      appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(list => list)
       return appointmentsClone
     })
 
@@ -202,7 +202,7 @@ export default class Appointments extends HTMLElement {
    */
   resetFilterDayListener = event => {
     this.lastDayFilters.dayCodes.forEach(dayCode => (dayCode.selected = false))
-    this.requestSubscriptionFilterListener(event, true)
+    this.requestAppointmentsFilterListener(event, true)
   }
 
   /**
