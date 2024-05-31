@@ -97,11 +97,11 @@ export default class AboTile extends Shadow() {
     this.html = ''
     this.html = /* html */ `
       <ks-m-event-detail
-        data='${JSON.stringify(aboDetail)}'
+        data='${JSON.stringify(aboDetail).replace(/'/g, 'ʼ')}'
       >
       </ks-m-event-detail>
       <div>
-        <ks-m-buttons data-buttons='${JSON.stringify(aboDetail.buttons)}'></ks-m-buttons>
+        <ks-m-buttons data-buttons='${JSON.stringify(aboDetail.buttons).replace(/'/g, 'ʼ')}'></ks-m-buttons>
       <div>
     `
     return this.fetchModules([

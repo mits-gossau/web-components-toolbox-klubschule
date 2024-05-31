@@ -503,7 +503,7 @@ export default class Event extends Shadow() {
         </div>
         <div class="controls">
           <div class="controls-left">
-            <ks-m-buttons data-buttons='${JSON.stringify(buttons)}'></ks-m-buttons>
+            <ks-m-buttons data-buttons='${JSON.stringify(buttons).replace(/'/g, 'ʼ')}'></ks-m-buttons>
           </div>
           <div class="controls-right">
             <div class="icons">
@@ -596,7 +596,7 @@ export default class Event extends Shadow() {
 
         this.details.innerHTML = /* html */ `
           <ks-m-event-detail
-            data='${JSON.stringify(data)}'
+            data='${JSON.stringify(data).replace(/'/g, 'ʼ')}'
           ></ks-m-event-detail>
         `
       })

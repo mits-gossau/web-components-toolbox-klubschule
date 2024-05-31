@@ -298,7 +298,7 @@ export default class TileList extends Shadow() {
           </div>
           <div class="o-tile-list__bottom">
             <div class="o-tile-list__bottom-left">
-              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons)}'></ks-m-buttons>
+              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}'></ks-m-buttons>
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
