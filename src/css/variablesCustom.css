@@ -213,6 +213,7 @@
   --grid-2columns-content-section-padding-mobile-custom: var(--mdx-sys-spacing-flex-m) 1rem;
   --grid-2columns-content-section-second-column-padding-mobile-custom: var(--mdx-sys-spacing-flex-m) 1rem;
   --grid-2columns-content-stage-min-height: 302px;
+  --grid-2columns-content-stage-min-height-mobile: auto;
   --grid-2columns2rows-justify-content-custom: space-evenly;
   --grid-432-auto-colums-auto-rows-grid-gap-custom: 1rem 0.5rem;
   --header-nav-right-a-logo-top-custom: calc(60.5px / 2 - 60px / 2);

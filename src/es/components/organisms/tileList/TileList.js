@@ -10,6 +10,8 @@ export default class TileList extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.ppage = 1
+
     this.clickEventListener = event => {
       if (this.icon) {
         if (this.icon.getAttribute('icon-name') === 'ChevronDown') {
@@ -32,23 +34,43 @@ export default class TileList extends Shadow() {
             bubbles: true,
             cancelable: true,
             composed: true
-          }))).then(tileData => (this.tilesContainer.innerHTML = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
-            // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
-            tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
-            if (tile.bezeichnung) tile.location.name = ''
-            return acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`
-          }, '')))
+          }))).then(data => this.renderTile(data))
         }
       }
     }
+
+    this.loadMoreClickEventListener = event => new Promise(resolve => this.dispatchEvent(new CustomEvent('request-locations', {
+      detail: {
+        resolve,
+        ppage: this.ppage,
+        filter: this.data.filter
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))).then(data => this.renderTile(data, true))
   }
 
   connectedCallback () {
     this.hidden = true
-    const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-    Promise.all(showPromises).then(() => (this.hidden = false))
+    new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-translations',
+        {
+          detail: {
+            resolve
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
+      const showPromises = []
+      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+      Promise.all(showPromises).then(() => (this.hidden = false))
+    })
   }
 
   /**
@@ -296,14 +318,20 @@ export default class TileList extends Shadow() {
           <div class="o-tile-list__tiles">
             ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`, '') : ''}
           </div>
-          ${data.buttonMore
-            ? /* html */`
-              <div class="o-tile-list__foot">
-                <ks-m-buttons data-buttons='[${JSON.stringify(data.buttonMore)}]'></ks-m-buttons>
-              </div> 
-            `
-            : ''
-          }      
+          <div
+            id="request-more-locations"
+            class="o-tile-list__foot"
+            style="display: none;"
+          >
+            <ks-a-button
+              icon
+              namespace="button-secondary-" 
+              color="secondary" 
+            >
+              <span>${this.getTranslation('CourseList.MoreLocationsPlaceholder')}</span>
+              <a-icon-mdx icon-name="ArrowDownRight" size="1em"></a-icon-mdx>
+            </ks-a-button>
+          </div>
         </div>
     </div>
     `
@@ -313,8 +341,10 @@ export default class TileList extends Shadow() {
     this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
     this.toggle = this.root.querySelector('.o-tile-list__bottom-left')
     this.tilesContainer = this.root.querySelector('.o-tile-list__tiles')
+    this.loadMore = this.root.querySelector('#request-more-locations')
 
     this.toggle.addEventListener('click', this.clickEventListener)
+    this.loadMore.addEventListener('click', this.loadMoreClickEventListener)
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
@@ -337,6 +367,24 @@ export default class TileList extends Shadow() {
         name: 'a-icon-mdx'
       }
     ])
+  }
+
+  renderTile (tileData, add = false) {
+    this.ppage = tileData.ppage || this.ppage
+    this.loadMore.style.display = tileData.ppage === -1 ? 'none': 'flex'
+    const tileString = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
+      // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
+      tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
+      if (tile.bezeichnung) tile.location.name = ''
+      return acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"></ks-m-tile>`
+    }, '')
+    if (add) {
+      const div = document.createElement('div')
+      div.innerHTML = tileString
+      Array.from(div.children).forEach(child => this.tilesContainer.appendChild(child))
+    } else {
+      this.tilesContainer.innerHTML = tileString
+    }
   }
 
   get tileList () {

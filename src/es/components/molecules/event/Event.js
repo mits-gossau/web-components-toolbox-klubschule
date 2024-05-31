@@ -449,7 +449,7 @@ export default class Event extends Shadow() {
   renderHTML () {
     const {
       datum_label,
-      timelabel,
+      days,
       zusatztitel,
       status,
       status_label,
@@ -470,7 +470,7 @@ export default class Event extends Shadow() {
           <div class="dates">
             <span class="date">${datum_label}</span>
             <div class="time">
-              <span class="days">${timelabel}</span>
+              <span class="days">${days.join(', ')}</span>
               ${zusatztitel ? /* html */ `<div class="badge">${zusatztitel}</div>` : ''}
             </div>
           </div>

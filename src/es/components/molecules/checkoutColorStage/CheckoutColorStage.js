@@ -67,6 +67,9 @@ export default class CheckoutColorStage extends Shadow() {
         background-color: var(--mdx-sys-color-primary-default);
         display: block;
       }
+      :host([no-margin-y]) {
+        margin: 0 !important;
+      }
     `
   }
 
@@ -105,6 +108,11 @@ export default class CheckoutColorStage extends Shadow() {
                     }
                 </p>
                 <ks-a-heading tag="h1" color="white" content-stage>${this.getAttribute('title')}</ks-a-heading>
+                ${this.hasAttribute('text')
+                        ? /* html */`
+                            <p>${this.getAttribute('text')}</p>`
+                        : ''
+                    }
             </div>
           </section>
         </o-grid>

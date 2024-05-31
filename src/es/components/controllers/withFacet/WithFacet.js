@@ -254,21 +254,26 @@ export default class WithFacet extends Shadow() {
     }
 
     this.requestLocations = event => {
+      let body = `{
+        "filter": ${JSON.stringify(event.detail.filter)},
+        "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
+        "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
+        "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
+        "onlycourse": true
+        ${initialRequestObj.clat ? `,"clat": "${initialRequestObj.clat}"` : ''}
+        ${initialRequestObj.clong ? `,"clong": "${initialRequestObj.clong}"` : ''}
+      }`
+      if (event?.detail?.ppage && this.requestLocationsLastBody) {
+        // ppage reuse last request
+        body = JSON.stringify(Object.assign(JSON.parse(this.requestLocationsLastBody), { ppage: event.detail.ppage }))
+      }
       const requestInit = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         mode: 'cors',
-        body: `{
-          "filter": ${JSON.stringify(event.detail.filter)},
-          "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
-          "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
-          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
-          "onlycourse": true
-          ${initialRequestObj.clat ? `,"clat": "${initialRequestObj.clat}"` : ''}
-          ${initialRequestObj.clong ? `,"clong": "${initialRequestObj.clong}"` : ''}
-        }`
+        body: (this.requestLocationsLastBody = body)
       }
       // @ts-ignore
       event.detail.resolve(fetch(apiUrl, requestInit).then(response => {
