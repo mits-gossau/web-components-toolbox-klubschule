@@ -39,6 +39,9 @@ export default class Radio extends Shadow() {
           flex-direction: column;
         }
 
+        :host .wrap img {
+          margin-left: var(--mdx-sys-spacing-fix-m)
+        }
         :host .wrap {
           display: flex;
           flex-direction: row-reverse;
@@ -113,6 +116,7 @@ export default class Radio extends Shadow() {
           border-radius: 50%;
           height: var(--mdx-comp-radiobutton-sizing-ellipse);
           width: var(--mdx-comp-radiobutton-sizing-ellipse);
+          min-width: var(--mdx-comp-radiobutton-sizing-ellipse);
         }
 
         :host .custom-error-text p,
