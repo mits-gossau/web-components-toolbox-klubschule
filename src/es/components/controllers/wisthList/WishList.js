@@ -2,6 +2,7 @@
 
 /*
 id assembly: kurstyp_kursid_centerid
+ext reminder: auto rename tag, code spell checker, es6-string-css, es6-string-html, live share, multiple cursor case preserve, sublime text keymap and sett...,
 
 GET MULTIPLE SPECIFIC COURSES:
 
