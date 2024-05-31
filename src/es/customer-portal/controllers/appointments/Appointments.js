@@ -21,6 +21,7 @@ export default class Appointments extends HTMLElement {
     this.abortControllerSubscriptionCourseAppointmentBooking = null
     this.abortControllerSubscriptionCourseAppointmentReversalListener = null
     this.abortControllerBookedSubscriptionCourseAppointments = null
+    //
     this.lastDayFilters = null
     this.lastTimeFilters = null
     this.lastLocationFilters = null
@@ -45,13 +46,8 @@ export default class Appointments extends HTMLElement {
     this.addEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.addEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.addEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
-    // day filter
-    // this.addEventListener('request-subscription-day-filter', this.requestSubscriptionDayFilterListener)
+    this.addEventListener('request-subscription-filter', this.requestSubscriptionFilterListener)
     this.addEventListener('reset-filter-day', this.resetFilterDayListener)
-    // time filter
-    // this.addEventListener('request-subscription-time-filter', this.requestSubscriptionTimeFilterListener)
-    // location filter
-    this.addEventListener('request-subscription-location-filter', this.requestSubscriptionLocationFilterListener)
   }
 
   disconnectedCallback () {
@@ -60,13 +56,8 @@ export default class Appointments extends HTMLElement {
     this.removeEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.removeEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.removeEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
-    // day filter
-    this.removeEventListener('request-subscription-day-filter', this.requestSubscriptionDayFilterListener)
+    this.removeEventListener('request-subscription-filter', this.requestSubscriptionFilterListener)
     this.removeEventListener('reset-filter-day', this.resetFilterDayListener)
-    // time filter
-    this.removeEventListener('request-subscription-time-filter', this.requestSubscriptionTimeFilterListener)
-    // location filter
-    this.removeEventListener('request-subscription-location-filter', this.requestSubscriptionLocationFilterListener)
   }
 
   /**
@@ -99,46 +90,62 @@ export default class Appointments extends HTMLElement {
   }
 
   /**
-   * Filter Appointments by Location
+   * Filter Appointments
    * @param {CustomEventInit} event
    * @param {Boolean} force
    */
-  requestSubscriptionLocationFilterListener = (event, force = false) => {
+  requestSubscriptionFilterListener = (event, force = false) => {
     // mdx prevent double event
-    if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) return
+    if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) {
+      return
+    }
 
     const subscriptionCourseAppointmentsFiltered = this.subscriptionCourseAppointments.then(async (appointments) => {
+      // use a clone to prevent fetched object manipulation
       const appointmentsClone = structuredClone(appointments)
 
-      // keep last filters
-      if (this.lastFilters) appointmentsClone.filters = this.lastFilters
+      // use last set filters
+      if (this.lastFilters) {
+        appointmentsClone.filters = this.lastFilters
+      }
 
+      // sync checked filters
       if (event?.detail?.target) {
+        // get type of used filter (day, time, location)
         const type = event.detail.target.getAttribute('type')
-        //
+
+        // get day filter checkboxes
         if (type === 'day') {
-          // find checkbox event target dayCode
           const newDayCode = appointmentsClone.filters.dayCodes.find(dayCode => dayCode.dayCode === Number(event.detail.target.value))
-          // sync filter selected with checkbox checked
-          if (newDayCode) newDayCode.selected = event.detail.target.checked
+          if (newDayCode) {
+            // sync checkbox selection
+            newDayCode.selected = event.detail.target.checked
+          }
         }
+
+        // get location filter checkboxes
         if (type === 'location') {
-          // find checkbox event target location
           const newLocationCode = appointmentsClone.filters.locations.find(location => location.locationId === Number(event.detail.target.value))
-          // sync filter selected with checkbox checked
-          if (newLocationCode) newLocationCode.selected = event.detail.target.checked
+          if (newLocationCode) {
+            // sync checkbox selection
+            newLocationCode.selected = event.detail.target.checked
+          }
         }
+
+        // get time filter checkboxes
         if (type === 'time') {
-          // find checkbox event target time
-          const newTimeCode = appointmentsClone.filters.timeCodes.find(time => time.timeCode === Number(event.detail.target.value))
-          // sync filter selected with checkbox checked
-          if (newTimeCode) newTimeCode.selected = event.detail.target.checked
+          const newTimeCode = appointmentsClone.filters.timeCodes.find(timeCode => timeCode.timeCode === Number(event.detail.target.value))
+          if (newTimeCode) {
+            // sync checkbox selection
+            newTimeCode.selected = event.detail.target.checked
+          }
         }
-        // keep this filter for next request
+
+        // keep selected filters for next request
         this.lastFilters = structuredClone(appointmentsClone.filters)
       }
 
-      // DAy
+      // filter by day
       if (appointmentsClone.filters.dayCodes.some(dayCode => dayCode.selected)) {
         appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(day => {
           day.subscriptionCourseAppointments = day.subscriptionCourseAppointments.filter(appointment => {
@@ -148,7 +155,7 @@ export default class Appointments extends HTMLElement {
         })
       }
 
-      // time
+      // filter by time
       if (appointmentsClone.filters.timeCodes.some(time => time.selected)) {
         appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(day => {
           if (day) {
@@ -162,7 +169,7 @@ export default class Appointments extends HTMLElement {
         })
       }
 
-      // Locatino
+      // filter by location
       if (appointmentsClone.filters.locations.some(centerLocation => centerLocation.selected)) {
         appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(day => {
           if (day) {
@@ -174,12 +181,11 @@ export default class Appointments extends HTMLElement {
         })
       }
 
-      // TODO: Other filters
-
-      // filter out empty days
+      // filter out empty values
       appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(day => day)
       return appointmentsClone
     })
+
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', {
       detail: {
         fetch: subscriptionCourseAppointmentsFiltered
@@ -190,129 +196,13 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
-  filterByDay (appointments) {
-    return appointments.selectedSubscription.dayList.filter(list => list)
-  }
-
-  filterByLocation (appointments) {
-    return appointments.selectedSubscription.dayList.filter(list => list)
-  }
-
   /**
-   * Filter Appointments by time
-   * @param {CustomEventInit} event
-   * @param {Boolean} force
-   */
-  // requestSubscriptionTimeFilterListener = (event, force = false) => {
-  //   // mdx prevent double event
-  //   if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) return
-  //   const subscriptionCourseAppointmentsFiltered = this.subscriptionCourseAppointments.then(async (appointments) => {
-  //     const appointmentsClone = structuredClone(appointments)
-  //     // keep last filters
-  //     if (this.lastTimeFilters) appointmentsClone.filters = this.lastTimeFilters
-
-  //     // TODO: Find not only timeCodes but also the other two possible filters regarding the event target
-  //     if (event?.detail?.target) {
-  //       // find checkbox event target dayCode
-  //       const newTimeCode = appointmentsClone.filters.timeCodes.find(timeCode => {
-  //         return timeCode.timeCode === Number(event.detail.target.value)
-  //       })
-  //       // sync filter selected with checkbox checked
-  //       if (newTimeCode) newTimeCode.selected = event.detail.target.checked
-  //       // keep this filter for next request
-  //       this.lastTimeFilters = structuredClone(appointmentsClone.filters)
-  //     }
-  //     // timeCode
-  //     // filter all appointments (time in dayList) by all possible selected filters
-  //     if (appointmentsClone.filters.timeCodes.some(dayCode => dayCode.selected)) {
-  //       appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(time => {
-  //         time.subscriptionCourseAppointments = time.subscriptionCourseAppointments.filter(appointment => {
-  //           return !!appointmentsClone.filters.timeCodes.find(timeCode => {
-  //             return appointment.courseAppointmentTimeCode.some(time => time === timeCode.timeCode && timeCode.selected)
-  //           })
-  //         })
-  //         return time.subscriptionCourseAppointments.length ? time : null
-  //       })
-  //     }
-
-  //     // filter out empty time
-  //     appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(time => time)
-  //     debugger
-  //     this.filteredList = appointmentsClone
-  //     return appointmentsClone
-  //   })
-  //   console.log('TIME', subscriptionCourseAppointmentsFiltered)
-  //   this.dispatchEvent(new CustomEvent('update-subscription-course-appointments', {
-  //     detail: {
-  //       fetch: subscriptionCourseAppointmentsFiltered
-  //     },
-  //     bubbles: true,
-  //     cancelable: true,
-  //     composed: true
-  //   }))
-  // }
-
-  /**
-   * Filter Appointments by day
-   * @param {CustomEventInit} event
-   * @param {Boolean} force
-   */
-  // requestSubscriptionDayFilterListener = (event, force = false) => {
-  //   debugger
-  //   // mdx prevent double event
-  //   if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) {
-  //     return
-  //   }
-  //   const subscriptionCourseAppointmentsFiltered = this.subscriptionCourseAppointments.then(async (appointments) => {
-  //     const appointmentsClone = structuredClone(appointments)
-  //     // keep last filters
-  //     if (this.lastDayFilters) appointmentsClone.filters = this.lastDayFilters
-
-  //     // TODO: Find not only dayCodes but also the other two possible filters regarding the event target
-  //     if (event?.detail?.target) {
-  //       // find checkbox event target dayCode
-  //       const newDayCode = appointmentsClone.filters.dayCodes.find(dayCode => dayCode.dayCode === Number(event.detail.target.value))
-  //       // sync filter selected with checkbox checked
-  //       if (newDayCode) newDayCode.selected = event.detail.target.checked
-  //       // keep this filter for next request
-  //       this.lastDayFilters = structuredClone(appointmentsClone.filters)
-  //     }
-
-  //     // dayCode
-  //     // filter all appointments (days in dayList) by all possible selected filters
-  //     if (appointmentsClone.filters.dayCodes.some(dayCode => dayCode.selected)) {
-  //       appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(day => {
-  //         day.subscriptionCourseAppointments = day.subscriptionCourseAppointments.filter(appointment => {
-  //           return !!appointmentsClone.filters.dayCodes.find(dayCode => (appointment.courseAppointmentDayCode === dayCode.dayCode && dayCode.selected))
-  //         })
-  //         return day.subscriptionCourseAppointments.length ? day : null
-  //       })
-  //     }
-
-  //     // TODO: Other filters
-
-  //     // filter out empty days
-  //     appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(day => day)
-  //     return appointmentsClone
-  //   })
-  //   console.log('DAY', subscriptionCourseAppointmentsFiltered)
-  //   this.dispatchEvent(new CustomEvent('update-subscription-course-appointments', {
-  //     detail: {
-  //       fetch: subscriptionCourseAppointmentsFiltered
-  //     },
-  //     bubbles: true,
-  //     cancelable: true,
-  //     composed: true
-  //   }))
-  // }
-
-  /**
-   * Reset day filter
+   * Reset Appointment filter
    * @param {CustomEventInit} event
    */
   resetFilterDayListener = event => {
     this.lastDayFilters.dayCodes.forEach(dayCode => (dayCode.selected = false))
-    this.requestSubscriptionDayFilterListener(event, true)
+    this.requestSubscriptionFilterListener(event, true)
   }
 
   /**
@@ -421,6 +311,10 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
+  /**
+   * Get Booked Appointments
+   * @param {CustomEventInit} event
+   */
   requestBookedSubscriptionCourseAppointmentsListener = async (event) => {
     if (this.abortControllerBookedSubscriptionCourseAppointments) this.abortControllerBookedSubscriptionCourseAppointments.abort()
     this.abortControllerBookedSubscriptionCourseAppointments = new AbortController()
@@ -450,7 +344,7 @@ export default class Appointments extends HTMLElement {
   }
 
   /**
-   * Returns an object with method, headers, body, and signal properties for making a POST request with fetch.
+   * Returns an object with request method, http headers, body, and signal properties for making a POST request with fetch.
    * @param {Object} data - The data that you want to send in the POST request. This data should be in a format that can be converted to JSON.
    * @param {AbortController} abortController - Abort Fetch requests
    * @returns {Object} An object is being returned to use as option object for api fetch
