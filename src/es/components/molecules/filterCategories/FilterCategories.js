@@ -15,6 +15,9 @@ export default class FilterCategories extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.childItems = ''
+    this.subNav = []
+
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
     this.keepDialogOpenEventListener = event => {
@@ -70,36 +73,68 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  iterateChildren(filterItem) {
-    if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-      filterItem.children.forEach(childData => {
+  iterateChildren(childData, parentItem) {
+    if (childData.children && childData.children.length > 0) {
+      childData.children.forEach(child => {
+          if (child.selected) {
+            this.childItems += child.label + ', '
+          }
+          const count = child.count ? `(${child.count})` : ''
+          const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
+          const checked = child.selected ? 'checked' : ''
+          const visible = child.visible ? 'visible' : ''
+          const div = document.createElement('div')
+          div.innerHTML = /* html */`
+            <mdx-component mutation-callback-event-name="request-with-facet">
+              <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
+            </mdx-component>
+          `
+          // @ts-ignore
+          div.children[0].filterItem = parentItem
+          this.subNav.push(div.children[0])
 
-        if (childData.children && childData.children.length > 0) {
-            childData.children.forEach(child => {
-                if (child.selected) {
-                  this.childItems += child.label + ', '
-                }
-                const count = child.count ? `(${child.count})` : ''
-                const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
-                const checked = child.selected ? 'checked' : ''
-                const visible = child.visible ? 'visible' : ''
-                const div = document.createElement('div')
-                div.innerHTML = /* html */`
-                  <mdx-component mutation-callback-event-name="request-with-facet">
-                    <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
-                  </mdx-component>
-                `
-                // @ts-ignore
-                div.children[0].filterItem = filterItem
-                this.subNav.push(div.children[0])
-
-                this.iterateChildren(child) // Recursively call the function for any nested children
-            })
-        }
-
-        this.html = this.mainNav
+          if (child.children && child.children.length > 0) {
+            this.iterateChildren(child, childData) // recursively call the function for any nested children
+          }
       })
     }
+  }
+
+  generateNavLevelItem (response, filterItem) {
+    const shouldRemainOpen = filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+
+    return /* html */`
+      <m-dialog id="${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+        <div class="container dialog-header" tabindex="0">
+          <a-button id="close-back">
+            <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
+          </a-button>
+          <h3>${filterItem.label}</h3>
+          <a-button request-event-name="backdrop-clicked" id="close">
+            <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+          </a-button>
+        </div>
+        <div class="dialog-content">
+          ${this.hasAttribute('translation-key-reset') ? /* html */`<p class="reset-link">
+            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-parent="${filterItem.urlpara}_${filterItem.id}">
+              ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+            </a-button>
+          </p>` : ''}
+          <div class="sub-level ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
+        </div>
+        <div class="container dialog-footer">
+          <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
+          <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `(${response.total.toString()})` : ''}${response.total_label}</a-button>
+        </div>
+        <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
+          <div class="wrap">
+            <span class="text">${filterItem.label}</span>
+            <span class="additional">${this.childItems.slice(0, -2)}</span>
+          </div>
+          <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+        </ks-m-nav-level-item>
+      </m-dialog>
+    `
   }
 
   renderHTML (fetch) {
@@ -119,92 +154,30 @@ export default class FilterCategories extends Shadow() {
       ])
     ]).then(() => {
       fetch.then(response => {
-        const filterData = response.filters
-        const total = response.total
-        const totalLabel = response.total_label
-
         this.html = ''
-        filterData.forEach((filterItem, i) => {
-          let childItems = ''
-          const subNav = []
 
+        response.filters.forEach((filterItem, i) => {
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
             filterItem.children.forEach(child => {
-              if (child.selected) {
-                childItems += child.label + ', '
-              }
-              const count = child.count ? `(${child.count})` : ''
-              const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
-              const checked = child.selected ? 'checked' : ''
-              const visible = child.visible ? 'visible' : ''
-              const div = document.createElement('div')
-              div.innerHTML = /* html */`
-                <mdx-component mutation-callback-event-name="request-with-facet">
-                  <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
-                </mdx-component>
-              `
-              // @ts-ignore
-              div.children[0].filterItem = filterItem
-              subNav.push(div.children[0])
+                this.iterateChildren(child, filterItem)
             })
 
             this.html = this.mainNav
           }
 
-          let resetButton = ''
-          if (this.hasAttribute('translation-key-reset')) {
-            resetButton = /* html */`
-              <p class="reset-link">
-                <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-parent="${filterItem.urlpara}_${filterItem.id}">
-                  ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
-                </a-button>
-              </p>
-            `
-          }
-
           if (this.mainNav.children[i]?.getAttribute('id') === filterItem.id) {
             const targetNode = this.mainNav.children[i].root.querySelector('.sub-level')
             targetNode.innerHTML = ''
-            subNav.forEach(node => targetNode.appendChild(node))
+            this.subNav.forEach(node => targetNode.appendChild(node))
           } else {
             if (filterItem.visible === false || filterItem.children?.length === 0) return
 
-            const shouldRemainOpen = filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
-
-            const navLevelItem = /* html */ `
-              <m-dialog id="${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
-                <div class="container dialog-header" tabindex="0">
-                  <a-button id="close-back">
-                    <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
-                  </a-button>
-                  <h3>${filterItem.label}</h3>
-                  <a-button request-event-name="backdrop-clicked" id="close">
-                    <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
-                  </a-button>
-                </div>
-                <div class="dialog-content">
-                  ${this.hasAttribute('translation-key-reset') ? resetButton : ''}
-                  <div class="sub-level ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
-                </div>
-                <div class="container dialog-footer">
-                  <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
-                  <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${total > 0 ? `(${total.toString()})` : ''}${totalLabel}</a-button>
-                </div>
-                <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
-                  <div class="wrap">
-                    <span class="text">${filterItem.label}</span>
-                    <span class="additional">${childItems.slice(0, -2)}</span>
-                  </div>
-                  <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-                </ks-m-nav-level-item>
-              </m-dialog>
-            `
+            const navLevelItem = this.generateNavLevelItem(response, filterItem)
             const div = document.createElement('div')
-
             div.innerHTML = navLevelItem
             // @ts-ignore
             const targetNode = div.children[0].root.querySelector('.sub-level')
-            subNav.forEach(node => targetNode.appendChild(node))
+            this.subNav.forEach(node => targetNode.appendChild(node))
             this.mainNav.appendChild(div.children[0])
           }
         })
