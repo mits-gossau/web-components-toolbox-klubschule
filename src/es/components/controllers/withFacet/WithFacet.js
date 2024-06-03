@@ -143,7 +143,7 @@ export default class WithFacet extends Shadow() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept-Language': `${LanguageEnum[this.getAttribute('sprach-id')]},q=0.9`
+            'Accept-Language': LanguageEnum[this.getAttribute('sprach-id')]
           },
           mode: 'cors',
           body: request
