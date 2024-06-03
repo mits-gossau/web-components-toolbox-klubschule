@@ -222,6 +222,11 @@
       separateFolder: true
     },
     {
+  		selector: 'mcs-',
+  		url: 'web-components-toolbox/src/es/components/mcs/',
+  		separateFolder: true
+  	},
+    {
       selector: 'contentful-',
       url: 'web-components-toolbox/src/es/components/contentful/',
       separateFolder: true
