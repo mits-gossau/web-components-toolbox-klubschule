@@ -127,6 +127,12 @@ export default class WithFacet extends Shadow() {
         request = this.lastRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
       }
 
+      const LanguageEnum = {
+        'd': 'de',
+        'f': 'fr',
+        'i': 'it'
+      }
+
       let requestInit = {}
       if (this.isMocked) {
         requestInit = {
@@ -136,7 +142,8 @@ export default class WithFacet extends Shadow() {
         requestInit = {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept-Language': `${LanguageEnum[this.getAttribute('sprach-id')]},q=0.9`
           },
           mode: 'cors',
           body: request
