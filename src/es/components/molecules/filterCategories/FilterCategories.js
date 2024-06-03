@@ -16,8 +16,7 @@ export default class FilterCategories extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.childItems = ''
-    this.subNav = []
-
+   
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
     this.keepDialogOpenEventListener = event => {
@@ -73,37 +72,34 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  iterateChildren(childData, parentItem) {
-    if (childData.children && childData.children.length > 0) {
-      childData.children.forEach(child => {
-          if (child.selected) {
-            this.childItems += child.label + ', '
-          }
-          const count = child.count ? `(${child.count})` : ''
-          const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
-          const checked = child.selected ? 'checked' : ''
-          const visible = child.visible ? 'visible' : ''
-          const div = document.createElement('div')
-          div.innerHTML = /* html */`
-            <mdx-component mutation-callback-event-name="request-with-facet">
-              <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
-            </mdx-component>
-          `
-          // @ts-ignore
-          div.children[0].filterItem = parentItem
-          this.subNav.push(div.children[0])
+  generateFilterCheckbox(child, parentItem) {
+    const subNav = []
 
-          if (child.children && child.children.length > 0) {
-            this.iterateChildren(child, childData) // recursively call the function for any nested children
-          }
-      })
+    if (child.selected) {
+      this.childItems += child.label + ', '
     }
+    const count = child.count ? `(${child.count})` : ''
+    const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
+    const checked = child.selected ? 'checked' : ''
+    const visible = child.visible ? 'visible' : ''
+    const div = document.createElement('div')
+    div.innerHTML = /* html */`
+      <mdx-component mutation-callback-event-name="request-with-facet">
+        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
+      </mdx-component>
+    `
+    // @ts-ignore
+    div.children[0].filterItem = parentItem
+    subNav.push(div.children[0])
+
+    return subNav
   }
 
   generateNavLevelItem (response, filterItem) {
     const shouldRemainOpen = filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    const div = document.createElement('div')
 
-    return /* html */`
+    div.innerHTML = /* html */`
       <m-dialog id="${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
@@ -135,6 +131,27 @@ export default class FilterCategories extends Shadow() {
         </ks-m-nav-level-item>
       </m-dialog>
     `
+
+    return { 
+      navLevelItem: div.children[0],
+      // @ts-ignore
+      subLevel: div.querySelector('m-dialog')?.root.querySelector('.sub-level')
+    }
+  }
+
+  generateFilters (response, filterItem, i, parentItem = this.mainNav) {
+    const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
+    parentItem.appendChild(generatedNavLevelItem.navLevelItem)
+
+    if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+      filterItem.children.forEach(child => {
+        if (child.children && child.children.length > 0) {
+          this.generateFilters(response, child, i, generatedNavLevelItem.subLevel) // recursively call the function for any nested children
+        } else {
+          this.generateFilterCheckbox(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+        }
+      })
+    }
   }
 
   renderHTML (fetch) {
@@ -156,30 +173,10 @@ export default class FilterCategories extends Shadow() {
       fetch.then(response => {
         this.html = ''
 
+        if (response.filters.length === 0) return
+
         response.filters.forEach((filterItem, i) => {
-          if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-            filterItem.children.forEach(child => {
-                this.iterateChildren(child, filterItem)
-            })
-
-            this.html = this.mainNav
-          }
-
-          if (this.mainNav.children[i]?.getAttribute('id') === filterItem.id) {
-            const targetNode = this.mainNav.children[i].root.querySelector('.sub-level')
-            targetNode.innerHTML = ''
-            this.subNav.forEach(node => targetNode.appendChild(node))
-          } else {
-            if (filterItem.visible === false || filterItem.children?.length === 0) return
-
-            const navLevelItem = this.generateNavLevelItem(response, filterItem)
-            const div = document.createElement('div')
-            div.innerHTML = navLevelItem
-            // @ts-ignore
-            const targetNode = div.children[0].root.querySelector('.sub-level')
-            this.subNav.forEach(node => targetNode.appendChild(node))
-            this.mainNav.appendChild(div.children[0])
-          }
+          this.generateFilters(response, filterItem, i)
         })
       })
     })
@@ -190,6 +187,8 @@ export default class FilterCategories extends Shadow() {
 
     const mainNav = document.createElement('div')
     mainNav.setAttribute('class', 'main-level')
+
+    this.html = mainNav
 
     return mainNav
   }
