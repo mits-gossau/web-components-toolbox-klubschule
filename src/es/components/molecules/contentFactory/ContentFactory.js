@@ -116,8 +116,8 @@ export default class ContentFactory extends Shadow() {
         <ks-m-content-search-item>
           <a href="${content.link}">
             <div>
-              ${content.text ? /* html */`<h3>${content.text}</h3>` : ''}
-              ${content.title ? /* html */`<p>${content.title}</p>` : ''}
+              ${content.title ? /* html */`<h3>${content.title}</h3>` : ''}
+              ${content.text ? /* html */`<p>${content.text}</p>` : ''}
             </div>
             ${content.image ? /* html */`<a-picture picture-load defaultSource="${content.image.src}" alt="${content.image.alt}"></a-picture>` : ''}
           </a>
