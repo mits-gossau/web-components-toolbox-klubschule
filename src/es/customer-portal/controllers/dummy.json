@@ -125,5 +125,8 @@
     "CP.cpYouHaveSuccessfullyCanceledTheAppointment":"[DE | Sie haben den Termin erfolgreich storniert]",
     "CP.cpFilterTitleLocation": "[DE | Standorte]",
     "CP.cpFilterTitleTime": "[DE | Zeit]",
-    "CP.cpFilterTitleDay": "[DE | Tag]"
+    "CP.cpFilterTitleDay": "[DE | Tag]",
+    "CP.cpNavigationAppointmentsBooking": "[DE | Abo-Termine buchen]",
+    "CP.cpNavigationBookedAppointments": "[DE | Gebuchte Termine]",
+    "CP.cpNavigationMySubscriptions": "[DE | Meine Abonnemente]"
 }

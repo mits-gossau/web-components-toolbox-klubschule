@@ -106,28 +106,22 @@ export default class Appointments extends HTMLElement {
         // get day filter checkboxes
         if (type === 'day') {
           const newDayCode = appointmentsClone.filters.dayCodes.find(dayCode => dayCode.dayCode === Number(event.detail.target.value))
-          if (newDayCode) {
-            // sync checkbox selection
-            newDayCode.selected = event.detail.target.checked
-          }
+          // sync checkbox selection
+          if (newDayCode) newDayCode.selected = event.detail.target.checked
         }
 
         // get location filter checkboxes
         if (type === 'location') {
           const newLocationCode = appointmentsClone.filters.locations.find(location => location.locationId === Number(event.detail.target.value))
-          if (newLocationCode) {
-            // sync checkbox selection
-            newLocationCode.selected = event.detail.target.checked
-          }
+          // sync checkbox selection
+          if (newLocationCode) newLocationCode.selected = event.detail.target.checked
         }
 
         // get time filter checkboxes
         if (type === 'time') {
           const newTimeCode = appointmentsClone.filters.timeCodes.find(timeCode => timeCode.timeCode === Number(event.detail.target.value))
-          if (newTimeCode) {
-            // sync checkbox selection
-            newTimeCode.selected = event.detail.target.checked
-          }
+          // sync checkbox selection
+          if (newTimeCode) newTimeCode.selected = event.detail.target.checked
         }
 
         // keep selected filters for next request

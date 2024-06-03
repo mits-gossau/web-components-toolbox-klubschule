@@ -175,17 +175,17 @@ export default class AppointmentsFilter extends Shadow() {
               ${filterStringCollection.reduce((acc, dayCode) => (dayCode.selected ? acc ? `${acc}, ${dayCode[filterStringDisplayValue]}` : dayCode[filterStringDisplayValue] : acc), '')}
             </span>
             <span part="label2" dynamic></span>
-            </ks-a-button>
-            <ks-a-button 
-              filter 
-              namespace="button-primary-" 
-              color="tertiary" 
-              justify-content="flex-start" 
-              request-event-name="reset-appointments-filter"
-              tag="${closeEventTag}">
-                <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-            </ks-a-button>
-          </m-double-button>
+          </ks-a-button>
+          <ks-a-button 
+            filter 
+            namespace="button-primary-" 
+            color="tertiary" 
+            justify-content="flex-start" 
+            request-event-name="reset-appointments-filter"
+            tag="${closeEventTag}">
+              <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+          </ks-a-button>
+        </m-double-button>
     `
   }
 
