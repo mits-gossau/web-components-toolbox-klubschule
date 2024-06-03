@@ -109,7 +109,6 @@ export default class WithFacet extends Shadow() {
 
         this.updateURLParams()
 
-        
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
         let hasSearchLocation = false
@@ -143,7 +142,7 @@ export default class WithFacet extends Shadow() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept-Language': LanguageEnum[this.getAttribute('sprach-id')]
+            'Accept-Language': LanguageEnum[this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd']
           },
           mode: 'cors',
           body: request
