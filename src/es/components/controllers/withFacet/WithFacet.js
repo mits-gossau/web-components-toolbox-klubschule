@@ -109,7 +109,6 @@ export default class WithFacet extends Shadow() {
 
         this.updateURLParams()
 
-        
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
         let hasSearchLocation = false
@@ -127,6 +126,12 @@ export default class WithFacet extends Shadow() {
         request = this.lastRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
       }
 
+      const LanguageEnum = {
+        'd': 'de',
+        'f': 'fr',
+        'i': 'it'
+      }
+
       let requestInit = {}
       if (this.isMocked) {
         requestInit = {
@@ -136,7 +141,8 @@ export default class WithFacet extends Shadow() {
         requestInit = {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept-Language': LanguageEnum[this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd']
           },
           mode: 'cors',
           body: request
