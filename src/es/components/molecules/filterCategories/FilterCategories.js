@@ -70,6 +70,38 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
+  iterateChildren(filterItem) {
+    if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+      filterItem.children.forEach(childData => {
+
+        if (childData.children && childData.children.length > 0) {
+            childData.children.forEach(child => {
+                if (child.selected) {
+                  this.childItems += child.label + ', '
+                }
+                const count = child.count ? `(${child.count})` : ''
+                const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
+                const checked = child.selected ? 'checked' : ''
+                const visible = child.visible ? 'visible' : ''
+                const div = document.createElement('div')
+                div.innerHTML = /* html */`
+                  <mdx-component mutation-callback-event-name="request-with-facet">
+                    <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
+                  </mdx-component>
+                `
+                // @ts-ignore
+                div.children[0].filterItem = filterItem
+                this.subNav.push(div.children[0])
+
+                this.iterateChildren(child) // Recursively call the function for any nested children
+            })
+        }
+
+        this.html = this.mainNav
+      })
+    }
+  }
+
   renderHTML (fetch) {
     Promise.all([
       fetch,
