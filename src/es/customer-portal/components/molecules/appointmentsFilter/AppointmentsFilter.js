@@ -268,13 +268,13 @@ export default class AppointmentsFilter extends Shadow() {
                   <a-translation data-trans-key='CP.cpAppointmentClose'/></a-translation>
               </ks-a-button>
             </div>
-            <!-- <ks-a-number-of-offers-button 
+            <ks-a-number-of-offers-button 
               id="close" 
               class="button-show-all-offers" 
               namespace="button-primary-" 
               no-pointer-events>
-              (XY) Kurse
-            </ks-a-number-of-offers-button> -->
+              (${this.dataset.counter}) Kurse
+            </ks-a-number-of-offers-button> 
           </div>
       </m-dialog> 
     `

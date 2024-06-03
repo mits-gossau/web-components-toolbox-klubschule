@@ -178,7 +178,7 @@ export default class AppointmentsList extends Shadow() {
               ${subscriptionSelect}
             </div>
             <div col-lg="12" col-md="12" col-sm="12">
-              <m-appointments-filter data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
+              <m-appointments-filter data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
             </div>
             `
             : ''}         
