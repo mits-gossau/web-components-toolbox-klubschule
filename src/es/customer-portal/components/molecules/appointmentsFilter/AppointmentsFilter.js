@@ -24,22 +24,10 @@ export default class AppointmentsFilter extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host > div {
-        align-items: center;
-        display: flex;
-        gap: 1em;
         margin: 2em 0;
-        width: 100%;
-      }
-      :host > div > div {
-        width:100%;
-      }
-      :host * ks-a-button {
-        width:100%;
       }
       @media only screen and (max-width: _max-width_) {
-        :host > div  {
-          flex-direction: column;
-        }
+        :host {}
       }
     `
     return this.fetchTemplate()
@@ -110,11 +98,18 @@ export default class AppointmentsFilter extends Shadow() {
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations } = filter
       this.html = /* html */ `
-        <div>
-          <div>${this.renderDayFilter(dayCodes)}</div>
-          <div>${this.renderTimeFilter(timeCodes)}</div>
-          <div>${this.renderLocationFilter(locations)}</div>
-          <!--<div>time</div>-->
+      <div>
+        <o-grid namespace="grid-12er-">
+          <style>
+            :host ks-a-button {
+              width: 100%;
+            }
+          </style>
+            <div col-lg="3" col-md="3" col-sm="12">${this.renderDayFilter(dayCodes)}</div>
+            <div col-lg="3" col-md="3" col-sm="12">${this.renderTimeFilter(timeCodes)}</div>
+            <div col-lg="3" col-md="3" col-sm="12">${this.renderLocationFilter(locations)}</div>
+            <div col-lg="3" col-md="3" col-sm="12">time</div>
+          </o-grid>
         </div>
       `
     })
