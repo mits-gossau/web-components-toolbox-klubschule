@@ -1,180 +1,327 @@
 <h1 id="primary">Input</h1>
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Default</h2>
     <div>
-        <ks-a-input>
-            <div>
-                <label>Label</label>
-                <input type="text">
-                <div class="hint">
-                    <span>This is a hint.</span>
-                </div>
-            </div>
-        </ks-a-input>
-    </div>
-</section>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Required</h2>
-    <div>
-        <ks-a-input>
-            <div>
-                <label>Label *</label>
-                <input type="text" required>
-                <div class="hint">
-                    <span>This is a hint.</span>
-                </div>
-            </div>
-        </ks-a-input>
-    </div>
-</section>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Placeholder</h2>
-    <div>
-        <ks-a-input>
-            <div>
-                <label>Label</label>
-                <input type="text" placeholder="Placeholder">
-            </div>
-        </ks-a-input>
-    </div>
-</section>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Hint</h2>
-    <div>
-        <ks-a-input>
-            <div>
-                <label for="input-01">Label</label>
-                <input id="input-01" type="text">
-                <div class="hint">
-                    <span>This is a hint.</span>
-                </div>
-            </div>
-        </ks-a-input>
-    </div>
-</section>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Counter</h2>
-    <div>
-        <ks-a-input>
-            <div>
-                <label for="input-02">Label</label>
-                <input id="input-02" type="text" maxlength="25">
-                <div class="hint">
-                    <span>This is a hint.</span>
-                    <div class="counter">
-                        <span class="current">0</span>
-                        <span class="max"></span>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'input-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Default</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="input-01">Label</label>
+                                <input id="input-01" name="input-01" type="text">
+                            </div>
+                        </ks-a-input>
                     </div>
-                </div>
-            </div>
-        </ks-a-input>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>
+
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Password</h2>
     <div>
-        <ks-a-input>
-            <div>
-                <label>Label *</label>
-                <input type="password" maxlength="25" required>
-                <div class="hint">
-                    <span>Max. 25 Zeichen, Gross- und Kleinschreibung, Zahlen und Sonderzeichen</span>
-                    <div class="counter">
-                        <span class="current">0</span>
-                        <span class="max"></span>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'input-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Hint</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="input-01">Label</label>
+                                <input id="input-01" name="input-01" type="text">
+                                <div class="hint">
+                                    <span>This is a hint.</span>
+                                </div>
+                            </div>
+                        </ks-a-input>
                     </div>
-                </div>
-            </div>
-        </ks-a-input>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>
+
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>E-Mail</h2>
     <div>
-        <ks-a-input>
-            <div>
-                <label>Label *</label>
-                <input type="email" pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
-            </div>
-        </ks-a-input>
-    </div>
-</section>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Number</h2>
-    <div>
-        <ks-a-input>
-            <div>
-                <label>Label</label>
-                <input type="number">
-            </div>
-        </ks-a-input>
-    </div>
-</section>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Disabled</h2>
-    <div>
-        <ks-a-input>
-            <div>
-                <label for="input-03">Label</label>
-                <input id="input-03" type="text" disabled>
-                <div class="hint">
-                    <span>This is a hint.</span>                
-                </div>
-            </div>
-        </ks-a-input>
-    </div>
-</section>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Input Error</h2>
-    <div>
-        <ks-a-input>
-            <div class="error">
-                <label for="input-04">Label</label>
-                <input id="input-04" type="text">
-                <div class="hint">
-                    <span>This is a hint.</span>                
-                </div>
-                <div class="error">
-                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left"></a-icon-mdx>
-                    <span>This is an error.</span>                
-                </div>
-            </div>
-        </ks-a-input>
-    </div>
-</section>
-<section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Textarea</h2>
-    <div>
-        <ks-a-input>
-            <div>
-                <label for="textarea-01">Label</label>
-                <textarea id="textarea-01" rows="4" cols="20" maxlength="150"></textarea>
-                <div class="hint">
-                    <span>This is a hint.</span>
-                    <div class="counter">
-                        <span class="current">0</span>
-                        <span class="max"></span>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'input-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Required</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="input-01">Label *</label>
+                                <input id="input-01" name="input-01" type="text" required
+                                    error-message-reference-point-changed="true" no-error-text-p
+                                    error-text-tag-name="span"
+                                    data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                <div class="hint">
+                                    <span>This is a hint.</span>
+                                </div>
+                                <div class="message">
+                                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em"
+                                        class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                                </div>
+                            </div>
+                        </ks-a-input>
                     </div>
-                </div>
-            </div>
-        </ks-a-input>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>
+
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Textarea Error</h2>
     <div>
-        <ks-a-input>
-            <div class="error">
-                <label for="textarea-01">Label</label>
-                <textarea id="textarea-01" rows="4" cols="20" maxlength="150"></textarea>
-                <div class="hint">
-                    <span>This is a hint.</span>                
-                </div>
-                <div class="error">
-                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left"></a-icon-mdx>
-                    <span>This is an error.</span>                
-                </div>
-            </div>
-        </ks-a-input>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'input-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Placeholder</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="input-01">Label</label>
+                                <input id="input-01" name="input-01" type="text" placeholder="Placeholder...">
+                            </div>
+                        </ks-a-input>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
+    </div>
+</section>
+
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <div>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'input-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Counter</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="input-01">Label</label>
+                                <input id="input-01" name="input-01" type="text" maxlength="25">
+                                <div class="hint">
+                                    <span>Maximal 25 Zeichen.</span>
+                                    <div class="counter">
+                                        <span class="current">0</span>
+                                        <span class="max"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ks-a-input>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
+    </div>
+</section>
+
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <div>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'input-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Password</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="input-01">Passwort *</label>
+                                <input id="input-01" name="input-01" type="password" maxlength="25" required
+                                    error-message-reference-point-changed="true" no-error-text-p
+                                    error-text-tag-name="span"
+                                    data-m-v-rules='{"required": {"error-message": "Bitte Passwort angeben."}}'>
+                                <div class="hint">
+                                    <span>Maximal 25 Zeichen.</span>
+                                    <div class="counter">
+                                        <span class="current">0</span>
+                                        <span class="max"></span>
+                                    </div>
+                                </div>
+                                <div class="message">
+                                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em"
+                                        class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                                </div>
+                            </div>
+                        </ks-a-input>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
+    </div>
+</section>
+
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <div>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'input-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Email</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="input-01">Email *</label>
+                                <input id="input-01" name="input-01" type="email"
+                                    pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required
+                                    error-message-reference-point-changed="true" no-error-text-p
+                                    error-text-tag-name="span"
+                                    data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                <div class="hint">
+                                    <span>This is a hint.</span>
+                                </div>
+                                <div class="message">
+                                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em"
+                                        class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                                </div>
+                            </div>
+                        </ks-a-input>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
+    </div>
+</section>
+
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <div>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'input-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Number</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="input-01">PLZ</label>
+                                <input id="input-01" name="input-01" type="number">
+                            </div>
+                        </ks-a-input>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
+    </div>
+</section>
+
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <div>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'input-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Disabled</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="input-01">Label</label>
+                                <input id="input-01" name="input-01" type="text" disabled>
+                            </div>
+                        </ks-a-input>
+                    </div>
+                </section>
+            </form>
+        </m-simple-form-validation>
+    </div>
+</section>
+
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <div>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'textarea-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Textarea</h2>
+                    <div>
+                        <ks-a-input mode="false">
+                            <div class="wrap">
+                                <label for="textarea-01">Label *</label>
+                                <textarea id="textarea-01" name="textarea-01" rows="4" cols="20" maxlength="150"
+                                    required error-message-reference-point-changed="true" no-error-text-p
+                                    error-text-tag-name="span"
+                                    data-m-v-rules='{"required": {"error-message": "This is an error message."}}'></textarea>
+                                <div class="hint">
+                                    <span>This is a hint.</span>
+                                    <div class="counter">
+                                        <span class="current">0</span>
+                                        <span class="max"></span>
+                                    </div>
+                                </div>
+                                <div class="message">
+                                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em"
+                                        class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                                </div>
+                            </div>
+                        </ks-a-input>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>

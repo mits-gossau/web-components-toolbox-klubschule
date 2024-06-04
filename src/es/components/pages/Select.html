@@ -1,78 +1,141 @@
 <h1 id="primary">Select</h1>
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Default</h2>
     <div>
-        <ks-m-select>
-            <div>
-                <label for="select-01">Label</label>
-                <select name="options" id="select-01">
-                    <option value="" disabled selected>Option wählen</option>
-                    <option value="o1">Option 1</option>
-                    <option value="o2">Option 2</option>
-                    <option value="o3">Option 3</option>
-                </select>
-            </div>
-        </ks-m-select>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'select-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Default</h2>
+                    <div>
+                        <ks-m-select mode="false">
+                            <div class="wrap">
+                                <label for="select-01">Label</label>
+                                <select id="select-01" name="select-01">
+                                    <option value="">Select Option...</option>
+                                    <option value="select-o-01">Option 1</option>
+                                    <option value="select-o-02">Option 2</option>
+                                    <option value="select-o-03">Option 3</option>
+                                </select>
+                            </div>
+                        </ks-m-select>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>
+
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Hint</h2>
     <div>
-        <ks-m-select>
-            <div>
-                <label for="select-02">Label</label>
-                <select name="options" id="select-02">
-                    <option value="" disabled selected>Option wählen</option>
-                    <option value="o1">Option 1</option>
-                    <option value="o2">Option 2</option>
-                    <option value="o3">Option 3</option>
-                </select>
-                <div class="hint">
-                    <span>This is a hint.</span>
-                </div>
-            </div>
-        </ks-m-select>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'select-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Hint</h2>
+                    <div>
+                        <ks-m-select mode="false">
+                            <div class="wrap">
+                                <label for="select-01">Label</label>
+                                <select id="select-01" name="select-01">
+                                    <option value="">Select Option...</option>
+                                    <option value="select-o-01">Option 1</option>
+                                    <option value="select-o-02">Option 2</option>
+                                    <option value="select-o-03">Option 3</option>
+                                </select>
+                                <div class="hint">
+                                    <span>This is a hint.</span>
+                                </div>
+                            </div>
+                        </ks-m-select>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>
+
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Disabled</h2>
     <div>
-        <ks-m-select>
-            <div>
-                <label for="select-03">Label</label>
-                <select name="options" id="select-03" disabled>
-                    <option value="" disabled selected>Option wählen</option>
-                    <option value="o1">Option 1</option>
-                    <option value="o2">Option 2</option>
-                    <option value="o3">Option 3</option>
-                </select>
-                <div class="hint">
-                    <span>This is a hint.</span>
-                </div>
-            </div>
-        </ks-m-select>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'select-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Required</h2>
+                    <div>
+                        <ks-m-select mode="false">
+                            <div class="wrap">
+                                <label for="select-01">Label *</label>
+                                <select id="select-01" name="select-01" required
+                                    error-message-reference-point-changed="true" no-error-text-p
+                                    error-text-tag-name="span"
+                                    data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                    <option value="">Select Option...</option>
+                                    <option value="select-o-01">Option 1</option>
+                                    <option value="select-o-02">Option 2</option>
+                                    <option value="select-o-03">Option 3</option>
+                                </select>
+                                <div class="hint">
+                                    <span>This is a hint.</span>
+                                </div>
+                                <div class="message">
+                                    <a-icon-mdx icon-name="AlertCircle" size="1em" rotate="0" class="icon-right"
+                                        new-error-message-reference-point="true"></a-icon-mdx>
+                                </div>
+                            </div>
+                        </ks-m-select>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>
+
 <section style="background-color: #f5ebeb; padding: 1em;">
-    <h2>Error</h2>
     <div>
-        <ks-m-select>
-            <div class="error">
-                <label for="select-04">Label</label>
-                <select name="options" id="select-04">
-                    <option value="" disabled selected>Option wählen</option>
-                    <option value="o1">Option 1</option>
-                    <option value="o2">Option 2</option>
-                    <option value="o3">Option 3</option>
-                </select>
-                <div class="hint">
-                    <span>This is a hint.</span>
-                </div>
-                <div class="error">
-                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="AlertCircle" size="1em" class="icon-left"></a-icon-mdx>
-                    <span>This is an error.</span>                
-                </div>
-            </div>
-        </ks-m-select>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
+                    'select-01': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Disabled</h2>
+                    <div>
+                        <ks-m-select mode="false">
+                            <div class="wrap">
+                                <label for="select-01">Label</label>
+                                <select id="select-01" name="select-01" disabled>
+                                    <option value="">Select Option...</option>
+                                    <option value="select-o-01">Option 1</option>
+                                    <option value="select-o-02">Option 2</option>
+                                    <option value="select-o-03">Option 3</option>
+                                </select>
+                            </div>
+                        </ks-m-select>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
     </div>
 </section>
