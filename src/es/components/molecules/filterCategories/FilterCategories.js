@@ -14,8 +14,6 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class FilterCategories extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-
-    this.childItems = ''
    
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
@@ -75,9 +73,6 @@ export default class FilterCategories extends Shadow() {
   generateFilterCheckbox(child, parentItem) {
     const subNav = []
 
-    if (child.selected) {
-      this.childItems += child.label + ', '
-    }
     const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
@@ -98,6 +93,14 @@ export default class FilterCategories extends Shadow() {
   generateNavLevelItem (response, filterItem) {
     const shouldRemainOpen = filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
+
+    let childItems = ''
+    const selectedChildren = filterItem.children.filter(child => child.selected)
+    if (selectedChildren.length > 0) {
+      selectedChildren.forEach(child => {
+        childItems += `${child.label}, `
+      })
+    }
 
     div.innerHTML = /* html */`
       <m-dialog id="${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
@@ -125,7 +128,7 @@ export default class FilterCategories extends Shadow() {
         <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
           <div class="wrap">
             <span class="text">${filterItem.label}</span>
-            <span class="additional">${this.childItems.slice(0, -2)}</span>
+            <span class="additional">${childItems.slice(0, -2)}</span>
           </div>
           <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
         </ks-m-nav-level-item>
