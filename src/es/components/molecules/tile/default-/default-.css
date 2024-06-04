@@ -6,14 +6,22 @@
     --tile-default-foot-display: flex;
     --tile-default-foot-justify-content: space-between;
     --tile-default-foot-align-items: center;
-    --tile-default-foot-padding: 1.5em;
+    --tile-default-foot-padding: 0;
     --tile-default-foot-passed-display: none;
     --tile-default-icon-box-dimension: 1.625em;
     --tile-default-icon-box-color: var(--m-white);
     --tile-default-overlay-display: none;
     --tile-default-overlay-background-color: transparent;
-    --tile-default-price-strong-font-family: var(--mdx-sys-font-flex-large-headline3-font-family);
-    --tile-default-price-strong-font-size: var(--mdx-sys-font-flex-large-headline3-font-size);
-    --tile-default-price-strong-line-height: var(--mdx-sys-font-flex-large-headline3-line-height);
-    --tile-default-price-strong-font-weight: var(--mdx-sys-font-flex-large-headline3-font-weight);
+    --tile-default-title-font-family: var(--mdx-sys-font-flex-headline3-font-family);
+    --tile-default-title-font-size: var(--mdx-sys-font-flex-headline3-font-size);
+    --tile-default-title-line-height: var(--mdx-sys-font-flex-headline3-line-height);
+    --tile-default-title-font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
+    --tile-default-price-font-family: var(--mdx-sys-font-font-fix-label4-font-family);
+    --tile-default-price-font-size: var(--mdx-sys-font-font-fix-label4-font-size);
+    --tile-default-price-line-height: var(--mdx-sys-font-font-fix-label4-line-height);
+    --tile-default-price-font-weight: var(--mdx-sys-font-font-fix-label4-font-weight);
+    --tile-default-price-strong-font-family: var(--mdx-sys-font-flex-headline3-font-family);
+    --tile-default-price-strong-font-size: var(--mdx-sys-font-flex-headline3-font-size);
+    --tile-default-price-strong-line-height: var(--mdx-sys-font-flex-headline3-line-height);
+    --tile-default-price-strong-font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
 }

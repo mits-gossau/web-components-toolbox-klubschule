@@ -50,6 +50,7 @@ export default class Tile extends Shadow() {
       :host .m-tile__wrap {
         position: relative;
         height: 100%;
+        padding: 1.5em;
       }
     
       :host .m-tile__overlay {
@@ -70,28 +71,19 @@ export default class Tile extends Shadow() {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1.5em;
-        padding-bottom: 0.75em;
-      }
-
-      :host .m-tile__head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.5em;
         padding-bottom: 0.75em;
       }
       
       :host .m-tile__title {
-          font-size: 1.5em;
-          line-height: 1.625em;
-          font-weight: 500;
+        font-family: var(--title-font-family);
+        font-size: var(--title-font-size);
+        line-height: var(--title-line-height);
+        font-weight: var(--title-font-weight);   
       }
       
       :host .m-tile__body {
           display: flex;
           align-items: center;
-          padding: 1.5em;
           padding-bottom: 2em;
       }
       
@@ -132,9 +124,10 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__price {
-          font-size: 0.875em;
-          line-height: 0.9375em;
-          font-weight: 500;
+          font-family: var(--price-font-family);
+          font-size: var(--price-font-size);
+          line-height: var(--price-line-height);
+          font-weight: var(--price-font-weight);  
           padding-left: 0.75em;
       }
       
@@ -181,13 +174,8 @@ export default class Tile extends Shadow() {
       }
 
       @media only screen and (max-width: _max-width_) {
-        :host .m-tile {
-            padding: 0.5em 0;
-        }
-
-        :host .m-tile__title {
-            font-size: 1.25em;
-            line-height: 1.375em;
+        :host .m-tile__wrap {
+            padding: 1rem 0.5rem;
         }
 
         :host .m-tile__content {
@@ -196,15 +184,19 @@ export default class Tile extends Shadow() {
         }
 
         :host .m-tile__price strong {
-            font-size: 1.125em;
-            line-height: 1.25em;
             padding-top: 0.75em;
             padding-left: 0;
         }
 
         :host .m-tile__foot-right {
+            margin-left: auto;
             flex-direction: column;
             align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        :host .m-tile__icon-box + .m-tile__icon-box {
+          margin-left: 1rem;
         }
       }
     `
