@@ -9,18 +9,18 @@
 
 [Examples](../../pages/CheckoutLayout.html) of all variations
 
-### Slots
+### IDs
 
-- `slot="top"`: Slot to be used for stage (or progress stepper)
-- `slot="main"`: Left main content (e. g. forms and other content)
-- `slot="sidebar"`: Right sidebar content (usually the summary of the offer)
-- `slot="bottom"`: Content before the footer
+- `id="top"`: Id to be used for stage (or progress stepper)
+- `id="main"`: Left main content (e. g. forms and other content)
+- `id="sidebar"`: Right sidebar content (usually the summary of the offer)
+- `id="bottom"`: Content before the footer
 
 
 ```html
 <ks-o-checkout-layout>
 
-    <section slot="top">
+    <section id="top">
         <ks-m-checkout-color-stage 
             back-label="Zurück (fallback browser back)" 
             title="Konfiguration: {{ Angebotstitel }}"
@@ -28,17 +28,17 @@
         </ks-m-checkout-color-stage>
     </section>
 
-    <section slot="main">
+    <section id="main">
         <h2>Main Content</h2>
         <p>(Desktop auf linker Seite)</p>
     </section>
 
-    <section slot="sidebar">
+    <section id="sidebar">
         <h2>Sidebar</h2>
         <p>(Desktop rechts)</p>
     </section>
 
-    <section slot="bottom">
+    <section id="bottom">
         <ks-m-back-forward
             back-label="Zurück"
             back-link="#back"

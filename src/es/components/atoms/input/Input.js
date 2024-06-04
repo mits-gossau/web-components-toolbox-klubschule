@@ -115,6 +115,7 @@ export default class Input extends Shadow() {
       :host .message span,
       :host .message a-icon-mdx {
         color: var(--mdx-comp-error-message-color-default);
+        font: var(--mdx-comp-error-message-font-default);
         display: flex;
       }
 
