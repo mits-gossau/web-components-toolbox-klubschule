@@ -157,7 +157,6 @@ export default class AppointmentsList extends Shadow() {
         this.html = ''
         const subscriptionSelect = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
         const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
-        console.log('appointments', { appointments, dayList })
         this.numberOfAppointments = dayList.counter
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
