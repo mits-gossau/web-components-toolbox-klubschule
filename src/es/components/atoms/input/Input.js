@@ -101,16 +101,10 @@ export default class Input extends Shadow() {
         font: var(--mdx-comp-inputfield-font-label);
       }
 
-      :host > div .error {
+      .wrap:has(.has-error) .hint {
         display: none;
       }
 
-      :host .error .hint {
-        display: none;
-      }
-
-      :host .error input,
-      :host .error textarea,
       :host input.has-error,
       :host textarea.has-error {
         border-color: var(--mdx-comp-inputfield-border-color-error);
@@ -118,13 +112,14 @@ export default class Input extends Shadow() {
         color: var(--mdx-comp-error-message-color-default);
       }
 
-      :host .error span,
-      :host .error a-icon-mdx {
+      :host .message span,
+      :host .message a-icon-mdx {
         color: var(--mdx-comp-error-message-color-default);
+        font: var(--mdx-comp-error-message-font-default);
         display: flex;
       }
 
-      :host .error span {
+      :host .message span {
         margin-left: var(--mdx-comp-inputfield-gap-content-below);
       }
 
@@ -192,7 +187,7 @@ export default class Input extends Shadow() {
         justify-content: space-between;
       }
 
-      :host .error .error {
+      :host .message {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -208,6 +203,14 @@ export default class Input extends Shadow() {
         flex-direction: row;
         color: var(--mdx-comp-inputfield-hint-counter-color-focus);
         font: var(--mdx-comp-inputfield-font-supporting);
+      }
+
+      .wrap:not(:has(.has-error)) > .message {
+        display: none;
+      }
+      
+      [dirty] .wrap > input:invalid ~ .message {
+        display: flex;
       }
     `
   }

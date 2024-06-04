@@ -289,12 +289,16 @@
   --ul-margin: 0 auto var(--mdx-sys-spacing-flex-xs);
   --ul-padding-left: 1.33333em;
   --ul-li-padding-left: calc(4rem/18);
+  --ul-li-font-family: var(--mdx-sys-font-flex-body3-font-family);
+  --ul-li-font-size: var(--mdx-sys-font-flex-body3-font-size);
+  --ul-li-line-height: var(--mdx-sys-font-flex-body3-line-height);
+  --ul-li-font-weight: var(--mdx-sys-font-flex-body3-font-weight);
 
   /* paragraph */
-  --p-font-family: var(--mdx-sys-font-flex-body3-font-family);
-  --p-font-size: var(--mdx-sys-font-flex-body3-font-size);
-  --p-line-height: var(--mdx-sys-font-flex-body3-line-height);
-  --p-font-weight: var(--mdx-sys-font-flex-body3-font-weight);
+  --p-font-family: var(--ul-li-font-family);
+  --p-font-size: var(--ul-li-font-size);
+  --p-line-height: var(--ul-li-line-height:);
+  --p-font-weight: var(--ul-li-font-weight);
   --p-margin: 0 auto var(--mdx-sys-spacing-flex-s);
   --p-form-margin: 0 auto var(--mdx-sys-spacing-flex-small-s);
 
@@ -396,6 +400,10 @@
   --icon-mdx-ks-event-tick-color: var(--mdx-base-color-grey-0);
   --icon-mdx-ks-event-color: var(--mdx-base-color-grey-950);
   --icon-mdx-ks-event-link-color: var(--mdx-base-color-klubschule-blue-600);
+
+  /* fix form icon sizes */
+  --icon-mdx-ks-forms-svg-height: 1rem;
+  --icon-mdx-ks-forms-svg-width: 1rem;
 
   /* google maps */
   --map-height-mobile: 120vw;

@@ -174,24 +174,33 @@ export default class CheckoutBookedOffer extends Shadow() {
           <ks-a-heading tag="h3">${headline}</ks-a-heading>
           <h4 class="checkout-booked-offer__name">${name}</h4>
           <ul class="checkout-booked-offer__info-list">
-            <li>
-              <img src="${this.statusData.iconPath}" />
-              <span>${this.statusData.label}</span>
-            </li>
-            <li>
-              <a-icon-mdx icon-name="Calendar" size="1.5rem"></a-icon-mdx>
-              <span>
-                ${date}<br />
-                ${time}
-              </span>
-            </li>
-            <li>
-              <a-icon-mdx icon-name="Location" size="1.5rem"></a-icon-mdx>
-              <span>
-                ${street}<br />
-                ${city}
-              </span>
-            </li>
+            ${this.statusData
+              ? `<li>
+                  <img src="${this.statusData.iconPath}" />
+                  <span>${this.statusData.label}</span>
+                </li>`
+              : ''
+            }
+            ${date
+              ? `<li>
+                  <a-icon-mdx icon-name="Calendar" size="1.5rem"></a-icon-mdx>
+                  <span>
+                    ${date}<br />
+                    ${time}
+                  </span>
+                </li>`
+              : ''
+            }
+            ${city
+              ? `<li>
+                  <a-icon-mdx icon-name="Location" size="1.5rem"></a-icon-mdx>
+                  <span>
+                    ${street}<br />
+                    ${city}
+                  </span>
+                </li>`
+              : ''
+            }
             <li>
               <a-icon-mdx icon-name="Wallet" size="1.5rem"></a-icon-mdx>
               ${/* Price Data Configuration */
@@ -260,6 +269,7 @@ export default class CheckoutBookedOffer extends Shadow() {
 
   get statusData () {
     const status = CheckoutBookedOffer.parseAttribute(this.getAttribute('status'))
+    if (!status.code) return null
     let iconName = ''
     if (status.code === '1') {
       iconName = 'garanteed'

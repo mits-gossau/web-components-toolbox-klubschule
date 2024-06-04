@@ -1,0 +1,48 @@
+<div>Checkout Stepper (displayed inside checkout Layout)</div>
+<hr>
+
+<ks-o-checkout-layout>
+
+    <section id="top">
+
+        <!-- stepper with back-link start -->
+        <ks-a-back-link href="#" icon="ArrowLeft">
+            Zur&uuml;ck
+        </ks-a-back-link>
+        <ks-m-checkout-stepper
+            steps='[
+                {
+                    "label": "Anmeldedaten",
+                    "status": "done",
+                    "link": "#anmeldedaten"
+                },
+                {
+                    "label": "Zahlung",
+                    "status": "current",
+                    "link": "#zahlung"
+                },
+                {
+                    "label": "Abschluss",
+                    "status": "default",
+                    "link": "#abschluss"
+                }
+            ]'
+        ></ks-m-checkout-stepper>
+        <!-- stepper with back-link end -->
+
+    </section>
+
+    <section id="main">
+        <p>...</p>
+    </section>
+
+    <section id="sidebar">
+        <p>...</p>
+    </section>
+
+    <section id="bottom">
+        <p>...</p>
+    </section>
+
+</ks-o-checkout-layout>
+
