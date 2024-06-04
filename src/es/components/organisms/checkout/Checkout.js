@@ -9,31 +9,17 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Checkout extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-
-    this.checkoutConfigurationListener = (event) => {
-      console.log(event)
-    }
   }
 
   connectedCallback () {
-    if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
 
-  disconnectedCallback () {
-    document.body.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
-  }
-
-  shouldRenderCSS () {
-    return true
-  }
+  disconnectedCallback () {}
 
   shouldRenderHTML () {
-    return true
+    return this.componentWasRendered
   }
-
-  renderCSS () {}
 
   renderHTML () {
     const children = this.root.querySelectorAll('select')
@@ -63,5 +49,7 @@ export default class Checkout extends Shadow() {
         }))
       })
     })
+
+    this.componentWasRendered = true;
   }
 }

@@ -11,13 +11,13 @@
             <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate"
                 initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
                 <ks-o-checkout mode="false">
-                    <ks-o-checkout-layout>
-                        <section slot="top">
+                    <ks-o-checkout-layout mode="false">
+                        <section id="top">
                             <ks-a-back-link href="#" alt="Alternative Text for Backlink" icon="ArrowLeft">
                                 Zurück
                             </ks-a-back-link>
                         </section>
-                        <section slot="main">
+                        <section id="main">
                             <ks-o-body-section content-width-var="100%" no-margin-y>
                                 <ks-a-heading tag="h2">Wie möchten Sie bezahlen?</ks-a-heading>
                                 <div class="margin-bottom-m">
@@ -66,7 +66,7 @@
                                 </div>
                             </ks-o-body-section>
                         </section>
-                        <section slot="sidebar">
+                        <section id="sidebar">
                             <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
                                 status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
                                 time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
@@ -74,11 +74,11 @@
                                         "annulationskostenversicherungPreis": "16.75 CHF",
                                         "lehrmittelPreis": "16.90 CHF",
                                         "materialPreis": "0.00 CHF",
-                                        "totalPreis": "646.90 CHF",
+                                        "totalPreis": "646.90 CHF"
                                     }'>
                             </ks-m-checkout-booked-offer>
                         </section>
-                        <section slot="bottom">
+                        <section id="bottom">
                             <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
                                 submit></ks-m-back-forward>
                         </section>
@@ -100,16 +100,16 @@
             <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate"
                 initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
                 <ks-o-checkout mode="false">
-                    <ks-o-checkout-layout>
-                        <section slot="top">
+                    <ks-o-checkout-layout mode="false">
+                        <section id="top">
                             <ks-a-back-link href="#" alt="Alternative Text for Backlink" icon="ArrowLeft">
                                 Zurück
                             </ks-a-back-link>
                         </section>
-                        <section slot="main">
+                        <section id="main">
                             <ks-o-body-section content-width-var="100%" no-margin-y>
                                 <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" no-border>
-                                    <div slot="description">
+                                    <div id="description">
                                         <p>Dieses Angebot ist zur Zeit ausgebucht. Wir werden Sie auf die Warteliste setzen und kontaktieren Sie, sobald ein Platz frei wird. Sie Bezahlen erst nach definitiver Anmeldung.</p>
                                     </div>
                                 </ks-m-system-notification>
@@ -160,7 +160,7 @@
                                 </div>
                             </ks-o-body-section>
                         </section>
-                        <section slot="sidebar">
+                        <section id="sidebar">
                             <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
                                 status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
                                 time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
@@ -172,7 +172,7 @@
                                     }'>
                             </ks-m-checkout-booked-offer>
                         </section>
-                        <section slot="bottom">
+                        <section id="bottom">
                             <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
                                 submit></ks-m-back-forward>
                         </section>
@@ -195,20 +195,20 @@
                 initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
                 <ks-o-checkout mode="false">
                     <ks-o-checkout-layout>
-                        <section slot="top">
+                        <section id="top">
                             <ks-a-back-link href="#" alt="Alternative Text for Backlink" icon="ArrowLeft">
                                 Zurück
                             </ks-a-back-link>
                         </section>
-                        <section slot="main">
+                        <section id="main">
                             <ks-o-body-section content-width-var="100%" no-margin-y>
                                 <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" no-border>
-                                    <div slot="description">
+                                    <div id="description">
                                         <p>Dieses Angebot ist bewilligungspflichtig. Nach der Bewilligung wird eine Rechnung ausgestellt.</p>
                                     </div>
                                 </ks-m-system-notification>
                                 <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" no-border>
-                                    <div slot="description">
+                                    <div id="description">
                                         <p>Dieses Angebot ist zur Zeit ausgebucht. Wir werden Sie auf die Warteliste setzen und kontaktieren Sie, sobald ein Platz frei wird. Sie Bezahlen erst nach definitiver Anmeldung.</p>
                                     </div>
                                 </ks-m-system-notification>
@@ -243,7 +243,7 @@
                                 </div>
                             </ks-o-body-section>
                         </section>
-                        <section slot="sidebar">
+                        <section id="sidebar">
                             <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
                                 status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
                                 time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
@@ -255,7 +255,7 @@
                                     }'>
                             </ks-m-checkout-booked-offer>
                         </section>
-                        <section slot="bottom">
+                        <section id="bottom">
                             <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
                                 submit></ks-m-back-forward>
                         </section>
