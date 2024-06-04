@@ -96,7 +96,7 @@ export default class AppointmentsFilter extends Shadow() {
       }
     ]).then(() => {
       const filter = JSON.parse(this.dataset.filter)
-      const { dayCodes, timeCodes, locations } = filter
+      const { dayCodes, timeCodes, locations, datePickerDayList } = filter
       this.html = /* html */ `
       <div>
         <o-grid namespace="grid-12er-">
@@ -108,7 +108,7 @@ export default class AppointmentsFilter extends Shadow() {
             <div col-lg="3" col-md="3" col-sm="12">${this.renderDayFilter(dayCodes)}</div>
             <div col-lg="3" col-md="3" col-sm="12">${this.renderTimeFilter(timeCodes)}</div>
             <div col-lg="3" col-md="3" col-sm="12">${this.renderLocationFilter(locations)}</div>
-            <div col-lg="3" col-md="3" col-sm="12">time</div>
+            <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList)}</div>
           </o-grid>
         </div>
       `
@@ -145,6 +145,25 @@ export default class AppointmentsFilter extends Shadow() {
         ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, locations, 'locationDescription', 'locations')}`
         : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleLocation')}`
       }
+    `
+  }
+
+  renderDatePickerListFilter (date) {
+    console.log(date)
+    return `
+      <!--<ks-a-input mode="false">
+        <div>
+          <label>Start der Gültigkeit *</label>
+            <input
+              type="date"
+              id="checkout-form-abo-start-date"
+              name="start-date"
+              onfocus="this.min=new Date().toISOString().split('T')[0]"
+              required
+              data-m-v-rules='{"required": {"error-message": "Bitte Datum angeben."}}'
+            >
+          </div>
+      </ks-a-input>--> 
     `
   }
 
