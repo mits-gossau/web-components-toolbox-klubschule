@@ -16,7 +16,7 @@ self.Environment = {
       case tagName && typeof tagName.includes === 'function' && tagName.includes('O-NAV-WRAPPER'):
       case tagName && typeof tagName.includes === 'function' && tagName.includes('KS-O-BODY-SECTION'):
       case constructor && typeof constructor.includes === 'function' && constructor.includes('Login'):
-      case constructor && typeof constructor.includes === 'function' && constructor.includes('CarouselTwo') && namespace === 'carousel-two-teaser-':
+      case constructor && typeof constructor.includes === 'function' && constructor.includes('CarouselTwo') && (namespace === 'carousel-two-teaser-' || namespace === 'carousel-two-3-column-'):
         return '1020px'
       default:
         return '767px'

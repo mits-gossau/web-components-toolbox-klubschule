@@ -47,7 +47,7 @@
                                 </select>
                             </div>
                             <div>
-                                <ks-m-checkout-insurance>
+                                <ks-m-checkout-insurance mode="false">
                                     <h2>Kurskosten absichern?</h2>
                                     <p>Mit einer Annullationskostenversicherung erhalten Sie in folgenden Fällen Ihr Kursgeld
                                         zurück:</p>
@@ -57,16 +57,26 @@
                                         <li>unverschuldete Kündigung des Arbeitsplatzes</li>
                                         <li>beruflich bedingter Wohnort-wechsel</li>
                                     </ul>
-                                    <ks-a-radio>
+                                    <ks-a-radio mode="false">
                                         <div class="wrap">
-                                            <label for="rb-01-01">Mit Versicherung</label>
-                                            <input id="rb-01-01" type="radio" name="rg-01">
+                                            <label for="checkout-form-booking-type-company">Mit Versicherung</label>
+                                            <input type="radio" id="checkout-form-booking-type-company" name="rg-01" value="mit"
+                                                required error-message-reference-point-changed="true" no-error-text-p
+                                                error-text-tag-name="span"
+                                                data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                             <div class="box"></div>
                                         </div>
                                         <div class="wrap">
-                                            <label for="rb-01-02">Ohne Versicherung</label>
-                                            <input id="rb-01-02" type="radio" name="rg-01">
+                                            <label for="checkout-form-booking-type-private">Ohne Versicherung</label>
+                                            <input type="radio" id="checkout-form-booking-type-private" name="rg-01" value="ohne"
+                                                error-message-reference-point-changed="true" no-error-text-p
+                                                error-text-tag-name="span"
+                                                data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                             <div class="box"></div>
+                                        </div>
+                                        <div class="message">
+                                            <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em" rotate="0" class="icon-right"
+                                                new-error-message-reference-point="true"></a-icon-mdx>
                                         </div>
                                     </ks-a-radio>
                                 </ks-m-checkout-insurance>

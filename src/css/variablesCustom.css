@@ -401,6 +401,10 @@
   --icon-mdx-ks-event-color: var(--mdx-base-color-grey-950);
   --icon-mdx-ks-event-link-color: var(--mdx-base-color-klubschule-blue-600);
 
+  /* fix form icon sizes */
+  --icon-mdx-ks-forms-svg-height: 1rem;
+  --icon-mdx-ks-forms-svg-width: 1rem;
+
   /* google maps */
   --map-height-mobile: 120vw;
 
