@@ -200,7 +200,7 @@ export default class AppointmentsFilter extends Shadow() {
       <style>
         :host {
           --button-secondary-width: 100% !important;
-          --button-secondary--not-label-flex-grow: 0;
+          --button-secondary-not-label-flex-grow: 0;
         }
       </style>
       <ks-a-button
