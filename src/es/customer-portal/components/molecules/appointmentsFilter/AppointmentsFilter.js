@@ -200,6 +200,7 @@ export default class AppointmentsFilter extends Shadow() {
       <style>
         :host {
           --button-secondary-width: 100% !important;
+          --button-secondary--not-label-flex-grow: 0;
         }
       </style>
       <ks-a-button
@@ -208,7 +209,7 @@ export default class AppointmentsFilter extends Shadow() {
         color="tertiary"
         justify-content="flex-start"
         request-event-name="${dialogOpenEventName}">
-          <a-translation data-trans-key="${transKey}"/></a-translation>
+          <a-translation data-trans-key="${transKey}"></a-translation>
       </ks-a-button>
     `
   }
