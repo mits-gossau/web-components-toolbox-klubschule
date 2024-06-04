@@ -2,50 +2,39 @@
 <p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?node-id=6179-53770&m=dev" target="_blank">figma</a></code></p>
 <hr />
 
-<o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" switch-aside-order-mobile>
-    <ks-o-body-section content-width-var="100%" no-margin-y>
-        
-        <m-simple-form-validation
-            namespace="simple-form-miduweb-"
-            no-validation-error-css
-            endpoint="/api/test"
-            method="POST"
-        >
-            <form>
-                <ks-o-checkout-layout mode="false">
+<m-simple-form-validation
+    namespace="simple-form-miduweb-"
+    no-validation-error-css
+    endpoint="/api/test"
+    method="POST"
+>
+    <form>
+        <ks-o-checkout-layout>
+            <section id="main">
 
-                    <!-- 👇🏻 relevant markup -->
-                    <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="26px" icon-blue>
-                        <div slot="description">
-                            <p>Bitte beachten Sie, dass das Abonnement nach dem Kauf zuerst durch die Klubschule manuell freigeschalten werden muss. Dieser Prozess wird nur innerhalb der normalen Arbeitszeiten durchgeführt.</p>
-                        </div>
-                    </ks-m-system-notification>
+                <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="26px" icon-blue>
+                    <div slot="description">
+                        <p>Bitte beachten Sie, dass das Abonnement nach dem Kauf zuerst durch die Klubschule manuell freigeschalten werden muss. Dieser Prozess wird nur innerhalb der normalen Arbeitszeiten durchgeführt.</p>
+                    </div>
+                </ks-m-system-notification>
+                <ks-a-heading tag="h2" style-as="h1">Ab wann soll Ihr Abonnement gültig sein?</ks-a-heading>
+                <ks-a-input mode="false">
+                    <div>
+                        <label>Start der Gültigkeit *</label>
+                        <input 
+                            type="date" 
+                            id="checkout-form-abo-start-date" 
+                            name="start-date" 
+                            onfocus="this.min=new Date().toISOString().split('T')[0]"
+                            required
+                            data-m-v-rules='{"required": {"error-message": "Bitte Datum angeben."}}'
+                        >
+                    </div>
+                </ks-a-input>
 
-                    <ks-a-heading tag="h2" style-as="h1">Ab wann soll Ihr Abonnement gültig sein?</ks-a-heading>
-
-                    <ks-a-input mode="false">
-                        <div>
-                            <label>Start der Gültigkeit *</label>
-                            <input 
-                                type="date" 
-                                id="checkout-form-abo-start-date" 
-                                name="start-date" 
-                                onfocus="this.min=new Date().toISOString().split('T')[0]"
-                                required
-                                data-m-v-rules='{"required": {"error-message": "Bitte Datum angeben."}}'
-                            >
-                        </div>
-                    </ks-a-input>
-                    <!-- 👆🏻 relevant markup -->
-
-                    <!-- only for demo --><br /><hr /><br />
-                    <!-- only for demo --><input type="submit" value="Submit" />
-                </ks-o-checkout-layout>
-            </form>
-        </m-simple-form-validation>
-
-    </ks-o-body-section>
-    <aside>
-        <!-- side content here -->
-    </aside>
-</o-grid>
+                <!-- only for demo --><br /><hr /><br />
+                <!-- only for demo --><input type="submit" value="Submit" />
+            </section>
+        </ks-o-checkout-layout>
+    </form>
+</m-simple-form-validation>

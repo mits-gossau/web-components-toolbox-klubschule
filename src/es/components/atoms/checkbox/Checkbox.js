@@ -36,16 +36,12 @@ export default class Checkbox extends Shadow() {
     this.css = /* css */ `
         :host {
             display: flex;
+            flex-direction: column;
         }
 
         :host .wrap {
           display: flex;
-          flex-direction: row-reverse;
-          justify-content: flex-start;
-          align-items: center;
-          padding-top: var(--padding-top);
-          padding-bottom: var(--padding-bottom);
-          padding-right: var(--padding-right);
+          flex-direction: column;
         }
 
         :host .wrap.disabled {
@@ -53,10 +49,19 @@ export default class Checkbox extends Shadow() {
           opacity: 0.2;
         }
 
-        :host .wrap:hover,
+        :host .control:hover,
         :host label:hover {
           background-color: var(--background);
           cursor: pointer;
+        }
+
+        :host .control {
+          display: flex;
+          flex-direction: row-reverse;
+          width: fit-content;
+          padding-top: var(--padding-top);
+          padding-bottom: var(--padding-bottom);
+          padding-right: var(--padding-right);
         }
 
         :host label {
@@ -97,8 +102,25 @@ export default class Checkbox extends Shadow() {
         .wrap:not(:has(.has-error)) > .message {
           display: none;
         }
-        [dirty] .wrap > input:invalid ~ .message {
-          display: block;
+
+        [dirty] .wrap:has(input:invalid) .message {
+          display: flex;
+          margin-top: var(--error-gap);
+        }
+
+        :host .message span,
+        :host .message a-icon-mdx {
+          color: var(--error-color);
+          display: flex;
+          align-items: center;
+        }
+
+        :host .message span {
+          font: var(--error-font);
+        }
+
+        :host .message a-icon-mdx {
+          margin-right: var(--error-icon-gap);
         }
     `
     return this.fetchTemplate()
