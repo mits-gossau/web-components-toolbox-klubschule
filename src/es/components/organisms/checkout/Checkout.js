@@ -55,8 +55,11 @@ export default class Checkout extends Shadow() {
 
     const radioInputs = this.root.querySelectorAll('input[type=radio]')
     Array.from(radioInputs).forEach(input => {
-      input.addEventListener('change', () => {
+      input.addEventListener('change', (event) => {
         this.dispatchEvent(new CustomEvent('request-checkout-configuration', {
+          detail: {
+            withInsurance: event.currentTarget.value
+          },
           bubbles: true,
           cancelable: true,
           composed: true
