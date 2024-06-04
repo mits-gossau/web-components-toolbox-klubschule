@@ -79,15 +79,34 @@ export default class FilterCategories extends Shadow() {
     const visible = child.visible ? 'visible' : ''
     const div = document.createElement('div')
     div.innerHTML = /* html */`
-      <mdx-component mutation-callback-event-name="request-with-facet">
-        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
-      </mdx-component>
+      <!--<mdx-component mutation-callback-event-name="request-with-facet">-->
+        <!--<mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>-->
+        <ks-m-nav-level-item mutation-callback-event-name="request-with-facet" namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}">
+          <div class="wrap">
+            <span class="text">${child.label} ${count}</span>
+          </div>
+        </ks-m-nav-level-item>
+      <!--</mdx-component>-->
     `
     // @ts-ignore
     div.children[0].filterItem = parentItem
     subNav.push(div.children[0])
 
     return subNav
+  }
+
+  getLastSelectedChild (filterItem) {
+    let lastSelectedChild = null
+
+    filterItem.children.filter(child => child.selected).forEach(child => {
+      if (child.children && child.children.length > 0) {
+        this.getLastSelectedChild(child)
+      } else {
+        lastSelectedChild = child
+      }
+    })
+
+    if (lastSelectedChild) return lastSelectedChild
   }
 
   generateNavLevelItem (response, filterItem) {
@@ -101,6 +120,9 @@ export default class FilterCategories extends Shadow() {
         childItems += `${child.label}, `
       })
     }
+
+    const lastSelectedChild = this.getLastSelectedChild(filterItem)
+    if (lastSelectedChild) console.log('lastSelectedChild', lastSelectedChild)
 
     div.innerHTML = /* html */`
       <m-dialog id="${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
