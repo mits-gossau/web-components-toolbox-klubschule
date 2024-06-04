@@ -297,7 +297,7 @@ export default class KsFooter extends Footer {
             flex-wrap: nowrap;
         }
         :host .footer-links-row li > a > a-icon-mdx {
-            display: block;
+            display: flex;
         }
     `
   }
