@@ -77,17 +77,22 @@ export default class FilterCategories extends Shadow() {
     const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
-    const div = document.createElement('div')
-    div.innerHTML = /* html */`
-      <!--<mdx-component mutation-callback-event-name="request-with-facet">-->
-        <!--<mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>-->
-        <ks-m-nav-level-item mutation-callback-event-name="request-with-facet" namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}">
-          <div class="wrap">
-            <span class="text">${child.label} ${count}</span>
-          </div>
-        </ks-m-nav-level-item>
-      <!--</mdx-component>-->
+
+    const mdxComponent = /* html */`
+      <mdx-component mutation-callback-event-name="request-with-facet">
+        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
+      </mdx-component>
     `
+    const navLevelItem = /* html */`
+      <ks-m-nav-level-item mutation-callback-event-name="request-with-facet" namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}">
+        <div class="wrap">
+          <span class="text">${child.label} ${count}</span>
+        </div>
+      </ks-m-nav-level-item>
+    `
+
+    const div = document.createElement('div')
+    div.innerHTML = mdxComponent
     // @ts-ignore
     div.children[0].filterItem = parentItem
     subNav.push(div.children[0])
@@ -96,17 +101,16 @@ export default class FilterCategories extends Shadow() {
   }
 
   getLastSelectedChild (filterItem) {
-    let lastSelectedChild = null
+    let lastSelectedChild = null;
+    if (filterItem.selected && (!filterItem.children || filterItem.children.length === 0)) return filterItem
+    if (filterItem.children) {
+        for (let child of filterItem.children) {
+            let result = this.getLastSelectedChild(child)
+            if (result) lastSelectedChild = result
+        }
+    }
 
-    filterItem.children.filter(child => child.selected).forEach(child => {
-      if (child.children && child.children.length > 0) {
-        this.getLastSelectedChild(child)
-      } else {
-        lastSelectedChild = child
-      }
-    })
-
-    if (lastSelectedChild) return lastSelectedChild
+    return lastSelectedChild
   }
 
   generateNavLevelItem (response, filterItem) {
@@ -122,7 +126,6 @@ export default class FilterCategories extends Shadow() {
     }
 
     const lastSelectedChild = this.getLastSelectedChild(filterItem)
-    if (lastSelectedChild) console.log('lastSelectedChild', lastSelectedChild)
 
     div.innerHTML = /* html */`
       <m-dialog id="${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
@@ -150,7 +153,8 @@ export default class FilterCategories extends Shadow() {
         <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
           <div class="wrap">
             <span class="text">${filterItem.label}</span>
-            <span class="additional">${childItems.slice(0, -2)}</span>
+            ${lastSelectedChild && filterItem.level === "" ? /* html */`<span class="additional">${lastSelectedChild.label}</span>` : ''}
+            <!--<span class="additional">${childItems.slice(0, -2)}</span>-->
           </div>
           <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
         </ks-m-nav-level-item>
@@ -164,14 +168,14 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  generateFilters (response, filterItem, i, parentItem = this.mainNav) {
+  generateFilters (response, filterItem, parentItem = this.mainNav) {
     const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
       filterItem.children.forEach(child => {
         if (child.children && child.children.length > 0) {
-          this.generateFilters(response, child, i, generatedNavLevelItem.subLevel) // recursively call the function for any nested children
+          this.generateFilters(response, child, generatedNavLevelItem.subLevel) // recursively call the function for any nested children
         } else {
           this.generateFilterCheckbox(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
         }
@@ -200,8 +204,8 @@ export default class FilterCategories extends Shadow() {
 
         if (response.filters.length === 0) return
 
-        response.filters.forEach((filterItem, i) => {
-          this.generateFilters(response, filterItem, i)
+        response.filters.forEach((filterItem) => {
+          this.generateFilters(response, filterItem)
         })
       })
     })
