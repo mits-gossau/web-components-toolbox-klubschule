@@ -109,7 +109,6 @@ export default class WithFacet extends Shadow() {
 
         this.updateURLParams()
 
-        
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
         let hasSearchLocation = false
@@ -127,6 +126,12 @@ export default class WithFacet extends Shadow() {
         request = this.lastRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
       }
 
+      const LanguageEnum = {
+        'd': 'de',
+        'f': 'fr',
+        'i': 'it'
+      }
+
       let requestInit = {}
       if (this.isMocked) {
         requestInit = {
@@ -136,7 +141,8 @@ export default class WithFacet extends Shadow() {
         requestInit = {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept-Language': LanguageEnum[this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd']
           },
           mode: 'cors',
           body: request
@@ -254,21 +260,26 @@ export default class WithFacet extends Shadow() {
     }
 
     this.requestLocations = event => {
+      let body = `{
+        "filter": ${JSON.stringify(event.detail.filter)},
+        "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
+        "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
+        "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
+        "onlycourse": true
+        ${initialRequestObj.clat ? `,"clat": "${initialRequestObj.clat}"` : ''}
+        ${initialRequestObj.clong ? `,"clong": "${initialRequestObj.clong}"` : ''}
+      }`
+      if (event?.detail?.ppage && this.requestLocationsLastBody) {
+        // ppage reuse last request
+        body = JSON.stringify(Object.assign(JSON.parse(this.requestLocationsLastBody), { ppage: event.detail.ppage }))
+      }
       const requestInit = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         mode: 'cors',
-        body: `{
-          "filter": ${JSON.stringify(event.detail.filter)},
-          "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
-          "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
-          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
-          "onlycourse": true
-          ${initialRequestObj.clat ? `,"clat": "${initialRequestObj.clat}"` : ''}
-          ${initialRequestObj.clong ? `,"clong": "${initialRequestObj.clong}"` : ''}
-        }`
+        body: (this.requestLocationsLastBody = body)
       }
       // @ts-ignore
       event.detail.resolve(fetch(apiUrl, requestInit).then(response => {

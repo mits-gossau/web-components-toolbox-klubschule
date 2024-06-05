@@ -39,6 +39,17 @@ export default class CheckoutLayout extends Shadow() {
         margin: 0 !important;
       }
 
+      /* style back link */
+      #top > ks-a-back-link {
+        --back-link-color: var(--mdx-sys-color-primary-default);
+        --color: var(--mdx-sys-color-primary-default);
+        --a-margin: 0;
+
+        display: block !important;
+        padding: var(--mdx-sys-spacing-flex-2xs) var(--mdx-sys-spacing-flex-xs) !important;
+        margin: 0 !important;
+      }
+
       @media screen and (max-width: _max-width_) {
         .checkout-layout__aside {
           border-top: 1px solid var(--mdx-sys-color-brand-neutral-300);

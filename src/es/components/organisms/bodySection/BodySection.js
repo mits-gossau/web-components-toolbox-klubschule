@@ -157,6 +157,16 @@ export default class KsBodyStyle extends BodyStyle {
         :host > .margin-bottom-s {
             margin-bottom: var(--mdx-sys-spacing-flex-s);
         }
+        :host > .margin-y-xs {
+            margin-top: var(--mdx-sys-spacing-flex-xs);
+            margin-bottom: var(--mdx-sys-spacing-flex-xs);
+        }
+        :host > .margin-top-xs {
+            margin-top: var(--mdx-sys-spacing-flex-xs);
+        }
+        :host > .margin-bottom-xs {
+            margin-bottom: var(--mdx-sys-spacing-flex-xs);
+        }
 
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */
         :host > [debug-ruler] {

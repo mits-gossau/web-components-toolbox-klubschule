@@ -7,4 +7,8 @@
     --checkbox-default-padding-right: var(--mdx-comp-checkbox-padding-horizontal-default);
     --checkbox-default-background: var(--mdx-comp-checkbox-unchecked-background-color-hover);
     --button-secondary-icon-right-margin: 0;
+    --checkbox-default-error-color: var(--mdx-comp-error-message-color-default);
+    --checkbox-default-error-gap: var(--mdx-comp-checkbox-gap-container-error);
+    --checkbox-default-error-font: var(--mdx-comp-error-message-font-default);
+    --checkbox-default-error-icon-gap: var(--mdx-comp-error-message-gap-icon-text-default)
 }

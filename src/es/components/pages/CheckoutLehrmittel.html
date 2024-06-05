@@ -47,7 +47,7 @@
                                 </select>
                             </div>
                             <div>
-                                <ks-m-checkout-insurance>
+                                <ks-m-checkout-insurance mode="false">
                                     <h2>Kurskosten absichern?</h2>
                                     <p>Mit einer Annullationskostenversicherung erhalten Sie in folgenden Fällen Ihr Kursgeld
                                         zurück:</p>
@@ -57,16 +57,26 @@
                                         <li>unverschuldete Kündigung des Arbeitsplatzes</li>
                                         <li>beruflich bedingter Wohnort-wechsel</li>
                                     </ul>
-                                    <ks-a-radio>
+                                    <ks-a-radio mode="false">
                                         <div class="wrap">
-                                            <label for="rb-01-01">Mit Versicherung</label>
-                                            <input id="rb-01-01" type="radio" name="rg-01">
+                                            <label for="checkout-form-booking-type-company" insurance-label>Mit Versicherung</label>
+                                            <input type="radio" id="checkout-form-booking-type-company" name="rg-01" value="true"
+                                                required error-message-reference-point-changed="true" no-error-text-p
+                                                error-text-tag-name="span"
+                                                data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                             <div class="box"></div>
                                         </div>
                                         <div class="wrap">
-                                            <label for="rb-01-02">Ohne Versicherung</label>
-                                            <input id="rb-01-02" type="radio" name="rg-01">
+                                            <label for="checkout-form-booking-type-private">Ohne Versicherung</label>
+                                            <input type="radio" id="checkout-form-booking-type-private" name="rg-01" value="false"
+                                                error-message-reference-point-changed="true" no-error-text-p
+                                                error-text-tag-name="span"
+                                                data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                             <div class="box"></div>
+                                        </div>
+                                        <div class="message">
+                                            <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em" rotate="0" class="icon-right"
+                                                new-error-message-reference-point="true"></a-icon-mdx>
                                         </div>
                                     </ks-a-radio>
                                 </ks-m-checkout-insurance>
@@ -77,11 +87,20 @@
                             <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
                                 status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
                                 time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
-                                course-price="630.00 CHF" initial-configuration-price-data='{
+                                course-price="630.00 CHF" 
+                                price-labels='{
+                                    "coursePrice": "Kurspreis",
+                                    "material": "Material",
+                                    "teachingAids": "Lehrmittel",
+                                    "insurance": "Annulationskostenversicherung",
+                                    "tax": "inkl. allfälliger MwSt",
+                                    "total": "Gesamtbetrag"
+                                }'
+                                initial-configuration-price-data='{
                                         "annulationskostenversicherungPreis": "16.75 CHF",
                                         "lehrmittelPreis": "16.90 CHF",
                                         "materialPreis": "0.00 CHF",
-                                        "totalPreis": "646.90 CHF",
+                                        "totalPreis": "646.90 CHF"
                                     }'>
                             </ks-m-checkout-booked-offer>
                         </section>

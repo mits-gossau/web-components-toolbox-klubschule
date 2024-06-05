@@ -17,7 +17,7 @@ export default class CheckoutBookedOffer extends Shadow() {
 
   connectedCallback () {
     // initially set the price configuration, this will be overwritten when the user changes his selection
-    this.configurationPriceData = CheckoutBookedOffer.parseAttribute(this.getAttribute('initial-configuration-price-data'))
+    this.configurationPriceData = CheckoutBookedOffer.parseAttribute(this.getAttribute('initial-configuration-price-data')) || console.log('intital-configuration-price-data missing')
 
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
@@ -29,8 +29,6 @@ export default class CheckoutBookedOffer extends Shadow() {
       cancelable: true,
       composed: true
     }))
-
-    this.mitAnnulationskostenversicherung = this.getAttribute('mit-annulationskostenversicherung') === 'true'
   }
 
   disconnectedCallback () {
@@ -46,8 +44,6 @@ export default class CheckoutBookedOffer extends Shadow() {
       this.html = ''
       this.renderHTML()
     })
-
-    this.mitAnnulationskostenversicherung = event.detail.withInsurance
   }
 
   /**
@@ -168,30 +164,40 @@ export default class CheckoutBookedOffer extends Shadow() {
     const coursePrice = this.getAttribute('course-price')
     const priceData = this.configurationPriceData
     const totalPrice = priceData?.totalPreis
+    const priceLabels = CheckoutBookedOffer.parseAttribute(this.getAttribute('price-labels'))
 
     this.html = /* HTML */ `
         <div class="checkout-booked-offer">
           <ks-a-heading tag="h3">${headline}</ks-a-heading>
           <h4 class="checkout-booked-offer__name">${name}</h4>
           <ul class="checkout-booked-offer__info-list">
-            <li>
-              <img src="${this.statusData.iconPath}" />
-              <span>${this.statusData.label}</span>
-            </li>
-            <li>
-              <a-icon-mdx icon-name="Calendar" size="1.5rem"></a-icon-mdx>
-              <span>
-                ${date}<br />
-                ${time}
-              </span>
-            </li>
-            <li>
-              <a-icon-mdx icon-name="Location" size="1.5rem"></a-icon-mdx>
-              <span>
-                ${street}<br />
-                ${city}
-              </span>
-            </li>
+            ${this.statusData
+              ? `<li>
+                  <img src="${this.statusData.iconPath}" />
+                  <span>${this.statusData.label}</span>
+                </li>`
+              : ''
+            }
+            ${date
+              ? `<li>
+                  <a-icon-mdx icon-name="Calendar" size="1.5rem"></a-icon-mdx>
+                  <span>
+                    ${date}<br />
+                    ${time}
+                  </span>
+                </li>`
+              : ''
+            }
+            ${city
+              ? `<li>
+                  <a-icon-mdx icon-name="Location" size="1.5rem"></a-icon-mdx>
+                  <span>
+                    ${street}<br />
+                    ${city}
+                  </span>
+                </li>`
+              : ''
+            }
             <li>
               <a-icon-mdx icon-name="Wallet" size="1.5rem"></a-icon-mdx>
               ${/* Price Data Configuration */
@@ -199,21 +205,27 @@ export default class CheckoutBookedOffer extends Shadow() {
                   ? /* html */`
                     <div class='checkout-booked-offer__price-info'>
                       <div class='checkout-booked-offer__price-info-line'>
-                        <span><a-translation data-trans-key='Checkout.CoursePrice' /></span>
+                        <span>${priceLabels.coursePrice}</span>
                         <span>${coursePrice}</span>
                       </div>
-                      <div class='checkout-booked-offer__price-info-line'>
-                        <span><a-translation data-trans-key='Checkout.Lehrmittel' /></span>
-                        <span>${priceData.lehrmittelPreis}</span>
-                      </div>
-                      <div class='checkout-booked-offer__price-info-line'>
-                        <span><a-translation data-trans-key='Checkout.Material' /></span>
-                        <span>${priceData.materialPreis}</span>
-                      </div>
-                      ${this.mitAnnulationskostenversicherung
+                      ${priceData.lehrmittelPreis
+                        ? /* html */`<div class='checkout-booked-offer__price-info-line'>
+                            <span>${priceLabels.teachingAids}</span>
+                            <span>${priceData.lehrmittelPreis}</span>
+                          </div>`
+                        : ''
+                      }
+                      ${priceData.materialPreis
+                        ? /* html */`<div class='checkout-booked-offer__price-info-line'>
+                            <span>${priceLabels.material}</span>
+                            <span>${priceData.materialPreis}</span>
+                          </div>`
+                        : ''
+                      }
+                      ${priceData.annulationskostenversicherungPreis
                         ? /* html */`
                           <div class='checkout-booked-offer__price-info-line'>
-                            <span><a-translation data-trans-key='Checkout.Annulationskostenversicherung' /></span>
+                            <span>${priceLabels.insurance}</span>
                             <span>${priceData.annulationskostenversicherungPreis}</span>
                           </div>`
                         : ''
@@ -260,6 +272,7 @@ export default class CheckoutBookedOffer extends Shadow() {
 
   get statusData () {
     const status = CheckoutBookedOffer.parseAttribute(this.getAttribute('status'))
+    if (!status?.code) return null
     let iconName = ''
     if (status.code === '1') {
       iconName = 'garanteed'

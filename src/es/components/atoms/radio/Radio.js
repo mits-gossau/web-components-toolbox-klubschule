@@ -5,25 +5,25 @@ export default class Radio extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.boxes = Array.from(this.root.querySelectorAll('.box') || [])
+    this.inputs = Array.from(this.root.querySelectorAll('input[type="radio"]') || [])
+
     this.clickEventListener = event => {
-      this.input.checked = !this.input.checked
+      this.inputs[this.boxes.indexOf(event.target)].checked = !this.inputs[this.boxes.indexOf(event.target)].checked
     }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 
-    this.box = this.root.querySelector('.box')
-    this.input = this.root.querySelector('input[type="radio"]')
-
     /**
      * Handle checked on box
      */
-    this.box.addEventListener('click', this.clickEventListener)
+    this.boxes.forEach(box => box.addEventListener('click', this.clickEventListener))
   }
 
   disconnectedCallback () {
-    this.box.removeEventListener('click', this.clickEventListener)
+    this.boxes.forEach(box => box.removeEventListener('click', this.clickEventListener))
   }
 
   shouldRenderCSS () {
@@ -39,6 +39,9 @@ export default class Radio extends Shadow() {
           flex-direction: column;
         }
 
+        :host .wrap img {
+          margin-left: var(--mdx-sys-spacing-fix-m)
+        }
         :host .wrap {
           display: flex;
           flex-direction: row-reverse;
@@ -113,38 +116,29 @@ export default class Radio extends Shadow() {
           border-radius: 50%;
           height: var(--mdx-comp-radiobutton-sizing-ellipse);
           width: var(--mdx-comp-radiobutton-sizing-ellipse);
+          min-width: var(--mdx-comp-radiobutton-sizing-ellipse);
         }
 
-        :host .custom-error-text p,
-        :host span.custom-error-text {
-          color: var(--mdx-comp-error-message-color-default);
-          font: var(--mdx-comp-error-message-font-default);
-          margin-top: var(--mdx-comp-inputfield-gap-content-below) !important;
-          order: var(--ks-input-custom-error-text-order, 1000);
-        }
-
-        :host .custom-error-text {
-          order: var(--ks-input-custom-error-text-order, 1000);
-        }
-  
-        :host .custom-error-text p,
-        :host span.custom-error-text {
+        :host(:not(:has(.has-error))) > .message {
           display: none;
         }
 
-        :host .custom-error-text p[error-text-id="required"].error-active,
-        :host span.custom-error-text[error-text-id="required"].error-active {
-          display: block;
+        :host .message {
+          display: flex;
+          align-items: center;
+        }
+        :host .message span,
+        :host .message a-icon-mdx {
+          color: var(--mdx-comp-error-message-color-default);
+          font: var(--mdx-comp-error-message-font-default);
+          display: flex;
+          align-items: center;
         }
 
-        :host .custom-error-text p[error-text-id="required"]::before,
-        :host span.custom-error-text[error-text-id="required"]::before {
-          content: var(--ks-input-error-icon, url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="alert_circle" clip-path="url(%23clip0_16648_89214)"><path id="Vector" d="M7.99967 5.33398V8.00065M7.99967 10.6673H8.00634M14.6663 8.00065C14.6663 11.6825 11.6816 14.6673 7.99967 14.6673C4.31778 14.6673 1.33301 11.6825 1.33301 8.00065C1.33301 4.31875 4.31778 1.33398 7.99967 1.33398C11.6816 1.33398 14.6663 4.31875 14.6663 8.00065Z" stroke="%23E02805" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="clip0_16648_89214"><rect width="16" height="16" fill="white" transform="translate(0 0.000610352)"/></clipPath></defs></svg>'));
-          margin-right: var(--mdx-comp-inputfield-gap-content-below);
-          position: relative;
-          top: var(--ks-input-error-icon-position-top, 3px);
+        :host .message a-icon-mdx {
+          --button-primary-icon-right-margin: 0;
+          margin-right: var(--mdx-comp-error-message-gap-icon-text-default);
         }
-
     `
   }
 }
