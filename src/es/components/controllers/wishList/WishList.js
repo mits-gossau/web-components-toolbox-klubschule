@@ -90,7 +90,7 @@ export default class WishList extends Shadow() {
       }))
     }
 
-    const endpointAdd = `${this.getAttribute('endpoint-request') || 'https://dev.klubschule.ch/Umbraco/api/watchlistAPI/Add?watchlistGuid=00000000-0000-0000-0000-000000000000&language=de&courseType=D&courseId=98314&centerId=1016'}`
+    const endpointAdd = `${this.getAttribute('endpoint-request') || 'https://dev.klubschule.ch/Umbraco/api/watchlistAPI/Add?language=de&courseType=D&courseId=90478&centerId=2667'}`
     this.addToWishListListener = event => {
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
@@ -113,10 +113,10 @@ export default class WishList extends Shadow() {
 
   connectedCallback () {
     this.addEventListener('request-wish-list', this.requestWishListListener)
-    this.requestWishListListener()
-    setTimeout(() => {
-      //this.addToWishListListener()
-    }, 10000);
+    // note from patrick, initial guid for wishlist gets with the fist add call returned
+    // after having guid in local storage request can be fired
+    //this.requestWishListListener()
+    this.addToWishListListener()
   }
   
   disconnectedCallback () {
