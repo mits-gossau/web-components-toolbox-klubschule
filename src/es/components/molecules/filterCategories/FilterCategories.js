@@ -17,7 +17,7 @@ export default class FilterCategories extends Shadow() {
    
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
-    this.keepDialogOpenEventListener = event => {
+    this.keepDialogOpenEventListener = event => {      
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
     }
   }
@@ -115,6 +115,7 @@ export default class FilterCategories extends Shadow() {
 
   generateNavLevelItem (response, filterItem) {
     const shouldRemainOpen = filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    
     const div = document.createElement('div')
 
     let childItems = ''
