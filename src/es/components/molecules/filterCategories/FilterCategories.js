@@ -70,15 +70,17 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  generateFilterCheckbox(child, parentItem) {
+  generateFilterElement(child, parentItem) {
+    console.log('generateFilterElement', child, parentItem)
     const subNav = []
 
     const count = child.count ? `(${child.count})` : ''
-    const disabled = child.disabled || child.count === 0 ? 'disabled' : ''
+    const disabled = child.disabled ? 'disabled' : ''    
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
+    const isMultipleChoice = parentItem.typ === 'multi'
 
-    const mdxComponent = /* html */`
+    const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
         <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
       </mdx-component>
@@ -92,7 +94,7 @@ export default class FilterCategories extends Shadow() {
     `
 
     const div = document.createElement('div')
-    div.innerHTML = mdxComponent
+    div.innerHTML = isMultipleChoice ? mdxCheckbox : navLevelItem
     // @ts-ignore
     div.children[0].filterItem = parentItem
     subNav.push(div.children[0])
@@ -178,7 +180,7 @@ export default class FilterCategories extends Shadow() {
         if (child.children && child.children.length > 0) {
           this.generateFilters(response, child, generatedNavLevelItem.subLevel) // recursively call the function for any nested children
         } else {
-          this.generateFilterCheckbox(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+          this.generateFilterElement(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
         }
       })
     }
