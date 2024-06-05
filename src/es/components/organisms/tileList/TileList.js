@@ -108,6 +108,11 @@ export default class TileList extends Shadow() {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 0.75em;
+        gap: 0.75rem;
+      }
+
+      :host .o-tile-list__top ks-m-tooltip {
+        margin-bottom: auto;
       }
 
       :host .o-tile-list__title {
