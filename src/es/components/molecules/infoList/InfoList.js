@@ -44,6 +44,9 @@ export default class InfoList extends CheckoutBookedOffer {
    */
   renderCSS () {
     this.css = /* css */`
+      :host {
+        --ul-margin: 0;
+      }
       :host > div {
         background-color: var(--info-list-bg-color, var(--background-color));
         margin: var(--any-content-spacing, var(--content-spacing, unset)) auto;
@@ -62,8 +65,6 @@ export default class InfoList extends CheckoutBookedOffer {
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        margin-inline: 0;
-        margin-block: 0;
         padding-left: 0 !important;
       }
 
@@ -91,54 +92,61 @@ export default class InfoList extends CheckoutBookedOffer {
         width: 1.5rem;
       }
 
-      :host ul li div {
-        flex: 1;
-      }
-
       :host ul li span {
         padding-top: 0.2em;
       }
 
       :host a {
-        display: block;
-        color: var(--mdx-comp-link-color-default);
-        font: var(--mdx-comp-link-font-standalone);
+        --a-display: block;
+        --a-color: var(--mdx-comp-link-color-default);
+        --a-font-weight: var(--mdx-comp-link-font-standalone-font-weight);
+        --a-font-size: var(--mdx-comp-link-font-standalone-font-size);
       }
 
-      :host div > div > div > a:last-of-type {
+      :host a:last-of-type {
         margin-top: var(--mdx-sys-spacing-flex-large-2xs);
       }
 
-      :host div > div > div > a:first-of-type {
+      :host a:first-of-type {
         margin-bottom: var(--mdx-sys-spacing-flex-large-m);
       }
 
-      :host div > div > div > ks-a-heading {
-        --h4-margin: var(--mdx-sys-spacing-flex-large-s) 0;
-        font: var(--mdx-sys-font-fix-label0);
+      :host ks-a-heading[tag="h3"] {
+        --h3-margin: var(--mdx-sys-spacing-flex-large-s) 0;
+        --h3-font-family: var(--mdx-sys-font-fix-label0-font-family);
+        --h3-font-weight: var(--mdx-sys-font-fix-label0-font-weight);
+        --h3-line-height: var(--mdx-sys-font-fix-label0-line-height);
+        --h3-font-size: var(--mdx-sys-font-fix-label0-font-size);
       }
 
-      :host div > div > div > ks-a-heading + div ~ div {
+      :host .flex {
         display: flex;
         justify-content: space-between;
         margin: 10px 0;
       }
 
-      :host div > div > div > ks-a-heading + div + div {
+      :host .info-wrapper {
         margin: var(--mdx-sys-spacing-flex-large-2xs) 0;
         gap: 10px;
       }
 
-      :host div > div > div > ks-a-heading + div ~ div:last-child span {
+      :host .flex:last-child > div > span:first-child {
         display: block;
       }
 
-      :host div > div > div > p {
-        margin-block: 0;
+      :host .total > span,
+      :host .total div > span:first-child {
+        font: var(--mdx-sys-font-flex-large-headline3);
       }
 
-      :host div > div > div > span > strong {
-        font: var(--mdx-sys-font-fix-label2);
+      :host .total div > span + span {
+        color: var(--mdx-sys-color-neutral-bold1);
+        font:  var(--mdx-sys-font-fix-body3);
+      }
+
+      :host span > strong {
+        --font-family-strong: var(--mdx-sys-font-fix-label2-font-family);
+        --font-weight-strong: var(--mdx-sys-font-fix-label2-font-weight);
       }
 
       @media only screen and (max-width: _max-width_) {
@@ -152,7 +160,7 @@ export default class InfoList extends CheckoutBookedOffer {
           width: 100%;
           margin-bottom: var(--mdx-sys-spacing-fix-xs);
         }
-        :host div > div > div > ks-a-heading + div ~ div span:first-child {
+        :host .flex > span:first-child {
           max-width: 68.26%;
         }
       }
