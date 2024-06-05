@@ -4,13 +4,36 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class NavLevelItem extends Shadow() {
   constructor (options = {}, ...args) {
     super({ keepCloneOutsideShadowRoot: true, importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.clickListener = event => {
+      if (this.getAttribute('request-event-name')) {
+        event.preventDefault()
+        this.dispatchEvent(new CustomEvent(this.getAttribute('request-event-name'), {
+          detail: {
+            wrapper: {
+              filterItem: this.filterItem
+            },
+            target: {
+              checked: this.getAttribute('namespace') !== 'nav-level-item-active-',
+              label: this.text.textContent
+            }
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      }
+    }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
+    this.addEventListener('click', this.clickListener)
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    this.removeEventListener('click', this.clickListener)
+  }
 
   shouldRenderCSS () {
     return !this.root.querySelector(
@@ -91,5 +114,9 @@ export default class NavLevelItem extends Shadow() {
           namespace: false
         }])
     }
+  }
+
+  get text () {
+    return this.root.querySelector('.text')
   }
 }

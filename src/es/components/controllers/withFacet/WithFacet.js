@@ -378,7 +378,7 @@ export default class WithFacet extends Shadow() {
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
             const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
-
+            debugger
             return `{
               ${child.count ? `"count": ${child.count},` : ''}
               ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}

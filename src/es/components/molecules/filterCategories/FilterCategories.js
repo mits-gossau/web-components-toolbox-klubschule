@@ -71,9 +71,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateFilterElement(child, parentItem) {
-    console.log('generateFilterElement', child, parentItem)
     const subNav = []
-
     const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled ? 'disabled' : ''    
     const checked = child.selected ? 'checked' : ''
@@ -86,12 +84,14 @@ export default class FilterCategories extends Shadow() {
       </mdx-component>
     `
     const navLevelItem = /* html */`
-      <ks-m-nav-level-item mutation-callback-event-name="request-with-facet" namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}">
+      <ks-m-nav-level-item namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet">
         <div class="wrap">
           <span class="text">${child.label} ${count}</span>
         </div>
       </ks-m-nav-level-item>
     `
+
+    if (!visible) return subNav
 
     const div = document.createElement('div')
     div.innerHTML = isMultipleChoice ? mdxCheckbox : navLevelItem
