@@ -10,8 +10,15 @@ export default class Checkout extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    /**
+     * Replace label text
+     * @param {*} event 
+     */
     this.checkoutConfigurationListener = (event) => {
-      console.log(event)
+      event.detail.fetch.then(insuranceData => {
+        this.labelWithInsurance = this.root.querySelector('label[insurance-label]');
+        this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel;
+      })
     }
   }
 
@@ -55,8 +62,11 @@ export default class Checkout extends Shadow() {
 
     const radioInputs = this.root.querySelectorAll('input[type=radio]')
     Array.from(radioInputs).forEach(input => {
-      input.addEventListener('change', () => {
+      input.addEventListener('change', (event) => {
         this.dispatchEvent(new CustomEvent('request-checkout-configuration', {
+          detail: {
+            withInsurance: event.currentTarget.value
+          },
           bubbles: true,
           cancelable: true,
           composed: true

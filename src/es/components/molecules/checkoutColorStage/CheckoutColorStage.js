@@ -78,6 +78,35 @@ export default class CheckoutColorStage extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
+    this.html = /* HTML */ `
+      <o-grid 
+          namespace="grid-2columns-content-stage-" 
+          first-container-vertical 
+          first-column-with="66%" 
+          width="100%"
+      >
+        <section>
+          <div class="stage-content">
+              <p class="topline link-underline">
+                  ${(this.hasAttribute('back-label') && (window.history.length > 1 || this.hasAttribute('back-link')))
+                      ? /* html */`
+                          <a class="back-button" href="${this.getAttribute('back-link') || '#'}">
+                              <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx>
+                              <span>${this.getAttribute('back-label')}</span>
+                          </a>`
+                      : ''
+                  }
+              </p>
+              <ks-a-heading tag="h1" color="white" content-stage>${this.getAttribute('title')}</ks-a-heading>
+              ${this.hasAttribute('text')
+                      ? /* html */`
+                          <p>${this.getAttribute('text')}</p>`
+                      : ''
+                  }
+          </div>
+        </section>
+      </o-grid>
+    `
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
@@ -87,37 +116,7 @@ export default class CheckoutColorStage extends Shadow() {
         path: `${this.importMetaUrl}../../atoms/heading/Heading.js`,
         name: 'ks-a-heading'
       }
-    ]).then(() => {
-      this.html = /* HTML */ `
-        <o-grid 
-            namespace="grid-2columns-content-stage-" 
-            first-container-vertical 
-            first-column-with="66%" 
-            width="100%"
-        >
-          <section>
-            <div class="stage-content">
-                <p class="topline link-underline">
-                    ${(this.hasAttribute('back-label') && (window.history.length > 1 || this.hasAttribute('back-link')))
-                        ? /* html */`
-                            <a class="back-button" href="${this.getAttribute('back-link') || '#'}">
-                                <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx>
-                                <span>${this.getAttribute('back-label')}</span>
-                            </a>`
-                        : ''
-                    }
-                </p>
-                <ks-a-heading tag="h1" color="white" content-stage>${this.getAttribute('title')}</ks-a-heading>
-                ${this.hasAttribute('text')
-                        ? /* html */`
-                            <p>${this.getAttribute('text')}</p>`
-                        : ''
-                    }
-            </div>
-          </section>
-        </o-grid>
-      `
-    })
+    ])
   }
 
   get grid () {

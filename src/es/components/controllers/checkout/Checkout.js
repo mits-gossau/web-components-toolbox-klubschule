@@ -42,10 +42,8 @@ export default class Checkout extends Shadow() {
       // get value from select
       const initialRequest = this.getAttribute('initial-request')
       const initialRequestObjFrozen = Object.freeze(JSON.parse(initialRequest.replaceAll("'", '"')))
-      const withInsurance = event.detail?.withInsurance ? `"mitVersicherung": ${!!event.detail?.withInsurance},` : ''
 
       const basicRequest = `
-        ${withInsurance}
         "portalId": ${initialRequestObjFrozen.portalId},
         "mandantId": ${initialRequestObjFrozen.mandantId},
         "kursTyp": "${initialRequestObjFrozen.kursTyp}",
@@ -84,8 +82,7 @@ export default class Checkout extends Shadow() {
               }).then(response => {
                 if (response.status >= 200 && response.status <= 299) return response.json()
                 throw new Error(response.statusText)
-              }),
-              withInsurance: !!event.detail?.withInsurance
+              })
             },
             bubbles: true,
             cancelable: true,
