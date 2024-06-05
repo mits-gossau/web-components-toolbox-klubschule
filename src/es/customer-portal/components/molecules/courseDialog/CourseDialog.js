@@ -673,7 +673,7 @@ export default class CourseDialog extends Shadow() {
           <!-- trans value = Raum -->
           <a-translation data-trans-key="CP.cpAppointmentIcsRoom"></a-translation>
         </span>
-        <span>${detail.courseLocation} / Raum ${detail.roomDescription}</span>
+        <span>${detail.courseLocation} / <a-translation data-trans-key="CP.cpAppointmentIcsRoom"></a-translation> ${detail.roomDescription}</span>
       </div>
       <div class="detail">
         <span>
@@ -688,8 +688,8 @@ export default class CourseDialog extends Shadow() {
           <a-translation data-trans-key="CP.cpAppointmentListColumnStatus"></a-translation>
         </span>
         <div>
-          <span class="${state.css.status}">${state.status}</span> 
-          <span class="${state.css.info}">${state.info}</span>
+          <span class="${state.css.status}"><a-translation data-trans-key='${state.statusTransKey}'></a-translation></span> 
+          <span class="${state.css.info}">${state.infoTransKey ? `<a-translation data-trans-key='${state.infoTransKey}'></a-translation>` : ''}</span>
         </div>
       </div>
       <div class="detail">
