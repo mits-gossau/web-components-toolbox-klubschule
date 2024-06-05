@@ -50,6 +50,10 @@ export default class CheckoutLayout extends Shadow() {
         margin: 0 !important;
       }
 
+      .checkout-form-group {
+        margin-bottom: var(--mdx-sys-spacing-flex-l);
+      }
+
       @media screen and (max-width: _max-width_) {
         .checkout-layout__aside {
           border-top: 1px solid var(--mdx-sys-color-brand-neutral-300);
