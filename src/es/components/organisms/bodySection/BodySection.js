@@ -124,6 +124,7 @@ export default class KsBodyStyle extends BodyStyle {
         }
 
         /* Utilities */
+        /* responsive spacings */
         :host > .margin-y-l {
             margin-top: var(--mdx-sys-spacing-flex-l);
             margin-bottom: var(--mdx-sys-spacing-flex-l);
@@ -166,6 +167,25 @@ export default class KsBodyStyle extends BodyStyle {
         }
         :host > .margin-bottom-xs {
             margin-bottom: var(--mdx-sys-spacing-flex-xs);
+        }
+        /* static spacings */
+        :host > .margin-top-fix-s {
+            margin-top: var(--mdx-sys-spacing-fix-s);
+        }
+        :host > .margin-bottom-fix-s {
+            margin-bottom: var(--mdx-sys-spacing-fix-s);
+        }
+        :host > .margin-top-fix-m {
+            margin-top: var(--mdx-sys-spacing-fix-m);
+        }
+        :host > .margin-bottom-fix-m {
+            margin-bottom: var(--mdx-sys-spacing-fix-m);
+        }
+        :host > .margin-top-fix-l {
+            margin-top: var(--mdx-sys-spacing-fix-l);
+        }
+        :host > .margin-bottom-fix-l {
+            margin-bottom: var(--mdx-sys-spacing-fix-l);
         }
 
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */

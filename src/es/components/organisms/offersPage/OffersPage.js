@@ -471,11 +471,11 @@ export default class OffersPage extends Shadow() {
                       <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="${this.getTranslation('CourseList.OffersPlaceholder')}">${this.getTranslation('CourseList.OffersPlaceholder')}</ks-a-number-of-offers-button>
                   </div>
               </m-dialog>
-              <o-grid namespace="grid-432-auto-colums-auto-rows-">
+              <o-grid namespace="grid-432-auto-colums-auto-rows-" class="margin-top-s margin-bottom-s">
                 <section>
                   <style>
                     :host {
-                      /* filter buttons have the exception of being fully rounded, that's why I am setting border-radius here */
+                      /* filter buttons have the exception of being fully rounded on all brands, that's why I am setting border-radius here */
                       --button-primary-border-radius: 999px;
                       --button-secondary-border-radius: 999px;
                     }
@@ -486,7 +486,7 @@ export default class OffersPage extends Shadow() {
                   <ks-m-filter-select></ks-m-filter-select>
                 </section>
               </o-grid>
-              <section id="sort-options">
+              <section id="sort-options" class="margin-bottom-fix-s">
               </section>
               <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}></ks-m-tile-factory>
               ${this.badgeContainer

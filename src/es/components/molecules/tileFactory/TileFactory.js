@@ -55,7 +55,10 @@ export default class TileFactory extends Shadow() {
       color: var(--color-error);
     }
     @media only screen and (max-width: _max-width_) {
-      
+      :host > section {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+      }
     }
     `
     return this.fetchTemplate()
