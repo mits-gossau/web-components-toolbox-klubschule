@@ -1,6 +1,6 @@
-<h1>Checkout Lehrmittel Konfiguration</h1>
+<h1>Checkout Booking Page</h1>
 
-<h2>No Message</h2>
+<h2>Checkout Booking Page</h2>
 <p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?node-id=6179-53770&m=dev" target="_blank">figma</a></code>
 </p>
 <hr />
@@ -9,6 +9,7 @@
     <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css
     endpoint="/api/test" method="POST" load-form-styles>
         <form>
+            <!-- booking informations  -->
             <ks-m-info-list status="{'code': '1', 'label': 'Garantiert Durchgeführt'}">
                 <div>
                     <ks-a-heading tag="h3">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
@@ -114,6 +115,9 @@
                     </div>
                 </div>
             </ks-m-info-list>
+            <!-- /booking informations  -->
+
+            <!-- textarea -->
             <ks-m-checkout-additional-input>
                 <div>
                     <ks-a-heading tag="h3">Zusätzliche Angaben zur Buchung</ks-a-heading>
@@ -121,10 +125,17 @@
                         <label for="description">Ihre Angabe</label>
                         <textarea id="Description" live-input-validation="true" rows="4" maxlength="50" data-m-v-rules='{"required": {"error-message": "Bitte diese textarea ausfüllen."},
                         "min-length": {"value": "3", "error-message": "Bitte minimum 3 Character eingeben."}}' name="Description"
-                        placeholder="Beschreibung hier eingeben..."></textarea>
+                        placeholder="Beschreibung hier eingeben..."
+                        error-message-reference-point-changed="true" no-error-text-p
+                        error-text-tag-name="span"></textarea>
                     </div>
                 </div>
             </ks-m-checkout-additional-input>
+            <!-- /textarea -->
+
+            <!-- just for testing  -->
+            <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
+            submit></ks-m-back-forward>
         </form>
     </m-simple-form-validation>
 </div>
