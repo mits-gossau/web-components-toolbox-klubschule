@@ -10,8 +10,15 @@ export default class Checkout extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    /**
+     * Replace label text
+     * @param {*} event 
+     */
     this.checkoutConfigurationListener = (event) => {
-      console.log(event)
+      event.detail.fetch.then(insuranceData => {
+        this.labelWithInsurance = this.root.querySelector('label[insurance-label]');
+        this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel;
+      })
     }
   }
 
