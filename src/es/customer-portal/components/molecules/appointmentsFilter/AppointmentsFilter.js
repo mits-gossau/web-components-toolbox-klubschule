@@ -15,6 +15,20 @@ export default class AppointmentsFilter extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
+    this.addEventListener('click', this.keepDialogOpenEventListener)
+  }
+
+  disconnectedCallback () {
+    this.removeEventListener('click', this.keepDialogOpenEventListener)
+  }
+
+  keepDialogOpenEventListener = event => {
+    console.log('cp', event.composedPath())
+    event.composedPath().find(node => {
+      console.log(node, node.tagName)
+      return node
+    })
+  // const res = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
   }
 
   shouldRenderCSS () {
@@ -242,6 +256,7 @@ export default class AppointmentsFilter extends Shadow() {
     const requestEventName = 'request-appointments-filter'
     return /* html */ `
       <m-dialog
+      open
         namespace="dialog-left-slide-in-"
         show-event-name="${showDialogEventName}"
         close-event-name="${requestEventName}">
