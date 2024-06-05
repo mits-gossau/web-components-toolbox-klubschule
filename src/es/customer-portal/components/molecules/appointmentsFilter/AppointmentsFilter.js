@@ -23,9 +23,24 @@ export default class AppointmentsFilter extends Shadow() {
   }
 
   keepDialogOpenEventListener = event => {
-    console.log('cp', event.composedPath())
+    // event.stopPropagation()
+    event.preventDefault()
+    console.log('cp', event, event.composedPath())
+
+    // const eventPath = event.composedPath()
+    // const elementsWithTag = eventPath.filter(function (element) {
+    //   // return element.tagName === 'MDX-CHECKBOX' && element.classList.contains('hydrated')
+    //   return element.tagName === 'MDX-CHECKBOX'
+    // })[0]
+    // if (elementsWithTag) elementsWithTag.setAttribute('checked', 'checked')
+    // console.log('tag', elementsWithTag)
+
     event.composedPath().find(node => {
-      console.log(node, node.tagName)
+      console.log(node)
+      if (node.tagName === 'INPUT') {
+        node.checked = true
+        debugger
+      }
       return node
     })
   // const res = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
@@ -256,7 +271,6 @@ export default class AppointmentsFilter extends Shadow() {
     const requestEventName = 'request-appointments-filter'
     return /* html */ `
       <m-dialog
-      open
         namespace="dialog-left-slide-in-"
         show-event-name="${showDialogEventName}"
         close-event-name="${requestEventName}">
