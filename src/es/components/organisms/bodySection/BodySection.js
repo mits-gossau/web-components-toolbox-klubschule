@@ -56,7 +56,8 @@ export default class KsBodyStyle extends BodyStyle {
             max-width: 100%;
         }
 
-        :host([has-background]) {
+        :host([has-background]),
+        :host([has-padding]) {
             padding-top: var(--mdx-sys-spacing-flex-l);
             padding-bottom: var(--mdx-sys-spacing-flex-l);
         }
