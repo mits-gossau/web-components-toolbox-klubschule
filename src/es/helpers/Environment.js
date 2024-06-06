@@ -22,21 +22,43 @@ self.Environment = {
         return '767px'
     }
   },
+  getCustomerPortalBaseAPIUrlByLanguage: function () {
+    switch (self.Environment.language) {
+      case 'fr-CH':
+        return {
+          baseAPI: this.isTestingEnv ? 'https://qual.ecole-club.ch/' : 'https://qual.ecole-club.ch/',
+          renewSearch: 'Cours/recherche@'
+        }
+      case 'it-CH':
+        return {
+          baseAPI: this.isTestingEnv ? 'https://qual.scuola-club.ch/' : 'https://qual.scuola-club.ch/',
+          renewSearch: 'Corsi/ricerca@'
+        }
+      case 'de-CH':
+        return {
+          baseAPI: this.isTestingEnv ? 'https://qual.klubschule.ch' : 'https://qual.klubschule.ch',
+          renewSearch: 'Kurse/suche@'
+        }
+      default:
+        return {
+          baseAPI: this.isTestingEnv ? 'https://qual.klubschule.ch' : 'https://qual.klubschule.ch',
+          renewSearch: 'Kurse/suche@'
+        }
+    }
+  },
   getApiBaseUrl: function (type) {
     switch (type) {
       case 'customer-portal': {
         return {
-          apiBaseUrl: this.isTestingEnv ? 'https://qual.klubschule.ch' : 'https://qual.klubschule.ch',
-          apiSubscriptionCourseAppointments: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointments' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointments',
-          apiSubscriptionCourseAppointmentBooking: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentbooking' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentbooking',
-          apiSubscriptionCourseAppointmentDetail: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentdetail' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentdetail',
-          apiSubscriptionCourseAppointmentReversal: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentreversal' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentreversal',
-          apiBookedSubscriptionCourseAppointments: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/bookedsubscriptioncourseappointments' : 'https://qual.klubschule.ch/api/CustomerPortal/bookedsubscriptioncourseappointments',
-          apiSubscriptions: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptions' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptions',
-          apiSubscriptionDetail: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscription' : 'https://qual.klubschule.ch/api/CustomerPortal/subscription',
-          apiSubscriptionPdf: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptionpdf' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptionpdf',
-          subscriptionRenewSearchLinkUrl: this.isTestingEnv ? 'https://qual.klubschule.ch/Kurse/suche@' : 'https://qual.klubschule.ch/Kurse/suche@',
-          translations: this.isTestingEnv ? 'https://dev.klubschule.ch/umbraco/api/1/Dictionaries/all/de/CP' : 'https://dev.klubschule.ch/umbraco/api/1/Dictionaries/all/de/CP'
+          apiSubscriptionCourseAppointments: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointments`,
+          apiSubscriptionCourseAppointmentBooking: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentbooking`,
+          apiSubscriptionCourseAppointmentDetail: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentdetail`,
+          apiSubscriptionCourseAppointmentReversal: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentreversal`,
+          apiBookedSubscriptionCourseAppointments: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/bookedsubscriptioncourseappointments`,
+          apiSubscriptions: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptions`,
+          apiSubscriptionDetail: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscription`,
+          apiSubscriptionPdf: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptionpdf`,
+          subscriptionRenewSearchLinkUrl: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/${this.getCustomerPortalBaseAPIUrlByLanguage().renewSearch}`
         }
       }
       default:
