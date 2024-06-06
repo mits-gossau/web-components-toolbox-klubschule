@@ -865,7 +865,7 @@ export default class CourseDialog extends Shadow() {
     const dateObject = new Date(dateString)
     const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
     // @ts-ignore
-    const formatter = new Intl.DateTimeFormat('de-DE', options)
+    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
     return formatter.format(dateObject)
   }
 
