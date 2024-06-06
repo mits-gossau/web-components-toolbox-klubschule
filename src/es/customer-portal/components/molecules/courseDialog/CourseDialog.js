@@ -655,6 +655,7 @@ export default class CourseDialog extends Shadow() {
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
     if (!state) return ''
     const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo)
+    const freeSeats = Number(state.status) ? state.status : ''
     return /* html */ `
       <div class="detail">
         <span>
@@ -688,7 +689,7 @@ export default class CourseDialog extends Shadow() {
           <a-translation data-trans-key="CP.cpAppointmentListColumnStatus"></a-translation>
         </span>
         <div>
-          <span class="${state.css.status}"><a-translation data-trans-key='${state.statusTransKey}'></a-translation></span> 
+          <span class="${state.css.status}">${freeSeats ? `${freeSeats}` : `<a-translation data-trans-key='${state.statusTransKey}'></a-translation`}</span> 
           <span class="${state.css.info}">${state.infoTransKey ? `<a-translation data-trans-key='${state.infoTransKey}'></a-translation>` : ''}</span>
         </div>
       </div>
