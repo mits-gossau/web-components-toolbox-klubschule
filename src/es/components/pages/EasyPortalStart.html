@@ -1,0 +1,74 @@
+<!-- 2-spaltige Bühne mit maximaler Ausprägung -->
+<o-grid 
+    namespace="grid-2columns-content-stage-" 
+    first-container-vertical 
+    first-column-with="66%"
+    background-color="var(--mdx-sys-color-accent-6-subtle1)" 
+    width="100%"
+    dark-text-color
+    image-src="https://mits-gossau.github.io/web-components-toolbox-klubschule/src/img/content-stage/placeholder-image.png"
+>
+    <div class="stage-content">
+        <p class="topline">
+        </p>
+        <h1>{{company}}</h1>
+        <p class="intro">Willkommen auf der Ausbildungsseite der Klubschule Migros für {{company}}-Mitarbeitende</p>
+    </div>
+    <aside>
+        <div class="aside-image"></div>
+    </aside>
+</o-grid>
+
+<!-- 1-spaltiger Content -->
+<ks-o-body-section variant="narrow">
+    <!-- CMS RichText -->
+    <div>
+        <p>
+            Sie befinden sich im Bereich der {{company}} mit speziellen Mitarbeiter-Angeboten. Ob Sprach oder Informatikkurs, Verkaufsseminar oder Marketingwissen: Es stehen Ihnen eine Vielzahl an Kursen zur Verfügung, mit denen Sie Ihr Wissen erweitern können. Nutzen Sie die Gelegenheit sich weiterzubilden.
+        </p>
+    </div>
+    <!-- /CMS RichText -->
+
+    <!-- CMS Akkordeon Container -->
+    <div class="margin-y-m">
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>Ihre Vorteile</h4>
+                    </summary>
+                    <div>
+                        <div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
+                        </div>
+                    </div>
+                </details>
+        </m-details>
+        <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>Massgeschneiderte Schulungsangebote</h4>
+                    </summary>
+                    <div>
+                        <div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
+                        </div>
+                    </div>
+                </details>
+        </m-details>
+    </div>
+    <!-- /CMS Akkordeon Container -->
+
+</ks-o-body-section>
+
+<!-- Angebote -->
+<ks-o-offers-page
+    endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
+    initial-request='{"filter":[{"label":"Sparte","id":"7","typ":"tree","urlpara":"angebot","disabled":false,"sort":5,"children":[{"id":"0N11027","typ":"","selected":true,"disabled":true,"HasChilds":false}],"HasChilds":true}],"sorting":1,"onlycourse":false,"PortalId":29,"sprachid":"d","MandantId":111}'
+    endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
+    google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"
+    no-search-tab
+></ks-o-offers-page>
