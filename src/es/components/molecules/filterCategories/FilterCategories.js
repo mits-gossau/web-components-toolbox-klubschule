@@ -70,6 +70,32 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
+  generateCenterFilter (filterItem) {
+    let centerFilter = ''
+
+    filterItem.children.forEach(region => {
+      centerFilter += /* html */`
+        <label class="headline">${region.label}</label>
+      `
+      region.children.forEach(center => {
+        const count = center.count ? `(${center.count})` : ''
+        const disabled = center.disabled ? 'disabled' : ''    
+        const checked = center.selected ? 'checked' : ''
+        const visible = center.visible ? 'visible' : ''
+        centerFilter += /* html */`
+          <mdx-component mutation-callback-event-name="request-with-facet">
+            <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}"></mdx-checkbox>
+          </mdx-component>
+        `
+      })
+    })
+
+    const div = document.createElement('div')
+    div.innerHTML = centerFilter
+
+    return div.children
+  }
+
   generateFilterElement(child, parentItem) {
     const subNav = []
     const count = child.count ? `(${child.count})` : ''
@@ -176,13 +202,18 @@ export default class FilterCategories extends Shadow() {
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-      filterItem.children.forEach(child => {
-        if (child.children && child.children.length > 0) {
-          this.generateFilters(response, child, generatedNavLevelItem.subLevel) // recursively call the function for any nested children
-        } else {
-          this.generateFilterElement(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
-        }
-      })
+      if (filterItem.id === "13") {
+        Array.from(this.generateCenterFilter(filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+      } else {
+        filterItem.children.forEach(child => {
+          if (child.children && child.children.length > 0) {
+            // recursively call the function for any nested children
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel) 
+          } else {
+            this.generateFilterElement(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+          }
+        })
+      }
     }
   }
 

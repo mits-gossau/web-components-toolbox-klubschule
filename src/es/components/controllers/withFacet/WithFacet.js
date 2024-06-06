@@ -179,6 +179,28 @@ export default class WithFacet extends Shadow() {
                 }
 
                 // url filter kung fu
+                // json.filters.forEach(filterItem => {
+                //   if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+                //     // console.log(filterItem)
+                //     const filterParam = this.params.get('filter')
+
+                //     // filterParam?.split('_').map(part => {
+                //     //   let [key, ...values] = part.split('-');
+                //     //   console.log('key: '+key, 'values: '+values)
+                //     // })
+
+                    
+                //     // filterItem.children.forEach(child => {
+                //     //   console.log(child)
+                //     // })
+                    
+                //     // let lastSelectedChild = this.getLastSelectedChild(filterItem)
+                //     // console.log('lastSelectedChild', lastSelectedChild)
+
+                //   }
+                // })
+
+                // old url filter kung fu
                 json.filters.forEach(filterItem => {
                   if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                     const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
@@ -317,6 +339,59 @@ export default class WithFacet extends Shadow() {
   }
 
   updateURLParams () {
+    // if (this.params) {
+      // const filterParam = this.params.get('filter')
+      
+      // filterParam?.split('_').map(part => {
+      //   let valuesUrlpara = []
+      //   let [key, ...values] = part.split('--')
+      //   let [keyUrlpara, keyId] = key.split('-')
+
+      //   values.map(value => {
+      //     value.split('-').map(value => {
+      //       valuesUrlpara.push(value)
+      //     })
+      //   })
+
+      //   let children = []
+      //   valuesUrlpara.map(value => {
+      //     children.push(`{
+      //       "urlpara": "${value}"
+      //     }`)
+      //   })
+
+      //   this.filters.push(`{
+      //     "urlpara": "${keyUrlpara}",
+      //     "id": "${keyId}",
+      //     "children": [${children.join(',')}]
+      //   }`)
+
+
+
+
+      //   console.log('key: '+keyUrlpara, 'id: '+keyId, 'valuesUrlpara: '+valuesUrlpara)
+
+
+
+        // values.map(value => {
+        //   console.log('value: '+value)
+
+        //   this.filters.push(`{
+        //     "urlpara": "${key}",
+        //     "selected": true,
+        //     "children": [
+        //       {
+        //         "urlpara": "${value}",
+        //         "selected": true
+        //       }
+        //     ]
+        //   }`)
+        // })
+
+      // })
+
+
+    // old stuff
     if (this.params) {
       const entriesWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
 
@@ -345,6 +420,19 @@ export default class WithFacet extends Shadow() {
       })
     }
   }
+
+  // getLastSelectedChild (filterItem) {
+  //   let lastSelectedChild = null;
+  //   if (filterItem.selected && (!filterItem.children || filterItem.children.length === 0)) return filterItem
+  //   if (filterItem.children) {
+  //       for (let child of filterItem.children) {
+  //           let result = this.getLastSelectedChild(child)
+  //           if (result) lastSelectedChild = result
+  //       }
+  //   }
+
+  //   return lastSelectedChild
+  // }
 
   removeAllFilterParamsFromURL () {
     if (this.params) {
@@ -378,7 +466,6 @@ export default class WithFacet extends Shadow() {
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
             const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
-            debugger
             return `{
               ${child.count ? `"count": ${child.count},` : ''}
               ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
