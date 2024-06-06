@@ -78,6 +78,7 @@ export default class AppointmentTile extends Tile {
       :host .subscription-info {
         display: flex;
         flex-direction: column;
+        gap: 0.5em;
       }
       :host .course-admin, .course-price {
         flex-grow: 1;
@@ -86,6 +87,7 @@ export default class AppointmentTile extends Tile {
       :host .course-info {
         display: flex;
         flex-direction: column;
+        gap: 0.5em;
       }
       :host .course-execution-info{
         gap: 0.5em;
@@ -100,11 +102,10 @@ export default class AppointmentTile extends Tile {
         font-weight: 400;
       }
       :host .time {
+        align-items: center;
         display: flex;
         gap: 0.5em;
-        align-items: center;
       }
-
       :host .body, .footer {
         align-items: center;
         display: grid;
@@ -114,12 +115,12 @@ export default class AppointmentTile extends Tile {
         padding: 1.5em 1.5em 0.75em 1.5em;
       }
       :host .info {
-        display: flex;
         align-items: center;
+        display: flex;
       }
       :host m-load-template-tag {
-          min-height: 16em;
-          display: block;
+        display: block;
+        min-height: 16em;
       }
       :host .status-not-bookable {
         border: 1px solid var(--alert-color);
@@ -152,8 +153,8 @@ export default class AppointmentTile extends Tile {
         padding: 0;
       }
       :host .meta li {
-        display: flex;
         align-items: center;
+        display: flex;
         flex-direction: row;
       }
       :host .meta li + li {
@@ -172,8 +173,8 @@ export default class AppointmentTile extends Tile {
           flex-direction: column;
         }
         :host .parent-footer {
-          flex-direction: column-reverse;
           align-items: flex-end;
+          flex-direction: column-reverse;
         }
         :host .course-booking {
           margin-top: 2.5em;
