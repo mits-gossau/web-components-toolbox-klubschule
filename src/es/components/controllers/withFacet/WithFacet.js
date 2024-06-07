@@ -94,7 +94,7 @@ export default class WithFacet extends Shadow() {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
         }
 
-        // TODO: @Alex, the location has to be kept in the URL
+        // TODO: @Alex, the location and location name has to be kept in the URL
 
         // keep the last search location inside initialRequestObj
         if (event?.detail?.key === 'location-search') {
@@ -219,6 +219,7 @@ export default class WithFacet extends Shadow() {
                     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
                   }
                 })
+                
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -378,7 +379,6 @@ export default class WithFacet extends Shadow() {
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
             const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
-
             return `{
               ${child.count ? `"count": ${child.count},` : ''}
               ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
