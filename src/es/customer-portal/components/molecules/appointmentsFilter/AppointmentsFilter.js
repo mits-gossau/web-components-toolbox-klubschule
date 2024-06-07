@@ -183,11 +183,12 @@ export default class AppointmentsFilter extends Shadow() {
     }
     return /* html */ `
       <div>
-       <style>
-              .flatpickr-day.today {
-                border-color: red;
-              }
-            </style>
+        <style>
+          :host {
+            --flatpickr-ks-border-radius:var(--button-secondary-border-radius,0);
+            --flatpickr-ks-padding:var(--button-secondary-padding, 0);
+          }
+        </style>
         <a-flatpickr
           options="${escapeForHtml(JSON.stringify(configOptions))}"
           namespace="flatpickr-ks-">
