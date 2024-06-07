@@ -10,115 +10,118 @@
     endpoint="/api/test" method="POST" load-form-styles>
         <form>
             <!-- booking informations  -->
-            <ks-m-info-list status="{'code': '1', 'label': 'Garantiert Durchgeführt'}">
-                <div>
-                    <ks-a-heading tag="h3">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
+
+            <ks-m-checkout-box-wrapper>
+                <ks-m-info-list status="{'code': '1', 'label': 'Garantiert Durchgeführt'}">
                     <div>
-                        <ul>
-                            <li class="js-status">
-                            </li>
-                            <li>
-                                <a-icon-mdx icon-name="Calendar" size="1.5rem"></a-icon-mdx>
-                                <span>
-                                    22.4.2023 - 19.6.2023<br />
-                                    Mo, 18:00 - 20:00 Uhr
-                                </span>
-                            </li>
-                            <li>
-                                <a-icon-mdx icon-name="Location" size="1.5rem"></a-icon-mdx>
-                                <span>
-                                    Hofwiesenstrasse 350<br />
-                                    8050 Zürich
-                                </span>
-                            </li>
-                            <li>
-                                <a-icon-mdx icon-name="ShoppingList" size="1.5rem"></a-icon-mdx>
-                                <span>Kurs Nr. E_1198345</span>
-                            </li>
-                        </ul>
+                        <ks-a-heading tag="h2">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
                         <div>
-                            <ks-a-heading tag="h4">
-                                Teilnehmer
-                            </ks-a-heading>
+                            <ul>
+                                <li class="js-status">
+                                </li>
+                                <li>
+                                    <a-icon-mdx icon-name="Calendar" size="1.5rem"></a-icon-mdx>
+                                    <span>
+                                        22.4.2023 - 19.6.2023<br />
+                                        Mo, 18:00 - 20:00 Uhr
+                                    </span>
+                                </li>
+                                <li>
+                                    <a-icon-mdx icon-name="Location" size="1.5rem"></a-icon-mdx>
+                                    <span>
+                                        Hofwiesenstrasse 350<br />
+                                        8050 Zürich
+                                    </span>
+                                </li>
+                                <li>
+                                    <a-icon-mdx icon-name="ShoppingList" size="1.5rem"></a-icon-mdx>
+                                    <span>Kurs Nr. E_1198345</span>
+                                </li>
+                            </ul>
                             <div>
-                                <span><strong>Herr Hans Muster<br></strong></span>
-                                <span>
-                                    Beispielstrasse 12, 3. OG<br>
-                                    8001 Zürich<br>
-                                    Schweiz
-                                </span>
-                            </div>
-                            <div>
-                                <span>
-                                    <strong>
-                                        E-Mail<br>
-                                        Phone<br>
-                                        Birthday<br><br>
-                                        Anmeldung als Geschenk
-                                    </strong>
-                                </span>
-                                <span>
-                                    hans.muster@beispiel.ch <br>
-                                    078 456 23 43 <br>
-                                    08.03.2002 <br><br>
-                                    Korrespondenz direkt zum/zur Teilnehmenden ab 09.03.2024.
-                                </span>
-                            </div>
-        
-                            <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
-                            <div>
-                                <span>
-                                    <strong>
-                                        Kursgeld
-                                    </strong>
-                                </span>
-                                <span>
-                                    CHF 220.00
-                                </span>
-                            </div>
-                            <div>
-                                <span>
-                                    <strong>
-                                        E-book
-                                    </strong>
-                                    <br>
-                                    Speakout 2nd Edition Pre-Intermediate Workbook with key Bundle
-                                </span>
-                                <span>
-                                    CHF 12.30
-                                </span>
-                            </div>
-                            <div>
-                                <span>
-                                    <strong>
-                                        E-book
-                                    </strong>
-                                    <br>
-                                    Speakout 2nd Edition Pre-Intermediate Workbook with key Bundle
-                                </span>
-                                <span>
-                                    CHF 12.30
-                                </span>
-                            </div>
-                            <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
-                            <hr />
-                            <div>
-                                <span>
-                                    <a-translation data-trans-key="Checkout.Total"></a-translation>
-                                </span>
+                                <ks-a-heading tag="h3">
+                                    Teilnehmer
+                                </ks-a-heading>
                                 <div>
-                                    <span>244.60 CHF</span>
-                                    <span><a-translation data-trans-key="Checkout.Tax"></a-translation></span>
+                                    <span><strong>Herr Hans Muster<br></strong></span>
+                                    <span>
+                                        Beispielstrasse 12, 3. OG<br>
+                                        8001 Zürich<br>
+                                        Schweiz
+                                    </span>
+                                </div>
+                                <div class="flex info-wrapper">
+                                    <span>
+                                        <strong>
+                                            E-Mail<br>
+                                            Phone<br>
+                                            Birthday<br><br>
+                                            Anmeldung als Geschenk
+                                        </strong>
+                                    </span>
+                                    <span>
+                                        hans.muster@beispiel.ch <br>
+                                        078 456 23 43 <br>
+                                        08.03.2002 <br><br>
+                                        Korrespondenz direkt zum/zur Teilnehmenden ab 09.03.2024.
+                                    </span>
+                                </div>
+                    
+                                <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                                <div class="flex">
+                                    <span>
+                                        <strong>
+                                            Kursgeld
+                                        </strong>
+                                    </span>
+                                    <span>
+                                        CHF 220.00
+                                    </span>
+                                </div>
+                                <div class="flex">
+                                    <span>
+                                        <strong>
+                                            E-book
+                                        </strong>
+                                        <br>
+                                        Speakout 2nd Edition Pre-Intermediate Workbook with key Bundle
+                                    </span>
+                                    <span>
+                                        CHF 12.30
+                                    </span>
+                                </div>
+                                <div class="flex">
+                                    <span>
+                                        <strong>
+                                            E-book
+                                        </strong>
+                                        <br>
+                                        Speakout 2nd Edition Pre-Intermediate Workbook with key Bundle
+                                    </span>
+                                    <span>
+                                        CHF 12.30
+                                    </span>
+                                </div>
+                                <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                                <hr />
+                                <div class="flex total">
+                                    <span>
+                                        <a-translation data-trans-key="Checkout.Total"></a-translation>
+                                    </span>
+                                    <div>
+                                        <span>244.60 CHF</span>
+                                        <span><a-translation data-trans-key="Checkout.Tax"></a-translation></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </ks-m-info-list>
+                </ks-m-info-list>
+            </ks-m-checkout-box-wrapper>
             <!-- /booking informations  -->
 
             <!-- textarea -->
-            <ks-m-checkout-additional-input>
+            <ks-m-checkout-box-wrapper>
                 <div>
                     <ks-a-heading tag="h3">Zusätzliche Angaben zur Buchung</ks-a-heading>
                     <div>
@@ -130,8 +133,67 @@
                         error-text-tag-name="span"></textarea>
                     </div>
                 </div>
-            </ks-m-checkout-additional-input>
+            </ks-m-checkout-box-wrapper>
             <!-- /textarea -->
+
+            <ks-m-checkout-box-wrapper>
+                <div>
+                    <ks-a-heading tag="h2">Zahlung</ks-a-heading>
+
+                    <div>
+                        <span>
+                            <strong>
+                                Zahlungsart<br><br>
+                            </strong>
+                            Bezahlung per Rechnung<br>
+                        </span>
+                    </div>
+
+                    <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+
+                    <div>
+                        <span><strong>
+                            Rechnungsempfänger<br><br>
+                            Herr Hans Muster<br>
+                            Acme GmbH<br>
+                        </strong></span>
+                        <span>
+                            Beispielstrasse 12, 3. OG<br>
+                            8001 Zürich<br>
+                            Schweiz
+                        </span>
+                    </div>
+
+                    <div class="flex info-wrapper">
+                        <span>
+                            <strong>
+                                E-Mail
+                            </strong>
+                        </span>
+                        <span>
+                            hans.muster@beispiel.ch
+                        </span>
+                    </div>
+
+                    <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                </div>
+
+                <div>
+                    <ks-a-heading tag="h2">Korrespondenz</ks-a-heading>
+                    <div>
+                        <span>
+                            Sie die Korrespondenz der Klubschule Migros wie folgt erhalten:
+                        </span>
+                        <div class="icon-text-wrapper margin-top-m flex">
+                            <a-icon-mdx icon-name="Check" size="1.5rem"></a-icon-mdx>
+                            <span>
+                                Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking per Mailversand an die angegebene E-Mail-Adresse.
+                            </span>
+                        </div>
+                        <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                    </div>
+                </div>
+            </ks-m-checkout-box-wrapper>
 
             <!-- just for testing  -->
             <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
