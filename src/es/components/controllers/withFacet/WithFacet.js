@@ -56,8 +56,6 @@ export default class WithFacet extends Shadow() {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-      console.log('---------------event', event?.detail?.this?.hasAttribute('filter'), event)
-
       let request
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
       const shouldResetFilter = event?.type === 'reset-filter'
@@ -168,7 +166,6 @@ export default class WithFacet extends Shadow() {
                 }
                 throw new Error(response.statusText)
               }).then(json => {
-                console.log("🚀 ~ :withFacetCache.set ~ json:", json)
                 // store initial response
                 if (!this.filters.length || this.filters.length === 0) {
                   this.lastResponse = json
