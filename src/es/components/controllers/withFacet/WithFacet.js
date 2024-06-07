@@ -56,6 +56,8 @@ export default class WithFacet extends Shadow() {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
+      console.log('---------------event', event?.detail?.this?.hasAttribute('filter'), event)
+
       let request
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
       const shouldResetFilter = event?.type === 'reset-filter'
@@ -94,7 +96,7 @@ export default class WithFacet extends Shadow() {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
         }
 
-        // TODO: @Alex, the location has to be kept in the URL
+        // TODO: @Alex, the location and location name has to be kept in the URL
 
         // keep the last search location inside initialRequestObj
         if (event?.detail?.key === 'location-search') {
@@ -166,6 +168,7 @@ export default class WithFacet extends Shadow() {
                 }
                 throw new Error(response.statusText)
               }).then(json => {
+                console.log("🚀 ~ :withFacetCache.set ~ json:", json)
                 // store initial response
                 if (!this.filters.length || this.filters.length === 0) {
                   this.lastResponse = json
@@ -219,6 +222,7 @@ export default class WithFacet extends Shadow() {
                     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
                   }
                 })
+                
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -378,7 +382,6 @@ export default class WithFacet extends Shadow() {
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
             const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
-
             return `{
               ${child.count ? `"count": ${child.count},` : ''}
               ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
