@@ -340,6 +340,7 @@ export default class OffersPage extends Shadow() {
           </m-dialog>
         </ks-c-auto-complete>
       </div>` : ''
+
     const locationSearch = this.hasAttribute('no-location-search') ? '' : /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
         <ks-c-auto-complete-location ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
@@ -388,9 +389,52 @@ export default class OffersPage extends Shadow() {
             </m-dialog>
         </ks-c-auto-complete-location>
       </div>`
+    
+    const searchInOverlay = this.hasAttribute('without-search-in-overlay') ? '' : /* html */`
+      <ks-c-auto-complete
+        input-change="search-change"
+        ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+        ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
+      >
+        <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
+          <div class="container">
+            <a-input
+              inputid="offers-page-input-search"
+              autofocus
+              placeholder="${this.getTranslation('Search.InputPlaceholder')}"
+              icon-name="Search" 
+              icon-size="calc(20rem/18)"
+              submit-search="request-auto-complete"
+              any-key-listener
+              type="search"
+              answer-event-name="search-change"
+              delete-listener
+              search
+            >
+            </a-input>
+            <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+            </div>
+          </div>
+          <div class="container">
+            <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+            </ks-m-auto-complete-list>
+          </div>
+          <a-input
+            id="show-modal"
+            inputid="show-modal"
+            placeholder="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
+            icon-name="Search"
+            icon-size="1.25em"
+            search type="search"
+            answer-event-name="search-change"
+          >
+          </a-input>
+        </m-dialog>
+      </ks-c-auto-complete>
+    `
 
     return /* html */ `
-      
         ${this.eventDetailURL ? `<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
@@ -422,47 +466,7 @@ export default class OffersPage extends Shadow() {
                           </a-button>
                       </p>
                       <div class="sub-content">
-                          <ks-c-auto-complete
-                            input-change="search-change"
-                            ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
-                            ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
-                          >
-                            <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
-                              <div class="container">
-                                <a-input
-                                  inputid="offers-page-input-search"
-                                  autofocus
-                                  placeholder="${this.getTranslation('Search.InputPlaceholder')}"
-                                  icon-name="Search" 
-                                  icon-size="calc(20rem/18)"
-                                  submit-search="request-auto-complete"
-                                  any-key-listener
-                                  type="search"
-                                  answer-event-name="search-change"
-                                  delete-listener
-                                  search
-                                >
-                                </a-input>
-                                <div id="close">
-                                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                                </div>
-                              </div>
-                              <div class="container">
-                                <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
-                                </ks-m-auto-complete-list>
-                              </div>
-                              <a-input
-                                id="show-modal"
-                                inputid="show-modal"
-                                placeholder="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
-                                icon-name="Search"
-                                icon-size="1.25em"
-                                search type="search"
-                                answer-event-name="search-change"
-                              >
-                              </a-input>
-                            </m-dialog>
-                          </ks-c-auto-complete>
+                          ${searchInOverlay}
                           <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="${this.getTranslation('Filter.closeOverlayer')}" translation-key-reset="${this.getTranslation('Filter.ResetFilter')}"></ks-m-filter-categories>
                       </div>
                   </div>
