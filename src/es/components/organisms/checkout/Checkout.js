@@ -37,7 +37,7 @@ export default class Checkout extends Shadow() {
   }
 
   shouldRenderHTML () {
-    return true
+    return !this.componentWasRendered
   }
 
   renderCSS () {}
