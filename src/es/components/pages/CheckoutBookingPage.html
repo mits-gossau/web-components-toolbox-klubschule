@@ -5,17 +5,17 @@
 </p>
 <hr />
 
-<div style="background-color: var(--mdx-sys-color-accent-6-subtle1); width: 100%; padding: 20px">
-    <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css
-    endpoint="/api/test" method="POST" load-form-styles>
+<ks-o-body-section variant="default" background-color="var(--mdx-sys-color-accent-6-subtle1)"
+    id="with-facet-body-section" tabindex="0" aria-label="Section">
+    <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+        method="POST" load-form-styles>
         <form>
             <!-- booking informations  -->
-
             <ks-m-checkout-box-wrapper>
                 <ks-m-info-list status="{'code': '1', 'label': 'Garantiert Durchgeführt'}">
                     <div>
                         <ks-a-heading tag="h2">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
-                        <div>
+                        <div class="list-wrapper">
                             <ul>
                                 <li class="js-status">
                                 </li>
@@ -66,7 +66,7 @@
                                         Korrespondenz direkt zum/zur Teilnehmenden ab 09.03.2024.
                                     </span>
                                 </div>
-                    
+
                                 <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
                                 <div class="flex">
                                     <span>
@@ -127,16 +127,18 @@
                     <div>
                         <label for="description">Ihre Angabe</label>
                         <textarea id="Description" live-input-validation="true" rows="4" maxlength="50" data-m-v-rules='{"required": {"error-message": "Bitte diese textarea ausfüllen."},
-                        "min-length": {"value": "3", "error-message": "Bitte minimum 3 Character eingeben."}}' name="Description"
-                        placeholder="Beschreibung hier eingeben..."
-                        error-message-reference-point-changed="true" no-error-text-p
-                        error-text-tag-name="span"></textarea>
+                        "min-length": {"value": "3", "error-message": "Bitte minimum 3 Character eingeben."}}'
+                            name="Description" placeholder="Beschreibung hier eingeben..."
+                            error-message-reference-point-changed="true" no-error-text-p
+                            error-text-tag-name="span"></textarea>
                     </div>
                 </div>
             </ks-m-checkout-box-wrapper>
             <!-- /textarea -->
 
+            <!-- 2 column wrapper -->
             <ks-m-checkout-box-wrapper>
+                <!-- Rechnungsempfänger -->
                 <div>
                     <ks-a-heading tag="h2">Zahlung</ks-a-heading>
 
@@ -153,10 +155,10 @@
 
                     <div>
                         <span><strong>
-                            Rechnungsempfänger<br><br>
-                            Herr Hans Muster<br>
-                            Acme GmbH<br>
-                        </strong></span>
+                                Rechnungsempfänger<br><br>
+                                Herr Hans Muster<br>
+                                Acme GmbH<br>
+                            </strong></span>
                         <span>
                             Beispielstrasse 12, 3. OG<br>
                             8001 Zürich<br>
@@ -177,7 +179,9 @@
 
                     <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
                 </div>
+                <!-- /Rechnungsempfänger -->
 
+                <!-- Korrespondenz -->
                 <div>
                     <ks-a-heading tag="h2">Korrespondenz</ks-a-heading>
                     <div>
@@ -187,17 +191,102 @@
                         <div class="icon-text-wrapper margin-top-m flex">
                             <a-icon-mdx icon-name="Check" size="1.5rem"></a-icon-mdx>
                             <span>
-                                Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking per Mailversand an die angegebene E-Mail-Adresse.
+                                Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking per Mailversand an die
+                                angegebene E-Mail-Adresse.
                             </span>
                         </div>
                         <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
                     </div>
                 </div>
+                <!-- /Korrespondenz -->
             </ks-m-checkout-box-wrapper>
+            <!-- /2 column wrapper -->
 
-            <!-- just for testing  -->
-            <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
-            submit></ks-m-back-forward>
+            <!-- Newsletter -->
+            <ks-m-checkout-box-wrapper>
+                <div>
+                    <ks-a-heading tag="h3">Newsletter</ks-a-heading>
+                    <div>
+                        <ks-a-checkbox mode="false" namespace="checkbox-default-">
+                            <div class="wrap">
+                                <div class="control">
+                                    <label for="cb-01">Ja, ich möchte regelmässig über aktuelle Angebote der Klubschule
+                                        Migros informiert werden.</label>
+                                        <input id="cb-01" name="cb-01" type="checkbox">
+                                    <div class="box">
+                                        <a-icon-mdx icon-name="Check" size="1.25em" rotate="0"
+                                            class="icon-right"></a-icon-mdx>
+                                    </div>
+                                </div>
+                            </div>
+                        </ks-a-checkbox>
+                    </div>
+                </div>
+            </ks-m-checkout-box-wrapper>
+            <!-- /Newsletter -->
+
+
+            <!-- End -->
+            <ks-m-checkout-box-wrapper>
+                <div class="full-width">
+                    <span>
+                        Ihre Gesundheit ist uns wichtig. Bitte beachten Sie, dass körperliche Aktivität mit
+                        gesundheitlichen Risiken verbunden sein kann. Sollten Sie an einer Krankheit leiden oder
+                        Beschwerden haben, empfehlen wir Ihnen dringend, sich vor Kursbeginn ärztlich beraten zu lassen.
+                        <a href="#">Vor Kursbeginn: Wichtige Hinweise zu Gesundheitsrisiken</a>
+                        Wir weisen ausdrücklich darauf hin, dass Sie mit Ihrer Zustimmung zu unseren Allgemeinen
+                        Geschäftsbedingungen (siehe Abschnitt “Haftungsausschluss und Versicherung”), auf eigenes Risiko
+                        am Training teilnehmen. Sollten während des Kurses Beschwerden auftreten, empfehlen wir Ihnen
+                        dringend, umgehend Ihren Arzt/Ihre Ärztin aufzusuchen und die Klubschule Migros sowie Ihre
+                        Lehrperson über Ihren Gesundheitszustand zu informieren. 
+                    </span>
+                    <div class="flex">
+                        <!-- Optional Zusatzinfo Fitnesskurs -->
+                        <div>
+                            <ks-a-checkbox mode="false" namespace="checkbox-default-">
+                                <div class="wrap">
+                                    <div class="control">
+                                        <label for="cb-02">Ja, ich möchte regelmässig über aktuelle Angebote der Klubschule
+                                            Migros informiert werden.</label>
+                                            <input id="cb-02" name="cb-02" type="checkbox" required
+                                                error-message-reference-point-changed="true" no-error-text-p
+                                                error-text-tag-name="span"
+                                                data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box">
+                                            <a-icon-mdx icon-name="Check" size="1.25em" rotate="0"
+                                                class="icon-right"></a-icon-mdx>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ks-a-checkbox>
+                        </div>
+                        <!-- Optional Zusatzinfo Fitnesskurs -->
+
+                        <div class="submit-wrapper">
+                            <div class="flex total">
+                                <span>
+                                    <a-translation data-trans-key="Checkout.Total"></a-translation>
+                                </span>
+                                <div>
+                                    <span>244.60 CHF</span>
+                                    <span><a-translation data-trans-key="Checkout.Tax"></a-translation></span>
+                                </div>
+                            </div>
+
+                            <ks-a-button 
+                                big 
+                                type="submit" mode="false"
+                                namespace="button-primary-" 
+                                color="secondary"
+                            >
+                                Jetzt verbindlich buchen
+                            </ks-a-button>
+                        </div>
+                    </div>
+                </div>
+            </ks-m-checkout-box-wrapper>
+            <!-- /End -->
+
         </form>
     </m-simple-form-validation>
-</div>
+</ks-o-body-section>

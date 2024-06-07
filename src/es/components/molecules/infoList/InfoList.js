@@ -46,8 +46,10 @@ export default class InfoList extends CheckoutBookedOffer {
     this.css = /* css */`
       :host {
         --ul-margin: 0;
+        padding: 0 !important;
+        width: 100%;
       }
-      :host > div > div {
+      :host .list-wrapper {
         display: flex;
         gap: var(--mdx-sys-spacing-fix-m);
       }
@@ -93,18 +95,8 @@ export default class InfoList extends CheckoutBookedOffer {
         display: block;
       }
 
-      :host .total > span,
-      :host .total div > span:first-child {
-        font: var(--mdx-sys-font-flex-large-headline3);
-      }
-
-      :host .total div > span + span {
-        color: var(--mdx-sys-color-neutral-bold1);
-        font:  var(--mdx-sys-font-fix-body3);
-      }
-
       @media only screen and (max-width: _max-width_) {
-        :host > div > div {
+        :host .list-wrapper {
           display: block;
         }
         :host ul {

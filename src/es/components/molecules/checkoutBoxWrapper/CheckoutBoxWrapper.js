@@ -35,12 +35,39 @@ export default class CheckoutBoxWrapper extends Shadow()  {
   renderCSS () {
     this.css = /* css */`
       :host {
+        --background-color: var(--mdx-sys-color-neutral-on-default, white);
         display: flex;
         gap: var(--mdx-sys-spacing-fix-m);
       }
-      :host > *,
+      :host .full-width {
+        min-width: 100vw;
+        margin-left: calc((100vw - 86.66vw) / -2);
+        margin-bottom: 0;
+        padding: var(--mdx-sys-spacing-flex-large-m) calc((100vw - 86.66vw) / 2 + var(--mdx-sys-spacing-fix-m)) var(--mdx-sys-spacing-flex-large-l);
+      }
+      :host .full-width a:first-of-type {
+        --a-font-size: var(--font-size, 16px);
+        margin: 16px 0;
+      }
+      :host .full-width > span + div {
+        margin-top: 56px;
+      }
+
+      :host .total {
+        min-width: 400px;
+      }
+      :host .total > span,
+      :host .total div > span:first-child {
+        font: var(--mdx-sys-font-flex-large-headline3);
+      }
+
+      :host .total div > span + span {
+        color: var(--mdx-sys-color-neutral-bold1);
+        font:  var(--mdx-sys-font-fix-body3);
+      }
+      :host > div,
       :host ks-m-info-list > * {
-        background-color: var(--info-list-bg-color, var(--background-color));
+        background-color: var(--background-color);
         margin-bottom: var(--mdx-sys-spacing-fix-m);
         padding: var(--mdx-sys-spacing-fix-m);
         width: 100%;
@@ -100,6 +127,10 @@ export default class CheckoutBoxWrapper extends Shadow()  {
         margin-top: var(--mdx-sys-spacing-flex-large-2xs);
       }
 
+      :host .submit-wrapper {
+        text-align: end;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host > *,
         :host ks-m-info-list > * {
@@ -111,6 +142,23 @@ export default class CheckoutBoxWrapper extends Shadow()  {
         }
         :host .flex > span:first-child {
           max-width: 68.26%;
+        }
+        :host .full-width {
+          width: 100vw;
+          margin-left: -1rem;
+        }
+        :host .full-width > .flex {
+          display: block;
+        }
+        :host .total {
+          min-width: unset;
+        }
+
+        :host .full-width > .flex > .flex.total {
+          margin-top: 56px;
+        }
+        :host .full-width > span + div {
+          margin-top: 0;
         }
       }
     `
