@@ -147,14 +147,18 @@ export default class FilterCategories extends Shadow() {
     const div = document.createElement('div')
 
     let childItems = ''
-    const selectedChildren = filterItem.children.filter(child => child.selected)
-    if (selectedChildren.length > 0) {
-      selectedChildren.forEach(child => {
-        childItems += `${child.label}, `
-      })
+    if (filterItem.selected){
+      if (filterItem.typ === 'multi') {
+        const selectedChildren = filterItem.children.filter(child => child.selected)
+        if (selectedChildren.length > 0) {
+          selectedChildren.forEach(child => {
+            childItems += `${child.label}, `
+          })
+        }
+      } else {
+        childItems = this.getLastSelectedChild(filterItem).label
+      }
     }
-
-    const lastSelectedChild = this.getLastSelectedChild(filterItem)
 
     div.innerHTML = /* html */`
       <m-dialog id="${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
@@ -182,8 +186,7 @@ export default class FilterCategories extends Shadow() {
         <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
           <div class="wrap">
             <span class="text">${filterItem.label}</span>
-            ${lastSelectedChild && filterItem.level === "" ? /* html */`<span class="additional">${lastSelectedChild.label}</span>` : ''}
-            <!--<span class="additional">${childItems.slice(0, -2)}</span>-->
+            <span class="additional">${childItems.slice(0, -2)}</span>
           </div>
           <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
         </ks-m-nav-level-item>

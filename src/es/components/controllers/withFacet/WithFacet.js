@@ -56,6 +56,8 @@ export default class WithFacet extends Shadow() {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
+      console.log('---------------event', event?.detail?.this?.hasAttribute('filter'), event)
+
       let request
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
       const shouldResetFilter = event?.type === 'reset-filter'
@@ -166,6 +168,7 @@ export default class WithFacet extends Shadow() {
                 }
                 throw new Error(response.statusText)
               }).then(json => {
+                console.log("🚀 ~ :withFacetCache.set ~ json:", json)
                 // store initial response
                 if (!this.filters.length || this.filters.length === 0) {
                   this.lastResponse = json
@@ -179,28 +182,6 @@ export default class WithFacet extends Shadow() {
                 }
 
                 // url filter kung fu
-                // json.filters.forEach(filterItem => {
-                //   if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                //     // console.log(filterItem)
-                //     const filterParam = this.params.get('filter')
-
-                //     // filterParam?.split('_').map(part => {
-                //     //   let [key, ...values] = part.split('-');
-                //     //   console.log('key: '+key, 'values: '+values)
-                //     // })
-
-                    
-                //     // filterItem.children.forEach(child => {
-                //     //   console.log(child)
-                //     // })
-                    
-                //     // let lastSelectedChild = this.getLastSelectedChild(filterItem)
-                //     // console.log('lastSelectedChild', lastSelectedChild)
-
-                //   }
-                // })
-
-                // old url filter kung fu
                 json.filters.forEach(filterItem => {
                   if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
                     const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
@@ -241,6 +222,7 @@ export default class WithFacet extends Shadow() {
                     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
                   }
                 })
+                
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -339,59 +321,6 @@ export default class WithFacet extends Shadow() {
   }
 
   updateURLParams () {
-    // if (this.params) {
-      // const filterParam = this.params.get('filter')
-      
-      // filterParam?.split('_').map(part => {
-      //   let valuesUrlpara = []
-      //   let [key, ...values] = part.split('--')
-      //   let [keyUrlpara, keyId] = key.split('-')
-
-      //   values.map(value => {
-      //     value.split('-').map(value => {
-      //       valuesUrlpara.push(value)
-      //     })
-      //   })
-
-      //   let children = []
-      //   valuesUrlpara.map(value => {
-      //     children.push(`{
-      //       "urlpara": "${value}"
-      //     }`)
-      //   })
-
-      //   this.filters.push(`{
-      //     "urlpara": "${keyUrlpara}",
-      //     "id": "${keyId}",
-      //     "children": [${children.join(',')}]
-      //   }`)
-
-
-
-
-      //   console.log('key: '+keyUrlpara, 'id: '+keyId, 'valuesUrlpara: '+valuesUrlpara)
-
-
-
-        // values.map(value => {
-        //   console.log('value: '+value)
-
-        //   this.filters.push(`{
-        //     "urlpara": "${key}",
-        //     "selected": true,
-        //     "children": [
-        //       {
-        //         "urlpara": "${value}",
-        //         "selected": true
-        //       }
-        //     ]
-        //   }`)
-        // })
-
-      // })
-
-
-    // old stuff
     if (this.params) {
       const entriesWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
 
@@ -420,19 +349,6 @@ export default class WithFacet extends Shadow() {
       })
     }
   }
-
-  // getLastSelectedChild (filterItem) {
-  //   let lastSelectedChild = null;
-  //   if (filterItem.selected && (!filterItem.children || filterItem.children.length === 0)) return filterItem
-  //   if (filterItem.children) {
-  //       for (let child of filterItem.children) {
-  //           let result = this.getLastSelectedChild(child)
-  //           if (result) lastSelectedChild = result
-  //       }
-  //   }
-
-  //   return lastSelectedChild
-  // }
 
   removeAllFilterParamsFromURL () {
     if (this.params) {
