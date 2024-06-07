@@ -14,6 +14,7 @@ export default class AppointmentsList extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.select = null
     this.numberOfAppointments = 0
+    this.currentOpenDialogFilterType = null
   }
 
   connectedCallback () {
@@ -116,6 +117,8 @@ export default class AppointmentsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     return fetch.then(appointments => {
+      debugger
+      this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       if (appointments.errorCode !== 0) {
         throw new Error(`${appointments.errorMessage}`)
       }
@@ -177,7 +180,7 @@ export default class AppointmentsList extends Shadow() {
               ${subscriptionSelect}
             </div>
             <div col-lg="12" col-md="12" col-sm="12">
-              <m-appointments-filter data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
+              <m-appointments-filter data-filter-open="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
             </div>
             `
             : ''}         

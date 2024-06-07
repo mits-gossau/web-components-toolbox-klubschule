@@ -22,11 +22,7 @@ export default class Appointments extends HTMLElement {
     this.abortControllerSubscriptionCourseAppointmentReversalListener = null
     this.abortControllerBookedSubscriptionCourseAppointments = null
     this.lastFilters = null
-    this.filterCounter = {
-      days: 0,
-      time: 0,
-      location: 0
-    }
+    this.currentDialogFilterOpen = null
   }
 
   connectedCallback () {
@@ -83,7 +79,7 @@ export default class Appointments extends HTMLElement {
    * @param {CustomEventInit} event
    * @param {Boolean} force
    */
-  requestAppointmentsFilterListener = (event, force = false) => {
+  requestAppointmentsFilterListener = (event, force = false, updateOpenDialog = true) => {
     // mdx prevent double event
     if ((!force && event.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') || !this.subscriptionCourseAppointments) {
       return
@@ -102,6 +98,10 @@ export default class Appointments extends HTMLElement {
       if (event?.detail?.target) {
         // get type of used filter (day, time, location)
         const type = event.detail.target.getAttribute('type')
+        debugger
+        if (updateOpenDialog) {
+          this.currentDialogFilterOpen = type
+        }
 
         // get day filter checkboxes
         if (type === 'day') {
@@ -166,6 +166,7 @@ export default class Appointments extends HTMLElement {
         })
       }
 
+      subscriptionCourseAppointmentsFiltered.currentDialogFilterOpen = this.currentDialogFilterOpen
       // filter out empty values
       appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(list => list)
       return appointmentsClone
@@ -188,7 +189,8 @@ export default class Appointments extends HTMLElement {
   resetFilterDayListener = event => {
     const type = event.detail.tags[0]
     this.lastFilters[type].forEach(filter => (filter.selected = false))
-    this.requestAppointmentsFilterListener(event, true)
+    this.currentDialogFilterOpen = null
+    this.requestAppointmentsFilterListener(event, true, false)
   }
 
   /**

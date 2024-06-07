@@ -15,35 +15,6 @@ export default class AppointmentsFilter extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
-    this.addEventListener('click', this.keepDialogOpenEventListener)
-  }
-
-  disconnectedCallback () {
-    this.removeEventListener('click', this.keepDialogOpenEventListener)
-  }
-
-  keepDialogOpenEventListener = event => {
-    // event.stopPropagation()
-    event.preventDefault()
-    console.log('cp', event, event.composedPath())
-
-    // const eventPath = event.composedPath()
-    // const elementsWithTag = eventPath.filter(function (element) {
-    //   // return element.tagName === 'MDX-CHECKBOX' && element.classList.contains('hydrated')
-    //   return element.tagName === 'MDX-CHECKBOX'
-    // })[0]
-    // if (elementsWithTag) elementsWithTag.setAttribute('checked', 'checked')
-    // console.log('tag', elementsWithTag)
-
-    event.composedPath().find(node => {
-      console.log(node)
-      if (node.tagName === 'INPUT') {
-        node.checked = true
-        debugger
-      }
-      return node
-    })
-  // const res = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
   }
 
   shouldRenderCSS () {
@@ -269,11 +240,14 @@ export default class AppointmentsFilter extends Shadow() {
    */
   renderDialog (showDialogEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle, type) {
     const requestEventName = 'request-appointments-filter'
+    // DEV WIP
+    // const keepOpen = this.dataset.filterOpen === type ? 'open' : ''
+    // close-event-name="backdrop-clicked" && ${keepOpen}
     return /* html */ `
       <m-dialog
         namespace="dialog-left-slide-in-"
-        show-event-name="${showDialogEventName}"
-        close-event-name="${requestEventName}">
+        close-event-name="${requestEventName}"
+        show-event-name="${showDialogEventName}">
           <div class="container dialog-header" tabindex="0">
               <div id="back">&nbsp;</div>
               <h3>
