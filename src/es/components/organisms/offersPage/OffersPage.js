@@ -302,6 +302,7 @@ export default class OffersPage extends Shadow() {
           ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
           ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
+          ${this.hasAttribute('auto-complete-disabled') ? ' disabled' : ''} 
         >
           <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
             <div class="container">
@@ -312,6 +313,7 @@ export default class OffersPage extends Shadow() {
                 icon-name="Search" 
                 icon-size="1.5em"
                 submit-search="request-auto-complete"
+                submit-search="request-with-facet"
                 any-key-listener
                 type="search"
                 answer-event-name="search-change"
@@ -394,7 +396,9 @@ export default class OffersPage extends Shadow() {
       <ks-c-auto-complete
         input-change="search-change"
         ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
-        ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
+        ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
+        ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''}
+        ${this.hasAttribute('auto-complete-disabled') ? ' disabled' : ''}
       >
         <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
           <div class="container">

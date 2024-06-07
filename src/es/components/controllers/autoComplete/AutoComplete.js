@@ -85,6 +85,9 @@ export default class AutoComplete extends Shadow() {
       // trigger search when enter or icon click
       if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { description: event.detail.value } })
     }
+
+    this.requestWithFacet = event => this.clickOnPredictionListener({ detail: { description: event.detail.value } })
+
     this.clickOnPredictionListener = event => {
       // home search input
       if (!this.hasAttribute('no-forwarding')) this.homeSearchInput(event.detail.description)
@@ -110,12 +113,14 @@ export default class AutoComplete extends Shadow() {
   }
 
   connectedCallback () {
-    this.addEventListener('request-auto-complete', this.requestAutoCompleteListener)
+    // disabled dispatches (forwards) the input submit event to with facet controller
+    this.addEventListener('request-auto-complete', this.hasAttribute('disabled') ? this.requestWithFacet : this.requestAutoCompleteListener)
     this.addEventListener('auto-complete-selection', this.clickOnPredictionListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener('request-auto-complete', this.requestAutoCompleteListener)
+    // disabled dispatches (forwards) the input submit event to with facet controller
+    this.removeEventListener('request-auto-complete', this.hasAttribute('disabled') ? this.requestWithFacet : this.requestAutoCompleteListener)
     this.removeEventListener('auto-complete-selection', this.clickOnPredictionListener)
   }
 
