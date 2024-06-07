@@ -42,8 +42,10 @@ export default class Checkout extends Shadow() {
       // get value from select
       const initialRequest = this.getAttribute('initial-request')
       const initialRequestObjFrozen = Object.freeze(JSON.parse(initialRequest.replaceAll("'", '"')))
+      const withInsurance = event.detail?.withInsurance ? `"mitVersicherung": ${!!event.detail?.withInsurance},` : ''
 
       const basicRequest = `
+        ${withInsurance}
         "portalId": ${initialRequestObjFrozen.portalId},
         "mandantId": ${initialRequestObjFrozen.mandantId},
         "kursTyp": "${initialRequestObjFrozen.kursTyp}",
