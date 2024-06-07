@@ -124,7 +124,7 @@ export default class CourseInfo extends Shadow() {
     this.html = /* html */`
       ${this.icon}
       <span class="content">
-        <span class="${css.status}">${(statusTransKey && freeSeats) ? `${freeSeats} <a-translation data-trans-key='${statusTransKey}' /></a-translation>` : `${status}`}</span>
+        <span class="${css.status}">${freeSeats ? `${freeSeats}` : `<a-translation data-trans-key='${statusTransKey}'></a-translation>`}</span>
         <span class="${css.info}">${hasDash}${infoTransKey ? `<a-translation data-trans-key='${infoTransKey}'></a-translation>` : ''}</span>
       </span>`
   }
