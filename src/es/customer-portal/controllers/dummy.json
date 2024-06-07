@@ -128,5 +128,6 @@
     "CP.cpFilterTitleDay": "[DE | Tag]",
     "CP.cpNavigationAppointmentsBooking": "[DE | Abo-Termine buchen]",
     "CP.cpNavigationBookedAppointments": "[DE | Gebuchte Termine]",
-    "CP.cpNavigationMySubscriptions": "[DE | Meine Abonnemente]"
+    "CP.cpNavigationMySubscriptions": "[DE | Meine Abonnemente]",
+    "CP.cpAppointmentsFilterStart":"[DE | Ab]"
 }

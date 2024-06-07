@@ -1,5 +1,8 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import { escapeForHtml } from '../../../helpers/Shared.js'
+
+/* global self */
 
 /**
  * @export
@@ -42,10 +45,6 @@ export default class AppointmentsFilter extends Shadow() {
       {
         path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`,
         namespaceFallback: true
-      },
-      {
-        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
-        name: 'a-translation'
       }
     ]
     switch (this.getAttribute('namespace')) {
@@ -93,6 +92,14 @@ export default class AppointmentsFilter extends Shadow() {
       {
         path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
         name: 'o-grid'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/flatpickr/Flatpickr.js`,
+        name: 'a-flatpickr'
       }
     ]).then(() => {
       const filter = JSON.parse(this.dataset.filter)
@@ -112,6 +119,15 @@ export default class AppointmentsFilter extends Shadow() {
           </o-grid>
         </div>
       `
+    }).then((dateFilter) => {
+      // setTimeout(() => {
+      //   const picker = this.root.querySelector('o-grid').root.querySelector('a-flatpickr').root
+      //   const config = picker.getElementsByClassName('flatpickr-input')[0].flatpickr().config
+      //   console.log(dateFilter, config)
+      //   config.mode = 'range'
+      //   config.maxDate = ''
+      //   config.minDate = ''
+      // }, 1000)
     })
   }
 
@@ -150,20 +166,37 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderDatePickerListFilter (date) {
     console.log(date)
-    return `
-      <!--<ks-a-input mode="false">
-        <div>
-          <label>Start der Gültigkeit *</label>
-            <input
-              type="date"
-              id="checkout-form-abo-start-date"
-              name="start-date"
-              onfocus="this.min=new Date().toISOString().split('T')[0]"
-              required
-              data-m-v-rules='{"required": {"error-message": "Bitte Datum angeben."}}'
-            >
+    const dateObject = new Date(date[0].date)
+    const dateObjectEnd = new Date(date[date.length - 1].date)
+    const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
+    // @ts-ignore
+    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
+    const startDate = formatter.format(dateObject)
+    const endDate = formatter.format(dateObjectEnd)
+    const configOptions = {
+      mode: 'range',
+      minDate: startDate,
+      maxDate: endDate,
+      dateFormat: 'd.m.Y',
+      defaultDate: [startDate, endDate],
+      showMonths: 1
+    }
+    return /* html */ `
+      <div>
+       <style>
+              .flatpickr-day.today {
+                border-color: red;
+              }
+            </style>
+        <a-flatpickr
+          options="${escapeForHtml(JSON.stringify(configOptions))}"
+          namespace="flatpickr-ks-">
+          <div>
+            <span><a-translation data-trans-key="CP.cpAppointmentsFilterStart"></a-translation>: ${startDate}</span>
+            <a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx>
           </div>
-      </ks-a-input>--> 
+        </a-flatpickr>
+      </div>
     `
   }
 

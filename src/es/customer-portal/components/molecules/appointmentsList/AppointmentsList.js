@@ -117,7 +117,6 @@ export default class AppointmentsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     return fetch.then(appointments => {
-      debugger
       this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       if (appointments.errorCode !== 0) {
         throw new Error(`${appointments.errorMessage}`)
