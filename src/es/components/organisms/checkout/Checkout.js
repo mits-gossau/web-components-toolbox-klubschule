@@ -29,7 +29,7 @@ export default class Checkout extends Shadow() {
   disconnectedCallback () {}
 
   shouldRenderHTML () {
-    return this.componentWasRendered
+    return !this.componentWasRendered
   }
 
   renderHTML () {

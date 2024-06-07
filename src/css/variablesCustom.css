@@ -423,6 +423,18 @@
 
   --simple-form-miduweb-p-margin: var(--simple-form-miduweb-hr-margin);
   --mdx-comp–inputfield-label-color-default: var(--mdx-comp-inputfield-label-color-default);
+
+  /* datepicker */
+  --flatpickr-ks-background: var(--mdx-comp-inputfield-background-color-default);
+  --flatpickr-ks-border-radius: var(--mdx-comp-inputfield-border-radius-default);
+  --flatpickr-ks-display: flex;
+  --flatpickr-ks-justify-content: space-between;
+  --flatpickr-ks-align-items: center;
+  --flatpickr-ks-font: var(--mdx-comp-inputfield-font-default);
+  --flatpickr-ks-color: var(--mdx-comp-inputfield-placeholder-color-default);
+  --flatpickr-ks-padding: var(--mdx-comp-inputfield-padding-vertical-default) var(--mdx-comp-inputfield-padding-horizontal-default);
+  --flatpickr-ks-border: var(--mdx-comp-inputfield-borderWidth-default) solid var(--mdx-comp-inputfield-border-color-default);
+  --flatpickr-ks-border-color-active: var(--mdx-comp-inputfield-border-color-focus);
 }
 
 @media screen and (min-width: 1441px) {
