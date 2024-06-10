@@ -68,6 +68,19 @@ export default class filterSelect extends Shadow() {
     }
   }
 
+  getLastSelectedChild (filterItem) {
+    let lastSelectedChild = null;
+    if (filterItem.selected && (!filterItem.children || filterItem.children.length === 0)) return filterItem
+    if (filterItem.children) {
+        for (let child of filterItem.children) {
+            let result = this.getLastSelectedChild(child)
+            if (result) lastSelectedChild = result
+        }
+    }
+
+    return lastSelectedChild
+  }
+
   renderHTML (fetch) {
     this.fetchModules([{
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
@@ -86,14 +99,22 @@ export default class filterSelect extends Shadow() {
         const filterData = response.filters
 
         this.html = ''
-        filterData.forEach((filterItem, i) => {
+        filterData.forEach((filterItem) => {
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+
             let childItems = ''
-            filterItem.children.forEach(child => {
-              if (child.selected) {
-                childItems += child.label + ', '
+            if (filterItem.selected){
+              if (filterItem.typ === 'multi') {
+                const selectedChildren = filterItem.children.filter(child => child.selected)
+                if (selectedChildren.length > 0) {
+                  selectedChildren.forEach(child => {
+                    childItems += `${child.label}, `
+                  })
+                }
+              } else {
+                childItems = this.getLastSelectedChild(filterItem).label
               }
-            })
+            }
 
             const doubleButton = /* html */`
               <m-double-button namespace="double-button-default-" width="100%">
