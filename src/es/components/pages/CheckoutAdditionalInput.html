@@ -1,0 +1,20 @@
+<h1>Checkout Lehrmittel Konfiguration</h1>
+
+<h2>No Message</h2>
+<p>
+  <code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?node-id=6179-53770&m=dev" target="_blank">figma</a></code>
+</p>
+<hr />
+<m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test" method="POST"
+  load-form-styles>
+  <ks-m-checkout-additional-input status="{'code': '1', 'label': 'Garantiert Durchgeführt'}">
+    <ks-a-heading tag="h3">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
+    <div>
+      <label for="description">Textarea => required + min-length(50) + max-length(20)WebAPI +
+        <strong>live-input-validation</strong></label>
+      <textarea id="Description" live-input-validation="true" rows="4" maxlength="50" data-m-v-rules='{"required": {"error-message": "Bitte diese textarea ausfüllen."},
+          "min-length": {"value": "3", "error-message": "Bitte minimum 3 Character eingeben."}}' name="Description"
+        placeholder="Beschreibung hier eingeben..."></textarea>
+    </div>
+  </ks-m-checkout-additional-input>
+</m-simple-form-validation>
