@@ -48,6 +48,7 @@ export default class AutoComplete extends Shadow() {
         return this.clearAutocomplete()
       }
       const token = event.detail.value
+      
       if (!token || token.length < 3) {
         this.clearAutocomplete()
         // update results
@@ -86,7 +87,11 @@ export default class AutoComplete extends Shadow() {
       if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { description: event.detail.value } })
     }
 
-    this.requestWithFacet = event => this.clickOnPredictionListener({ detail: { description: event.detail.value } })
+    this.requestWithFacet = event => {
+      if (event.detail.type === 'enter' || event.detail.type === 'search-click') {
+        return this.clickOnPredictionListener({ detail: { description: event.detail.value } })
+      }
+    }
 
     this.clickOnPredictionListener = event => {
       // home search input
