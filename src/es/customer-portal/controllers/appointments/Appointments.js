@@ -181,11 +181,14 @@ export default class Appointments extends HTMLElement {
 
       // Flatpickr Shit
       if (event.detail?.this?.tagName === 'A-FLATPICKR') {
-        debugger
         const convertedTags = event.detail.origEvent.selectedDates.map(tag => {
           return this.formatDateString(tag)
         })
-        const r = this.filterProductsByCheckedCount(appointmentsClone.filters.datePickerDayList, convertedTags)
+        const r = this.filterByShit(appointmentsClone.filters.datePickerDayList, convertedTags)
+        const isPreviousSet = appointmentsClone.filters.datePickerDayList.filter((obj) => obj.selectedPicker)
+        if (isPreviousSet.length) {
+          appointmentsClone.filters.datePickerDayList.splice(-1, 1)
+        }
         appointmentsClone.filters.datePickerDayList.push({ selectedPicker: r })
       }
       return appointmentsClone
@@ -201,7 +204,7 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
-  filterProductsByCheckedCount (list, checkedDates) {
+  filterByShit (list, checkedDates) {
     return list.filter(product => checkedDates.includes(product.date))
   }
 
