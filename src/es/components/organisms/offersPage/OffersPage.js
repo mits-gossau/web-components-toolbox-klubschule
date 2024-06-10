@@ -151,7 +151,7 @@ export default class OffersPage extends Shadow() {
    * @return Promise<void>
    */
   renderHTML () {
-    this.html = `<ks-c-with-facet
+    this.html = /* html */`<ks-c-with-facet
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
