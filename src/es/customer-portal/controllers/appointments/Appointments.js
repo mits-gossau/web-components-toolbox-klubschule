@@ -184,13 +184,44 @@ export default class Appointments extends HTMLElement {
         const convertedTags = event.detail.origEvent.selectedDates.map(tag => {
           return this.formatDateString(tag)
         })
-        const r = this.filterByShit(appointmentsClone.filters.datePickerDayList, convertedTags)
-        const isPreviousSet = appointmentsClone.filters.datePickerDayList.filter((obj) => obj.selectedPicker)
-        if (isPreviousSet.length) {
-          appointmentsClone.filters.datePickerDayList.splice(-1, 1)
+        // const r = this.filterByShit(appointmentsClone.filters.datePickerDayList, convertedTags)
+        // const isPreviousSet = appointmentsClone.filters.datePickerDayList.filter((obj) => obj.selectedPicker)
+        // if (isPreviousSet.length) {
+        //   appointmentsClone.filters.datePickerDayList.splice(-1, 1)
+        // }
+        // appointmentsClone.filters.datePickerDayList.push({ selectedPicker: r })
+
+        // Refactor Version
+        // if 1 selected
+        if (convertedTags.length === 1) {
+          appointmentsClone.filters.datePickerDayList = appointmentsClone.filters.datePickerDayList.map(day => {
+            if (convertedTags.includes(day.date)) {
+              day.selected = true
+            } else {
+              day.selected = false
+            }
+            return day
+          })
         }
-        appointmentsClone.filters.datePickerDayList.push({ selectedPicker: r })
+
+        // if range selected
+        if (convertedTags.length === 2) {
+          const fromDate = convertedTags[0]
+          const toDate = convertedTags[1]
+          appointmentsClone.filters.datePickerDayList = appointmentsClone.filters.datePickerDayList.map((d) => {
+            const dateTimestamp = Date.parse(d.date)
+            const fromTimestamp = Date.parse(fromDate)
+            const toTimestamp = Date.parse(toDate)
+            if (dateTimestamp >= fromTimestamp && dateTimestamp <= toTimestamp) {
+              d.selected = true
+            } else {
+              d.selected = false
+            }
+            return d
+          })
+        }
       }
+
       return appointmentsClone
     })
 

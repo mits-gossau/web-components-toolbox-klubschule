@@ -157,33 +157,34 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderDatePickerListFilter (dateList) {
     const dateListClear = structuredClone(dateList)
+    const minRange = this.formatDate(dateListClear[0].date)
+    const endRange = this.formatDate(dateListClear[dateListClear.length - 1].date)
+    const startDate = this.formatDate(dateListClear.find((obj) => obj.selected === true).date)
+    const endDate = this.formatDate(dateListClear.findLast((obj) => obj.selected === true).date)
+    const defVal = startDate === endDate ? [startDate] : [startDate, endDate]
+    const defaultValue = defVal
+    debugger
 
-    let minRange = null
-    let endRange = null
-    let startDate = null
-    let endDate = null
-    let defaultValue = []
-
-    if (dateList[dateList.length - 1].selectedPicker) {
-      if (dateList[dateList.length - 1].selectedPicker.length === 1) {
-        minRange = this.formatDate(dateListClear[0].date)
-        endRange = this.formatDate(dateListClear[dateListClear.length - 2].date)
-        startDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[0].date)
-        defaultValue = [startDate]
-      } else {
-        minRange = this.formatDate(dateListClear[0].date)
-        endRange = this.formatDate(dateListClear[dateListClear.length - 2].date)
-        startDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[0].date)
-        endDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[1].date)
-        defaultValue = [startDate, endDate]
-      }
-    } else {
-      minRange = this.formatDate(dateListClear[0].date)
-      endRange = this.formatDate(dateListClear[dateListClear.length - 1].date)
-      startDate = minRange
-      endDate = endRange
-      defaultValue = [startDate, endDate]
-    }
+    // if (dateList[dateList.length - 1].selectedPicker) {
+    //   if (dateList[dateList.length - 1].selectedPicker.length === 1) {
+    //     minRange = this.formatDate(dateListClear[0].date)
+    //     endRange = this.formatDate(dateListClear[dateListClear.length - 2].date)
+    //     startDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[0].date)
+    //     defaultValue = [startDate]
+    //   } else {
+    //     minRange = this.formatDate(dateListClear[0].date)
+    //     endRange = this.formatDate(dateListClear[dateListClear.length - 2].date)
+    //     startDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[0].date)
+    //     endDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[1].date)
+    //     defaultValue = [startDate, endDate]
+    //   }
+    // } else {
+    //   minRange = this.formatDate(dateListClear[0].date)
+    //   endRange = this.formatDate(dateListClear[dateListClear.length - 1].date)
+    //   startDate = minRange
+    //   endDate = endRange
+    //   defaultValue = [startDate, endDate]
+    // }
 
     const configOptions = {
       minDate: minRange,
