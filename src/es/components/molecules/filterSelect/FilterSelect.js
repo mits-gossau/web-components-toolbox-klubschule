@@ -103,17 +103,16 @@ export default class filterSelect extends Shadow() {
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
 
             let childItems = ''
-            if (filterItem.selected){
-              if (filterItem.typ === 'multi') {
-                const selectedChildren = filterItem.children.filter(child => child.selected)
-                if (selectedChildren.length > 0) {
-                  selectedChildren.forEach(child => {
-                    childItems += `${child.label}, `
-                  })
-                }
-              } else {
-                childItems = this.getLastSelectedChild(filterItem).label
+            if (filterItem.typ === 'multi') {
+              const selectedChildren = filterItem.children.filter(child => child.selected)
+              if (selectedChildren.length > 0) {
+                selectedChildren.forEach(child => {
+                  childItems += `${child.label}, `
+                })
               }
+            } else {
+              const lastSelectedChild = this.getLastSelectedChild(filterItem)
+              if (lastSelectedChild) childItems = lastSelectedChild.label
             }
 
             const doubleButton = /* html */`
