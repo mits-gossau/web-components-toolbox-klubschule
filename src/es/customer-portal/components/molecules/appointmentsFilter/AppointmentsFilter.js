@@ -101,7 +101,7 @@ export default class AppointmentsFilter extends Shadow() {
         path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/flatpickr/Flatpickr.js`,
         name: 'a-flatpickr'
       }
-    ]).then(() => {
+    ]).then(async () => {
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations, datePickerDayList } = filter
       this.html = /* html */ `
@@ -119,15 +119,6 @@ export default class AppointmentsFilter extends Shadow() {
           </o-grid>
         </div>
       `
-    }).then((dateFilter) => {
-      // setTimeout(() => {
-      //   const picker = this.root.querySelector('o-grid').root.querySelector('a-flatpickr').root
-      //   const config = picker.getElementsByClassName('flatpickr-input')[0].flatpickr().config
-      //   console.log(dateFilter, config)
-      //   config.mode = 'range'
-      //   config.maxDate = ''
-      //   config.minDate = ''
-      // }, 1000)
     })
   }
 
@@ -164,21 +155,41 @@ export default class AppointmentsFilter extends Shadow() {
     `
   }
 
-  renderDatePickerListFilter (date) {
-    console.log(date)
-    const dateObject = new Date(date[0].date)
-    const dateObjectEnd = new Date(date[date.length - 1].date)
-    const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
-    // @ts-ignore
-    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
-    const startDate = formatter.format(dateObject)
-    const endDate = formatter.format(dateObjectEnd)
+  renderDatePickerListFilter (dateList) {
+    const dateListClear = structuredClone(dateList)
+
+    let minRange = null
+    let endRange = null
+    let startDate = null
+    let endDate = null
+    let defaultValue = []
+
+    if (dateList[dateList.length - 1].selectedPicker) {
+      if (dateList[dateList.length - 1].selectedPicker.length === 1) {
+        minRange = this.formatDate(dateListClear[0].date)
+        endRange = this.formatDate(dateListClear[dateListClear.length - 2].date)
+        startDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[0].date)
+        defaultValue = [startDate]
+      } else {
+        minRange = this.formatDate(dateListClear[0].date)
+        endRange = this.formatDate(dateListClear[dateListClear.length - 2].date)
+        startDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[0].date)
+        endDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[1].date)
+        defaultValue = [startDate, endDate]
+      }
+    } else {
+      minRange = this.formatDate(dateListClear[0].date)
+      endRange = this.formatDate(dateListClear[dateListClear.length - 1].date)
+      startDate = minRange
+      endDate = endRange
+      defaultValue = [startDate, endDate]
+    }
+
     const configOptions = {
-      mode: 'range',
-      minDate: startDate,
-      maxDate: endDate,
+      minDate: minRange,
+      maxDate: endRange,
       dateFormat: 'd.m.Y',
-      defaultDate: [startDate, endDate],
+      defaultDate: defaultValue,
       showMonths: 1
     }
     return /* html */ `
@@ -191,6 +202,7 @@ export default class AppointmentsFilter extends Shadow() {
         </style>
         <a-flatpickr
           options="${escapeForHtml(JSON.stringify(configOptions))}"
+          request-event-name="request-appointments-filter"
           namespace="flatpickr-ks-">
           <div>
             <span><a-translation data-trans-key="CP.cpAppointmentsFilterStart"></a-translation>: ${startDate}</span>
@@ -199,6 +211,14 @@ export default class AppointmentsFilter extends Shadow() {
         </a-flatpickr>
       </div>
     `
+  }
+
+  formatDate (dateString) {
+    const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
+    // @ts-ignore
+    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
+    const ds = new Date(dateString)
+    return formatter.format(ds)
   }
 
   /**

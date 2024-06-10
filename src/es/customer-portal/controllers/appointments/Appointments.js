@@ -33,6 +33,7 @@ export default class Appointments extends HTMLElement {
     this.addEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
     this.addEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
     this.addEventListener('reset-appointments-filter', this.resetFilterDayListener)
+    this.addEventListener('request-appointments-filter-date-picker', this.requestAppointmentsFilterDatePickerListener)
   }
 
   disconnectedCallback () {
@@ -43,6 +44,13 @@ export default class Appointments extends HTMLElement {
     this.removeEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
     this.removeEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
     this.removeEventListener('reset-appointments-filter', this.resetFilterDayListener)
+    this.removeEventListener('request-appointments-filter-date-picker', this.requestAppointmentsFilterDatePickerListener)
+  }
+
+  requestAppointmentsFilterDatePickerListener = (event) => {
+    console.log(this.lastFilters)
+    console.log(event)
+    this.requestAppointmentsFilterListener(event, false, false)
   }
 
   /**
@@ -98,7 +106,6 @@ export default class Appointments extends HTMLElement {
       if (event?.detail?.target) {
         // get type of used filter (day, time, location)
         const type = event.detail.target.getAttribute('type')
-        debugger
         if (updateOpenDialog) {
           this.currentDialogFilterOpen = type
         }
@@ -166,9 +173,21 @@ export default class Appointments extends HTMLElement {
         })
       }
 
+      // @ts-ignore
       subscriptionCourseAppointmentsFiltered.currentDialogFilterOpen = this.currentDialogFilterOpen
+
       // filter out empty values
       appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(list => list)
+
+      // Flatpickr Shit
+      if (event.detail?.this?.tagName === 'A-FLATPICKR') {
+        debugger
+        const convertedTags = event.detail.origEvent.selectedDates.map(tag => {
+          return this.formatDateString(tag)
+        })
+        const r = this.filterProductsByCheckedCount(appointmentsClone.filters.datePickerDayList, convertedTags)
+        appointmentsClone.filters.datePickerDayList.push({ selectedPicker: r })
+      }
       return appointmentsClone
     })
 
@@ -180,6 +199,18 @@ export default class Appointments extends HTMLElement {
       cancelable: true,
       composed: true
     }))
+  }
+
+  filterProductsByCheckedCount (list, checkedDates) {
+    return list.filter(product => checkedDates.includes(product.date))
+  }
+
+  formatDateString (dateString) {
+    return new Intl.DateTimeFormat('en-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(dateString)
   }
 
   /**
