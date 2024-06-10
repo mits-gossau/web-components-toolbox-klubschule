@@ -1,11 +1,11 @@
 :host {
+    display: block;
     position: relative;
     color: white;
     --color: currentColor;
 
     font: var(--mdx-sys-font-fix-label0);
     min-width: 200px;
-    max-width: 230px;
 }
 
 a-picture {
