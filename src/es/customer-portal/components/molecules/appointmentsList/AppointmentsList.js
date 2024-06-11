@@ -1,6 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { makeUniqueCourseId } from '../../../helpers/Shared.js'
+import { makeUniqueCourseId, escapeForHtml } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 
@@ -14,6 +14,7 @@ export default class AppointmentsList extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.select = null
     this.numberOfAppointments = 0
+    this.currentOpenDialogFilterType = null
   }
 
   connectedCallback () {
@@ -73,7 +74,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
   }
 
   renderCSS () {
@@ -116,6 +117,7 @@ export default class AppointmentsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     return fetch.then(appointments => {
+      this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       if (appointments.errorCode !== 0) {
         throw new Error(`${appointments.errorMessage}`)
       }
@@ -177,7 +179,7 @@ export default class AppointmentsList extends Shadow() {
               ${subscriptionSelect}
             </div>
             <div col-lg="12" col-md="12" col-sm="12">
-              <!-- <m-appointments-filter></m-appointments-filter> -->
+              <m-appointments-filter data-filter-open="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
             </div>
             `
             : ''}         
@@ -298,7 +300,8 @@ export default class AppointmentsList extends Shadow() {
     if (!data.selectedSubscription) {
       booked = data.dayList[0]?.subscriptionCourseAppointments[0]
     }
-    const selectedSubscription = data.selectedSubscription
+    // @ts-ignore
+    const selectedSubscription = structuredClone(data.selectedSubscription
       ? data.selectedSubscription
       : {
           subscriptionBalance: booked?.subscriptionBalance,
@@ -308,7 +311,7 @@ export default class AppointmentsList extends Shadow() {
           subscriptionType: booked?.subscriptionType,
           subscriptionValidFrom: booked?.subscriptionValidFrom,
           subscriptionValidTo: booked?.subscriptionValidTo
-        }
+        })
     const dayList = data.selectedSubscription ? data.selectedSubscription.dayList : data.dayList
     delete selectedSubscription.dayList
     return {

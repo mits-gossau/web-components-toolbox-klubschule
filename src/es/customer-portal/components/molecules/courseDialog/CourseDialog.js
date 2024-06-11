@@ -468,7 +468,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
   }
 
   shouldRenderHTML () {
@@ -655,6 +655,7 @@ export default class CourseDialog extends Shadow() {
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
     if (!state) return ''
     const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo)
+    const freeSeats = Number(state.status) ? state.status : ''
     return /* html */ `
       <div class="detail">
         <span>
@@ -673,7 +674,7 @@ export default class CourseDialog extends Shadow() {
           <!-- trans value = Raum -->
           <a-translation data-trans-key="CP.cpAppointmentIcsRoom"></a-translation>
         </span>
-        <span>${detail.courseLocation} / Raum ${detail.roomDescription}</span>
+        <span>${detail.courseLocation} / <a-translation data-trans-key="CP.cpAppointmentIcsRoom"></a-translation> ${detail.roomDescription}</span>
       </div>
       <div class="detail">
         <span>
@@ -688,8 +689,8 @@ export default class CourseDialog extends Shadow() {
           <a-translation data-trans-key="CP.cpAppointmentListColumnStatus"></a-translation>
         </span>
         <div>
-          <span class="${state.css.status}">${state.status}</span> 
-          <span class="${state.css.info}">${state.info}</span>
+          <span class="${state.css.status}">${freeSeats ? `${freeSeats}` : `<a-translation data-trans-key='${state.statusTransKey}'></a-translation`}</span> 
+          <span class="${state.css.info}">${state.infoTransKey ? `<a-translation data-trans-key='${state.infoTransKey}'></a-translation>` : ''}</span>
         </div>
       </div>
       <div class="detail">
@@ -864,7 +865,7 @@ export default class CourseDialog extends Shadow() {
     const dateObject = new Date(dateString)
     const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
     // @ts-ignore
-    const formatter = new Intl.DateTimeFormat('de-DE', options)
+    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
     return formatter.format(dateObject)
   }
 

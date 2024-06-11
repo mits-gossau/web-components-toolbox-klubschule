@@ -23,24 +23,14 @@ export default class Checkout extends Shadow() {
   }
 
   connectedCallback () {
-    if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
 
-  disconnectedCallback () {
-    document.body.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
-  }
-
-  shouldRenderCSS () {
-    return true
-  }
+  disconnectedCallback () {}
 
   shouldRenderHTML () {
-    return true
+    return !this.componentWasRendered
   }
-
-  renderCSS () {}
 
   renderHTML () {
     const children = this.root.querySelectorAll('select')
@@ -73,5 +63,7 @@ export default class Checkout extends Shadow() {
         }))
       })
     })
+
+    this.componentWasRendered = true;
   }
 }

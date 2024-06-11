@@ -19,33 +19,57 @@
                         </section>
 
                         <section id="main">
+                            <div class="checkout-form-group">
 
-                            <ks-a-heading tag="h3">Speakout 2nd Edition Pre-Intermediate Workbook with key
-                                Bundle</ks-a-heading>
-                            <div>
-                                <label validation-message="Select a pet!" for="20416">Lehrmittel</label>
-                                <select name="20416" required="" id="20416"
-                                    data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'>
-                                    <option value="">Lehrmittel wählen...</option>
-                                    <option value="1">E-Book / CHF 22.40</option>
-                                    <option value="2">E-Book / CHF 23.40</option>
-                                    <option value="3">E-Book / CHF 24.40</option>
-                                    <option value="4">E-Book / CHF 25.40</option>
-                                </select>
+                                <ks-a-heading tag="h2" style-as="h1">Lehrmittel</ks-a-heading>
+                                <p>
+                                    Bitte wählen Sie Ihre gewünschte Lehrmittelform aus. Wenn Sie kein Lehrmittel bestellen, bitten wir Sie, das Lehrmittel bis zum Kursstart selbst zu organisieren.
+                                </p>
+                                <ks-a-heading tag="h3">Speakout 2nd Edition Pre-Intermediate Workbook with key
+                                    Bundle</ks-a-heading>
+
+                              <ks-m-select mode="false">
+                                <div class="wrap">
+                                  <label validation-message="Select a pet!" for="20416">Lehrmittel</label>
+                                  <select name="20416" required="" id="20416"
+                                      data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'
+                                      error-message-reference-point-changed="true" no-error-text-p
+                                      error-text-tag-name="span"
+                                      >
+                                      <option value="">Lehrmittel wählen...</option>
+                                      <option value="1">E-Book / CHF 22.40</option>
+                                      <option value="2">E-Book / CHF 23.40</option>
+                                      <option value="3">E-Book / CHF 24.40</option>
+                                      <option value="4">E-Book / CHF 25.40</option>
+                                  </select>
+                                  <div class="box"></div>
+                                </div>
+                              </ks-m-select>
+                                <ks-a-heading tag="h3">Speakout 2nd Edition Pre-Intermediate Student Book mit DVD
+                                    Rom</ks-a-heading>
+
+                              <ks-m-select mode="false">
+                                  <div class="wrap">
+                                      <label validation-message="Select a pet!" for="21786">Lehrmittel</label>
+                                      <select name="21786" required="" id="21786"
+                                          error-message-reference-point-changed="true" no-error-text-p
+                                          error-text-tag-name="span"
+                                          data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'>
+                                          <option value="">Lehrmittel wählen...</option>
+                                          <option value="0">E-Book / CHF 22.40</option>
+                                          <option value="1">E-Book / CHF 23.40</option>
+                                          <option value="2">E-Book / CHF 24.40</option>
+                                          <option value="3">E-Book / CHF 25.40</option>
+                                      </select>
+                                      <div class="box"></div>
+                                  </div>
+                              </ks-m-select>
+                                <p>
+                                    <strong>E-Books</strong><br>
+                                    Für E-Books erhalten Sie nach der Bezahlung drei Tage vor Kursstart den Online-Zugriff an Ihre E-Mail-Adresse zugestellt. Bitte beachten Sie, dass E-Book Lizenzen nach der Zustellung nicht rückerstattet werden.
+                                </p>
                             </div>
-                            <ks-a-heading tag="h3">Speakout 2nd Edition Pre-Intermediate Student Book mit DVD
-                                Rom</ks-a-heading>
-                            <div>
-                                <label validation-message="Select a pet!" for="21786">Lehrmittel</label>
-                                <select name="21786" required="" id="21786"
-                                    data-m-v-rules='{"required": {"error-message": "Bitte diese Feld ausfüllen."}}'>
-                                    <option value="">Lehrmittel wählen...</option>
-                                    <option value="0">E-Book / CHF 22.40</option>
-                                    <option value="1">E-Book / CHF 23.40</option>
-                                    <option value="2">E-Book / CHF 24.40</option>
-                                    <option value="3">E-Book / CHF 25.40</option>
-                                </select>
-                            </div>
+
                             <div>
                                 <ks-m-checkout-insurance mode="false">
                                     <h2>Kurskosten absichern?</h2>
@@ -84,7 +108,7 @@
                         </section>
 
                         <section id="sidebar">
-                            <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
+                            <ks-m-checkout-booked-offer use-api headline="Headline" name="Angebotsname"
                                 status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
                                 time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
                                 course-price="630.00 CHF" 

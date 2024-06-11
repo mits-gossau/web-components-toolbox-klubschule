@@ -197,6 +197,9 @@
 
   /* --- Selectable CMS colors End --- */
 
+  --button-badge-padding: var(--mdx-sys-spacing-fix-3xs) var(--mdx-sys-spacing-fix-2xs);
+  --button-badge-border-radius: 3px;
+
   --emotion-pictures-default-img-max-height: 50vh;
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
@@ -423,6 +426,18 @@
 
   --dialog-left-slide-in-checkout-max-width-custom: 1120px;
   --dialog-left-slide-in-checkout-max-width-container-custom: 100%;
+
+  /* datepicker */
+  --flatpickr-ks-background: var(--mdx-comp-inputfield-background-color-default);
+  --flatpickr-ks-border-radius: var(--mdx-comp-inputfield-border-radius-default);
+  --flatpickr-ks-display: flex;
+  --flatpickr-ks-justify-content: space-between;
+  --flatpickr-ks-align-items: center;
+  --flatpickr-ks-font: var(--mdx-comp-inputfield-font-default);
+  --flatpickr-ks-color: var(--mdx-comp-inputfield-placeholder-color-default);
+  --flatpickr-ks-padding: var(--mdx-comp-inputfield-padding-vertical-default) var(--mdx-comp-inputfield-padding-horizontal-default);
+  --flatpickr-ks-border: var(--mdx-comp-inputfield-borderWidth-default) solid var(--mdx-comp-inputfield-border-color-default);
+  --flatpickr-ks-border-color-active: var(--mdx-comp-inputfield-border-color-focus);
 }
 
 @media screen and (min-width: 1441px) {

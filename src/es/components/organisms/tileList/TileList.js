@@ -79,7 +79,7 @@ export default class TileList extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
   }
 
   /**
@@ -108,12 +108,19 @@ export default class TileList extends Shadow() {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 0.75em;
+        gap: 0.75rem;
+      }
+
+      :host .o-tile-list__top ks-m-tooltip {
+        margin-bottom: auto;
       }
 
       :host .o-tile-list__title {
-        font-size: 1.5em;
-        line-height: 1.625em;
-        font-weight: 500;        
+        font-family: var(--mdx-sys-font-flex-headline3-font-family);
+        font-size: var(--mdx-sys-font-flex-headline3-font-size);
+        font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
+        line-height: var(--mdx-sys-font-flex-headline3-line-height);
+        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);        
       }
 
       :host a-icon-mdx {
@@ -149,25 +156,32 @@ export default class TileList extends Shadow() {
         display: flex;
         flex-direction: row;
         align-items: center;
+        gap: 1rem;
       }
 
       :host .o-tile-list__price {
-        font-size: 0.875em;
-        line-height: 0.9375em;
-        font-weight: 500;
-        padding-left: 0.75em;
+        font-family: var(--mdx-sys-font-fix-label3-font-family);
+        font-size: var(--mdx-sys-font-fix-label3-font-size);
+        font-weight: var(--mdx-sys-font-fix-label3-font-weight);
+        line-height: var(--mdx-sys-font-fix-label3-line-height);
+        letter-spacing: var(--mdx-sys-font-fix-label3-letter-spacing);
+        text-align: end;
+        white-space: nowrap;
       }
       
       :host .o-tile-list__price strong {
-        font-family: 'Graphik';
-        font-size: 1.5em;
-        line-height: 1.625em;
-        font-weight: 500;
+        font-family: var(--mdx-sys-font-flex-headline3-font-family);
+        font-size: var(--mdx-sys-font-flex-headline3-font-size);
+        font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
+        line-height: var(--mdx-sys-font-flex-headline3-line-height);
+        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);
+        white-space: initial;
       }
 
       :host .o-tile-list__icons {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
       }
     
       :host .o-tile-list__icon-box {
@@ -198,8 +212,8 @@ export default class TileList extends Shadow() {
       }
 
       :host ks-m-tile {
-        margin-bottom: 1em;
         width: 32%;
+        flex-grow: 1;
       }
 
       :host .o-tile-list__foot {
@@ -227,13 +241,17 @@ export default class TileList extends Shadow() {
 
         :host .o-tile-list__bottom {
           align-items: flex-end;
-          margin-bottom: 2em;
         }
 
         :host .o-tile-list__bottom-right {
           flex-direction: column;
           justify-content: flex-start;
-          align-items: flex-start;
+          align-items: flex-end;
+          gap: 0.75rem;
+        }
+
+        :host .o-tile-list__icon-box + .o-tile-list__icon-box {
+          margin-left: 1rem;
         }
 
         :host .o-tile-list__price {
@@ -242,7 +260,6 @@ export default class TileList extends Shadow() {
 
         :host ks-m-tile {
           margin-right:0;
-          margin-bottom: 1em;
           width: 100%
         }
 
@@ -298,7 +315,7 @@ export default class TileList extends Shadow() {
           </div>
           <div class="o-tile-list__bottom">
             <div class="o-tile-list__bottom-left">
-              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}'></ks-m-buttons>
+              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small></ks-m-buttons>
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
@@ -324,7 +341,6 @@ export default class TileList extends Shadow() {
             style="display: none;"
           >
             <ks-a-button
-              icon
               namespace="button-secondary-" 
               color="secondary" 
             >

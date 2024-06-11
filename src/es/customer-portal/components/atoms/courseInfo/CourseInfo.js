@@ -50,7 +50,7 @@ export default class CourseInfo extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
   }
 
   shouldRenderHTML () {
@@ -124,7 +124,7 @@ export default class CourseInfo extends Shadow() {
     this.html = /* html */`
       ${this.icon}
       <span class="content">
-        <span class="${css.status}">${(statusTransKey && freeSeats) ? `${freeSeats} <a-translation data-trans-key='${statusTransKey}' /></a-translation>` : `${status}`}</span>
+        <span class="${css.status}">${freeSeats ? `${freeSeats}` : `<a-translation data-trans-key='${statusTransKey}'></a-translation>`}</span>
         <span class="${css.info}">${hasDash}${infoTransKey ? `<a-translation data-trans-key='${infoTransKey}'></a-translation>` : ''}</span>
       </span>`
   }
