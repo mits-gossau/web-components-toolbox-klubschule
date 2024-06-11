@@ -197,22 +197,28 @@
                                 </div>
                             </ks-m-system-notification>
                             <ks-a-heading tag="h2">Wie möchten Sie bezahlen?</ks-a-heading>
-                            <div class="margin-bottom-m">
+                            <div class="margin-bottom-m">   
                                 <ks-a-radio mode="false">
                                     <div class="wrap">
-                                        <label for="rb-03-01">Bezahlung via Rechnung</label>
-                                        <input id="rb-03-01" type="radio" name="rb-03">
+                                        <label for="rb-01-01">Bezahlung via Rechnung</label>
+                                        <input id="rb-01-01" type="radio" name="rb-01" value="invoice"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
                                     <div class="wrap">
                                         <img src="./../../../../img/payment/Payment.svg" />
-                                        <label for="rb-03-02">Kreditkarte</label>
-                                        <input id="rb-03-02" type="radio" name="rb-03">
+                                        <label for="rb-01-02">Kreditkarte</label>
+                                        <input id="rb-01-02" type="radio" name="rb-01" value="card" required
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
                                     <div class="message">
-                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle"
-                                            size="1em" rotate="0" class="icon-right"
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
                                             new-error-message-reference-point="true"></a-icon-mdx>
                                     </div>
                                 </ks-a-radio>
@@ -228,29 +234,38 @@
                                     Korrespondenz.
                                 </strong>
                             </p>
-                            <div>
+                            <div class="margin-bottom-m">
                                 <ks-a-radio mode="false">
                                     <div class="wrap">
-                                        <label for="rb-04-01">Sämtliche Korrespondenzen inkl. Rechnungen für
-                                            E-Banking per Mailversand an die angegebene E-Mail-Adresse.</label>
-                                        <input id="rb-04-01" type="radio" name="rb-04">
+                                        <label for="rb-02-01">Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking
+                                            per Mailversand an die angegebene E-Mail-Adresse.</label>
+                                        <input id="rb-02-01" type="radio" name="rb-02" value="mail"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
                                     <div class="wrap">
-                                        <label for="rb-04-02">Briefe per Mailversand an die angegebene
-                                            E-Mail-Adresse aber Rechnungen per Post.</label>
-                                        <input id="rb-04-02" type="radio" name="rb-04">
+                                        <label for="rb-02-02">Briefe per Mailversand an die angegebene E-Mail-Adresse
+                                            aber Rechnungen per Post.</label>
+                                        <input id="rb-02-02" type="radio" name="rb-02" value="semi"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <label for="rb-02-03">Sämtliche Korrespondenzen per Postversand</label>
+                                        <input id="rb-02-03" type="radio" name="rb-02" value="postial"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
 
-                                    <div class="wrap">
-                                        <label for="rb-04-03">Sämtliche Korrespondenzen per Postversand</label>
-                                        <input id="rb-04-03" type="radio" name="rb-04">
-                                        <div class="box"></div>
-                                    </div>
                                     <div class="message">
-                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle"
-                                            size="1em" rotate="0" class="icon-right"
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
                                             new-error-message-reference-point="true"></a-icon-mdx>
                                     </div>
                                 </ks-a-radio>
@@ -348,30 +363,38 @@
                                     Korrespondenz.
                                 </strong>
                             </p>
-                            <div>
+                            <div class="margin-bottom-m">
                                 <ks-a-radio mode="false">
                                     <div class="wrap">
-                                        <label for="rb-06-01">Sämtliche Korrespondenzen inkl. Rechnungen für
-                                            E-Banking per Mailversand an die angegebene E-Mail-Adresse.</label>
-                                        <input id="rb-06-01" type="radio" name="rb-06">
+                                        <label for="rb-02-01">Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking
+                                            per Mailversand an die angegebene E-Mail-Adresse.</label>
+                                        <input id="rb-02-01" type="radio" name="rb-02" value="mail"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
                                     <div class="wrap">
-                                        <label for="rb-06-02">Briefe per Mailversand an die angegebene
-                                            E-Mail-Adresse aber Rechnungen per Post.</label>
-                                        <input id="rb-06-02" type="radio" name="rb-06">
+                                        <label for="rb-02-02">Briefe per Mailversand an die angegebene E-Mail-Adresse
+                                            aber Rechnungen per Post.</label>
+                                        <input id="rb-02-02" type="radio" name="rb-02" value="semi"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
-
                                     <div class="wrap">
-                                        <label for="rb-06-03">Sämtliche Korrespondenzen per Postversand</label>
-                                        <input id="rb-06-03" type="radio" name="rb-06">
+                                        <label for="rb-02-03">Sämtliche Korrespondenzen per Postversand</label>
+                                        <input id="rb-02-03" type="radio" name="rb-02" value="postial"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
 
                                     <div class="message">
-                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle"
-                                            size="1em" rotate="0" class="icon-right"
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
                                             new-error-message-reference-point="true"></a-icon-mdx>
                                     </div>
                                 </ks-a-radio>
@@ -473,30 +496,38 @@
                                     Korrespondenz.
                                 </strong>
                             </p>
-                            <div>
+                            <div class="margin-bottom-m">
                                 <ks-a-radio mode="false">
                                     <div class="wrap">
-                                        <label for="rb-06-01">Sämtliche Korrespondenzen inkl. Rechnungen für
-                                            E-Banking per Mailversand an die angegebene E-Mail-Adresse.</label>
-                                        <input id="rb-06-01" type="radio" name="rb-06">
+                                        <label for="rb-02-01">Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking
+                                            per Mailversand an die angegebene E-Mail-Adresse.</label>
+                                        <input id="rb-02-01" type="radio" name="rb-02" value="mail"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
                                     <div class="wrap">
-                                        <label for="rb-06-02">Briefe per Mailversand an die angegebene
-                                            E-Mail-Adresse aber Rechnungen per Post.</label>
-                                        <input id="rb-06-02" type="radio" name="rb-06">
+                                        <label for="rb-02-02">Briefe per Mailversand an die angegebene E-Mail-Adresse
+                                            aber Rechnungen per Post.</label>
+                                        <input id="rb-02-02" type="radio" name="rb-02" value="semi"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
-
                                     <div class="wrap">
-                                        <label for="rb-06-03">Sämtliche Korrespondenzen per Postversand</label>
-                                        <input id="rb-06-03" type="radio" name="rb-06">
+                                        <label for="rb-02-03">Sämtliche Korrespondenzen per Postversand</label>
+                                        <input id="rb-02-03" type="radio" name="rb-02" value="postial"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box"></div>
                                     </div>
 
                                     <div class="message">
-                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle"
-                                            size="1em" rotate="0" class="icon-right"
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
                                             new-error-message-reference-point="true"></a-icon-mdx>
                                     </div>
                                 </ks-a-radio>
