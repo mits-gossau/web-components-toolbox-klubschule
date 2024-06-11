@@ -130,11 +130,13 @@ export default class FilterCategories extends Shadow() {
 
   getLastSelectedChild (filterItem) {
     let lastSelectedChild = null;
-    if (filterItem.selected && (!filterItem.children || filterItem.children.length === 0)) return filterItem
-    if (filterItem.children) {
+    if (!filterItem.children || filterItem.children.length === 0) return filterItem
+    if (filterItem.children) {      
         for (let child of filterItem.children) {
-            let result = this.getLastSelectedChild(child)
-            if (result) lastSelectedChild = result
+            if (child.selected) {
+              let result = this.getLastSelectedChild(child)
+              if (result) lastSelectedChild = result
+            }
         }
     }
 
@@ -143,7 +145,6 @@ export default class FilterCategories extends Shadow() {
 
   generateNavLevelItem (response, filterItem) {
     const shouldRemainOpen = filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
-    
     const div = document.createElement('div')
 
     let childItems = ''
@@ -157,7 +158,6 @@ export default class FilterCategories extends Shadow() {
     } else {
       childItems = this.getLastSelectedChild(filterItem) ? this.getLastSelectedChild(filterItem).label : ''
     }
-    console.log(childItems)
 
     div.innerHTML = /* html */`
       <m-dialog id="filter-${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
