@@ -200,6 +200,8 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateFilters (response, filterItem, parentItem = this.mainNav) {
+    if (!filterItem.visible) return
+    
     const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
