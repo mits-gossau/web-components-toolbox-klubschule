@@ -475,7 +475,7 @@ export default class OffersPage extends Shadow() {
                       </div>
                   </div>
                   <div class="container dialog-footer">
-                      <a-button id="close" namespace="button-secondary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
+                      <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
                       <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="${this.getTranslation('CourseList.OffersPlaceholder')}">${this.getTranslation('CourseList.OffersPlaceholder')}</ks-a-number-of-offers-button>
                   </div>
               </m-dialog>
