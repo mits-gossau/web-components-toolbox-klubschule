@@ -156,11 +156,11 @@ export default class AppointmentsFilter extends Shadow() {
   }
 
   renderDatePickerListFilter (dateList) {
-    const dateListClear = structuredClone(dateList)
-    const minRange = this.formatDate(dateListClear[0].date)
-    const endRange = this.formatDate(dateListClear[dateListClear.length - 1].date)
-    const startDate = this.formatDate(dateListClear.find((day) => day.selected === true).date)
-    const endDate = this.formatDate(dateListClear.findLast((day) => day.selected === true).date)
+    const dateListClone = structuredClone(dateList)
+    const minRange = this.formatDate(dateListClone[0].date)
+    const endRange = this.formatDate(dateListClone[dateListClone.length - 1].date)
+    const startDate = this.formatDate(dateListClone.find((day) => day.selected === true).date)
+    const endDate = this.formatDate(dateListClone.findLast((day) => day.selected === true).date)
     const defaultPickrValue = startDate === endDate ? [startDate] : [startDate, endDate]
     const pickerLabelValue = defaultPickrValue.join(' - ')
 
@@ -326,11 +326,11 @@ export default class AppointmentsFilter extends Shadow() {
   }
 
   /**
- * Takes a date string as input, converts it to a Date object, and formats it
- * according to the specified options using Intl.DateTimeFormat.
- * @param {string} dateString - The `dateString`
- * @returns {string} Formatted date
- */
+   * Takes a date string as input, converts it to a Date object and formats it
+   * according to the specified options using Intl.DateTimeFormat.
+   * @param {string} dateString - `dateString`
+   * @returns {string} Formatted date
+   */
   formatDate (dateString) {
     const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
     // @ts-ignore
