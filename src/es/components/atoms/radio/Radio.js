@@ -7,23 +7,13 @@ export default class Radio extends Shadow() {
 
     this.boxes = Array.from(this.root.querySelectorAll('.box') || [])
     this.inputs = Array.from(this.root.querySelectorAll('input[type="radio"]') || [])
-
-    this.clickEventListener = event => {
-      this.inputs[this.boxes.indexOf(event.target)].checked = !this.inputs[this.boxes.indexOf(event.target)].checked
-    }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-
-    /**
-     * Handle checked on box
-     */
-    this.boxes.forEach(box => box.addEventListener('click', this.clickEventListener))
   }
 
   disconnectedCallback () {
-    this.boxes.forEach(box => box.removeEventListener('click', this.clickEventListener))
   }
 
   shouldRenderCSS () {
@@ -127,6 +117,9 @@ export default class Radio extends Shadow() {
           height: var(--mdx-comp-radiobutton-sizing-ellipse);
           width: var(--mdx-comp-radiobutton-sizing-ellipse);
           min-width: var(--mdx-comp-radiobutton-sizing-ellipse);
+
+          /* by setting pointer events to none the input will be clickable as it is behind the box */
+          pointer-events: none;
         }
 
         :host(:not(:has(.has-error))) > .message {
