@@ -35,6 +35,7 @@ export default class CheckoutBoxWrapper extends Shadow()  {
   renderCSS () {
     this.css = /* css */`
       :host {
+        --total-width: var(--checkbox-wrapper-total-width, 400px);
         --background-color: var(--mdx-sys-color-neutral-on-default, white);
         display: flex;
         gap: var(--mdx-sys-spacing-fix-m);
@@ -45,16 +46,16 @@ export default class CheckoutBoxWrapper extends Shadow()  {
         margin-bottom: 0;
         padding: var(--mdx-sys-spacing-flex-large-m) calc((100vw - 86.66vw) / 2 + var(--mdx-sys-spacing-fix-m)) var(--mdx-sys-spacing-flex-large-l);
       }
-      :host .full-width a:first-of-type {
+      :host .full-width > span > a {
         --a-font-size: var(--font-size, 16px);
-        margin: 16px 0;
+        margin: var(--mdx-sys-spacing-fix-xs) 0;
       }
       :host .full-width > span + div {
         margin-top: 56px;
       }
 
       :host .total {
-        min-width: 400px;
+        min-width: var(--total-width);
       }
       :host .total > span,
       :host .total div > span:first-child {
@@ -94,6 +95,11 @@ export default class CheckoutBoxWrapper extends Shadow()  {
       :host .info-wrapper {
         margin: var(--mdx-sys-spacing-flex-large-2xs) 0;
         gap: 10px;
+        justify-content: flex-start;
+      }
+
+      :host .info-wrapper span {
+        min-width: 120px
       }
 
       :host ks-a-heading[tag="h3"] {
@@ -117,12 +123,10 @@ export default class CheckoutBoxWrapper extends Shadow()  {
         --a-font-size: var(--mdx-comp-link-font-standalone-font-size);
         --a-margin: 0;
       }
-
-      :host a:last-of-type {
+      :host a.spacing-top {
         margin-top: var(--mdx-sys-spacing-flex-large-2xs);
       }
-
-      :host a:first-of-type {
+      :host a.spacing-y {
         margin-bottom: var(--mdx-sys-spacing-flex-large-m);
         margin-top: var(--mdx-sys-spacing-flex-large-2xs);
       }

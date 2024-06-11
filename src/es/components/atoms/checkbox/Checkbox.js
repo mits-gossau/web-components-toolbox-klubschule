@@ -69,7 +69,14 @@ export default class Checkbox extends Shadow() {
           line-height: 1.25em;
           font-weight: 400;
           padding: var(--label-padding, 0);   
-        }
+          }
+          
+          :host label a {
+            display: inline !important;
+            font-size: 1em;
+            line-height: 1.25em;
+            font-weight: 400;
+          }
 
         :host input[type='checkbox'] {
             width: 0;

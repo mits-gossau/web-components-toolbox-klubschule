@@ -14,7 +14,7 @@
             <ks-m-checkout-box-wrapper>
                 <ks-m-info-list status="{'code': '1', 'label': 'Garantiert Durchgeführt'}">
                     <div>
-                        <ks-a-heading tag="h2">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
+                        <ks-a-heading tag="h2" style-as="h3">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
                         <div class="list-wrapper">
                             <ul>
                                 <li class="js-status">
@@ -67,7 +67,7 @@
                                     </span>
                                 </div>
 
-                                <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                                <a class="spacing-y" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
                                 <div class="flex">
                                     <span>
                                         <strong>
@@ -102,7 +102,7 @@
                                         CHF 12.30
                                     </span>
                                 </div>
-                                <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                                <a class="spacing-top" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
                                 <hr />
                                 <div class="flex total">
                                     <span>
@@ -123,14 +123,11 @@
             <!-- textarea -->
             <ks-m-checkout-box-wrapper>
                 <div>
-                    <ks-a-heading tag="h3">Zusätzliche Angaben zur Buchung</ks-a-heading>
+                    <ks-a-heading tag="h2" style-as="h3">Zusätzliche Angaben zur Buchung</ks-a-heading>
                     <div>
-                        <label for="description">Ihre Angabe</label>
-                        <textarea id="Description" live-input-validation="true" rows="4" maxlength="50" data-m-v-rules='{"required": {"error-message": "Bitte diese textarea ausfüllen."},
-                        "min-length": {"value": "3", "error-message": "Bitte minimum 3 Character eingeben."}}'
-                            name="Description" placeholder="Beschreibung hier eingeben..."
-                            error-message-reference-point-changed="true" no-error-text-p
-                            error-text-tag-name="span"></textarea>
+                        <label for="additional-informations">Ihre Angabe</label>
+                        <textarea id="additional-informations" live-input-validation="true" rows="4"
+                            maxlength="50"></textarea>
                     </div>
                 </div>
             </ks-m-checkout-box-wrapper>
@@ -140,7 +137,7 @@
             <ks-m-checkout-box-wrapper>
                 <!-- Rechnungsempfänger -->
                 <div>
-                    <ks-a-heading tag="h2">Zahlung</ks-a-heading>
+                    <ks-a-heading tag="h2" style-as="h3">Zahlung</ks-a-heading>
 
                     <div>
                         <span>
@@ -151,7 +148,7 @@
                         </span>
                     </div>
 
-                    <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                    <a class="spacing-y" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
 
                     <div>
                         <span><strong>
@@ -177,13 +174,13 @@
                         </span>
                     </div>
 
-                    <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                    <a class="spacing-top" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
                 </div>
                 <!-- /Rechnungsempfänger -->
 
                 <!-- Korrespondenz -->
                 <div>
-                    <ks-a-heading tag="h2">Korrespondenz</ks-a-heading>
+                    <ks-a-heading tag="h2" style-as="h3">Korrespondenz</ks-a-heading>
                     <div>
                         <span>
                             Sie die Korrespondenz der Klubschule Migros wie folgt erhalten:
@@ -195,7 +192,7 @@
                                 angegebene E-Mail-Adresse.
                             </span>
                         </div>
-                        <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                        <a class="spacing-top" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
                     </div>
                 </div>
                 <!-- /Korrespondenz -->
@@ -205,18 +202,23 @@
             <!-- Newsletter -->
             <ks-m-checkout-box-wrapper>
                 <div>
-                    <ks-a-heading tag="h3">Newsletter</ks-a-heading>
+                    <ks-a-heading tag="h2" style-as="h3">Newsletter</ks-a-heading>
                     <div>
                         <ks-a-checkbox mode="false" namespace="checkbox-default-">
                             <div class="wrap">
                                 <div class="control">
                                     <label for="cb-01">Ja, ich möchte regelmässig über aktuelle Angebote der Klubschule
                                         Migros informiert werden.</label>
-                                        <input id="cb-01" name="cb-01" type="checkbox">
+                                    <input id="cb-01" name="cb-01" type="checkbox">
                                     <div class="box">
                                         <a-icon-mdx icon-name="Check" size="1.25em" rotate="0"
                                             class="icon-right"></a-icon-mdx>
                                     </div>
+                                </div>
+                                <div class="message">
+                                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                        rotate="0" class="icon-right"
+                                        new-error-message-reference-point="true"></a-icon-mdx>
                                 </div>
                             </div>
                         </ks-a-checkbox>
@@ -229,6 +231,7 @@
             <!-- End -->
             <ks-m-checkout-box-wrapper>
                 <div class="full-width">
+                    <!-- Optional Zusatzinfo Fitnesskurs -->
                     <span>
                         Ihre Gesundheit ist uns wichtig. Bitte beachten Sie, dass körperliche Aktivität mit
                         gesundheitlichen Risiken verbunden sein kann. Sollten Sie an einer Krankheit leiden oder
@@ -240,27 +243,36 @@
                         dringend, umgehend Ihren Arzt/Ihre Ärztin aufzusuchen und die Klubschule Migros sowie Ihre
                         Lehrperson über Ihren Gesundheitszustand zu informieren. 
                     </span>
+                    <!-- Optional Zusatzinfo Fitnesskurs -->
+
                     <div class="flex">
-                        <!-- Optional Zusatzinfo Fitnesskurs -->
                         <div>
                             <ks-a-checkbox mode="false" namespace="checkbox-default-">
                                 <div class="wrap">
                                     <div class="control">
-                                        <label for="cb-02">Ja, ich möchte regelmässig über aktuelle Angebote der Klubschule
-                                            Migros informiert werden.</label>
-                                            <input id="cb-02" name="cb-02" type="checkbox" required
-                                                error-message-reference-point-changed="true" no-error-text-p
-                                                error-text-tag-name="span"
-                                                data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <label for="cb-02">
+                                            Ja, ich akzeptiere die allgemeinen
+                                            <a href="#">Geschäftsbedingungen (AGB)</a>.
+                                            Die Bearbeitung von Personendaten erfolgt in Übereinstimmung mit unserer
+                                            <a href="#">Datenschutzerklärung</a>.
+                                        </label>
+                                        <input id="cb-01" name="cb-01" type="checkbox" required
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
                                         <div class="box">
                                             <a-icon-mdx icon-name="Check" size="1.25em" rotate="0"
                                                 class="icon-right"></a-icon-mdx>
                                         </div>
                                     </div>
+                                    <div class="message">
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
+                                            new-error-message-reference-point="true"></a-icon-mdx>
+                                    </div>
                                 </div>
                             </ks-a-checkbox>
                         </div>
-                        <!-- Optional Zusatzinfo Fitnesskurs -->
 
                         <div class="submit-wrapper">
                             <div class="flex total">
@@ -273,12 +285,7 @@
                                 </div>
                             </div>
 
-                            <ks-a-button 
-                                big 
-                                type="submit" mode="false"
-                                namespace="button-primary-" 
-                                color="secondary"
-                            >
+                            <ks-a-button big type="submit" mode="false" namespace="button-primary-" color="secondary">
                                 Jetzt verbindlich buchen
                             </ks-a-button>
                         </div>
