@@ -1,7 +1,7 @@
 <!-- NICHT AKTUELLER STAND -->
 <ks-c-centers mock>
     <section>
-        <m-dialog namespace="dialog-left-slide-in-">
+        <m-dialog namespace="dialog-left-slide-in-checkout-">
             <div class="container dialog-header" tabindex="0">
                 <div id="back">
                     <a-icon-mdx icon-name="ChevronLeft" size="2em"></a-icon-mdx>
@@ -175,8 +175,10 @@
                                 </div>
                                 <br>
                                 <div class="container dialog-footer">
-                                    <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
-                                    <input type="submit" value="Senden" form="form-01">
+                                    <!-- <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+                                    <input type="submit" value="Senden" form="form-01"> -->
+                                    <ks-m-back-forward mode="false" back-label="Schliessen" back-link="#back" forward-label="Senden"
+                                    submit></ks-m-back-forward>
                                 </div>
                             </section>
                         </form>
