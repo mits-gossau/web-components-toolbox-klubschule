@@ -130,12 +130,13 @@ export default class TileFactory extends Shadow() {
               }'
             ></ks-m-event>
           ` : (
-            course.locations?.length > 1 && course.filter?.length
+            (course.locations?.length > 1 || data.sort.sort === 2) && course.filter?.length
               ? /* html */`
                 <ks-o-tile-list data='{
-                  ${this.fillGeneralTileInfo(course)},
+                  ${data.sort.sort === 2 ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
                   "filter": ${JSON.stringify(course.filter) || ''},
-                  "locations": ${JSON.stringify(course.locations) || ''}
+                  "locations": ${JSON.stringify(course.locations) || ''},
+                  "sort": ${JSON.stringify(data.sort.sort) || ''}
                 }'>
                 </ks-o-tile-list>
               `
@@ -176,6 +177,15 @@ export default class TileFactory extends Shadow() {
         "amount": "${course.price.amount}",
         "per": "${course.price.per}"
       }
+    `
+  }
+
+  fillGeneralTileInfoNearBy (course) {
+    return `
+      "title": "${course.bezeichnung}",
+      "iconTooltip": ${JSON.stringify(course.infotextshort.replace(/'/g, 'ʼ')) || ''},
+      "icons": ${JSON.stringify(course.icons) || ''},
+      "buttons": ${JSON.stringify(course.buttons) || ''}
     `
   }
 

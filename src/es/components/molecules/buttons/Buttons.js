@@ -42,6 +42,7 @@ export default class Buttons extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host .buttons-container {
+        --border-color-secondary: var(--button-secondary-border-color, var(--color-secondary));
         display: flex;
         gap: 1rem;
       }
