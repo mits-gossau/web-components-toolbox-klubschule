@@ -24,7 +24,7 @@ export default class Tile extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
   }
 
   /**
@@ -72,6 +72,11 @@ export default class Tile extends Shadow() {
         justify-content: space-between;
         align-items: center;
         padding-bottom: 0.75em;
+        gap: 0.75rem;
+      }
+
+      :host .m-tile__head ks-m-tooltip {
+        margin-bottom: auto;
       }
       
       :host .m-tile__title {
@@ -288,7 +293,7 @@ export default class Tile extends Shadow() {
           <div class="m-tile__foot-left">
             <!-- Trash Icon is pre-placed for wishlist -->
             <!-- <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx> -->
-            <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}'></ks-m-buttons>
+            <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small></ks-m-buttons>
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">

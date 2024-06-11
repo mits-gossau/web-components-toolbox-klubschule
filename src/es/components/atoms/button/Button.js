@@ -16,7 +16,7 @@ export default class KsButton extends Button {
    * @return {Promise<void>}
    */
   fetchTemplate () {
-    if (!this.hasAttribute('color') && !this.hasAttribute('justify-content')) return super.fetchTemplate()
+    if (!this.hasAttribute('color') && !this.hasAttribute('justify-content') && !this.hasAttribute('small') && !this.hasAttribute('big')) return super.fetchTemplate()
     const replaces = this.buttonTagName === 'a'
       ? [{
           pattern: '([^-=]{1})button',

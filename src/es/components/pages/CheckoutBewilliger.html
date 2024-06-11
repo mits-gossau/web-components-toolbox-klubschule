@@ -1,0 +1,123 @@
+<!-- setting style width to 100% is currently necessary as I can't make the checkout layout full width otherwise -->
+<m-simple-form-validation
+  namespace="simple-form-miduweb-"
+  no-validation-error-css
+  endpoint="/api/test"
+  method="POST"
+  schema="{
+    'bewilliger': {
+      'anrede': 'text',
+      'vorname': '',
+      'nachname': '',
+      'email': ''
+    }
+  }"
+>
+  <form>
+    <ks-o-checkout mode="false">
+      <ks-o-checkout-layout>
+        <section id="main">
+          <h2>Bewilliger</h2>
+          <p>Bitte geben Sie hier die Kontaktdaten der Person an, die Ihnen den Kurs bewilligt.</p>
+          <br>
+          <div>
+            <label>Anrede *</label>
+            <ks-a-radio row mode="false">
+              <div class="wrap">
+                  <label for="anrede-herr">Herr</label>
+                  <input 
+                      type="radio" 
+                      id="anrede-herr" 
+                      name="anrede" 
+                      value="Herr"
+                      required
+                      error-message-reference-point-changed="true"
+                      no-error-text-p 
+                      error-text-tag-name="span" 
+                      data-m-v-rules='{"required": {"error-message": "Bitte Anrede wählen."}}'
+                  >
+                  <div class="box"></div>
+              </div>
+              <div class="wrap">
+                  <label for="anrede-frau">Frau</label>
+                  <input 
+                      type="radio" 
+                      id="anrede-frau" 
+                      name="anrede" 
+                      value="Frau"
+                      error-message-reference-point-changed="true"
+                      no-error-text-p 
+                      error-text-tag-name="span" 
+                      data-m-v-rules='{"required": {"error-message": "Bitte Anrede wählen."}}'
+                  >
+                  <div class="box"></div>
+              </div>
+              <div class="message">
+                <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
+              </div>
+            </ks-a-radio>
+          </div>
+          <br>
+          <div>
+            <o-grid namespace="grid-12er-" mobile-breakpoint="600px" tablet-breakpoint="1300px" mode="false" id="checkout-bewilliger-grid">
+              <div col-lg="6" col-md="6" col-sm="12">
+                <ks-a-input mode="false">
+                  <div class="wrap">
+                      <label for="vorname">Vorname *</label>
+                      <input id="vorname" name="vorname" type="text" required
+                        error-message-reference-point-changed="true"
+                        no-error-text-p
+                        error-text-tag-name="span"
+                        data-m-v-rules='{"required": {"error-message": "Bitte Vornamen angeben."}}'
+                      >
+                      <div class="message">
+                          <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>                
+                      </div>
+                  </div>
+                </ks-a-input>
+              </div>
+              <div col-lg="6" col-md="6" col-sm="12">
+                <ks-a-input mode="false">
+                  <div class="wrap">
+                      <label for="nachname">Nachname *</label>
+                      <input id="nachname" name="nachname" type="text" required
+                        error-message-reference-point-changed="true"
+                        no-error-text-p
+                        error-text-tag-name="span"
+                        data-m-v-rules='{"required": {"error-message": "Bitte Nachnamen angeben."}}'
+                      >
+                      <div class="message">
+                          <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>                
+                      </div>
+                  </div>
+                </ks-a-input>
+              </div>
+            </o-grid>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                  <label for="email">Email *</label>
+                  <input id="email" name="email" type="email"
+                      pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required
+                      error-message-reference-point-changed="true" no-error-text-p
+                      error-text-tag-name="span"
+                      data-m-v-rules='{"required": {"error-message": "Bitte E-Mail angeben."}}'>
+                  <div class="message">
+                      <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                          class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                  </div>
+              </div>
+            </ks-a-input>
+          </div>
+        </section>
+        <section id="bottom">
+
+          <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter zur Zahlung"
+              submit></ks-m-back-forward>
+        </section>
+      </ks-o-checkout-layout>
+    </ks-o-checkout>
+  </form>
+</m-simple-form-validation>

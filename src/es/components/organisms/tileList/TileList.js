@@ -79,7 +79,7 @@ export default class TileList extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
   }
 
   /**
@@ -212,8 +212,8 @@ export default class TileList extends Shadow() {
       }
 
       :host ks-m-tile {
-        margin-bottom: 1em;
         width: 32%;
+        flex-grow: 1;
       }
 
       :host .o-tile-list__foot {
@@ -260,7 +260,6 @@ export default class TileList extends Shadow() {
 
         :host ks-m-tile {
           margin-right:0;
-          margin-bottom: 1em;
           width: 100%
         }
 
@@ -316,7 +315,7 @@ export default class TileList extends Shadow() {
           </div>
           <div class="o-tile-list__bottom">
             <div class="o-tile-list__bottom-left">
-              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}'></ks-m-buttons>
+              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small></ks-m-buttons>
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
@@ -342,7 +341,6 @@ export default class TileList extends Shadow() {
             style="display: none;"
           >
             <ks-a-button
-              icon
               namespace="button-secondary-" 
               color="secondary" 
             >
