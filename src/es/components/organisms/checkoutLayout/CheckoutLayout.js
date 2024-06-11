@@ -87,6 +87,11 @@ export default class CheckoutLayout extends Shadow() {
         font: var(--mdx-sys-font-fix-label2);
       }
 
+      label {
+        color: var(--mdx-comp–inputfield-label-color-default);
+        font: var(--mdx-comp-inputfield-font-label);
+      }
+
       @media screen and (max-width: _max-width_) {
         .checkout-layout__aside {
           border-top: 1px solid var(--mdx-sys-color-brand-neutral-300);
@@ -102,7 +107,7 @@ export default class CheckoutLayout extends Shadow() {
     div.innerHTML = /* html */`
       <div class="checkout-layout">
           <slot name="top"></slot>
-          <o-grid mode="false" namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border>
+          <o-grid mode="false" namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border id="checkout-layout-grid">
               <section>
                   <div>
                       <slot name="main"></slot>
