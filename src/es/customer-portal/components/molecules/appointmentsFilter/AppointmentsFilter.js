@@ -159,46 +159,39 @@ export default class AppointmentsFilter extends Shadow() {
     const dateListClear = structuredClone(dateList)
     const minRange = this.formatDate(dateListClear[0].date)
     const endRange = this.formatDate(dateListClear[dateListClear.length - 1].date)
-    const startDate = this.formatDate(dateListClear.find((obj) => obj.selected === true).date)
-    const endDate = this.formatDate(dateListClear.findLast((obj) => obj.selected === true).date)
-    const defVal = startDate === endDate ? [startDate] : [startDate, endDate]
-    const defaultValue = defVal
-    debugger
+    const startDate = this.formatDate(dateListClear.find((day) => day.selected === true).date)
+    const endDate = this.formatDate(dateListClear.findLast((day) => day.selected === true).date)
+    const defaultPickrValue = startDate === endDate ? [startDate] : [startDate, endDate]
+    const pickerLabelValue = defaultPickrValue.join(' - ')
 
     const configOptions = {
       minDate: minRange,
       maxDate: endRange,
       dateFormat: 'd.m.Y',
-      defaultDate: defaultValue,
+      defaultDate: defaultPickrValue,
       showMonths: 1
     }
+
     return /* html */ `
       <div>
         <style>
           :host {
-            --flatpickr-ks-border-radius:var(--button-secondary-border-radius,0);
-            --flatpickr-ks-padding:var(--button-secondary-padding, 0);
+            --flatpickr-ks-border-radius: var(--button-secondary-border-radius,0);
+            --flatpickr-ks-label-font-weight: var(--button-secondary-font-weight, normal);
+            --flatpickr-ks-padding: var(--button-secondary-padding, 0);
           }
         </style>
         <a-flatpickr
+          namespace="flatpickr-ks-"
           options="${escapeForHtml(JSON.stringify(configOptions))}"
-          request-event-name="request-appointments-filter"
-          namespace="flatpickr-ks-">
+          request-event-name="request-appointments-filter">
           <div>
-            <span><a-translation data-trans-key="CP.cpAppointmentsFilterStart"></a-translation>: ${startDate}</span>
+            <span>${pickerLabelValue}</span>
             <a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx>
           </div>
         </a-flatpickr>
       </div>
     `
-  }
-
-  formatDate (dateString) {
-    const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
-    // @ts-ignore
-    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
-    const ds = new Date(dateString)
-    return formatter.format(ds)
   }
 
   /**
@@ -330,5 +323,19 @@ export default class AppointmentsFilter extends Shadow() {
           </div>
       </m-dialog> 
     `
+  }
+
+  /**
+ * Takes a date string as input, converts it to a Date object, and formats it
+ * according to the specified options using Intl.DateTimeFormat.
+ * @param {string} dateString - The `dateString`
+ * @returns {string} Formatted date
+ */
+  formatDate (dateString) {
+    const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
+    // @ts-ignore
+    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
+    const ds = new Date(dateString)
+    return formatter.format(ds)
   }
 }

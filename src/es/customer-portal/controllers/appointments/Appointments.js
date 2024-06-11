@@ -128,6 +128,44 @@ export default class Appointments extends HTMLElement {
         this.lastFilters = structuredClone(appointmentsClone.filters)
       }
 
+      // sync selected date picker list
+      if (event.detail?.this?.tagName === 'A-FLATPICKR') {
+        // convert selected dates
+        const convertedTags = event.detail.origEvent.selectedDates.map(day => this.formatDateString(day))
+
+        // if 1 date selected
+        if (convertedTags.length === 1) {
+          appointmentsClone.filters.datePickerDayList = appointmentsClone.filters.datePickerDayList.map(day => {
+            if (convertedTags.includes(day.date)) {
+              day.selected = true
+            } else {
+              day.selected = false
+            }
+            return day
+          })
+        }
+
+        // if range selected
+        if (convertedTags.length === 2) {
+          const fromDate = convertedTags[0]
+          const toDate = convertedTags[1]
+          appointmentsClone.filters.datePickerDayList = appointmentsClone.filters.datePickerDayList.map((day) => {
+            const dateTimestamp = Date.parse(day.date)
+            const fromTimestamp = Date.parse(fromDate)
+            const toTimestamp = Date.parse(toDate)
+            if (dateTimestamp >= fromTimestamp && dateTimestamp <= toTimestamp) {
+              day.selected = true
+            } else {
+              day.selected = false
+            }
+            return day
+          })
+        }
+
+        // keep selected filters for next request
+        this.lastFilters = structuredClone(appointmentsClone.filters)
+      }
+
       // filter by day
       if (appointmentsClone.filters.dayCodes.some(dayCode => dayCode.selected)) {
         appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(day => {
@@ -166,47 +204,33 @@ export default class Appointments extends HTMLElement {
         })
       }
 
+      // filter by date picker
+      if (appointmentsClone.filters.datePickerDayList.some(day => day.selected)) {
+        const first = appointmentsClone.filters.datePickerDayList.find((day) => day.selected === true)
+        const last = appointmentsClone.filters.datePickerDayList.findLast((day) => day.selected === true)
+
+        appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(day => {
+          if (day) {
+            day.subscriptionCourseAppointments = day.subscriptionCourseAppointments.filter(appointment => {
+              const appointmentDate = appointment.courseAppointmentDate.slice(0, 10)
+              const dateTimestamp = Date.parse(appointmentDate)
+              const fromTimestamp = Date.parse(first.date)
+              const toTimestamp = Date.parse(last.date)
+              if (dateTimestamp >= fromTimestamp && dateTimestamp <= toTimestamp) {
+                return appointment
+              }
+              return null
+            })
+          }
+          return day?.subscriptionCourseAppointments.length ? day : null
+        })
+      }
+
       // @ts-ignore
       subscriptionCourseAppointmentsFiltered.currentDialogFilterOpen = this.currentDialogFilterOpen
 
       // filter out empty values
       appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(list => list)
-
-      // Flatpickr Shit
-      if (event.detail?.this?.tagName === 'A-FLATPICKR') {
-        const convertedTags = event.detail.origEvent.selectedDates.map(tag => {
-          return this.formatDateString(tag)
-        })
-
-        // if 1 selected
-        if (convertedTags.length === 1) {
-          appointmentsClone.filters.datePickerDayList = appointmentsClone.filters.datePickerDayList.map(day => {
-            if (convertedTags.includes(day.date)) {
-              day.selected = true
-            } else {
-              day.selected = false
-            }
-            return day
-          })
-        }
-
-        // if range selected
-        if (convertedTags.length === 2) {
-          const fromDate = convertedTags[0]
-          const toDate = convertedTags[1]
-          appointmentsClone.filters.datePickerDayList = appointmentsClone.filters.datePickerDayList.map((d) => {
-            const dateTimestamp = Date.parse(d.date)
-            const fromTimestamp = Date.parse(fromDate)
-            const toTimestamp = Date.parse(toDate)
-            if (dateTimestamp >= fromTimestamp && dateTimestamp <= toTimestamp) {
-              d.selected = true
-            } else {
-              d.selected = false
-            }
-            return d
-          })
-        }
-      }
 
       return appointmentsClone
     })
@@ -219,14 +243,6 @@ export default class Appointments extends HTMLElement {
       cancelable: true,
       composed: true
     }))
-  }
-
-  formatDateString (dateString) {
-    return new Intl.DateTimeFormat('en-CA', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(dateString)
   }
 
   /**
@@ -393,5 +409,21 @@ export default class Appointments extends HTMLElement {
       body: JSON.stringify(data),
       signal: abortController.signal
     }
+  }
+
+  /**
+   * Format a date string in the 'en-CA' locale with the year, month, and day
+   * Example:
+   *  input: "Thu Jun 13 2024 00:00:00 GMT+0200 (Mitteleuropäische Sommerzeit)"
+   *  output: "2024-06-13"
+   * @param {Date} dateString - The `dateString`
+   * @returns {string} Returning a formatted date in the 'en-CA' locale
+   */
+  formatDateString (dateString) {
+    return new Intl.DateTimeFormat('en-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(dateString)
   }
 }
