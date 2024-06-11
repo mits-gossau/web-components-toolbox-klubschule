@@ -33,6 +33,9 @@ export default class KsSystemNotification extends SystemNotification {
         display: flex;
         gap: var(--icon-spacing);
       }
+      :host .description {
+        margin: auto 0;
+      }
       :host .description,
       :host .description p,
       :host .icon span {
