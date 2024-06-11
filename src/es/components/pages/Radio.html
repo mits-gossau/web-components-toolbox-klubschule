@@ -47,6 +47,62 @@
         <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
             method="POST" schema="{
                 'more': {
+                    'rg-02': ''
+                }
+            }">
+            <form>
+                <section id="main">
+                    <h2>Row</h2>
+                    <div>
+                        <label>Anrede *</label>
+                        <ks-a-radio row mode="false">
+                          <div class="wrap">
+                              <label for="anrede-herr">Radio Option 1</label>
+                              <input 
+                                  type="radio" 
+                                  id="anrede-herr"
+                                  name="rg-02" 
+                                  value="option1"
+                                  required
+                                  error-message-reference-point-changed="true"
+                                  no-error-text-p 
+                                  error-text-tag-name="span" 
+                                  data-m-v-rules='{"required": {"error-message": "Bitte Anrede wählen."}}'
+                              >
+                              <div class="box"></div>
+                          </div>
+                          <div class="wrap">
+                              <label for="anrede-frau">Radio Option 2</label>
+                              <input 
+                                  type="radio" 
+                                  id="anrede-frau" 
+                                  name="rg-02" 
+                                  value="option2"
+                                  error-message-reference-point-changed="true"
+                                  no-error-text-p 
+                                  error-text-tag-name="span" 
+                                  data-m-v-rules='{"required": {"error-message": "Bitte Anrede wählen."}}'
+                              >
+                              <div class="box"></div>
+                          </div>
+                          <div class="message">
+                            <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
+                          </div>
+                        </ks-a-radio>
+                    </div>
+                </section>
+                <br>
+                <input type="submit" value="Submit" />
+            </form>
+        </m-simple-form-validation>
+    </div>
+</section>
+
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <div>
+        <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
+            method="POST" schema="{
+                'more': {
                     'rg-01': ''
                 }
             }">

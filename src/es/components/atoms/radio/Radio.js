@@ -39,9 +39,19 @@ export default class Radio extends Shadow() {
           flex-direction: column;
         }
 
+        :host([row]) {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+
+        :host([row]) .message {
+          width: 100%;
+        }
+
         :host .wrap img {
           margin-left: var(--mdx-sys-spacing-fix-m)
         }
+
         :host .wrap {
           display: flex;
           flex-direction: row-reverse;
