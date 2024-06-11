@@ -81,6 +81,8 @@ export default class Buttons extends Shadow() {
    */
   renderHTML () {
     const dataButtons = JSON.parse(this.getAttribute('data-buttons')) || [{}]
+    const optionalBigAttr = this.hasAttribute('big') ? 'big' : ''
+    const optionalSmallAttr = this.hasAttribute('small') ? 'small' : ''
 
     const buttons = dataButtons?.reduce((acc, button) => acc + (
       button.event === 'bookmark' ? '' : /* html */`
@@ -89,6 +91,8 @@ export default class Buttons extends Shadow() {
           namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
           color="secondary" 
           ${button.link ? `href=${button.link}` : ''}
+          ${optionalBigAttr} 
+          ${optionalSmallAttr}
         >
           ${button.text ? '<span>' + button.text + '</span>' : ''}
           ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
