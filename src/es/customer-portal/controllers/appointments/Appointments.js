@@ -31,9 +31,9 @@ export default class Appointments extends HTMLElement {
     this.addEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.addEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.addEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
-    this.addEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
+    // due to the flatpickr dom connection timing issue use document.body in this case
+    document.body.addEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
     this.addEventListener('reset-appointments-filter', this.resetFilterDayListener)
-    this.addEventListener('request-appointments-filter-date-picker', this.requestAppointmentsFilterDatePickerListener)
   }
 
   disconnectedCallback () {
@@ -42,15 +42,8 @@ export default class Appointments extends HTMLElement {
     this.removeEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.removeEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.removeEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
-    this.removeEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
+    document.body.removeEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
     this.removeEventListener('reset-appointments-filter', this.resetFilterDayListener)
-    this.removeEventListener('request-appointments-filter-date-picker', this.requestAppointmentsFilterDatePickerListener)
-  }
-
-  requestAppointmentsFilterDatePickerListener = (event) => {
-    console.log(this.lastFilters)
-    console.log(event)
-    this.requestAppointmentsFilterListener(event, false, false)
   }
 
   /**
@@ -184,14 +177,7 @@ export default class Appointments extends HTMLElement {
         const convertedTags = event.detail.origEvent.selectedDates.map(tag => {
           return this.formatDateString(tag)
         })
-        // const r = this.filterByShit(appointmentsClone.filters.datePickerDayList, convertedTags)
-        // const isPreviousSet = appointmentsClone.filters.datePickerDayList.filter((obj) => obj.selectedPicker)
-        // if (isPreviousSet.length) {
-        //   appointmentsClone.filters.datePickerDayList.splice(-1, 1)
-        // }
-        // appointmentsClone.filters.datePickerDayList.push({ selectedPicker: r })
 
-        // Refactor Version
         // if 1 selected
         if (convertedTags.length === 1) {
           appointmentsClone.filters.datePickerDayList = appointmentsClone.filters.datePickerDayList.map(day => {
@@ -233,10 +219,6 @@ export default class Appointments extends HTMLElement {
       cancelable: true,
       composed: true
     }))
-  }
-
-  filterByShit (list, checkedDates) {
-    return list.filter(product => checkedDates.includes(product.date))
   }
 
   formatDateString (dateString) {

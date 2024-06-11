@@ -165,27 +165,6 @@ export default class AppointmentsFilter extends Shadow() {
     const defaultValue = defVal
     debugger
 
-    // if (dateList[dateList.length - 1].selectedPicker) {
-    //   if (dateList[dateList.length - 1].selectedPicker.length === 1) {
-    //     minRange = this.formatDate(dateListClear[0].date)
-    //     endRange = this.formatDate(dateListClear[dateListClear.length - 2].date)
-    //     startDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[0].date)
-    //     defaultValue = [startDate]
-    //   } else {
-    //     minRange = this.formatDate(dateListClear[0].date)
-    //     endRange = this.formatDate(dateListClear[dateListClear.length - 2].date)
-    //     startDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[0].date)
-    //     endDate = this.formatDate(dateList[dateList.length - 1].selectedPicker[1].date)
-    //     defaultValue = [startDate, endDate]
-    //   }
-    // } else {
-    //   minRange = this.formatDate(dateListClear[0].date)
-    //   endRange = this.formatDate(dateListClear[dateListClear.length - 1].date)
-    //   startDate = minRange
-    //   endDate = endRange
-    //   defaultValue = [startDate, endDate]
-    // }
-
     const configOptions = {
       minDate: minRange,
       maxDate: endRange,
