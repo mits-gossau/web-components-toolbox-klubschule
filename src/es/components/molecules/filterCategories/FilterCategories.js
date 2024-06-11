@@ -180,7 +180,7 @@ export default class FilterCategories extends Shadow() {
         </div>
         <div class="container dialog-footer">
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
-          <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `(${response.total.toString()})` : ''}${response.total_label}</a-button>
+          <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `${response.total.toString()}` : ''} ${response.total_label}</a-button>
         </div>
         <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
           <div class="wrap">
@@ -201,7 +201,7 @@ export default class FilterCategories extends Shadow() {
 
   generateFilters (response, filterItem, parentItem = this.mainNav) {
     if (!filterItem.visible) return
-    
+
     const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 

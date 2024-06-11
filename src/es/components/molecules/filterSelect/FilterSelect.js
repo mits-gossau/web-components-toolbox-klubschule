@@ -85,20 +85,38 @@ export default class filterSelect extends Shadow() {
     this.fetchModules([{
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
       name: 'o-grid'
-    }, {
+    }, 
+    {
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/doubleButton/DoubleButton.js`,
       name: 'm-double-button'
-    }, {
+    }, 
+    {
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
       name: 'a-icon-mdx'
-    }, {
+    },
+    {
+      path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+      name: 'm-dialog'
+    }, 
+    {
       path: `${this.importMetaUrl}../../atoms/button/Button.js`,
       name: 'ks-a-button'
+    },
+    {
+      path: `${this.importMetaUrl}../../controllers/autoComplete/AutoComplete.js`,
+      name: 'ks-c-auto-complete'
+    },
+    {
+      path: `${this.importMetaUrl}../../molecules/autoCompleteList/AutoCompleteList.js`,
+      name: 'ks-m-auto-complete-list'
     }]).then(() => {
       fetch.then(response => {
         const filterData = response.filters
+        const searchTerm = response.searchText
 
         this.html = ''
+
+        // loop through the filter data and generate the filter select
         filterData.forEach((filterItem) => {
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
 
@@ -132,6 +150,56 @@ export default class filterSelect extends Shadow() {
             }
           }
         })
+
+        // render search button
+        if (searchTerm) {
+          this.html = /* html */`
+            <ks-c-auto-complete
+              no-forwarding
+              ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+              ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
+              ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
+              ${this.hasAttribute('auto-complete-disabled') ? ' disabled' : ''} 
+            >
+              <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
+                <div class="container">
+                  <a-input
+                    inputid="filter-select-input-search"
+                    autofocus
+                    placeholder="${this.hasAttribute('translation-key-search-placeholder') ? this.getAttribute('translation-key-search-placeholder') : 'Search'}"
+                    icon-name="Search" 
+                    icon-size="1.5em"
+                    submit-search="request-auto-complete"
+                    submit-search="request-with-facet"
+                    any-key-listener
+                    type="search"
+                    answer-event-name="search-change"
+                    delete-listener
+                    search
+                  >
+                  </a-input>
+                  <div id="close">
+                      <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                  </div>
+                </div>
+                <div class="container">
+                  <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+                  </ks-m-auto-complete-list>
+                </div>
+                <m-double-button id="show-modal" namespace="double-button-default-" width="100%">
+                  <ks-a-button search-filter namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="dialog-open-search">
+                    <span part="label1">${searchTerm}</span>
+                    <span part="label2" dynamic></span>
+                  </ks-a-button>
+                  <ks-a-button search-filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter">
+                    <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+                  </ks-a-button>
+                </m-double-button>
+              </m-dialog>
+            </ks-c-auto-complete>
+          `
+        }
+
       })
     })
   }

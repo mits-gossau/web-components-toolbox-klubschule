@@ -60,6 +60,7 @@ export default class WithFacet extends Shadow() {
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
       const shouldResetFilter = event?.type === 'reset-filter'
       const shouldResetFilterFromFilterSelectButton = event?.detail?.this?.hasAttribute('filter')
+      const shouldResetSearchFromFilterSelectButton = event?.detail?.this?.hasAttribute('search-filter')
       let isNextPage = false
 
       if (event?.detail?.ppage && this.lastRequest) {
@@ -84,14 +85,16 @@ export default class WithFacet extends Shadow() {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
           this.removeAllFilterParamsFromURL()
         }
-
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
           this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
         }
-
         if (shouldResetFilterFromFilterSelectButton) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
+        }
+        if (shouldResetSearchFromFilterSelectButton) {
+          initialRequestObj = Object.assign(initialRequestObj, { shouldResetSearchFromFilterSelectButton })
+          this.removeFilterParamsFromURL('q')
         }
 
         // TODO: @Alex, the location and location name has to be kept in the URL
