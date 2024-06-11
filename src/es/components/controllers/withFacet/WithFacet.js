@@ -181,35 +181,44 @@ export default class WithFacet extends Shadow() {
                   this.params.set('q', json.searchText)
                 }
 
+                // 
+                let paramsObj = {}
+                this.params.forEach((value, key) => {
+                    paramsObj[key] = value.split('-')
+                })
+                console.log(paramsObj)
+
                 // url filter kung fu
                 json.filters.forEach(filterItem => {
                   console.log(filterItem)
-                  if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                    
 
-                    // urls like https://dev.klubschule.ch/suche/?tag=mo-di-do&zeit=mittag-abend
-                    let result = {}
-                    this.params.forEach((value, key) => {
-                        result[key] = value.split('-')
-                    })
-                    // console.log(result)
+                  // check if key exists in filterItem as urlpara
+                  for (const key in paramsObj) {
+                    if (paramsObj.hasOwnProperty(key)) {
+                      if (filterItem.urlpara && filterItem.urlpara.includes(key)) {
+                        console.log(`Good catch: --> ${key} exists in filterItem as urlpara`);
+                      }
+                    }
+                  }
 
-                    filterItem.children.forEach(child => {
-                      // console.log(child)
-                      
-                      
-                      
-                      
 
-                    })
+
+          
+
+
+
+
+
+
+
+              
 
                     
                     
 
                    
 
-                    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-                  }
+                  WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
                 })
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
