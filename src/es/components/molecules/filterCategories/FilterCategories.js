@@ -147,21 +147,20 @@ export default class FilterCategories extends Shadow() {
     const div = document.createElement('div')
 
     let childItems = ''
-    if (filterItem.selected){
-      if (filterItem.typ === 'multi') {
-        const selectedChildren = filterItem.children.filter(child => child.selected)
-        if (selectedChildren.length > 0) {
-          selectedChildren.forEach(child => {
-            childItems += `${child.label}, `
-          })
-        }
-      } else {
-        childItems = this.getLastSelectedChild(filterItem).label
+    if (filterItem.typ === 'multi') {
+      const selectedChildren = filterItem.children.filter(child => child.selected)
+      if (selectedChildren.length > 0) {
+        selectedChildren.forEach(child => {
+          childItems += `${child.label}, `
+        })
       }
+    } else {
+      childItems = this.getLastSelectedChild(filterItem) ? this.getLastSelectedChild(filterItem).label : ''
     }
+    console.log(childItems)
 
     div.innerHTML = /* html */`
-      <m-dialog id="${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+      <m-dialog id="filter-${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
@@ -180,7 +179,7 @@ export default class FilterCategories extends Shadow() {
           <div class="sub-level ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
         </div>
         <div class="container dialog-footer">
-          <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
+          <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
           <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `(${response.total.toString()})` : ''}${response.total_label}</a-button>
         </div>
         <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
