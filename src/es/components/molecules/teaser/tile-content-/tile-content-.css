@@ -137,7 +137,7 @@
 
 :host([brand=ibaw]) figure,
 :host([brand=ibaw]) article {
-  --text-color-hover: black;
+  --text-color-hover: var(--mdx-sys-color-neutral-bold4);
 }
 
 :host([brand=ibaw]) figure:hover figcaption > strong:first-child,
