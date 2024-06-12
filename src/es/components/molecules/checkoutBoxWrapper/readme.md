@@ -1,16 +1,23 @@
-<h1>Checkout Lehrmittel Konfiguration</h1>
+# Checkout Info List
 
-<h2>No Message</h2>
-<p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?node-id=6179-53770&m=dev" target="_blank">figma</a></code>
-</p>
-<hr />
+> Checkout Info List.
 
-<!-- booking informations  -->
-<ks-m-checkout-box-wrapper>
+- [JIRA](https://jira.migros.net/browse/MIDUWEB-755)
+- [Examples](../../pages/CheckoutBookingInformation.html)
+
+## Attributes
+- `status`: JSON with code and label `{'code': '1', 'label': 'Garantiert Durchgeführt'}`.  
+
+
+## Markup Examples
+
+### Example
+
+```html
     <ks-m-info-list status="{'code': '1', 'label': 'Garantiert Durchgeführt'}">
         <div>
-            <ks-a-heading tag="h2" style-as="h3">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
-            <div class="list-wrapper">
+            <ks-a-heading tag="h3">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
+            <div>
                 <ul>
                     <li class="js-status">
                     </li>
@@ -34,7 +41,7 @@
                     </li>
                 </ul>
                 <div>
-                    <ks-a-heading tag="h3">
+                    <ks-a-heading tag="h4">
                         Teilnehmer
                     </ks-a-heading>
                     <div>
@@ -45,7 +52,7 @@
                             Schweiz
                         </span>
                     </div>
-                    <div class="flex info-wrapper">
+                    <div>
                         <span>
                             <strong>
                                 E-Mail<br>
@@ -62,8 +69,8 @@
                         </span>
                     </div>
 
-                    <a class="spacing-y" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
-                    <div class="flex">
+                    <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                    <div>
                         <span>
                             <strong>
                                 Kursgeld
@@ -73,7 +80,7 @@
                             CHF 220.00
                         </span>
                     </div>
-                    <div class="flex">
+                    <div>
                         <span>
                             <strong>
                                 E-book
@@ -85,7 +92,7 @@
                             CHF 12.30
                         </span>
                     </div>
-                    <div class="flex">
+                    <div>
                         <span>
                             <strong>
                                 E-book
@@ -97,9 +104,9 @@
                             CHF 12.30
                         </span>
                     </div>
-                    <a class="spacing-top" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                    <a href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
                     <hr />
-                    <div class="flex total">
+                    <div>
                         <span>
                             <a-translation data-trans-key="Checkout.Total"></a-translation>
                         </span>
@@ -112,5 +119,5 @@
             </div>
         </div>
     </ks-m-info-list>
-</ks-m-checkout-box-wrapper>
-<!-- /booking informations  -->
+```
+

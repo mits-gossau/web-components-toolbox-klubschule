@@ -14,10 +14,10 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class FilterCategories extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-   
+
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
-    this.keepDialogOpenEventListener = event => {      
+    this.keepDialogOpenEventListener = event => {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
     }
   }
@@ -41,7 +41,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   renderCSS () {
@@ -79,7 +79,7 @@ export default class FilterCategories extends Shadow() {
       `
       region.children.forEach(center => {
         const count = center.count ? `(${center.count})` : ''
-        const disabled = center.disabled ? 'disabled' : ''    
+        const disabled = center.disabled ? 'disabled' : ''
         const checked = center.selected ? 'checked' : ''
         const visible = center.visible ? 'visible' : ''
         centerFilter += /* html */`
@@ -96,10 +96,10 @@ export default class FilterCategories extends Shadow() {
     return div.children
   }
 
-  generateFilterElement(child, parentItem) {
+  generateFilterElement (child, parentItem) {
     const subNav = []
     const count = child.count ? `(${child.count})` : ''
-    const disabled = child.disabled ? 'disabled' : ''    
+    const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
     const isMultipleChoice = parentItem.typ === 'multi'
@@ -129,13 +129,15 @@ export default class FilterCategories extends Shadow() {
   }
 
   getLastSelectedChild (filterItem) {
-    let lastSelectedChild = null;
-    if (filterItem.selected && (!filterItem.children || filterItem.children.length === 0)) return filterItem
+    let lastSelectedChild = null
+    if (!filterItem.children || filterItem.children.length === 0) return filterItem
     if (filterItem.children) {
-        for (let child of filterItem.children) {
-            let result = this.getLastSelectedChild(child)
-            if (result) lastSelectedChild = result
+      for (const child of filterItem.children) {
+        if (child.selected) {
+          const result = this.getLastSelectedChild(child)
+          if (result) lastSelectedChild = result
         }
+      }
     }
 
     return lastSelectedChild
@@ -143,21 +145,18 @@ export default class FilterCategories extends Shadow() {
 
   generateNavLevelItem (response, filterItem) {
     const shouldRemainOpen = filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
-    
     const div = document.createElement('div')
 
     let childItems = ''
-    if (filterItem.selected){
-      if (filterItem.typ === 'multi') {
-        const selectedChildren = filterItem.children.filter(child => child.selected)
-        if (selectedChildren.length > 0) {
-          selectedChildren.forEach(child => {
-            childItems += `${child.label}, `
-          })
-        }
-      } else {
-        childItems = this.getLastSelectedChild(filterItem).label
+    if (filterItem.typ === 'multi') {
+      const selectedChildren = filterItem.children.filter(child => child.selected)
+      if (selectedChildren.length > 0) {
+        selectedChildren.forEach(child => {
+          childItems += `${child.label}, `
+        })
       }
+    } else {
+      childItems = this.getLastSelectedChild(filterItem) ? this.getLastSelectedChild(filterItem).label : ''
     }
 
     div.innerHTML = /* html */`
@@ -180,8 +179,8 @@ export default class FilterCategories extends Shadow() {
           <div class="sub-level ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
         </div>
         <div class="container dialog-footer">
-          <a-button id="close" namespace="button-secondary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
-          <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `(${response.total.toString()})` : ''}${response.total_label}</a-button>
+          <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
+          <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `${response.total.toString()}` : ''} ${response.total_label}</a-button>
         </div>
         <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
           <div class="wrap">
@@ -193,7 +192,7 @@ export default class FilterCategories extends Shadow() {
       </m-dialog>
     `
 
-    return { 
+    return {
       navLevelItem: div.children[0],
       // @ts-ignore
       subLevel: div.querySelector('m-dialog')?.root.querySelector('.sub-level')
@@ -201,17 +200,19 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateFilters (response, filterItem, parentItem = this.mainNav) {
+    if (!filterItem.visible) return
+
     const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-      if (filterItem.id === "13") {
+      if (filterItem.id === '13') { // center filters
         Array.from(this.generateCenterFilter(filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
       } else {
         filterItem.children.forEach(child => {
           if (child.children && child.children.length > 0) {
             // recursively call the function for any nested children
-            this.generateFilters(response, child, generatedNavLevelItem.subLevel) 
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel)
           } else {
             this.generateFilterElement(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
           }

@@ -12,12 +12,12 @@ export default class Checkout extends Shadow() {
 
     /**
      * Replace label text
-     * @param {*} event 
+     * @param {*} event
      */
     this.checkoutConfigurationListener = (event) => {
       event.detail.fetch.then(insuranceData => {
-        this.labelWithInsurance = this.root.querySelector('label[insurance-label]');
-        this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel;
+        this.labelWithInsurance = this.root.querySelector('label[insurance-label]')
+        this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel
       })
     }
   }
@@ -39,7 +39,7 @@ export default class Checkout extends Shadow() {
         this.dispatchEvent(new CustomEvent('request-checkout-configuration',
           {
             detail: {
-              id: changeEvent.currentTarget.id,
+              id: changeEvent.currentTarget.dataset.lehrmitttelId,
               value: changeEvent.currentTarget.value
             },
             bubbles: true,
@@ -64,6 +64,6 @@ export default class Checkout extends Shadow() {
       })
     })
 
-    this.componentWasRendered = true;
+    this.componentWasRendered = true
   }
 }

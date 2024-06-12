@@ -79,7 +79,7 @@ export default class TileList extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**
@@ -127,6 +127,11 @@ export default class TileList extends Shadow() {
         --icon-mdx-ks-color: var(--icon-color-blue);
       }
 
+
+      :host .o-tile-list__top + .o-tile-list__bottom {
+        margin-top: 2em;
+      }
+
       :host .o-tile-list__middle {
         margin-bottom: 2em;
       }
@@ -141,6 +146,10 @@ export default class TileList extends Shadow() {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+      }
+
+      :host .o-tile-list__bottom--grey {
+        --button-secondary-border-color: var(--mdx-sys-color-neutral-subtle3);
       }
 
       :host .o-tile-list__details {
@@ -283,6 +292,7 @@ export default class TileList extends Shadow() {
     const warnMandatory = 'data attribute requires: '
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     this.data = data
+    console.log(data, data.sort !== 2)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="o-tile-list">
@@ -297,23 +307,25 @@ export default class TileList extends Shadow() {
                   `
               : ''}          
           </div>
-          <div class="o-tile-list__middle">
-            ${data.location?.name
-              ? /* html */`
-              <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
-              `
-              : ''
-            }
-            ${data.location?.badge
-              ? /* html */`
-                <ks-a-button badge namespace="button-secondary-" color="tertiary">
-                  <span>${data.location.badge}</span>
-                </ks-a-button>
-              `
-              : ''
-            }
-          </div>
-          <div class="o-tile-list__bottom">
+          ${data.sort !== 2 ? /* html */ `
+            <div class="o-tile-list__middle">
+              ${data.location?.name
+                ? /* html */`
+                <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
+                `
+                : ''
+              }
+              ${data.location?.badge
+                ? /* html */`
+                  <ks-a-button badge namespace="button-secondary-" color="tertiary">
+                    <span>${data.location.badge}</span>
+                  </ks-a-button>
+                `
+                : ''
+              }
+            </div>
+          ` : ''}
+          <div class="o-tile-list__bottom ${data.sort === 2 ? 'o-tile-list__bottom--grey' : ''}">
             <div class="o-tile-list__bottom-left">
               <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small></ks-m-buttons>
             </div>
@@ -387,7 +399,7 @@ export default class TileList extends Shadow() {
 
   renderTile (tileData, add = false) {
     this.ppage = tileData.ppage || this.ppage
-    this.loadMore.style.display = tileData.ppage === -1 ? 'none': 'flex'
+    this.loadMore.style.display = tileData.ppage === -1 ? 'none' : 'flex'
     const tileString = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
       // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
       tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title

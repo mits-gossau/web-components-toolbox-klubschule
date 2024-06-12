@@ -468,7 +468,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   shouldRenderHTML () {
@@ -715,7 +715,7 @@ export default class CourseDialog extends Shadow() {
    */
   renderNotification () {
     return /* html */ `
-      <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" tabindex="0">
+      <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" tabindex="0" icon-size="1.5em">
         <style>
           :host {
             --system-notification-default-icon-border-width: 0 !important;
@@ -760,7 +760,7 @@ export default class CourseDialog extends Shadow() {
    */
   renderDownloads (courseData, courseDetail) {
     // @ts-ignore
-    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseDetail.centerId}`
+    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').coursePDF}/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}`
     return /* html */ `
       <ks-m-link-list namespace="link-list-download-">
         <ul>

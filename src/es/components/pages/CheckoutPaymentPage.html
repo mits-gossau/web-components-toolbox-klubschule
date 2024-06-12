@@ -1,0 +1,567 @@
+<h1>Checkout Payment Page</h1>
+
+<h2>No Message</h2>
+<p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?node-id=3111-398362&t=MLNNKNTCqsB0CVCt-0" target="_blank">figma</a></code>
+</p>
+<hr />
+
+<m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test" method="POST">
+    <form>
+        <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate"
+            initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
+            <ks-o-checkout mode="false">
+                <ks-o-checkout-layout mode="false">
+
+                    <section id="top">
+
+                        <!-- stepper with back-link start -->
+                        <ks-a-back-link href="#" icon="ArrowLeft">
+                            Zur&uuml;ck
+                        </ks-a-back-link>
+                        <ks-m-checkout-stepper steps='[
+                                {
+                                    "label": "Anmeldedaten",
+                                    "status": "done",
+                                    "link": "#anmeldedaten"
+                                },
+                                {
+                                    "label": "Zahlung",
+                                    "status": "current",
+                                    "link": "#zahlung"
+                                },
+                                {
+                                    "label": "Abschluss",
+                                    "status": "default",
+                                    "link": "#abschluss"
+                                }
+                            ]'></ks-m-checkout-stepper>
+                        <!-- stepper with back-link end -->
+                    </section>
+
+                    <section id="main">
+                        <ks-o-body-section content-width-var="100%" no-margin-y>
+                            <ks-a-heading tag="h2">Wie möchten Sie bezahlen?</ks-a-heading>
+                            <div class="margin-bottom-m">
+                                <ks-a-radio mode="false">
+                                    <div class="wrap">
+                                        <label for="rb-01-01">Bezahlung via Rechnung</label>
+                                        <input id="rb-01-01" type="radio" name="rb-01" value="invoice"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <img src="./../../../../img/payment/Payment.svg" />
+                                        <label for="rb-01-02">Kreditkarte</label>
+                                        <input id="rb-01-02" type="radio" name="rb-01" value="card" required
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="message">
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
+                                            new-error-message-reference-point="true"></a-icon-mdx>
+                                    </div>
+                                </ks-a-radio>
+                            </div>
+                            <ks-a-heading class="margin-top-s" tag="h3">Korrespondenz</ks-a-heading>
+                            <p class="margin-y-xs">
+                                Wie möchten Sie die Korrespondenz der Klubschule Migros erhalten? (gilt für alle Kurse &
+                                Teilnehmer)
+                            </p>
+                            <p class="margin-y-xs">
+                                <strong>
+                                    Wir empfehlen den E-Mail-Versand für schnellere und umwelt-freundlichere
+                                    Korrespondenz.
+                                </strong>
+                            </p>
+                            <div>
+                                <ks-a-radio mode="false">
+                                    <div class="wrap">
+                                        <label for="rb-02-01">Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking
+                                            per Mailversand an die angegebene E-Mail-Adresse.</label>
+                                        <input id="rb-02-01" type="radio" name="rb-02" value="mail"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <label for="rb-02-02">Briefe per Mailversand an die angegebene E-Mail-Adresse
+                                            aber Rechnungen per Post.</label>
+                                        <input id="rb-02-02" type="radio" name="rb-02" value="semi"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <label for="rb-02-03">Sämtliche Korrespondenzen per Postversand</label>
+                                        <input id="rb-02-03" type="radio" name="rb-02" value="postial"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+
+                                    <div class="message">
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
+                                            new-error-message-reference-point="true"></a-icon-mdx>
+                                    </div>
+                                </ks-a-radio>
+                            </div>
+                        </ks-o-body-section>
+                    </section>
+
+                    <section id="sidebar">
+                        <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
+                            status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
+                            time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
+                            course-price="630.00 CHF" price-labels='{
+                            "coursePrice": "Kurspreis",
+                            "material": "Material",
+                            "teachingAids": "Lehrmittel",
+                            "insurance": "Annulationskostenversicherung",
+                            "tax": "inkl. allfälliger MwSt",
+                            "total": "Gesamtbetrag"
+                        }' initial-configuration-price-data='{
+                                "annulationskostenversicherungPreis": "16.75 CHF",
+                                "lehrmittelPreis": "16.90 CHF",
+                                "materialPreis": "0.00 CHF",
+                                "totalPreis": "646.90 CHF"
+                            }'>
+                        </ks-m-checkout-booked-offer>
+                    </section>
+
+                    <section id="bottom">
+                        <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
+                            submit></ks-m-back-forward>
+                    </section>
+
+                </ks-o-checkout-layout>
+            </ks-o-checkout>
+        </ks-c-checkout>
+    </form>
+</m-simple-form-validation>
+
+
+<h2>Single Message</h2>
+<p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?t=f6aEQs0faDZ77w7G-0" target="_blank">figma</a></code>
+</p>
+<hr />
+
+<m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test" method="POST">
+    <form>
+        <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate"
+            initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
+            <ks-o-checkout mode="false">
+                <ks-o-checkout-layout mode="false">
+
+                    <section id="top">
+
+                        <!-- stepper with back-link start -->
+                        <ks-a-back-link href="#" icon="ArrowLeft">
+                            Zur&uuml;ck
+                        </ks-a-back-link>
+                        <ks-m-checkout-stepper steps='[
+                                {
+                                    "label": "Anmeldedaten",
+                                    "status": "done",
+                                    "link": "#anmeldedaten"
+                                },
+                                {
+                                    "label": "Zahlung",
+                                    "status": "current",
+                                    "link": "#zahlung"
+                                },
+                                {
+                                    "label": "Abschluss",
+                                    "status": "default",
+                                    "link": "#abschluss"
+                                }
+                            ]'></ks-m-checkout-stepper>
+                        <!-- stepper with back-link end -->
+                    </section>
+
+                    <section id="main">
+                        <ks-o-body-section content-width-var="100%" no-margin-y>
+                            <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+                                <div slot="description">
+                                    <p>Dieses Angebot ist zur Zeit ausgebucht. Wir werden Sie auf die Warteliste
+                                        setzen und kontaktieren Sie, sobald ein Platz frei wird. Sie Bezahlen erst
+                                        nach definitiver Anmeldung.</p>
+                                </div>
+                            </ks-m-system-notification>
+                            <ks-a-heading tag="h2">Wie möchten Sie bezahlen?</ks-a-heading>
+                            <div class="margin-bottom-m">   
+                                <ks-a-radio mode="false">
+                                    <div class="wrap">
+                                        <label for="rb-01-01">Bezahlung via Rechnung</label>
+                                        <input id="rb-01-01" type="radio" name="rb-01" value="invoice"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <img src="./../../../../img/payment/Payment.svg" />
+                                        <label for="rb-01-02">Kreditkarte</label>
+                                        <input id="rb-01-02" type="radio" name="rb-01" value="card" required
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="message">
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
+                                            new-error-message-reference-point="true"></a-icon-mdx>
+                                    </div>
+                                </ks-a-radio>
+                            </div>
+                            <ks-a-heading class="margin-top-s" tag="h3">Korrespondenz</ks-a-heading>
+                            <p class="margin-y-xs">
+                                Wie möchten Sie die Korrespondenz der Klubschule Migros erhalten? (gilt für alle
+                                Kurse & Teilnehmer)
+                            </p>
+                            <p class="margin-y-xs">
+                                <strong>
+                                    Wir empfehlen den E-Mail-Versand für schnellere und umwelt-freundlichere
+                                    Korrespondenz.
+                                </strong>
+                            </p>
+                            <div class="margin-bottom-m">
+                                <ks-a-radio mode="false">
+                                    <div class="wrap">
+                                        <label for="rb-02-01">Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking
+                                            per Mailversand an die angegebene E-Mail-Adresse.</label>
+                                        <input id="rb-02-01" type="radio" name="rb-02" value="mail"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <label for="rb-02-02">Briefe per Mailversand an die angegebene E-Mail-Adresse
+                                            aber Rechnungen per Post.</label>
+                                        <input id="rb-02-02" type="radio" name="rb-02" value="semi"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <label for="rb-02-03">Sämtliche Korrespondenzen per Postversand</label>
+                                        <input id="rb-02-03" type="radio" name="rb-02" value="postial"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+
+                                    <div class="message">
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
+                                            new-error-message-reference-point="true"></a-icon-mdx>
+                                    </div>
+                                </ks-a-radio>
+                            </div>
+                        </ks-o-body-section>
+                    </section>
+
+                    <section id="sidebar">
+                        <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
+                            status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
+                            time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
+                            course-price="630.00 CHF" price-labels='{
+                            "coursePrice": "Kurspreis",
+                            "material": "Material",
+                            "teachingAids": "Lehrmittel",
+                            "insurance": "Annulationskostenversicherung",
+                            "tax": "inkl. allfälliger MwSt",
+                            "total": "Gesamtbetrag"
+                        }' initial-configuration-price-data='{
+                                "annulationskostenversicherungPreis": "16.75 CHF",
+                                "lehrmittelPreis": "16.90 CHF",
+                                "materialPreis": "0.00 CHF",
+                                "totalPreis": "646.90 CHF"
+                            }'>
+                        </ks-m-checkout-booked-offer>
+                    </section>
+
+                    <section id="bottom">
+                        <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
+                            submit></ks-m-back-forward>
+                    </section>
+
+                </ks-o-checkout-layout>
+            </ks-o-checkout>
+        </ks-c-checkout>
+    </form>
+</m-simple-form-validation>
+
+
+<h2>Single Message no Payment Selection</h2>
+<p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?t=f6aEQs0faDZ77w7G-0" target="_blank">figma</a></code>
+</p>
+<hr />
+
+<m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test" method="POST">
+    <form>
+        <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate"
+            initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
+            <ks-o-checkout mode="false">
+                <ks-o-checkout-layout mode="false">
+
+                    <section id="top">
+
+                        <!-- stepper with back-link start -->
+                        <ks-a-back-link href="#" icon="ArrowLeft">
+                            Zur&uuml;ck
+                        </ks-a-back-link>
+                        <ks-m-checkout-stepper steps='[
+                                {
+                                    "label": "Anmeldedaten",
+                                    "status": "done",
+                                    "link": "#anmeldedaten"
+                                },
+                                {
+                                    "label": "Zahlung",
+                                    "status": "current",
+                                    "link": "#zahlung"
+                                },
+                                {
+                                    "label": "Abschluss",
+                                    "status": "default",
+                                    "link": "#abschluss"
+                                }
+                            ]'></ks-m-checkout-stepper>
+                        <!-- stepper with back-link end -->
+                    </section>
+
+                    <section id="main">
+                        <ks-o-body-section content-width-var="100%" no-margin-y>
+                            <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+                                <div slot="description">
+                                    <p>Dieses Angebot ist zur Zeit ausgebucht. Wir werden Sie auf die Warteliste
+                                        setzen und kontaktieren Sie, sobald ein Platz frei wird. Sie Bezahlen erst
+                                        nach definitiver Anmeldung.</p>
+                                </div>
+                            </ks-m-system-notification>
+                            <ks-a-heading class="margin-top-s" tag="h3">Korrespondenz</ks-a-heading>
+                            <p class="margin-y-xs">
+                                Wie möchten Sie die Korrespondenz der Klubschule Migros erhalten? (gilt für alle
+                                Kurse & Teilnehmer)
+                            </p>
+                            <p class="margin-y-xs">
+                                <strong>
+                                    Wir empfehlen den E-Mail-Versand für schnellere und umwelt-freundlichere
+                                    Korrespondenz.
+                                </strong>
+                            </p>
+                            <div class="margin-bottom-m">
+                                <ks-a-radio mode="false">
+                                    <div class="wrap">
+                                        <label for="rb-02-01">Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking
+                                            per Mailversand an die angegebene E-Mail-Adresse.</label>
+                                        <input id="rb-02-01" type="radio" name="rb-02" value="mail"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <label for="rb-02-02">Briefe per Mailversand an die angegebene E-Mail-Adresse
+                                            aber Rechnungen per Post.</label>
+                                        <input id="rb-02-02" type="radio" name="rb-02" value="semi"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <label for="rb-02-03">Sämtliche Korrespondenzen per Postversand</label>
+                                        <input id="rb-02-03" type="radio" name="rb-02" value="postial"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+
+                                    <div class="message">
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
+                                            new-error-message-reference-point="true"></a-icon-mdx>
+                                    </div>
+                                </ks-a-radio>
+                            </div>
+                        </ks-o-body-section>
+                    </section>
+
+                    <section id="sidebar">
+                        <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
+                            status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
+                            time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
+                            course-price="630.00 CHF" price-labels='{
+                            "coursePrice": "Kurspreis",
+                            "material": "Material",
+                            "teachingAids": "Lehrmittel",
+                            "insurance": "Annulationskostenversicherung",
+                            "tax": "inkl. allfälliger MwSt",
+                            "total": "Gesamtbetrag"
+                        }' initial-configuration-price-data='{
+                                "annulationskostenversicherungPreis": "16.75 CHF",
+                                "lehrmittelPreis": "16.90 CHF",
+                                "materialPreis": "0.00 CHF",
+                                "totalPreis": "646.90 CHF"
+                            }'>
+                        </ks-m-checkout-booked-offer>
+                    </section>
+
+                    <section id="bottom">
+                        <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
+                            submit></ks-m-back-forward>
+                    </section>
+
+                </ks-o-checkout-layout>
+            </ks-o-checkout>
+        </ks-c-checkout>
+    </form>
+</m-simple-form-validation>
+
+
+<h2>Double Message no Payment Selection</h2>
+<p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?t=f6aEQs0faDZ77w7G-0" target="_blank">figma</a></code>
+</p>
+<hr />
+
+<m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test" method="POST">
+    <form>
+        <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/CommerceApi/Recalculate"
+            initial-request="{'portalId': 29,'mandantId': 111,'kursTyp': 'E','kursId': 1725969,'centerId': 1016,'spracheId': 'D'}">
+            <ks-o-checkout mode="false">
+                <ks-o-checkout-layout mode="false">
+
+                    <section id="top">
+
+                        <!-- stepper with back-link start -->
+                        <ks-a-back-link href="#" icon="ArrowLeft">
+                            Zur&uuml;ck
+                        </ks-a-back-link>
+                        <ks-m-checkout-stepper steps='[
+                                {
+                                    "label": "Anmeldedaten",
+                                    "status": "done",
+                                    "link": "#anmeldedaten"
+                                },
+                                {
+                                    "label": "Zahlung",
+                                    "status": "current",
+                                    "link": "#zahlung"
+                                },
+                                {
+                                    "label": "Abschluss",
+                                    "status": "default",
+                                    "link": "#abschluss"
+                                }
+                            ]'></ks-m-checkout-stepper>
+                        <!-- stepper with back-link end -->
+                    </section>
+
+                    <section id="main">
+                        <ks-o-body-section content-width-var="100%" no-margin-y>
+                            <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+                                <div slot="description">
+                                    <p>Dieses Angebot ist bewilligungspflichtig. Nach der Bewilligung wird eine
+                                        Rechnung ausgestellt.</p>
+                                </div>
+                            </ks-m-system-notification>
+                            <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+                                <div slot="description">
+                                    <p>System Notification Default (Primary) No Border</p>
+                                </div>
+                            </ks-m-system-notification>
+                            <ks-a-heading class="margin-top-s" tag="h3">Korrespondenz</ks-a-heading>
+                            <p class="margin-y-xs">
+                                Wie möchten Sie die Korrespondenz der Klubschule Migros erhalten? (gilt für alle
+                                Kurse & Teilnehmer)
+                            </p>
+                            <p class="margin-y-xs">
+                                <strong>
+                                    Wir empfehlen den E-Mail-Versand für schnellere und umwelt-freundlichere
+                                    Korrespondenz.
+                                </strong>
+                            </p>
+                            <div class="margin-bottom-m">
+                                <ks-a-radio mode="false">
+                                    <div class="wrap">
+                                        <label for="rb-02-01">Sämtliche Korrespondenzen inkl. Rechnungen für E-Banking
+                                            per Mailversand an die angegebene E-Mail-Adresse.</label>
+                                        <input id="rb-02-01" type="radio" name="rb-02" value="mail"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <label for="rb-02-02">Briefe per Mailversand an die angegebene E-Mail-Adresse
+                                            aber Rechnungen per Post.</label>
+                                        <input id="rb-02-02" type="radio" name="rb-02" value="semi"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+                                    <div class="wrap">
+                                        <label for="rb-02-03">Sämtliche Korrespondenzen per Postversand</label>
+                                        <input id="rb-02-03" type="radio" name="rb-02" value="postial"
+                                            error-message-reference-point-changed="true" no-error-text-p
+                                            error-text-tag-name="span"
+                                            data-m-v-rules='{"required": {"error-message": "This is an error message."}}'>
+                                        <div class="box"></div>
+                                    </div>
+
+                                    <div class="message">
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
+                                            rotate="0" class="icon-right"
+                                            new-error-message-reference-point="true"></a-icon-mdx>
+                                    </div>
+                                </ks-a-radio>
+                            </div>
+                        </ks-o-body-section>
+                    </section>
+
+                    <section id="sidebar">
+                        <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
+                            status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
+                            time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich"
+                            course-price="630.00 CHF" price-labels='{
+                            "coursePrice": "Kurspreis",
+                            "material": "Material",
+                            "teachingAids": "Lehrmittel",
+                            "insurance": "Annulationskostenversicherung",
+                            "tax": "inkl. allfälliger MwSt",
+                            "total": "Gesamtbetrag"
+                        }' initial-configuration-price-data='{
+                                "annulationskostenversicherungPreis": "16.75 CHF",
+                                "lehrmittelPreis": "16.90 CHF",
+                                "materialPreis": "0.00 CHF",
+                                "totalPreis": "646.90 CHF"
+                            }'>
+                        </ks-m-checkout-booked-offer>
+                    </section>
+
+                    <section id="bottom">
+                        <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
+                            submit></ks-m-back-forward>
+                    </section>
+
+                </ks-o-checkout-layout>
+            </ks-o-checkout>
+        </ks-c-checkout>
+    </form>
+</m-simple-form-validation>
