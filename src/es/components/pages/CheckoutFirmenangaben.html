@@ -1,0 +1,112 @@
+<!-- setting style width to 100% is currently necessary as I can't make the checkout layout full width otherwise -->
+<m-simple-form-validation
+  namespace="simple-form-miduweb-"
+  no-validation-error-css
+  endpoint="/api/test"
+  method="POST"
+  schema="{
+    'firmenangaben': {
+      'division': '',
+      'abteilung': '',
+      'kostenstelle': '',
+      'betriebsnummer': '',
+      'rechnungsinformation': '',
+      'zusatzfeld1': '',
+      'zusatzfeld2': ''
+    }
+  }"
+>
+  <form>
+    <ks-o-checkout mode="false">
+      <ks-o-checkout-layout>
+        <section id="main">
+          <h2>Firmenangaben</h2>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                  <label for="division">Division *</label>
+                  <input id="division" name="division" type="text" required
+                    error-message-reference-point-changed="true"
+                    no-error-text-p
+                    error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Division angeben."}}'
+                  >
+                  <div class="message">
+                      <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>                
+                  </div>
+              </div>
+            </ks-a-input>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                  <label for="abteilung">Abteilung</label>
+                  <input id="abteilung" name="abteilung" type="text">
+              </div>
+            </ks-a-input>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                  <label for="kostenstelle">Kostenstelle / OE</label>
+                  <input id="kostenstelle" name="kostenstelle" type="text">
+              </div>
+            </ks-a-input>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                  <label for="betriebsnummer">Betriebs-Nr.</label>
+                  <input id="betriebsnummer" name="betriebsnummer" type="text">
+              </div>
+            </ks-a-input>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                  <label for="rechnungsinformation">Info für Rechnung *</label>
+                  <input id="rechnungsinformation" name="rechnungsinformation" type="text" required
+                    error-message-reference-point-changed="true"
+                    no-error-text-p
+                    error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Info für Rechnung angeben."}}'
+                  >
+                  <div class="message">
+                      <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>                
+                  </div>
+              </div>
+            </ks-a-input>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                  <label for="zusatzfeld1">Zusatzfeld 1</label>
+                  <input id="zusatzfeld1" name="zusatzfeld1" type="text">
+              </div>
+            </ks-a-input>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                  <label for="zusatzfeld2">Zusatzfeld 2</label>
+                  <input id="zusatzfeld2" name="zusatzfeld2" type="text">
+              </div>
+            </ks-a-input>
+          </div>
+          <br>
+        </section>
+        <section id="bottom">
+          <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter zur Zahlung"
+              submit></ks-m-back-forward>
+        </section>
+      </ks-o-checkout-layout>
+    </ks-o-checkout>
+  </form>
+</m-simple-form-validation>
