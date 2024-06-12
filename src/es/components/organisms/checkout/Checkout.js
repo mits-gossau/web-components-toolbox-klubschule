@@ -12,12 +12,12 @@ export default class Checkout extends Shadow() {
 
     /**
      * Replace label text
-     * @param {*} event 
+     * @param {*} event
      */
     this.checkoutConfigurationListener = (event) => {
       event.detail.fetch.then(insuranceData => {
-        this.labelWithInsurance = this.root.querySelector('label[insurance-label]');
-        this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel;
+        this.labelWithInsurance = this.root.querySelector('label[insurance-label]')
+        this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel
       })
     }
   }
@@ -64,6 +64,6 @@ export default class Checkout extends Shadow() {
       })
     })
 
-    this.componentWasRendered = true;
+    this.componentWasRendered = true
   }
 }

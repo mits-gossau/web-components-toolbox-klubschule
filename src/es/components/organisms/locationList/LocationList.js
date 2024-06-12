@@ -23,7 +23,7 @@ export default class LocationList extends Anchor() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**

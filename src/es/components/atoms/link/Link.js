@@ -19,7 +19,7 @@ export default class Link extends Shadow() {
   disconnectedCallback () {}
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   shouldRenderHTML () {

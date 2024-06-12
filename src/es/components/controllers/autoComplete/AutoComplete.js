@@ -37,7 +37,7 @@ export default class AutoComplete extends Shadow() {
       mode: 'false',
       ...options
     }, ...args)
-    
+
     this.abortController = null
     const apiUrl = `${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}`
     const apiUrlObj = new URL(apiUrl, apiUrl.charAt(0) === '/' ? location.origin : apiUrl.charAt(0) === '.' ? this.importMetaUrl : undefined)
@@ -48,7 +48,7 @@ export default class AutoComplete extends Shadow() {
         return this.clearAutocomplete()
       }
       const token = event.detail.value
-      
+
       if (!token || token.length < 3) {
         this.clearAutocomplete()
         // update results

@@ -7,15 +7,15 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class CheckoutAdditionalInput extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
   }
 
   /**
@@ -23,10 +23,9 @@ export default class CheckoutAdditionalInput extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+  shouldRenderCSS () {
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
-
 
   /**
    * renders the css

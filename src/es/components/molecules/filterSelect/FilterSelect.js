@@ -27,6 +27,21 @@ export default class filterSelect extends Shadow() {
         cancelable: true,
         composed: true
       }))
+    this.translationPromise = new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-translations',
+        {
+          detail: {
+            resolve
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
+      const showPromises = []
+    })
   }
 
   disconnectedCallback () {
@@ -34,7 +49,7 @@ export default class filterSelect extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   renderCSS () {
@@ -69,13 +84,13 @@ export default class filterSelect extends Shadow() {
   }
 
   getLastSelectedChild (filterItem) {
-    let lastSelectedChild = null;
+    let lastSelectedChild = null
     if (filterItem.selected && (!filterItem.children || filterItem.children.length === 0)) return filterItem
     if (filterItem.children) {
-        for (let child of filterItem.children) {
-            let result = this.getLastSelectedChild(child)
-            if (result) lastSelectedChild = result
-        }
+      for (const child of filterItem.children) {
+        const result = this.getLastSelectedChild(child)
+        if (result) lastSelectedChild = result
+      }
     }
 
     return lastSelectedChild
@@ -85,23 +100,40 @@ export default class filterSelect extends Shadow() {
     this.fetchModules([{
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
       name: 'o-grid'
-    }, {
+    },
+    {
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/doubleButton/DoubleButton.js`,
       name: 'm-double-button'
-    }, {
+    },
+    {
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
       name: 'a-icon-mdx'
-    }, {
+    },
+    {
+      path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+      name: 'm-dialog'
+    },
+    {
       path: `${this.importMetaUrl}../../atoms/button/Button.js`,
       name: 'ks-a-button'
+    },
+    {
+      path: `${this.importMetaUrl}../../controllers/autoComplete/AutoComplete.js`,
+      name: 'ks-c-auto-complete'
+    },
+    {
+      path: `${this.importMetaUrl}../../molecules/autoCompleteList/AutoCompleteList.js`,
+      name: 'ks-m-auto-complete-list'
     }]).then(() => {
-      fetch.then(response => {
-        const filterData = response.filters
+      Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
+        const filterData = response?.filters
+        // const searchTerm = response.searchText
 
         this.html = ''
+
+        // loop through the filter data and generate the filter select
         filterData.forEach((filterItem) => {
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-
             let childItems = ''
             if (filterItem.typ === 'multi') {
               const selectedChildren = filterItem.children.filter(child => child.selected)
@@ -132,6 +164,21 @@ export default class filterSelect extends Shadow() {
             }
           }
         })
+
+        // render search button
+        if (response.searchText) {
+          this.html = /* html */`
+            <m-double-button namespace="double-button-default-" width="100%">
+              <ks-a-button namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>
+                <span part="label1">${response.searchText}</span>
+                <span part="label2" dynamic></span>
+              </ks-a-button>
+              <ks-a-button search-filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter">
+                <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+              </ks-a-button>
+            </m-double-button>
+          `
+        }
       })
     })
   }

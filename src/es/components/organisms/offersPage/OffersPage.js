@@ -15,8 +15,9 @@ export default class OffersPage extends Shadow() {
     this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
+        this.searchTerm = data.searchText
         const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-        bodySection.shadowRoot.querySelector('#pagination').style.display = data.ppage === -1 ? 'none': 'block'
+        bodySection.shadowRoot.querySelector('#pagination').style.display = data.ppage === -1 ? 'none' : 'block'
 
         // Set Sort
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
@@ -304,7 +305,7 @@ export default class OffersPage extends Shadow() {
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
           ${this.hasAttribute('auto-complete-disabled') ? ' disabled' : ''} 
         >
-          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
+          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog">
             <div class="container">
               <a-input
                 inputid="offers-page-input-search"
@@ -391,7 +392,7 @@ export default class OffersPage extends Shadow() {
             </m-dialog>
         </ks-c-auto-complete-location>
       </div>`
-    
+
     const searchInOverlay = this.hasAttribute('without-search-in-overlay') ? '' : /* html */`
       <ks-c-auto-complete
         input-change="search-change"
@@ -437,15 +438,14 @@ export default class OffersPage extends Shadow() {
         </m-dialog>
       </ks-c-auto-complete>
     `
-
     return /* html */ `
-        ${this.eventDetailURL ? `<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
+        ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
               <o-grid namespace="grid-12er-">
                 <section>
                   ${this.hasAttribute('no-search-tab')
-                    ? `<div col-lg="12" col-md="12" col-sm="12">
+                    ? /* html */`<div col-lg="12" col-md="12" col-sm="12">
                         <ks-a-with-facet-counter></ks-a-with-facet-counter>
                       </div>`
                     : ''}
@@ -475,7 +475,7 @@ export default class OffersPage extends Shadow() {
                       </div>
                   </div>
                   <div class="container dialog-footer">
-                      <a-button id="close" namespace="button-secondary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
+                      <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
                       <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="${this.getTranslation('CourseList.OffersPlaceholder')}">${this.getTranslation('CourseList.OffersPlaceholder')}</ks-a-number-of-offers-button>
                   </div>
               </m-dialog>
@@ -488,9 +488,13 @@ export default class OffersPage extends Shadow() {
                       --button-secondary-border-radius: 999px;
                     }
                   </style>
+                  <!-- button to filter all -->
                   <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.getTranslation('CourseList.FilterAllPlaceholder')}
                   </ks-a-button>
+                  <!-- TODO: button to filter search -->
+                  
+                  <!-- buttons for selected filters -->
                   <ks-m-filter-select></ks-m-filter-select>
                 </section>
               </o-grid>
@@ -511,7 +515,7 @@ export default class OffersPage extends Shadow() {
                 </ks-a-button>
               </ks-a-with-facet-pagination>
           </ks-o-body-section>
-        ${this.eventDetailURL ? '</ks-c-event-detail>' : ''}
+        ${this.eventDetailURL ? /* html */'</ks-c-event-detail>' : ''}
     `
   }
 

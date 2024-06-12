@@ -8,16 +8,16 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @class CheckoutBookedOffer
 * @type {CustomElementConstructor}
 */
-export default class CheckoutBoxWrapper extends Shadow()  {
-  constructor(options = {}, ...args) {
+export default class CheckoutBoxWrapper extends Shadow() {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
   }
 
   /**
@@ -25,7 +25,7 @@ export default class CheckoutBoxWrapper extends Shadow()  {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
   }
 

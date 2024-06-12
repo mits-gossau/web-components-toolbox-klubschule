@@ -79,7 +79,7 @@ export default class TileList extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**
@@ -309,7 +309,7 @@ export default class TileList extends Shadow() {
           </div>
           ${data.sort !== 2 ? /* html */ `
             <div class="o-tile-list__middle">
-              ${data.location?.name 
+              ${data.location?.name
                 ? /* html */`
                 <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
                 `
@@ -399,7 +399,7 @@ export default class TileList extends Shadow() {
 
   renderTile (tileData, add = false) {
     this.ppage = tileData.ppage || this.ppage
-    this.loadMore.style.display = tileData.ppage === -1 ? 'none': 'flex'
+    this.loadMore.style.display = tileData.ppage === -1 ? 'none' : 'flex'
     const tileString = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
       // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
       tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
