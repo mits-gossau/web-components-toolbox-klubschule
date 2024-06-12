@@ -73,8 +73,8 @@ export default class WithFacet extends Shadow() {
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
         this.filters = []
-        const filter = this.constructFilterItem(event)
-        if (filter) this.filters.push(filter)
+        // const filter = this.constructFilterItem(event)
+        // if (filter) this.filters.push(filter)
 
         // if there is an initial filter set (e.g. for events) we want to keep it
         if (initialFiltersAsString?.length) {
@@ -181,45 +181,7 @@ export default class WithFacet extends Shadow() {
                   this.params.set('q', json.searchText)
                 }
 
-                // 
-                let paramsObj = {}
-                this.params.forEach((value, key) => {
-                    paramsObj[key] = value.split('-')
-                })
-                console.log(paramsObj)
-
-                // url filter kung fu
-                json.filters.forEach(filterItem => {
-                  // console.log(filterItem)
-
-                  // check if key exists in filterItem as urlpara
-                  for (const key in paramsObj) {
-                    if (paramsObj.hasOwnProperty(key)) {
-                      if (filterItem.urlpara && filterItem.urlpara.includes(key)) {
-                        // console.log(`Good catch: --> ${key} exists in filterItem as urlpara`);
-                      }
-                    }
-                  }
-
-
-
-          
-
-
-
-
-
-
-
-              
-
-                    
-                    
-
-                   
-
-                  WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-                })
+                // TODO: @Alex - url kung fu
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -292,7 +254,7 @@ export default class WithFacet extends Shadow() {
     }
 
     this.popstateListener = event => {
-      this.params = this.catchURLParams()
+      this.params = new URLSearchParams(self.location.search)
       this.requestWithFacetListener()
     }
   }
@@ -311,109 +273,6 @@ export default class WithFacet extends Shadow() {
     this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.removeEventListener('request-locations', this.requestLocations)
     self.removeEventListener('popstate', this.popstateListener)
-  }
-
-  catchURLParams () {
-    return new URLSearchParams(self.location.search)
-  }
-
-  updateURLParams () {
-    if (this.params) {
-      const entriesWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-
-      entriesWithUnderscore.forEach(([key, value]) => {
-        const [urlparaKey, idKey] = key.split('_')
-        const children = []
-
-        value.split(',').forEach(value => {
-          const [urlparaValue, idValue] = value.split('_')
-
-          children.push(`{
-              "urlpara": "${urlparaValue}",
-              "id": "${idValue}",
-              "selected": true
-            }`)
-        })
-
-        const filter = (`{
-            "urlpara": "${urlparaKey}",
-            "id": "${idKey}",
-            "selected": true,
-            "children": [${children.join(',')}]
-          }`)
-
-        this.filters.push(filter)
-      })
-    }
-  }
-
-  removeAllFilterParamsFromURL () {
-    if (this.params) {
-      const keys = [...this.params.keys()]
-
-      keys.forEach(key => {
-        if (key.includes('_')) {
-          this.params.delete(key)
-        }
-      })
-
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    }
-  }
-
-  removeFilterParamsFromURL (filterParent) {
-    if (this.params) {
-      this.params.delete(`${filterParent}`)
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    }
-  }
-
-  constructFilterItem (event) {
-    const filterItem = event?.detail?.wrapper?.filterItem
-
-    return filterItem
-      ? `{
-        "children": [
-          ${filterItem.children.map(child => {
-            const count = child.count ? `(${child.count})` : ''
-            const label = count ? `${child.label} ${count}` : child.label
-            const hasSameLabel = label.trim() === event.detail?.target.label.trim()
-            const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
-            return `{
-              ${child.count ? `"count": ${child.count},` : ''}
-              ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
-              "hasChilds": ${child.hasChilds},
-              "id": "${child.id}",
-              "label": "${child.label}",
-              ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
-              ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
-              "selected": ${hasSameLabel
-                ? isCheckedNullOrUndefined
-                  ? (child.selected || false)
-                  : event.detail.target.checked
-                : (child.selected || false)},
-              ${child.sort ? `"sort": ${child.sort},` : ''}
-              ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
-              ${child.typ ? `"typ": "${child.typ}",` : ''}
-              "urlpara": "${child.urlpara}"
-            }`
-          })}
-        ],
-        ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
-        ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
-        ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
-        ${filterItem.id ? `"id": "${filterItem.id}",` : ''}
-        ${filterItem.label ? `"label": "${filterItem.label}",` : ''}
-        ${filterItem.options ? `"options": ${filterItem.options},` : ''}
-        ${filterItem.partitionKey ? `"partitionKey": "${filterItem.partitionKey}",` : ''}
-        ${filterItem.rowKey ? `"rowKey": "${filterItem.rowKey}",` : ''}
-        ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
-        ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
-        ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
-        ${filterItem.urlpara ? `"urlpara": "${filterItem.urlpara}",` : ''}
-        "visible": ${filterItem.visible || true}
-      }`
-      : ''
   }
 
   static historyPushState (...args) {

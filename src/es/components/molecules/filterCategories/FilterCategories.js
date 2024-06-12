@@ -206,7 +206,7 @@ export default class FilterCategories extends Shadow() {
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-      if (filterItem.id === "13") {
+      if (filterItem.id === "13") { // center filters
         Array.from(this.generateCenterFilter(filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
       } else {
         filterItem.children.forEach(child => {
