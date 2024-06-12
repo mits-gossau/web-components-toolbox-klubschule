@@ -14,7 +14,7 @@
             <ks-m-checkout-box-wrapper>
                 <ks-m-info-list status="{'code': '1', 'label': 'Garantiert Durchgeführt'}">
                     <div>
-                        <ks-a-heading tag="h2" style-as="h3">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
+                        <ks-a-heading tag="h2"style-as="h3">Badminton GU Fortgeschrittene 6 TN</ks-a-heading>
                         <div class="list-wrapper">
                             <ul>
                                 <li class="js-status">
@@ -126,8 +126,7 @@
                     <ks-a-heading tag="h2" style-as="h3">Zusätzliche Angaben zur Buchung</ks-a-heading>
                     <div>
                         <label for="additional-informations">Ihre Angabe</label>
-                        <textarea id="additional-informations" live-input-validation="true" rows="4"
-                            maxlength="50"></textarea>
+                        <textarea id="additional-informations" live-input-validation="true" rows="4" maxlength="50"></textarea>
                     </div>
                 </div>
             </ks-m-checkout-box-wrapper>
@@ -144,37 +143,9 @@
                             <strong>
                                 Zahlungsart<br><br>
                             </strong>
-                            Bezahlung per Rechnung<br>
+                            Bezahlung durch Firma<br>
                         </span>
                     </div>
-
-                    <a class="spacing-y" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
-
-                    <div>
-                        <span><strong>
-                                Rechnungsempfänger<br><br>
-                                Herr Hans Muster<br>
-                                Acme GmbH<br>
-                            </strong></span>
-                        <span>
-                            Beispielstrasse 12, 3. OG<br>
-                            8001 Zürich<br>
-                            Schweiz
-                        </span>
-                    </div>
-
-                    <div class="flex info-wrapper">
-                        <span>
-                            <strong>
-                                E-Mail
-                            </strong>
-                        </span>
-                        <span>
-                            hans.muster@beispiel.ch
-                        </span>
-                    </div>
-
-                    <a class="spacing-top" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
                 </div>
                 <!-- /Rechnungsempfänger -->
 
@@ -199,6 +170,38 @@
             </ks-m-checkout-box-wrapper>
             <!-- /2 column wrapper -->
 
+            <!-- Firmenangaben -->
+            <ks-m-checkout-box-wrapper>
+                <div>
+                    <ks-a-heading tag="h2" style-as="h3">Firmenangaben</ks-a-heading>
+                    <div>
+                        <span>
+                            Division<br>
+                            Abteilung<br>
+                            Kostenstelle / OE<br>
+                            Betriebsnummer<br>
+                            Info für die Rechnung<br>
+                            Zusatzfeld 1<br>
+                            Zusatzfeld 2
+                        </span>
+                    </div>
+
+                    <div class="flex info-wrapper">
+                        <span>
+                            <strong>
+                                E-Mail
+                            </strong>
+                        </span>
+                        <span>
+                            hans.muster@beispiel.ch
+                        </span>
+                    </div>
+
+                    <a class="spacing-top" href="https://www.migros.ch/en" target="_self">Angaben ändern</a>
+                </div>
+            </ks-m-checkout-box-wrapper>
+            <!-- /Firmenangaben -->
+
             <!-- Newsletter -->
             <ks-m-checkout-box-wrapper>
                 <div>
@@ -209,15 +212,14 @@
                                 <div class="control">
                                     <label for="cb-01">Ja, ich möchte regelmässig über aktuelle Angebote der Klubschule
                                         Migros informiert werden.</label>
-                                    <input id="cb-01" name="cb-01" type="checkbox">
+                                        <input id="cb-01" name="cb-01" type="checkbox">
                                     <div class="box">
                                         <a-icon-mdx icon-name="Check" size="1.25em" rotate="0"
                                             class="icon-right"></a-icon-mdx>
                                     </div>
                                 </div>
                                 <div class="message">
-                                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
-                                        rotate="0" class="icon-right"
+                                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em" rotate="0" class="icon-right"
                                         new-error-message-reference-point="true"></a-icon-mdx>
                                 </div>
                             </div>
@@ -244,7 +246,7 @@
                         Lehrperson über Ihren Gesundheitszustand zu informieren. 
                     </span>
                     <!-- Optional Zusatzinfo Fitnesskurs -->
-
+                     
                     <div class="flex">
                         <div>
                             <ks-a-checkbox mode="false" namespace="checkbox-default-">
@@ -266,8 +268,7 @@
                                         </div>
                                     </div>
                                     <div class="message">
-                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
-                                            rotate="0" class="icon-right"
+                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em" rotate="0" class="icon-right"
                                             new-error-message-reference-point="true"></a-icon-mdx>
                                     </div>
                                 </div>
@@ -285,7 +286,12 @@
                                 </div>
                             </div>
 
-                            <ks-a-button big type="submit" mode="false" namespace="button-primary-" color="secondary">
+                            <ks-a-button 
+                                big 
+                                type="submit" mode="false"
+                                namespace="button-primary-" 
+                                color="secondary"
+                            >
                                 Jetzt verbindlich buchen
                             </ks-a-button>
                         </div>

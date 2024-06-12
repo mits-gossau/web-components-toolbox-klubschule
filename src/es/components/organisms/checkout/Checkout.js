@@ -39,7 +39,7 @@ export default class Checkout extends Shadow() {
         this.dispatchEvent(new CustomEvent('request-checkout-configuration',
           {
             detail: {
-              id: changeEvent.currentTarget.id,
+              id: changeEvent.currentTarget.dataset.lehrmitttelId,
               value: changeEvent.currentTarget.value
             },
             bubbles: true,

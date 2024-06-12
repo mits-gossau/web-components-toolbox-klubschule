@@ -24,7 +24,7 @@ export default class Buttons extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return this.hasAttribute('id') ? !this.root.querySelector(`:host > style[_css], #${this.getAttribute('id')} > style[_css]`) : !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
   }
 
   /**
@@ -42,6 +42,7 @@ export default class Buttons extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host .buttons-container {
+        --border-color-secondary: var(--button-secondary-border-color, var(--color-secondary));
         display: flex;
         gap: 1rem;
       }
