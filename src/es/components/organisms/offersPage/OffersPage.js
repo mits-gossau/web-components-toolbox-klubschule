@@ -305,7 +305,7 @@ export default class OffersPage extends Shadow() {
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
           ${this.hasAttribute('auto-complete-disabled') ? ' disabled' : ''} 
         >
-          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
+          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog">
             <div class="container">
               <a-input
                 inputid="offers-page-input-search"

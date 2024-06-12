@@ -190,13 +190,13 @@ export default class WithFacet extends Shadow() {
 
                 // url filter kung fu
                 json.filters.forEach(filterItem => {
-                  console.log(filterItem)
+                  // console.log(filterItem)
 
                   // check if key exists in filterItem as urlpara
                   for (const key in paramsObj) {
                     if (paramsObj.hasOwnProperty(key)) {
                       if (filterItem.urlpara && filterItem.urlpara.includes(key)) {
-                        console.log(`Good catch: --> ${key} exists in filterItem as urlpara`);
+                        // console.log(`Good catch: --> ${key} exists in filterItem as urlpara`);
                       }
                     }
                   }

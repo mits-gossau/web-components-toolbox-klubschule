@@ -27,6 +27,21 @@ export default class filterSelect extends Shadow() {
         cancelable: true,
         composed: true
       }))
+    this.translationPromise = new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-translations',
+        {
+          detail: {
+            resolve
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
+      const showPromises = []
+    })
   }
 
   disconnectedCallback () {
@@ -110,8 +125,8 @@ export default class filterSelect extends Shadow() {
       path: `${this.importMetaUrl}../../molecules/autoCompleteList/AutoCompleteList.js`,
       name: 'ks-m-auto-complete-list'
     }]).then(() => {
-      fetch.then(response => {
-        const filterData = response.filters
+      Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
+        const filterData = response?.filters
         // const searchTerm = response.searchText
 
         this.html = ''
@@ -150,6 +165,21 @@ export default class filterSelect extends Shadow() {
             }
           }
         })
+
+        // render search button
+        if (response.searchText) {
+          this.html = /* html */`
+            <m-double-button namespace="double-button-default-" width="100%">
+              <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>
+                <span part="label1">${response.searchText}</span>
+                <span part="label2" dynamic></span>
+              </ks-a-button>
+              <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter">
+                <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+              </ks-a-button>
+            </m-double-button>
+          `
+        }
       })
     })
   }
