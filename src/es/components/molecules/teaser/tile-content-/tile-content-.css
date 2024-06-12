@@ -108,3 +108,40 @@
     padding: 1rem .5rem;
   }
 }
+
+/* brands */
+:host([brand=ibaw]) {
+  --teaser-tile-content-headline-font-family: var(--mdx-sys-font-flex-custom2-font-family);
+  --teaser-tile-content-headline-font-size: var(--mdx-sys-font-flex-custom2-font-size);
+  --teaser-tile-content-headline-font-weight: var(--mdx-sys-font-flex-custom2-font-weight);
+  --teaser-tile-content-headline-line-height: var(--mdx-sys-font-flex-custom2-line-height);
+}
+
+:host([brand=ibaw][color=ibaw-turquoise]) {
+  --background-color-hover: var(--mdx-base-color-ibaw-light-blue-600, #32DED5);
+}
+
+:host([brand=ibaw]) figure figcaption > strong:first-child,
+:host([brand=ibaw]) article > div > strong:first-child {
+  clip-path: polygon(0% 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%, 0% 0%);
+
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  width: fit-content;
+  padding-right: calc(var(--mdx-sys-spacing-fix-2xs) + 8px);
+  padding-left: var(--mdx-sys-spacing-fix-2xs);
+  color: #fff;
+  background: var(--color-${this.getAttribute('color')}, #00A2AD);
+}
+
+:host([brand=ibaw]) figure,
+:host([brand=ibaw]) article {
+  --text-color-hover: black;
+}
+
+:host([brand=ibaw]) figure:hover figcaption > strong:first-child,
+:host([brand=ibaw]) article:hover > div > strong:first-child {
+  background: #fff;
+  color: var(--background-color-hover);
+}
