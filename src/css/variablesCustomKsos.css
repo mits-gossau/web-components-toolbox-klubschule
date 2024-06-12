@@ -66,4 +66,11 @@
   --font-family-bold: "Corporate S", Helvetica, Arial, sans-serif;
   --font-family-secondary: "Corporate S", Helvetica, Arial, sans-serif;
   --font-family: "Corporate S", Helvetica, Arial, sans-serif;
+
+  --footer-default-column-border-color-custom: var(--mdx-sys-color-brand-neutral-500);
+  --footer-default-column-border-width-custom: 1px;
+  --footer-default-legal-links-border-custom: var(--mdx-sys-color-brand-neutral-500);
+
+  --footer-default-invert-background-color-custom: var(--mdx-sys-color-accent-6-default);
+  --footer-default-legal-background-color-custom: var(--mdx-sys-color-accent-6-default);
 }

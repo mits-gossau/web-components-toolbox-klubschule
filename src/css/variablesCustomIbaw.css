@@ -49,4 +49,6 @@
   --font-family-bold: "DIN 2014", Helvetica, Arial, sans-serif;
   --font-family-secondary: "DIN 2014", Helvetica, Arial, sans-serif;
   --font-family: "DIN 2014", Helvetica, Arial, sans-serif;
+
+  /* brand exceptions for footer are handled via brand attribute and custom styling */
 }
