@@ -4,7 +4,8 @@
     --checkbox-default-color: #0053A6;
     --checkbox-default-padding-top: var(--mdx-comp-checkbox-padding-vertical-default);
     --checkbox-default-padding-bottom: var(--mdx-comp-checkbox-padding-vertical-default);
-    --checkbox-default-padding-right: var(--mdx-comp-checkbox-padding-horizontal-default);
+    --checkbox-default-padding-right: var(--mdx-comp-checkbox-padding-horizontal-default); 
+    --checkbox-default-padding-left: calc(var(--mdx-comp-checkbox-padding-horizontal-default) + var(--mdx-comp-checkbox-sizing-ellipse));
     --checkbox-default-background: var(--mdx-comp-checkbox-unchecked-background-color-hover);
     --button-secondary-icon-right-margin: 0;
     --checkbox-default-error-color: var(--mdx-comp-error-message-color-default);
