@@ -170,11 +170,11 @@ export default class filterSelect extends Shadow() {
         if (response.searchText) {
           this.html = /* html */`
             <m-double-button namespace="double-button-default-" width="100%">
-              <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>
+              <ks-a-button namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>
                 <span part="label1">${response.searchText}</span>
                 <span part="label2" dynamic></span>
               </ks-a-button>
-              <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter">
+              <ks-a-button search-filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
               </ks-a-button>
             </m-double-button>
