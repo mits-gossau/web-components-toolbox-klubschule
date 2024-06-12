@@ -1,9 +1,5 @@
 :host {
     --system-notification-neutral-background-color: var(--mdx-sys-color-neutral-subtle1);
     --system-notification-neutral-icon-border-color: var(--mdx-sys-color-neutral-bold4);
-    --system-notification-neutral-icon-size: 1em;
     --icon-mdx-ks-color: var(--mdx-sys-color-neutral-default);
-
-    --icon-mdx-ks-svg-height: var(--system-notification-neutral-icon-size);
-    --icon-mdx-ks-svg-width: var(--system-notification-neutral-icon-size);
 }

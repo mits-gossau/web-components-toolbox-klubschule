@@ -12,13 +12,10 @@
     --system-notification-default-item-border-radius: var(--mdx-sys-border-radius-sm);
     --system-notification-default-item-width: 100%;
     --system-notification-default-typography: var(--mdx-sys-font-fix-body2);
-    --system-notification-error-icon-size: 1em;
 
     --underline-text-decoration: var(--mdx-base-font-text-decoration-underline);
     --underline-text-decoration-hover: var(--underline-text-decoration);
     --underline-after-height: 0;
-    --icon-mdx-ks-svg-height: var(--system-notification-error-icon-size);
-    --icon-mdx-ks-svg-width: var(--system-notification-error-icon-size);
 
     text-decoration-line: unset;
     --p-margin: 0;
