@@ -417,9 +417,9 @@ export default class Appointments extends HTMLElement {
 
   /**
    * Updates the 'selected' property of an item in a list based on a specified key and match criteria.
-   * @param {Array.<object>} list - Array of objects that you want to search through to find an object with a specific key-value pair.
+   * @param {Array.<object>} list - Array of objects to search through to find an object with a specific key-value pair.
    * @param {string} key - Used to specify the property key in the objects within the `list` array that will be used for comparison with the `match` parameter.
-   * @param {number} match - Used to specify the value that you want to match against the `key` in the `list` array.
+   * @param {number} match - Used to specify the value to match against the `key` in the `list` array.
    * @param {boolean} selected - Boolean value that indicates whether the item with the specified `key` and `match` should be selected or not.
    */
   syncSelectedFilter (list, key, match, selected) {
