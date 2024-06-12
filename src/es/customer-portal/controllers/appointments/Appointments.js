@@ -423,7 +423,7 @@ export default class Appointments extends HTMLElement {
    * @param {boolean} selected - Boolean value that indicates whether the item with the specified `key` and `match` should be selected or not.
    */
   syncSelectedFilter (list, key, match, selected) {
-    const newDayCode = list.find(item => item[key] === match)
-    if (newDayCode) newDayCode.selected = selected
+    const listItem = list.find(item => item[key] === match)
+    if (listItem) listItem.selected = selected
   }
 }
