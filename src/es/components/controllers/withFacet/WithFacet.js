@@ -101,7 +101,7 @@ export default class WithFacet extends Shadow() {
 
         // keep the last search location inside initialRequestObj
         if (event?.detail?.key === 'location-search') {
-          if (!!event.detail.lat && !!event.detail.lng ) {
+          if (!!event.detail.lat && !!event.detail.lng) {
             initialRequestObj.clat = event.detail.lat
             initialRequestObj.clong = event.detail.lng
           } else {
@@ -122,7 +122,7 @@ export default class WithFacet extends Shadow() {
           "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
           "searchcontent": ${!this.hasAttribute('no-search-tab')}
           ${(hasSorting = event?.detail?.key === 'sorting' && !!event.detail.id) ? `,"sorting": "${event.detail.id}"` : ''}
-          ${hasSearchTerm ? `,"searchText": "${event?.detail?.key === 'input-search' ? event.detail.value : this.params.get('q')}"`: ''}
+          ${hasSearchTerm ? `,"searchText": "${event?.detail?.key === 'input-search' ? event.detail.value : this.params.get('q')}"` : ''}
           ${(hasSearchLocation = !!initialRequestObj.clat) ? `,"clat": "${initialRequestObj.clat}"` : ''}
           ${(hasSearchLocation = !!initialRequestObj.clong) ? `,"clong": "${initialRequestObj.clong}"` : ''}
         }`
@@ -130,9 +130,9 @@ export default class WithFacet extends Shadow() {
       }
 
       const LanguageEnum = {
-        'd': 'de',
-        'f': 'fr',
-        'i': 'it'
+        d: 'de',
+        f: 'fr',
+        i: 'it'
       }
 
       let requestInit = {}
@@ -266,7 +266,7 @@ export default class WithFacet extends Shadow() {
     this.addEventListener('request-locations', this.requestLocations)
     self.addEventListener('popstate', this.popstateListener)
   }
-  
+
   disconnectedCallback () {
     this.removeEventListener('request-with-facet', this.requestWithFacetListener)
     this.removeEventListener('reset-all-filters', this.requestWithFacetListener)

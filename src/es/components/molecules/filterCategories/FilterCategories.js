@@ -14,10 +14,10 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class FilterCategories extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-   
+
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
-    this.keepDialogOpenEventListener = event => {      
+    this.keepDialogOpenEventListener = event => {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
     }
   }
@@ -41,7 +41,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   renderCSS () {
@@ -79,7 +79,7 @@ export default class FilterCategories extends Shadow() {
       `
       region.children.forEach(center => {
         const count = center.count ? `(${center.count})` : ''
-        const disabled = center.disabled ? 'disabled' : ''    
+        const disabled = center.disabled ? 'disabled' : ''
         const checked = center.selected ? 'checked' : ''
         const visible = center.visible ? 'visible' : ''
         centerFilter += /* html */`
@@ -96,10 +96,10 @@ export default class FilterCategories extends Shadow() {
     return div.children
   }
 
-  generateFilterElement(child, parentItem) {
+  generateFilterElement (child, parentItem) {
     const subNav = []
     const count = child.count ? `(${child.count})` : ''
-    const disabled = child.disabled ? 'disabled' : ''    
+    const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
     const isMultipleChoice = parentItem.typ === 'multi'
@@ -129,15 +129,15 @@ export default class FilterCategories extends Shadow() {
   }
 
   getLastSelectedChild (filterItem) {
-    let lastSelectedChild = null;
+    let lastSelectedChild = null
     if (!filterItem.children || filterItem.children.length === 0) return filterItem
-    if (filterItem.children) {      
-        for (let child of filterItem.children) {
-            if (child.selected) {
-              let result = this.getLastSelectedChild(child)
-              if (result) lastSelectedChild = result
-            }
+    if (filterItem.children) {
+      for (const child of filterItem.children) {
+        if (child.selected) {
+          const result = this.getLastSelectedChild(child)
+          if (result) lastSelectedChild = result
         }
+      }
     }
 
     return lastSelectedChild
@@ -192,7 +192,7 @@ export default class FilterCategories extends Shadow() {
       </m-dialog>
     `
 
-    return { 
+    return {
       navLevelItem: div.children[0],
       // @ts-ignore
       subLevel: div.querySelector('m-dialog')?.root.querySelector('.sub-level')
@@ -206,13 +206,13 @@ export default class FilterCategories extends Shadow() {
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-      if (filterItem.id === "13") { // center filters
+      if (filterItem.id === '13') { // center filters
         Array.from(this.generateCenterFilter(filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
       } else {
         filterItem.children.forEach(child => {
           if (child.children && child.children.length > 0) {
             // recursively call the function for any nested children
-            this.generateFilters(response, child, generatedNavLevelItem.subLevel) 
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel)
           } else {
             this.generateFilterElement(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
           }

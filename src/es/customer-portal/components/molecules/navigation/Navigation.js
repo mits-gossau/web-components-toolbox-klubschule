@@ -40,7 +40,7 @@ export default class Navigation extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   shouldRenderHTML () {

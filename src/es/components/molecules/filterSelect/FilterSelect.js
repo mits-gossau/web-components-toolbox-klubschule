@@ -49,7 +49,7 @@ export default class filterSelect extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   renderCSS () {
@@ -84,13 +84,13 @@ export default class filterSelect extends Shadow() {
   }
 
   getLastSelectedChild (filterItem) {
-    let lastSelectedChild = null;
+    let lastSelectedChild = null
     if (filterItem.selected && (!filterItem.children || filterItem.children.length === 0)) return filterItem
     if (filterItem.children) {
-        for (let child of filterItem.children) {
-            let result = this.getLastSelectedChild(child)
-            if (result) lastSelectedChild = result
-        }
+      for (const child of filterItem.children) {
+        const result = this.getLastSelectedChild(child)
+        if (result) lastSelectedChild = result
+      }
     }
 
     return lastSelectedChild
@@ -100,11 +100,11 @@ export default class filterSelect extends Shadow() {
     this.fetchModules([{
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
       name: 'o-grid'
-    }, 
+    },
     {
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/doubleButton/DoubleButton.js`,
       name: 'm-double-button'
-    }, 
+    },
     {
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
       name: 'a-icon-mdx'
@@ -112,7 +112,7 @@ export default class filterSelect extends Shadow() {
     {
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
       name: 'm-dialog'
-    }, 
+    },
     {
       path: `${this.importMetaUrl}../../atoms/button/Button.js`,
       name: 'ks-a-button'
@@ -134,7 +134,6 @@ export default class filterSelect extends Shadow() {
         // loop through the filter data and generate the filter select
         filterData.forEach((filterItem) => {
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-
             let childItems = ''
             if (filterItem.typ === 'multi') {
               const selectedChildren = filterItem.children.filter(child => child.selected)

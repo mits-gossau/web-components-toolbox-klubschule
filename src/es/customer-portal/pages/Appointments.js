@@ -27,7 +27,7 @@ export default class AppointmentList extends Index {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   renderHTML () {

@@ -9,16 +9,16 @@ import CheckoutBookedOffer from '../checkoutBookedOffer/CheckoutBookedOffer.js'
 * @type {CustomElementConstructor}
 */
 export default class InfoList extends CheckoutBookedOffer {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
   }
 
   /**
@@ -26,8 +26,8 @@ export default class InfoList extends CheckoutBookedOffer {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`) 
+  shouldRenderCSS () {
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**
@@ -35,8 +35,8 @@ export default class InfoList extends CheckoutBookedOffer {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
-    return !this.root.querySelector(".js-status > *")
+  shouldRenderHTML () {
+    return !this.root.querySelector('.js-status > *')
   }
 
   /**
@@ -107,13 +107,12 @@ export default class InfoList extends CheckoutBookedOffer {
     `
   }
 
-
   /**
    * Render HTML
    * @returns Promise<void>
    */
-  renderHTML() {
-    this.root.querySelector(".js-status").innerHTML = /* html */ `
+  renderHTML () {
+    this.root.querySelector('.js-status').innerHTML = /* html */ `
       <img src="${this.statusData.iconPath}" />
       <span>${this.statusData.label}</span>
     `

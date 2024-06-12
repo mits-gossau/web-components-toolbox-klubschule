@@ -17,7 +17,7 @@ export default class OffersPage extends Shadow() {
         this.data = data
         this.searchTerm = data.searchText
         const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-        bodySection.shadowRoot.querySelector('#pagination').style.display = data.ppage === -1 ? 'none': 'block'
+        bodySection.shadowRoot.querySelector('#pagination').style.display = data.ppage === -1 ? 'none' : 'block'
 
         // Set Sort
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
@@ -392,7 +392,7 @@ export default class OffersPage extends Shadow() {
             </m-dialog>
         </ks-c-auto-complete-location>
       </div>`
-    
+
     const searchInOverlay = this.hasAttribute('without-search-in-overlay') ? '' : /* html */`
       <ks-c-auto-complete
         input-change="search-change"
@@ -515,7 +515,7 @@ export default class OffersPage extends Shadow() {
                 </ks-a-button>
               </ks-a-with-facet-pagination>
           </ks-o-body-section>
-        ${this.eventDetailURL ? /* html */`</ks-c-event-detail>` : ''}
+        ${this.eventDetailURL ? /* html */'</ks-c-event-detail>' : ''}
     `
   }
 
