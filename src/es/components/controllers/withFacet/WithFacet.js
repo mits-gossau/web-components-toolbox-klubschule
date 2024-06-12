@@ -110,8 +110,6 @@ export default class WithFacet extends Shadow() {
           }
         }
 
-        this.updateURLParams()
-
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
         let hasSearchLocation = false
