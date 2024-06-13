@@ -11,5 +11,9 @@
     --checkbox-default-error-color: var(--mdx-comp-error-message-color-default);
     --checkbox-default-error-gap: var(--mdx-comp-checkbox-gap-container-error);
     --checkbox-default-error-font: var(--mdx-comp-error-message-font-default);
-    --checkbox-default-error-icon-gap: var(--mdx-comp-error-message-gap-icon-text-default)
+    --checkbox-default-error-icon-gap: var(--mdx-comp-error-message-gap-icon-text-default);
+    --checkbox-default-label-color: var(--mdx-comp-checkbox-checked-label-color-default);
+    --checkbox-default-label-font: var(--mdx-comp-checkbox-font-label);
+    --checkbox-default-hint-color: var(--mdx-comp-inputfield-hint-counter-color-focus);
+    --checkbox-default-hint-font: var(--mdx-comp-inputfield–font-supporting);
 }
