@@ -26,12 +26,12 @@ self.Environment = {
     switch (self.Environment.language) {
       case 'fr-CH':
         return {
-          baseAPI: this.isTestingEnv ? 'https://qual.ecole-club.ch/' : 'https://qual.ecole-club.ch/',
+          baseAPI: this.isTestingEnv ? 'https://qual.ecole-club.ch' : 'https://qual.ecole-club.ch',
           renewSearch: 'Cours/recherche@'
         }
       case 'it-CH':
         return {
-          baseAPI: this.isTestingEnv ? 'https://qual.scuola-club.ch/' : 'https://qual.scuola-club.ch/',
+          baseAPI: this.isTestingEnv ? 'https://qual.scuola-club.ch' : 'https://qual.scuola-club.ch',
           renewSearch: 'Corsi/ricerca@'
         }
       case 'de-CH':
@@ -58,7 +58,8 @@ self.Environment = {
           apiSubscriptions: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptions`,
           apiSubscriptionDetail: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscription`,
           apiSubscriptionPdf: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptionpdf`,
-          subscriptionRenewSearchLinkUrl: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/${this.getCustomerPortalBaseAPIUrlByLanguage().renewSearch}`
+          subscriptionRenewSearchLinkUrl: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/${this.getCustomerPortalBaseAPIUrlByLanguage().renewSearch}`,
+          coursePDF: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/coursepdf`
         }
       }
       default:

@@ -103,26 +103,14 @@ export default class Appointments extends HTMLElement {
           this.currentDialogFilterOpen = type
         }
 
-        // get day filter checkboxes
-        if (type === 'day') {
-          const newDayCode = appointmentsClone.filters.dayCodes.find(dayCode => dayCode.dayCode === Number(event.detail.target.value))
-          // sync checkbox selection
-          if (newDayCode) newDayCode.selected = event.detail.target.checked
-        }
+        // sync day filter checkboxes
+        if (type === 'day') this.syncSelectedFilter(appointmentsClone.filters.dayCodes, 'dayCode', Number(event.detail.target.value), event.detail.target.checked)
 
-        // get location filter checkboxes
-        if (type === 'location') {
-          const newLocationCode = appointmentsClone.filters.locations.find(location => location.locationId === Number(event.detail.target.value))
-          // sync checkbox selection
-          if (newLocationCode) newLocationCode.selected = event.detail.target.checked
-        }
+        // sync location filter checkboxes
+        if (type === 'location') this.syncSelectedFilter(appointmentsClone.filters.locations, 'locationId', Number(event.detail.target.value), event.detail.target.checked)
 
-        // get time filter checkboxes
-        if (type === 'time') {
-          const newTimeCode = appointmentsClone.filters.timeCodes.find(timeCode => timeCode.timeCode === Number(event.detail.target.value))
-          // sync checkbox selection
-          if (newTimeCode) newTimeCode.selected = event.detail.target.checked
-        }
+        // sync time filter checkboxes
+        if (type === 'time') this.syncSelectedFilter(appointmentsClone.filters.timeCodes, 'timeCode', Number(event.detail.target.value), event.detail.target.checked)
 
         // keep selected filters for next request
         this.lastFilters = structuredClone(appointmentsClone.filters)
@@ -425,5 +413,17 @@ export default class Appointments extends HTMLElement {
       month: '2-digit',
       day: '2-digit'
     }).format(dateString)
+  }
+
+  /**
+   * Updates the 'selected' property of an item in a list based on a specified key and match criteria.
+   * @param {Array.<object>} list - Array of objects to search through to find an object with a specific key-value pair.
+   * @param {string} key - Used to specify the property key in the objects within the `list` array that will be used for comparison with the `match` parameter.
+   * @param {number} match - Used to specify the value to match against the `key` in the `list` array.
+   * @param {boolean} selected - Boolean value that indicates whether the item with the specified `key` and `match` should be selected or not.
+   */
+  syncSelectedFilter (list, key, match, selected) {
+    const listItem = list.find(item => item[key] === match)
+    if (listItem) listItem.selected = selected
   }
 }
