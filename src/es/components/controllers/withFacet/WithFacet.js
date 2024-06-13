@@ -273,9 +273,9 @@ export default class WithFacet extends Shadow() {
     self.removeEventListener('popstate', this.popstateListener)
   }
 
-  removeFilterParamsFromURL (filterParent) {
+  removeFilterParamsFromURL (key) {
     if (this.params) {
-      this.params.delete(`${filterParent}`)
+      this.params.delete(key)
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
