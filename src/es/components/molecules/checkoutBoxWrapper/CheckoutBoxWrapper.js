@@ -37,13 +37,14 @@ export default class CheckoutBoxWrapper extends Shadow() {
       :host {
         --total-width: var(--checkbox-wrapper-total-width, 400px);
         --background-color: var(--mdx-sys-color-neutral-on-default, white);
-        display: flex;
+        --any-display: flex;
         gap: var(--mdx-sys-spacing-fix-m);
       }
       :host .full-width {
-        width: 100vw;
+        position: relative;
+        left: calc((100% - var(--body-section-default-width)) / -2);
+        min-width: 100vw;
         max-width: var(--body-max-width);
-        margin-left: calc((100vw - var(--body-section-default-width, 86.666%)) / -2);
         margin-bottom: 0;
         padding: var(--mdx-sys-spacing-flex-large-m) calc((100vw - 86.66vw) / 2 + var(--mdx-sys-spacing-fix-m)) var(--mdx-sys-spacing-flex-large-l);
       }
@@ -73,6 +74,14 @@ export default class CheckoutBoxWrapper extends Shadow() {
         margin-bottom: var(--mdx-sys-spacing-fix-m);
         padding: var(--mdx-sys-spacing-fix-m);
         width: 100%;
+      }
+
+      :host(.ks-o-body-section__last-child) > div {
+        margin-bottom: 0;
+      }
+
+      :host(.ks-o-body-section__last-child) .full-width ks-a-checkbox {
+        width: 66.66%;
       }
 
       :host .flex {
@@ -177,10 +186,6 @@ export default class CheckoutBoxWrapper extends Shadow() {
         }
       }
       @media only screen and (min-width: 1441px) {
-        // :host .full-width {
-        //   min-width: 100vw;
-        //   margin-left: calc((100vw - 81.25vw) / -2);
-        // }
       }
     `
   }
