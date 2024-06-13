@@ -83,6 +83,10 @@ export default class CheckoutLayout extends Shadow() {
         margin-bottom: var(--mdx-sys-spacing-flex-l);
       }
 
+      :host ks-m-select + p {
+        margin: var(--mdx-sys-spacing-flex-large-xs) 0 !important;
+      }
+
       strong {
         font: var(--mdx-sys-font-fix-label2);
       }

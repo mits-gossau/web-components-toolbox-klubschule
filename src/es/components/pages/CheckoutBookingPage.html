@@ -5,11 +5,11 @@
 </p>
 <hr />
 
-<ks-o-body-section variant="default" background-color="var(--mdx-sys-color-accent-6-subtle1)"
-    id="with-facet-body-section" tabindex="0" aria-label="Section">
-    <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test"
-        method="POST" load-form-styles>
-        <form>
+<m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test" method="POST"
+    load-form-styles>
+    <form>
+        <ks-o-body-section variant="default" background-color="var(--mdx-sys-color-accent-6-subtle1)" no-margin-y
+            id="with-facet-body-section" tabindex="0" aria-label="Section" mode="false">
             <!-- booking informations  -->
             <ks-m-checkout-box-wrapper>
                 <ks-m-info-list status="{'code': '1', 'label': 'Garantiert Durchgeführt'}">
@@ -123,12 +123,19 @@
             <!-- textarea -->
             <ks-m-checkout-box-wrapper>
                 <div>
-                    <ks-a-heading tag="h2" style-as="h3">Zusätzliche Angaben zur Buchung</ks-a-heading>
-                    <div>
-                        <label for="additional-informations">Ihre Angabe</label>
-                        <textarea id="additional-informations" live-input-validation="true" rows="4"
-                            maxlength="50"></textarea>
-                    </div>
+                    <ks-a-input mode="false">
+                        <div class="wrap">
+                            <label for="textarea-01">Ihre Angaben</label>
+                            <textarea id="textarea-01" name="textarea-01" rows="4" cols="20" maxlength="150"></textarea>
+                            <div class="hint">
+                                <span></span>
+                                <div class="counter">
+                                    <span class="current">0</span>
+                                    <span class="max"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </ks-a-input>
                 </div>
             </ks-m-checkout-box-wrapper>
             <!-- /textarea -->
@@ -228,6 +235,9 @@
             <!-- /Newsletter -->
 
 
+        </ks-o-body-section>
+        <ks-o-body-section variant="default" no-margin-y mode="false">
+
             <!-- End -->
             <ks-m-checkout-box-wrapper>
                 <div class="full-width">
@@ -274,7 +284,7 @@
                             </ks-a-checkbox>
                         </div>
 
-                        <div class="submit-wrapper">
+                        <div>
                             <div class="flex total">
                                 <span>
                                     <a-translation data-trans-key="Checkout.Total"></a-translation>
@@ -284,16 +294,18 @@
                                     <span><a-translation data-trans-key="Checkout.Tax"></a-translation></span>
                                 </div>
                             </div>
-
-                            <ks-a-button big type="submit" mode="false" namespace="button-primary-" color="secondary">
-                                Jetzt verbindlich buchen
-                            </ks-a-button>
                         </div>
+                    </div>
+
+                    <div class="submit-wrapper">
+                        <ks-a-button big type="submit" mode="false" namespace="button-primary-" color="secondary">
+                            Jetzt verbindlich buchen
+                        </ks-a-button>
                     </div>
                 </div>
             </ks-m-checkout-box-wrapper>
             <!-- /End -->
+        </ks-o-body-section>
 
-        </form>
-    </m-simple-form-validation>
-</ks-o-body-section>
+    </form>
+</m-simple-form-validation>
