@@ -123,12 +123,21 @@
             <!-- textarea -->
             <ks-m-checkout-box-wrapper>
                 <div>
-                    <ks-a-heading tag="h2" style-as="h3">Zusätzliche Angaben zur Buchung</ks-a-heading>
-                    <div>
-                        <label for="additional-informations">Ihre Angabe</label>
-                        <textarea id="additional-informations" live-input-validation="true" rows="4" maxlength="50"></textarea>
-                    </div>
-                </div>
+                    <ks-a-input mode="false">
+                        <div class="wrap">
+                            <label for="textarea-01">Ihre Angaben</label>
+                            <textarea id="textarea-01" name="textarea-01" rows="4" cols="20" maxlength="150"
+                            ></textarea>
+                            <div class="hint">
+                                <span></span>
+                                <div class="counter">
+                                    <span class="current">0</span>
+                                    <span class="max"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </ks-a-input>
+                </div>            
             </ks-m-checkout-box-wrapper>
             <!-- /textarea -->
 

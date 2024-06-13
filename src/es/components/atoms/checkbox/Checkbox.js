@@ -62,25 +62,16 @@ export default class Checkbox extends Shadow() {
         }
 
         :host label {
-          display: flex;
-          flex-direction: column;
           flex: 1;
           font-size: 1em;
           line-height: 1.25em;
           font-weight: 400;
-          color: var(--label-color);
-          font: var(--label-font);
           padding: 
               var(--padding-top)
               var(--padding-right)
               var(--padding-bottom)
               calc(var(--padding-right) + 1.25em)
           ;
-        }
-
-        :host label span {
-          color: var(--hint-color);
-          font: var(--hint-font);
         }
           
         :host label a {
