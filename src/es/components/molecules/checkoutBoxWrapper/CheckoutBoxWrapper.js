@@ -185,8 +185,6 @@ export default class CheckoutBoxWrapper extends Shadow() {
           margin-top: 0;
         }
       }
-      @media only screen and (min-width: 1441px) {
-      }
     `
   }
 }
