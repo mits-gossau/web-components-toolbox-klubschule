@@ -27,3 +27,8 @@
 
     min-height: 100%;
 }
+
+:host([color=ibaw-lightblue]) {
+    --color: var(--mdx-sys-color-neutral-bold4);
+    color: var(--mdx-sys-color-neutral-bold4);
+}

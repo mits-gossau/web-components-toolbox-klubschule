@@ -83,6 +83,7 @@ export default class KsFooter extends Footer {
                 background-color: var(--legal-background-color);
                 text-align: center;
                 width: 33%;
+                border-left: var(--column-border-width) var(--column-border-color) solid;
             }
             :host footer>div:first-child>.footer-links>div>* {
                 text-align: center;
@@ -172,6 +173,8 @@ export default class KsFooter extends Footer {
                 }
                 :host footer>div:first-child .footer-links {
                     width: 100%;
+                    border-left: 0;
+                    border-bottom: var(--column-border-width) solid var(--column-border-color);
                 }
                 :host footer>div:first-child {
                     flex-direction: column-reverse;
