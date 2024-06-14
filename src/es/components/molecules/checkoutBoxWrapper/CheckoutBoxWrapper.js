@@ -41,12 +41,7 @@ export default class CheckoutBoxWrapper extends Shadow() {
         gap: var(--mdx-sys-spacing-fix-m);
       }
       :host .full-width {
-        position: relative;
-        left: calc((100% - var(--body-section-default-width)) / -2);
-        min-width: 100vw;
-        max-width: var(--body-max-width);
-        margin-bottom: 0;
-        padding: var(--mdx-sys-spacing-flex-large-m) calc((100vw - 86.66vw) / 2 + var(--mdx-sys-spacing-fix-m)) var(--mdx-sys-spacing-flex-large-l);
+        padding: var(--mdx-sys-spacing-flex-large-m) 0 var(--mdx-sys-spacing-flex-large-l);
       }
       :host .full-width > span > a {
         --a-font-size: var(--font-size, 16px);
@@ -166,10 +161,6 @@ export default class CheckoutBoxWrapper extends Shadow() {
         }
         :host .flex > span:first-child {
           max-width: 68.26%;
-        }
-        :host .full-width {
-          width: 100vw;
-          margin-left: -1rem;
         }
         :host .full-width > .flex {
           display: block;
