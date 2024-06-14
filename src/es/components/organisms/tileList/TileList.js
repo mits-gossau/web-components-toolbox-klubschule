@@ -292,7 +292,6 @@ export default class TileList extends Shadow() {
     const warnMandatory = 'data attribute requires: '
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     this.data = data
-    console.log(data, data.sort !== 2)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     this.html = /* HTML */`
     <div class="o-tile-list">

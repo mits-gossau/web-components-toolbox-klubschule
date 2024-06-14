@@ -60,7 +60,6 @@ export default class WithFacet extends Shadow() {
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
       const shouldResetFilter = event?.type === 'reset-filter'
       const shouldResetFilterFromFilterSelectButton = event?.detail?.this?.hasAttribute('filter')
-      const shouldResetSearchFromFilterSelectButton = event?.detail?.this?.hasAttribute('search-filter')
       let isNextPage = false
 
       if (event?.detail?.ppage && this.lastRequest) {
@@ -73,8 +72,8 @@ export default class WithFacet extends Shadow() {
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
         this.filters = []
-        // const filter = this.constructFilterItem(event)
-        // if (filter) this.filters.push(filter)
+        const filter = this.constructFilterItem(event)
+        if (filter) this.filters.push(filter)
 
         // if there is an initial filter set (e.g. for events) we want to keep it
         if (initialFiltersAsString?.length) {
@@ -85,23 +84,21 @@ export default class WithFacet extends Shadow() {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
           this.removeAllFilterParamsFromURL()
         }
+
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
           this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
         }
+
         if (shouldResetFilterFromFilterSelectButton) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
-        }
-        if (shouldResetSearchFromFilterSelectButton) {
-          initialRequestObj = Object.assign(initialRequestObj, { shouldResetSearchFromFilterSelectButton })
-          this.removeFilterParamsFromURL('q')
         }
 
         // TODO: @Alex, the location and location name has to be kept in the URL
 
         // keep the last search location inside initialRequestObj
         if (event?.detail?.key === 'location-search') {
-          if (!!event.detail.lat && !!event.detail.lng) {
+          if (!!event.detail.lat && !!event.detail.lng ) {
             initialRequestObj.clat = event.detail.lat
             initialRequestObj.clong = event.detail.lng
           } else {
@@ -109,6 +106,8 @@ export default class WithFacet extends Shadow() {
             if (initialRequestObj.clong) delete initialRequestObj.clong
           }
         }
+
+        this.updateURLParams()
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
@@ -120,7 +119,7 @@ export default class WithFacet extends Shadow() {
           "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
           "searchcontent": ${!this.hasAttribute('no-search-tab')}
           ${(hasSorting = event?.detail?.key === 'sorting' && !!event.detail.id) ? `,"sorting": "${event.detail.id}"` : ''}
-          ${hasSearchTerm ? `,"searchText": "${event?.detail?.key === 'input-search' ? event.detail.value : this.params.get('q')}"` : ''}
+          ${hasSearchTerm ? `,"searchText": "${event?.detail?.key === 'input-search' ? event.detail.value : this.params.get('q')}"`: ''}
           ${(hasSearchLocation = !!initialRequestObj.clat) ? `,"clat": "${initialRequestObj.clat}"` : ''}
           ${(hasSearchLocation = !!initialRequestObj.clong) ? `,"clong": "${initialRequestObj.clong}"` : ''}
         }`
@@ -128,9 +127,9 @@ export default class WithFacet extends Shadow() {
       }
 
       const LanguageEnum = {
-        d: 'de',
-        f: 'fr',
-        i: 'it'
+        'd': 'de',
+        'f': 'fr',
+        'i': 'it'
       }
 
       let requestInit = {}
@@ -179,7 +178,48 @@ export default class WithFacet extends Shadow() {
                   this.params.set('q', json.searchText)
                 }
 
-                // TODO: @Alex - url kung fu
+                // url filter kung fu
+                // json.filters.forEach(filterItem => {
+                //   if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+                //     const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+                //     const selectedChildren = []
+
+                //     filterItem.children.forEach(child => {
+                //       // check if the child is already in the url params
+                //       const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
+
+                //       if (containsChild) {
+                //         selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
+                //       }
+
+                //       // if selected, add it to the url params
+                //       if (child.selected) {
+                //         if (!containsChild && !shouldResetAllFilters) {
+                //           selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
+                //         }
+
+                //         if (selectedChildren.length > 0) {
+                //           this.params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
+                //         }
+
+                //       // if unselected, remove it from the url params
+                //       } else {
+                //         if (containsChild) {
+                //           const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
+                //           selectedChildren.splice(index, 1)
+
+                //           this.params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
+
+                //           if (this.params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
+                //             this.params.delete(`${filterItem.urlpara}_${filterItem.id}`)
+                //           }
+                //         }
+                //       }
+                //     })
+                //     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+                //   }
+                // })
+                
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -252,7 +292,7 @@ export default class WithFacet extends Shadow() {
     }
 
     this.popstateListener = event => {
-      this.params = new URLSearchParams(self.location.search)
+      this.params = this.catchURLParams()
       this.requestWithFacetListener()
     }
   }
@@ -264,7 +304,7 @@ export default class WithFacet extends Shadow() {
     this.addEventListener('request-locations', this.requestLocations)
     self.addEventListener('popstate', this.popstateListener)
   }
-
+  
   disconnectedCallback () {
     this.removeEventListener('request-with-facet', this.requestWithFacetListener)
     this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
@@ -273,11 +313,107 @@ export default class WithFacet extends Shadow() {
     self.removeEventListener('popstate', this.popstateListener)
   }
 
-  removeFilterParamsFromURL (key) {
+  catchURLParams () {
+    return new URLSearchParams(self.location.search)
+  }
+
+  updateURLParams () {
     if (this.params) {
-      this.params.delete(key)
+      const entriesWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+
+      entriesWithUnderscore.forEach(([key, value]) => {
+        const [urlparaKey, idKey] = key.split('_')
+        const children = []
+
+        value.split(',').forEach(value => {
+          const [urlparaValue, idValue] = value.split('_')
+
+          children.push(`{
+              "urlpara": "${urlparaValue}",
+              "id": "${idValue}",
+              "selected": true
+            }`)
+        })
+
+        const filter = (`{
+            "urlpara": "${urlparaKey}",
+            "id": "${idKey}",
+            "selected": true,
+            "children": [${children.join(',')}]
+          }`)
+
+        this.filters.push(filter)
+      })
+    }
+  }
+
+  removeAllFilterParamsFromURL () {
+    if (this.params) {
+      const keys = [...this.params.keys()]
+
+      keys.forEach(key => {
+        if (key.includes('_')) {
+          this.params.delete(key)
+        }
+      })
+
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
+  }
+
+  removeFilterParamsFromURL (filterParent) {
+    if (this.params) {
+      this.params.delete(`${filterParent}`)
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    }
+  }
+
+  constructFilterItem (event) {
+    const filterItem = event?.detail?.wrapper?.filterItem
+
+    return filterItem
+      ? `{
+        "children": [
+          ${filterItem.children.map(child => {
+            const count = child.count ? `(${child.count})` : ''
+            const label = count ? `${child.label} ${count}` : child.label
+            const hasSameLabel = label.trim() === event.detail?.target.label.trim()
+            const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
+            return `{
+              ${child.count ? `"count": ${child.count},` : ''}
+              ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
+              "hasChilds": ${child.hasChilds},
+              "id": "${child.id}",
+              "label": "${child.label}",
+              ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
+              ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
+              "selected": ${hasSameLabel
+                ? isCheckedNullOrUndefined
+                  ? (child.selected || false)
+                  : event.detail.target.checked
+                : (child.selected || false)},
+              ${child.sort ? `"sort": ${child.sort},` : ''}
+              ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
+              ${child.typ ? `"typ": "${child.typ}",` : ''}
+              "urlpara": "${child.urlpara}"
+            }`
+          })}
+        ],
+        ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
+        ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
+        ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
+        ${filterItem.id ? `"id": "${filterItem.id}",` : ''}
+        ${filterItem.label ? `"label": "${filterItem.label}",` : ''}
+        ${filterItem.options ? `"options": ${filterItem.options},` : ''}
+        ${filterItem.partitionKey ? `"partitionKey": "${filterItem.partitionKey}",` : ''}
+        ${filterItem.rowKey ? `"rowKey": "${filterItem.rowKey}",` : ''}
+        ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
+        ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
+        ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
+        ${filterItem.urlpara ? `"urlpara": "${filterItem.urlpara}",` : ''}
+        "visible": ${filterItem.visible || true}
+      }`
+      : ''
   }
 
   static historyPushState (...args) {
