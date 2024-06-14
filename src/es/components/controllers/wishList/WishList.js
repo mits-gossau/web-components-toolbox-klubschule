@@ -1,7 +1,7 @@
 // @ts-check
 
 /*
-id assembly: kurstyp_kursid_centerid
+id assembly: courseType_courseId_centerid
 
 GET MULTIPLE SPECIFIC COURSES:
 
@@ -68,17 +68,70 @@ export default class WishList extends Shadow() {
       ...options
     }, ...args)
 
-    this.abortController = null
-    const endpointRequest = `${this.getAttribute('endpoint-request') || 'https://dev.klubschule.ch/Umbraco/api/watchlistAPI/Get'}`
+    const endpoint = this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/api/watchlistAPI'
+    const successCode = 0
 
+    this.abortController = null
     this.requestWishListListener = event => {
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
       this.dispatchEvent(new CustomEvent('wish-list', {
         detail: {
-          fetch: fetch(endpointRequest, {
-            method: 'GET',
-            signal: this.abortController.signal
+          // answer with an empty watchlistEntries array, incase we don't have a guid yet, the guid will be received with the first add action
+          fetch: this.guid
+            ? fetch(`${endpoint}/GetById?inclCourseDetail=false&watchlistGuid=${this.guid}`, {
+              method: 'GET',
+              signal: this.abortController.signal
+            }).then(response => {
+              if (response.status >= 200 && response.status <= 299) return response.json()
+              throw new Error(response.statusText)
+            }).then(json => {
+              if (json.code !== successCode) this.guid = ''
+              // watchlistEntries array is always delivered. Empty when 404!
+              return json
+            })
+            : Promise.resolve({
+              watchlistEntries: []
+            })
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }
+
+    this.addToWishListListener = (event, retry = true) => {
+      let hasWatchlistGuidParameter = false
+      this.dispatchEvent(new CustomEvent('wish-list', {
+        detail: {
+          fetch: fetch(`${endpoint}/Add?inclCourseDetail=false${(hasWatchlistGuidParameter = !!this.guid) ? `&watchlistGuid=${this.guid}` : ''}&language=${event.detail.language || document.documentElement.getAttribute('lang')?.substring(0, 2) || 'de'}&courseType=${event.detail.courseType}&courseId=${event.detail.courseId}&centerId=${event.detail.centerId}`, {
+            method: 'GET'
+          }).then(response => {
+            if (response.status >= 200 && response.status <= 299) return response.json()
+            throw new Error(response.statusText)
+          }).then(json => {
+            if (json.code !== successCode) {
+              this.guid = ''
+              // retry without watchlistGuid and get a new guid on this call
+              if (hasWatchlistGuidParameter && retry) this.addToWishListListener(event, false)
+            } else if (json.watchlistGuid) {
+              this.guid = json.watchlistGuid
+            }
+            return json
+          })
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }
+
+    this.removeFromWishListListener = event => {
+      if (!this.guid) return
+      this.dispatchEvent(new CustomEvent('wish-list', {
+        detail: {
+          fetch: fetch(`${endpoint}/Remove?inclCourseDetail=false&watchlistGuid=${this.guid}&language=${event.detail.language || document.documentElement.getAttribute('lang')?.substring(0, 2) || 'de'}&courseType=${event.detail.courseType}&courseId=${event.detail.courseId}&centerId=${event.detail.centerId}`, {
+            method: 'GET'
           }).then(response => {
             if (response.status >= 200 && response.status <= 299) return response.json()
             throw new Error(response.statusText)
@@ -90,18 +143,19 @@ export default class WishList extends Shadow() {
       }))
     }
 
-    const endpointAdd = `${this.getAttribute('endpoint-request') || 'https://dev.klubschule.ch/Umbraco/api/watchlistAPI/Add?language=de&courseType=D&courseId=90478&centerId=2667'}`
-    this.addToWishListListener = event => {
-      if (this.abortController) this.abortController.abort()
-      this.abortController = new AbortController()
+    this.removeAllFromWishListListener = event => {
+      if (!this.guid) return
       this.dispatchEvent(new CustomEvent('wish-list', {
         detail: {
-          fetch: fetch(endpointAdd, {
-            method: 'GET',
-            signal: this.abortController.signal
+          fetch: fetch(`${endpoint}/Clear?inclCourseDetail=false&watchlistGuid=${this.guid}`, {
+            method: 'GET'
           }).then(response => {
             if (response.status >= 200 && response.status <= 299) return response.json()
             throw new Error(response.statusText)
+          }).then(json => {
+            if (json.code !== successCode) this.guid = ''
+            // watchlistEntries array is always delivered. Empty when 404!
+            return json
           })
         },
         bubbles: true,
@@ -113,13 +167,23 @@ export default class WishList extends Shadow() {
 
   connectedCallback () {
     this.addEventListener('request-wish-list', this.requestWishListListener)
-    // note from patrick, initial guid for wishlist gets with the fist add call returned
-    // after having guid in local storage request can be fired
-    //this.requestWishListListener()
-    this.addToWishListListener()
+    this.addEventListener('add-to-wish-list', this.addToWishListListener)
+    this.addEventListener('remove-from-wish-list', this.removeFromWishListListener)
+    this.addEventListener('remove-all-from-wish-list', this.removeAllFromWishListListener)
   }
   
   disconnectedCallback () {
     this.removeEventListener('request-wish-list', this.requestWishListListener)
+    this.removeEventListener('add-to-wish-list', this.addToWishListListener)
+    this.removeEventListener('remove-from-wish-list', this.removeFromWishListListener)
+    this.removeEventListener('remove-all-from-wish-list', this.removeAllFromWishListListener)
+  }
+
+  set guid (value) {
+    localStorage.setItem('wishListGuid', value || '')
+  }
+
+  get guid () {
+    return localStorage.getItem('wishListGuid') || ''
   }
 }
