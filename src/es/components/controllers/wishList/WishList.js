@@ -1,55 +1,8 @@
 // @ts-check
 
-/*
-id assembly: courseType_courseId_centerid
-
-GET MULTIPLE SPECIFIC COURSES:
-
-"filter": [
-  {
-      "hasChilds": false,
-      "label": "",
-      "id": "26",
-      "typ": "",
-      "level": "",
-      "color": "",
-      "selected": false,
-      "disabled": false,
-      "hideCount": false,
-      "children": [
-          {
-              "hasChilds": false,
-              "label": "",
-              "id": "D_101312",
-              "typ": "",
-              "level": "",
-              "color": "",
-              "selected": true,
-              "disabled": false,
-              "hideCount": false
-          },
-          {
-              "hasChilds": false,
-              "label": "",
-              "id": "D_88449",
-              "typ": "",
-              "level": "",
-              "color": "",
-              "selected": true,
-              "disabled": false,
-              "hideCount": false
-          }
-      ]
-    }
-  ]
-  
-*/
-
 /* global fetch */
 /* global self */
 /* global CustomEvent */
-
-import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /**
  * WishList are retrieved via the corresponding endpoint as set as an attribute
@@ -60,13 +13,9 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
  * @class WishList
  * @type {CustomElementConstructor}
  */
-export default class WishList extends Shadow() {
-  constructor (options = {}, ...args) {
-    super({
-      importMetaUrl: import.meta.url,
-      mode: 'false',
-      ...options
-    }, ...args)
+export default class WishList extends HTMLElement {
+  constructor () {
+    super()
 
     const endpoint = this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/api/watchlistAPI'
     const successCode = 0
@@ -184,6 +133,6 @@ export default class WishList extends Shadow() {
   }
 
   get guid () {
-    return localStorage.getItem('wishListGuid') || ''
+    return '2728e4e9-da4e-4b11-988b-7caa90b10a77' || localStorage.getItem('wishListGuid') || ''
   }
 }

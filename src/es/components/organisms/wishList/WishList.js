@@ -102,90 +102,39 @@ export default class WishList extends Shadow() {
     if (fetch) {
       const data = await fetch
       this.html = ''
-      console.log('*********', data)
       if (data.watchlistEntries.length) {
+        // assemble withfacet filter
         const filter = {
+          color: '',
+          disabled: false,
+          hasChilds: false,
+          hideCount: false,
+          id: '26',
+          label: '',
+          level: '',
+          selected: false,
+          typ: ''
+        }
+        const initialRequest = {
           MandantId:  111,
           PortalId: 29,
           filter: [{
-            children: [{
-              color: '',
-              disabled: false,
-              hasChilds: false,
-              hideCount: false,
-              id: 'D_101312',
-              label: '',
-              level: '',
-              selected: true,
-              typ: ''
-            }],
-            color: '',
-            disabled: false,
-            hasChilds: false,
-            hideCount: false,
-            id: '26',
-            label: '',
-            level: '',
-            selected: false,
-            typ: ''
+            children: [],
+            ...filter
           }],
           ppage: 1,
           psize: 6,
           sprachid: 'd'
         }
+        // id assembly: courseType_courseId_centerid
+        // @ts-ignore
+        initialRequest.filter[0].children = data.watchlistEntries.map(entry => ({...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true}))
         this.html = /* html */`
           <ks-o-offers-page
             headless
             no-search-tab
             endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
-            initial-request='{"filter":[
-            {
-              "hasChilds": false,
-              "label": "",
-              "id": "26",
-              "typ": "",
-              "level": "",
-              "color": "",
-              "selected": false,
-              "disabled": false,
-              "hideCount": false,
-              "children": [
-              {
-                "hasChilds": false,
-                "label": "",
-                "id": "D_101312",
-                "typ": "",
-                "level": "",
-                "color": "",
-                "selected": true,
-                "disabled": false,
-                "hideCount": false
-              },
-              {
-                "hasChilds": false,
-                "label": "",
-                "id": "D_88449",
-                "typ": "",
-                "level": "",
-                "color": "",
-                "selected": true,
-                "disabled": false,
-                "hideCount": false
-              },
-              {
-                "hasChilds": false,
-                "label": "",
-                "id": "D_90478",
-                "typ": "",
-                "level": "",
-                "color": "",
-                "selected": true,
-                "disabled": false,
-                "hideCount": false
-              }
-              ]
-            }
-            ],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":6}'
+            initial-request='${JSON.stringify(initialRequest)}'
           ></ks-o-offers-page>
         `
       } else {
