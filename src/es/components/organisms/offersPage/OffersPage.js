@@ -137,6 +137,9 @@ export default class OffersPage extends Shadow() {
       :host ks-o-body-section {
         padding: 3.375em 0 5em;
       }
+      :host([headless]) ks-o-body-section {
+        padding: 0;
+      }
       @media only screen and (max-width: _max-width_) {
         :host ks-o-body-section {
           padding: 3em 0 4em;

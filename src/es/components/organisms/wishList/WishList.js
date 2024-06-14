@@ -11,6 +11,9 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class WishList extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.message = this.root.querySelector('#message')
+    this.wishListListener = event => this.renderHTML(event.detail.fetch)
   }
 
   connectedCallback () {
@@ -19,6 +22,12 @@ export default class WishList extends Shadow() {
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
     if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
     Promise.all(showPromises).then(() => (this.hidden = false))
+    document.body.addEventListener('wish-list', this.wishListListener)
+    this.dispatchEvent(new CustomEvent('request-wish-list', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
   }
 
   disconnectedCallback () {}
@@ -84,70 +93,105 @@ export default class WishList extends Shadow() {
 
   /**
    * Render HTML
+   * @param {Promise<{watchlistEntries: {aktiv: boolean, course: any, mandantId: number, centerId: number, kursTyp: number, kursId: number, sprache: string, code: number, message: string}[]}>} [fetch=undefined]
    * @return {Promise<void>}
    */
-  renderHTML (data) {
-    if (data) {
-      this.html = /* html */`
-        <ks-o-offers-page
-          headless
-          endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
-          initial-request='{"filter":[
-          {
-            "hasChilds": false,
-            "label": "",
-            "id": "26",
-            "typ": "",
-            "level": "",
-            "color": "",
-            "selected": false,
-            "disabled": false,
-            "hideCount": false,
-            "children": [
+  async renderHTML (fetch) {
+    this.html = ''
+    this.renderLoading()
+    if (fetch) {
+      const data = await fetch
+      this.html = ''
+      console.log('*********', data)
+      if (data.watchlistEntries.length) {
+        const filter = {
+          MandantId:  111,
+          PortalId: 29,
+          filter: [{
+            children: [{
+              color: '',
+              disabled: false,
+              hasChilds: false,
+              hideCount: false,
+              id: 'D_101312',
+              label: '',
+              level: '',
+              selected: true,
+              typ: ''
+            }],
+            color: '',
+            disabled: false,
+            hasChilds: false,
+            hideCount: false,
+            id: '26',
+            label: '',
+            level: '',
+            selected: false,
+            typ: ''
+          }],
+          ppage: 1,
+          psize: 6,
+          sprachid: 'd'
+        }
+        this.html = /* html */`
+          <ks-o-offers-page
+            headless
+            no-search-tab
+            endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
+            initial-request='{"filter":[
             {
               "hasChilds": false,
               "label": "",
-              "id": "D_101312",
+              "id": "26",
               "typ": "",
               "level": "",
               "color": "",
-              "selected": true,
+              "selected": false,
               "disabled": false,
-              "hideCount": false
-            },
-            {
-              "hasChilds": false,
-              "label": "",
-              "id": "D_88449",
-              "typ": "",
-              "level": "",
-              "color": "",
-              "selected": true,
-              "disabled": false,
-              "hideCount": false
-            },
-            {
-              "hasChilds": false,
-              "label": "",
-              "id": "D_90478",
-              "typ": "",
-              "level": "",
-              "color": "",
-              "selected": true,
-              "disabled": false,
-              "hideCount": false
+              "hideCount": false,
+              "children": [
+              {
+                "hasChilds": false,
+                "label": "",
+                "id": "D_101312",
+                "typ": "",
+                "level": "",
+                "color": "",
+                "selected": true,
+                "disabled": false,
+                "hideCount": false
+              },
+              {
+                "hasChilds": false,
+                "label": "",
+                "id": "D_88449",
+                "typ": "",
+                "level": "",
+                "color": "",
+                "selected": true,
+                "disabled": false,
+                "hideCount": false
+              },
+              {
+                "hasChilds": false,
+                "label": "",
+                "id": "D_90478",
+                "typ": "",
+                "level": "",
+                "color": "",
+                "selected": true,
+                "disabled": false,
+                "hideCount": false
+              }
+              ]
             }
-            ]
-          }
-          ],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":6}'
-        ></ks-o-offers-page>
-      `
-    } else {
-      this.html = /* html */`
-        <mdx-component>
-            <mdx-loading-bar></mdx-loading-bar>
-        </mdx-component>
-      `
+            ],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":6}'
+          ></ks-o-offers-page>
+        `
+      } else {
+        this.html = this.message
+        this.message.removeAttribute('hidden')
+      }
     }
     return this.fetchModules([
       {
@@ -159,6 +203,14 @@ export default class WishList extends Shadow() {
         name: 'mdx-component'
       }
     ])
+  }
+
+  renderLoading () {
+    this.html = /* html */`
+      <mdx-component>
+          <mdx-loading-bar></mdx-loading-bar>
+      </mdx-component>
+    `
   }
 
   get loadingBar () {
