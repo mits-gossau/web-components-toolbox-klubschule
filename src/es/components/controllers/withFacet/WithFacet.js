@@ -56,6 +56,15 @@ export default class WithFacet extends Shadow() {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
+      // center filter url kung fu
+      if (event?.detail?.target?.getAttribute('center-id')) {
+        if (event.detail.mutationList[0].attributeName === 'checked') {
+          this.addOrUpdateURLParams('ort', event.detail.target.getAttribute('center-id'))
+        } else {
+          this.removeURLParams('ort', event.detail.target.getAttribute('center-id'))
+        }
+      }
+
       let request
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
       const shouldResetFilter = event?.type === 'reset-filter'
@@ -311,6 +320,34 @@ export default class WithFacet extends Shadow() {
     this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.removeEventListener('request-locations', this.requestLocations)
     self.removeEventListener('popstate', this.popstateListener)
+  }
+
+  addOrUpdateURLParams (key, value) {
+    if (this.params.has(key)) {
+      const currentValue = this.params.get(key)
+      if (!currentValue?.includes(value)) {
+        this.params.set(key, `${currentValue}-${value}`)
+      }
+    } else {
+      this.params.set(key, value)
+    }
+    
+    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+  }
+
+  removeURLParams (key, value) {
+    if (this.params.has(key)) {
+      const currentValue = this.params.get(key)
+      if (currentValue?.includes(value)) {
+        this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
+      }
+
+      if (this.params.get(key) === '') {
+        this.params.delete(key)
+      }
+
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    }
   }
 
   catchURLParams () {
