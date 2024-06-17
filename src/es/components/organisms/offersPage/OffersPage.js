@@ -303,7 +303,7 @@ export default class OffersPage extends Shadow() {
           ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
           ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
-          ${this.hasAttribute('auto-complete-disabled') ? ' disabled' : ''} 
+          ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
         >
           <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog">
             <div class="container">
@@ -401,7 +401,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
         ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
         ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''}
-        ${this.hasAttribute('auto-complete-disabled') ? ' disabled' : ''}
+        ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'}
       >
         <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
           <div class="container">

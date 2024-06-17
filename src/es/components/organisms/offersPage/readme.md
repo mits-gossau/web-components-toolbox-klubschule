@@ -21,4 +21,4 @@ You can find a simple example markup in the above linked example pages.
 - `with-search-input`: includes search in page
 - `with-location-input`: includes location search in page
 - `with-filter-search`: includes search in filter overlay
-- `auto-complete-disabled`: disables auto-complete in search fields
+- `with-auto-complete`: includes auto-complete in search fields
