@@ -176,60 +176,7 @@ export default class WithFacet extends Shadow() {
                   this.lastResponse = json
                 }
 
-                // check if filter is in url
                 this.checkFiltersInURL(json.filters)
-               
-
-                // url search text kung fu
-                if (!json.searchText) {
-                  this.params.delete('q')
-                } else {
-                  this.params.set('q', json.searchText)
-                }
-
-
-                // url filter kung fu
-                // json.filters.forEach(filterItem => {
-                //   if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                //     const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                //     const selectedChildren = []
-
-                //     filterItem.children.forEach(child => {
-                //       // check if the child is already in the url params
-                //       const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
-
-                //       if (containsChild) {
-                //         selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                //       }
-
-                //       // if selected, add it to the url params
-                //       if (child.selected) {
-                //         if (!containsChild && !shouldResetAllFilters) {
-                //           selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                //         }
-
-                //         if (selectedChildren.length > 0) {
-                //           this.params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
-                //         }
-
-                //       // if unselected, remove it from the url params
-                //       } else {
-                //         if (containsChild) {
-                //           const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                //           selectedChildren.splice(index, 1)
-
-                //           this.params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
-
-                //           if (this.params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
-                //             this.params.delete(`${filterItem.urlpara}_${filterItem.id}`)
-                //           }
-                //         }
-                //       }
-                //     })
-                //     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-                //   }
-                // })
-                
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
