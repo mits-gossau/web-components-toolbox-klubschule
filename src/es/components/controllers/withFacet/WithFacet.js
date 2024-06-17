@@ -56,14 +56,8 @@ export default class WithFacet extends Shadow() {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
-      // center filter url kung fu
-      if (event?.detail?.target?.getAttribute('center-id')) {
-        if (event.detail.mutationList[0].attributeName === 'checked') {
-          this.addOrUpdateURLParams('ort', event.detail.target.getAttribute('center-id'))
-        } else {
-          this.removeURLParams('ort', event.detail.target.getAttribute('center-id'))
-        }
-      }
+      // url kung fu
+      this.urlKungFu(event)
 
       let request
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
@@ -320,6 +314,29 @@ export default class WithFacet extends Shadow() {
     this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.removeEventListener('request-locations', this.requestLocations)
     self.removeEventListener('popstate', this.popstateListener)
+  }
+
+  urlKungFu (event) {
+    // center filter
+    const centerId = event?.detail?.target?.getAttribute('center-id')
+    if (centerId) {
+      if (event.detail.mutationList[0].attributeName === 'checked') {
+        this.addOrUpdateURLParams('ort', event.detail.target.getAttribute('center-id'))
+      } else {
+        this.removeURLParams('ort', event.detail.target.getAttribute('center-id'))
+      }
+    }
+
+    // other filter
+    const filterId = event?.detail?.target?.getAttribute('filter-id')
+    if (filterId) {
+      const [key, value] = filterId.split('-')
+      if (event.detail.mutationList[0].attributeName === 'checked') {
+        this.addOrUpdateURLParams(key, value)
+      } else {
+        this.removeURLParams(key, value)
+      }
+    }
   }
 
   addOrUpdateURLParams (key, value) {
