@@ -52,7 +52,6 @@ export default class WithFacet extends Shadow() {
     this.lastResponse = {}
     // simply the payload of the last request
     this.lastRequest = null
-    this.filtersArray = []
 
     this.requestWithFacetListener = (event) => {
       // mdx prevent double event
