@@ -295,21 +295,27 @@ export default class WithFacet extends Shadow() {
     }
     
     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    this.requestWithFacetListener()
   }
 
   removeURLParams (key, value) {
-    console.log('removeURLParams', key, value, this.params.has(key))
     if (this.params.has(key)) {
-      const currentValue = this.params.get(key)
-      if (currentValue?.includes(value)) {
-        this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
-      }
-
-      if (this.params.get(key) === '') {
+      if (!value) {
         this.params.delete(key)
+      } else {
+        const currentValue = this.params.get(key)
+
+        if (currentValue?.includes(value)) {
+          this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
+        }
+
+        if (this.params.get(key) === '') {
+          this.params.delete(key)
+        }
       }
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      this.requestWithFacetListener()
     }
   }
 
@@ -317,6 +323,7 @@ export default class WithFacet extends Shadow() {
     this.filterParams.forEach(filterItem => {
       this.params.delete(`${filterItem}`)
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      this.requestWithFacetListener()
     })
   }
 
