@@ -5,7 +5,6 @@
     --color: currentColor;
 
     font: var(--mdx-sys-font-fix-label0);
-    min-width: 200px;
 }
 
 a-picture {
