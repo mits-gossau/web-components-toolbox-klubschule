@@ -323,12 +323,13 @@ export default class WithFacet extends Shadow() {
   }
 
   urlKungFu (event) {
-    const filterId = event?.detail?.target?.getAttribute('filter-id')
+    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
     if (filterId) {
       const [key, value] = filterId.split('-')
       if (event.detail.mutationList[0].attributeName === 'checked') {
         this.addOrUpdateURLParams(key, value)
-      } else {
+      } 
+      if (event.detail.mutationList[0].attributeName !== 'checked') {
         this.removeURLParams(key, value)
       }
     }

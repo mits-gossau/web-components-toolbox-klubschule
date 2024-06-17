@@ -89,7 +89,7 @@ export default class Buttons extends Shadow() {
     let filteredURLParams = ''
     const shouldKeepURLParams = this.hasAttribute('keep-url-params')
     if (shouldKeepURLParams) {
-      const urlParams = this.hasAttribute('with-url-params') ? window.location.search : ''
+      const urlParams = this.hasAttribute('keep-url-params') ? window.location.search : ''
       const urlParamsMap = new URLSearchParams(urlParams)
       const urlParamsArray = Array.from(urlParamsMap.keys())
       // TODO: keys to ignore should be moved to .env file
@@ -100,6 +100,7 @@ export default class Buttons extends Shadow() {
     }
 
     const buttons = dataButtons?.reduce((acc, button) => {
+      // keep existing url params
       if (shouldKeepURLParams && button.link){
         if (button.link.includes('?')) {
           button.link = button.link + '&' + filteredURLParams

@@ -293,7 +293,7 @@ export default class Tile extends Shadow() {
           <div class="m-tile__foot-left">
             <!-- Trash Icon is pre-placed for wishlist -->
             <!-- <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx> -->
-            <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small with-url-params></ks-m-buttons>
+            <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small keep-url-params></ks-m-buttons>
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
