@@ -275,11 +275,9 @@ export default class WithFacet extends Shadow() {
       this.params.forEach((value, key) => {
         if (this.filterParams.includes(key)) return
         if (key === 'q') {
-          console.log('Good catch! --> [', key, '] exists as search text')
           this.filterParams.push(key)
         }
         if (filterItem.urlpara.includes(key)) {
-          console.log('Good catch! --> [', key, '] exists as urlpara')
           this.filterParams.push(key)
         }
         if (filterItem.children && filterItem.children.length > 0) {
@@ -332,7 +330,6 @@ export default class WithFacet extends Shadow() {
     const filterId = event?.detail?.target?.getAttribute('filter-id')
     if (filterId) {
       const [key, value] = filterId.split('-')
-      console.log('key:', key, 'value:', value)
       if (event.detail.mutationList[0].attributeName === 'checked') {
         this.addOrUpdateURLParams(key, value)
       } else {
