@@ -172,7 +172,7 @@ export default class FilterCategories extends Shadow() {
         </div>
         <div class="dialog-content">
           ${this.hasAttribute('translation-key-reset') ? /* html */`<p class="reset-link">
-            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-urlpara="${filterItem.urlpara}">
+            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-key="${filterItem.urlpara}">
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
@@ -182,7 +182,7 @@ export default class FilterCategories extends Shadow() {
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
           <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `${response.total.toString()}` : ''} ${response.total_label}</a-button>
         </div>
-        <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal" filter-urlpara="${filterItem.urlpara}">
+        <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal" filter-key="${filterItem.urlpara}">
           <div class="wrap">
             <span class="text">${filterItem.label}</span>
             <span class="additional">${childItems.slice(0, -2)}</span>
