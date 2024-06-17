@@ -342,9 +342,10 @@ export default class OffersPage extends Shadow() {
             </a-input>
           </m-dialog>
         </ks-c-auto-complete>
-      </div>` : ''
+      </div>
+    ` : ''
 
-    const locationSearch = this.hasAttribute('no-location-search') ? '' : /* html */`
+    const locationInput = this.hasAttribute('with-location-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
         <ks-c-auto-complete-location ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
             <m-dialog namespace="dialog-top-slide-in-" id="location-search" close-event-name="close-location-dialog">
@@ -391,9 +392,10 @@ export default class OffersPage extends Shadow() {
                 </a-input>
             </m-dialog>
         </ks-c-auto-complete-location>
-      </div>`
+      </div>
+    ` : ''
 
-    const searchInOverlay = this.hasAttribute('without-search-in-overlay') ? '' : /* html */`
+    const filterSearch = this.hasAttribute('with-filter-search') ? /* html */`
       <ks-c-auto-complete
         input-change="search-change"
         ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
@@ -437,7 +439,8 @@ export default class OffersPage extends Shadow() {
           </a-input>
         </m-dialog>
       </ks-c-auto-complete>
-    `
+    ` : ''
+
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
@@ -450,7 +453,7 @@ export default class OffersPage extends Shadow() {
                       </div>`
                     : ''}
                   ${this.eventDetailURL ? '' : searchInput}
-                  ${locationSearch}
+                  ${locationInput}
                 </section>
               </o-grid>
               <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
@@ -470,8 +473,13 @@ export default class OffersPage extends Shadow() {
                           </a-button>
                       </p>
                       <div class="sub-content">
-                          ${searchInOverlay}
-                          <ks-m-filter-categories namespace="filter-default-" lang="de" translation-key-close="${this.getTranslation('Filter.closeOverlayer')}" translation-key-reset="${this.getTranslation('Filter.ResetFilter')}"></ks-m-filter-categories>
+                          ${filterSearch}
+                          <ks-m-filter-categories 
+                            namespace="filter-default-" 
+                            lang="de" 
+                            translation-key-close="${this.getTranslation('Filter.closeOverlayer')}" 
+                            translation-key-reset="${this.getTranslation('Filter.ResetFilter')}"
+                          ></ks-m-filter-categories>
                       </div>
                   </div>
                   <div class="container dialog-footer">
@@ -492,10 +500,8 @@ export default class OffersPage extends Shadow() {
                   <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.getTranslation('CourseList.FilterAllPlaceholder')}
                   </ks-a-button>
-                  <!-- TODO: button to filter search -->
-                  
-                  <!-- buttons for selected filters -->
-                  <ks-m-filter-select></ks-m-filter-select>
+                  <!-- buttons to filter -->
+                  <ks-m-filter-select ${this.hasAttribute('with-filter-search') ? 'with-search' : ''}></ks-m-filter-select>
                 </section>
               </o-grid>
               <section id="sort-options" class="margin-bottom-fix-s">
