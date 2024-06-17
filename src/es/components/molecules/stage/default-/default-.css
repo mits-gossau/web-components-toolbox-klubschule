@@ -22,6 +22,7 @@
     aspect-ratio: 21/9;
     padding: var(--mdx-sys-spacing-flex-m) var(--mdx-sys-spacing-flex-xs);
     margin: 0 !important;
+    overflow: hidden;
 }
 
 :host a,
@@ -100,5 +101,23 @@
     :host([has-background-mobile]) {
         background: var(--mdx-sys-color-accent-6-subtle1);
         margin-bottom: -1px;
+    }
+}
+
+/* for larger views */
+@media screen and (min-width: 1440px) {
+    :host {
+        --stage-default-max-height: calc(100vh - 280px);
+        max-height: var(--stage-default-max-height);
+    }
+
+    :host a-picture {
+        inset: 0 0 auto;
+    }
+
+    :host a-picture::after {
+        inset: 0 0 auto;
+        height: 100%;
+        max-height: var(--stage-default-max-height);
     }
 }
