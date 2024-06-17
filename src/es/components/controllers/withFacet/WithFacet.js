@@ -326,8 +326,12 @@ export default class WithFacet extends Shadow() {
   checkFiltersInURL (filters) {
     filters.forEach(filterItem => {
       this.params.forEach((value, key) => {
+        if (this.filterParams.includes(key)) return
+        if (key === 'q') {
+          console.log('Good catch! --> [', key, '] exists as search text')
+          this.filterParams.push(key)
+        }
         if (filterItem.urlpara.includes(key)) {
-          if (this.filterParams.includes(key)) return
           console.log('Good catch! --> [', key, '] exists as urlpara')
           this.filterParams.push(key)
         }
@@ -389,13 +393,6 @@ export default class WithFacet extends Shadow() {
   catchURLParams () {
     return new URLSearchParams(self.location.search)
   }
-
-  // removeFilterFromURL (filterItem) {
-  //   if (this.params) {
-  //     this.params.delete(`${filterItem}`)
-  //     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-  //   }
-  // }
 
   constructFilterItem (event) {
     const filterItem = event?.detail?.wrapper?.filterItem
