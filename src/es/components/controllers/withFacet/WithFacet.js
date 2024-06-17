@@ -84,7 +84,6 @@ export default class WithFacet extends Shadow() {
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
           this.removeAllURLParams()
-          // this.removeAllFilterParamsFromURL()
         }
 
         if (shouldResetFilter) {
@@ -109,9 +108,7 @@ export default class WithFacet extends Shadow() {
           }
         }
 
-        // url kung fu
         this.urlKungFu(event)
-        // this.updateURLParams()
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
