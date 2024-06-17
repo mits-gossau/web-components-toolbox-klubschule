@@ -72,8 +72,8 @@ export default class WithFacet extends Shadow() {
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
         this.filters = []
-        const filter = this.constructFilterItem(event)
-        if (filter) this.filters.push(filter)
+        // const filter = this.constructFilterItem(event)
+        // if (filter) this.filters.push(filter)
 
         // if there is an initial filter set (e.g. for events) we want to keep it
         if (initialFiltersAsString?.length) {

@@ -48,7 +48,7 @@ export default class Facts extends Shadow() {
         }
 
         :host .fact {
-          background-color: var(--mdx-sys-color-accent-6-subtle2);
+          background-color: var(--fact-background-color-custum, var(--mdx-sys-color-accent-6-subtle2));
           display: flex;
           flex-direction: column;
           align-items: center;

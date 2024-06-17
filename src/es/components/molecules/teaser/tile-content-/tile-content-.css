@@ -29,7 +29,9 @@
 
   /* css vars for inverse variant */
   --pretitle-color: var(--color-${this.getAttribute('color')});
+  --pretitle-background: transparent;
   --pretitle-color-hover: var(--mdx-sys-color-neutral-on-default);
+  --pretitle-background-hover: transparent;
   --text-color: var(--color-neutral-bold4);
   --text-color-hover: var(--mdx-sys-color-neutral-on-default);
   --background-color: var(--mdx-sys-color-neutral-on-default);
@@ -85,11 +87,13 @@
 :host figure figcaption > strong:first-child,
 :host article > div > strong:first-child {
   color: var(--pretitle-color);
+  background: var(--pretitle-background);
 }
 
 :host figure:hover figcaption > strong:first-child,
 :host article:hover > div > strong:first-child {
   color: var(--pretitle-color-hover);
+  background: var(--pretitle-background-hover);
 }
 
 :host p {
@@ -107,4 +111,54 @@
   :host article > div {
     padding: 1rem .5rem;
   }
+}
+
+/* brands */
+:host([brand=ibaw]) {
+  --teaser-tile-content-headline-font-family: var(--mdx-sys-font-flex-custom2-font-family);
+  --teaser-tile-content-headline-font-size: var(--mdx-sys-font-flex-custom2-font-size);
+  --teaser-tile-content-headline-font-weight: var(--mdx-sys-font-flex-custom2-font-weight);
+  --teaser-tile-content-headline-line-height: var(--mdx-sys-font-flex-custom2-line-height);
+
+  --pretitle-color: #fff;
+  --pretitle-background: var(--color-${this.getAttribute('color')}, #00A2AD);
+  --pretitle-color-hover: var(--color-${this.getAttribute('color')}, #00A2AD);
+  --pretitle-background-hover: #fff;
+}
+
+:host([brand=ibaw][inverse]) {
+  /* css vars for inverse variant */
+  --pretitle-color: var(--color-${this.getAttribute('color')}, #00A2AD);
+  --pretitle-background: #fff;
+  --pretitle-color-hover: #fff;
+  --pretitle-background-hover: var(--color-${this.getAttribute('color')}, #00A2AD);
+  --background-color: var(--color-${this.getAttribute('color')}, black);
+  --background-color-hover: var(--mdx-sys-color-neutral-on-default);
+}
+
+:host([brand=ibaw]) figure figcaption > strong:first-child,
+:host([brand=ibaw]) article > div > strong:first-child {
+  clip-path: polygon(0% 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%, 0% 0%);
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  width: fit-content;
+  padding-right: calc(var(--mdx-sys-spacing-fix-2xs) + 8px);
+  padding-left: var(--mdx-sys-spacing-fix-2xs);
+}
+
+/* color exception ibaw-turquoise */
+:host([brand=ibaw][inverse][color=ibaw-turquoise]),
+:host([brand=ibaw][inverse][color=secondary]) {
+  --pretitle-color: var(--mdx-base-color-ibaw-light-blue-600, #32DED5);
+  --background-color: var(--mdx-base-color-ibaw-light-blue-600, #32DED5);
+  --text-color: var(--mdx-sys-color-neutral-bold4);
+  --text-color-hover: var(--mdx-sys-color-neutral-bold4);
+}
+:host(:not([inverse])[brand=ibaw][color=ibaw-turquoise]),
+:host(:not([inverse])[brand=ibaw][color=secondary]) {
+  --pretitle-color-hover: var(--mdx-base-color-ibaw-light-blue-600, #32DED5);
+  --background-color-hover: var(--mdx-base-color-ibaw-light-blue-600, #32DED5);
+  --text-color: var(--mdx-sys-color-neutral-bold4);
+  --text-color-hover: var(--mdx-sys-color-neutral-bold4);
 }

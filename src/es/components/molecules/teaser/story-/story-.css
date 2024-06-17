@@ -51,3 +51,25 @@
     padding: 1rem .5rem;
   }
 }
+
+/* brand adjustments */
+:host([brand=ibaw]) {
+  --teaser-story-headline-font-family: var(--mdx-sys-font-flex-custom2-font-family);
+  --teaser-story-headline-font-size: var(--mdx-sys-font-flex-custom2-font-size);
+  --teaser-story-headline-font-weight: var(--mdx-sys-font-flex-custom2-font-weight);
+  --teaser-story-headline-line-height: var(--mdx-sys-font-flex-custom2-line-height);
+}
+
+:host([brand=ibaw]) figure figcaption > strong:first-child,
+:host([brand=ibaw]) article > div > strong:first-child {
+  clip-path: polygon(0% 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%, 0% 0%);
+
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  width: fit-content;
+  padding-right: calc(var(--mdx-sys-spacing-fix-2xs) + 8px);
+  padding-left: var(--mdx-sys-spacing-fix-2xs);
+  color: #fff;
+  background: var(--color-${this.getAttribute('color')}, #00A2AD);
+}
