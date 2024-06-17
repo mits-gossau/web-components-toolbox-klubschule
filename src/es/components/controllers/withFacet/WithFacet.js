@@ -88,7 +88,7 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeURLParams(event.detail.this.getAttribute('filter-key'), event.detail.this.getAttribute('filter-value'))
+          this.removeURLParams(event.detail.this.getAttribute('filter-key'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
