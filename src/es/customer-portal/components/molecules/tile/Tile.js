@@ -317,11 +317,11 @@ export default class AppointmentTile extends Tile {
                     </a-course-info>
                   </li>
                   <li> 
-                    <a-icon-mdx icon-name="User" size="1.5em" tabindex="0"></a-icon-mdx>
+                    <a-icon-mdx icon-name="User" size="1.5em"></a-icon-mdx>
                     <span>${content.instructorDescription}</span>
                   </li>
                   <li>
-                    <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
+                    <a-icon-mdx icon-name="Location" size="1.5em"></a-icon-mdx>
                     <div class="location-room">
                       <span>${content.courseLocation}</span>
                       <span><a-translation data-trans-key='CP.cpAppointmentIcsRoom'/></a-translation> ${content.roomDescription}</span>

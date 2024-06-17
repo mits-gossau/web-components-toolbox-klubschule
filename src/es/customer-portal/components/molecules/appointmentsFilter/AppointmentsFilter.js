@@ -275,7 +275,7 @@ export default class AppointmentsFilter extends Shadow() {
         namespace="dialog-left-slide-in-"
         close-event-name="${requestEventName}"
         show-event-name="${showDialogEventName}">
-          <div class="container dialog-header" tabindex="0">
+          <div class="container dialog-header">
               <div id="back">&nbsp;</div>
               <h3>
                 <a-translation data-trans-key="${translationKeyTitle}"></a-translation>
