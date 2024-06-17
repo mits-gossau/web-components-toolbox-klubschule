@@ -106,11 +106,11 @@ export default class FilterCategories extends Shadow() {
 
     const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
-        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}"></mdx-checkbox>
+        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}" filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
       </mdx-component>
     `
     const navLevelItem = /* html */`
-      <ks-m-nav-level-item namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet">
+      <ks-m-nav-level-item namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}">
         <div class="wrap">
           <span class="text">${child.label} ${count}</span>
         </div>
@@ -172,7 +172,7 @@ export default class FilterCategories extends Shadow() {
         </div>
         <div class="dialog-content">
           ${this.hasAttribute('translation-key-reset') ? /* html */`<p class="reset-link">
-            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-parent="${filterItem.urlpara}_${filterItem.id}">
+            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-urlpara="${filterItem.urlpara}">
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
@@ -182,7 +182,7 @@ export default class FilterCategories extends Shadow() {
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
           <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `${response.total.toString()}` : ''} ${response.total_label}</a-button>
         </div>
-        <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal">
+        <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal" filter-urlpara="${filterItem.urlpara}">
           <div class="wrap">
             <span class="text">${filterItem.label}</span>
             <span class="additional">${childItems.slice(0, -2)}</span>
