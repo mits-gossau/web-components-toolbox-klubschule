@@ -153,7 +153,7 @@ export default class filterSelect extends Shadow() {
                   <span part="label1">${childItems.slice(0, -2)/* remove last comma and space */}</span>
                   <span part="label2" dynamic></span>
                 </ks-a-button>
-                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-parent="${filterItem.urlpara}_${filterItem.id}">
+                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-urlpara="${filterItem.urlpara}">
                   <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
                 </ks-a-button>
               </m-double-button>
@@ -166,7 +166,7 @@ export default class filterSelect extends Shadow() {
         })
 
         // render search button
-        if (response.searchText) {
+        if (this.hasAttribute('with-search') && response.searchText) {
           this.html = /* html */`
             <m-double-button namespace="double-button-default-" width="100%">
               <ks-a-button namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>

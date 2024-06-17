@@ -43,6 +43,7 @@ export default class WithFacet extends Shadow() {
     let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(this.url.search)
+    this.filterParams = []
     this.isMocked = this.hasAttribute('mock')
     const apiUrl = this.isMocked
       ? `${this.importMetaUrl}./mock/default.json`
@@ -82,12 +83,12 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
-          this.removeAllFilterParamsFromURL()
+          this.removeAllURLParams()
         }
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
+          this.removeURLParams(event.detail.this.getAttribute('filter-urlpara'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
@@ -107,7 +108,7 @@ export default class WithFacet extends Shadow() {
           }
         }
 
-        this.updateURLParams()
+        this.urlKungFu(event)
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
@@ -171,55 +172,7 @@ export default class WithFacet extends Shadow() {
                   this.lastResponse = json
                 }
 
-                // url search text kung fu
-                if (!json.searchText) {
-                  this.params.delete('q')
-                } else {
-                  this.params.set('q', json.searchText)
-                }
-
-                // url filter kung fu
-                // json.filters.forEach(filterItem => {
-                //   if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                //     const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                //     const selectedChildren = []
-
-                //     filterItem.children.forEach(child => {
-                //       // check if the child is already in the url params
-                //       const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
-
-                //       if (containsChild) {
-                //         selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                //       }
-
-                //       // if selected, add it to the url params
-                //       if (child.selected) {
-                //         if (!containsChild && !shouldResetAllFilters) {
-                //           selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                //         }
-
-                //         if (selectedChildren.length > 0) {
-                //           this.params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
-                //         }
-
-                //       // if unselected, remove it from the url params
-                //       } else {
-                //         if (containsChild) {
-                //           const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                //           selectedChildren.splice(index, 1)
-
-                //           this.params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
-
-                //           if (this.params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
-                //             this.params.delete(`${filterItem.urlpara}_${filterItem.id}`)
-                //           }
-                //         }
-                //       }
-                //     })
-                //     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-                //   }
-                // })
-                
+                this.checkFiltersInURL(json.filters)
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -313,58 +266,71 @@ export default class WithFacet extends Shadow() {
     self.removeEventListener('popstate', this.popstateListener)
   }
 
+  checkFiltersInURL (filters) {
+    filters.forEach(filterItem => {
+      this.params.forEach((value, key) => {
+        if (this.filterParams.includes(key)) return
+        if (key === 'q') {
+          this.filterParams.push(key)
+        }
+        if (filterItem.urlpara.includes(key)) {
+          this.filterParams.push(key)
+        }
+        if (filterItem.children && filterItem.children.length > 0) {
+          this.checkFiltersInURL(filterItem.children)
+        }
+      })
+    })
+  }
+
+  addOrUpdateURLParams (key, value) {
+    if (this.params.has(key)) {
+      const currentValue = this.params.get(key)
+      if (!currentValue?.includes(value)) {
+        this.params.set(key, `${currentValue}-${value}`)
+      }
+    } else {
+      this.params.set(key, value)
+    }
+    
+    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+  }
+
+  removeURLParams (key, value) {
+    if (this.params.has(key)) {
+      const currentValue = this.params.get(key)
+      if (currentValue?.includes(value)) {
+        this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
+      }
+
+      if (this.params.get(key) === '') {
+        this.params.delete(key)
+      }
+
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    }
+  }
+
+  removeAllURLParams () {
+    this.filterParams.forEach(filterItem => {
+      this.params.delete(`${filterItem}`)
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    })
+  }
+
   catchURLParams () {
     return new URLSearchParams(self.location.search)
   }
 
-  updateURLParams () {
-    if (this.params) {
-      const entriesWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-
-      entriesWithUnderscore.forEach(([key, value]) => {
-        const [urlparaKey, idKey] = key.split('_')
-        const children = []
-
-        value.split(',').forEach(value => {
-          const [urlparaValue, idValue] = value.split('_')
-
-          children.push(`{
-              "urlpara": "${urlparaValue}",
-              "id": "${idValue}",
-              "selected": true
-            }`)
-        })
-
-        const filter = (`{
-            "urlpara": "${urlparaKey}",
-            "id": "${idKey}",
-            "selected": true,
-            "children": [${children.join(',')}]
-          }`)
-
-        this.filters.push(filter)
-      })
-    }
-  }
-
-  removeAllFilterParamsFromURL () {
-    if (this.params) {
-      const keys = [...this.params.keys()]
-
-      keys.forEach(key => {
-        if (key.includes('_')) {
-          this.params.delete(key)
-        }
-      })
-
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    }
-  }
-
-  removeFilterParamsFromURL (filterParent) {
-    if (this.params) {
-      this.params.delete(`${filterParent}`)
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+  urlKungFu (event) {
+    const filterId = event?.detail?.target?.getAttribute('filter-id')
+    if (filterId) {
+      const [key, value] = filterId.split('-')
+      if (event.detail.mutationList[0].attributeName === 'checked') {
+        this.addOrUpdateURLParams(key, value)
+      } else {
+        this.removeURLParams(key, value)
+      }
     }
   }
 
