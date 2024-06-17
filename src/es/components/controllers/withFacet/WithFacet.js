@@ -289,19 +289,6 @@ export default class WithFacet extends Shadow() {
     })
   }
 
-  urlKungFu (event) {
-    const filterId = event?.detail?.target?.getAttribute('filter-id')
-    if (filterId) {
-      const [key, value] = filterId.split('-')
-      console.log('key:', key, 'value:', value)
-      if (event.detail.mutationList[0].attributeName === 'checked') {
-        this.addOrUpdateURLParams(key, value)
-      } else {
-        this.removeURLParams(key, value)
-      }
-    }
-  }
-
   addOrUpdateURLParams (key, value) {
     if (this.params.has(key)) {
       const currentValue = this.params.get(key)
@@ -339,6 +326,19 @@ export default class WithFacet extends Shadow() {
 
   catchURLParams () {
     return new URLSearchParams(self.location.search)
+  }
+
+  urlKungFu (event) {
+    const filterId = event?.detail?.target?.getAttribute('filter-id')
+    if (filterId) {
+      const [key, value] = filterId.split('-')
+      console.log('key:', key, 'value:', value)
+      if (event.detail.mutationList[0].attributeName === 'checked') {
+        this.addOrUpdateURLParams(key, value)
+      } else {
+        this.removeURLParams(key, value)
+      }
+    }
   }
 
   constructFilterItem (event) {
