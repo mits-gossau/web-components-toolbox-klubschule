@@ -293,13 +293,13 @@ export default class TileList extends Shadow() {
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     this.data = data
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
-    this.html = /* HTML */`
+    this.html = /* html */`
     <div class="o-tile-list">
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
             <span class="o-tile-list__title">${data.title || warnMandatory + 'title'}</span>
             ${data.iconTooltip
-              ? `
+              ? /* html */`
                 <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
                   <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
                 </ks-m-tooltip>
