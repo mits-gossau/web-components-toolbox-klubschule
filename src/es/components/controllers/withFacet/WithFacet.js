@@ -43,6 +43,7 @@ export default class WithFacet extends Shadow() {
     let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(this.url.search)
+    this.filterParams = []
     this.isMocked = this.hasAttribute('mock')
     const apiUrl = this.isMocked
       ? `${this.importMetaUrl}./mock/default.json`
@@ -51,13 +52,11 @@ export default class WithFacet extends Shadow() {
     this.lastResponse = {}
     // simply the payload of the last request
     this.lastRequest = null
+    this.filtersArray = []
 
     this.requestWithFacetListener = (event) => {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
-
-      // url kung fu
-      this.urlKungFu(event)
 
       let request
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
@@ -85,12 +84,13 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
-          this.removeAllFilterParamsFromURL()
+          this.removeAllURLParams()
+          // this.removeAllFilterParamsFromURL()
         }
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-urlpara'))
+          this.removeURLParams(event.detail.this.getAttribute('filter-urlpara'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
@@ -110,7 +110,9 @@ export default class WithFacet extends Shadow() {
           }
         }
 
-        this.updateURLParams()
+        // url kung fu
+        this.urlKungFu(event)
+        // this.updateURLParams()
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
@@ -174,12 +176,17 @@ export default class WithFacet extends Shadow() {
                   this.lastResponse = json
                 }
 
+                // check if filter is in url
+                this.checkFiltersInURL(json.filters)
+               
+
                 // url search text kung fu
                 if (!json.searchText) {
                   this.params.delete('q')
                 } else {
                   this.params.set('q', json.searchText)
                 }
+
 
                 // url filter kung fu
                 // json.filters.forEach(filterItem => {
@@ -316,21 +323,26 @@ export default class WithFacet extends Shadow() {
     self.removeEventListener('popstate', this.popstateListener)
   }
 
-  urlKungFu (event) {
-    // center filter
-    const centerId = event?.detail?.target?.getAttribute('center-id')
-    if (centerId) {
-      if (event.detail.mutationList[0].attributeName === 'checked') {
-        this.addOrUpdateURLParams('ort', event.detail.target.getAttribute('center-id'))
-      } else {
-        this.removeURLParams('ort', event.detail.target.getAttribute('center-id'))
-      }
-    }
+  checkFiltersInURL (filters) {
+    filters.forEach(filterItem => {
+      this.params.forEach((value, key) => {
+        if (filterItem.urlpara.includes(key)) {
+          if (this.filterParams.includes(key)) return
+          console.log('Good catch! --> [', key, '] exists as urlpara')
+          this.filterParams.push(key)
+        }
+        if (filterItem.children && filterItem.children.length > 0) {
+          this.checkFiltersInURL(filterItem.children)
+        }
+      })
+    })
+  }
 
-    // other filter
+  urlKungFu (event) {
     const filterId = event?.detail?.target?.getAttribute('filter-id')
     if (filterId) {
       const [key, value] = filterId.split('-')
+      console.log('key:', key, 'value:', value)
       if (event.detail.mutationList[0].attributeName === 'checked') {
         this.addOrUpdateURLParams(key, value)
       } else {
@@ -367,60 +379,23 @@ export default class WithFacet extends Shadow() {
     }
   }
 
+  removeAllURLParams () {
+    this.filterParams.forEach(filterItem => {
+      this.params.delete(`${filterItem}`)
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    })
+  }
+
   catchURLParams () {
     return new URLSearchParams(self.location.search)
   }
 
-  updateURLParams () {
-    if (this.params) {
-      const entriesWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-
-      entriesWithUnderscore.forEach(([key, value]) => {
-        const [urlparaKey, idKey] = key.split('_')
-        const children = []
-
-        value.split(',').forEach(value => {
-          const [urlparaValue, idValue] = value.split('_')
-
-          children.push(`{
-              "urlpara": "${urlparaValue}",
-              "id": "${idValue}",
-              "selected": true
-            }`)
-        })
-
-        const filter = (`{
-            "urlpara": "${urlparaKey}",
-            "id": "${idKey}",
-            "selected": true,
-            "children": [${children.join(',')}]
-          }`)
-
-        this.filters.push(filter)
-      })
-    }
-  }
-
-  removeAllFilterParamsFromURL () {
-    if (this.params) {
-      const keys = [...this.params.keys()]
-
-      keys.forEach(key => {
-        if (key.includes('_')) {
-          this.params.delete(key)
-        }
-      })
-
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    }
-  }
-
-  removeFilterParamsFromURL (filterParent) {
-    if (this.params) {
-      this.params.delete(`${filterParent}`)
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    }
-  }
+  // removeFilterFromURL (filterItem) {
+  //   if (this.params) {
+  //     this.params.delete(`${filterItem}`)
+  //     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+  //   }
+  // }
 
   constructFilterItem (event) {
     const filterItem = event?.detail?.wrapper?.filterItem
