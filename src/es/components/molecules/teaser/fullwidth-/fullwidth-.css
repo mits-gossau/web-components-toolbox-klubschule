@@ -172,6 +172,7 @@ a-picture {
         aspect-ratio: unset;
         padding: var(--mdx-sys-spacing-fix-m) var(--mdx-sys-spacing-fix-s) var(--mdx-sys-spacing-fix-l);
         margin: 0;
+        min-width: unset;
     }
 
     :host > div::before {
