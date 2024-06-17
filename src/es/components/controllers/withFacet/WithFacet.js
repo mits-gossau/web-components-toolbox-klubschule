@@ -88,7 +88,7 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeURLParams(event.detail.this.getAttribute('filter-urlpara'))
+          this.removeURLParams(event.detail.this.getAttribute('filter-key'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
@@ -109,6 +109,7 @@ export default class WithFacet extends Shadow() {
         }
 
         this.urlKungFu(event)
+        this.dataLayerPush(event)
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
@@ -294,20 +295,27 @@ export default class WithFacet extends Shadow() {
     }
     
     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    this.requestWithFacetListener()
   }
 
   removeURLParams (key, value) {
     if (this.params.has(key)) {
-      const currentValue = this.params.get(key)
-      if (currentValue?.includes(value)) {
-        this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
-      }
-
-      if (this.params.get(key) === '') {
+      if (!value) {
         this.params.delete(key)
+      } else {
+        const currentValue = this.params.get(key)
+
+        if (currentValue?.includes(value)) {
+          this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
+        }
+
+        if (this.params.get(key) === '') {
+          this.params.delete(key)
+        }
       }
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      this.requestWithFacetListener()
     }
   }
 
@@ -315,6 +323,7 @@ export default class WithFacet extends Shadow() {
     this.filterParams.forEach(filterItem => {
       this.params.delete(`${filterItem}`)
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      this.requestWithFacetListener()
     })
   }
 
@@ -333,6 +342,20 @@ export default class WithFacet extends Shadow() {
         this.removeURLParams(key, value)
       }
     }
+  }
+
+  dataLayerPush (event) {
+    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
+    if (!filterId) return
+
+    const [category, name] = filterId.split('-')
+    const dataLayer = {
+      'event': 'filterSelection',              
+      'filterName': `${name}`, //the name of the clicked filter.
+      'filterCategory': `${category}`, //the category that this filter belongs to - IF there is one, if not we can remove this key
+    }
+    // @ts-ignore
+    self.dataLayer.push(dataLayer)
   }
 
   constructFilterItem (event) {
