@@ -88,7 +88,7 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeURLParams(event.detail.this.getAttribute('filter-urlpara'))
+          this.removeURLParams(event.detail.this.getAttribute('filter-key'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
@@ -109,6 +109,7 @@ export default class WithFacet extends Shadow() {
         }
 
         this.urlKungFu(event)
+        this.dataLayerPush(event)
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
@@ -173,6 +174,7 @@ export default class WithFacet extends Shadow() {
                 }
 
                 this.checkFiltersInURL(json.filters)
+                this.checkSearchInURL(json.searchText)
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -272,6 +274,7 @@ export default class WithFacet extends Shadow() {
         if (this.filterParams.includes(key)) return
         if (key === 'q') {
           this.filterParams.push(key)
+          console.log('[q] exists in URL', this.filterParams)
         }
         if (filterItem.urlpara.includes(key)) {
           this.filterParams.push(key)
@@ -281,6 +284,14 @@ export default class WithFacet extends Shadow() {
         }
       })
     })
+  }
+
+  checkSearchInURL (searchText) {
+    if (!searchText) {
+      this.removeURLParams('q')
+    } else {
+      this.addOrUpdateURLParams('q', searchText)
+    }
   }
 
   addOrUpdateURLParams (key, value) {
@@ -293,28 +304,34 @@ export default class WithFacet extends Shadow() {
       this.params.set(key, value)
     }
     
-    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    this.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
   }
 
   removeURLParams (key, value) {
     if (this.params.has(key)) {
-      const currentValue = this.params.get(key)
-      if (currentValue?.includes(value)) {
-        this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
-      }
-
-      if (this.params.get(key) === '') {
+      if (!value) {
         this.params.delete(key)
+      } else {
+        const currentValue = this.params.get(key)
+
+        if (currentValue?.includes(value)) {
+          this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
+        }
+
+        if (this.params.get(key) === '') {
+          this.params.delete(key)
+        }
       }
 
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      this.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
   removeAllURLParams () {
     this.filterParams.forEach(filterItem => {
       this.params.delete(`${filterItem}`)
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+
+      this.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     })
   }
 
@@ -333,6 +350,20 @@ export default class WithFacet extends Shadow() {
         this.removeURLParams(key, value)
       }
     }
+  }
+
+  dataLayerPush (event) {
+    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
+    if (!filterId) return
+
+    const [category, name] = filterId.split('-')
+    const dataLayer = {
+      'event': 'filterSelection',              
+      'filterName': `${name}`, //the name of the clicked filter.
+      'filterCategory': `${category}`, //the category that this filter belongs to - IF there is one, if not we can remove this key
+    }
+    // @ts-ignore
+    self.dataLayer.push(dataLayer)
   }
 
   constructFilterItem (event) {
@@ -383,11 +414,12 @@ export default class WithFacet extends Shadow() {
       : ''
   }
 
-  static historyPushState (...args) {
+  historyPushState (...args) {
     // Avoid multiple empty pushes, otherwise the navigation history becomes jammed
     if ((new URL(args[2])).search !== location.search) {
       // @ts-ignore
       self.history.pushState(...args)
+      this.popstateListener()
     }
   }
 }

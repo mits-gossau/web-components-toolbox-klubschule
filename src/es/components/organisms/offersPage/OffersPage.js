@@ -403,7 +403,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''}
         ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'}
       >
-        <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
+        <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog">
           <div class="container">
             <a-input
               inputid="offers-page-input-search"
@@ -412,6 +412,7 @@ export default class OffersPage extends Shadow() {
               icon-name="Search" 
               icon-size="calc(20rem/18)"
               submit-search="request-auto-complete"
+              submit-search="request-with-facet"
               any-key-listener
               type="search"
               answer-event-name="search-change"
