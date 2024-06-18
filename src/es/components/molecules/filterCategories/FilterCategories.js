@@ -71,29 +71,32 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateCenterFilter (filterItem) {
-    let centerFilter = ''
+    let centerNav = []
 
     filterItem.children.forEach(region => {
-      centerFilter += /* html */`
-        <label class="headline">${region.label}</label>
-      `
+      const divRegion = document.createElement('div')
+      divRegion.innerHTML = /* html */`<label class="headline">${region.label}</label>`
+      centerNav.push(divRegion.children[0])
+
       region.children.forEach(center => {
         const count = center.count ? `(${center.count})` : ''
         const disabled = center.disabled ? 'disabled' : ''
         const checked = center.selected ? 'checked' : ''
         const visible = center.visible ? 'visible' : ''
-        centerFilter += /* html */`
+        const centerCheckbox = /* html */`
           <mdx-component mutation-callback-event-name="request-with-facet">
             <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}" filter-id="center-${center.id}"></mdx-checkbox>
           </mdx-component>
         `
+        const div = document.createElement('div')
+        div.innerHTML = centerCheckbox
+        // @ts-ignore
+        div.children[0].filterItem = center
+        centerNav.push(div.children[0])
       })
     })
 
-    const div = document.createElement('div')
-    div.innerHTML = centerFilter
-
-    return div.children
+    return centerNav
   }
 
   generateFilterElement (child, parentItem) {
@@ -172,7 +175,7 @@ export default class FilterCategories extends Shadow() {
         </div>
         <div class="dialog-content">
           ${this.hasAttribute('translation-key-reset') ? /* html */`<p class="reset-link">
-            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-key="${filterItem.urlpara}">
+            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-urlpara="${filterItem.urlpara}">
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
@@ -182,7 +185,7 @@ export default class FilterCategories extends Shadow() {
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
           <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `${response.total.toString()}` : ''} ${response.total_label}</a-button>
         </div>
-        <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal" filter-key="${filterItem.urlpara}">
+        <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal" filter-urlpara="${filterItem.urlpara}">
           <div class="wrap">
             <span class="text">${filterItem.label}</span>
             <span class="additional">${childItems.slice(0, -2)}</span>

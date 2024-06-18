@@ -368,11 +368,12 @@ export default class WithFacet extends Shadow() {
 
   constructFilterItem (event) {
     const filterItem = event?.detail?.wrapper?.filterItem
+    console.log("🚀 ~ WithFacet ~ constructFilterItem ~ filterItem:", filterItem, event)
 
     return filterItem
       ? `{
         "children": [
-          ${filterItem.children.map(child => {
+          ${filterItem.children ? filterItem.children.map(child => {
             const count = child.count ? `(${child.count})` : ''
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
@@ -395,7 +396,7 @@ export default class WithFacet extends Shadow() {
               ${child.typ ? `"typ": "${child.typ}",` : ''}
               "urlpara": "${child.urlpara}"
             }`
-          })}
+          }) : ''}
         ],
         ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
         ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
