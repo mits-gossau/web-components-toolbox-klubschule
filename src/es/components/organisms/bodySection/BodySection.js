@@ -50,13 +50,6 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: var(--mdx-sys-spacing-flex-l) !important;
         }
         
-        :host p.intro {
-            font-family: var(--intro-font-family, var(--font-family));
-            font-size: var(--intro-font-size, 20px);
-            font-weight: var(--intro-font-weight, 500);
-            line-height: var(--intro-line-height, 23.4px);
-        }
-        
         :host > * {
             margin-left: auto;
             margin-right: auto;
@@ -72,6 +65,14 @@ export default class KsBodyStyle extends BodyStyle {
         :host([no-margin-y]) {
             margin-top: 0 !important;
             margin-bottom: 0 !important;
+        }
+
+        :host([no-margin-bottom]) {
+            margin-bottom: 0 !important;
+        }
+
+        :host([margin-top-m]) {
+            margin-top: var(--mdx-sys-spacing-flex-m) !important;
         }
 
         :host([variant=default]) > * {
