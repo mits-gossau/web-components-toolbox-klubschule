@@ -73,8 +73,8 @@ export default class WithFacet extends Shadow() {
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
         this.filters = []
-        // const filter = this.constructFilterItem(event)
-        // if (filter) this.filters.push(filter)
+        const filter = this.constructFilterItem(event)
+        if (filter) this.filters.push(filter)
 
         // if there is an initial filter set (e.g. for events) we want to keep it
         if (initialFiltersAsString?.length) {
@@ -304,7 +304,7 @@ export default class WithFacet extends Shadow() {
       this.params.set(key, value)
     }
     
-    this.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
   }
 
   removeURLParams (key, value) {
@@ -323,7 +323,7 @@ export default class WithFacet extends Shadow() {
         }
       }
 
-      this.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
@@ -331,7 +331,7 @@ export default class WithFacet extends Shadow() {
     this.filterParams.forEach(filterItem => {
       this.params.delete(`${filterItem}`)
 
-      this.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     })
   }
 
@@ -414,12 +414,11 @@ export default class WithFacet extends Shadow() {
       : ''
   }
 
-  historyPushState (...args) {
+  static historyPushState (...args) {
     // Avoid multiple empty pushes, otherwise the navigation history becomes jammed
     if ((new URL(args[2])).search !== location.search) {
       // @ts-ignore
       self.history.pushState(...args)
-      this.popstateListener()
     }
   }
 }
