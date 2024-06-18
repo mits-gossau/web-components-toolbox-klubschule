@@ -239,7 +239,7 @@
   --header-checkout-content-width: calc(min(100%, var(--body-max-width)) - 2rem);
   --header-checkout-content-width-mobile: calc(min(100%, var(--body-max-width)) - 1rem);
   --header-border-bottom: 1px solid var(--m-gray-300);
-  --multi-level-navigation-default-o-nav-wrapper-top: 2.7rem;
+  --multi-level-navigation-default-o-nav-wrapper-top: 2.85rem;
   --multi-level-navigation-default-desktop-main-wrapper-width: 105vw;
   --multi-level-navigation-default-desktop-main-wrapper-position: absolute;
   --multi-level-navigation-default-desktop-main-wrapper-position-left: 49%;
