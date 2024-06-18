@@ -50,6 +50,13 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: var(--mdx-sys-spacing-flex-l) !important;
         }
         
+        :host p.intro {
+            font-family: var(--intro-font-family, var(--font-family));
+            font-size: var(--intro-font-size, 20px);
+            font-weight: var(--intro-font-weight, 500);
+            line-height: var(--intro-line-height, 23.4px);
+        }
+        
         :host > * {
             margin-left: auto;
             margin-right: auto;

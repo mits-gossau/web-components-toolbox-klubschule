@@ -1,10 +1,10 @@
 :host {
     --button-tertiary-margin: 0;
 
-    --teaser-fullwidth-headline-font-family: var(--mdx-sys-font-flex-large-headline2-font-family);
-    --teaser-fullwidth-headline-font-size: var(--mdx-sys-font-flex-large-headline2-font-size);
-    --teaser-fullwidth-headline-font-weight: var(--mdx-sys-font-flex-large-headline2-font-weight);
-    --teaser-fullwidth-headline-line-height: var(--mdx-sys-font-flex-large-headline2-line-height);
+    --teaser-fullwidth-headline-font-family: var(--mdx-sys-font-flex-headline2-font-family);
+    --teaser-fullwidth-headline-font-size: var(--mdx-sys-font-flex-headline2-font-size);
+    --teaser-fullwidth-headline-font-weight: var(--mdx-sys-font-flex-headline2-font-weight);
+    --teaser-fullwidth-headline-line-height: var(--mdx-sys-font-flex-headline2-line-height);
 
     display: block;
     position: relative;

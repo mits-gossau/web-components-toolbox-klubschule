@@ -318,6 +318,12 @@
   --p-margin: 0 auto var(--mdx-sys-spacing-flex-s);
   --p-form-margin: 0 auto var(--mdx-sys-spacing-flex-small-s);
 
+  /* intro text */
+  --intro-font-family: var(--mdx-sys-font-flex-body2-font-family);
+  --intro-font-size: var(--mdx-sys-font-flex-body2-font-size);
+  --intro-font-weight: var(--mdx-sys-font-weight-emphasis-light);
+  --intro-line-height: var(--mdx-sys-font-flex-body2-line-height);
+
   /* links */
   --a-color: var(--mdx-comp-link-color-default);
   --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
