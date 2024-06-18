@@ -133,6 +133,6 @@ export default class WishList extends HTMLElement {
   }
 
   get guid () {
-    return '2728e4e9-da4e-4b11-988b-7caa90b10a77' || localStorage.getItem('wishListGuid') || ''
+    return this.getAttribute('guid') || localStorage.getItem('wishListGuid') || ''
   }
 }
