@@ -295,7 +295,6 @@ export default class WithFacet extends Shadow() {
     }
     
     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    this.requestWithFacetListener()
   }
 
   removeURLParams (key, value) {
@@ -315,7 +314,6 @@ export default class WithFacet extends Shadow() {
       }
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-      this.requestWithFacetListener()
     }
   }
 
@@ -323,7 +321,6 @@ export default class WithFacet extends Shadow() {
     this.filterParams.forEach(filterItem => {
       this.params.delete(`${filterItem}`)
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-      this.requestWithFacetListener()
     })
   }
 
