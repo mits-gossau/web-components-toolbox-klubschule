@@ -274,7 +274,6 @@ export default class WithFacet extends Shadow() {
         if (this.filterParams.includes(key)) return
         if (key === 'q') {
           this.filterParams.push(key)
-          console.log('[q] exists in URL', this.filterParams)
         }
         if (filterItem.urlpara.includes(key)) {
           this.filterParams.push(key)
@@ -368,7 +367,6 @@ export default class WithFacet extends Shadow() {
 
   constructFilterItem (event) {
     const filterItem = event?.detail?.wrapper?.filterItem
-    console.log("🚀 ~ WithFacet ~ constructFilterItem ~ filterItem:", filterItem, event)
 
     return filterItem
       ? `{
