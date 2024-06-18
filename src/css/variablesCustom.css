@@ -405,7 +405,7 @@
   --grid-2columns-content-stage-label-font-custom: var(--mdx-sys-font-fix-body2);
   --grid-2columns-content-stage-label-margin-left-custom: 0.25em;
   --grid-2columns-content-stage-label-padding-custom: 0.25em 0.5em;
-  --grid-2columns-content-stage-paragraph-font-custom: var(--mdx-sys-font-flex-large-body2);
+  --grid-2columns-content-stage-paragraph-font-custom: var(--mdx-sys-font-flex-body2);
   --grid-2columns-content-stage-topline-font-custom: var(--mdx-sys-font-fix-label1);
 
   /* carousel */
