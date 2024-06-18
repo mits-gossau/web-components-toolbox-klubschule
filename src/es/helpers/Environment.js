@@ -46,20 +46,45 @@ self.Environment = {
         }
     }
   },
+  getBaseUrl: function () {
+    const url = window.location.href
+    const urlObj = new URL(url)
+    const subdomain = urlObj.hostname.split('.')[0]
+    switch (subdomain) {
+      case 'intadmin':
+      case 'int':
+      case 'localhost':
+        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
+      case 'dev':
+      case 'devadmin':
+        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
+      default:
+        return 'https://miducaexportapicustomerportalprd.azurewebsites.net'
+    }
+  },
   getApiBaseUrl: function (type) {
     switch (type) {
       case 'customer-portal': {
         return {
-          apiSubscriptionCourseAppointments: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointments`,
-          apiSubscriptionCourseAppointmentBooking: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentbooking`,
-          apiSubscriptionCourseAppointmentDetail: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentdetail`,
-          apiSubscriptionCourseAppointmentReversal: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentreversal`,
-          apiBookedSubscriptionCourseAppointments: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/bookedsubscriptioncourseappointments`,
-          apiSubscriptions: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptions`,
-          apiSubscriptionDetail: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscription`,
-          apiSubscriptionPdf: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptionpdf`,
-          subscriptionRenewSearchLinkUrl: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/${this.getCustomerPortalBaseAPIUrlByLanguage().renewSearch}`,
-          coursePDF: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/coursepdf`
+          // apiSubscriptionCourseAppointments: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointments`,
+          apiSubscriptionCourseAppointments: 'https://miducaexportapicustomerportalint.azurewebsites.net/api/CustomerPortal/subscriptioncourseappointments',
+          // apiSubscriptionCourseAppointmentBooking: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentbooking`,
+          apiSubscriptionCourseAppointmentBooking: 'https://miducaexportapicustomerportalint.azurewebsites.net/api/CustomerPortal/subscriptioncourseappointmentbooking',
+          // apiSubscriptionCourseAppointmentDetail: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentdetail`,
+          apiSubscriptionCourseAppointmentDetail: 'https://miducaexportapicustomerportalint.azurewebsites.net/api/CustomerPortal/subscriptioncourseappointmentdetail',
+          // apiSubscriptionCourseAppointmentReversal: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentreversal`,
+          apiSubscriptionCourseAppointmentReversal: 'https://miducaexportapicustomerportalint.azurewebsites.net/api/CustomerPortal/subscriptioncourseappointmentreversal',
+          // apiBookedSubscriptionCourseAppointments: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/bookedsubscriptioncourseappointments`,
+          apiBookedSubscriptionCourseAppointments: 'https://miducaexportapicustomerportalint.azurewebsites.net/api/CustomerPortal/bookedsubscriptioncourseappointments',
+          // apiSubscriptions: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptions`,
+          apiSubscriptions: `${this.getBaseUrl()}/api/CustomerPortal/subscriptions`,
+          // apiSubscriptionDetail: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscription`,
+          apiSubscriptionDetail: 'https://miducaexportapicustomerportalint.azurewebsites.net/api/CustomerPortal/subscription',
+          // apiSubscriptionPdf: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptionpdf`,
+          apiSubscriptionPdf: 'https://miducaexportapicustomerportalint.azurewebsites.net/api/CustomerPortal/subscriptionpdf',
+          // subscriptionRenewSearchLinkUrl: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/${this.getCustomerPortalBaseAPIUrlByLanguage().renewSearch}`,
+          subscriptionRenewSearchLinkUrl: 'https://int.klubschule.ch/suche/?q=',
+          coursePDF: 'https://miducaexportapicustomerportalint.azurewebsites.net/api/CustomerPortal/coursepdf'
         }
       }
       default:
