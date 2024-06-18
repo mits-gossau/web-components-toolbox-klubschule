@@ -304,7 +304,7 @@ export default class WithFacet extends Shadow() {
       this.params.set(key, value)
     }
     
-    window.location.href = `${this.url.origin}${this.url.pathname}?${this.params.toString()}`
+    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
   }
 
   removeURLParams (key, value) {
@@ -323,7 +323,7 @@ export default class WithFacet extends Shadow() {
         }
       }
 
-      window.location.href = `${this.url.origin}${this.url.pathname}?${this.params.toString()}`
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
@@ -331,7 +331,7 @@ export default class WithFacet extends Shadow() {
     this.filterParams.forEach(filterItem => {
       this.params.delete(`${filterItem}`)
 
-      window.location.href = `${this.url.origin}${this.url.pathname}?${this.params.toString()}`
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     })
   }
 
