@@ -43,6 +43,7 @@ export default class WithFacet extends Shadow() {
     let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(this.url.search)
+    this.filterParams = []
     this.isMocked = this.hasAttribute('mock')
     const apiUrl = this.isMocked
       ? `${this.importMetaUrl}./mock/default.json`
@@ -82,33 +83,39 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
-          this.removeAllFilterParamsFromURL()
+          this.removeAllURLParams()
         }
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
+          this.removeURLParams(event.detail.this.getAttribute('filter-key'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
         }
 
-        // TODO: @Alex, the location has to be kept in the URL
-
         // keep the last search location inside initialRequestObj
         if (event?.detail?.key === 'location-search') {
-          if (!!event.detail.lat && !!event.detail.lng ) {
+          if (!!event.detail.lat && !!event.detail.lng && !!event.detail.description) {
             initialRequestObj.clat = event.detail.lat
             initialRequestObj.clong = event.detail.lng
+            initialRequestObj.cname = event.detail.description
           } else {
             if (initialRequestObj.clat) delete initialRequestObj.clat
             if (initialRequestObj.clong) delete initialRequestObj.clong
+            if (initialRequestObj.cname) delete initialRequestObj.cname
           }
         }
 
-        this.updateURLParams()
+        // keep search location if it is in the url
+        if (this.params.has('clat') && this.params.has('clong') && this.params.has('cname')) {
+          initialRequestObj.clat = this.params.get('clat')
+          initialRequestObj.clong = this.params.get('clong')
+          initialRequestObj.cname = this.params.get('cname')
+        }
 
+        this.urlKungFu(event)
         this.dataLayerPush(event)
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
@@ -173,54 +180,8 @@ export default class WithFacet extends Shadow() {
                   this.lastResponse = json
                 }
 
-                // url search text kung fu
-                if (!json.searchText) {
-                  this.params.delete('q')
-                } else {
-                  this.params.set('q', json.searchText)
-                }
-
-                // url filter kung fu
-                // json.filters.forEach(filterItem => {
-                //   if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                //     const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                //     const selectedChildren = []
-
-                //     filterItem.children.forEach(child => {
-                //       // check if the child is already in the url params
-                //       const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
-
-                //       if (containsChild) {
-                //         selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                //       }
-
-                //       // if selected, add it to the url params
-                //       if (child.selected) {
-                //         if (!containsChild && !shouldResetAllFilters) {
-                //           selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                //         }
-
-                //         if (selectedChildren.length > 0) {
-                //           this.params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
-                //         }
-
-                //       // if unselected, remove it from the url params
-                //       } else {
-                //         if (containsChild) {
-                //           const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                //           selectedChildren.splice(index, 1)
-
-                //           this.params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
-
-                //           if (this.params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
-                //             this.params.delete(`${filterItem.urlpara}_${filterItem.id}`)
-                //           }
-                //         }
-                //       }
-                //     })
-                //     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-                //   }
-                // })
+                this.checkFiltersInURL(json.filters)
+                this.checkSearchInURL(json.searchText)
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -314,59 +275,113 @@ export default class WithFacet extends Shadow() {
     self.removeEventListener('popstate', this.popstateListener)
   }
 
+  checkFiltersInURL (filters) {
+    filters.forEach(filterItem => {
+      this.params.forEach((value, key) => {
+        if (this.filterParams.includes(key)) return
+        if (key === 'q' || key === 'clat' || key === 'clong' || key === 'cname') {
+          this.filterParams.push(key)
+        }
+        if (filterItem.urlpara.includes(key)) {
+          this.filterParams.push(key)
+        }
+        if (filterItem.children && filterItem.children.length > 0) {
+          this.checkFiltersInURL(filterItem.children)
+        }
+      })
+    })
+  }
+
+  checkSearchInURL (searchText) {
+    if (!searchText) {
+      this.removeURLParams('q')
+    } else {
+      this.addOrUpdateURLParams('q', searchText)
+    }
+  }
+
+  addOrUpdateURLParams (key, value) {
+    if (this.params.has(key)) {
+      const currentValue = this.params.get(key)
+      if (!currentValue?.includes(value)) {
+        this.params.set(key, `${currentValue}-${value}`)
+      }
+    } else {
+      this.params.set(key, value)
+    }
+    
+    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+  }
+
+  removeURLParams (key, value) {
+    if (this.params.has(key)) {
+      if (!value) {
+        this.params.delete(key)
+      } else {
+        const currentValue = this.params.get(key)
+
+        if (currentValue?.includes(value)) {
+          this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
+        }
+
+        if (this.params.get(key) === '') {
+          this.params.delete(key)
+        }
+      }
+
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    }
+  }
+
+  removeAllURLParams () {
+    this.filterParams.forEach(filterItem => {
+      this.params.delete(`${filterItem}`)
+
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    })
+  }
+
   catchURLParams () {
     return new URLSearchParams(self.location.search)
   }
 
-  updateURLParams () {
-    if (this.params) {
-      const entriesWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+  urlKungFu (event) {
+    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
+    const isLocationSearch = event?.detail?.key === 'location-search'
+    // const isLocationInURL = this.params.has('clat') && this.params.has('clong') && this.params.has('cname')
 
-      entriesWithUnderscore.forEach(([key, value]) => {
-        const [urlparaKey, idKey] = key.split('_')
-        const children = []
+    if (filterId) {
+      const [key, value] = filterId.split('-')
+      if (event.detail.mutationList[0].attributeName === 'checked') {
+        this.addOrUpdateURLParams(key, value)
+      } 
+      if (event.detail.mutationList[0].attributeName !== 'checked') {
+        this.removeURLParams(key, value)
+      }
+    }
 
-        value.split(',').forEach(value => {
-          const [urlparaValue, idValue] = value.split('_')
-
-          children.push(`{
-              "urlpara": "${urlparaValue}",
-              "id": "${idValue}",
-              "selected": true
-            }`)
-        })
-
-        const filter = (`{
-            "urlpara": "${urlparaKey}",
-            "id": "${idKey}",
-            "selected": true,
-            "children": [${children.join(',')}]
-          }`)
-
-        this.filters.push(filter)
-      })
+    if (isLocationSearch) {
+      this.removeURLParams('clat')
+      this.removeURLParams('clong')
+      this.removeURLParams('cname')
+      this.addOrUpdateURLParams('clat', event.detail.lat)
+      this.addOrUpdateURLParams('clong', event.detail.lng)
+      this.addOrUpdateURLParams('cname', encodeURIComponent(event.detail.description))
     }
   }
 
-  removeAllFilterParamsFromURL () {
-    if (this.params) {
-      const keys = [...this.params.keys()]
+  dataLayerPush (event) {
+    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
+    if (!filterId) return
 
-      keys.forEach(key => {
-        if (key.includes('_')) {
-          this.params.delete(key)
-        }
-      })
-
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    const [category, name] = filterId.split('-')
+    const dataLayer = {
+      'event': 'filterSelection',              
+      'filterName': `${name}`,
+      'filterCategory': `${category}`,
     }
-  }
-
-  removeFilterParamsFromURL (filterParent) {
-    if (this.params) {
-      this.params.delete(`${filterParent}`)
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    }
+    // @ts-ignore
+    self.dataLayer.push(dataLayer)
   }
 
   constructFilterItem (event) {
@@ -375,12 +390,11 @@ export default class WithFacet extends Shadow() {
     return filterItem
       ? `{
         "children": [
-          ${filterItem.children.map(child => {
+          ${filterItem.children ? filterItem.children.map(child => {
             const count = child.count ? `(${child.count})` : ''
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
             const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
-
             return `{
               ${child.count ? `"count": ${child.count},` : ''}
               ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
@@ -399,7 +413,7 @@ export default class WithFacet extends Shadow() {
               ${child.typ ? `"typ": "${child.typ}",` : ''}
               "urlpara": "${child.urlpara}"
             }`
-          })}
+          }) : ''}
         ],
         ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
         ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
@@ -416,20 +430,6 @@ export default class WithFacet extends Shadow() {
         "visible": ${filterItem.visible || true}
       }`
       : ''
-  }
-
-  dataLayerPush (event) {
-    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
-    if (!filterId) return
-
-    const [category, name] = filterId.split('-')
-    const dataLayer = {
-      'event': 'filterSelection',              
-      'filterName': `${name}`,
-      'filterCategory': `${category}`,
-    }
-    // @ts-ignore
-    self.dataLayer.push(dataLayer)
   }
 
   static historyPushState (...args) {
