@@ -6,24 +6,37 @@ export default class Checkbox extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
-      this.input.click()
+      this.input.checked = !this.input.checked;
+
+      if (this.input.hasAttribute('trigger')) {
+        this.dispatchEvent(new CustomEvent('triggered-by',
+          {
+            detail: {
+              element: this.input
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          })
+        )
+      }
     }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 
-    this.box = this.root.querySelector('.box')
+    this.wrap = this.root.querySelector('.wrap')
     this.input = this.root.querySelector('input[type="checkbox"]')
 
     /**
      * Handle checked on box
      */
-    this.box.addEventListener('click', this.clickEventListener)
+    this.wrap.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
-    this.box.removeEventListener('click', this.clickEventListener)
+    this.wrap.removeEventListener('click', this.clickEventListener)
   }
 
   shouldRenderCSS () {
@@ -37,6 +50,7 @@ export default class Checkbox extends Shadow() {
         :host {
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
 
         :host .wrap {
@@ -100,8 +114,11 @@ export default class Checkbox extends Shadow() {
         }       
 
         :host input[type='checkbox']:checked + .box a-icon-mdx {
-            display: block;
-            color: var(--color);;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color);
+            margin: 0;
         }
 
         :host .box {
@@ -115,6 +132,9 @@ export default class Checkbox extends Shadow() {
           width: 1.25em;
           margin-right: 0.75em;
           flex: 1 0 1.25em;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         :host .box a-icon-mdx {
