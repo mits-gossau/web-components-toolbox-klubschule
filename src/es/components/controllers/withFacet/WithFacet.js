@@ -375,7 +375,7 @@ export default class WithFacet extends Shadow() {
     return filterItem
       ? `{
         "children": [
-          ${filterItem.children.map(child => {
+          ${filterItem.children && filterItem.children.map(child => {
             const count = child.count ? `(${child.count})` : ''
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
