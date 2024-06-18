@@ -174,6 +174,7 @@ export default class WithFacet extends Shadow() {
                 }
 
                 this.checkFiltersInURL(json.filters)
+                this.checkSearchInURL(json.searchText)
 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -273,6 +274,7 @@ export default class WithFacet extends Shadow() {
         if (this.filterParams.includes(key)) return
         if (key === 'q') {
           this.filterParams.push(key)
+          console.log('[q] exists in URL', this.filterParams)
         }
         if (filterItem.urlpara.includes(key)) {
           this.filterParams.push(key)
@@ -282,6 +284,14 @@ export default class WithFacet extends Shadow() {
         }
       })
     })
+  }
+
+  checkSearchInURL (searchText) {
+    if (!searchText) {
+      this.removeURLParams('q')
+    } else {
+      this.addOrUpdateURLParams('q', searchText)
+    }
   }
 
   addOrUpdateURLParams (key, value) {
@@ -295,7 +305,6 @@ export default class WithFacet extends Shadow() {
     }
     
     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    this.requestWithFacetListener()
   }
 
   removeURLParams (key, value) {
@@ -315,15 +324,14 @@ export default class WithFacet extends Shadow() {
       }
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-      this.requestWithFacetListener()
     }
   }
 
   removeAllURLParams () {
     this.filterParams.forEach(filterItem => {
       this.params.delete(`${filterItem}`)
+
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-      this.requestWithFacetListener()
     })
   }
 
