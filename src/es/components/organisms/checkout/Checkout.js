@@ -24,6 +24,19 @@ export default class Checkout extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
+
+    this.root.addEventListener('triggered-by', (event) => {
+      let trigger = event.detail.element;
+      let triggeredElement = this.root.querySelector(`input[type="checkbox"][triggered-by="${trigger.id}"]`);
+
+      if (triggeredElement) {
+        triggeredElement.checked = !triggeredElement.checked;
+        triggeredElement.click();
+        triggeredElement.closest('.wrap').classList.toggle('disabled');
+      }
+
+      event.stopPropagation();
+    })
   }
 
   disconnectedCallback () {}

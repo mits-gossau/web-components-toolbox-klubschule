@@ -93,7 +93,7 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
+          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-key'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
@@ -114,8 +114,6 @@ export default class WithFacet extends Shadow() {
         }
 
         this.updateFilterFromURLParams()
-
-        this.dataLayerPush(event)
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
@@ -224,7 +222,10 @@ export default class WithFacet extends Shadow() {
       }, 50))
     }
 
+    this.abortControllerLocations = null
     this.requestLocations = event => {
+      if (this.abortControllerLocations) this.abortControllerLocations.abort()
+      this.abortControllerLocations = new AbortController()
       let body = `{
         "filter": ${JSON.stringify(event.detail.filter)},
         "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
@@ -244,7 +245,8 @@ export default class WithFacet extends Shadow() {
           'Content-Type': 'application/json'
         },
         mode: 'cors',
-        body: (this.requestLocationsLastBody = body)
+        body: (this.requestLocationsLastBody = body),
+        signal: this.abortControllerLocations.signal
       }
       // @ts-ignore
       event.detail.resolve(fetch(apiUrl, requestInit).then(response => {
@@ -428,20 +430,6 @@ export default class WithFacet extends Shadow() {
         "visible": ${filterItem.visible || true}
       }`
       : ''
-  }
-
-  dataLayerPush (event) {
-    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
-    if (!filterId) return
-
-    const [category, name] = filterId.split('-')
-    const dataLayer = {
-      'event': 'filterSelection',              
-      'filterName': `${name}`,
-      'filterCategory': `${category}`,
-    }
-    // @ts-ignore
-    self.dataLayer.push(dataLayer)
   }
 
   static historyPushState (...args) {

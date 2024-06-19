@@ -28,8 +28,8 @@ export default class Voting extends Shadow() {
         cancelable: true,
         composed: true,
         detail: {
-          courseId: params.get('kursId'),
-          customerId: params.get('teilnehmerId')
+          kursId: params.get('kursId'),
+          teilnehmerId: params.get('teilnehmerId')
         }
       })
     )
