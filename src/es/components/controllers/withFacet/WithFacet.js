@@ -305,7 +305,7 @@ export default class WithFacet extends Shadow() {
     // TODO: build filter for payload with selected filters
     const filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
     const filteredURLParams = filteredURLKeys.map(key => `${key}=${this.params.get(key)}`).join('&')
-    console.log("🚀 filteredURLParams:", filteredURLParams)
+    // console.log("🚀 filteredURLParams:", filteredURLParams)
   }
 
   updateUrlSearchFromResponse (response) {
@@ -337,7 +337,6 @@ export default class WithFacet extends Shadow() {
         // if param is already in url
         if (urlParamsContainsKey) {
           const urlParamsContainsValues = this.params.get(filterItem.urlpara)?.split('-')
-          console.log("🚀 urlParamsContainsValues:", urlParamsContainsValues)
           
           filterItem.children.forEach(child => {
             // if value is already present
@@ -361,7 +360,6 @@ export default class WithFacet extends Shadow() {
         // add filterITtem.urlpara as key with collected values to params
         if (selectedChildren.length > 0) {
           this.params.set(filterItem.urlpara, selectedChildren.join('-'))
-          console.log('selectedChildren', selectedChildren)
         }
       }
     })
