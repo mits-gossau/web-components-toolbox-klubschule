@@ -100,17 +100,24 @@ export default class WithFacet extends Shadow() {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
         }
 
-        // TODO: @Alex, the location has to be kept in the URL
-
-        // keep the last search location inside initialRequestObj
+        // keep the last search location inside initialRequestObj and store it in url params
         if (event?.detail?.key === 'location-search') {
           if (!!event.detail.lat && !!event.detail.lng ) {
             initialRequestObj.clat = event.detail.lat
             initialRequestObj.clong = event.detail.lng
+            this.params.set('clat', event.detail.lat)
+            this.params.set('clong', event.detail.lng)
+            this.params.set('cname', encodeURIComponent(event.detail.description))
           } else {
             if (initialRequestObj.clat) delete initialRequestObj.clat
             if (initialRequestObj.clong) delete initialRequestObj.clong
+            this.params.delete('clat')
+            this.params.delete('clong')
+            this.params.delete('cname')
           }
+        } else if (this.params.has('clat') || this.params.has('clong') || this.params.has('cname')) {
+          initialRequestObj.clat = this.params.get('clat')
+          initialRequestObj.clong = this.params.get('clong')
         }
 
         this.updateFilterFromURLParams()
