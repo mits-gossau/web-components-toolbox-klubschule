@@ -92,9 +92,9 @@ export default class Buttons extends Shadow() {
       const urlParams = this.hasAttribute('keep-url-params') ? window.location.search : ''
       const urlParamsMap = new URLSearchParams(urlParams)
       const urlParamsArray = Array.from(urlParamsMap.keys())
-      // TODO: keys to ignore should be moved to .env file
+      // TODO: keys to ignore should be moved to .env file (see also WithFacet.js)
       const ignoreURLKeys = ['rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
-                            'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']; // GA parameters
+                            'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] // GA parameters
       const filteredURLKeys = urlParamsArray.filter(key => !ignoreURLKeys.includes(key))
       filteredURLParams = filteredURLKeys.map(key => `${key}=${urlParamsMap.get(key)}`).join('&')
     }
@@ -103,9 +103,9 @@ export default class Buttons extends Shadow() {
       // keep existing url params
       if (shouldKeepURLParams && button.link){
         if (button.link.includes('?')) {
-          button.link = button.link + '&' + filteredURLParams
+          button.link = button.link + '&' + encodeURIComponent(filteredURLParams)
         } else {
-          button.link = button.link + '?' + filteredURLParams
+          button.link = button.link + '?' + encodeURIComponent(filteredURLParams)
         }
       }
 
