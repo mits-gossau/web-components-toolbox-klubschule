@@ -141,9 +141,6 @@ export default class AppointmentsList extends Shadow() {
     this.renderLoading()
     return fetch.then(appointments => {
       this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
-      // if (appointments.errorCode !== 0) {
-      //   throw new Error(`${appointments.errorMessage}`)
-      // }
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,
