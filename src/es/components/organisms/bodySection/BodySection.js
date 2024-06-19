@@ -67,6 +67,14 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: 0 !important;
         }
 
+        :host([no-margin-bottom]) {
+            margin-bottom: 0 !important;
+        }
+
+        :host([margin-top-m]) {
+            margin-top: var(--mdx-sys-spacing-flex-m) !important;
+        }
+
         :host([variant=default]) > * {
             width: var(--body-section-default-width, 86.666%);
         }
