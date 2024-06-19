@@ -254,10 +254,17 @@
   --search-input-border-color-hover: var(--mdx-base-color-grey-975);
   --search-input-border-color-custom: var(--m-gray-700);
   --search-input-color: var(--mdx-base-color-grey-975);
-  --search-input-padding: 0.5em 1em;
+  --search-input-padding: 0.5rem 1.5rem;
+  --search-input-padding-mobile: 0.5rem 1rem;
+  --search-icon-right: 1.5rem;
+  --search-icon-right-mobile: 1rem;
   --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big: 100%;
   --search-input-border-radius: 999px; /* search inputs are fully rounded for all brands */
+  --search-input-height: 3.25rem; /* mdx token missing */
+  --search-input-height-mobile: 2.5rem;
+  --search-input-font-size: var(--mdx-sys-font-fix-label1-font-size);
+  --search-input-font-size-mobile: var(--mdx-sys-font-fix-label2-font-size);
   --search-justify-content-custom: flex-end;
   --search-label-font-size: var(--font-size);
   --search-label-line-height: calc(4/3);
