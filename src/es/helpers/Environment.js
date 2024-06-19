@@ -22,44 +22,62 @@ self.Environment = {
         return '767px'
     }
   },
-  getCustomerPortalBaseAPIUrlByLanguage: function () {
+  getCustomerPortalRenewalLinkByLanguage: function () {
     switch (self.Environment.language) {
       case 'fr-CH':
+      case 'fr':
         return {
-          baseAPI: this.isTestingEnv ? 'https://qual.ecole-club.ch' : 'https://qual.ecole-club.ch',
-          renewSearch: 'Cours/recherche@'
+          url: 'https://{env}.ecole-club.ch',
+          path: 'rechecher'
         }
       case 'it-CH':
+      case 'it':
         return {
-          baseAPI: this.isTestingEnv ? 'https://qual.scuola-club.ch' : 'https://qual.scuola-club.ch',
-          renewSearch: 'Corsi/ricerca@'
+          url: 'https://{env}.scuola-club.ch',
+          path: 'ricerca'
         }
       case 'de-CH':
+      case 'de':
         return {
-          baseAPI: this.isTestingEnv ? 'https://qual.klubschule.ch' : 'https://qual.klubschule.ch',
-          renewSearch: 'Kurse/suche@'
+          url: 'https://{env}.klubschule.ch',
+          path: 'suche'
         }
       default:
         return {
-          baseAPI: this.isTestingEnv ? 'https://qual.klubschule.ch' : 'https://qual.klubschule.ch',
-          renewSearch: 'Kurse/suche@'
+          url: 'https://www.klubschule.ch',
+          path: 'suche'
         }
+    }
+  },
+  getEnvUrl: function () {
+    const url = window.location.href
+    const urlObj = new URL(url)
+    const subdomain = urlObj.hostname.split('.')[0]
+    switch (subdomain) {
+      case 'intadmin':
+      case 'int':
+      case 'localhost':
+        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
+      case 'dev':
+      case 'devadmin':
+        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
+      default:
+        return 'https://miducaexportapicustomerportalprd.azurewebsites.net'
     }
   },
   getApiBaseUrl: function (type) {
     switch (type) {
       case 'customer-portal': {
         return {
-          apiSubscriptionCourseAppointments: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointments`,
-          apiSubscriptionCourseAppointmentBooking: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentbooking`,
-          apiSubscriptionCourseAppointmentDetail: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentdetail`,
-          apiSubscriptionCourseAppointmentReversal: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptioncourseappointmentreversal`,
-          apiBookedSubscriptionCourseAppointments: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/bookedsubscriptioncourseappointments`,
-          apiSubscriptions: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptions`,
-          apiSubscriptionDetail: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscription`,
-          apiSubscriptionPdf: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/subscriptionpdf`,
-          subscriptionRenewSearchLinkUrl: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/${this.getCustomerPortalBaseAPIUrlByLanguage().renewSearch}`,
-          coursePDF: `${this.getCustomerPortalBaseAPIUrlByLanguage().baseAPI}/api/CustomerPortal/coursepdf`
+          apiSubscriptionCourseAppointments: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointments`,
+          apiSubscriptionCourseAppointmentBooking: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointmentbooking`,
+          apiSubscriptionCourseAppointmentDetail: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointmentdetail`,
+          apiSubscriptionCourseAppointmentReversal: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointmentreversal`,
+          apiBookedSubscriptionCourseAppointments: `${this.getEnvUrl()}/api/CustomerPortal/bookedsubscriptioncourseappointments`,
+          apiSubscriptions: `${this.getEnvUrl()}/api/CustomerPortal/subscriptions`,
+          apiSubscriptionDetail: `${this.getEnvUrl()}/api/CustomerPortal/subscription`,
+          apiSubscriptionPdf: `${this.getEnvUrl()}/api/CustomerPortal/subscriptionpdf`,
+          coursePDF: `${this.getEnvUrl()}/api/CustomerPortal/coursepdf`
         }
       }
       default:

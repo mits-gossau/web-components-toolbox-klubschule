@@ -81,9 +81,6 @@ export default class SubscriptionsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     fetch.then(subscriptions => {
-      if (subscriptions.errorCode !== 0) {
-        throw new Error(`${subscriptions.errorMessage}`)
-      }
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,

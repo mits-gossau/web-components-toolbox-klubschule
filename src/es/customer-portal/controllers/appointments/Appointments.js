@@ -60,8 +60,10 @@ export default class Appointments extends HTMLElement {
     const data = {
       userId,
       subscriptionType,
-      subscriptionId
+      subscriptionId,
+      language: this.getLanguage()
     }
+
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionCourseAppointments)
     this.dispatchEvent(new CustomEvent('update-subscription-course-appointments', {
       detail: {
@@ -262,7 +264,8 @@ export default class Appointments extends HTMLElement {
       courseType: tags[0].courseType,
       subscriptionId: tags[1].subscriptionId,
       subscriptionType: tags[1].subscriptionType,
-      userId: this.dataset.userId
+      userId: this.dataset.userId,
+      language: this.getLanguage()
     }
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionCourseAppointmentBooking)
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', {
@@ -297,7 +300,8 @@ export default class Appointments extends HTMLElement {
       courseType: tags[0].courseType,
       subscriptionId: tags[1].subscriptionId,
       subscriptionType: tags[1].subscriptionType,
-      userId: this.dataset.userId
+      userId: this.dataset.userId,
+      language: this.getLanguage()
     }
     const type = tags[2] ? tags[2].type : ''
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionCourseAppointmentDetail)
@@ -333,7 +337,8 @@ export default class Appointments extends HTMLElement {
       courseType: tags[0].courseType,
       subscriptionId: tags[1].subscriptionId,
       subscriptionType: tags[1].subscriptionType,
-      userId: this.dataset.userId
+      userId: this.dataset.userId,
+      language: this.getLanguage()
     }
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionCourseAppointmentReversalListener)
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', {
@@ -363,9 +368,9 @@ export default class Appointments extends HTMLElement {
       userId,
       subscriptionType,
       subscriptionId,
-      includeConsumedAppointments: 'false'
+      includeConsumedAppointments: true,
+      language: this.getLanguage()
     }
-
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerBookedSubscriptionCourseAppointments)
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiBookedSubscriptionCourseAppointments}`
@@ -425,5 +430,10 @@ export default class Appointments extends HTMLElement {
   syncSelectedFilter (list, key, match, selected) {
     const listItem = list.find(item => item[key] === match)
     if (listItem) listItem.selected = selected
+  }
+
+  getLanguage () {
+    // @ts-ignore
+    return self.Environment.language.substring(0, 2) || 'de'
   }
 }
