@@ -20,6 +20,8 @@ export default class Checkbox extends Shadow() {
           })
         )
       }
+
+      event.preventDefault();
     }
   }
 
