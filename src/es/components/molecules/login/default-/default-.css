@@ -45,7 +45,7 @@
 @media only screen and (max-width: _max-width_) {
     :host,
     :host > section {
-        gap: 1rem;
+        gap: 1.5rem;
     }
     :host .only-desktop {
         display: none;
