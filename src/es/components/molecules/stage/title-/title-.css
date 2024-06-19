@@ -46,9 +46,15 @@
 :host > .topline {
     padding-top: var(--mdx-sys-spacing-flex-m);
     margin-top: 0 !important;
-    margin-bottom: var(--mdx-sys-spacing-flex-m) !important;
+    margin-bottom: 0 !important;
     width: 100%;
     text-align: left;
+}
+
+:host ks-a-back-link {
+    /* remove default spacing */
+    --content-spacing: 0;
+    --content-spacing-mobile: 0;
 }
 
 :host a {
@@ -58,6 +64,7 @@
 }
 
 :host > ks-a-heading {
+    padding-top: var(--mdx-sys-spacing-flex-m);
     padding-bottom: var(--mdx-sys-spacing-flex-m);
     max-width: calc(64rem + 2 * var(--mdx-sys-spacing-flex-xs));
 }
@@ -65,5 +72,9 @@
 @media screen and (max-width: _max-width_) {
     :host a-picture {
         --aspect-ratio: 4/3;
+    }
+
+    :host > .topline {
+        padding-top: var(--mdx-sys-spacing-flex-s);
     }
 }
