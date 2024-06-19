@@ -138,6 +138,9 @@ export default class OffersPage extends Shadow() {
       :host ks-o-body-section {
         padding: 3.375em 0 5em;
       }
+      :host([headless]) ks-o-body-section {
+        padding: 0;
+      }
       @media only screen and (max-width: _max-width_) {
         :host ks-o-body-section {
           padding: 3em 0 4em;
@@ -446,6 +449,9 @@ export default class OffersPage extends Shadow() {
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
+            ${this.hasAttribute('headless')
+              ? ''
+              : /* html */`
               <o-grid namespace="grid-12er-">
                 <section>
                   ${this.hasAttribute('no-search-tab')
@@ -507,6 +513,7 @@ export default class OffersPage extends Shadow() {
               </o-grid>
               <section id="sort-options" class="margin-bottom-fix-s">
               </section>
+            `}
               <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}></ks-m-tile-factory>
               ${this.badgeContainer
                 ? /* HTML */ `
