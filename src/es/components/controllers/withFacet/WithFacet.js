@@ -115,8 +115,6 @@ export default class WithFacet extends Shadow() {
 
         this.updateFilterFromURLParams()
 
-        this.dataLayerPush(event)
-
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
         let hasSearchLocation = false
@@ -428,20 +426,6 @@ export default class WithFacet extends Shadow() {
         "visible": ${filterItem.visible || true}
       }`
       : ''
-  }
-
-  dataLayerPush (event) {
-    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
-    if (!filterId) return
-
-    const [category, name] = filterId.split('-')
-    const dataLayer = {
-      'event': 'filterSelection',              
-      'filterName': `${name}`,
-      'filterCategory': `${category}`,
-    }
-    // @ts-ignore
-    self.dataLayer.push(dataLayer)
   }
 
   static historyPushState (...args) {

@@ -341,6 +341,8 @@ export default class OffersPage extends Shadow() {
               icon-size="1.25em"
               search type="search"
               answer-event-name="search-change"
+              readonly
+              pointer
             >
             </a-input>
           </m-dialog>
@@ -391,6 +393,8 @@ export default class OffersPage extends Shadow() {
                   search
                   type="search"
                   answer-event-name="location-change"
+                  readonly
+                  pointer
                 >
                 </a-input>
             </m-dialog>
