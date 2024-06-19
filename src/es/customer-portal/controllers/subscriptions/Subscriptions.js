@@ -108,7 +108,8 @@ export default class Subscriptions extends HTMLElement {
     const data = {
       subscriptionId,
       subscriptionType,
-      userId
+      userId,
+      language: this.getLanguage()
     }
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionPdf}`
