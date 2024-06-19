@@ -42,8 +42,13 @@ export default class WithFacet extends Shadow() {
     // additional setting for initial request
     let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
     this.url = new URL(self.location.href)
-    this.params = new URLSearchParams(this.url.search)
-    this.filterParams = []
+    this.params = this.catchURLParams()
+    this.filterKeys = []
+    this.ignoreURLKeys = [
+      'rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
+      'q', // search term, handled separately
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content' // GA parameters
+    ] 
     this.isMocked = this.hasAttribute('mock')
     const apiUrl = this.isMocked
       ? `${this.importMetaUrl}./mock/default.json`
@@ -83,19 +88,19 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
-          this.removeAllURLParams()
+          this.removeAllFilterParamsFromURL()
         }
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeURLParams(event.detail.this.getAttribute('filter-key'))
+          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
         }
 
-        // TODO: @Alex, the location and location name has to be kept in the URL
+        // TODO: @Alex, the location has to be kept in the URL
 
         // keep the last search location inside initialRequestObj
         if (event?.detail?.key === 'location-search') {
@@ -108,7 +113,8 @@ export default class WithFacet extends Shadow() {
           }
         }
 
-        this.urlKungFu(event)
+        this.updateFilterFromURLParams()
+
         this.dataLayerPush(event)
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
@@ -174,8 +180,11 @@ export default class WithFacet extends Shadow() {
                 }
 
                 this.checkFiltersInURL(json.filters)
-                this.checkSearchInURL(json.searchText)
 
+                this.updateUrlSearchFromResponse(json)
+
+                this.updateUrlParamsFromResponse(json)
+                
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
                 if (shouldResetFilter) json = Object.assign(json, { shouldResetFilter })
@@ -268,16 +277,19 @@ export default class WithFacet extends Shadow() {
     self.removeEventListener('popstate', this.popstateListener)
   }
 
+  catchURLParams () {
+    return new URLSearchParams(self.location.search)
+  }
+
   checkFiltersInURL (filters) {
     filters.forEach(filterItem => {
       this.params.forEach((value, key) => {
-        if (this.filterParams.includes(key)) return
-        if (key === 'q') {
-          this.filterParams.push(key)
-          console.log('[q] exists in URL', this.filterParams)
+        if (this.filterKeys.includes(key)) return
+        if (key === 'q' || key === 'clat' || key === 'clong' || key === 'cname') {
+          this.filterKeys.push(key)
         }
         if (filterItem.urlpara.includes(key)) {
-          this.filterParams.push(key)
+          this.filterKeys.push(key)
         }
         if (filterItem.children && filterItem.children.length > 0) {
           this.checkFiltersInURL(filterItem.children)
@@ -286,85 +298,88 @@ export default class WithFacet extends Shadow() {
     })
   }
 
-  checkSearchInURL (searchText) {
-    if (!searchText) {
-      this.removeURLParams('q')
+  updateFilterFromURLParams () {
+    // Handled by cms and backend
+  }
+
+  updateUrlSearchFromResponse (response) {
+    if (!response.searchText) {
+      this.params.delete('q')
     } else {
-      this.addOrUpdateURLParams('q', searchText)
+      this.params.set('q', response.searchText)
     }
   }
 
-  addOrUpdateURLParams (key, value) {
-    if (this.params.has(key)) {
-      const currentValue = this.params.get(key)
-      if (!currentValue?.includes(value)) {
-        this.params.set(key, `${currentValue}-${value}`)
-      }
+  updateParamsWithSelectedChildren(filterItem) {
+    const selectedChildren = filterItem.children
+      .filter(child => child.selected)
+      .map(child => child.urlpara);
+  
+    if (selectedChildren.length > 0) {
+      this.params.set(filterItem.urlpara, selectedChildren.join('-'));
     } else {
-      this.params.set(key, value)
+      this.params.delete(filterItem.urlpara);
     }
-    
-    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
   }
 
-  removeURLParams (key, value) {
-    if (this.params.has(key)) {
-      if (!value) {
-        this.params.delete(key)
-      } else {
-        const currentValue = this.params.get(key)
+  updateUrlParamsFromResponse (response) {
+    response.filters.forEach(filterItem => {
+      if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+        if (this.filterKeys.includes(filterItem.urlpara)) {
+          // @ts-ignore
+          const values = this.params.get(`${filterItem.urlpara}`)?.split('-')
 
-        if (currentValue?.includes(value)) {
-          this.params.set(key, currentValue.split('-').filter(val => val !== value).join('-'))
+          if (values) {
+            filterItem.children.forEach(child => {
+              if (child.selected && !values.includes(child.urlpara)) {
+                values.push(child.urlpara)
+              }
+              if (!child.selected && values.includes(child.urlpara)) {
+                const index = values.indexOf(child.urlpara)
+                values.splice(index, 1)
+              }
+            })
+
+            if (values.length > 0) {
+              this.params.set(`${filterItem.urlpara}`, values.join('-'))
+            }
+
+            if (values.length === 0) {
+              this.params.delete(`${filterItem.urlpara}`)
+            }
+          } else {
+            this.updateParamsWithSelectedChildren(filterItem)
+          }
+        } else {
+          this.updateParamsWithSelectedChildren(filterItem)    
         }
 
-        if (this.params.get(key) === '') {
-          this.params.delete(key)
-        }
+        WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
       }
-
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    }
-  }
-
-  removeAllURLParams () {
-    this.filterParams.forEach(filterItem => {
-      this.params.delete(`${filterItem}`)
-
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     })
   }
 
-  catchURLParams () {
-    return new URLSearchParams(self.location.search)
-  }
+  removeAllFilterParamsFromURL () {
+    if (this.params) {
+      const keys = [...this.params.keys()]
 
-  urlKungFu (event) {
-    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
-    if (filterId) {
-      const [key, value] = filterId.split('-')
-      if (event.detail.mutationList[0].attributeName === 'checked') {
-        this.addOrUpdateURLParams(key, value)
-      } 
-      if (event.detail.mutationList[0].attributeName !== 'checked') {
-        this.removeURLParams(key, value)
-      }
+      keys.forEach(key => {
+        if (key.includes('_')) {
+          this.params.delete(key)
+        }
+      })
+
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  dataLayerPush (event) {
-    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
-    if (!filterId) return
-
-    const [category, name] = filterId.split('-')
-    const dataLayer = {
-      'event': 'filterSelection',              
-      'filterName': `${name}`, //the name of the clicked filter.
-      'filterCategory': `${category}`, //the category that this filter belongs to - IF there is one, if not we can remove this key
+  removeFilterParamsFromURL (filterParent) {
+    if (this.params) {
+      this.params.delete(`${filterParent}`)
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
-    // @ts-ignore
-    self.dataLayer.push(dataLayer)
   }
+
 
   constructFilterItem (event) {
     const filterItem = event?.detail?.wrapper?.filterItem
@@ -372,11 +387,12 @@ export default class WithFacet extends Shadow() {
     return filterItem
       ? `{
         "children": [
-          ${filterItem.children.map(child => {
+          ${filterItem.children && filterItem.children.map(child => {
             const count = child.count ? `(${child.count})` : ''
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
             const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
+
             return `{
               ${child.count ? `"count": ${child.count},` : ''}
               ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
@@ -412,6 +428,20 @@ export default class WithFacet extends Shadow() {
         "visible": ${filterItem.visible || true}
       }`
       : ''
+  }
+
+  dataLayerPush (event) {
+    const filterId = event?.detail?.target?.hasAttribute('filter-id') ? event.detail.target.getAttribute('filter-id') : null
+    if (!filterId) return
+
+    const [category, name] = filterId.split('-')
+    const dataLayer = {
+      'event': 'filterSelection',              
+      'filterName': `${name}`,
+      'filterCategory': `${category}`,
+    }
+    // @ts-ignore
+    self.dataLayer.push(dataLayer)
   }
 
   static historyPushState (...args) {
