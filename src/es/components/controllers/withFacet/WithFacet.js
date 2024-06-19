@@ -284,6 +284,7 @@ export default class WithFacet extends Shadow() {
   }
 
   checkFiltersInURL (filters) {
+    // console.log('checkFiltersInURL', filters)
     filters.forEach(filterItem => {
       this.params.forEach((value, key) => {
         if (this.filterKeys.includes(key)) return
@@ -301,7 +302,10 @@ export default class WithFacet extends Shadow() {
   }
 
   updateFilterFromURLParams () {
-    // Handled by cms and backend
+    // TODO: build filter for payload with selected filters
+    const filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
+    const filteredURLParams = filteredURLKeys.map(key => `${key}=${this.params.get(key)}`).join('&')
+    // console.log("🚀 filteredURLParams:", filteredURLParams)
   }
 
   updateUrlSearchFromResponse (response) {
@@ -315,50 +319,52 @@ export default class WithFacet extends Shadow() {
   updateParamsWithSelectedChildren(filterItem) {
     const selectedChildren = filterItem.children
       .filter(child => child.selected)
-      .map(child => child.urlpara);
+      .map(child => child.urlpara)
   
     if (selectedChildren.length > 0) {
-      this.params.set(filterItem.urlpara, selectedChildren.join('-'));
+      this.params.set(filterItem.urlpara, selectedChildren.join('-'))
     } else {
-      this.params.delete(filterItem.urlpara);
+      this.params.delete(filterItem.urlpara)
     }
   }
 
   updateUrlParamsFromResponse (response) {
     response.filters.forEach(filterItem => {
       if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-        if (this.filterKeys.includes(filterItem.urlpara)) {
-          // @ts-ignore
-          const values = this.params.get(`${filterItem.urlpara}`)?.split('-')
+        const urlParamsContainsKey = this.params.has(filterItem.urlpara)
+        const selectedChildren = []
 
-          if (values) {
-            filterItem.children.forEach(child => {
-              if (child.selected && !values.includes(child.urlpara)) {
-                values.push(child.urlpara)
-              }
-              if (!child.selected && values.includes(child.urlpara)) {
-                const index = values.indexOf(child.urlpara)
-                values.splice(index, 1)
-              }
-            })
-
-            if (values.length > 0) {
-              this.params.set(`${filterItem.urlpara}`, values.join('-'))
+        // if param is already in url
+        if (urlParamsContainsKey) {
+          const urlParamsContainsValues = this.params.get(filterItem.urlpara)?.split('-')
+          
+          filterItem.children.forEach(child => {
+            // if value is already present
+            if (urlParamsContainsValues?.includes(child.urlpara)) {
+              selectedChildren.push(child.urlpara)
             }
-
-            if (values.length === 0) {
-              this.params.delete(`${filterItem.urlpara}`)
+            // if value is not present
+            if (child.selected && !selectedChildren.includes(child.urlpara)) {
+              selectedChildren.push(child.urlpara)
             }
-          } else {
-            this.updateParamsWithSelectedChildren(filterItem)
-          }
+          })
+        // if param is not in url
         } else {
-          this.updateParamsWithSelectedChildren(filterItem)    
+          filterItem.children.forEach(child => {
+            if (child.selected && !selectedChildren.includes(child.urlpara)) {
+              selectedChildren.push(child.urlpara)
+            }
+          })
         }
 
-        WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+        // add filterITtem.urlpara as key with collected values to params
+        if (selectedChildren.length > 0) {
+          this.params.set(filterItem.urlpara, selectedChildren.join('-'))
+        }
       }
     })
+
+    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
   }
 
   removeAllFilterParamsFromURL () {
