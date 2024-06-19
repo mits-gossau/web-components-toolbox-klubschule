@@ -28,12 +28,14 @@ export default class Checkout extends Shadow() {
     this.root.addEventListener('triggered-by', (event) => {
       let trigger = event.detail.element;
       let triggeredElement = this.root.querySelector(`input[type="checkbox"][triggered-by="${trigger.id}"]`);
-      // let visibleTrigger = this.root.querySelector(`div[visible-by="${triggeredElement.id}"][triggered-by="${trigger.id}"]`);
 
       if (triggeredElement) {
+        triggeredElement.checked = !triggeredElement.checked;
         triggeredElement.click();
         triggeredElement.closest('.wrap').classList.toggle('disabled');
       }
+
+      event.stopPropagation();
     })
   }
 

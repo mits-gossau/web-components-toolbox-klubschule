@@ -7,6 +7,7 @@ export default class Checkbox extends Shadow() {
 
     this.clickEventListener = event => {
       this.input.checked = !this.input.checked;
+      this.input.click();
 
       if (this.input.hasAttribute('trigger')) {
         this.dispatchEvent(new CustomEvent('triggered-by',
@@ -21,7 +22,7 @@ export default class Checkbox extends Shadow() {
         )
       }
 
-      event.preventDefault();
+      event.stopPropagation();
     }
   }
 
