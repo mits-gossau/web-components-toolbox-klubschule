@@ -334,19 +334,22 @@ export default class WithFacet extends Shadow() {
         const urlParamsContainsKey = this.params.has(filterItem.urlpara)
         const selectedChildren = []
 
+        // if param is already in url
         if (urlParamsContainsKey) {
           const urlParamsContainsValues = this.params.get(filterItem.urlpara)?.split('-')
           console.log("🚀 urlParamsContainsValues:", urlParamsContainsValues)
           
           filterItem.children.forEach(child => {
-            // check if child.urlpara is in urlParamsContainsValues
+            // if value is already present
             if (urlParamsContainsValues?.includes(child.urlpara)) {
               selectedChildren.push(child.urlpara)
             }
+            // if value is not present
             if (child.selected && !selectedChildren.includes(child.urlpara)) {
               selectedChildren.push(child.urlpara)
             }
           })
+        // if param is not in url
         } else {
           filterItem.children.forEach(child => {
             if (child.selected && !selectedChildren.includes(child.urlpara)) {
@@ -355,6 +358,7 @@ export default class WithFacet extends Shadow() {
           })
         }
 
+        // add filterITtem.urlpara as key with collected values to params
         if (selectedChildren.length > 0) {
           this.params.set(filterItem.urlpara, selectedChildren.join('-'))
           console.log('selectedChildren', selectedChildren)
