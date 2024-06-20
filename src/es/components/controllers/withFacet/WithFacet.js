@@ -43,6 +43,7 @@ export default class WithFacet extends Shadow() {
     let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
+    this.filters = []
     this.filterKeys = []
     this.ignoreURLKeys = [
       'rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
@@ -79,7 +80,6 @@ export default class WithFacet extends Shadow() {
         const initialFilters = initialRequestObj?.filter
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
-        this.filters = []
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
 
@@ -316,7 +316,7 @@ export default class WithFacet extends Shadow() {
   }
 
   updateFilterFromURLParams () {
-    this.filters = []
+    // this.filters = []
     const filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
     const filterItems = []
 
