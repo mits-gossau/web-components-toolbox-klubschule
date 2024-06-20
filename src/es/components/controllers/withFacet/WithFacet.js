@@ -57,6 +57,8 @@ export default class WithFacet extends Shadow() {
     this.lastResponse = {}
     // simply the payload of the last request
     this.lastRequest = null
+    // recursion depth counter
+    this.filtersInURLRecursionDepth = 0
 
     this.requestWithFacetListener = (event) => {
       // mdx prevent double event
@@ -88,12 +90,12 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
-          this.removeAllFilterParamsFromURL()
+          this.removeAllFilterParams()
         }
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          // this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-key'))
+          this.removeFilterParam(event.detail.this.getAttribute('filter-key'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
@@ -289,7 +291,8 @@ export default class WithFacet extends Shadow() {
   }
 
   checkFiltersInURL (filters) {
-    // console.log('checkFiltersInURL', filters)
+    this.filtersInURLRecursionDepth++
+
     filters.forEach(filterItem => {
       this.params.forEach((value, key) => {
         if (this.filterKeys.includes(key)) return
@@ -300,17 +303,20 @@ export default class WithFacet extends Shadow() {
           this.filterKeys.push(key)
         }
         if (filterItem.children && filterItem.children.length > 0) {
-          this.checkFiltersInURL(filterItem.children)
+          this.checkFiltersInURL(filterItem.children) // Recursive call
         }
       })
     })
-    
-    this.updateFilterFromURLParams()
+
+    this.filtersInURLRecursionDepth--
+
+    if (this.filtersInURLRecursionDepth === 0) {
+      this.updateFilterFromURLParams();
+    }
   }
 
   updateFilterFromURLParams () {
     const filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
-    const filteredURLParams = filteredURLKeys.map(key => `${key}=${this.params.get(key)}`).join('&')
     const filterItems = []
 
     if (this.filterKeys.length !== 0 && this.lastResponse.filters) {
@@ -323,17 +329,22 @@ export default class WithFacet extends Shadow() {
     filterItems.forEach(item => {
       if (filteredURLKeys.includes(item.urlpara)) {
         item.children.forEach(child => {
-          if (filteredURLParams.includes(child.urlpara)) {
+          if (this.params.get(item.urlpara)?.split('-').includes(child.urlpara)) {
             child.selected = true
+          } else {
+            child.selected = false
           }
         })
       }
     })
 
-    filterItems.forEach(item => {
-      const filter = this.constructFilterItem(item)
-      if (filter) this.filters.push(filter)
-    })
+    if (filterItems.length > 0) {
+      console.log(filterItems)
+      filterItems.forEach(item => {
+        const filter = this.constructFilterItem(item)
+        if (filter) this.filters.push(filter)
+      })
+    }
   }
 
   updateUrlSearchFromResponse (response) {
@@ -395,7 +406,7 @@ export default class WithFacet extends Shadow() {
     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
   }
 
-  removeAllFilterParamsFromURL () {
+  removeAllFilterParams () {
     if (this.params) {
       this.filterKeys.forEach(key => {
         this.params.delete(key)
@@ -408,11 +419,13 @@ export default class WithFacet extends Shadow() {
     }
   }
 
-  removeFilterParamsFromURL (key) {
+  removeFilterParam (key) {
     if (this.params) {
       this.params.delete(key)
       this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
       this.filters = this.filters.filter(filter => !filter.includes(`"${key}"`))
+
+      console.log(this.params.toString(), this.filterKeys, this.filters)
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
