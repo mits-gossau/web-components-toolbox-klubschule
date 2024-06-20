@@ -180,9 +180,7 @@ export default class WithFacet extends Shadow() {
                 throw new Error(response.statusText)
               }).then(json => {
                 // store initial response
-                // if (!this.filters.length || this.filters.length === 0) {
-                  this.lastResponse = json
-                // }
+                this.lastResponse = json
 
                 this.checkFiltersInURL(json.filters)
 
@@ -311,19 +309,26 @@ export default class WithFacet extends Shadow() {
   }
 
   updateFilterFromURLParams () {
-    // TODO: build filter for payload with selected filters
     const filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
     const filteredURLParams = filteredURLKeys.map(key => `${key}=${this.params.get(key)}`).join('&')
-    console.log("🚀 filteredURLParams:", filteredURLParams, this.filterKeys, this.lastResponse.filters)
+    const filterItems = []
 
-    // check if key is in last response
-    if (this.filterKeys.length === 0 && this.lastResponse.filters) {
+    if (this.filterKeys.length !== 0 && this.lastResponse.filters) {
       this.filterKeys.forEach(key => {
         const filterItem = this.lastResponse.filters.find(filterItem => filterItem.urlpara === key)
-        console.log("🚀 filterItem:", filterItem)
+        if (filterItem) filterItems.push(filterItem)
       })
     }
 
+    filterItems.forEach(item => {
+      if (filteredURLKeys.includes(item.urlpara)) {
+        item.children.forEach(child => {
+          if (filteredURLParams.includes(child.urlpara)) {
+            child.selected = true
+          }
+        })
+      }
+    })
   }
 
   updateUrlSearchFromResponse (response) {
