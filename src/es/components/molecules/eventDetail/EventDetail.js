@@ -31,25 +31,8 @@ export default class EventDetail extends Shadow() {
   }
 
   connectedCallback () {
-    this.hidden = true
-    new Promise(resolve => {
-      this.dispatchEvent(new CustomEvent('request-translations',
-        {
-          detail: {
-            resolve
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }))
-    }).then(async result => {
-      await result.fetch
-      this.getTranslation = result.getTranslationSync
-      const showPromises = []
-      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-      Promise.all(showPromises).then(() => (this.hidden = false))
-    })
+    if (this.shouldRenderCSS()) this.renderCSS()
+    if (this.shouldRenderHTML()) this.renderHTML()
 
     this.linkMore = this.root.querySelector('.link-more')
     this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
@@ -418,7 +401,7 @@ export default class EventDetail extends Shadow() {
             `, '') : ''}
             ${this.data.abo_typen_link_label && this.data.abo_typen_link ? /* html */ `
               <ks-c-abonnements>
-                <ks-m-abonnements abo-id="${this.data.kurs_id}" abonnements-api="${this.data.abo_typen_link}" link-label="${this.data.abo_typen_link_label}" button-close-label="${this.closeButton || this.getTranslation('Filter.closeOverlayer') || 'Schliessen'}">
+                <ks-m-abonnements abo-id="${this.data.kurs_id}" abonnements-api="${this.data.abo_typen_link}" link-label="${this.data.abo_typen_link_label}" button-close-label="${this.closeButton || 'Schliessen'}">
                 </ks-m-abonnements>
               </ks-c-abonnements>
             ` : ''}
