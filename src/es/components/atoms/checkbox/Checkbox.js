@@ -6,8 +6,9 @@ export default class Checkbox extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
-      this.input.checked = !this.input.checked;
-      this.input.click();
+      event.preventDefault()
+      event.stopPropagation()
+      this.input.click()
 
       if (this.input.hasAttribute('trigger')) {
         this.dispatchEvent(new CustomEvent('triggered-by',
@@ -21,25 +22,19 @@ export default class Checkbox extends Shadow() {
           })
         )
       }
-
-      event.stopPropagation();
     }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-
-    this.wrap = this.root.querySelector('.wrap')
-    this.input = this.root.querySelector('input[type="checkbox"]')
-
     /**
      * Handle checked on box
      */
-    this.wrap.addEventListener('click', this.clickEventListener)
+    this.clickableElements.forEach(element => element.addEventListener('click', this.clickEventListener))
   }
 
   disconnectedCallback () {
-    this.wrap.removeEventListener('click', this.clickEventListener)
+    this.clickableElements.forEach(element => element.removeEventListener('click', this.clickEventListener))
   }
 
   shouldRenderCSS () {
@@ -184,5 +179,13 @@ export default class Checkbox extends Shadow() {
             namespace: false
           }])
     }
+  }
+
+  get input () {
+    return this.root.querySelector('input[type="checkbox"]')
+  }
+
+  get clickableElements () {
+    return this.root.querySelectorAll('.control > *:not(input[type="checkbox"])')
   }
 }
