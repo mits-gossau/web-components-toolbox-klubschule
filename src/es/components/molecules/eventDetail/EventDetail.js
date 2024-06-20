@@ -40,6 +40,22 @@ export default class EventDetail extends Shadow() {
     if (this.linkMore) {
       this.linkMore.addEventListener('click', this.clickEventListener)
     }
+
+    this.translationPromise = new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-translations',
+        {
+          detail: {
+            resolve
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
+      const showPromises = []
+    })
   }
 
   disconnectedCallback () {
@@ -401,7 +417,7 @@ export default class EventDetail extends Shadow() {
             `, '') : ''}
             ${this.data.abo_typen_link_label && this.data.abo_typen_link ? /* html */ `
               <ks-c-abonnements>
-                <ks-m-abonnements abo-id="${this.data.kurs_id}" abonnements-api="${this.data.abo_typen_link}" link-label="${this.data.abo_typen_link_label}" button-close-label="${this.closeButton}">
+                <ks-m-abonnements abo-id="${this.data.kurs_id}" abonnements-api="${this.data.abo_typen_link}" link-label="${this.data.abo_typen_link_label}" button-close-label="${this.closeButton || this.getTranslation('Filter.closeOverlayer') || 'Schliessen'}">
                 </ks-m-abonnements>
               </ks-c-abonnements>
             ` : ''}
