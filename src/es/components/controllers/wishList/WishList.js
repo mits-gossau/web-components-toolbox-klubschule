@@ -20,33 +20,37 @@ export default class WishList extends HTMLElement {
     const endpoint = this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/api/watchlistAPI'
     const successCode = 0
 
-    this.abortController = null
+    let timeout = null
+    let abortController = null
     this.requestWishListListener = event => {
-      if (this.abortController) this.abortController.abort()
-      this.abortController = new AbortController()
-      this.dispatchEvent(new CustomEvent('wish-list', {
-        detail: {
-          // answer with an empty watchlistEntries array, incase we don't have a guid yet, the guid will be received with the first add action
-          fetch: this.guid
-            ? fetch(`${endpoint}/GetById?inclCourseDetail=false&watchlistGuid=${this.guid}`, {
-              method: 'GET',
-              signal: this.abortController.signal
-            }).then(response => {
-              if (response.status >= 200 && response.status <= 299) return response.json()
-              throw new Error(response.statusText)
-            }).then(json => {
-              if (json.code !== successCode) this.guid = ''
-              // watchlistEntries array is always delivered. Empty when 404!
-              return json
-            })
-            : Promise.resolve({
-              watchlistEntries: []
-            })
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        if (abortController) abortController.abort()
+        abortController = new AbortController()
+        this.dispatchEvent(new CustomEvent('wish-list', {
+          detail: {
+            // answer with an empty watchlistEntries array, incase we don't have a guid yet, the guid will be received with the first add action
+            fetch: this.guid
+              ? fetch(`${endpoint}/GetById?inclCourseDetail=false&watchlistGuid=${this.guid}`, {
+                method: 'GET',
+                signal: abortController.signal
+              }).then(response => {
+                if (response.status >= 200 && response.status <= 299) return response.json()
+                throw new Error(response.statusText)
+              }).then(json => {
+                if (json.code !== successCode) this.guid = ''
+                // watchlistEntries array is always delivered. Empty when 404!
+                return json
+              })
+              : Promise.resolve({
+                watchlistEntries: []
+              })
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      }, 50)
     }
 
     this.addToWishListListener = (event, retry = true) => {

@@ -3,7 +3,8 @@
         <a class="only-desktop" href="">Über uns</a>
         <a class="only-desktop" href="">Zusätzliche Services</a>
         <a>
-            <a-icon-mdx icon-name="Heart" size="1.5em" rotate="0" custom-notification='{
+            <a-icon-mdx icon-name="Heart" size="1.5rem" mobile-size="1.3rem" color="#3d3d3d" rotate="0"
+                custom-notification='{
         "height":".4rem",
         "width":".4rem",
         "background":"red",
@@ -13,31 +14,23 @@
         "top":"1px"}'>
             </a-icon-mdx>
         </a>
-        <ks-c-auto-complete disabled endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search" search-url="https://dev.klubschule.ch/suche/">
+        <ks-c-auto-complete disabled endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
+            search-url="https://dev.klubschule.ch/suche/">
             <m-dialog namespace="dialog-top-slide-in-" show-event-name="open-main-search" close-other-flyout>
                 <div class="container">
-                    <a-input
-                        answer-event-name="search-change"
-                        any-key-listener
-                        autofocus
-                        delete-listener
-                        icon-name="Search"
-                        icon-size="1.25em"
-                        inputid="location-search"
-                        placeholder="Suchen"
-                        search
-                        submit-search="request-auto-complete"
-                        type="search"
-                    ></a-input>
+                    <a-input answer-event-name="search-change" any-key-listener autofocus delete-listener
+                        icon-name="Search" icon-size="1.25em" inputid="location-search" placeholder="Suchen" search
+                        submit-search="request-auto-complete" type="search"></a-input>
                     <div id="close">
                         <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
                     </div>
                 </div>
                 <div class="container">
-                    <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection"></ks-m-auto-complete-list>
+                    <ks-m-auto-complete-list
+                        auto-complete-selection="auto-complete-selection"></ks-m-auto-complete-list>
                 </div>
                 <a id="show-modal">
-                    <a-icon-mdx icon-name="Search" size="1.5em" rotate="0"></a-icon-mdx>
+                    <a-icon-mdx icon-name="Search" size="1.5rem" mobile-size="1.3rem" color="#3d3d3d" rotate="0"></a-icon-mdx>
                 </a>
             </m-dialog>
         </ks-c-auto-complete>
@@ -52,25 +45,21 @@
             </ul>
         </ks-m-sort>
     </section>
-    <mdx-login
-        avatar="{
+    <mdx-login avatar="{
             'user-initials': 'AW',
             'profile-image-url': 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&amp;w=2776&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             'profile-image-alt': 'Alt text for profile image',
             'login-avatar-arialabel': 'Migros Account from: '
-        }"
-        flyout="{
+        }" flyout="{
             'logout': '() => self.open(\'https://migros.account.ch/logout\', \'_self\')',
             'user-profile-email': 'anita-ulrich@mgb.ch',
             'user-profile-name': 'Anita Ulrich',
             'account-url': 'https://account.migros.ch/account',
             'menuitemgroup': [{'title':'looooooooooooooooooooooooooooong Title','menuItems':[{'label':'I am a Link ','href':'https://account.migros.ch/account','as':'link'},{'label':'I am a Button','href':'#','as':'button'}]},{'title':'Group 2','menuItems':[{'label':'I am a looooooooooooooooooooooooooooong Link','href':'#','as':'link'},{'label':'Link 4','href':'#','as':'link'},{'label':'Link 5','href':'#','as':'link'},{'label':'Link 6','href':'#','as':'link'}]}],
             'notificationlinks': {'notifications':{'cumulusConnection':'https://account.migros.ch/cumulus','mailDeliverability':'https://account.migros.ch/account'}}
-        }"
-        all="{
+        }" all="{
             'is-logged-in': true,
             'language': 'de',
             'size': 'sm'
-        }"
-    ></mdx-login>
+        }"></mdx-login>
 </ks-m-login>
