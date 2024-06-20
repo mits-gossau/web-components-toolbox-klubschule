@@ -252,7 +252,8 @@
   --search-input-background-color: var(--m-white);
   --search-input-border-color-focus: var(--mdx-base-color-grey-975);
   --search-input-border-color-hover: var(--mdx-base-color-grey-975);
-  --search-input-border-color-custom: var(--m-gray-700);
+  --search-input-border-color: var(--mdx-sys-color-neutral-bold1);
+  --search-input-border-color-custom: var(--m-gray-700); /* needed? */
   --search-input-color: var(--mdx-base-color-grey-975);
   --search-input-padding: 0.5rem 1.5rem;
   --search-input-padding-mobile: 0.5rem 1rem;
