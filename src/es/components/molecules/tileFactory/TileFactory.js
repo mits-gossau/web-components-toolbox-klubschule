@@ -158,6 +158,7 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfo (course) {
+    console.log(course)
     return `
       "title": "${course.bezeichnung}",
       "iconTooltip": ${JSON.stringify(course.infotextshort.replace(/'/g, 'ʼ')) || ''},

@@ -294,13 +294,14 @@ export default class KsFooter extends Footer {
             margin-bottom: var(--footer-default-list-item-spacing);
         }
         :host .footer-links-row li > a {
-            display: flex;
+            display: inline-block;
             align-items: center;
             gap: 0.125em;
             flex-wrap: nowrap;
         }
         :host .footer-links-row li > a > a-icon-mdx {
-            display: flex;
+            display: inline-block;
+            margin-bottom: -0.2em;
         }
     `
   }
