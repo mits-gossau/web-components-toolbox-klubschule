@@ -397,7 +397,6 @@ export default class WithFacet extends Shadow() {
 
   removeAllFilterParamsFromURL () {
     if (this.params) {
-
       this.filterKeys.forEach(key => {
         this.params.delete(key)
       })
@@ -411,8 +410,8 @@ export default class WithFacet extends Shadow() {
 
   removeFilterParamsFromURL (key) {
     if (this.params) {
+      this.params.delete(key)
       this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
-      this.params.delete(`${key}`)
       this.filters = this.filters.filter(filter => !filter.includes(`"${key}"`))
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
