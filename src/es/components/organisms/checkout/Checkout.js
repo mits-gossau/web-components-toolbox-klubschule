@@ -20,26 +20,26 @@ export default class Checkout extends Shadow() {
         this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel
       })
     }
-  }
 
-  connectedCallback () {
-    if (this.shouldRenderHTML()) this.renderHTML()
-
-    this.root.addEventListener('triggered-by', (event) => {
+    this.triggeredByListener = event => {
       let trigger = event.detail.element;
       let triggeredElement = this.root.querySelector(`input[type="checkbox"][triggered-by="${trigger.id}"]`);
 
       if (triggeredElement) {
-        triggeredElement.checked = !triggeredElement.checked;
-        triggeredElement.click();
-        triggeredElement.closest('.wrap').classList.toggle('disabled');
+        if (event.detail.element.checked && !triggeredElement.checked || !event.detail.element.checked && triggeredElement.checked) triggeredElement.click()
+        triggeredElement.closest('.wrap').classList[event.detail.element.checked ? 'add' : 'remove']('disabled')
       }
-
-      event.stopPropagation();
-    })
+    }
   }
 
-  disconnectedCallback () {}
+  connectedCallback () {
+    if (this.shouldRenderHTML()) this.renderHTML()
+    this.root.addEventListener('triggered-by', this.triggeredByListener)
+  }
+
+  disconnectedCallback () {
+    this.root.removeEventListener('triggered-by', this.triggeredByListener)
+  }
 
   shouldRenderHTML () {
     return !this.componentWasRendered
