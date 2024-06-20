@@ -402,6 +402,7 @@ export default class WithFacet extends Shadow() {
         this.params.delete(key)
       })
       
+      this.filterKeys = []
       this.filters = []
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
