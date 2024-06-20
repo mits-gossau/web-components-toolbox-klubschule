@@ -1,22 +1,20 @@
 <!-- setting style width to 100% is currently necessary as I can't make the checkout layout full width otherwise -->
-<m-simple-form-validation
-  namespace="simple-form-miduweb-"
-  no-validation-error-css
-  endpoint="/api/test"
-  method="POST"
+<m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test" method="POST"
   schema="{
     'more': {
       'input-01': '',
       'input-02': '',
       'input-03': '',
       'input-04': '',
+      'input-05': '',
+      'input-06': '',
+      'input-date-01':'',
       'textarea-01': '',
       'cb-01': 'text',
       'rg-01': 'text',
       'select-01': ''
     }
-  }"
->
+  }">
   <form>
     <ks-o-checkout mode="false">
       <ks-o-checkout-layout>
@@ -25,16 +23,14 @@
           <div>
             <ks-a-input mode="false">
               <div class="wrap">
-                  <label for="input-01">Vorname *</label>
-                  <input id="input-01" name="input-01" type="text" required
-                    error-message-reference-point-changed="true"
-                    no-error-text-p
-                    error-text-tag-name="span"
-                    data-m-v-rules='{"required": {"error-message": "Bitte Vornamen angeben."}}'
-                  >
-                  <div class="message">
-                      <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>                
-                  </div>
+                <label for="input-01">Vorname *</label>
+                <input id="input-01" name="input-01" type="text" required error-message-reference-point-changed="true"
+                  no-error-text-p error-text-tag-name="span"
+                  data-m-v-rules='{"required": {"error-message": "Bitte Vornamen angeben."}}'>
+                <div class="message">
+                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                    class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                </div>
               </div>
             </ks-a-input>
           </div>
@@ -42,16 +38,14 @@
           <div>
             <ks-a-input mode="false">
               <div class="wrap">
-                  <label for="input-02">Name *</label>
-                  <input id="input-02" name="input-02" type="text" required
-                    error-message-reference-point-changed="true"
-                    no-error-text-p
-                    error-text-tag-name="span"
-                    data-m-v-rules='{"required": {"error-message": "Bitte Namen angeben."}}'
-                  >
-                  <div class="message">
-                      <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>                
-                  </div>
+                <label for="input-02">Name *</label>
+                <input id="input-02" name="input-02" type="text" required error-message-reference-point-changed="true"
+                  no-error-text-p error-text-tag-name="span"
+                  data-m-v-rules='{"required": {"error-message": "Bitte Namen angeben."}}'>
+                <div class="message">
+                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                    class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                </div>
               </div>
             </ks-a-input>
           </div>
@@ -59,23 +53,21 @@
           <div>
             <ks-a-input mode="false">
               <div class="wrap">
-                  <label for="input-03">Passwort *</label>
-                  <input id="input-03" name="input-03" type="password" maxlength="25" required
-                    error-message-reference-point-changed="true"
-                    no-error-text-p
-                    error-text-tag-name="span"
-                    data-m-v-rules='{"required": {"error-message": "Bitte Passwort angeben."}}'
-                  >
-                  <div class="hint">
-                    <span>Maximal 25 Zeichen.</span>
-                    <div class="counter">
-                      <span class="current">0</span>
-                      <span class="max"></span>
-                    </div>
+                <label for="input-03">Passwort *</label>
+                <input id="input-03" name="input-03" type="password" maxlength="25" required
+                  error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                  data-m-v-rules='{"required": {"error-message": "Bitte Passwort angeben."}}'>
+                <div class="hint">
+                  <span>Maximal 25 Zeichen.</span>
+                  <div class="counter">
+                    <span class="current">0</span>
+                    <span class="max"></span>
                   </div>
-                  <div class="message">
-                      <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>                
-                  </div>
+                </div>
+                <div class="message">
+                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                    class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                </div>
               </div>
             </ks-a-input>
           </div>
@@ -83,12 +75,43 @@
           <div>
             <ks-a-input mode="false">
               <div class="wrap">
-                  <label for="input-04">PLZ</label>
-                  <input id="input-04" name="input-04" type="number"
-                  >
-                  <div class="hint">
-                    <span>PLZ ist optional.</span>
-                  </div>
+                <label for="input-04">PLZ</label>
+                <input id="input-04" name="input-04" type="number">
+                <div class="hint">
+                  <span>PLZ ist optional.</span>
+                </div>
+              </div>
+            </ks-a-input>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                <label for="input-05">AHV-Nummer * Mask-Version</label>
+                <input id="input-05" name="input-05" type="text" required error-message-reference-point-changed="true"
+                  no-error-text-p error-text-tag-name="span"
+                  data-m-v-rules='{"required": {"error-message": "Bitte AHV-Nummer angeben."},
+                  "pattern": {"pattern-value":"", "mask-value": "NNN.NNNN.NNNN.N#", "error-message": "Bitte richtige AHV-Nummer eingeben."}}'>
+                <div class="message">
+                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                    class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                </div>
+              </div>
+            </ks-a-input>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                <label for="input-06">AHV-Nummer * Pattern-Version</label>
+                <input id="input-06" name="input-06" type="text" required error-message-reference-point-changed="true"
+                  no-error-text-p error-text-tag-name="span"
+                  data-m-v-rules='{"required": {"error-message": "Bitte AHV-Nummer angeben."},
+                  "pattern": {"pattern-value":"^756\\.\\d{4}\\.\\d{4}\\.\\.{2}$", "error-message": "Bitte richtige AHV-Nummer eingeben."}}'>
+                <div class="message">
+                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                    class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                </div>
               </div>
             </ks-a-input>
           </div>
@@ -97,45 +120,42 @@
           <div>
             <ks-a-input mode="false">
               <div class="wrap">
-                  <label for="textarea-01">Antragsbegründung *</label>
-                  <textarea id="textarea-01" name="textarea-01" rows="4" cols="20" maxlength="150" required
-                    error-message-reference-point-changed="true"
-                    no-error-text-p
-                    error-text-tag-name="span"
-                    data-m-v-rules='{"required": {"error-message": "Bitte Begründung angeben."}}'
-                  ></textarea>
-                  <div class="hint">
-                    <span>Bitte begründe deine Anfrage.</span>
-                    <div class="counter">
-                        <span class="current">0</span>
-                        <span class="max"></span>
-                    </div>
+                <label for="textarea-01">Antragsbegründung *</label>
+                <textarea id="textarea-01" name="textarea-01" rows="4" cols="20" maxlength="150" required
+                  error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                  data-m-v-rules='{"required": {"error-message": "Bitte Begründung angeben."}}'></textarea>
+                <div class="hint">
+                  <span>Bitte begründe deine Anfrage.</span>
+                  <div class="counter">
+                    <span class="current">0</span>
+                    <span class="max"></span>
                   </div>
-                  <div class="message">
-                      <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>                
-                  </div>
+                </div>
+                <div class="message">
+                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                    class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                </div>
               </div>
-            </ks-a-input>            
+            </ks-a-input>
           </div>
           <br>
           <div>
             <ks-a-checkbox mode="false" namespace="checkbox-default-">
               <div class="wrap">
-                  <div class="control">
-                    <label for="cb-01">Ich bestätige die allgemeinen Richtlinien. *</label>
-                    <input id="cb-01" name="cb-01" type="checkbox" required
-                      error-message-reference-point-changed="true"
-                      no-error-text-p
-                      error-text-tag-name="span"
-                      data-m-v-rules='{"required": {"error-message": "Bitte Policy akzeptieren."}}'                  
-                    >
-                    <div class="box">
-                      <a-icon-mdx icon-name="Check" size="var(--ks-error-icon-size)" rotate="0" class="icon-right"></a-icon-mdx>
-                    </div>
+                <div class="control">
+                  <label for="cb-01">Ich bestätige die allgemeinen Richtlinien. *</label>
+                  <input id="cb-01" name="cb-01" type="checkbox" required error-message-reference-point-changed="true"
+                    no-error-text-p error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Policy akzeptieren."}}'>
+                  <div class="box">
+                    <a-icon-mdx icon-name="Check" size="var(--ks-error-icon-size)" rotate="0"
+                      class="icon-right"></a-icon-mdx>
                   </div>
-                  <div class="message">
-                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
-                  </div>
+                </div>
+                <div class="message">
+                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                    rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
+                </div>
               </div>
             </ks-a-checkbox>
           </div>
@@ -143,64 +163,60 @@
           <div>
             <p>Bitte geben Sie an, ob diese Buchung ihre Firma bezahlt oder ob Sie die Kurskosten privat tragen. *</p>
             <ks-a-radio mode="false">
-                <div class="wrap">
-                    <label for="checkout-form-booking-type-company">Bezahlung durch Firma</label>
-                    <input 
-                        type="radio" 
-                        id="checkout-form-booking-type-company" 
-                        name="rg-01" 
-                        value="company"
-                        required
-                        error-message-reference-point-changed="true"
-                        no-error-text-p 
-                        error-text-tag-name="span" 
-                        data-m-v-rules='{"required": {"error-message": "Bitte Buchungsart angeben."}}'
-                    >
-                    <div class="box"></div>
-                </div>
-                <div class="wrap">
-                    <label for="checkout-form-booking-type-private">Ich bezahle selbst</label>
-                    <input 
-                        type="radio" 
-                        id="checkout-form-booking-type-private" 
-                        name="rg-01" 
-                        value="private"
-                        error-message-reference-point-changed="true"
-                        no-error-text-p 
-                        error-text-tag-name="span" 
-                        data-m-v-rules='{"required": {"error-message": "Bitte Buchungsart angeben."}}'
-                    >
-                    <div class="box"></div>
-                </div>
-                <div class="message">
-                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
-                </div>
-            </ks-a-radio>           
+              <div class="wrap">
+                <label for="checkout-form-booking-type-company">Bezahlung durch Firma</label>
+                <input type="radio" id="checkout-form-booking-type-company" name="rg-01" value="company" required
+                  error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                  data-m-v-rules='{"required": {"error-message": "Bitte Buchungsart angeben."}}'>
+                <div class="box"></div>
+              </div>
+              <div class="wrap">
+                <label for="checkout-form-booking-type-private">Ich bezahle selbst</label>
+                <input type="radio" id="checkout-form-booking-type-private" name="rg-01" value="private"
+                  error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                  data-m-v-rules='{"required": {"error-message": "Bitte Buchungsart angeben."}}'>
+                <div class="box"></div>
+              </div>
+              <div class="message">
+                <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                  rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
+              </div>
+            </ks-a-radio>
           </div>
           <br>
           <div>
             <ks-m-select mode="false">
               <div class="wrap">
-                  <label for="select-01">Sprache *</label>
-                  <select id="select-01" name="select-01" required
-                    error-message-reference-point-changed="true"
-                    no-error-text-p 
-                    error-text-tag-name="span" 
-                    data-m-v-rules='{"required": {"error-message": "Bitte Sprache auswählen."}}'                  
-                  >
-                      <option value="">Sprache wählen</option>
-                      <option value="de">Deutsch</option>
-                      <option value="en">Englisch</option>
-                      <option value="fr">Französisch</option>
-                  </select>
-                  <div class="hint">
-                      <span>Bitte wähle deine bevorzugte Sprache aus.</span>
-                  </div>
-                  <div class="message">
-                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
-                  </div>
+                <label for="select-01">Sprache *</label>
+                <select id="select-01" name="select-01" required error-message-reference-point-changed="true"
+                  no-error-text-p error-text-tag-name="span"
+                  data-m-v-rules='{"required": {"error-message": "Bitte Sprache auswählen."}}'>
+                  <option value="">Sprache wählen</option>
+                  <option value="de">Deutsch</option>
+                  <option value="en">Englisch</option>
+                  <option value="fr">Französisch</option>
+                </select>
+                <div class="hint">
+                  <span>Bitte wähle deine bevorzugte Sprache aus.</span>
+                </div>
+                <div class="message">
+                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                    rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
+                </div>
               </div>
-            </ks-m-select>            
+            </ks-m-select>
+          </div>
+          <br>
+          <div>
+            <ks-a-input mode="false">
+              <div class="wrap">
+                <label for="input-date-01">Start der Gültigkeit</label>
+                <input id="input-date-01" name="input-date-01" min="2024-06-19" required="" live-input-validation="true"
+                  type="date"
+                  data-m-v-rules='{"required":{"error-message":"Bitte geben Sie das Gültigkeitsdatum ein"},"min-date-value":{"value":"2024-06-19","error-message":"Bitte geben Sie ein Datum in der Zukunft ein"}, "max-date-value":{"value":"2028-06-19","error-message":"Bitte geben Sie ein Datum bis 2028-06-19 ein"}}'
+                  value="">
+              </div>
+            </ks-a-input>
           </div>
           <br>
           <br>
