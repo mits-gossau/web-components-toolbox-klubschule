@@ -93,7 +93,7 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-key'))
+          // this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-key'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
@@ -401,6 +401,8 @@ export default class WithFacet extends Shadow() {
       this.filterKeys.forEach(key => {
         this.params.delete(key)
       })
+      
+      this.filters = []
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
@@ -410,7 +412,7 @@ export default class WithFacet extends Shadow() {
     if (this.params) {
       this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
       this.params.delete(`${key}`)
-      this.updateFilterFromURLParams()
+      this.filters = this.filters.filter(filter => !filter.includes(`"${key}"`))
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
