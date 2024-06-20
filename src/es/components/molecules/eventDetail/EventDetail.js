@@ -31,17 +31,8 @@ export default class EventDetail extends Shadow() {
   }
 
   connectedCallback () {
-    if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
-
-    this.linkMore = this.root.querySelector('.link-more')
-    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
-
-    if (this.linkMore) {
-      this.linkMore.addEventListener('click', this.clickEventListener)
-    }
-
-    this.translationPromise = new Promise(resolve => {
+    this.hidden = true
+    new Promise(resolve => {
       this.dispatchEvent(new CustomEvent('request-translations',
         {
           detail: {
@@ -55,7 +46,17 @@ export default class EventDetail extends Shadow() {
       await result.fetch
       this.getTranslation = result.getTranslationSync
       const showPromises = []
+      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+      Promise.all(showPromises).then(() => (this.hidden = false))
     })
+
+    this.linkMore = this.root.querySelector('.link-more')
+    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
+
+    if (this.linkMore) {
+      this.linkMore.addEventListener('click', this.clickEventListener)
+    }
   }
 
   disconnectedCallback () {
