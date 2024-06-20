@@ -316,6 +316,7 @@ export default class WithFacet extends Shadow() {
   }
 
   updateFilterFromURLParams () {
+    this.filters = []
     const filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
     const filterItems = []
 
@@ -339,7 +340,6 @@ export default class WithFacet extends Shadow() {
     })
 
     if (filterItems.length > 0) {
-      console.log(filterItems)
       filterItems.forEach(item => {
         const filter = this.constructFilterItem(item)
         if (filter) this.filters.push(filter)
