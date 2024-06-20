@@ -329,6 +329,11 @@ export default class WithFacet extends Shadow() {
         })
       }
     })
+
+    filterItems.forEach(item => {
+      const filter = this.constructFilterItem(item)
+      if (filter) this.filters.push(filter)
+    })
   }
 
   updateUrlSearchFromResponse (response) {
@@ -403,18 +408,24 @@ export default class WithFacet extends Shadow() {
 
   removeFilterParamsFromURL (key) {
     if (this.params) {
+      this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
       this.params.delete(`${key}`)
+      this.updateFilterFromURLParams()
+
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
 
   constructFilterItem (event) {
-    const filterItem = event?.detail?.wrapper?.filterItem
+    let filterItem = event?.detail?.wrapper?.filterItem
+    if (!(event instanceof Event)) {
+      filterItem = event
+    }
 
     return filterItem
       ? `{
-        "children": [
+        ${filterItem.children ? `"children": [
           ${filterItem.children && filterItem.children.map(child => {
             const count = child.count ? `(${child.count})` : ''
             const label = count ? `${child.label} ${count}` : child.label
@@ -440,7 +451,7 @@ export default class WithFacet extends Shadow() {
               "urlpara": "${child.urlpara}"
             }`
           })}
-        ],
+        ],` : ''}
         ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
         ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
         ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
