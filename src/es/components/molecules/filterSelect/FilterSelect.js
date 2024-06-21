@@ -143,7 +143,7 @@ export default class filterSelect extends Shadow() {
               }
             } else {
               const lastSelectedChild = this.getLastSelectedChild(filterItem)
-              if (lastSelectedChild) childItems = lastSelectedChild.label
+              if (lastSelectedChild) childItems = `${lastSelectedChild.label}, `
             }
 
             const doubleButton = /* html */`
