@@ -391,8 +391,11 @@
   --details-default-icon-right-border-bottom-last-custom: 0.0625em solid var(--mdx-base-color-grey-700);
   --details-default-icon-right-border-color-custom: var(--mdx-base-color-grey-700);
   --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
-  --details-default-icon-right-h4-font-size: 1em;
-  --details-default-icon-right-h4-line-height: 1.125em;
+  --details-default-icon-right-h4-font-size: var(--mdx-sys-font-fix-label1-font-size);
+  --details-default-icon-right-h4-font-size-mobile: var(--mdx-sys-font-fix-label2-font-size);
+  --details-default-icon-right-h4-font-weight: var(--mdx-sys-font-fix-label1-font-weight);
+  --details-default-icon-right-h4-line-height: var(--mdx-sys-font-fix-label1-line-height);
+  --details-default-icon-right-h4-line-height-mobile: var(--mdx-sys-font-fix-label2-line-height);
   --details-default-icon-right-text-align: start;
   --details-default-icon-right-summary-border-bottom-open-custom: 1px solid transparent;
   --details-default-icon-right-icon-align-items-custom: center;
