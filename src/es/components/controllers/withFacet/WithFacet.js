@@ -341,6 +341,7 @@ export default class WithFacet extends Shadow() {
 
     if (filterItems.length > 0) {
       filterItems.forEach(item => {
+        console.log(item)
         const filter = this.constructFilterItem(item)
         if (filter) this.filters.push(filter)
       })
