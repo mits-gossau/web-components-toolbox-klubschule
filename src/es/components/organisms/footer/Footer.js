@@ -300,6 +300,7 @@ export default class KsFooter extends Footer {
             flex-wrap: nowrap;
         }
         :host .footer-links-row li > a > a-icon-mdx {
+            --icon-mdx-svg-display: block;
             display: inline-block;
             margin-bottom: -0.2em;
         }
