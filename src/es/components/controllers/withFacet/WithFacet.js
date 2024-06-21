@@ -80,6 +80,7 @@ export default class WithFacet extends Shadow() {
         const initialFilters = initialRequestObj?.filter
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
+        // this.filters = []
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
 
@@ -316,7 +317,7 @@ export default class WithFacet extends Shadow() {
   }
 
   updateFilterFromURLParams () {
-    // this.filters = []
+    this.filters = []
     const filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
     const filterItems = []
 
@@ -325,26 +326,25 @@ export default class WithFacet extends Shadow() {
         const filterItem = this.lastResponse.filters.find(filterItem => filterItem.urlpara === key)
         if (filterItem) filterItems.push(filterItem)
       })
-    }
 
-    filterItems.forEach(item => {
-      if (filteredURLKeys.includes(item.urlpara)) {
-        item.children.forEach(child => {
-          if (this.params.get(item.urlpara)?.split('-').includes(child.urlpara)) {
-            child.selected = true
-          } else {
-            child.selected = false
-          }
+      filterItems.forEach(item => {
+        if (filteredURLKeys.includes(item.urlpara)) {
+          item.children.forEach(child => {
+            if (this.params.get(item.urlpara)?.split('-').includes(child.urlpara)) {
+              child.selected = true
+            } else {
+              child.selected = false
+            }
+          })
+        }
+      })
+
+      if (filterItems.length > 0) {
+        filterItems.forEach(item => {
+          const filter = this.constructFilterItem(item)
+          if (filter) this.filters.push(filter)
         })
       }
-    })
-
-    if (filterItems.length > 0) {
-      filterItems.forEach(item => {
-        console.log(item)
-        const filter = this.constructFilterItem(item)
-        if (filter) this.filters.push(filter)
-      })
     }
   }
 
@@ -360,6 +360,9 @@ export default class WithFacet extends Shadow() {
     const selectedChildren = filterItem.children
       .filter(child => child.selected)
       .map(child => child.urlpara)
+    console.log("🚀 ~ WithFacet ~ updateParamsWithSelectedChildren ~ selectedChildren:", selectedChildren)
+
+      
   
     if (selectedChildren.length > 0) {
       this.params.set(filterItem.urlpara, selectedChildren.join('-'))
