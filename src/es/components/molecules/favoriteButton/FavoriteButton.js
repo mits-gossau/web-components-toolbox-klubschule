@@ -50,18 +50,23 @@ export default class FavoriteButton extends Shadow() {
       }))
     }
 
-    this.wishListListener = async event => this.setFavoured((isFavoured = (await event.detail.fetch).watchlistEntries.some(entry => (id.courseType === entry.kursTyp && id.courseId === String(entry.kursId) && id.centerId === String(entry.centerId)))))
+    /** @type {(any)=>void} */
+    let wishListResolve = map => map
+    /** @type {Promise<void>} */
+    this.wishListPromise = new Promise(resolve => (wishListResolve = resolve))
+    this.wishListListener = async event => {
+      this.setFavoured((isFavoured = (await event.detail.fetch).watchlistEntries.some(entry => (id.courseType === entry.kursTyp && id.courseId === String(entry.kursId) && id.centerId === String(entry.centerId)))))
+      wishListResolve(true)
+    }
   }
 
   connectedCallback () {
     this.hidden = true
-    const showPromises = []
+    const showPromises = [this.wishListPromise]
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
     if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-    Promise.all(showPromises).then(() => {
-      this.resizeListener()
-      this.hidden = false
-    })
+    this.resizeListener()
+    Promise.all(showPromises).then(() => (this.hidden = false))
     self.addEventListener('resize', this.resizeListener)
     this.addEventListener('click', this.favoritesClickListener)
     document.body.addEventListener('wish-list', this.wishListListener)
@@ -118,7 +123,7 @@ export default class FavoriteButton extends Shadow() {
   renderHTML () {
     this.html = ''
     const div = document.createElement('div')
-    div.innerHTML = /* html */`<ks-a-button namespace="button-tertiary-" color="secondary" round></ks-a-button>`
+    div.innerHTML = /* html */`<ks-a-button namespace="button-tertiary-" color="secondary"></ks-a-button>`
     this.button = div.children[0]
     div.innerHTML = /* html */`<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>`
     this.icon = div.children[0]
