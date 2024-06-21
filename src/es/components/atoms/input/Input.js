@@ -124,8 +124,8 @@ export default class Input extends Shadow() {
       }
 
       :host .custom-error-text p {
-        color: var(--mdx-comp-error-message-color-default);
-        font: var(--mdx-comp-error-message-font-default);
+        color: var(--mdx-comp-error-message-color-default)  !important;
+        font: var(--mdx-comp-error-message-font-default)  !important;
         margin-top: var(--mdx-comp-inputfield-gap-content-below) !important;
       }
 
