@@ -1,7 +1,7 @@
 import Footer from '../../web-components-toolbox/src/es/components/organisms/footer/Footer.js'
 
 export default class KsFooter extends Footer {
-  constructor (options = {}, ...args) {
+  constructor (options = { mobileBreakpoint: '1020px' }, ...args) {
     super({
       ...options
     }, ...args)
