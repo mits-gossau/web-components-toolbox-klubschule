@@ -65,6 +65,8 @@ export default class WithFacet extends Shadow() {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
 
+      if (event?.detail?.wrapper?.filterItem) this.updateFilterAndParamsWithSelectedFilter(event)
+
       let request
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
       const shouldResetFilter = event?.type === 'reset-filter'
@@ -316,17 +318,26 @@ export default class WithFacet extends Shadow() {
     }
   }
 
-  updateFilterFromURLParams () {
+  updateFilterFromURLParams (key = null) {
     this.filters = []
-    const filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
+    let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
+    if (key) filteredURLKeys = [key] // set first filter key
     const filterItems = []
 
+    // if there are filters in the url
     if (this.filterKeys.length !== 0 && this.lastResponse.filters) {
       this.filterKeys.forEach(key => {
         const filterItem = this.lastResponse.filters.find(filterItem => filterItem.urlpara === key)
-        if (filterItem) filterItems.push(filterItem)
+        if (filterItem) {
+          filterItems.push(filterItem)
+        } else {
+          // remove filter key if it is not in the response
+          this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
+          filteredURLKeys = filteredURLKeys.filter(urlKey => urlKey !== key)
+        }
       })
 
+      // select children based on url params
       filterItems.forEach(item => {
         if (filteredURLKeys.includes(item.urlpara)) {
           item.children.forEach(child => {
@@ -339,6 +350,7 @@ export default class WithFacet extends Shadow() {
         }
       })
 
+      // construct filter items
       if (filterItems.length > 0) {
         filterItems.forEach(item => {
           const filter = this.constructFilterItem(item)
@@ -356,19 +368,42 @@ export default class WithFacet extends Shadow() {
     }
   }
 
-  updateParamsWithSelectedChildren(filterItem) {
-    const selectedChildren = filterItem.children
-      .filter(child => child.selected)
-      .map(child => child.urlpara)
-    console.log("🚀 ~ WithFacet ~ updateParamsWithSelectedChildren ~ selectedChildren:", selectedChildren)
+  updateFilterAndParamsWithSelectedFilter(event) {
+    const filterId = event?.detail?.mutationList[0].target.getAttribute('filter-id')
+    if (!filterId) return
+    const [filterKey, filterValue] = filterId.split('-')
+    const currentValues = this.params.get(filterKey)?.split('-') || []
 
-      
-  
-    if (selectedChildren.length > 0) {
-      this.params.set(filterItem.urlpara, selectedChildren.join('-'))
-    } else {
-      this.params.delete(filterItem.urlpara)
+    // if filterKey is not in url
+    if (!this.params.get(filterKey) && filterValue !== '') {
+      this.params.set(filterKey, filterValue)
+      this.filterKeys.push(filterKey)
+      this.updateFilterFromURLParams(filterKey)
+      return
     }
+
+    // if filterKey is in url
+    if (!currentValues?.includes(filterValue)) {
+      currentValues.push(filterValue)
+      this.params.set(filterKey, currentValues.join('-'))
+
+    // if filterValue is not in url
+    } else {
+      currentValues.splice(currentValues.indexOf(filterValue), 1)
+
+      // if filterValue is the last value
+      if (currentValues.length > 0) {
+        this.params.delete(filterKey)
+        this.params.set(filterKey, currentValues.join('-'))
+
+      // if filterValue is the only value
+      } else {
+        this.params.delete(filterKey)
+        this.filterKeys = this.filterKeys.filter(key => key !== filterKey)
+      }
+    }
+
+    this.updateFilterFromURLParams()
   }
 
   updateUrlParamsFromResponse (response) {
@@ -428,8 +463,6 @@ export default class WithFacet extends Shadow() {
       this.params.delete(key)
       this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
       this.filters = this.filters.filter(filter => !filter.includes(`"${key}"`))
-
-      console.log(this.params.toString(), this.filterKeys, this.filters)
 
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
