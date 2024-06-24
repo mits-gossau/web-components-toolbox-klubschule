@@ -127,8 +127,6 @@ export default class WishList extends Shadow() {
             children: [],
             ...filter
           }],
-          ppage: 1,
-          psize: 6,
           sprachid: 'd'
         }
         // id assembly: courseType_courseId_centerid
