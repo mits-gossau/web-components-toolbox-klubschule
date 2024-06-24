@@ -90,12 +90,16 @@ export default class ContentFactory extends Shadow() {
         {
           path: `${this.importMetaUrl}../../organisms/contentList/ContentList.js`,
           name: 'ks-o-content-list'
+        },
+        {
+          path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+          name: 'a-translation'
         }
       ])
     ]).then(([data]) => {
       if (!data.isNextPage) this.html = ''
       if (!data) {
-        this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}</span>`
+        this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Content.Error'}"></a-translation></span>`
         return
       }
       this.html = data.contentItems.reduce((acc, content) => acc + (content.children?.length
@@ -128,7 +132,7 @@ export default class ContentFactory extends Shadow() {
     }).catch(error => {
       console.error(error)
       this.html = ''
-      this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}<br>${error}</span>`
+      this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Content.Error'}"></a-translation></span>`
     })
   }
 

@@ -54,6 +54,7 @@ export default class WishList extends HTMLElement {
     }
 
     this.addToWishListListener = (event, retry = true) => {
+      if (event.detail.this?.hasAttribute('course')) [event.detail.courseType, event.detail.courseId, event.detail.centerId] = event.detail.this.getAttribute('course').split('_')
       let hasWatchlistGuidParameter = false
       this.dispatchEvent(new CustomEvent('wish-list', {
         detail: {
@@ -81,6 +82,7 @@ export default class WishList extends HTMLElement {
 
     this.removeFromWishListListener = event => {
       if (!this.guid) return
+      if (event.detail.this?.hasAttribute('course')) [event.detail.courseType, event.detail.courseId, event.detail.centerId] = event.detail.this.getAttribute('course').split('_')
       this.dispatchEvent(new CustomEvent('wish-list', {
         detail: {
           fetch: fetch(`${endpoint}/Remove?inclCourseDetail=false&watchlistGuid=${this.guid}&language=${event.detail.language || document.documentElement.getAttribute('lang')?.substring(0, 2) || 'de'}&courseType=${event.detail.courseType}&courseId=${event.detail.courseId}&centerId=${event.detail.centerId}`, {

@@ -120,6 +120,7 @@ export default class Tile extends Shadow() {
           display: flex;
           flex-direction: row;
           align-items: center;
+          gap: 0.5em;
       }
       
       :host .m-tile__foot-right {
@@ -291,8 +292,7 @@ export default class Tile extends Shadow() {
         </div>
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
-            <!-- Trash Icon is pre-placed for wishlist -->
-            <!-- <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx> -->
+            ${this.hasAttribute('is-wish-list') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
             <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small keep-url-params></ks-m-buttons>
           </div>
           <div class="m-tile__foot-right">
@@ -312,8 +312,7 @@ export default class Tile extends Shadow() {
       <div class="m-tile__foot-passed">
         <span class="m-tile__passed-message">${data.passed?.title || warnMandatory + 'passed.title'}</span>
         <div class="m-tile__foot-left">
-          <!-- Trash Icon is pre-placed for wishlist -->
-          <!-- <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em"></a-icon-mdx> -->
+          ${this.hasAttribute('is-wish-list') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
           <ks-a-button namespace="button-secondary-" color="secondary">
             <span>${data.passed?.button.text || warnMandatory + 'passed.button.text'}</span>
             <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.passed?.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
