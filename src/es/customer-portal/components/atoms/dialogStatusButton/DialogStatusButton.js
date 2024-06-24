@@ -166,7 +166,7 @@ export default class DialogStatusButton extends Shadow() {
       case (type === 'detail' && status === 5):
         return /* html */ `
           <ks-a-button
-            color="quaternary" 
+            color="ks-red" 
             namespace="button-primary-" 
             request-event-name="request-show-dialog-reversal-confirmation"
             tag="${id}"> 
@@ -186,7 +186,7 @@ export default class DialogStatusButton extends Shadow() {
       case (type === 'reversal' || status === 5):
         return /* html */ `
           <ks-a-button
-            color="quaternary"
+            color="ks-red"
             namespace="button-primary-"
             request-event-name="request-subscription-course-appointment-reversal"
             tag='[${content},${selectedSubscription}]'>
