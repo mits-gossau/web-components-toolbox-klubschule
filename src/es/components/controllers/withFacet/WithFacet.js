@@ -94,15 +94,18 @@ export default class WithFacet extends Shadow() {
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
           this.removeAllFilterParams()
+          withFacetCache.clear()
         }
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
           this.removeFilterParam(event.detail.this.getAttribute('filter-key'))
+          withFacetCache.clear()
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
+          withFacetCache.clear()
         }
 
         // keep the last search location inside initialRequestObj and store it in url params
@@ -468,57 +471,41 @@ export default class WithFacet extends Shadow() {
     }
   }
 
-
   constructFilterItem (event) {
     let filterItem = event?.detail?.wrapper?.filterItem
+
     if (!(event instanceof Event)) {
       filterItem = event
     }
 
-    return filterItem
-      ? `{
-        ${filterItem.children ? `"children": [
-          ${filterItem.children && filterItem.children.map(child => {
-            const count = child.count ? `(${child.count})` : ''
-            const label = count ? `${child.label} ${count}` : child.label
-            const hasSameLabel = label.trim() === event.detail?.target.label.trim()
-            const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
+    return filterItem ? this.objectToString(filterItem) : ''
+  }
 
-            return `{
-              ${child.count ? `"count": ${child.count},` : ''}
-              ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
-              "hasChilds": ${child.hasChilds},
-              "id": "${child.id}",
-              "label": "${child.label}",
-              ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
-              ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
-              "selected": ${hasSameLabel
-                ? isCheckedNullOrUndefined
-                  ? (child.selected || false)
-                  : event.detail.target.checked
-                : (child.selected || false)},
-              ${child.sort ? `"sort": ${child.sort},` : ''}
-              ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
-              ${child.typ ? `"typ": "${child.typ}",` : ''}
-              "urlpara": "${child.urlpara}"
-            }`
-          })}
-        ],` : ''}
-        ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
-        ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
-        ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
-        ${filterItem.id ? `"id": "${filterItem.id}",` : ''}
-        ${filterItem.label ? `"label": "${filterItem.label}",` : ''}
-        ${filterItem.options ? `"options": ${filterItem.options},` : ''}
-        ${filterItem.partitionKey ? `"partitionKey": "${filterItem.partitionKey}",` : ''}
-        ${filterItem.rowKey ? `"rowKey": "${filterItem.rowKey}",` : ''}
-        ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
-        ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
-        ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
-        ${filterItem.urlpara ? `"urlpara": "${filterItem.urlpara}",` : ''}
-        "visible": ${filterItem.visible || true}
-      }`
-      : ''
+  objectToString(obj) {
+    let result = ''
+    const keys = Object.keys(obj)
+    keys.forEach((key, index) => {
+      if (index > 0) result += ',' // add comma before items except first one
+      const value = obj[key]
+      if (typeof value === 'object' && value !== null) {
+        if (Array.isArray(value)) {
+          result += `"${key}": [`
+          value.forEach((item, itemIndex) => {
+            if (itemIndex > 0) result += ',' // add comma before items except first one
+            const itemString = this.objectToString(item)
+            result += `${itemString}`
+          })
+          result += `]`
+        } else {
+          result += `"${key}": {${this.objectToString(value)}}`
+        }
+      } else {
+        const formattedValue = typeof value === 'string' ? `"${value}"` : value
+        result += `"${key}": ${formattedValue}`
+      }
+    })
+  
+    return `{${result}}`
   }
 
   static historyPushState (...args) {
