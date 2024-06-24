@@ -55,10 +55,13 @@ self.Environment = {
     const subdomain = urlObj.hostname.split('.')[0]
     switch (subdomain) {
       case 'intadmin':
-      case 'int':
-      case 'localhost':
         return 'https://miducaexportapicustomerportalint.azurewebsites.net'
+      case 'int':
+        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
+      case 'localhost':
+        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
       case 'dev':
+        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
       case 'devadmin':
         return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
       default:
