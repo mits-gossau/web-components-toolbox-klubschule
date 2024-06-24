@@ -127,7 +127,7 @@ export default class FavoriteButton extends Shadow() {
     this.button = div.children[0]
     div.innerHTML = /* html */`<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>`
     this.icon = div.children[0]
-    div.innerHTML = /* html */`<a-translation data-trans-key="${this.getAttribute('off-text')}" part=text></a-translation>`
+    div.innerHTML = /* html */`<a-translation data-trans-key="${this.getAttribute('off-text') ?? 'Wishlist.Remember'}" part=text></a-translation>`
     this.text = div.children[0]
     this.button.appendChild(this.icon)
     this.button.appendChild(this.text)
@@ -151,10 +151,10 @@ export default class FavoriteButton extends Shadow() {
   setFavoured (value) {
     if (value) {
       this.icon?.setAttribute('icon-name', 'HeartFilled')
-      this.text?.setAttribute('data-trans-key', this.getAttribute('on-text'))
+      this.text?.setAttribute('data-trans-key', this.getAttribute('on-text') ?? 'Wishlist.Remembered')
     } else {
       this.icon?.setAttribute('icon-name', 'Heart')
-      this.text?.setAttribute('data-trans-key', this.getAttribute('off-text'))
+      this.text?.setAttribute('data-trans-key', this.getAttribute('off-text') ?? 'Wishlist.Remember')
     }
   }
 
