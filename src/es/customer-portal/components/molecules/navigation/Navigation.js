@@ -22,11 +22,28 @@ export default class Navigation extends Shadow() {
       event.stopPropagation()
       const target = event.composedPath()[0]
       if (target.tagName === 'A' || target.tagName === 'A-TRANSLATION') {
+        this.updateActiveStates(target.parentElement.parentElement)
         const url = new URL(location.href)
         url.searchParams.set('page', target.getAttribute('href'))
         history.pushState(history.state, document.title, url.href)
       }
     }
+  }
+
+  updateActiveStates(currentElement = null) {
+    const links = this.root.querySelectorAll('li')
+    const linkElements = Array.from(links)
+    if (!currentElement) {
+      linkElements[0].classList.add('active')
+      return
+    }
+    linkElements.forEach(link => {
+      // @ts-ignore
+      if (link.classList.contains('active') && link.id !== currentElement.id) link.classList.remove('active')
+      // @ts-ignore
+      if (link.id === currentElement.id) link.classList.add('active')
+
+    })
   }
 
   connectedCallback () {
@@ -50,11 +67,16 @@ export default class Navigation extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
+        --any-content-width: 100%;
+        --any-content-width-mobile: 100%;
         display:flex;
-        margin:0;
+        margin:0 auto !important;
+        background:white;
+        width:100% !important;
       }
-      :host ul {
-        overflow-x: auto;
+      :host ul.nav {
+        width: var(--ul-width);
+        margin: 0 auto;
       }
       :host li {
         padding:1em 0;
@@ -64,6 +86,9 @@ export default class Navigation extends Shadow() {
       }
       :host .active {
         border-bottom: var(--active-border-bottom, 0);
+      }
+      :host .active > a {
+        color:var(--a-active-color, inherit);
       }
       @media only screen and (max-width: _max-width_) {
         :host {}
@@ -105,24 +130,26 @@ export default class Navigation extends Shadow() {
     this.navigationWrapper = this.root.querySelector('div') || document.createElement('div')
     Promise.all([fetchModules]).then(() => {
       this.html = /* html */ `
-          <ul>
-            <li>
+          <ul class="nav">
+            <li id="1">
               <a href="/" route target="_self">
                 <a-translation href="/" route target="_self"  data-trans-key='CP.cpNavigationAppointmentsBooking'></a-translation>
               </a>
             </li>
-            <li>
+            <li id="2">
               <a href="/booked" route target="_self">
                 <a-translation href="/booked" route target="_self" data-trans-key='CP.cpNavigationBookedAppointments'></a-translation>
               </a>
             </li>
-            <li>
+            <li id="3">
               <a href="/subscriptions" route target="_self">
                 <a-translation href="/subscriptions" route target="_self" data-trans-key='CP.cpNavigationMySubscriptions' mode="false"></a-translation>
               </a>
             </li>
           </ul>
       `
+    }).then(_ => {
+      this.updateActiveStates()
     })
   }
 }
