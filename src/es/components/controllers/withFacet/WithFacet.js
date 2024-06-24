@@ -329,6 +329,7 @@ export default class WithFacet extends Shadow() {
 
     // if there are filters in the url
     if (this.filterKeys.length !== 0 && this.lastResponse.filters) {
+      console.log('updateFilterFromURLParams', this.filterKeys)
       this.filterKeys.forEach(key => {
         const filterItem = this.lastResponse.filters.find(filterItem => filterItem.urlpara === key)
         if (filterItem) {
@@ -339,6 +340,8 @@ export default class WithFacet extends Shadow() {
           filteredURLKeys = filteredURLKeys.filter(urlKey => urlKey !== key)
         }
       })
+
+      console.log('updateFilterFromURLParams', filterItems, filteredURLKeys)
 
       // select children based on url params
       filterItems.forEach(item => {
@@ -357,9 +360,12 @@ export default class WithFacet extends Shadow() {
       if (filterItems.length > 0) {
         filterItems.forEach(item => {
           const filter = this.constructFilterItem(item)
-          if (filter) this.filters.push(filter)
+          if (filter) this.filters.push(JSON.parse(filter))
+          console.log('updateFilterFromURLParams', JSON.parse(filter))
         })
       }
+
+      console.log('updateFilterFromURLParams', this.filters)
     }
   }
 
@@ -472,20 +478,25 @@ export default class WithFacet extends Shadow() {
   }
 
   toggleFilterItem(filterItem, filterKey, filterValue, select) {
+    console.log('toggleFilterItem', filterItem, filterKey, filterValue, select)
     if (filterItem.urlpara === filterKey) {
       if (filterItem.children) {
         filterItem.children.forEach(child => {
-          this.toggleFilterItem(child, filterKey, filterValue) // recursively call for each child
+          this.toggleFilterItem(child, filterKey, filterValue, select) // recursively call for each child
         })
       }
     } else if (filterItem.children) { // continue searching in children
       filterItem.children.forEach(child => {
-        this.toggleFilterItem(child, filterKey, filterValue)
+        this.toggleFilterItem(child, filterKey, filterValue, select)
       })
     }
   
     if ((filterItem.urlpara || filterItem.id) === filterValue) {
       filterItem.selected = select
+      if (!select) {
+        console.log('unselect', select, filterItem)
+
+      }
     }
   }
 
@@ -500,6 +511,8 @@ export default class WithFacet extends Shadow() {
       const [filterKey, filterValue] = event.detail.target.getAttribute('filter-id').split('-')
       filterItem = this.toggleFilterItem(filterItem, filterKey, filterValue, event.detail?.target.checked)
     }
+
+    if (filterItem) console.log('constructFilterItem', filterItem)
 
     return filterItem ? JSON.stringify(filterItem) : ''
   }

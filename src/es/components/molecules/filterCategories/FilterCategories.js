@@ -92,7 +92,7 @@ export default class FilterCategories extends Shadow() {
         const visible = center.visible ? 'visible' : ''
         const centerCheckbox = /* html */`
           <mdx-component mutation-callback-event-name="request-with-facet">
-            <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}" filter-id="center-${center.id}"></mdx-checkbox>
+            <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}" filter-id="${region.urlpara}-${center.id}"></mdx-checkbox>
           </mdx-component>
         `
         const div = document.createElement('div')
