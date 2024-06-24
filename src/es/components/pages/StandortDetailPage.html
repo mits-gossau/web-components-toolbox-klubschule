@@ -13,8 +13,10 @@
                 <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx> <span>&Uuml;bersicht</span>
             </a>
         </p>
-        <ks-a-heading tag="h1" content-stage>
-            Klubschule Migros Baden
+        <ks-a-heading content-stage>
+            <h1>
+                Klubschule Migros Baden
+            </h1>
         </ks-a-heading>
         <p class="intro">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magn.</p>
     </div>
@@ -338,7 +340,7 @@
 <!-- /CMS Teaser Slider -->
 
 <!-- Exceptionally added some inline styles to erase unwanted spacings -->
-<div id="angebote" style="width: 100%; margin-bottom: 0;">
+<div id="angebote" class="no-margin full-width">
     <ks-o-offers-page endpoint="https://miducabulaliwebappdev-test.azurewebsites.net/api/CourseSearch/withfacet"
     initial-request='{"filter":[],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":6}'
     endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
