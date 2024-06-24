@@ -42,16 +42,16 @@ export default class TileFactory extends Shadow() {
   */
   renderCSS () {
     this.css = /* css */ `
-    :host> section {
+    :host > section {
       display: flex;
       flex-direction: column;
       gap: 1em;
       margin-bottom: 1em;
     }
-    :host> section:last-child {
+    :host > section:last-child {
       margin-bottom: 0;
     }
-    : host > .error {
+    :host > .error {
       color: var(--color-error);
     }
     @media only screen and (max-width: _max-width_) {
@@ -109,12 +109,16 @@ export default class TileFactory extends Shadow() {
         {
           path: `${this.importMetaUrl}../event/Event.js`,
           name: 'ks-m-event'
+        },
+        {
+          path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+          name: 'a-translation'
         }
       ])
     ]).then(([data]) => {
       if (!data.isNextPage) this.html = ''
       if (!data) {
-        this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}</span>`
+        this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
         return
       }
       this.html = data.courses.reduce(
@@ -133,13 +137,13 @@ export default class TileFactory extends Shadow() {
                   ${this.fillGeneralTileInfo(course)},
                   "filter": ${JSON.stringify(course.filter) || ''},
                   "locations": ${JSON.stringify(course.locations) || ''}
-                }'>
+                }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
                 </ks-o-tile-list>
               `
               : /* html */`
                 <ks-m-tile namespace="tile-default-" data='{
                   ${this.fillGeneralTileInfo(course)}
-                }'></ks-m-tile>
+                }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>
               `
           )
           return acc = acc + tile
@@ -149,7 +153,7 @@ export default class TileFactory extends Shadow() {
     }).catch(error => {
       console.error(error)
       this.html = ''
-      this.html = `<span class=error>${this.getAttribute('error-translation') || 'Leider haben wir keine Produkte zu diesem Suchbegriff gefunden.'}<br>${error}</span>`
+      this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
     })
   }
 
@@ -172,7 +176,8 @@ export default class TileFactory extends Shadow() {
         "from": "${course.price.pre}",
         "amount": "${course.price.amount}",
         "per": "${course.price.per}"
-      }
+      },
+      "parentkey": "${course.parentkey}"
     `
   }
 

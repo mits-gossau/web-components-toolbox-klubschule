@@ -495,7 +495,7 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options">
               </section>
             `}
-              <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}></ks-m-tile-factory>
+              <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile-factory>
               ${this.badgeContainer
                 ? /* HTML */ `
                   <ks-m-badge-legend>

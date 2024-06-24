@@ -63,8 +63,33 @@ export default class WishList extends Shadow() {
         justify-content: flex-end;
         padding-bottom: 1em;
       }
+      :host > .error {
+        color: var(--color-error);
+      }
     `
-    return Promise.resolve()
+    return this.fetchTemplate()
+  }
+
+  /**
+   * fetches the template
+   * @return {Promise<void>}
+   */
+  fetchTemplate () {
+    /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
+    const styles = [
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
+        namespace: false
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+        namespaceFallback: true
+      }
+    ]
+    switch (this.getAttribute('namespace')) {
+      default:
+        return this.fetchCSS(styles)
+    }
   }
 
   /**
@@ -76,9 +101,13 @@ export default class WishList extends Shadow() {
     this.html = ''
     this.renderLoading()
     if (fetch) {
-      const data = await fetch
+      fetch.catch(error => {
+        this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Wishlist.Error'}"></a-translation></span>`
+        if (this.lastData) this.renderHTML(Promise.resolve(this.lastData))
+      })
+      const data = this.lastData = await fetch
       this.html = ''
-      if (data.watchlistEntries.length) {
+      if (data?.watchlistEntries.length) {
         // assemble withfacet filter
         const filter = {
           color: '',
@@ -108,7 +137,7 @@ export default class WishList extends Shadow() {
         this.html = /* html */`
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
             <div part="delete-btn-wrapper">
-              <ks-a-button namespace="button-secondary-" color="tertiary">
+              <ks-a-button namespace="button-secondary-" color="tertiary" request-event-name="remove-all-from-wish-list">
                 <a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>
                 <a-translation data-trans-key="${this.getAttribute('delete-all-text') ?? 'Wishlist.DeleteAll'}"></a-translation>
               </ks-a-button>
@@ -117,7 +146,8 @@ export default class WishList extends Shadow() {
           <ks-o-offers-page
             headless
             no-search-tab
-            endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
+            is-wish-list
+            endpoint="${this.getAttribute('endpoint')}"
             initial-request='${JSON.stringify(initialRequest)}'
           ></ks-o-offers-page>
         `
