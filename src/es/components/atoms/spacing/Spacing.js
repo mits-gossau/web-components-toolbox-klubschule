@@ -35,7 +35,7 @@ export default class Spacing extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.root.querySelector(`:host > spacing-${this.type}`)
+    return !this.root.querySelector(`:host > .spacing-${this.type}`)
   }
 
   /**
@@ -52,33 +52,34 @@ export default class Spacing extends Shadow() {
       }
 
       :host .spacing-2xl-flex {
-        height: var(--mdx-sys-spacing-flex-large-2xl);
+        height: var(--mdx-sys-spacing-flex-2xl);
       }
 
       :host .spacing-xl-flex {
-        height: var(--mdx-sys-spacing-flex-large-xl);
+        height: var(--mdx-sys-spacing-flex-xl);
       }
 
       :host .spacing-l-flex {
-        height: var(--mdx-sys-spacing-flex-large-l);
+        height: var(--mdx-sys-spacing-flex-l);
       }
 
       :host .spacing-m-flex {
-        height: var(--mdx-sys-spacing-flex-large-m);
+        height: var(--mdx-sys-spacing-flex-m);
       }
 
       :host .spacing-s-flex {
-        height: var(--mdx-sys-spacing-flex-large-s);
+        height: var(--mdx-sys-spacing-flex-s);
       }
 
       :host .spacing-xs-flex {
-        height: var(--mdx-sys-spacing-flex-large-xs);
+        height: var(--mdx-sys-spacing-flex-xs);
       }
 
       :host .spacing-2xs-flex {
-        height: var(--mdx-sys-spacing-flex-large-2xs);
+        height: var(--mdx-sys-spacing-flex-2xs);
       }
 
+      /* FIX */
       :host .spacing-3xl-fix {
         height: var(--mdx-sys-spacing-fix-3xl);
       }
@@ -117,68 +118,6 @@ export default class Spacing extends Shadow() {
 
       :host .spacing-4xs-fix {
         height: var(--mdx-sys-spacing-fix-4xs);
-      }
-      
-      /* MEDIUM */
-      @media (max-width: 1019px) {
-          :host .spacing-2xl-flex {
-              height: var(--mdx-sys-spacing-flex-medium-2xl);
-          }
-
-          :host .spacing-xl-flex {
-            height: var(--mdx-sys-spacing-flex-medium-xl);
-          }
-    
-          :host .spacing-l-flex {
-            height: var(--mdx-sys-spacing-flex-medium-l);
-          }
-    
-          :host .spacing-m-flex {
-            height: var(--mdx-sys-spacing-flex-medium-m);
-          }
-    
-          :host .spacing-s-flex {
-            height: var(--mdx-sys-spacing-flex-medium-s);
-          }
-    
-          :host .spacing-xs-flex {
-            height: var(--mdx-sys-spacing-flex-medium-xs);
-          }
-    
-          :host .spacing-2xs-flex {
-            height: var(--mdx-sys-spacing-flex-medium-2xs);
-          }
-      }
-
-      /* SMALL */
-      @media (max-width: 669px) {
-          :host .spacing-2xl-flex {
-              height: var(--mdx-sys-spacing-flex-small-2xl);
-          }
-
-          :host .spacing-xl-flex {
-            height: var(--mdx-sys-spacing-flex-small-xl);
-          }
-    
-          :host .spacing-l-flex {
-            height: var(--mdx-sys-spacing-flex-small-l);
-          }
-    
-          :host .spacing-m-flex {
-            height: var(--mdx-sys-spacing-flex-small-m);
-          }
-    
-          :host .spacing-s-flex {
-            height: var(--mdx-sys-spacing-flex-small-s);
-          }
-    
-          :host .spacing-xs-flex {
-            height: var(--mdx-sys-spacing-flex-small-xs);
-          }
-    
-          :host .spacing-2xs-flex {
-            height: var(--mdx-sys-spacing-flex-small-2xs);
-          }
       }
     `
   }
