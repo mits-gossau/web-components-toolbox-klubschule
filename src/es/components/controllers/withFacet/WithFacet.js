@@ -471,41 +471,38 @@ export default class WithFacet extends Shadow() {
     }
   }
 
+  deselectFilterItem(filterItem, filterKey, filterValue) {
+    if (filterItem.urlpara === filterKey) {
+      if (filterItem.children) {
+        filterItem.children.forEach(child => {
+          this.deselectFilterItem(child, filterKey, filterValue) // recursively callfor each child
+        })
+      }
+    } else if (filterItem.children) { // continue searching in children
+      filterItem.children.forEach(child => {
+        this.deselectFilterItem(child, filterKey, filterValue)
+      })
+    }
+  
+    if (filterItem.urlpara === filterValue) {
+      filterItem.selected = false
+    }
+  }
+
   constructFilterItem (event) {
     let filterItem = event?.detail?.wrapper?.filterItem
-
+    
+    // if event is not an Event object, it is a filterItem
     if (!(event instanceof Event)) {
       filterItem = event
     }
 
-    return filterItem ? this.objectToString(filterItem) : ''
-  }
+    if (filterItem && !event.detail?.target.checked && event.detail?.target.getAttribute('filter-id')) {
+      const [filterKey, filterValue] = event.detail.target.getAttribute('filter-id').split('-')
+      filterItem = this.deselectFilterItem(filterItem, filterKey, filterValue)
+    }
 
-  objectToString(obj) {
-    let result = ''
-    const keys = Object.keys(obj)
-    keys.forEach((key, index) => {
-      if (index > 0) result += ',' // add comma before items except first one
-      const value = obj[key]
-      if (typeof value === 'object' && value !== null) {
-        if (Array.isArray(value)) {
-          result += `"${key}": [`
-          value.forEach((item, itemIndex) => {
-            if (itemIndex > 0) result += ',' // add comma before items except first one
-            const itemString = this.objectToString(item)
-            result += `${itemString}`
-          })
-          result += `]`
-        } else {
-          result += `"${key}": {${this.objectToString(value)}}`
-        }
-      } else {
-        const formattedValue = typeof value === 'string' ? `"${value}"` : value
-        result += `"${key}": ${formattedValue}`
-      }
-    })
-  
-    return `{${result}}`
+    return filterItem ? JSON.stringify(filterItem) : ''
   }
 
   static historyPushState (...args) {
