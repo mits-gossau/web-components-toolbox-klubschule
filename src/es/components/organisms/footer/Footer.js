@@ -1,7 +1,7 @@
 import Footer from '../../web-components-toolbox/src/es/components/organisms/footer/Footer.js'
 
 export default class KsFooter extends Footer {
-  constructor (options = {}, ...args) {
+  constructor (options = { mobileBreakpoint: '1020px' }, ...args) {
     super({
       ...options
     }, ...args)
@@ -83,6 +83,7 @@ export default class KsFooter extends Footer {
                 background-color: var(--legal-background-color);
                 text-align: center;
                 width: 33%;
+                border-left: var(--column-border-width) var(--column-border-color) solid;
             }
             :host footer>div:first-child>.footer-links>div>* {
                 text-align: center;
@@ -172,6 +173,8 @@ export default class KsFooter extends Footer {
                 }
                 :host footer>div:first-child .footer-links {
                     width: 100%;
+                    border-left: 0;
+                    border-bottom: var(--column-border-width) solid var(--column-border-color);
                 }
                 :host footer>div:first-child {
                     flex-direction: column-reverse;
@@ -291,13 +294,15 @@ export default class KsFooter extends Footer {
             margin-bottom: var(--footer-default-list-item-spacing);
         }
         :host .footer-links-row li > a {
-            display: flex;
+            display: inline-block;
             align-items: center;
             gap: 0.125em;
             flex-wrap: nowrap;
         }
         :host .footer-links-row li > a > a-icon-mdx {
-            display: flex;
+            --icon-mdx-svg-display: block;
+            display: inline-block;
+            margin-bottom: -0.2em;
         }
     `
   }

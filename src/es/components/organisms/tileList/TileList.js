@@ -79,7 +79,7 @@ export default class TileList extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**
@@ -108,16 +108,28 @@ export default class TileList extends Shadow() {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 0.75em;
+        gap: 0.75rem;
+      }
+
+      :host .o-tile-list__top ks-m-tooltip {
+        margin-bottom: auto;
       }
 
       :host .o-tile-list__title {
-        font-size: 1.5em;
-        line-height: 1.625em;
-        font-weight: 500;        
+        font-family: var(--mdx-sys-font-flex-headline3-font-family);
+        font-size: var(--mdx-sys-font-flex-headline3-font-size);
+        font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
+        line-height: var(--mdx-sys-font-flex-headline3-line-height);
+        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);        
       }
 
       :host a-icon-mdx {
         --icon-mdx-ks-color: var(--icon-color-blue);
+      }
+
+
+      :host .o-tile-list__top + .o-tile-list__bottom {
+        margin-top: 2em;
       }
 
       :host .o-tile-list__middle {
@@ -136,6 +148,10 @@ export default class TileList extends Shadow() {
         justify-content: space-between;
       }
 
+      :host .o-tile-list__bottom--grey {
+        --button-secondary-border-color: var(--mdx-sys-color-neutral-subtle3);
+      }
+
       :host .o-tile-list__details {
         height: 0;
         overflow: hidden;
@@ -149,25 +165,32 @@ export default class TileList extends Shadow() {
         display: flex;
         flex-direction: row;
         align-items: center;
+        gap: 1rem;
       }
 
       :host .o-tile-list__price {
-        font-size: 0.875em;
-        line-height: 0.9375em;
-        font-weight: 500;
-        padding-left: 0.75em;
+        font-family: var(--mdx-sys-font-fix-label3-font-family);
+        font-size: var(--mdx-sys-font-fix-label3-font-size);
+        font-weight: var(--mdx-sys-font-fix-label3-font-weight);
+        line-height: var(--mdx-sys-font-fix-label3-line-height);
+        letter-spacing: var(--mdx-sys-font-fix-label3-letter-spacing);
+        text-align: end;
+        white-space: nowrap;
       }
       
       :host .o-tile-list__price strong {
-        font-family: 'Graphik';
-        font-size: 1.5em;
-        line-height: 1.625em;
-        font-weight: 500;
+        font-family: var(--mdx-sys-font-flex-headline3-font-family);
+        font-size: var(--mdx-sys-font-flex-headline3-font-size);
+        font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
+        line-height: var(--mdx-sys-font-flex-headline3-line-height);
+        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);
+        white-space: initial;
       }
 
       :host .o-tile-list__icons {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
       }
     
       :host .o-tile-list__icon-box {
@@ -198,8 +221,8 @@ export default class TileList extends Shadow() {
       }
 
       :host ks-m-tile {
-        margin-bottom: 1em;
         width: 32%;
+        flex-grow: 1;
       }
 
       :host .o-tile-list__foot {
@@ -227,13 +250,17 @@ export default class TileList extends Shadow() {
 
         :host .o-tile-list__bottom {
           align-items: flex-end;
-          margin-bottom: 2em;
         }
 
         :host .o-tile-list__bottom-right {
           flex-direction: column;
           justify-content: flex-start;
-          align-items: flex-start;
+          align-items: flex-end;
+          gap: 0.75rem;
+        }
+
+        :host .o-tile-list__icon-box + .o-tile-list__icon-box {
+          margin-left: 1rem;
         }
 
         :host .o-tile-list__price {
@@ -242,7 +269,6 @@ export default class TileList extends Shadow() {
 
         :host ks-m-tile {
           margin-right:0;
-          margin-bottom: 1em;
           width: 100%
         }
 
@@ -267,38 +293,40 @@ export default class TileList extends Shadow() {
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     this.data = data
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
-    this.html = /* HTML */`
+    this.html = /* html */`
     <div class="o-tile-list">
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
-            <span class="o-tile-list__title">${data.title || warnMandatory + 'title'}</span>
+            <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
             ${data.iconTooltip
-              ? `
+              ? /* html */`
                 <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
                   <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
                 </ks-m-tooltip>
                   `
               : ''}          
           </div>
-          <div class="o-tile-list__middle">
-            ${data.location?.name
-              ? /* html */`
-              <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
-              `
-              : ''
-            }
-            ${data.location?.badge
-              ? /* html */`
-                <ks-a-button badge namespace="button-secondary-" color="tertiary">
-                  <span>${data.location.badge}</span>
-                </ks-a-button>
-              `
-              : ''
-            }
-          </div>
-          <div class="o-tile-list__bottom">
+          ${data.sort !== 2 ? /* html */ `
+            <div class="o-tile-list__middle">
+              ${data.location?.name
+                ? /* html */`
+                <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
+                `
+                : ''
+              }
+              ${data.location?.badge
+                ? /* html */`
+                  <ks-a-button badge namespace="button-secondary-" color="tertiary">
+                    <span>${data.location.badge}</span>
+                  </ks-a-button>
+                `
+                : ''
+              }
+            </div>
+          ` : ''}
+          <div class="o-tile-list__bottom ${data.sort === 2 ? 'o-tile-list__bottom--grey' : ''}">
             <div class="o-tile-list__bottom-left">
-              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}'></ks-m-buttons>
+              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small></ks-m-buttons>
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
@@ -324,7 +352,6 @@ export default class TileList extends Shadow() {
             style="display: none;"
           >
             <ks-a-button
-              icon
               namespace="button-secondary-" 
               color="secondary" 
             >
@@ -371,7 +398,7 @@ export default class TileList extends Shadow() {
 
   renderTile (tileData, add = false) {
     this.ppage = tileData.ppage || this.ppage
-    this.loadMore.style.display = tileData.ppage === -1 ? 'none': 'flex'
+    this.loadMore.style.display = tileData.ppage === -1 ? 'none' : 'flex'
     const tileString = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
       // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
       tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title

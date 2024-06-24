@@ -100,7 +100,7 @@ export default class DialogStatusButton extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   renderCSS () {
@@ -174,8 +174,7 @@ export default class DialogStatusButton extends Shadow() {
           </ks-a-button>
         `
       case (type === 'subscriptions'): {
-        // @ts-ignore
-        const url = `${self.Environment.getApiBaseUrl('customer-portal').subscriptionRenewSearchLinkUrl}${this.dataContent.subscriptionKindType}_${this.dataContent.subscriptionKindId}`
+        const url = this.createSubscriptionRenewLink(this.dataContent)
         return /* html */ `
           <ks-a-button
             href="${url}" 
@@ -223,5 +222,20 @@ export default class DialogStatusButton extends Shadow() {
           <a-translation data-trans-key='CP.cpAppointmentClose'/></a-translation>
       </ks-a-button>
     `
+  }
+
+  createSubscriptionRenewLink (linkParams) {
+    const { subscriptionKindType, subscriptionKindId } = linkParams
+    // @ts-ignore
+    const linkData = self.Environment.getCustomerPortalRenewalLinkByLanguage()
+    // Extract the subdomain
+    const url = window.location.href
+    const urlObj = new URL(url)
+    let subdomain = urlObj.hostname.split('.')[0]
+    // that's just the way it is now!
+    if (subdomain === 'localhost') subdomain = 'int'
+    // just look at Environment.js to see what the 'env' is
+    linkData.url = linkData.url.replace('{env}', subdomain)
+    return `${linkData.url}/${linkData.path}/?q=${subscriptionKindType}_${subscriptionKindId}`
   }
 }

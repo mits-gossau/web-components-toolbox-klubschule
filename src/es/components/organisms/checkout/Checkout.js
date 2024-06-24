@@ -12,35 +12,38 @@ export default class Checkout extends Shadow() {
 
     /**
      * Replace label text
-     * @param {*} event 
+     * @param {*} event
      */
     this.checkoutConfigurationListener = (event) => {
       event.detail.fetch.then(insuranceData => {
-        this.labelWithInsurance = this.root.querySelector('label[insurance-label]');
-        this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel;
+        this.labelWithInsurance = this.root.querySelector('label[insurance-label]')
+        this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel
       })
+    }
+
+    this.triggeredByListener = event => {
+      let trigger = event.detail.element;
+      let triggeredElement = this.root.querySelector(`input[type="checkbox"][triggered-by="${trigger.id}"]`);
+
+      if (triggeredElement) {
+        if (event.detail.element.checked && !triggeredElement.checked || !event.detail.element.checked && triggeredElement.checked) triggeredElement.click()
+        triggeredElement.closest('.wrap').classList[event.detail.element.checked ? 'add' : 'remove']('disabled')
+      }
     }
   }
 
   connectedCallback () {
-    if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
+    this.root.addEventListener('triggered-by', this.triggeredByListener)
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
-  }
-
-  shouldRenderCSS () {
-    return true
+    this.root.removeEventListener('triggered-by', this.triggeredByListener)
   }
 
   shouldRenderHTML () {
-    return true
+    return !this.componentWasRendered
   }
-
-  renderCSS () {}
 
   renderHTML () {
     const children = this.root.querySelectorAll('select')
@@ -49,7 +52,7 @@ export default class Checkout extends Shadow() {
         this.dispatchEvent(new CustomEvent('request-checkout-configuration',
           {
             detail: {
-              id: changeEvent.currentTarget.id,
+              id: changeEvent.currentTarget.dataset.lehrmitttelId,
               value: changeEvent.currentTarget.value
             },
             bubbles: true,
@@ -73,5 +76,7 @@ export default class Checkout extends Shadow() {
         }))
       })
     })
+
+    this.componentWasRendered = true
   }
 }

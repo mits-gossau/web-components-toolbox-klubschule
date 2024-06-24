@@ -35,10 +35,10 @@ export default class Form extends Shadow() {
             teilnehmerId: params.get('teilnehmerId'),
             optionPriceAvailable: this.voting.optionPrice.available,
             optionPriceValue: formData.get('optionPrice') === 'on',
-            optionLessonsAvailable: this.voting.optionPrice.available,
+            optionLessonsAvailable: this.voting.optionLessons.available,
             optionLessonsValue: formData.get('optionLessons') === 'on',
-            comment: formData.get('comment')
-            // preferredVariant: 'string', // TODO: get preferred variant from form?
+            comment: formData.get('comment'),
+            preferredVariant: '' // TODO: get preferred variant from form?
           }
         })
       )
@@ -184,12 +184,14 @@ export default class Form extends Shadow() {
             </tr>
           </tbody>
         </table>
-        <ks-a-checkbox namespace="checkbox-default-" mode="false">
+        <ks-a-checkbox mode="false" namespace="checkbox-default-">
           <div class="wrap">
-            <label for="optionPrice"><strong><a-translation key="CustomerLoyality.OptionPrice.CheckboxLabel"></a-translation></strong></label>
-            <input id="optionPrice" type="checkbox" name="optionPrice">
-            <div class="box">
-              <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
+            <div class="control">
+              <label for="optionPrice"><strong><a-translation key="CustomerLoyality.OptionPrice.CheckboxLabel"></a-translation></strong></label>
+              <input id="optionPrice" name="optionPrice" type="checkbox">
+              <div class="box">
+                <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
+              </div>
             </div>
           </div>
         </ks-a-checkbox>
@@ -221,12 +223,14 @@ export default class Form extends Shadow() {
             </tr>
           </tbody>
         </table>
-        <ks-a-checkbox namespace="checkbox-default-" mode="false">
+        <ks-a-checkbox mode="false" namespace="checkbox-default-">
           <div class="wrap">
-            <label for="optionLessons"><strong><a-translation key="CustomerLoyality.OptionLessons.CheckboxLabel"></a-translation></strong></label>
-            <input id="optionLessons" type="checkbox" name="optionLessons">
-            <div class="box">
+            <div class="control">
+              <label for="optionLessons"><strong><a-translation key="CustomerLoyality.OptionLessons.CheckboxLabel"></a-translation></strong></label>
+              <input id="optionLessons" name="optionLessons" type="checkbox">
+              <div class="box">
                 <a-icon-mdx icon-name="Check" size="1.25em" rotate="0" class="icon-right"></a-icon-mdx>
+              </div>
             </div>
           </div>
         </ks-a-checkbox>

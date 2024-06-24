@@ -6,24 +6,35 @@ export default class Checkbox extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
+      event.preventDefault()
+      event.stopPropagation()
       this.input.click()
+
+      if (this.input.hasAttribute('trigger')) {
+        this.dispatchEvent(new CustomEvent('triggered-by',
+          {
+            detail: {
+              element: this.input
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          })
+        )
+      }
     }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-
-    this.box = this.root.querySelector('.box')
-    this.input = this.root.querySelector('input[type="checkbox"]')
-
     /**
      * Handle checked on box
      */
-    this.box.addEventListener('click', this.clickEventListener)
+    this.clickableElements.forEach(element => element.addEventListener('click', this.clickEventListener))
   }
 
   disconnectedCallback () {
-    this.box.removeEventListener('click', this.clickEventListener)
+    this.clickableElements.forEach(element => element.removeEventListener('click', this.clickEventListener))
   }
 
   shouldRenderCSS () {
@@ -37,9 +48,11 @@ export default class Checkbox extends Shadow() {
         :host {
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
 
         :host .wrap {
+          position: relative;
           display: flex;
           flex-direction: column;
         }
@@ -49,26 +62,44 @@ export default class Checkbox extends Shadow() {
           opacity: 0.2;
         }
 
-        :host .control:hover,
-        :host label:hover {
+        :host .control:hover label {
           background-color: var(--background);
           cursor: pointer;
         }
 
         :host .control {
+          flex: 1;
           display: flex;
           flex-direction: row-reverse;
-          width: fit-content;
-          padding-top: var(--padding-top);
-          padding-bottom: var(--padding-bottom);
-          padding-right: var(--padding-right);
         }
 
         :host label {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
           font-size: 1em;
           line-height: 1.25em;
           font-weight: 400;
-          padding: var(--label-padding, 0);   
+          color: var(--label-color);
+          font: var(--label-font);
+          padding: 
+              var(--padding-top)
+              var(--padding-right)
+              var(--padding-bottom)
+              calc(var(--padding-right) + 1.25em)
+          ;
+        }
+
+        :host label span {
+          color: var(--hint-color);
+          font: var(--hint-font);
+        }
+          
+        :host label a {
+          display: inline !important;
+          font-size: 1em;
+          line-height: 1.25em;
+          font-weight: 400;
         }
 
         :host input[type='checkbox'] {
@@ -81,18 +112,27 @@ export default class Checkbox extends Shadow() {
         }       
 
         :host input[type='checkbox']:checked + .box a-icon-mdx {
-            display: block;
-            color: var(--color);;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color);
+            margin: 0;
         }
 
         :host .box {
-            background-color: var(--box-background-color);
-            border: 0.0625em solid var(--border-color);
-            border-radius: var(--border-radius, 0);
-            height: 1.25em;
-            width: 1.25em;
-            margin-right: 0.75em;
-            flex: 1 0 1.25em;
+          position: absolute;
+          left: 0;
+          top: var(--padding-top);
+          background-color: var(--box-background-color);
+          border: 0.0625em solid var(--border-color);
+          border-radius: var(--border-radius, 0);
+          height: 1.25em;
+          width: 1.25em;
+          margin-right: 0.75em;
+          flex: 1 0 1.25em;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         :host .box a-icon-mdx {
@@ -138,12 +178,14 @@ export default class Checkbox extends Shadow() {
             path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
             namespace: false
           }])
-      case 'center-list-':
-        return this.fetchCSS([
-          {
-            path: `${this.importMetaUrl}./center-list-/center-list-.css`,
-            namespace: false
-          }])
     }
+  }
+
+  get input () {
+    return this.root.querySelector('input[type="checkbox"]')
+  }
+
+  get clickableElements () {
+    return this.root.querySelectorAll('.control > *:not(input[type="checkbox"])')
   }
 }

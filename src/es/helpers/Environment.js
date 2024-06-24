@@ -22,21 +22,62 @@ self.Environment = {
         return '767px'
     }
   },
+  getCustomerPortalRenewalLinkByLanguage: function () {
+    switch (self.Environment.language) {
+      case 'fr-CH':
+      case 'fr':
+        return {
+          url: 'https://{env}.ecole-club.ch',
+          path: 'rechecher'
+        }
+      case 'it-CH':
+      case 'it':
+        return {
+          url: 'https://{env}.scuola-club.ch',
+          path: 'ricerca'
+        }
+      case 'de-CH':
+      case 'de':
+        return {
+          url: 'https://{env}.klubschule.ch',
+          path: 'suche'
+        }
+      default:
+        return {
+          url: 'https://www.klubschule.ch',
+          path: 'suche'
+        }
+    }
+  },
+  getEnvUrl: function () {
+    const url = window.location.href
+    const urlObj = new URL(url)
+    const subdomain = urlObj.hostname.split('.')[0]
+    switch (subdomain) {
+      case 'intadmin':
+      case 'int':
+      case 'localhost':
+        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
+      case 'dev':
+      case 'devadmin':
+        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
+      default:
+        return 'https://miducaexportapicustomerportalprd.azurewebsites.net'
+    }
+  },
   getApiBaseUrl: function (type) {
     switch (type) {
       case 'customer-portal': {
         return {
-          apiBaseUrl: this.isTestingEnv ? 'https://qual.klubschule.ch' : 'https://qual.klubschule.ch',
-          apiSubscriptionCourseAppointments: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointments' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointments',
-          apiSubscriptionCourseAppointmentBooking: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentbooking' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentbooking',
-          apiSubscriptionCourseAppointmentDetail: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentdetail' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentdetail',
-          apiSubscriptionCourseAppointmentReversal: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentreversal' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptioncourseappointmentreversal',
-          apiBookedSubscriptionCourseAppointments: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/bookedsubscriptioncourseappointments' : 'https://qual.klubschule.ch/api/CustomerPortal/bookedsubscriptioncourseappointments',
-          apiSubscriptions: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptions' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptions',
-          apiSubscriptionDetail: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscription' : 'https://qual.klubschule.ch/api/CustomerPortal/subscription',
-          apiSubscriptionPdf: this.isTestingEnv ? 'https://qual.klubschule.ch/api/CustomerPortal/subscriptionpdf' : 'https://qual.klubschule.ch/api/CustomerPortal/subscriptionpdf',
-          subscriptionRenewSearchLinkUrl: this.isTestingEnv ? 'https://qual.klubschule.ch/Kurse/suche@' : 'https://qual.klubschule.ch/Kurse/suche@',
-          translations: this.isTestingEnv ? 'https://dev.klubschule.ch/umbraco/api/1/Dictionaries/all/de/CP' : 'https://dev.klubschule.ch/umbraco/api/1/Dictionaries/all/de/CP'
+          apiSubscriptionCourseAppointments: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointments`,
+          apiSubscriptionCourseAppointmentBooking: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointmentbooking`,
+          apiSubscriptionCourseAppointmentDetail: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointmentdetail`,
+          apiSubscriptionCourseAppointmentReversal: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointmentreversal`,
+          apiBookedSubscriptionCourseAppointments: `${this.getEnvUrl()}/api/CustomerPortal/bookedsubscriptioncourseappointments`,
+          apiSubscriptions: `${this.getEnvUrl()}/api/CustomerPortal/subscriptions`,
+          apiSubscriptionDetail: `${this.getEnvUrl()}/api/CustomerPortal/subscription`,
+          apiSubscriptionPdf: `${this.getEnvUrl()}/api/CustomerPortal/subscriptionpdf`,
+          coursePDF: `${this.getEnvUrl()}/api/CustomerPortal/coursepdf`
         }
       }
       default:

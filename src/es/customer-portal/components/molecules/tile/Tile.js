@@ -3,6 +3,8 @@ import Tile from '../../../../components/molecules/tile/Tile.js'
 import { courseAppointmentStatusMapping } from '../../../helpers/Mapping.js'
 import { makeUniqueCourseId, escapeForHtml, getTileState } from '../../../helpers/Shared.js'
 
+/* global self */
+
 /**
  * @export
  * @class AppointmentTile
@@ -76,6 +78,7 @@ export default class AppointmentTile extends Tile {
       :host .subscription-info {
         display: flex;
         flex-direction: column;
+        gap: 0.5em;
       }
       :host .course-admin, .course-price {
         flex-grow: 1;
@@ -84,6 +87,7 @@ export default class AppointmentTile extends Tile {
       :host .course-info {
         display: flex;
         flex-direction: column;
+        gap: 0.5em;
       }
       :host .course-execution-info{
         gap: 0.5em;
@@ -98,11 +102,10 @@ export default class AppointmentTile extends Tile {
         font-weight: 400;
       }
       :host .time {
+        align-items: center;
         display: flex;
         gap: 0.5em;
-        align-items: center;
       }
-
       :host .body, .footer {
         align-items: center;
         display: grid;
@@ -112,12 +115,12 @@ export default class AppointmentTile extends Tile {
         padding: 1.5em 1.5em 0.75em 1.5em;
       }
       :host .info {
-        display: flex;
         align-items: center;
+        display: flex;
       }
       :host m-load-template-tag {
-          min-height: 16em;
-          display: block;
+        display: block;
+        min-height: 16em;
       }
       :host .status-not-bookable {
         border: 1px solid var(--alert-color);
@@ -150,8 +153,8 @@ export default class AppointmentTile extends Tile {
         padding: 0;
       }
       :host .meta li {
-        display: flex;
         align-items: center;
+        display: flex;
         flex-direction: row;
       }
       :host .meta li + li {
@@ -170,8 +173,8 @@ export default class AppointmentTile extends Tile {
           flex-direction: column;
         }
         :host .parent-footer {
-          flex-direction: column-reverse;
           align-items: flex-end;
+          flex-direction: column-reverse;
         }
         :host .course-booking {
           margin-top: 2.5em;
@@ -314,11 +317,11 @@ export default class AppointmentTile extends Tile {
                     </a-course-info>
                   </li>
                   <li> 
-                    <a-icon-mdx icon-name="User" size="1.5em" tabindex="0"></a-icon-mdx>
+                    <a-icon-mdx icon-name="User" size="1.5em"></a-icon-mdx>
                     <span>${content.instructorDescription}</span>
                   </li>
                   <li>
-                    <a-icon-mdx icon-name="Location" size="1.5em" tabindex="0"></a-icon-mdx>
+                    <a-icon-mdx icon-name="Location" size="1.5em"></a-icon-mdx>
                     <div class="location-room">
                       <span>${content.courseLocation}</span>
                       <span><a-translation data-trans-key='CP.cpAppointmentIcsRoom'/></a-translation> ${content.roomDescription}</span>
@@ -402,8 +405,7 @@ export default class AppointmentTile extends Tile {
     const dateObject = new Date(date)
     const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }
     // @ts-ignore
-    // TODO: locale!
-    const formatter = new Intl.DateTimeFormat('de-DE', options)
+    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
     return formatter.format(dateObject)
   }
 
@@ -411,8 +413,7 @@ export default class AppointmentTile extends Tile {
     const dateObject = new Date(dateString)
     const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
     // @ts-ignore
-    // TODO: locale!
-    const formatter = new Intl.DateTimeFormat('de-DE', options)
+    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
     return formatter.format(dateObject)
   }
 

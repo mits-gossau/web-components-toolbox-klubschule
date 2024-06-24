@@ -14,6 +14,17 @@ import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/
  */
 export default class KsBodyStyle extends BodyStyle {
   /**
+     * block the parent Body.js to renderCSS
+     *
+     * @return {boolean}
+     */
+  shouldRenderCSS () {
+    return !this.root.querySelector(
+        `:host > style[_css], ${this.tagName} > style[_css]`
+    )
+  }
+
+  /**
    * controls all body > main content width and margin (keep as small as possible and add other styles into the style.css)
    *
    * @return {void}
@@ -56,7 +67,8 @@ export default class KsBodyStyle extends BodyStyle {
             max-width: 100%;
         }
 
-        :host([has-background]) {
+        :host([has-background]),
+        :host([has-padding]) {
             padding-top: var(--mdx-sys-spacing-flex-l);
             padding-bottom: var(--mdx-sys-spacing-flex-l);
         }
@@ -64,6 +76,14 @@ export default class KsBodyStyle extends BodyStyle {
         :host([no-margin-y]) {
             margin-top: 0 !important;
             margin-bottom: 0 !important;
+        }
+
+        :host([no-margin-bottom]) {
+            margin-bottom: 0 !important;
+        }
+
+        :host([margin-top-m]) {
+            margin-top: var(--mdx-sys-spacing-flex-m) !important;
         }
 
         :host([variant=default]) > * {
@@ -95,6 +115,9 @@ export default class KsBodyStyle extends BodyStyle {
         :host > [wrapper].ks-o-body-section__last-child {
             margin-bottom: 0 !important;
         }
+        :host > ks-m-checkout-box-wrapper.ks-o-body-section__last-child {
+            padding-bottom: var(--mdx-sys-spacing-flex-l) !important;
+        }
         :host([variant=default]) > [namespace="teaser-fullwidth-"],
         :host([variant=narrow]) > [namespace="teaser-fullwidth-"] {
             width: calc(var(--body-section-default-width, 86.666%) + var(--mdx-sys-spacing-fix-m) * 2);
@@ -124,6 +147,7 @@ export default class KsBodyStyle extends BodyStyle {
         }
 
         /* Utilities */
+        /* responsive spacings */
         :host > .margin-y-l {
             margin-top: var(--mdx-sys-spacing-flex-l);
             margin-bottom: var(--mdx-sys-spacing-flex-l);
@@ -166,6 +190,25 @@ export default class KsBodyStyle extends BodyStyle {
         }
         :host > .margin-bottom-xs {
             margin-bottom: var(--mdx-sys-spacing-flex-xs);
+        }
+        /* static spacings */
+        :host > .margin-top-fix-s {
+            margin-top: var(--mdx-sys-spacing-fix-s);
+        }
+        :host > .margin-bottom-fix-s {
+            margin-bottom: var(--mdx-sys-spacing-fix-s);
+        }
+        :host > .margin-top-fix-m {
+            margin-top: var(--mdx-sys-spacing-fix-m);
+        }
+        :host > .margin-bottom-fix-m {
+            margin-bottom: var(--mdx-sys-spacing-fix-m);
+        }
+        :host > .margin-top-fix-l {
+            margin-top: var(--mdx-sys-spacing-fix-l);
+        }
+        :host > .margin-bottom-fix-l {
+            margin-bottom: var(--mdx-sys-spacing-fix-l);
         }
 
         /* debug ruler to check alignment, DO NOT USE IN PRODUCTION */

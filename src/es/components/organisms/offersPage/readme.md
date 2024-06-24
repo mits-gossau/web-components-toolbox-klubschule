@@ -18,3 +18,7 @@ You can find a simple example markup in the above linked example pages.
 - `endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"`: Endpoint for Auto Complete functionality
 - `google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"`: Google API Key (AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s)
 - `event-detail-url="https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/"`: API for Course/ Events Details
+- `with-search-input`: includes search in page
+- `with-location-input`: includes location search in page
+- `with-filter-search`: includes search in filter overlay
+- `with-auto-complete`: includes auto-complete in search fields

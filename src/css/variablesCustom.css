@@ -197,6 +197,9 @@
 
   /* --- Selectable CMS colors End --- */
 
+  --button-badge-padding: var(--mdx-sys-spacing-fix-3xs) var(--mdx-sys-spacing-fix-2xs);
+  --button-badge-border-radius: 3px;
+
   --emotion-pictures-default-img-max-height: 50vh;
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
@@ -222,12 +225,25 @@
   --header-nav-right-background-color-custom: white;
   --header-nav-right-content-width: var(--any-content-width);
   --header-nav-right-logo-width-custom: calc(100rem/18);
-  --header-nav-right-height-mobile-custom: 3.75rem;
+  --header-nav-right-height-mobile-custom: auto;
   --logo-default-height-mobile-custom: var(--header-nav-right-height-mobile-custom);
   --logo-default-width-mobile-custom: var(--logo-default-height-mobile-custom);
   --header-nav-right-height-custom: calc(100rem/18);
   --header-nav-right-margin-custom: 0 0 1rem 0;
   --header-nav-right-padding: 0;
+  --header-nav-grid-a-menu-icon-height: 2px;
+  --header-content-width: calc(min(100%, var(--body-max-width)) - 2.5rem);
+  --header-content-width-mobile: calc(min(100%, var(--body-max-width)) - 1rem);
+  --header-easy-portal-content-width: calc(min(100%, var(--body-max-width)) - 2rem);
+  --header-easy-portal-content-width-mobile: calc(min(100%, var(--body-max-width)) - 1rem);
+  --header-checkout-content-width: calc(min(100%, var(--body-max-width)) - 2rem);
+  --header-checkout-content-width-mobile: calc(min(100%, var(--body-max-width)) - 1rem);
+  --header-border-bottom: 1px solid var(--m-gray-300);
+  --multi-level-navigation-default-o-nav-wrapper-top: 2.85rem;
+  --multi-level-navigation-default-desktop-main-wrapper-width: 105vw;
+  --multi-level-navigation-default-desktop-main-wrapper-position: absolute;
+  --multi-level-navigation-default-desktop-main-wrapper-position-left: 49%;
+  --multi-level-navigation-default-desktop-main-wrapper-position-right: 49%;
   --label-letter-spacing: 0;
   --menu-color-custom: white;
   --login-width: var(--header-default-content-width);
@@ -236,12 +252,20 @@
   --search-input-background-color: var(--m-white);
   --search-input-border-color-focus: var(--mdx-base-color-grey-975);
   --search-input-border-color-hover: var(--mdx-base-color-grey-975);
-  --search-input-border-color-custom: var(--m-gray-700);
+  --search-input-border-color: var(--mdx-sys-color-neutral-bold1);
+  --search-input-border-color-custom: var(--m-gray-700); /* needed? */
   --search-input-color: var(--mdx-base-color-grey-975);
-  --search-input-padding: 0.5em 1em;
+  --search-input-padding: 0.5rem 1.5rem;
+  --search-input-padding-mobile: 0.5rem 1rem;
+  --search-icon-right: 1.5rem;
+  --search-icon-right-mobile: 1rem;
   --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big: 100%;
   --search-input-border-radius: 999px; /* search inputs are fully rounded for all brands */
+  --search-input-height: 3.25rem; /* mdx token missing */
+  --search-input-height-mobile: 2.5rem;
+  --search-input-font-size: var(--mdx-sys-font-fix-label1-font-size);
+  --search-input-font-size-mobile: var(--mdx-sys-font-fix-label2-font-size);
   --search-justify-content-custom: flex-end;
   --search-label-font-size: var(--font-size);
   --search-label-line-height: calc(4/3);
@@ -302,6 +326,12 @@
   --p-margin: 0 auto var(--mdx-sys-spacing-flex-s);
   --p-form-margin: 0 auto var(--mdx-sys-spacing-flex-small-s);
 
+  /* intro text */
+  --intro-font-family: var(--mdx-sys-font-flex-body2-font-family);
+  --intro-font-size: var(--mdx-sys-font-flex-body2-font-size);
+  --intro-font-weight: var(--mdx-sys-font-weight-emphasis-light);
+  --intro-line-height: var(--mdx-sys-font-flex-body2-line-height);
+
   /* links */
   --a-color: var(--mdx-comp-link-color-default);
   --a-font-weight: var(--mdx-comp-link-font-default-font-weight);
@@ -361,8 +391,11 @@
   --details-default-icon-right-border-bottom-last-custom: 0.0625em solid var(--mdx-base-color-grey-700);
   --details-default-icon-right-border-color-custom: var(--mdx-base-color-grey-700);
   --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
-  --details-default-icon-right-h4-font-size: 1em;
-  --details-default-icon-right-h4-line-height: 1.125em;
+  --details-default-icon-right-h4-font-size: var(--mdx-sys-font-fix-label1-font-size);
+  --details-default-icon-right-h4-font-size-mobile: var(--mdx-sys-font-fix-label2-font-size);
+  --details-default-icon-right-h4-font-weight: var(--mdx-sys-font-fix-label1-font-weight);
+  --details-default-icon-right-h4-line-height: var(--mdx-sys-font-fix-label1-line-height);
+  --details-default-icon-right-h4-line-height-mobile: var(--mdx-sys-font-fix-label2-line-height);
   --details-default-icon-right-text-align: start;
   --details-default-icon-right-summary-border-bottom-open-custom: 1px solid transparent;
   --details-default-icon-right-icon-align-items-custom: center;
@@ -383,7 +416,7 @@
   --grid-2columns-content-stage-label-font-custom: var(--mdx-sys-font-fix-body2);
   --grid-2columns-content-stage-label-margin-left-custom: 0.25em;
   --grid-2columns-content-stage-label-padding-custom: 0.25em 0.5em;
-  --grid-2columns-content-stage-paragraph-font-custom: var(--mdx-sys-font-flex-large-body2);
+  --grid-2columns-content-stage-paragraph-font-custom: var(--mdx-sys-font-flex-body2);
   --grid-2columns-content-stage-topline-font-custom: var(--mdx-sys-font-fix-label1);
 
   /* carousel */
@@ -420,6 +453,21 @@
 
   --simple-form-miduweb-p-margin: var(--simple-form-miduweb-hr-margin);
   --mdx-comp–inputfield-label-color-default: var(--mdx-comp-inputfield-label-color-default);
+
+  --dialog-left-slide-in-checkout-max-width-custom: 1120px;
+  --dialog-left-slide-in-checkout-max-width-container-custom: 100%;
+
+  /* datepicker */
+  --flatpickr-ks-background: var(--mdx-comp-inputfield-background-color-default);
+  --flatpickr-ks-border-radius: var(--mdx-comp-inputfield-border-radius-default);
+  --flatpickr-ks-display: flex;
+  --flatpickr-ks-justify-content: space-between;
+  --flatpickr-ks-align-items: center;
+  --flatpickr-ks-font: var(--mdx-comp-inputfield-font-default);
+  --flatpickr-ks-color: var(--mdx-comp-inputfield-placeholder-color-default);
+  --flatpickr-ks-padding: var(--mdx-comp-inputfield-padding-vertical-default) var(--mdx-comp-inputfield-padding-horizontal-default);
+  --flatpickr-ks-border: var(--mdx-comp-inputfield-borderWidth-default) solid var(--mdx-comp-inputfield-border-color-default);
+  --flatpickr-ks-border-color-active: var(--mdx-comp-inputfield-border-color-focus);
 }
 
 @media screen and (min-width: 1441px) {

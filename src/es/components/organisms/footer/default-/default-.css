@@ -4,13 +4,15 @@
     --footer-default-content-spacing-mobile-vertical: var(--mdx-sys-spacing-fix-2xs);
     --footer-default-border-color: var(--mdx-sys-color-neutral-bold1);
     --footer-default-border-width: var(--mdx-sys-border-width-default);
+    --footer-default-column-border-color: var(--footer-default-column-border-color-custom, transparent);
+    --footer-default-column-border-width: var(--footer-default-column-border-width-custom, 0);
     --footer-default-wrapper-spacing: var(--mdx-sys-spacing-fix-2xl);
     --footer-default-legal-spacing-vertical: var(--mdx-sys-spacing-flex-small-s);
-    --footer-default-legal-links-border: var(--mdx-sys-color-neutral-subtle4);
+    --footer-default-legal-links-border: var(--footer-default-legal-links-border-custom, var(--mdx-sys-color-neutral-subtle4));
     --footer-default-legal-flex-spacing-vertical: var(--mdx-sys-spacing-flex-large-xs);
     --footer-default-legal-font: var(--mdx-sys-font-fix-body3);
     --footer-default-legal-link-color: var(--mdx-base-color-orange-600);
-    --footer-default-legal-background-color: var(--mdx-sys-color-accent-6-subtle1);
+    --footer-default-legal-background-color: var(--footer-default-legal-background-color-custom, var(--mdx-sys-color-accent-6-subtle1));
     --footer-default-content-accordion-typography: var(--mdx-sys-font-fix-label2);
     --footer-default-content-accordion-color: var(--mdx-sys-color-neutral-bold4);
     --footer-default-content-accordion-item-spacing: var(--mdx-sys-spacing-fix-s);
@@ -24,7 +26,7 @@
 
     --footer-default-gap: var(--footer-default-gap-custom, var(--content-spacing));
     --footer-default-invert-a-color-hover: var(--footer-default-invert-a-color-hover-custom, var(--color-hover));
-    --footer-default-invert-background-color: var(--mdx-sys-color-accent-6-subtle2);
+    --footer-default-invert-background-color: var(--footer-default-invert-background-color-custom, var(--mdx-sys-color-accent-6-subtle2));
     --footer-default-invert-color-hover: var(--color-hover);
     --footer-default-invert-color: var(--footer-default-content-accordion-color);
     --footer-default-invert-orange-a-color-hover: var(--footer-default-invert-orange-a-color-hover-custom, var(--color-hover));
@@ -57,3 +59,12 @@
     --details-default-icon-right-svg-color-custom: var(--color-secondary);
 }
 
+/* exception for ibaw brand -> can be activated by adding brand="ibaw" to the footer */
+:host([brand=ibaw]) .invert.footer-links,
+:host([brand=ibaw]) .invert.footer-links h3,
+:host([brand=ibaw]) footer > div:first-child .footer-links > div:last-child > div {
+    background: var(--mdx-sys-color-brand-accent-6-700);
+    color: var(--mdx-sys-color-neutral-on-default) !important;
+    --color: var(--mdx-sys-color-neutral-on-default);
+    --color-tertiary: var(--mdx-sys-color-neutral-on-default);
+}

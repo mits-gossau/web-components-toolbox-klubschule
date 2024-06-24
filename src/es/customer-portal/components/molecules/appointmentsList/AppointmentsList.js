@@ -1,6 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { makeUniqueCourseId } from '../../../helpers/Shared.js'
+import { makeUniqueCourseId, escapeForHtml } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 
@@ -14,17 +14,19 @@ export default class AppointmentsList extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.select = null
     this.numberOfAppointments = 0
+    this.currentOpenDialogFilterType = null
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
-    this.dispatchEvent(new CustomEvent(this.dataset.requestSubscription || 'request-appointments',
+    document.body.addEventListener('update-subscriptions', this.subscriptionsListener)
+    // get first subscription information for current user
+    // then request the appointments with received 'subscriptionType' and 'subscriptionId'
+    // pointless thing, due to poor api design
+    this.dispatchEvent(new CustomEvent('request-subscriptions',
       {
-        detail: {
-          subscriptionType: '',
-          userId: ''
-        },
+        detail: {},
         bubbles: true,
         cancelable: true,
         composed: true
@@ -34,7 +36,29 @@ export default class AppointmentsList extends Shadow() {
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
+    document.body.removeEventListener('update-subscriptions', this.subscriptionsListener)
     this.select?.removeEventListener('change', this.selectEventListener)
+  }
+
+  /**
+   * Need 'subscriptionType' and 'subscriptionId' from current user
+   * @param {CustomEventInit} event
+   */
+  subscriptionsListener = (event) => {
+    event.detail.fetch.then((subscriptionData) => {
+      const { subscriptionType, subscriptionId } = subscriptionData.activeSubscriptions[0]
+      this.dispatchEvent(new CustomEvent(this.dataset.requestSubscription || 'request-appointments',
+        {
+          detail: {
+            subscriptionType,
+            subscriptionId
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }
+      ))
+    })
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
@@ -73,7 +97,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   renderCSS () {
@@ -116,9 +140,7 @@ export default class AppointmentsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     return fetch.then(appointments => {
-      if (appointments.errorCode !== 0) {
-        throw new Error(`${appointments.errorMessage}`)
-      }
+      this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,
@@ -177,7 +199,7 @@ export default class AppointmentsList extends Shadow() {
               ${subscriptionSelect}
             </div>
             <div col-lg="12" col-md="12" col-sm="12">
-              <!-- <m-appointments-filter></m-appointments-filter> -->
+              <m-appointments-filter data-filter-open="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
             </div>
             `
             : ''}         
@@ -231,10 +253,11 @@ export default class AppointmentsList extends Shadow() {
     const list = []
     let counter = 0
     dayList.forEach(day => {
-      counter += day.subscriptionCourseAppointments.length
+      const appointmentType = day.subscriptionCourseAppointments ? 'subscriptionCourseAppointments' : 'bookedSubscriptionCourseAppointments'
+      counter += day[appointmentType].length
       const dayWrapper = document.createElement('div')
       dayWrapper.appendChild(this.renderDayHeading(day.weekday, heading))
-      day.subscriptionCourseAppointments.forEach(appointment => {
+      day[appointmentType].forEach(appointment => {
         const tile = this.makeTileComponent(tileComponent, appointment, selectedSubscription)
         dayWrapper.appendChild(tile)
       })
@@ -296,9 +319,10 @@ export default class AppointmentsList extends Shadow() {
   getDayListData (data) {
     let booked = {}
     if (!data.selectedSubscription) {
-      booked = data.dayList[0]?.subscriptionCourseAppointments[0]
+      booked = data.dayList[0]?.bookedSubscriptionCourseAppointments[0]
     }
-    const selectedSubscription = data.selectedSubscription
+    // @ts-ignore
+    const selectedSubscription = structuredClone(data.selectedSubscription
       ? data.selectedSubscription
       : {
           subscriptionBalance: booked?.subscriptionBalance,
@@ -308,7 +332,7 @@ export default class AppointmentsList extends Shadow() {
           subscriptionType: booked?.subscriptionType,
           subscriptionValidFrom: booked?.subscriptionValidFrom,
           subscriptionValidTo: booked?.subscriptionValidTo
-        }
+        })
     const dayList = data.selectedSubscription ? data.selectedSubscription.dayList : data.dayList
     delete selectedSubscription.dayList
     return {

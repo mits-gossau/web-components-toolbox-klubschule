@@ -334,7 +334,7 @@ export default class CourseDialog extends Shadow() {
         }
       </style>
       <div class="success-message">
-        <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>
+        <a-icon-mdx icon-name="CheckCircle" size="3em" class="success"></a-icon-mdx>
         <h2 class="success">
           <!-- trans value = Sie haben den Termin erfolgreich gebucht -->
           <a-translation data-trans-key="CP.cpYouHaveBookedTheAppointmentSuccessfully"></a-translation>
@@ -458,7 +458,7 @@ export default class CourseDialog extends Shadow() {
         }
       </style>
       <div class="success-message">
-        <a-icon-mdx icon-name="CheckCircle" size="3em" tabindex="0" class="success"></a-icon-mdx>
+        <a-icon-mdx icon-name="CheckCircle" size="3em" class="success"></a-icon-mdx>
           <h2 class="success">
             <!-- trans value = Sie haben den Termin erfolgreich storniert -->
             <a-translation data-trans-key="CP.cpYouHaveSuccessfullyCanceledTheAppointment"></a-translation>
@@ -468,7 +468,7 @@ export default class CourseDialog extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   shouldRenderHTML () {
@@ -655,6 +655,7 @@ export default class CourseDialog extends Shadow() {
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
     if (!state) return ''
     const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo)
+    const freeSeats = Number(state.status) ? state.status : ''
     return /* html */ `
       <div class="detail">
         <span>
@@ -673,7 +674,7 @@ export default class CourseDialog extends Shadow() {
           <!-- trans value = Raum -->
           <a-translation data-trans-key="CP.cpAppointmentIcsRoom"></a-translation>
         </span>
-        <span>${detail.courseLocation} / Raum ${detail.roomDescription}</span>
+        <span>${detail.courseLocation} / <a-translation data-trans-key="CP.cpAppointmentIcsRoom"></a-translation> ${detail.roomDescription}</span>
       </div>
       <div class="detail">
         <span>
@@ -688,8 +689,8 @@ export default class CourseDialog extends Shadow() {
           <a-translation data-trans-key="CP.cpAppointmentListColumnStatus"></a-translation>
         </span>
         <div>
-          <span class="${state.css.status}">${state.status}</span> 
-          <span class="${state.css.info}">${state.info}</span>
+          <span class="${state.css.status}">${freeSeats ? `${freeSeats}` : `<a-translation data-trans-key='${state.statusTransKey}'></a-translation`}</span> 
+          <span class="${state.css.info}">${state.infoTransKey ? `<a-translation data-trans-key='${state.infoTransKey}'></a-translation>` : ''}</span>
         </div>
       </div>
       <div class="detail">
@@ -714,7 +715,7 @@ export default class CourseDialog extends Shadow() {
    */
   renderNotification () {
     return /* html */ `
-      <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" tabindex="0">
+      <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.5em">
         <style>
           :host {
             --system-notification-default-icon-border-width: 0 !important;
@@ -759,7 +760,7 @@ export default class CourseDialog extends Shadow() {
    */
   renderDownloads (courseData, courseDetail) {
     // @ts-ignore
-    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').apiBaseUrl}/api/customerportal/coursepdf/${courseData.courseType}/${courseData.courseId}/${courseDetail.centerId}`
+    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').coursePDF}/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}/${self.Environment.language.substring(0, 2)}`
     return /* html */ `
       <ks-m-link-list namespace="link-list-download-">
         <ul>
@@ -864,7 +865,7 @@ export default class CourseDialog extends Shadow() {
     const dateObject = new Date(dateString)
     const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
     // @ts-ignore
-    const formatter = new Intl.DateTimeFormat('de-DE', options)
+    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
     return formatter.format(dateObject)
   }
 

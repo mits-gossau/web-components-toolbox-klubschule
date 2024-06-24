@@ -42,7 +42,14 @@ export default class WithFacet extends Shadow() {
     // additional setting for initial request
     let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
     this.url = new URL(self.location.href)
-    this.params = new URLSearchParams(this.url.search)
+    this.params = this.catchURLParams()
+    this.filters = []
+    this.filterKeys = []
+    this.ignoreURLKeys = [
+      'rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
+      'q', // search term, handled separately
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content' // GA parameters
+    ] 
     this.isMocked = this.hasAttribute('mock')
     const apiUrl = this.isMocked
       ? `${this.importMetaUrl}./mock/default.json`
@@ -51,10 +58,14 @@ export default class WithFacet extends Shadow() {
     this.lastResponse = {}
     // simply the payload of the last request
     this.lastRequest = null
+    // recursion depth counter
+    this.filtersInURLRecursionDepth = 0
 
     this.requestWithFacetListener = (event) => {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
+
+      if (event?.detail?.wrapper?.filterItem) this.updateFilterAndParamsWithSelectedFilter(event)
 
       let request
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
@@ -71,7 +82,7 @@ export default class WithFacet extends Shadow() {
         const initialFilters = initialRequestObj?.filter
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
-        this.filters = []
+        // this.filters = []
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
 
@@ -82,32 +93,39 @@ export default class WithFacet extends Shadow() {
 
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
-          this.removeAllFilterParamsFromURL()
+          this.removeAllFilterParams()
         }
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeFilterParamsFromURL(event.detail.this.getAttribute('filter-parent'))
+          this.removeFilterParam(event.detail.this.getAttribute('filter-key'))
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
         }
 
-        // TODO: @Alex, the location has to be kept in the URL
-
-        // keep the last search location inside initialRequestObj
+        // keep the last search location inside initialRequestObj and store it in url params
         if (event?.detail?.key === 'location-search') {
           if (!!event.detail.lat && !!event.detail.lng ) {
             initialRequestObj.clat = event.detail.lat
             initialRequestObj.clong = event.detail.lng
+            this.params.set('clat', event.detail.lat)
+            this.params.set('clong', event.detail.lng)
+            this.params.set('cname', encodeURIComponent(event.detail.description))
           } else {
             if (initialRequestObj.clat) delete initialRequestObj.clat
             if (initialRequestObj.clong) delete initialRequestObj.clong
+            this.params.delete('clat')
+            this.params.delete('clong')
+            this.params.delete('cname')
           }
+        } else if (this.params.has('clat') || this.params.has('clong') || this.params.has('cname')) {
+          initialRequestObj.clat = this.params.get('clat')
+          initialRequestObj.clong = this.params.get('clong')
         }
 
-        this.updateURLParams()
+        this.updateFilterFromURLParams()
 
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
@@ -167,59 +185,14 @@ export default class WithFacet extends Shadow() {
                 throw new Error(response.statusText)
               }).then(json => {
                 // store initial response
-                if (!this.filters.length || this.filters.length === 0) {
-                  this.lastResponse = json
-                }
+                this.lastResponse = json
 
-                // url search text kung fu
-                if (!json.searchText) {
-                  this.params.delete('q')
-                } else {
-                  this.params.set('q', json.searchText)
-                }
+                this.checkFiltersInURL(json.filters)
 
-                // url filter kung fu
-                json.filters.forEach(filterItem => {
-                  if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-                    const paramsWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
-                    const selectedChildren = []
+                this.updateUrlSearchFromResponse(json)
 
-                    filterItem.children.forEach(child => {
-                      // check if the child is already in the url params
-                      const containsChild = paramsWithUnderscore.some(array => array.includes(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`))
-
-                      if (containsChild) {
-                        selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                      }
-
-                      // if selected, add it to the url params
-                      if (child.selected) {
-                        if (!containsChild && !shouldResetAllFilters) {
-                          selectedChildren.push(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                        }
-
-                        if (selectedChildren.length > 0) {
-                          this.params.set(`${filterItem.urlpara}_${filterItem.id}`, `${selectedChildren.join(',')}`)
-                        }
-
-                      // if unselected, remove it from the url params
-                      } else {
-                        if (containsChild) {
-                          const index = selectedChildren.indexOf(`${child.urlpara ? child.urlpara : 'f'}_${child.id}`)
-                          selectedChildren.splice(index, 1)
-
-                          this.params.set(`${filterItem.urlpara}_${filterItem.id}`, selectedChildren.join(','))
-
-                          if (this.params.get(`${filterItem.urlpara}_${filterItem.id}`) === '') {
-                            this.params.delete(`${filterItem.urlpara}_${filterItem.id}`)
-                          }
-                        }
-                      }
-                    })
-                    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-                  }
-                })
-
+                this.updateUrlParamsFromResponse(json)
+                
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
                 if (shouldResetFilter) json = Object.assign(json, { shouldResetFilter })
@@ -259,7 +232,10 @@ export default class WithFacet extends Shadow() {
       }, 50))
     }
 
+    this.abortControllerLocations = null
     this.requestLocations = event => {
+      if (this.abortControllerLocations) this.abortControllerLocations.abort()
+      this.abortControllerLocations = new AbortController()
       let body = `{
         "filter": ${JSON.stringify(event.detail.filter)},
         "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
@@ -279,7 +255,8 @@ export default class WithFacet extends Shadow() {
           'Content-Type': 'application/json'
         },
         mode: 'cors',
-        body: (this.requestLocationsLastBody = body)
+        body: (this.requestLocationsLastBody = body),
+        signal: this.abortControllerLocations.signal
       }
       // @ts-ignore
       event.detail.resolve(fetch(apiUrl, requestInit).then(response => {
@@ -316,64 +293,192 @@ export default class WithFacet extends Shadow() {
     return new URLSearchParams(self.location.search)
   }
 
-  updateURLParams () {
-    if (this.params) {
-      const entriesWithUnderscore = [...this.params.entries()].filter(([key, value]) => key.includes('_') && value.includes('_'))
+  checkFiltersInURL (filters) {
+    this.filtersInURLRecursionDepth++
 
-      entriesWithUnderscore.forEach(([key, value]) => {
-        const [urlparaKey, idKey] = key.split('_')
-        const children = []
-
-        value.split(',').forEach(value => {
-          const [urlparaValue, idValue] = value.split('_')
-
-          children.push(`{
-              "urlpara": "${urlparaValue}",
-              "id": "${idValue}",
-              "selected": true
-            }`)
-        })
-
-        const filter = (`{
-            "urlpara": "${urlparaKey}",
-            "id": "${idKey}",
-            "selected": true,
-            "children": [${children.join(',')}]
-          }`)
-
-        this.filters.push(filter)
+    filters.forEach(filterItem => {
+      this.params.forEach((value, key) => {
+        if (this.filterKeys.includes(key)) return
+        if (key === 'q' || key === 'clat' || key === 'clong' || key === 'cname') {
+          this.filterKeys.push(key)
+        }
+        if (filterItem.urlpara.includes(key)) {
+          this.filterKeys.push(key)
+        }
+        if (filterItem.children && filterItem.children.length > 0) {
+          this.checkFiltersInURL(filterItem.children) // Recursive call
+        }
       })
+    })
+
+    this.filtersInURLRecursionDepth--
+
+    if (this.filtersInURLRecursionDepth === 0) {
+      this.updateFilterFromURLParams();
     }
   }
 
-  removeAllFilterParamsFromURL () {
-    if (this.params) {
-      const keys = [...this.params.keys()]
+  updateFilterFromURLParams (key = null) {
+    this.filters = []
+    let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
+    if (key) filteredURLKeys = [key] // set first filter key
+    const filterItems = []
 
-      keys.forEach(key => {
-        if (key.includes('_')) {
-          this.params.delete(key)
+    // if there are filters in the url
+    if (this.filterKeys.length !== 0 && this.lastResponse.filters) {
+      this.filterKeys.forEach(key => {
+        const filterItem = this.lastResponse.filters.find(filterItem => filterItem.urlpara === key)
+        if (filterItem) {
+          filterItems.push(filterItem)
+        } else {
+          // remove filter key if it is not in the response
+          this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
+          filteredURLKeys = filteredURLKeys.filter(urlKey => urlKey !== key)
         }
       })
 
+      // select children based on url params
+      filterItems.forEach(item => {
+        if (filteredURLKeys.includes(item.urlpara)) {
+          item.children.forEach(child => {
+            if (this.params.get(item.urlpara)?.split('-').includes(child.urlpara)) {
+              child.selected = true
+            } else {
+              child.selected = false
+            }
+          })
+        }
+      })
+
+      // construct filter items
+      if (filterItems.length > 0) {
+        filterItems.forEach(item => {
+          const filter = this.constructFilterItem(item)
+          if (filter) this.filters.push(filter)
+        })
+      }
+    }
+  }
+
+  updateUrlSearchFromResponse (response) {
+    if (!response.searchText) {
+      this.params.delete('q')
+    } else {
+      this.params.set('q', response.searchText)
+    }
+  }
+
+  updateFilterAndParamsWithSelectedFilter(event) {
+    const filterId = event?.detail?.mutationList[0].target.getAttribute('filter-id')
+    if (!filterId) return
+    const [filterKey, filterValue] = filterId.split('-')
+    const currentValues = this.params.get(filterKey)?.split('-') || []
+
+    // if filterKey is not in url
+    if (!this.params.get(filterKey) && filterValue !== '') {
+      this.params.set(filterKey, filterValue)
+      this.filterKeys.push(filterKey)
+      this.updateFilterFromURLParams(filterKey)
+      return
+    }
+
+    // if filterKey is in url
+    if (!currentValues?.includes(filterValue)) {
+      currentValues.push(filterValue)
+      this.params.set(filterKey, currentValues.join('-'))
+
+    // if filterValue is not in url
+    } else {
+      currentValues.splice(currentValues.indexOf(filterValue), 1)
+
+      // if filterValue is the last value
+      if (currentValues.length > 0) {
+        this.params.delete(filterKey)
+        this.params.set(filterKey, currentValues.join('-'))
+
+      // if filterValue is the only value
+      } else {
+        this.params.delete(filterKey)
+        this.filterKeys = this.filterKeys.filter(key => key !== filterKey)
+      }
+    }
+
+    this.updateFilterFromURLParams()
+  }
+
+  updateUrlParamsFromResponse (response) {
+    response.filters.forEach(filterItem => {
+      if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+        const urlParamsContainsKey = this.params.has(filterItem.urlpara)
+        const selectedChildren = []
+
+        // if param is already in url
+        if (urlParamsContainsKey) {
+          const urlParamsContainsValues = this.params.get(filterItem.urlpara)?.split('-')
+          
+          filterItem.children.forEach(child => {
+            // if value is already present
+            if (urlParamsContainsValues?.includes(child.urlpara)) {
+              selectedChildren.push(child.urlpara)
+            }
+            // if value is not present
+            if (child.selected && !selectedChildren.includes(child.urlpara)) {
+              selectedChildren.push(child.urlpara)
+            }
+          })
+        // if param is not in url
+        } else {
+          filterItem.children.forEach(child => {
+            if (child.selected && !selectedChildren.includes(child.urlpara)) {
+              selectedChildren.push(child.urlpara)
+            }
+          })
+        }
+
+        // add filterITtem.urlpara as key with collected values to params
+        if (selectedChildren.length > 0) {
+          this.params.set(filterItem.urlpara, selectedChildren.join('-'))
+        }
+      }
+    })
+
+    WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+  }
+
+  removeAllFilterParams () {
+    if (this.params) {
+      this.filterKeys.forEach(key => {
+        this.params.delete(key)
+      })
+      
+      this.filterKeys = []
+      this.filters = []
+
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  removeFilterParamsFromURL (filterParent) {
+  removeFilterParam (key) {
     if (this.params) {
-      this.params.delete(`${filterParent}`)
+      this.params.delete(key)
+      this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
+      this.filters = this.filters.filter(filter => !filter.includes(`"${key}"`))
+
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
+
 
   constructFilterItem (event) {
-    const filterItem = event?.detail?.wrapper?.filterItem
+    let filterItem = event?.detail?.wrapper?.filterItem
+    if (!(event instanceof Event)) {
+      filterItem = event
+    }
 
     return filterItem
       ? `{
-        "children": [
-          ${filterItem.children.map(child => {
+        ${filterItem.children ? `"children": [
+          ${filterItem.children && filterItem.children.map(child => {
             const count = child.count ? `(${child.count})` : ''
             const label = count ? `${child.label} ${count}` : child.label
             const hasSameLabel = label.trim() === event.detail?.target.label.trim()
@@ -398,7 +503,7 @@ export default class WithFacet extends Shadow() {
               "urlpara": "${child.urlpara}"
             }`
           })}
-        ],
+        ],` : ''}
         ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
         ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
         ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}

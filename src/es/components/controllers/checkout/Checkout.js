@@ -29,7 +29,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
  * @type {CustomElementConstructor}
  */
 export default class Checkout extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({
       importMetaUrl: import.meta.url,
       mode: 'false',
@@ -42,8 +42,10 @@ export default class Checkout extends Shadow() {
       // get value from select
       const initialRequest = this.getAttribute('initial-request')
       const initialRequestObjFrozen = Object.freeze(JSON.parse(initialRequest.replaceAll("'", '"')))
+      const withInsurance = event.detail?.withInsurance ? `"mitVersicherung": ${!!event.detail?.withInsurance},` : ''
 
       const basicRequest = `
+        ${withInsurance}
         "portalId": ${initialRequestObjFrozen.portalId},
         "mandantId": ${initialRequestObjFrozen.mandantId},
         "kursTyp": "${initialRequestObjFrozen.kursTyp}",
@@ -54,12 +56,13 @@ export default class Checkout extends Shadow() {
 
       if (event.detail?.id && event.detail?.value) {
         const hadActiveSelection = this.selectedOptions.find(({ lehrmittelId }) => event.detail.id === lehrmittelId)
-        hadActiveSelection ? hadActiveSelection.lehrmittelOption = event.detail.value : this.selectedOptions.push({
-          lehrmittelId: event.detail?.id,
-          lehrmittelOption: event.detail?.value
-        })
+        hadActiveSelection
+          ? hadActiveSelection.lehrmittelOption = event.detail.value
+          : this.selectedOptions.push({
+            lehrmittelId: event.detail?.id,
+            lehrmittelOption: event.detail?.value
+          })
       }
-
 
       // todo emit event with changed data
       this.dispatchEvent(
@@ -73,10 +76,12 @@ export default class Checkout extends Shadow() {
                   'Content-Type': 'application/json'
                 },
                 mode: 'cors',
-                body: this.selectedOptions.length ? `{
+                body: this.selectedOptions.length
+                  ? `{
                     ${basicRequest},
-                    "selectedLehrmittel": [${this.selectedOptions.reduce((acc, selectedOption, index) => acc + `${JSON.stringify(selectedOption)}${this.selectedOptions.length - 1 === index ? "" : ","}`, "")}]
-                  }` : `{
+                    "selectedLehrmittel": [${this.selectedOptions.reduce((acc, selectedOption, index) => acc + `${JSON.stringify(selectedOption)}${this.selectedOptions.length - 1 === index ? '' : ','}`, '')}]
+                  }`
+                  : `{
                     ${basicRequest}
                   }`
               }).then(response => {
@@ -93,11 +98,11 @@ export default class Checkout extends Shadow() {
     }
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.addEventListener('request-checkout-configuration', this.requestCheckoutListener)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.removeEventListener('request-checkout-configuration', this.requestCheckoutListener)
   }
 }

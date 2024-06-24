@@ -54,7 +54,7 @@ export default class EventDetail extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**
@@ -401,7 +401,7 @@ export default class EventDetail extends Shadow() {
             `, '') : ''}
             ${this.data.abo_typen_link_label && this.data.abo_typen_link ? /* html */ `
               <ks-c-abonnements>
-                <ks-m-abonnements abo-id="${this.data.kurs_id}" abonnements-api="${this.data.abo_typen_link}" link-label="${this.data.abo_typen_link_label}" button-close-label="${this.closeButton}">
+                <ks-m-abonnements abo-id="${this.data.kurs_id}" abonnements-api="${this.data.abo_typen_link}" link-label="${this.data.abo_typen_link_label}" button-close-label="${this.closeButton || 'Schliessen'}">
                 </ks-m-abonnements>
               </ks-c-abonnements>
             ` : ''}

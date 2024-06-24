@@ -32,7 +32,7 @@ export default class TileFactory extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**
@@ -55,7 +55,10 @@ export default class TileFactory extends Shadow() {
       color: var(--color-error);
     }
     @media only screen and (max-width: _max-width_) {
-      
+      :host > section {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+      }
     }
     `
     return this.fetchTemplate()
@@ -131,12 +134,13 @@ export default class TileFactory extends Shadow() {
               }'
             ></ks-m-event>
           ` : (
-            course.locations?.length > 1 && course.filter?.length
+            (course.locations?.length > 1 || data.sort.sort === 2) && course.filter?.length
               ? /* html */`
                 <ks-o-tile-list data='{
-                  ${this.fillGeneralTileInfo(course)},
+                  ${data.sort.sort === 2 ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
                   "filter": ${JSON.stringify(course.filter) || ''},
-                  "locations": ${JSON.stringify(course.locations) || ''}
+                  "locations": ${JSON.stringify(course.locations) || ''},
+                  "sort": ${JSON.stringify(data.sort.sort) || ''}
                 }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
                 </ks-o-tile-list>
               `
@@ -178,6 +182,15 @@ export default class TileFactory extends Shadow() {
         "per": "${course.price.per}"
       },
       "parentkey": "${course.parentkey}"
+    `
+  }
+
+  fillGeneralTileInfoNearBy (course) {
+    return `
+      "title": "${course.bezeichnung}",
+      "iconTooltip": ${JSON.stringify(course.infotextshort.replace(/'/g, 'ʼ')) || ''},
+      "icons": ${JSON.stringify(course.icons) || ''},
+      "buttons": ${JSON.stringify(course.buttons) || ''}
     `
   }
 

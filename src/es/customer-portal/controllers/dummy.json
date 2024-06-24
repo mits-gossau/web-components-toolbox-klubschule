@@ -8,7 +8,7 @@
     "CP.cpAppointmentListFilterShow": "Termin anzeigen",
     "CP.cpAppointmentNote5": "Stornierung bis 2 Stunden vor Termin möglich.",
     "CP.cpLogout": "Abmelden",
-    "CP.cpAppointmentListFilterReset": "Alle Filter zurücksetzen",
+    "CP.cpAppointmentListFilterReset": "Alles zurücksetzen",
     "CP.cpInfoCancelFlatSubscriptionInBooking": "Eine Stornierung ist nur bis 2 Stunden vor Terminbeginn möglich.",
     "CP.cpAppointmentSwissCurrency": "CHF",
     "CP.cpShortValidity": "Ihr Abonnement läuft bald ab.",
@@ -122,5 +122,12 @@
     "CP.cpAppointmentBookedViaSubscription":"[DE | Termin wird über ihr Abonnement gebucht]",
     "CP.cpYouHaveBookedTheAppointmentSuccessfully":"[DE | Sie haben den Termin erfolgreich gebucht]",
     "CP.cpHerebyYouCancelThisAppointment":"[DE | Hiermit stornieren sie diesen Termin]",
-    "CP.cpYouHaveSuccessfullyCanceledTheAppointment":"[DE | Sie haben den Termin erfolgreich storniert]"
+    "CP.cpYouHaveSuccessfullyCanceledTheAppointment":"[DE | Sie haben den Termin erfolgreich storniert]",
+    "CP.cpFilterTitleLocation": "[DE | Standorte]",
+    "CP.cpFilterTitleTime": "[DE | Zeit]",
+    "CP.cpFilterTitleDay": "[DE | Tag]",
+    "CP.cpNavigationAppointmentsBooking": "[DE | Abo-Termine buchen]",
+    "CP.cpNavigationBookedAppointments": "[DE | Gebuchte Termine]",
+    "CP.cpNavigationMySubscriptions": "[DE | Meine Abonnemente]",
+    "CP.cpAppointmentsFilterStart":"[DE | Ab]"
 }

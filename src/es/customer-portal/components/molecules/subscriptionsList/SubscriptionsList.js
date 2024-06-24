@@ -38,7 +38,7 @@ export default class SubscriptionsList extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   renderCSS () {
@@ -81,9 +81,6 @@ export default class SubscriptionsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     fetch.then(subscriptions => {
-      if (subscriptions.errorCode !== 0) {
-        throw new Error(`${subscriptions.errorMessage}`)
-      }
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,

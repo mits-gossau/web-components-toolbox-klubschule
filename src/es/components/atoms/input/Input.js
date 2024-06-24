@@ -81,7 +81,7 @@ export default class Input extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**
@@ -124,8 +124,8 @@ export default class Input extends Shadow() {
       }
 
       :host .custom-error-text p {
-        color: var(--mdx-comp-error-message-color-default);
-        font: var(--mdx-comp-error-message-font-default);
+        color: var(--mdx-comp-error-message-color-default)  !important;
+        font: var(--mdx-comp-error-message-font-default)  !important;
         margin-top: var(--mdx-comp-inputfield-gap-content-below) !important;
       }
 

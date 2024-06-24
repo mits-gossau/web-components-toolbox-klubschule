@@ -21,7 +21,7 @@ export default class Navigation extends Shadow() {
       event.preventDefault()
       event.stopPropagation()
       const target = event.composedPath()[0]
-      if (target.tagName === 'A') {
+      if (target.tagName === 'A' || target.tagName === 'A-TRANSLATION') {
         const url = new URL(location.href)
         url.searchParams.set('page', target.getAttribute('href'))
         history.pushState(history.state, document.title, url.href)
@@ -40,7 +40,7 @@ export default class Navigation extends Shadow() {
   }
 
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   shouldRenderHTML () {
@@ -98,8 +98,8 @@ export default class Navigation extends Shadow() {
   renderHTML () {
     const fetchModules = this.fetchModules([
       {
-        path: `${this.importMetaUrl}'../../../../../../../es/components/molecules/tab/Tab.js`,
-        name: 'ks-m-tab'
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
       }
     ])
     this.navigationWrapper = this.root.querySelector('div') || document.createElement('div')
@@ -107,13 +107,19 @@ export default class Navigation extends Shadow() {
       this.html = /* html */ `
           <ul>
             <li>
-              <a href="/" route target="_self">Abo-Termine buchen</a>
+              <a href="/" route target="_self">
+                <a-translation href="/" route target="_self"  data-trans-key='CP.cpNavigationAppointmentsBooking'></a-translation>
+              </a>
             </li>
             <li>
-              <a href="/booked" route target="_self">Gebuchte Termine</a>
+              <a href="/booked" route target="_self">
+                <a-translation href="/booked" route target="_self" data-trans-key='CP.cpNavigationBookedAppointments'></a-translation>
+              </a>
             </li>
             <li>
-              <a href="/subscriptions" route target="_self">Meine Abonnemente</a>
+              <a href="/subscriptions" route target="_self">
+                <a-translation href="/subscriptions" route target="_self" data-trans-key='CP.cpNavigationMySubscriptions' mode="false"></a-translation>
+              </a>
             </li>
           </ul>
       `

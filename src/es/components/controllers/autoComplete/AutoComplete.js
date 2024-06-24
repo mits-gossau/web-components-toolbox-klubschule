@@ -48,6 +48,7 @@ export default class AutoComplete extends Shadow() {
         return this.clearAutocomplete()
       }
       const token = event.detail.value
+
       if (!token || token.length < 3) {
         this.clearAutocomplete()
         // update results
@@ -85,6 +86,13 @@ export default class AutoComplete extends Shadow() {
       // trigger search when enter or icon click
       if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { description: event.detail.value } })
     }
+
+    this.requestWithFacet = event => {
+      if (event.detail.type === 'enter' || event.detail.type === 'search-click') {
+        return this.clickOnPredictionListener({ detail: { description: event.detail.value } })
+      }
+    }
+
     this.clickOnPredictionListener = event => {
       // home search input
       if (!this.hasAttribute('no-forwarding')) this.homeSearchInput(event.detail.description)
@@ -110,12 +118,14 @@ export default class AutoComplete extends Shadow() {
   }
 
   connectedCallback () {
-    this.addEventListener('request-auto-complete', this.requestAutoCompleteListener)
+    // disabled dispatches (forwards) the input submit event to with facet controller
+    this.addEventListener('request-auto-complete', this.hasAttribute('disabled') ? this.requestWithFacet : this.requestAutoCompleteListener)
     this.addEventListener('auto-complete-selection', this.clickOnPredictionListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener('request-auto-complete', this.requestAutoCompleteListener)
+    // disabled dispatches (forwards) the input submit event to with facet controller
+    this.removeEventListener('request-auto-complete', this.hasAttribute('disabled') ? this.requestWithFacet : this.requestAutoCompleteListener)
     this.removeEventListener('auto-complete-selection', this.clickOnPredictionListener)
   }
 
@@ -164,42 +174,52 @@ export default class AutoComplete extends Shadow() {
           items: [
             {
               term: 'englisch',
+              text: 'englisch',
               typ: 1
             },
             {
               term: 'englisch   privatunterricht  wann und wo sie wolle',
+              text: 'englisch   privatunterricht  wann und wo sie wolle',
               typ: 1
             },
             {
               term: 'englisch a1 ganz entspannt',
+              text: 'englisch a1 ganz entspannt',
               typ: 1
             },
             {
               term: 'englisch anfanger innen',
+              text: 'englisch anfanger innen',
               typ: 1
             },
             {
               term: 'englisch anfanger innen   onlinekurs',
+              text: 'englisch anfanger innen   onlinekurs',
               typ: 1
             },
             {
               term: 'Englisch Business',
+              text: 'Englisch Business',
               typ: 2
             },
             {
               term: 'Englisch Diplome',
+              text: 'Englisch Diplome',
               typ: 2
             },
             {
               term: 'Englisch Konversation',
+              text: 'Englisch Konversation',
               typ: 2
             },
             {
               term: 'Englisch Konversation B1',
+              text: 'Englisch Konversation B1',
               typ: 2
             },
             {
               term: 'Englisch Konversation B2',
+              text: 'Englisch Konversation B2',
               typ: 2
             }
           ],

@@ -40,7 +40,8 @@ export default class Subscriptions extends HTMLElement {
     this.abortControllerSubscriptions = new AbortController()
     const { userId } = this.dataset
     const data = {
-      userId
+      userId,
+      language: this.getLanguage()
     }
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptions}`
@@ -73,7 +74,8 @@ export default class Subscriptions extends HTMLElement {
     const data = {
       subscriptionId,
       subscriptionType,
-      userId
+      userId,
+      language: this.getLanguage()
     }
     const type = tags[2] ? tags[2].type : ''
     // @ts-ignore
@@ -106,7 +108,8 @@ export default class Subscriptions extends HTMLElement {
     const data = {
       subscriptionId,
       subscriptionType,
-      userId
+      userId,
+      language: this.getLanguage()
     }
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionPdf}`
@@ -139,5 +142,10 @@ export default class Subscriptions extends HTMLElement {
       body: JSON.stringify(data),
       signal: abortController.signal
     }
+  }
+
+  getLanguage () {
+    // @ts-ignore
+    return self.Environment.language.substring(0, 2) || 'de'
   }
 }

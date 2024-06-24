@@ -22,10 +22,12 @@
     aspect-ratio: 21/9;
     padding: var(--mdx-sys-spacing-flex-m) var(--mdx-sys-spacing-flex-xs);
     margin: 0 !important;
+    overflow: hidden;
 }
 
 :host a,
 :host ks-a-back-link {
+    display: inline-block;
     filter: drop-shadow(0 0 6px rgba(0,0,0,0.4));
 
     --back-link-color: white;
@@ -77,15 +79,46 @@
     max-width: 1036px
 }
 
+:host([has-background]) {
+    background: var(--mdx-sys-color-accent-6-subtle1);
+    margin-bottom: -1px;
+}
+
 /* brand adjustments */
 :host([brand=ksos]) {
-    clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 14.03vw), 80.0867361% 100%, 0% calc(100% - 4.34vw));
     padding-bottom: var(--mdx-sys-spacing-flex-xl);
+}
+
+:host([brand=ksos]) a-picture {
+    clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 14.03vw), 80.0867361% 100%, 0% calc(100% - 4.34vw));
 }
 
 @media screen and (max-width: _max-width_) {
     :host {
         aspect-ratio: 4/3;
         padding: var(--mdx-sys-spacing-flex-s);
+    }
+
+    :host([has-background-mobile]) {
+        background: var(--mdx-sys-color-accent-6-subtle1);
+        margin-bottom: -1px;
+    }
+}
+
+/* for larger views */
+@media screen and (min-width: 1440px) {
+    :host {
+        --stage-default-max-height: calc(100vh - 280px);
+        max-height: var(--stage-default-max-height);
+    }
+
+    :host a-picture {
+        inset: 0 0 auto;
+    }
+
+    :host a-picture::after {
+        inset: 0 0 auto;
+        height: 100%;
+        max-height: var(--stage-default-max-height);
     }
 }
