@@ -30,7 +30,9 @@ export default class WishList extends Shadow() {
     }))
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    document.body.removeEventListener('wish-list', this.wishListListener)
+  }
 
   /**
    * evaluates if a render is necessary
@@ -56,9 +58,13 @@ export default class WishList extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      :host {}
-      @media only screen and (max-width: _max-width_) {
-        :host {}
+      :host > ks-o-body-section::part(delete-btn-wrapper) {
+        display: flex;
+        justify-content: flex-end;
+        padding-bottom: 1em;
+      }
+      :host > .error {
+        color: var(--color-error);
       }
     `
     return this.fetchTemplate()
@@ -81,11 +87,6 @@ export default class WishList extends Shadow() {
       }
     ]
     switch (this.getAttribute('namespace')) {
-      case 'wish-list-default-':
-        return this.fetchCSS([{
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-          namespace: false
-        }, ...styles])
       default:
         return this.fetchCSS(styles)
     }
@@ -100,9 +101,13 @@ export default class WishList extends Shadow() {
     this.html = ''
     this.renderLoading()
     if (fetch) {
-      const data = await fetch
+      fetch.catch(error => {
+        this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Wishlist.Error'}"></a-translation></span>`
+        if (this.lastData) this.renderHTML(Promise.resolve(this.lastData))
+      })
+      const data = this.lastData = await fetch
       this.html = ''
-      if (data.watchlistEntries.length) {
+      if (data?.watchlistEntries.length) {
         // assemble withfacet filter
         const filter = {
           color: '',
@@ -122,18 +127,25 @@ export default class WishList extends Shadow() {
             children: [],
             ...filter
           }],
-          ppage: 1,
-          psize: 6,
           sprachid: 'd'
         }
         // id assembly: courseType_courseId_centerid
         // @ts-ignore
         initialRequest.filter[0].children = data.watchlistEntries.map(entry => ({...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true}))
         this.html = /* html */`
+          <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
+            <div part="delete-btn-wrapper">
+              <ks-a-button namespace="button-secondary-" color="tertiary" request-event-name="remove-all-from-wish-list">
+                <a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>
+                <a-translation data-trans-key="${this.getAttribute('delete-all-text') ?? 'Wishlist.DeleteAll'}"></a-translation>
+              </ks-a-button>
+            </div>
+          </ks-o-body-section>
           <ks-o-offers-page
             headless
             no-search-tab
-            endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
+            is-wish-list
+            endpoint="${this.getAttribute('endpoint')}"
             initial-request='${JSON.stringify(initialRequest)}'
           ></ks-o-offers-page>
         `
@@ -143,6 +155,22 @@ export default class WishList extends Shadow() {
       }
     }
     return this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
+        name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/bodySection/BodySection.js`,
+        name: 'ks-o-body-section'
+      },
       {
         path: `${this.importMetaUrl}../offersPage/OffersPage.js`,
         name: 'ks-o-offers-page'

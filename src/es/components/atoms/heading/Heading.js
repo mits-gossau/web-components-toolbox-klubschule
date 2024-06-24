@@ -14,7 +14,9 @@ export default class Heading extends Shadow() {
     this.styleAs = this.getAttribute('style-as')
     this.color = this.getAttribute('color') || 'var(--mdx-base-color-grey-975)'
 
-    this.heading = document.createElement(this.tag)
+    const existingHeadline = this.root.querySelector('h1, h2, h3, h4, h5')
+    this.heading = existingHeadline || document.createElement(this.tag)
+
     if (this.styleAs) this.heading.setAttribute('class', this.styleAs)
     // this.heading.setAttribute('style', `color: ${this.color}`)
 

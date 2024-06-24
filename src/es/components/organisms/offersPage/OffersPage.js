@@ -518,7 +518,7 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options" class="margin-bottom-fix-s">
               </section>
             `}
-              <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}></ks-m-tile-factory>
+              <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile-factory>
               ${this.badgeContainer
                 ? /* HTML */ `
                   <ks-m-badge-legend>
@@ -539,7 +539,7 @@ export default class OffersPage extends Shadow() {
 
   get tabContentTwo () {
     return /* HTML */ `
-      <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)"">
+      <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
         <o-grid namespace="grid-12er-">
           <section>
             <div col-lg="12" col-md="12" col-sm="12">
