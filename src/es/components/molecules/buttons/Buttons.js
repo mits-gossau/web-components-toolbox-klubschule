@@ -103,9 +103,9 @@ export default class Buttons extends Shadow() {
       // keep existing url params
       if (shouldKeepURLParams && button.link){
         if (button.link.includes('?')) {
-          button.link = button.link + '&' + encodeURIComponent(filteredURLParams)
+          button.link = button.link + '&' + filteredURLParams
         } else {
-          button.link = button.link + '?' + encodeURIComponent(filteredURLParams)
+          button.link = button.link + '?' + filteredURLParams
         }
       }
 

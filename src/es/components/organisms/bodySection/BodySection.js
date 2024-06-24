@@ -14,6 +14,17 @@ import BodyStyle from '../../web-components-toolbox/src/es/components/organisms/
  */
 export default class KsBodyStyle extends BodyStyle {
   /**
+     * block the parent Body.js to renderCSS
+     *
+     * @return {boolean}
+     */
+  shouldRenderCSS () {
+    return !this.root.querySelector(
+        `:host > style[_css], ${this.tagName} > style[_css]`
+    )
+  }
+
+  /**
    * controls all body > main content width and margin (keep as small as possible and add other styles into the style.css)
    *
    * @return {void}

@@ -264,7 +264,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__head">
           <span class="m-tile__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
           ${data.iconTooltip
-            ? `
+            ? /* html */`
               <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
                 <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
               </ks-m-tooltip>
@@ -305,7 +305,7 @@ export default class Tile extends Shadow() {
                 </div>
               `, '')}           
             </div>
-            <span class="m-tile__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
+            <span class="m-tile__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
           </div>
         </div>      
       </div>

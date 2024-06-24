@@ -239,7 +239,7 @@
   --header-checkout-content-width: calc(min(100%, var(--body-max-width)) - 2rem);
   --header-checkout-content-width-mobile: calc(min(100%, var(--body-max-width)) - 1rem);
   --header-border-bottom: 1px solid var(--m-gray-300);
-  --multi-level-navigation-default-o-nav-wrapper-top: 2.7rem;
+  --multi-level-navigation-default-o-nav-wrapper-top: 2.85rem;
   --multi-level-navigation-default-desktop-main-wrapper-width: 105vw;
   --multi-level-navigation-default-desktop-main-wrapper-position: absolute;
   --multi-level-navigation-default-desktop-main-wrapper-position-left: 49%;
@@ -252,12 +252,20 @@
   --search-input-background-color: var(--m-white);
   --search-input-border-color-focus: var(--mdx-base-color-grey-975);
   --search-input-border-color-hover: var(--mdx-base-color-grey-975);
-  --search-input-border-color-custom: var(--m-gray-700);
+  --search-input-border-color: var(--mdx-sys-color-neutral-bold1);
+  --search-input-border-color-custom: var(--m-gray-700); /* needed? */
   --search-input-color: var(--mdx-base-color-grey-975);
-  --search-input-padding: 0.5em 1em;
+  --search-input-padding: 0.5rem 1.5rem;
+  --search-input-padding-mobile: 0.5rem 1rem;
+  --search-icon-right: 1.5rem;
+  --search-icon-right-mobile: 1rem;
   --search-input-placeholder-color: var(--m-gray-700);
   --search-input-width-big: 100%;
   --search-input-border-radius: 999px; /* search inputs are fully rounded for all brands */
+  --search-input-height: 3.25rem; /* mdx token missing */
+  --search-input-height-mobile: 2.5rem;
+  --search-input-font-size: var(--mdx-sys-font-fix-label1-font-size);
+  --search-input-font-size-mobile: var(--mdx-sys-font-fix-label2-font-size);
   --search-justify-content-custom: flex-end;
   --search-label-font-size: var(--font-size);
   --search-label-line-height: calc(4/3);
@@ -383,8 +391,11 @@
   --details-default-icon-right-border-bottom-last-custom: 0.0625em solid var(--mdx-base-color-grey-700);
   --details-default-icon-right-border-color-custom: var(--mdx-base-color-grey-700);
   --details-default-icon-right-summary-child-color-custom: var(--mdx-base-color-grey-975);
-  --details-default-icon-right-h4-font-size: 1em;
-  --details-default-icon-right-h4-line-height: 1.125em;
+  --details-default-icon-right-h4-font-size: var(--mdx-sys-font-fix-label1-font-size);
+  --details-default-icon-right-h4-font-size-mobile: var(--mdx-sys-font-fix-label2-font-size);
+  --details-default-icon-right-h4-font-weight: var(--mdx-sys-font-fix-label1-font-weight);
+  --details-default-icon-right-h4-line-height: var(--mdx-sys-font-fix-label1-line-height);
+  --details-default-icon-right-h4-line-height-mobile: var(--mdx-sys-font-fix-label2-line-height);
   --details-default-icon-right-text-align: start;
   --details-default-icon-right-summary-border-bottom-open-custom: 1px solid transparent;
   --details-default-icon-right-icon-align-items-custom: center;

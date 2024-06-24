@@ -16,10 +16,10 @@
     --tile-default-title-font-size: var(--mdx-sys-font-flex-headline3-font-size);
     --tile-default-title-line-height: var(--mdx-sys-font-flex-headline3-line-height);
     --tile-default-title-font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
-    --tile-default-price-font-family: var(--mdx-sys-font-font-fix-label4-font-family);
-    --tile-default-price-font-size: var(--mdx-sys-font-font-fix-label4-font-size);
-    --tile-default-price-line-height: var(--mdx-sys-font-font-fix-label4-line-height);
-    --tile-default-price-font-weight: var(--mdx-sys-font-font-fix-label4-font-weight);
+    --tile-default-price-font-family: var(--mdx-sys-font-fix-label3-font-family);
+    --tile-default-price-font-size: var(--mdx-sys-font-fix-label3-font-size);
+    --tile-default-price-line-height: var(--mdx-sys-font-fix-label3-line-height);
+    --tile-default-price-font-weight: var(--mdx-sys-font-fix-label3-font-weight);  
     --tile-default-price-strong-font-family: var(--mdx-sys-font-flex-headline3-font-family);
     --tile-default-price-strong-font-size: var(--mdx-sys-font-flex-headline3-font-size);
     --tile-default-price-strong-line-height: var(--mdx-sys-font-flex-headline3-line-height);

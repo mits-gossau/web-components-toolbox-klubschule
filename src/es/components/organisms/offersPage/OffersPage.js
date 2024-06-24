@@ -196,10 +196,6 @@ export default class OffersPage extends Shadow() {
 
     return this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../molecules/tab/Tab.js`,
-        name: 'ks-m-tab'
-      },
-      {
         path: `${this.importMetaUrl}../../molecules/badgeLegend/BadgeLegend.js`,
         name: 'ks-m-badge-legend'
       },
@@ -294,6 +290,10 @@ export default class OffersPage extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/contentFactory/ContentFactory.js`,
         name: 'ks-m-content-factory'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/tab/Tab.js`,
+        name: 'ks-m-tab'
       }
     ])
   }
@@ -539,7 +539,7 @@ export default class OffersPage extends Shadow() {
 
   get tabContentTwo () {
     return /* HTML */ `
-      <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)"">
+      <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
         <o-grid namespace="grid-12er-">
           <section>
             <div col-lg="12" col-md="12" col-sm="12">
