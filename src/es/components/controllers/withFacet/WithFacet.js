@@ -471,35 +471,34 @@ export default class WithFacet extends Shadow() {
     }
   }
 
-  deselectFilterItem(filterItem, filterKey, filterValue) {
+  toggleFilterItem(filterItem, filterKey, filterValue, select) {
     if (filterItem.urlpara === filterKey) {
       if (filterItem.children) {
         filterItem.children.forEach(child => {
-          this.deselectFilterItem(child, filterKey, filterValue) // recursively callfor each child
+          this.toggleFilterItem(child, filterKey, filterValue) // recursively call for each child
         })
       }
     } else if (filterItem.children) { // continue searching in children
       filterItem.children.forEach(child => {
-        this.deselectFilterItem(child, filterKey, filterValue)
+        this.toggleFilterItem(child, filterKey, filterValue)
       })
     }
   
-    if (filterItem.urlpara === filterValue) {
-      filterItem.selected = false
+    if ((filterItem.urlpara || filterItem.id) === filterValue) {
+      filterItem.selected = select
     }
   }
 
   constructFilterItem (event) {
     let filterItem = event?.detail?.wrapper?.filterItem
-    
     // if event is not an Event object, it is a filterItem
     if (!(event instanceof Event)) {
       filterItem = event
     }
 
-    if (filterItem && !event.detail?.target.checked && event.detail?.target.getAttribute('filter-id')) {
+    if (filterItem && event.detail?.target.getAttribute('filter-id')) {
       const [filterKey, filterValue] = event.detail.target.getAttribute('filter-id').split('-')
-      filterItem = this.deselectFilterItem(filterItem, filterKey, filterValue)
+      filterItem = this.toggleFilterItem(filterItem, filterKey, filterValue, event.detail?.target.checked)
     }
 
     return filterItem ? JSON.stringify(filterItem) : ''
