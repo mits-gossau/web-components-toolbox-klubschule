@@ -107,6 +107,11 @@ export default class KsTeaser extends Teaser {
           margin: 0;
         }
 
+        p {
+          /* important to override behavior of mailto links */
+          white-space: wrap;
+        }
+
         :host a-picture {
           display: block;
           overflow: hidden;
