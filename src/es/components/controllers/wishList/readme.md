@@ -14,7 +14,7 @@
 
 
 ### Variations (check out example Controller template html above):
-- *endpoint*: Add attribute `endpoint` to `ks-c-wish-list` to the wish list api expl.: https://dev.klubschule.ch/Umbraco/api/watchlistAPI.
+- *endpoint*: Add attribute `endpoint` to `ks-c-wish-list` to the [wish list api](https://wiki.migros.net/pages/viewpage.action?pageId=731830238) expl.: https://dev.klubschule.ch/Umbraco/api/watchlistAPI.
 this component should be placed at the base page above p-general or further
 
 ### Variations (check out example Organism aka. List page above):
