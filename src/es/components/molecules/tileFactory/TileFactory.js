@@ -176,7 +176,7 @@ export default class TileFactory extends Shadow() {
   fillGeneralTileInfo (course) {
     return `
       "title": "${course.bezeichnung}",
-      "iconTooltip": ${JSON.stringify(course.infotextshort.replace(/'/g, 'ʼ')) || ''},
+      "iconTooltip": ${JSON.stringify(course.infotextshort.replace(/'/g, "\'")) || ''},
       "location": {
         "iconName": "Location",
         "name": "${course.location?.name
@@ -186,8 +186,8 @@ export default class TileFactory extends Shadow() {
             : ''}",
         "badge": "${course.location.badge ? course.location.badge : ''}"
       },
-      "buttons": ${JSON.stringify(course.buttons) || ''},
-      "icons": ${JSON.stringify(course.icons) || ''},
+      "buttons": ${JSON.stringify(course.buttons).replace(/'/g, "\'") || ''},
+      "icons": ${JSON.stringify(course.icons).replace(/'/g, "\'") || ''},
       "price": {
         "from": "${course.price.pre}",
         "amount": "${course.price.amount}",
@@ -200,9 +200,9 @@ export default class TileFactory extends Shadow() {
   fillGeneralTileInfoNearBy (course) {
     return `
       "title": "${course.bezeichnung}",
-      "iconTooltip": ${JSON.stringify(course.infotextshort.replace(/'/g, 'ʼ')) || ''},
-      "icons": ${JSON.stringify(course.icons) || ''},
-      "buttons": ${JSON.stringify(course.buttons) || ''}
+      "iconTooltip": ${JSON.stringify(course.infotextshort.replace(/'/g, "\'")) || ''},
+      "icons": ${JSON.stringify(course.icons).replace(/'/g, "\'") || ''},
+      "buttons": ${JSON.stringify(course.buttons).replace(/'/g, "\'") || ''}
     `
   }
 

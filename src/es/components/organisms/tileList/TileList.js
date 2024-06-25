@@ -325,7 +325,7 @@ export default class TileList extends Shadow() {
           ` : ''}
           <div class="o-tile-list__bottom ${data.sort === 2 ? 'o-tile-list__bottom--grey' : ''}">
             <div class="o-tile-list__bottom-left">
-              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, '\'')}' small></ks-m-buttons>
+              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, "\'")}' small></ks-m-buttons>
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
@@ -343,7 +343,7 @@ export default class TileList extends Shadow() {
         </div>
         <div class="o-tile-list__details">
           <div class="o-tile-list__tiles">
-            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/'/g, "\'").replace(/"/g, "\"")}"${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`, '') : ''}
+            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/'/g, "\'").replace(/"/g, '\"')}"${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`, '') : ''}
           </div>
           <div
             id="request-more-locations"

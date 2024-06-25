@@ -143,7 +143,7 @@ export default class FilterCategories extends Shadow() {
         }
       }
     }
-    console.log(lastSelectedChild)
+    
     return lastSelectedChild
   }
 
