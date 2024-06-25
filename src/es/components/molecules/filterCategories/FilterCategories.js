@@ -45,6 +45,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   renderCSS () {
+    this.css = ''
     return this.fetchTemplate()
   }
 
