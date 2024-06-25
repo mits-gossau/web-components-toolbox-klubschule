@@ -15,6 +15,7 @@ export default class Checkout extends Shadow() {
      * @param {*} event
      */
     this.checkoutConfigurationListener = (event) => {
+      console.log("triggered")
       event.detail.fetch.then(insuranceData => {
         this.labelWithInsurance = this.root.querySelector('label[insurance-label]')
         this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel
@@ -35,10 +36,12 @@ export default class Checkout extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     this.root.addEventListener('triggered-by', this.triggeredByListener)
+    document.body.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
-
+    
   disconnectedCallback () {
     this.root.removeEventListener('triggered-by', this.triggeredByListener)
+    document.body.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
 
   shouldRenderHTML () {
