@@ -325,7 +325,7 @@ export default class TileList extends Shadow() {
           ` : ''}
           <div class="o-tile-list__bottom ${data.sort === 2 ? 'o-tile-list__bottom--grey' : ''}">
             <div class="o-tile-list__bottom-left">
-              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, "\'")}' small></ks-m-buttons>
+              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, "\'").replace(/"/g, '\"')}' small></ks-m-buttons>
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
