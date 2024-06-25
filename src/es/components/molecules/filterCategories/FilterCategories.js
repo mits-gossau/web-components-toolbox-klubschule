@@ -143,7 +143,7 @@ export default class FilterCategories extends Shadow() {
         }
       }
     }
-
+    console.log(lastSelectedChild)
     return lastSelectedChild
   }
 
@@ -162,6 +162,20 @@ export default class FilterCategories extends Shadow() {
       }
     } else {
       childItems = this.getLastSelectedChild(filterItem) ? this.getLastSelectedChild(filterItem).label : ''
+    }
+    if (filterItem.typ === 'group') {
+      const selectedChildren = filterItem.children.filter(child => child.selected)
+      if (selectedChildren.length > 0) {
+        selectedChildren.forEach(child => {
+          if (child.selected) {
+            child.children.forEach(subChild => {
+              if (subChild.selected) {
+                childItems += `${subChild.label}, `
+              }
+            })
+          }
+        })
+      }
     }
 
     div.innerHTML = /* html */`
