@@ -21,7 +21,7 @@ export default class OffersPage extends Shadow() {
 
         // Set Sort
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
-        if (sort) {
+        if (sort && !this.eventDetailURL) {
           this.fetchModules([
             {
               path: `${this.importMetaUrl}../../molecules/sort/Sort.js`,
