@@ -236,6 +236,10 @@ export default class OffersPage extends Shadow() {
         name: 'ks-a-heading'
       },
       {
+        path: `${this.importMetaUrl}../../atoms/spacing/Spacing.js`,
+        name: 'ks-a-spacing'
+      },
+      {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/input/Input.js`,
         name: 'a-input'
       },
@@ -526,12 +530,14 @@ export default class OffersPage extends Shadow() {
                   </ks-m-badge-legend>
                 `
                 : ''}
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               <ks-a-with-facet-pagination class="hidden" id="pagination">
                 <ks-a-button namespace="button-primary-" color="secondary">
                     <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                 </ks-a-button>
               </ks-a-with-facet-pagination>
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
           </ks-o-body-section>
         ${this.eventDetailURL ? /* html */'</ks-c-event-detail>' : ''}
     `
