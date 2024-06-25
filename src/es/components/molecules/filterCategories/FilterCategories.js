@@ -100,7 +100,7 @@ export default class FilterCategories extends Shadow() {
     return centerNav
   }
 
-  generateFilterElement (response, child, parentItem) {
+  generateFilterElement (response, child, parentItem, firstFilterItemId) {
     const subNav = []
     const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled ? 'disabled' : ''
@@ -126,14 +126,13 @@ export default class FilterCategories extends Shadow() {
     const div = document.createElement('div')
     div.innerHTML = isMultipleChoice ? mdxCheckbox : navLevelItem
     // @ts-ignore
-    div.children[0].filterItem = response.filters[0]
+    div.children[0].filterItem = response.filters.find(filter => filter.id === firstFilterItemId)
     subNav.push(div.children[0])
 
     return subNav
   }
 
   getLastSelectedChild (filterItem) {
-    // console.log(filterItem)
     let lastSelectedChild = null
     if (!filterItem.children || filterItem.children.length === 0) return
     if (filterItem.children) {
@@ -204,12 +203,10 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  generateFilters (response, filterItem, parentItem = this.mainNav) {
+  generateFilters (response, filterItem, parentItem = this.mainNav, firstFilterItemId = null) {
     if (!filterItem.visible) return
-
-    // How to keep first filterItem.id?
+    if (firstFilterItemId === null) firstFilterItemId = filterItem.id
     
-
     const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
@@ -219,9 +216,9 @@ export default class FilterCategories extends Shadow() {
       } else {
         filterItem.children.forEach(child => {
           if (child.children && child.children.length > 0) {
-            this.generateFilters(response, child, generatedNavLevelItem.subLevel) // recursive call
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId) // recursive call
           } else {
-            this.generateFilterElement(response, child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+            this.generateFilterElement(response, child, filterItem, firstFilterItemId).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
           }
         })
       }

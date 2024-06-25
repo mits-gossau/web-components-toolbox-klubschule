@@ -97,7 +97,6 @@ export default class TileFactory extends Shadow() {
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
   async renderHTML (fetch) {
-    console.log('renderHTML factory')
     /*
     // TODO: If needed do the loading animation
     this.fetchModules([
@@ -110,7 +109,6 @@ export default class TileFactory extends Shadow() {
     this.html = '<a-loading></a-loading>'
     */
     return fetch.then(data => {
-      console.log('fetch resolved factory')
       if (!data.isNextPage) this.html = ''
       if (!data) {
         this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`

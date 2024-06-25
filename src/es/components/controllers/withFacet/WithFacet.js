@@ -84,7 +84,6 @@ export default class WithFacet extends Shadow() {
         // construct filter item
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
-        console.log('filters', this.filters)
 
         // if there is an initial filter set (e.g. for events) we want to keep it
         if (initialFiltersAsString?.length) {
@@ -171,7 +170,6 @@ export default class WithFacet extends Shadow() {
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
-        console.log('dispatch')
         this.dispatchEvent(new CustomEvent('with-facet', {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
@@ -362,7 +360,6 @@ export default class WithFacet extends Shadow() {
   }
 
   updateFilterAndParamsWithSelectedFilter(event) {
-    console.log('event', event, event.composedPath())
     if (!event?.detail) return
     const filterId = event.detail.mutationList?.[0].target.getAttribute('filter-id') || event.detail.target?.filterId
     if (!filterId) return
@@ -502,14 +499,10 @@ export default class WithFacet extends Shadow() {
       filterItem = event
     }
 
-    console.log(filterItem, filterId)
-
     if (filterItem && filterId) {
       const [filterKey, filterValue] = filterId.split('-')
       filterItem = this.toggleFilterItem(filterItem, filterKey, filterValue, event)
     }
-
-    console.log(filterItem)
 
     return filterItem ? filterItem : ''
   }
