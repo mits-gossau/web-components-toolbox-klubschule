@@ -35,10 +35,12 @@ export default class Checkout extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     this.root.addEventListener('triggered-by', this.triggeredByListener)
+    document.body.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
-
+    
   disconnectedCallback () {
     this.root.removeEventListener('triggered-by', this.triggeredByListener)
+    document.body.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
 
   shouldRenderHTML () {
@@ -52,7 +54,7 @@ export default class Checkout extends Shadow() {
         this.dispatchEvent(new CustomEvent('request-checkout-configuration',
           {
             detail: {
-              id: changeEvent.currentTarget.dataset.lehrmitttelId,
+              id: changeEvent.currentTarget.dataset.lehrmittelId,
               value: changeEvent.currentTarget.value
             },
             bubbles: true,
