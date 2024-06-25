@@ -129,15 +129,15 @@ export default class Spacing extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
-    if (this.previousSibling) this.removeMargin(this.previousSibling, 'margin-bottom: 0 !important;')
-    if (this.nextSibling) this.removeMargin(this.nextSibling, 'margin-top: 0 !important;')
+    if (this.previousElementSibling) this.removeMargin(this.previousElementSibling, 'bottom')
+    if (this.nextElementSibling) this.removeMargin(this.nextElementSibling, 'top')
     this.html = /* HTML */`
     <div class="spacing spacing-${this.type}"></div>
     `
   }
 
-  removeMargin (node, style) {
-    if (node.nodeName === '#text') return;
-    node.setAttribute('style', `${style}${node.getAttribute('style') ?? ''}`)
+  removeMargin (node, direction) {
+    node.setAttribute('no-margin-' + direction, '')
+    node.setAttribute('style', `margin-${direction}: 0 !important;${node.getAttribute('style') ?? ''}`)
   }
 }
