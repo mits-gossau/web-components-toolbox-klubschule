@@ -309,30 +309,32 @@ export default class OffersPage extends Shadow() {
           ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
         >
           <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog">
-            <div class="container">
-              <a-input
-                inputid="offers-page-input-search"
-                autofocus
-                placeholder="${this.getTranslation('Search.InputPlaceholder')}"
-                icon-name="Search" 
-                icon-size="1.5em"
-                submit-search="request-auto-complete"
-                submit-search="request-with-facet"
-                any-key-listener
-                type="search"
-                answer-event-name="search-change"
-                delete-listener
-                search
-              >
-              </a-input>
-              <div id="close">
-                  <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+            <dialog>
+              <div class="container">
+                <a-input
+                  inputid="offers-page-input-search"
+                  autofocus
+                  placeholder="${this.getTranslation('Search.InputPlaceholder')}"
+                  icon-name="Search" 
+                  icon-size="1.5em"
+                  submit-search="request-auto-complete"
+                  submit-search="request-with-facet"
+                  any-key-listener
+                  type="search"
+                  answer-event-name="search-change"
+                  delete-listener
+                  search
+                >
+                </a-input>
+                <div id="close">
+                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                </div>
               </div>
-            </div>
-            <div class="container">
-              <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
-              </ks-m-auto-complete-list>
-            </div>
+              <div class="container">
+                <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+                </ks-m-auto-complete-list>
+              </div>
+            </dialog>
             <a-input
               id="show-modal"
               inputid="show-modal"
@@ -354,6 +356,7 @@ export default class OffersPage extends Shadow() {
       <div col-lg="6" col-md="6" col-sm="12">
         <ks-c-auto-complete-location ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
             <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog">
+              <dialog>
                 <div class="container">
                     <a-input 
                       id="offers-page-location-search-input"
@@ -384,19 +387,20 @@ export default class OffersPage extends Shadow() {
                         </ul>
                     </ks-m-auto-complete-list>
                 </div>
-                <a-input 
-                  id="show-modal-location"
-                  inputid="show-modal"
-                  placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}"
-                  icon-name="Location"
-                  icon-size="1.25em"
-                  search
-                  type="search"
-                  answer-event-name="location-change"
-                  readonly
-                  pointer
-                >
-                </a-input>
+              </dialog>
+              <a-input 
+                id="show-modal-location"
+                inputid="show-modal"
+                placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}"
+                icon-name="Location"
+                icon-size="1.25em"
+                search
+                type="search"
+                answer-event-name="location-change"
+                readonly
+                pointer
+              >
+              </a-input>
             </m-dialog>
         </ks-c-auto-complete-location>
       </div>
@@ -411,30 +415,32 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'}
       >
         <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog">
-          <div class="container">
-            <a-input
-              inputid="offers-page-input-search"
-              autofocus
-              placeholder="${this.getTranslation('Search.InputPlaceholder')}"
-              icon-name="Search" 
-              icon-size="calc(20rem/18)"
-              submit-search="request-auto-complete"
-              submit-search="request-with-facet"
-              any-key-listener
-              type="search"
-              answer-event-name="search-change"
-              delete-listener
-              search
-            >
-            </a-input>
-            <div id="close">
-                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+          <dialog>
+            <div class="container">
+              <a-input
+                inputid="offers-page-input-search"
+                autofocus
+                placeholder="${this.getTranslation('Search.InputPlaceholder')}"
+                icon-name="Search" 
+                icon-size="calc(20rem/18)"
+                submit-search="request-auto-complete"
+                submit-search="request-with-facet"
+                any-key-listener
+                type="search"
+                answer-event-name="search-change"
+                delete-listener
+                search
+              >
+              </a-input>
+              <div id="close">
+                  <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+              </div>
             </div>
-          </div>
-          <div class="container">
-            <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
-            </ks-m-auto-complete-list>
-          </div>
+            <div class="container">
+              <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+              </ks-m-auto-complete-list>
+            </div>
+          </dialog>
           <a-input
             id="show-modal"
             inputid="show-modal"
@@ -468,6 +474,7 @@ export default class OffersPage extends Shadow() {
                 </section>
               </o-grid>
               <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
+                <dialog>
                   <!-- overlayer -->
                   <div class="container dialog-header" tabindex="0">
                       <div id="back">
@@ -485,7 +492,7 @@ export default class OffersPage extends Shadow() {
                       </p>
                       <div class="sub-content">
                           ${filterSearch}
-                          <ks-m-filter-categories 
+                          <ks-m-filter-categories
                             namespace="filter-default-" 
                             lang="de" 
                             translation-key-close="${this.getTranslation('Filter.closeOverlayer')}" 
@@ -497,6 +504,7 @@ export default class OffersPage extends Shadow() {
                       <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
                       <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="${this.getTranslation('CourseList.OffersPlaceholder')}">${this.getTranslation('CourseList.OffersPlaceholder')}</ks-a-number-of-offers-button>
                   </div>
+                </dialog>
               </m-dialog>
               <o-grid namespace="grid-432-auto-colums-auto-rows-" class="margin-top-s margin-bottom-s">
                 <section>
