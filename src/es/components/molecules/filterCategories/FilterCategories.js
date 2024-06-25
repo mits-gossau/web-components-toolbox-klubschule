@@ -100,7 +100,7 @@ export default class FilterCategories extends Shadow() {
     return centerNav
   }
 
-  generateFilterElement (child, parentItem) {
+  generateFilterElement (response, child, parentItem) {
     const subNav = []
     const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled ? 'disabled' : ''
@@ -126,7 +126,7 @@ export default class FilterCategories extends Shadow() {
     const div = document.createElement('div')
     div.innerHTML = isMultipleChoice ? mdxCheckbox : navLevelItem
     // @ts-ignore
-    div.children[0].filterItem = parentItem
+    div.children[0].filterItem = response.filters[0]
     subNav.push(div.children[0])
 
     return subNav
@@ -163,8 +163,6 @@ export default class FilterCategories extends Shadow() {
     } else {
       childItems = this.getLastSelectedChild(filterItem) ? this.getLastSelectedChild(filterItem).label : ''
     }
-
-    // console.log(filterItem.urlpara, childItems)
 
     div.innerHTML = /* html */`
       <m-dialog id="filter-${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
@@ -209,6 +207,9 @@ export default class FilterCategories extends Shadow() {
   generateFilters (response, filterItem, parentItem = this.mainNav) {
     if (!filterItem.visible) return
 
+    // How to keep first filterItem.id?
+    
+
     const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
@@ -220,7 +221,7 @@ export default class FilterCategories extends Shadow() {
           if (child.children && child.children.length > 0) {
             this.generateFilters(response, child, generatedNavLevelItem.subLevel) // recursive call
           } else {
-            this.generateFilterElement(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+            this.generateFilterElement(response, child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
           }
         })
       }
@@ -247,8 +248,6 @@ export default class FilterCategories extends Shadow() {
         this.html = ''
 
         if (response.filters.length === 0) return
-
-        console.log(response)
 
         response.filters.forEach((filterItem) => {
           this.generateFilters(response, filterItem)

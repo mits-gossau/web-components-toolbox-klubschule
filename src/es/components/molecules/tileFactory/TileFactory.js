@@ -17,6 +17,7 @@ export default class TileFactory extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
+    if (this.shouldRenderModules()) this.renderModules()
     document.body.addEventListener('with-facet', this.withFacetEventNameListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
       {
@@ -33,6 +34,15 @@ export default class TileFactory extends Shadow() {
 
   shouldRenderCSS () {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
+  }
+
+  /**
+   * evaluates if a render is necessary
+   *
+   * @return {boolean}
+   */
+  shouldRenderModules () {
+    return !this.renderedModules
   }
 
   /**
@@ -87,6 +97,7 @@ export default class TileFactory extends Shadow() {
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
   async renderHTML (fetch) {
+    console.log('renderHTML factory')
     /*
     // TODO: If needed do the loading animation
     this.fetchModules([
@@ -98,27 +109,8 @@ export default class TileFactory extends Shadow() {
     this.html = ''
     this.html = '<a-loading></a-loading>'
     */
-    return Promise.all([
-      fetch,
-      this.fetchModules([
-        {
-          path: `${this.importMetaUrl}../tile/Tile.js`,
-          name: 'ks-m-tile'
-        },
-        {
-          path: `${this.importMetaUrl}../../organisms/tileList/TileList.js`,
-          name: 'ks-o-tile-list'
-        },
-        {
-          path: `${this.importMetaUrl}../event/Event.js`,
-          name: 'ks-m-event'
-        },
-        {
-          path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
-          name: 'a-translation'
-        }
-      ])
-    ]).then(([data]) => {
+    return fetch.then(data => {
+      console.log('fetch resolved factory')
       if (!data.isNextPage) this.html = ''
       if (!data) {
         this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
@@ -159,6 +151,28 @@ export default class TileFactory extends Shadow() {
       this.html = ''
       this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
     })
+  }
+
+  renderModules () {
+    this.renderedModules = true
+    return this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../tile/Tile.js`,
+        name: 'ks-m-tile'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/tileList/TileList.js`,
+        name: 'ks-o-tile-list'
+      },
+      {
+        path: `${this.importMetaUrl}../event/Event.js`,
+        name: 'ks-m-event'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
+      }
+    ])
   }
 
   fillGeneralTileInfo (course) {

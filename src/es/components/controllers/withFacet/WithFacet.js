@@ -36,8 +36,7 @@ export default class WithFacet extends Shadow() {
       ...options
     }, ...args)
 
-    const withFacetCache = new Map()
-    const timeoutIds = new Map()
+    let timeoutId = null
     const coordinatesToTerm = new Map()
     // additional setting for initial request
     let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
@@ -85,6 +84,7 @@ export default class WithFacet extends Shadow() {
         // construct filter item
         const filter = this.constructFilterItem(event)
         if (filter) this.filters.push(filter)
+        console.log('filters', this.filters)
 
         // if there is an initial filter set (e.g. for events) we want to keep it
         if (initialFiltersAsString?.length) {
@@ -94,18 +94,15 @@ export default class WithFacet extends Shadow() {
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
           this.removeAllFilterParams()
-          withFacetCache.clear()
         }
 
         if (shouldResetFilter) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
           this.removeFilterParam(event.detail.this.getAttribute('filter-key'))
-          withFacetCache.clear()
         }
 
         if (shouldResetFilterFromFilterSelectButton) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
-          withFacetCache.clear()
         }
 
         // keep the last search location inside initialRequestObj and store it in url params
@@ -172,17 +169,13 @@ export default class WithFacet extends Shadow() {
       }
 
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
-      if (timeoutIds.has(request)) clearTimeout(timeoutIds.get(request))
-      timeoutIds.set(request, setTimeout(() => {
-        let fetchPromise = null
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        console.log('dispatch')
         this.dispatchEvent(new CustomEvent('with-facet', {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
-            fetch: (fetchPromise = withFacetCache.has(request)
-              ? withFacetCache.get(request)
-              // TODO: withFacetCache key must include all variants as well as future payloads
-              // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
-              : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
+            fetch: fetch(apiUrl, requestInit).then(response => {
                 if (response.status >= 200 && response.status <= 299) {
                   return response.json()
                 }
@@ -201,37 +194,35 @@ export default class WithFacet extends Shadow() {
                 if (shouldResetFilterFromFilterSelectButton) json = Object.assign(json, { shouldResetFilterFromFilterSelectButton })
 
                 return json
-              })).get(request))
+              }).finally(json => {
+                const requestObj = JSON.parse(request)
+                // update inputs
+                this.dispatchEvent(new CustomEvent('search-change', {
+                  detail: {
+                    searchTerm: (json || requestObj)?.searchText
+                  },
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
+                }))
+                const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
+                if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+                this.dispatchEvent(new CustomEvent('location-change', {
+                  detail: {
+                    searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
+                    searchCoordinates
+                  },
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
+                }))
+              })
           },
           bubbles: true,
           cancelable: true,
           composed: true
         }))
-
-        fetchPromise.finally(json => {
-          const requestObj = JSON.parse(request)
-          // update inputs
-          this.dispatchEvent(new CustomEvent('search-change', {
-            detail: {
-              searchTerm: (json || requestObj)?.searchText
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }))
-          const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
-          if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
-          this.dispatchEvent(new CustomEvent('location-change', {
-            detail: {
-              searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
-              searchCoordinates
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }))
-        })
-      }, 50))
+      }, 50)
     }
 
     this.abortControllerLocations = null
@@ -316,12 +307,11 @@ export default class WithFacet extends Shadow() {
     this.filtersInURLRecursionDepth--
 
     if (this.filtersInURLRecursionDepth === 0) {
-      this.updateFilterFromURLParams();
+      this.updateFilterFromURLParams()
     }
   }
 
   updateFilterFromURLParams (key = null) {
-    if (key) console.log('updateFilterFromURLParams', key)
     this.filters = []
     let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
     if (key) filteredURLKeys = [key] // set first filter key
@@ -358,7 +348,6 @@ export default class WithFacet extends Shadow() {
         filterItems.forEach(item => {
           const filter = this.constructFilterItem(item)
           if (filter) this.filters.push(JSON.stringify(filter))
-          console.log('updateFilterFromURLParams', filter)
         })
       }
     }
@@ -373,7 +362,9 @@ export default class WithFacet extends Shadow() {
   }
 
   updateFilterAndParamsWithSelectedFilter(event) {
-    const filterId = event?.detail?.mutationList[0].target.getAttribute('filter-id')
+    console.log('event', event, event.composedPath())
+    if (!event?.detail) return
+    const filterId = event.detail.mutationList?.[0].target.getAttribute('filter-id') || event.detail.target?.filterId
     if (!filterId) return
     const [filterKey, filterValue] = filterId.split('-')
     const currentValues = this.params.get(filterKey)?.split('-') || []
@@ -411,7 +402,6 @@ export default class WithFacet extends Shadow() {
   }
 
   updateUrlParamsFromResponse (response) {
-    console.log('updateUrlParamsFromResponse', response)
     response.filters.forEach(filterItem => {
       if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
         const urlParamsContainsKey = this.params.has(filterItem.urlpara)
@@ -473,41 +463,53 @@ export default class WithFacet extends Shadow() {
     }
   }
 
-  toggleFilterItem(filterItem, filterKey, filterValue, select) {
-    if (filterItem.urlpara === filterKey) {
-      if (filterItem.children) {
-        filterItem.children.forEach(child => {
-          this.toggleFilterItem(child, filterKey, filterValue, select) // recursive call
-        })
-      }
-    } else if (filterItem.children) { // continue searching
+  toggleFilterItem(filterItem, filterKey, filterValue, event) {
+    if (filterItem.children) {
       filterItem.children.forEach(child => {
-        this.toggleFilterItem(child, filterKey, filterValue, select)
+        const count = child.count ? `(${child.count})` : ''
+        const label = count ? `${child.label} ${count}` : child.label
+        const hasSameLabel = label.trim() === event.detail?.target.label.trim()
+        const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
+
+        child.count = count
+        child.selected = hasSameLabel
+          ? isCheckedNullOrUndefined
+            ? (child.selected || false)
+            : event.detail.target.checked
+          : (child.selected || false)
+      
+        if (filterItem.urlpara === filterKey || filterItem.urlpara !== filterKey) {
+          this.toggleFilterItem(child, filterKey, filterValue, event) // recursive call
+        }
       })
-    }
-  
-    if ((filterItem.urlpara || filterItem.id) === filterValue) {
-      if (!select) {
-        filterItem.selected = false
-        console.log('unselect', !select, filterItem)
+
+      // if all children are deselected, remove filterKey from url
+      const allChildrenDeselected = filterItem.children.every(child => !child.selected)
+      if (allChildrenDeselected) {
+        this.removeFilterParam(filterItem.urlpara)
       }
     }
+
+    return filterItem
   }
 
   constructFilterItem (event) {
     let filterItem = event?.detail?.wrapper?.filterItem
+    if (!event) return
+    const filterId = (typeof event.detail?.target?.getAttribute === 'function' && event.detail?.target?.getAttribute('filter-id')) || event.detail?.target?.filterId
     // if event is not an Event object, it is a filterItem
     if (!(event instanceof Event)) {
       filterItem = event
     }
 
-    if (filterItem && event.detail?.target.getAttribute('filter-id')) {
-      const [filterKey, filterValue] = event.detail.target.getAttribute('filter-id').split('-')
-      console.log('filter', filterKey, filterValue, event.detail?.target.checked)
-      filterItem = this.toggleFilterItem(filterItem, filterKey, filterValue, event.detail?.target.checked)
+    console.log(filterItem, filterId)
+
+    if (filterItem && filterId) {
+      const [filterKey, filterValue] = filterId.split('-')
+      filterItem = this.toggleFilterItem(filterItem, filterKey, filterValue, event)
     }
 
-    if (filterItem) console.log('constructFilterItem', filterItem)
+    console.log(filterItem)
 
     return filterItem ? filterItem : ''
   }
