@@ -248,9 +248,10 @@ export default class AppointmentsFilter extends Shadow() {
         id="show-modal"
         namespace="button-secondary-"
         color="tertiary"
-        justify-content="flex-start"
+        justify-content="space-between"
         request-event-name="${dialogOpenEventName}">
           <a-translation data-trans-key="${transKey}"></a-translation>
+          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDown" size="1em" class="icon-down">
       </ks-a-button>
     `
   }

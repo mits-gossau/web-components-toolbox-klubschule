@@ -8,4 +8,6 @@
     --tooltip-default-before-left: 0.5em;
     --tooltip-default-before-right: auto;
     --tooltip-default-before-bottom: auto;
+
+    --tooltip-default-a-color: var(--mdx-comp-link-color-default);
 }

@@ -20,8 +20,6 @@ export default class FilterCategories extends Shadow() {
     this.keepDialogOpenEventListener = event => {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
     }
-
-    this.cssCache = null
   }
 
   connectedCallback () {
@@ -47,12 +45,8 @@ export default class FilterCategories extends Shadow() {
   }
 
   renderCSS () {
-    if (this.cssCache) {
-      return this.cssCache
-    } else {
-      this.cssCache = this.fetchTemplate()
-      return this.cssCache
-    }
+    this.css = ''
+    return this.fetchTemplate()
   }
 
   fetchTemplate () {

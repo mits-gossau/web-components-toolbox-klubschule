@@ -10,4 +10,9 @@
     --navigation-default-ul-margin-mobile: 0;
     --navigation-default-ul-margin:0;
     --navigation-default-ul-padding-left:0;
+    --navigation-default-ul-width: var(--content-width, calc(100% - var(--content-spacing)* 2));
+    --navigation-default-a-color:var(--color, inherit);
+    --navigation-default-a-active-color: var(--mdx-sys-color-primary-default);
+    --navigation-default-ul-li-line-height: 100%;
+    --navigation-default-a-color-hover: var(--mdx-sys-color-primary-default);
 }

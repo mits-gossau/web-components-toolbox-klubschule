@@ -335,7 +335,7 @@ export default class CourseDialog extends Shadow() {
       </style>
       <div class="success-message">
         <a-icon-mdx icon-name="CheckCircle" size="3em" class="success"></a-icon-mdx>
-        <h2 class="success">
+        <h2>
           <!-- trans value = Sie haben den Termin erfolgreich gebucht -->
           <a-translation data-trans-key="CP.cpYouHaveBookedTheAppointmentSuccessfully"></a-translation>
         </h2>
@@ -459,7 +459,7 @@ export default class CourseDialog extends Shadow() {
       </style>
       <div class="success-message">
         <a-icon-mdx icon-name="CheckCircle" size="3em" class="success"></a-icon-mdx>
-          <h2 class="success">
+          <h2>
             <!-- trans value = Sie haben den Termin erfolgreich storniert -->
             <a-translation data-trans-key="CP.cpYouHaveSuccessfullyCanceledTheAppointment"></a-translation>
           </h2>   
