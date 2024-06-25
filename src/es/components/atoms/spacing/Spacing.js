@@ -45,6 +45,8 @@ export default class Spacing extends Shadow() {
     this.css = /* css */`
       :host {
         display: block;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
       }
 
       :host .spacing {
@@ -127,8 +129,14 @@ export default class Spacing extends Shadow() {
    * @returns Promise<void>
    */
     renderHTML () {
+      if (this.previousSibling) this.removeMarginTopBottom(this.previousSibling)
+      if (this.nextSibling) this.removeMarginTopBottom(this.nextSibling)
       this.html = /* HTML */`
       <div class="spacing spacing-${this.type}"></div>
       `
+    }
+
+    removeMarginTopBottom(node) {
+      node.setAttribute('style', `margin-top: 0 !important;margin-bottom: 0 !important;${node.getAttribute('style') ?? ''}`)
     }
 }
