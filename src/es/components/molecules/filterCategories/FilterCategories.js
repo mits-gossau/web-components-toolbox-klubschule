@@ -139,8 +139,9 @@ export default class FilterCategories extends Shadow() {
   }
 
   getLastSelectedChild (filterItem) {
+    // console.log(filterItem)
     let lastSelectedChild = null
-    if (!filterItem.children || filterItem.children.length === 0) return filterItem
+    if (!filterItem.children || filterItem.children.length === 0) return
     if (filterItem.children) {
       for (const child of filterItem.children) {
         if (child.selected) {
@@ -168,6 +169,8 @@ export default class FilterCategories extends Shadow() {
     } else {
       childItems = this.getLastSelectedChild(filterItem) ? this.getLastSelectedChild(filterItem).label : ''
     }
+
+    // console.log(filterItem.urlpara, childItems)
 
     div.innerHTML = /* html */`
       <m-dialog id="filter-${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
@@ -221,8 +224,7 @@ export default class FilterCategories extends Shadow() {
       } else {
         filterItem.children.forEach(child => {
           if (child.children && child.children.length > 0) {
-            // recursively call the function for any nested children
-            this.generateFilters(response, child, generatedNavLevelItem.subLevel)
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel) // recursive call
           } else {
             this.generateFilterElement(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
           }
@@ -251,6 +253,8 @@ export default class FilterCategories extends Shadow() {
         this.html = ''
 
         if (response.filters.length === 0) return
+
+        console.log(response)
 
         response.filters.forEach((filterItem) => {
           this.generateFilters(response, filterItem)
