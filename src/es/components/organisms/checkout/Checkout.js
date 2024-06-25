@@ -52,7 +52,7 @@ export default class Checkout extends Shadow() {
         this.dispatchEvent(new CustomEvent('request-checkout-configuration',
           {
             detail: {
-              id: changeEvent.currentTarget.dataset.lehrmitttelId,
+              id: changeEvent.currentTarget.dataset.lehrmittelId,
               value: changeEvent.currentTarget.value
             },
             bubbles: true,

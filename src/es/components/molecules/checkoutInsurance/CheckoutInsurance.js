@@ -11,7 +11,7 @@ export default class CheckoutInsurance extends Shadow() {
 
     document.addEventListener('checkout-configuration', (customEvent) => {
       // @ts-ignore
-      console.log(customEvent.detail?.fetch)
+      // console.log(customEvent.detail?.fetch)
       // todo update price according
     })
 
