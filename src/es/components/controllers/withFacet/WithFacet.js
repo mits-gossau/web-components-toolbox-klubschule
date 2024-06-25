@@ -81,9 +81,11 @@ export default class WithFacet extends Shadow() {
         const initialFilters = initialRequestObj?.filter
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
+        this.updateFilterFromURLParams()
+
         // construct filter item
         const filter = this.constructFilterItem(event)
-        if (filter) this.filters.push(filter)
+        if (filter) this.filters.push(JSON.stringify(filter))
 
         // if there is an initial filter set (e.g. for events) we want to keep it
         if (initialFiltersAsString?.length) {
@@ -124,8 +126,6 @@ export default class WithFacet extends Shadow() {
           initialRequestObj.clong = this.params.get('clong')
         }
 
-        this.updateFilterFromURLParams()
-
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
         let hasSearchLocation = false
@@ -143,6 +143,7 @@ export default class WithFacet extends Shadow() {
         }`
         request = this.lastRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
       }
+      
 
       const LanguageEnum = {
         'd': 'de',
@@ -309,8 +310,8 @@ export default class WithFacet extends Shadow() {
     }
   }
 
-  updateFilterFromURLParams (key = null) {
-    this.filters = []
+  updateFilterFromURLParams (key = null, filters = []) {
+    this.filters = filters
     let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
     if (key) filteredURLKeys = [key] // set first filter key
     const filterItems = []
@@ -468,7 +469,6 @@ export default class WithFacet extends Shadow() {
         const hasSameLabel = label.trim() === event.detail?.target.label.trim()
         const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
 
-        child.count = count
         child.selected = hasSameLabel
           ? isCheckedNullOrUndefined
             ? (child.selected || false)

@@ -71,7 +71,7 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  generateCenterFilter (filterItem) {
+  generateCenterFilter (response, filterItem) {
     let centerNav = []
 
     filterItem.children.forEach(region => {
@@ -92,7 +92,7 @@ export default class FilterCategories extends Shadow() {
         const div = document.createElement('div')
         div.innerHTML = centerCheckbox
         // @ts-ignore
-        div.children[0].filterItem = center
+        div.children[0].filterItem = response.filters.find(filter => filter.id === filterItem.id)
         centerNav.push(div.children[0])
       })
     })
@@ -213,7 +213,7 @@ export default class FilterCategories extends Shadow() {
 
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
       if (filterItem.id === '13') { // center filters
-        Array.from(this.generateCenterFilter(filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+        Array.from(this.generateCenterFilter(response, filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
       } else {
         filterItem.children.forEach(child => {
           if (child.children && child.children.length > 0) {
