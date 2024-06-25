@@ -150,7 +150,6 @@ export default class FilterCategories extends Shadow() {
   generateNavLevelItem (response, filterItem) {
     const filterIdPrefix = 'filter-'
     const shouldRemainOpen = filterIdPrefix+filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
-    console.log("🚀 shouldRemainOpen:", shouldRemainOpen, filterItem.id, this.lastId)
     const div = document.createElement('div')
 
     let childItems = ''
