@@ -15,7 +15,6 @@ export default class Checkout extends Shadow() {
      * @param {*} event
      */
     this.checkoutConfigurationListener = (event) => {
-      console.log("triggered")
       event.detail.fetch.then(insuranceData => {
         this.labelWithInsurance = this.root.querySelector('label[insurance-label]')
         this.labelWithInsurance.innerHTML = insuranceData.annulationskostenversicherungLabel
