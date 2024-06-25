@@ -148,7 +148,9 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateNavLevelItem (response, filterItem) {
-    const shouldRemainOpen = filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    const filterIdPrefix = 'filter-'
+    const shouldRemainOpen = filterIdPrefix+filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    console.log("🚀 shouldRemainOpen:", shouldRemainOpen, filterItem.id, this.lastId)
     const div = document.createElement('div')
 
     let childItems = ''
@@ -164,7 +166,7 @@ export default class FilterCategories extends Shadow() {
     }
 
     div.innerHTML = /* html */`
-      <m-dialog id="filter-${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+      <m-dialog id="${filterIdPrefix+filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
