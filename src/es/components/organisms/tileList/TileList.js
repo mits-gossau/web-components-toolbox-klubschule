@@ -221,8 +221,7 @@ export default class TileList extends Shadow() {
       }
 
       :host ks-m-tile {
-        width: 32%;
-        flex-grow: 1;
+        width: calc(33.333% - 1em * (2 / 3));
       }
 
       :host .o-tile-list__foot {
@@ -332,7 +331,7 @@ export default class TileList extends Shadow() {
               <div class="o-tile-list__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <div class="o-tile-list__icon-box">
-                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.text}">
+                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.text.replaceAll('"', "'")}">
                     <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
                   </ks-m-tooltip>
                 </div>
@@ -344,7 +343,7 @@ export default class TileList extends Shadow() {
         </div>
         <div class="o-tile-list__details">
           <div class="o-tile-list__tiles">
-            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`, '') : ''}
+            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/'/g, "ʼ").replace(/"/g, "'")}"${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`, '') : ''}
           </div>
           <div
             id="request-more-locations"
@@ -403,7 +402,7 @@ export default class TileList extends Shadow() {
       // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
       tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
       if (tile.bezeichnung) tile.location.name = ''
-      return acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/"/g, "'")}"${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`
+      return acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/'/g, "´").replace(/"/g, "'")}"${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`
     }, '')
     if (add) {
       const div = document.createElement('div')

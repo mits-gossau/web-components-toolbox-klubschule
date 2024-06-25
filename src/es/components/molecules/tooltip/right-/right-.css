@@ -4,4 +4,6 @@
 
     --tooltip-right-before-left: unset;
     --tooltip-right-before-right: 0.5em;
+
+    --tooltip-right-a-color: var(--mdx-comp-link-color-default);
 }

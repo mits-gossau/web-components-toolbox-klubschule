@@ -112,6 +112,10 @@ export default class Tooltip extends Shadow() {
         margin-bottom: 1.5em;
       }
 
+      :host .text a {
+        color: var(--a-color);
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host .tooltip {
           position: fixed;

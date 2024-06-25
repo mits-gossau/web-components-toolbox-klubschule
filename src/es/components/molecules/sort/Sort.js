@@ -174,19 +174,30 @@ export default class Sort extends Shadow() {
       li.classList.add('m-sort__item')
       if (this.hasAttribute('with-facet')) {
         li.addEventListener('click',
-          (event) => this.dispatchEvent(
-            new CustomEvent('request-with-facet',
-              {
-                detail: {
-                  key: 'sorting',
-                  id: event.currentTarget?.id
-                },
-                bubbles: true,
-                cancelable: true,
-                composed: true
-              }
-            )
-          )
+          (event) => {
+            if (window.location.search.includes('clat') && window.location.search.includes('clong')) {
+              this.dispatchEvent(
+                new CustomEvent('request-with-facet', {
+                    detail: {
+                      key: 'sorting',
+                      id: event.currentTarget?.id
+                    },
+                    bubbles: true,
+                    cancelable: true,
+                    composed: true
+                })
+              )
+            } else {
+              this.dispatchEvent(
+                new CustomEvent('show-location-search-dialog', {
+                    detail: {},
+                    bubbles: true,
+                    cancelable: true,
+                    composed: true
+                })
+              )
+            }
+          }
         )
       }
     })

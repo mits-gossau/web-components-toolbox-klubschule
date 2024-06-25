@@ -125,8 +125,8 @@ export default class Tile extends Shadow() {
       
       :host .m-tile__foot-right {
           display: flex;
-          flex-direction: row;
-          align-items: center;
+          flex-direction: column;
+          align-items: flex-end;
       }
       
       :host .m-tile__price {

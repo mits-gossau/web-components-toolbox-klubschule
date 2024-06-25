@@ -353,7 +353,7 @@ export default class OffersPage extends Shadow() {
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
         <ks-c-auto-complete-location ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
-            <m-dialog namespace="dialog-top-slide-in-" id="location-search" close-event-name="close-location-dialog">
+            <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog">
                 <div class="container">
                     <a-input 
                       id="offers-page-location-search-input"
