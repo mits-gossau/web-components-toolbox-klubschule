@@ -135,8 +135,9 @@ export default class WithFacet extends Shadow() {
           "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
           "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
           "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
+          "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
           "searchcontent": ${!this.hasAttribute('no-search-tab')}
-          ${(hasSorting = event?.detail?.key === 'sorting' && !!event.detail.id) ? `,"sorting": "${event.detail.id}"` : ''}
+          ${(hasSorting = (event?.detail?.key === 'sorting' && !!event.detail.id) || (event?.detail?.key === 'location-search')) ? `,"sorting": "${event.detail.id || 2}"` : ''}
           ${hasSearchTerm ? `,"searchText": "${event?.detail?.key === 'input-search' ? event.detail.value : this.params.get('q')}"`: ''}
           ${(hasSearchLocation = !!initialRequestObj.clat) ? `,"clat": "${initialRequestObj.clat}"` : ''}
           ${(hasSearchLocation = !!initialRequestObj.clong) ? `,"clong": "${initialRequestObj.clong}"` : ''}
