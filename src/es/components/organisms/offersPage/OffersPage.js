@@ -260,6 +260,10 @@ export default class OffersPage extends Shadow() {
         name: 'ks-a-button'
       },
       {
+        path: `${this.importMetaUrl}../../atoms/spacing/Spacing.js`,
+        name: 'ks-a-spacing'
+      },
+      {
         path: `${this.importMetaUrl}../../molecules/filterSelect/FilterSelect.js`,
         name: 'ks-m-filter-select'
       },
@@ -534,6 +538,7 @@ export default class OffersPage extends Shadow() {
                   </ks-m-badge-legend>
                 `
                 : ''}
+              <ks-a-spacing type="2xs-flex"></ks-a-spacing>
               <ks-a-with-facet-pagination class="hidden" id="pagination">
                 <ks-a-button namespace="button-primary-" color="secondary">
                     <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
