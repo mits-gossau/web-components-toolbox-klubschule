@@ -332,6 +332,7 @@ export default class OffersPage extends Shadow() {
                   answer-event-name="search-change"
                   delete-listener
                   search
+                  autocomplete="off"
                 >
                 </a-input>
                 <div id="close">
@@ -353,6 +354,7 @@ export default class OffersPage extends Shadow() {
               answer-event-name="search-change"
               readonly
               pointer
+              autocomplete="off"
             >
             </a-input>
           </m-dialog>
@@ -379,6 +381,7 @@ export default class OffersPage extends Shadow() {
                       type="search"
                       delete-listener
                       answer-event-name="location-change"
+                      autocomplete="off"
                     >
                     </a-input>
                     <div id="close">
@@ -407,6 +410,7 @@ export default class OffersPage extends Shadow() {
                 answer-event-name="location-change"
                 readonly
                 pointer
+                autocomplete="off"
               >
               </a-input>
             </m-dialog>
@@ -438,6 +442,7 @@ export default class OffersPage extends Shadow() {
                 answer-event-name="search-change"
                 delete-listener
                 search
+                autocomplete="off"
               >
               </a-input>
               <div id="close">
@@ -457,6 +462,7 @@ export default class OffersPage extends Shadow() {
             icon-size="1.25em"
             search type="search"
             answer-event-name="search-change"
+            autocomplete="off"
           >
           </a-input>
         </m-dialog>
