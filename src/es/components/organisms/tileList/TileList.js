@@ -326,11 +326,7 @@ export default class TileList extends Shadow() {
           ` : ''}
           <div class="o-tile-list__bottom ${data.sort === 2 ? 'o-tile-list__bottom--grey' : ''}">
             <div class="o-tile-list__bottom-left">
-<<<<<<< HEAD
               <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small></ks-m-buttons>
-=======
-              <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, '’').replace(/"/g, '\"')}' small></ks-m-buttons>
->>>>>>> 55589ad89c8761b77542aff7f57ee2ea219ba440
             </div>
             <div class="o-tile-list__bottom-right">
               <div class="o-tile-list__icons">
@@ -348,11 +344,7 @@ export default class TileList extends Shadow() {
         </div>
         <div class="o-tile-list__details">
           <div class="o-tile-list__tiles">
-<<<<<<< HEAD
             ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/'/g, "ʼ").replace(/"/g, "'")}"${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`, '') : ''}
-=======
-            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`, '') : ''}
->>>>>>> 55589ad89c8761b77542aff7f57ee2ea219ba440
           </div>
           <div
             id="request-more-locations"
@@ -411,12 +403,7 @@ export default class TileList extends Shadow() {
       // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
       tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
       if (tile.bezeichnung) tile.location.name = ''
-<<<<<<< HEAD
       return acc + /* html */`<ks-m-tile namespace="tile-default-" data="${JSON.stringify(tile).replace(/'/g, "ʼ").replace(/"/g, "'")}"${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`
-=======
-      // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
-      return acc + /* html */`<ks-m-tile namespace="tile-default-" data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`
->>>>>>> 55589ad89c8761b77542aff7f57ee2ea219ba440
     }, '')
     if (add) {
       const div = document.createElement('div')

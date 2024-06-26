@@ -258,7 +258,6 @@ export default class Tile extends Shadow() {
     const data = Tile.parseAttribute(this.getAttribute('data'))
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
-    // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     this.html = /* HTML */`
     <div class="m-tile">
       <div class="m-tile__wrap">
@@ -294,7 +293,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             ${this.hasAttribute('is-wish-list') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
-            <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, '’')}' small keep-url-params></ks-m-buttons>
+            <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, 'ʼ')}' small keep-url-params></ks-m-buttons>
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
