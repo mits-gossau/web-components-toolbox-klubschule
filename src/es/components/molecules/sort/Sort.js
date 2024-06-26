@@ -88,7 +88,7 @@ export default class Sort extends Shadow() {
       }
 
       :host .m-sort__item {
-        display: var(--item-display, inline);
+        display: var(--item-display, block);
         padding: var(--item-padding, 1em 1.5em);
         min-width: var(--item-min-width, 18em);
         font-size: 1em;

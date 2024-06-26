@@ -73,8 +73,10 @@ export default class WithFacet extends Shadow() {
       let isNextPage = false
 
       if (event?.detail?.ppage && this.lastRequest) {
+        const lastRequestAsJson = JSON.parse(this.lastRequest)
+        lastRequestAsJson.psize = 2 * lastRequestAsJson.psize
         // ppage reuse last request
-        request = JSON.stringify(Object.assign(JSON.parse(this.lastRequest), { ppage: event.detail.ppage }))
+        request = JSON.stringify(Object.assign(lastRequestAsJson, { ppage: event.detail.ppage }))
         isNextPage = true
       } else {
         // new request
@@ -126,7 +128,8 @@ export default class WithFacet extends Shadow() {
           initialRequestObj.clong = this.params.get('clong')
         }
 
-        const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
+        this.hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
+        if (this.hasSearchTerm) this.searchTerm = event?.detail?.value || this.params.get('q')
         let hasSorting = false
         let hasSearchLocation = false
         const filterRequest = `{
@@ -137,11 +140,11 @@ export default class WithFacet extends Shadow() {
           "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
           "searchcontent": ${!this.hasAttribute('no-search-tab')}
           ${(hasSorting = (event?.detail?.key === 'sorting' && !!event.detail.id) || (event?.detail?.key === 'location-search')) ? `,"sorting": "${event.detail.id || 2}"` : ''}
-          ${hasSearchTerm ? `,"searchText": "${event?.detail?.key === 'input-search' ? event.detail.value : this.params.get('q')}"`: ''}
+          ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"`: ''}
           ${(hasSearchLocation = !!initialRequestObj.clat) ? `,"clat": "${initialRequestObj.clat}"` : ''}
           ${(hasSearchLocation = !!initialRequestObj.clong) ? `,"clong": "${initialRequestObj.clong}"` : ''}
         }`
-        request = this.lastRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
+        request = this.lastRequest = this.filters.length > 0 || this.hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
       }
       
 
@@ -230,12 +233,19 @@ export default class WithFacet extends Shadow() {
     this.requestLocations = event => {
       if (this.abortControllerLocations) this.abortControllerLocations.abort()
       this.abortControllerLocations = new AbortController()
+      
+      // merge both user Filter with sublevel filter
+      const subLevelFilter = event.detail.filter
+      if (this.filters?.length) subLevelFilter.push(JSON.parse(this.filters.reduce((acc, filter) => acc + `${filter}`)))
+
       let body = `{
-        "filter": ${JSON.stringify(event.detail.filter)},
+        "filter": ${JSON.stringify(subLevelFilter)},
         "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
         "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
+        "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
         "onlycourse": true
+        ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"`: ''}
         ${initialRequestObj.clat ? `,"clat": "${initialRequestObj.clat}"` : ''}
         ${initialRequestObj.clong ? `,"clong": "${initialRequestObj.clong}"` : ''}
       }`
