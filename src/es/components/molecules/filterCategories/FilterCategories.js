@@ -17,6 +17,7 @@ export default class FilterCategories extends Shadow() {
 
     this.generatedNavLevelItemMap = new Map()
     this.generateCenterFilterMap = new Map()
+    this.total = 0
     
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
@@ -193,6 +194,7 @@ export default class FilterCategories extends Shadow() {
     const filterIdPrefix = 'filter-'
     const shouldRemainOpen = filterIdPrefix+filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
+    this.total = response.total
 
     let childItems = ''
     if (filterItem.typ === 'multi') {
@@ -267,18 +269,12 @@ export default class FilterCategories extends Shadow() {
     
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
-      // TODO: updateNavLevelItem - Button Update only
-      const dialog = generatedNavLevelItem.navLevelItem.root.querySelector('dialog')
-      const dialogFooter = dialog.querySelector('.dialog-footer')
-      const buttonShowAllOffers = dialogFooter.querySelector('.button-show-all-offers')
-      console.log(buttonShowAllOffers)
-      // buttonShowAllOffers = `${response.total.toString()} ${response.total_label}`
+      generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
     } else {
       this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)))
     }
     if (!Array.from(parentItem.childNodes).includes(generatedNavLevelItem.navLevelItem)) parentItem.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-      
       if (filterItem.id === '13') { // center filters
         const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, Array.from(this.generateCenterFilter(response, filterItem))).get(level + '_' + filterItem.id)
         if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedCenterFilters[0])) {
