@@ -447,6 +447,7 @@ export default class Event extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
+    if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     const {
       datum_label,
       days,
@@ -461,9 +462,8 @@ export default class Event extends Shadow() {
       icons,
       price
     } = this.data.course
-
-    if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
+    // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     this.html = /* HTML */`
       <div class="event">
         <div class="head">
@@ -503,7 +503,7 @@ export default class Event extends Shadow() {
         </div>
         <div class="controls">
           <div class="controls-left">
-            <ks-m-buttons data-buttons='${JSON.stringify(buttons).replace(/'/g, 'ʼ')}'></ks-m-buttons>
+            <ks-m-buttons data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
           </div>
           <div class="controls-right">
             <div class="icons">
@@ -594,9 +594,10 @@ export default class Event extends Shadow() {
       }))).then((data) => {
         this.details.classList.remove('loading')
 
+        // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
         this.details.innerHTML = /* html */ `
           <ks-m-event-detail
-            data='${JSON.stringify(data).replace(/'/g, 'ʼ')}'
+            data='${JSON.stringify(data).replace(/'/g, '’')}'
           ></ks-m-event-detail>
         `
       })
@@ -608,7 +609,7 @@ export default class Event extends Shadow() {
   }
 
   get data () {
-    return Event.parseAttribute(this.getAttribute('data'))
+    return JSON.parse(this.getAttribute('data'))
   }
 
   get mockData () {

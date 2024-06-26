@@ -36,7 +36,7 @@ export default class OffersPage extends Shadow() {
           sort.innerHTML = /* html */ `
             <ks-m-sort namespace="sort-right-" with-facet>
               ${this.data?.sort?.items?.length ? /* html */ `
-                <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort).label}">
+                <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort)?.label || ''}">
                   ${listElements}
                 </ul>
               ` : ''}
@@ -236,6 +236,10 @@ export default class OffersPage extends Shadow() {
         name: 'ks-a-heading'
       },
       {
+        path: `${this.importMetaUrl}../../atoms/spacing/Spacing.js`,
+        name: 'ks-a-spacing'
+      },
+      {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/input/Input.js`,
         name: 'a-input'
       },
@@ -328,6 +332,7 @@ export default class OffersPage extends Shadow() {
                   answer-event-name="search-change"
                   delete-listener
                   search
+                  autocomplete="off"
                 >
                 </a-input>
                 <div id="close">
@@ -349,6 +354,7 @@ export default class OffersPage extends Shadow() {
               answer-event-name="search-change"
               readonly
               pointer
+              autocomplete="off"
             >
             </a-input>
           </m-dialog>
@@ -375,6 +381,7 @@ export default class OffersPage extends Shadow() {
                       type="search"
                       delete-listener
                       answer-event-name="location-change"
+                      autocomplete="off"
                     >
                     </a-input>
                     <div id="close">
@@ -403,6 +410,7 @@ export default class OffersPage extends Shadow() {
                 answer-event-name="location-change"
                 readonly
                 pointer
+                autocomplete="off"
               >
               </a-input>
             </m-dialog>
@@ -434,6 +442,7 @@ export default class OffersPage extends Shadow() {
                 answer-event-name="search-change"
                 delete-listener
                 search
+                autocomplete="off"
               >
               </a-input>
               <div id="close">
@@ -453,6 +462,7 @@ export default class OffersPage extends Shadow() {
             icon-size="1.25em"
             search type="search"
             answer-event-name="search-change"
+            autocomplete="off"
           >
           </a-input>
         </m-dialog>
@@ -538,13 +548,14 @@ export default class OffersPage extends Shadow() {
                   </ks-m-badge-legend>
                 `
                 : ''}
-              <ks-a-spacing type="2xs-flex"></ks-a-spacing>
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               <ks-a-with-facet-pagination class="hidden" id="pagination">
                 <ks-a-button namespace="button-primary-" color="secondary">
                     <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                 </ks-a-button>
               </ks-a-with-facet-pagination>
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
           </ks-o-body-section>
         ${this.eventDetailURL ? /* html */'</ks-c-event-detail>' : ''}
     `

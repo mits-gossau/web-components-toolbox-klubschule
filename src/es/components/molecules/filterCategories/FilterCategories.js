@@ -71,7 +71,7 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  generateCenterFilter (filterItem) {
+  generateCenterFilter (response, filterItem) {
     let centerNav = []
 
     filterItem.children.forEach(region => {
@@ -86,13 +86,13 @@ export default class FilterCategories extends Shadow() {
         const visible = center.visible ? 'visible' : ''
         const centerCheckbox = /* html */`
           <mdx-component mutation-callback-event-name="request-with-facet">
-            <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}" filter-id="center-${center.id}"></mdx-checkbox>
+            <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}" filter-id="${region.urlpara}-${center.id}"></mdx-checkbox>
           </mdx-component>
         `
         const div = document.createElement('div')
         div.innerHTML = centerCheckbox
         // @ts-ignore
-        div.children[0].filterItem = center
+        div.children[0].filterItem = response.filters.find(filter => filter.id === filterItem.id)
         centerNav.push(div.children[0])
       })
     })
@@ -100,7 +100,7 @@ export default class FilterCategories extends Shadow() {
     return centerNav
   }
 
-  generateFilterElement (child, parentItem) {
+  generateFilterElement (response, child, parentItem, firstFilterItemId) {
     const subNav = []
     const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled ? 'disabled' : ''
@@ -126,7 +126,7 @@ export default class FilterCategories extends Shadow() {
     const div = document.createElement('div')
     div.innerHTML = isMultipleChoice ? mdxCheckbox : navLevelItem
     // @ts-ignore
-    div.children[0].filterItem = parentItem
+    div.children[0].filterItem = response.filters.find(filter => filter.id === firstFilterItemId)
     subNav.push(div.children[0])
 
     return subNav
@@ -134,7 +134,7 @@ export default class FilterCategories extends Shadow() {
 
   getLastSelectedChild (filterItem) {
     let lastSelectedChild = null
-    if (!filterItem.children || filterItem.children.length === 0) return filterItem
+    if (!filterItem.children || filterItem.children.length === 0) return
     if (filterItem.children) {
       for (const child of filterItem.children) {
         if (child.selected) {
@@ -143,12 +143,13 @@ export default class FilterCategories extends Shadow() {
         }
       }
     }
-
+    
     return lastSelectedChild
   }
 
   generateNavLevelItem (response, filterItem) {
-    const shouldRemainOpen = filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    const filterIdPrefix = 'filter-'
+    const shouldRemainOpen = filterIdPrefix+filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
 
     let childItems = ''
@@ -162,9 +163,23 @@ export default class FilterCategories extends Shadow() {
     } else {
       childItems = this.getLastSelectedChild(filterItem) ? this.getLastSelectedChild(filterItem).label : ''
     }
+    if (filterItem.typ === 'group') {
+      const selectedChildren = filterItem.children.filter(child => child.selected)
+      if (selectedChildren.length > 0) {
+        selectedChildren.forEach(child => {
+          if (child.selected) {
+            child.children.forEach(subChild => {
+              if (subChild.selected) {
+                childItems += `${subChild.label}, `
+              }
+            })
+          }
+        })
+      }
+    }
 
     div.innerHTML = /* html */`
-      <m-dialog id="filter-${filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+      <m-dialog id="${filterIdPrefix+filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
@@ -203,22 +218,22 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  generateFilters (response, filterItem, parentItem = this.mainNav) {
+  generateFilters (response, filterItem, parentItem = this.mainNav, firstFilterItemId = null) {
     if (!filterItem.visible) return
-
+    if (firstFilterItemId === null) firstFilterItemId = filterItem.id
+    
     const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
     parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
       if (filterItem.id === '13') { // center filters
-        Array.from(this.generateCenterFilter(filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+        Array.from(this.generateCenterFilter(response, filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
       } else {
         filterItem.children.forEach(child => {
           if (child.children && child.children.length > 0) {
-            // recursively call the function for any nested children
-            this.generateFilters(response, child, generatedNavLevelItem.subLevel)
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId) // recursive call
           } else {
-            this.generateFilterElement(child, filterItem).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+            this.generateFilterElement(response, child, filterItem, firstFilterItemId).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
           }
         })
       }
@@ -242,13 +257,15 @@ export default class FilterCategories extends Shadow() {
       ])
     ]).then(() => {
       fetch.then(response => {
-        this.html = ''
-
-        if (response.filters.length === 0) return
-
-        response.filters.forEach((filterItem) => {
-          this.generateFilters(response, filterItem)
-        })
+        setTimeout(() => {
+          this.html = ''
+  
+          if (response.filters.length === 0) return
+  
+          response.filters.forEach((filterItem) => {
+            this.generateFilters(response, filterItem)
+          })
+        }, 0)
       })
     })
   }

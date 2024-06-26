@@ -36,8 +36,7 @@ export default class WithFacet extends Shadow() {
       ...options
     }, ...args)
 
-    const withFacetCache = new Map()
-    const timeoutIds = new Map()
+    let timeoutId = null
     const coordinatesToTerm = new Map()
     // additional setting for initial request
     let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
@@ -82,9 +81,11 @@ export default class WithFacet extends Shadow() {
         const initialFilters = initialRequestObj?.filter
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
 
-        // this.filters = []
+        this.updateFilterFromURLParams()
+
+        // construct filter item
         const filter = this.constructFilterItem(event)
-        if (filter) this.filters.push(filter)
+        if (filter) this.filters.push(JSON.stringify(filter))
 
         // if there is an initial filter set (e.g. for events) we want to keep it
         if (initialFiltersAsString?.length) {
@@ -125,8 +126,6 @@ export default class WithFacet extends Shadow() {
           initialRequestObj.clong = this.params.get('clong')
         }
 
-        this.updateFilterFromURLParams()
-
         const hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         let hasSorting = false
         let hasSearchLocation = false
@@ -144,6 +143,7 @@ export default class WithFacet extends Shadow() {
         }`
         request = this.lastRequest = this.filters.length > 0 || hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
       }
+      
 
       const LanguageEnum = {
         'd': 'de',
@@ -169,17 +169,12 @@ export default class WithFacet extends Shadow() {
       }
 
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
-      if (timeoutIds.has(request)) clearTimeout(timeoutIds.get(request))
-      timeoutIds.set(request, setTimeout(() => {
-        let fetchPromise = null
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
         this.dispatchEvent(new CustomEvent('with-facet', {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
-            fetch: (fetchPromise = withFacetCache.has(request)
-              ? withFacetCache.get(request)
-              // TODO: withFacetCache key must include all variants as well as future payloads
-              // TODO: know the api data change cycle and use timestamps if that would be shorter than the session life time
-              : withFacetCache.set(request, fetch(apiUrl, requestInit).then(response => {
+            fetch: fetch(apiUrl, requestInit).then(response => {
                 if (response.status >= 200 && response.status <= 299) {
                   return response.json()
                 }
@@ -188,11 +183,11 @@ export default class WithFacet extends Shadow() {
                 // store initial response
                 this.lastResponse = json
 
-                this.checkFiltersInURL(json.filters)
-
-                this.updateUrlSearchFromResponse(json)
-
-                this.updateUrlParamsFromResponse(json)
+                setTimeout(() => {
+                  this.checkFiltersInURL(json.filters)
+                  this.updateUrlSearchFromResponse(json)
+                  this.updateUrlParamsFromResponse(json)
+                }, 0)
                 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
@@ -200,37 +195,35 @@ export default class WithFacet extends Shadow() {
                 if (shouldResetFilterFromFilterSelectButton) json = Object.assign(json, { shouldResetFilterFromFilterSelectButton })
 
                 return json
-              })).get(request))
+              }).finally(json => {
+                const requestObj = JSON.parse(request)
+                // update inputs
+                this.dispatchEvent(new CustomEvent('search-change', {
+                  detail: {
+                    searchTerm: (json || requestObj)?.searchText
+                  },
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
+                }))
+                const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
+                if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+                this.dispatchEvent(new CustomEvent('location-change', {
+                  detail: {
+                    searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
+                    searchCoordinates
+                  },
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
+                }))
+              })
           },
           bubbles: true,
           cancelable: true,
           composed: true
         }))
-
-        fetchPromise.finally(json => {
-          const requestObj = JSON.parse(request)
-          // update inputs
-          this.dispatchEvent(new CustomEvent('search-change', {
-            detail: {
-              searchTerm: (json || requestObj)?.searchText
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }))
-          const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
-          if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
-          this.dispatchEvent(new CustomEvent('location-change', {
-            detail: {
-              searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
-              searchCoordinates
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }))
-        })
-      }, 50))
+      }, 50)
     }
 
     this.abortControllerLocations = null
@@ -315,12 +308,12 @@ export default class WithFacet extends Shadow() {
     this.filtersInURLRecursionDepth--
 
     if (this.filtersInURLRecursionDepth === 0) {
-      this.updateFilterFromURLParams();
+      this.updateFilterFromURLParams()
     }
   }
 
-  updateFilterFromURLParams (key = null) {
-    this.filters = []
+  updateFilterFromURLParams (key = null, filters = []) {
+    this.filters = filters
     let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
     if (key) filteredURLKeys = [key] // set first filter key
     const filterItems = []
@@ -355,7 +348,7 @@ export default class WithFacet extends Shadow() {
       if (filterItems.length > 0) {
         filterItems.forEach(item => {
           const filter = this.constructFilterItem(item)
-          if (filter) this.filters.push(filter)
+          if (filter) this.filters.push(JSON.stringify(filter))
         })
       }
     }
@@ -370,7 +363,8 @@ export default class WithFacet extends Shadow() {
   }
 
   updateFilterAndParamsWithSelectedFilter(event) {
-    const filterId = event?.detail?.mutationList[0].target.getAttribute('filter-id')
+    if (!event?.detail) return
+    const filterId = event.detail.mutationList?.[0].target.getAttribute('filter-id') || event.detail.target?.filterId
     if (!filterId) return
     const [filterKey, filterValue] = filterId.split('-')
     const currentValues = this.params.get(filterKey)?.split('-') || []
@@ -469,57 +463,50 @@ export default class WithFacet extends Shadow() {
     }
   }
 
+  toggleFilterItem(filterItem, filterKey, filterValue, event) {
+    if (filterItem.children) {
+      filterItem.children.forEach(child => {
+        const count = child.count ? `(${child.count})` : ''
+        const label = count ? `${child.label} ${count}` : child.label
+        const hasSameLabel = label.trim() === event.detail?.target.label.trim()
+        const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
+
+        child.selected = hasSameLabel
+          ? isCheckedNullOrUndefined
+            ? (child.selected || false)
+            : event.detail.target.checked
+          : (child.selected || false)
+      
+        if (filterItem.urlpara === filterKey || filterItem.urlpara !== filterKey) {
+          this.toggleFilterItem(child, filterKey, filterValue, event) // recursive call
+        }
+      })
+
+      // if all children are deselected, remove filterKey from url
+      const allChildrenDeselected = filterItem.children.every(child => !child.selected)
+      if (allChildrenDeselected) {
+        this.removeFilterParam(filterItem.urlpara)
+      }
+    }
+
+    return filterItem
+  }
 
   constructFilterItem (event) {
     let filterItem = event?.detail?.wrapper?.filterItem
+    if (!event) return
+    const filterId = (typeof event.detail?.target?.getAttribute === 'function' && event.detail?.target?.getAttribute('filter-id')) || event.detail?.target?.filterId
+    // if event is not an Event object, it is a filterItem
     if (!(event instanceof Event)) {
       filterItem = event
     }
 
-    return filterItem
-      ? `{
-        ${filterItem.children ? `"children": [
-          ${filterItem.children && filterItem.children.map(child => {
-            const count = child.count ? `(${child.count})` : ''
-            const label = count ? `${child.label} ${count}` : child.label
-            const hasSameLabel = label.trim() === event.detail?.target.label.trim()
-            const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
+    if (filterItem && filterId) {
+      const [filterKey, filterValue] = filterId.split('-')
+      filterItem = this.toggleFilterItem(filterItem, filterKey, filterValue, event)
+    }
 
-            return `{
-              ${child.count ? `"count": ${child.count},` : ''}
-              ${child.eTag ? `"eTag": "${child.eTag.replace(/"/g, '\\"')}",` : ''}
-              "hasChilds": ${child.hasChilds},
-              "id": "${child.id}",
-              "label": "${child.label}",
-              ${child.partitionKey ? `"partitionKey": "${child.partitionKey}",` : ''}
-              ${child.rowKey ? `"rowKey": "${child.rowKey}",` : ''}
-              "selected": ${hasSameLabel
-                ? isCheckedNullOrUndefined
-                  ? (child.selected || false)
-                  : event.detail.target.checked
-                : (child.selected || false)},
-              ${child.sort ? `"sort": ${child.sort},` : ''}
-              ${child.timestamp ? `"timestamp": "${child.timestamp}",` : ''}
-              ${child.typ ? `"typ": "${child.typ}",` : ''}
-              "urlpara": "${child.urlpara}"
-            }`
-          })}
-        ],` : ''}
-        ${filterItem.disabled ? `"disabled": ${filterItem.disabled},` : ''}
-        ${filterItem.eTag ? `"eTag": "${filterItem.eTag.replace(/"/g, '\\"')}",` : ''}
-        ${filterItem.hasChilds ? `"hasChilds": ${filterItem.hasChilds},` : ''}
-        ${filterItem.id ? `"id": "${filterItem.id}",` : ''}
-        ${filterItem.label ? `"label": "${filterItem.label}",` : ''}
-        ${filterItem.options ? `"options": ${filterItem.options},` : ''}
-        ${filterItem.partitionKey ? `"partitionKey": "${filterItem.partitionKey}",` : ''}
-        ${filterItem.rowKey ? `"rowKey": "${filterItem.rowKey}",` : ''}
-        ${filterItem.sort ? `"sort": ${filterItem.sort},` : ''}
-        ${filterItem.timestamp ? `"timestamp": "${filterItem.timestamp}",` : ''}
-        ${filterItem.typ ? `"typ": "${filterItem.typ}",` : ''}
-        ${filterItem.urlpara ? `"urlpara": "${filterItem.urlpara}",` : ''}
-        "visible": ${filterItem.visible || true}
-      }`
-      : ''
+    return filterItem ? filterItem : ''
   }
 
   static historyPushState (...args) {

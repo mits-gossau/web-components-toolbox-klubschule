@@ -90,6 +90,7 @@ export default class AboTile extends Shadow() {
 
   /**
   * renderHTML
+  * NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
   * @param {any} aboDetail - An array of course fetch objects.
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
@@ -97,11 +98,11 @@ export default class AboTile extends Shadow() {
     this.html = ''
     this.html = /* html */ `
       <ks-m-event-detail
-        data='${JSON.stringify(aboDetail).replace(/'/g, 'ʼ')}'
+        data='${JSON.stringify(aboDetail).replace(/'/g, '’')}'
       >
       </ks-m-event-detail>
       <div>
-        <ks-m-buttons data-buttons='${JSON.stringify(aboDetail.buttons).replace(/'/g, 'ʼ')}'></ks-m-buttons>
+        <ks-m-buttons data-buttons='${JSON.stringify(aboDetail.buttons).replace(/'/g, '’')}'></ks-m-buttons>
       <div>
     `
     return this.fetchModules([
