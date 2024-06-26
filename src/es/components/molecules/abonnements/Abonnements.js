@@ -141,6 +141,7 @@ export default class Abonnements extends Shadow() {
 
   /**
     * renderContent
+    * NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     * @param data Abonnement Infos
     * @returns {Promise<void>} The function `renderContent` returns a Promise.
   */
@@ -150,10 +151,10 @@ export default class Abonnements extends Shadow() {
       ? data.courses.reduce(
         (acc, abonnement) => acc + (
           abonnement.locations?.length ? /* html */ `
-            <ks-o-tile-list data='${JSON.stringify(abonnement).replace(/'/g, "\'").replace(/"/g, '\"')}'>
+            <ks-o-tile-list data='${JSON.stringify(abonnement).replace(/'/g, '’').replace(/"/g, '\"')}'>
             </ks-o-tile-list>
           ` : /* html */ `
-            <ks-m-tile namespace="tile-default-" data='${JSON.stringify(abonnement).replace(/'/g, "\'").replace(/"/g, '\"')}'>
+            <ks-m-tile namespace="tile-default-" data='${JSON.stringify(abonnement).replace(/'/g, '’').replace(/"/g, '\"')}'>
             </ks-m-tile>
           `
         ),
