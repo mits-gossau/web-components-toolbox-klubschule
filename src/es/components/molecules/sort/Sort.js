@@ -88,7 +88,8 @@ export default class Sort extends Shadow() {
       }
 
       :host .m-sort__item {
-        padding: 1em 1.5em;
+        display: var(--item-display, inline);
+        padding: var(--item-padding, 1em 1.5em);
         min-width: var(--item-min-width, 18em);
         font-size: 1em;
         line-height: 1.375em;
@@ -100,12 +101,18 @@ export default class Sort extends Shadow() {
         background-color: var(--hover-color);
       }
 
-      :host .m-sort__item-active {
+      :host .m-sort__item-active,
+      :host .m-sort__item-active * {
         font-weight: 500;
       }
 
       :host .m-sort__tooltip-open {
         display: block;
+      }
+
+      :host .m-sort__item a {
+        padding: var(--item-a-padding, 1em);
+        width: var(--item-a-width, auto);
       }
 
       @media only screen and (max-width: _max-width_) {

@@ -246,6 +246,14 @@ export default class Heading extends Shadow() {
         align-items: center;
       }
 
+      /* attributes to unset margin top/bottom, used e.g. by spacer component */
+      :host([no-margin-top]) > * {
+        margin-top: 0 !important;
+      }
+      :host([no-margin-bottom]) > * {
+        margin-top: 0 !important;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host([border-top]) [border-top]::before {
           width: var(--h-border-top-width, var(--mdx-sys-sizing-fix-2xl));
