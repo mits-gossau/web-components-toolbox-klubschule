@@ -93,8 +93,11 @@ export default class Buttons extends Shadow() {
       const urlParamsMap = new URLSearchParams(urlParams)
       const urlParamsArray = Array.from(urlParamsMap.keys())
       // TODO: keys to ignore should be moved to .env file (see also WithFacet.js)
-      const ignoreURLKeys = ['rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
-                            'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] // GA parameters
+      const ignoreURLKeys = [
+        'rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
+        'q', // ignore search query
+        'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'
+      ] // GA parameters
       const filteredURLKeys = urlParamsArray.filter(key => !ignoreURLKeys.includes(key))
       filteredURLParams = filteredURLKeys.map(key => `${key}=${urlParamsMap.get(key)}`).join('&')
     }

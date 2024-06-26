@@ -17,6 +17,7 @@ export default class TileFactory extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
+    if (this.shouldRenderModules()) this.renderModules()
     document.body.addEventListener('with-facet', this.withFacetEventNameListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
       {
@@ -33,6 +34,15 @@ export default class TileFactory extends Shadow() {
 
   shouldRenderCSS () {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
+  }
+
+  /**
+   * evaluates if a render is necessary
+   *
+   * @return {boolean}
+   */
+  shouldRenderModules () {
+    return !this.renderedModules
   }
 
   /**
@@ -98,62 +108,44 @@ export default class TileFactory extends Shadow() {
     this.html = ''
     this.html = '<a-loading></a-loading>'
     */
-    return Promise.all([
-      fetch,
-      this.fetchModules([
-        {
-          path: `${this.importMetaUrl}../tile/Tile.js`,
-          name: 'ks-m-tile'
-        },
-        {
-          path: `${this.importMetaUrl}../../organisms/tileList/TileList.js`,
-          name: 'ks-o-tile-list'
-        },
-        {
-          path: `${this.importMetaUrl}../event/Event.js`,
-          name: 'ks-m-event'
-        },
-        {
-          path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
-          name: 'a-translation'
+    return fetch.then(data => {
+      setTimeout(() => {
+        if (!data.isNextPage) this.html = ''
+        if (!data) {
+          this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
+          return
         }
-      ])
-    ]).then(([data]) => {
-      if (!data.isNextPage) this.html = ''
-      if (!data) {
-        this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
-        return
-      }
-      this.html = data.courses.reduce(
-        (acc, course) => {
-          const tile = this.isEventSearch ? /* html */ `
-            <ks-m-event
-              data='{
-                "course": ${JSON.stringify(course)},
-                "sprachid": "${data.sprachid}"
-              }'
-            ></ks-m-event>
-          ` : (
-            (course.locations?.length > 1 || data.sort.sort === 2) && course.filter?.length
-              ? /* html */`
-                <ks-o-tile-list data='{
-                  ${data.sort.sort === 2 ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
-                  "filter": ${JSON.stringify(course.filter) || ''},
-                  "locations": ${JSON.stringify(course.locations) || ''},
-                  "sort": ${JSON.stringify(data.sort.sort) || ''}
-                }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
-                </ks-o-tile-list>
-              `
-              : /* html */`
-                <ks-m-tile namespace="tile-default-" data='{
-                  ${this.fillGeneralTileInfo(course)}
-                }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>
-              `
-          )
-          return acc = acc + tile
-        },
-        '<section>'
-      ) + '</section>'
+        this.html = data.courses.reduce(
+          (acc, course) => {
+            const tile = this.isEventSearch ? /* html */ `
+              <ks-m-event
+                data='{
+                  "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
+                  "sprachid": "${data.sprachid}"
+                }'
+              ></ks-m-event>
+            ` : (
+              (course.locations?.length > 1 || data.sort.sort === 2) && course.filter?.length
+                ? /* html */`
+                  <ks-o-tile-list data='{
+                    ${data.sort.sort === 2 ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
+                    "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+                    "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+                    "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
+                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
+                  </ks-o-tile-list>
+                `
+                : /* html */`
+                  <ks-m-tile namespace="tile-default-" data='{
+                    ${this.fillGeneralTileInfo(course)}
+                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>
+                `
+            )
+            return acc = acc + tile
+          },
+          '<section>'
+        ) + '</section>'
+      }, 0)
     }).catch(error => {
       console.error(error)
       this.html = ''
@@ -161,10 +153,33 @@ export default class TileFactory extends Shadow() {
     })
   }
 
+  renderModules () {
+    this.renderedModules = true
+    return this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../tile/Tile.js`,
+        name: 'ks-m-tile'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/tileList/TileList.js`,
+        name: 'ks-o-tile-list'
+      },
+      {
+        path: `${this.importMetaUrl}../event/Event.js`,
+        name: 'ks-m-event'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
+      }
+    ])
+  }
+
   fillGeneralTileInfo (course) {
+    // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     return `
       "title": "${course.bezeichnung}",
-      "iconTooltip": ${JSON.stringify(course.infotextshort.replace(/'/g, 'ʼ')) || ''},
+      "iconTooltip": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "location": {
         "iconName": "Location",
         "name": "${course.location?.name
@@ -174,8 +189,8 @@ export default class TileFactory extends Shadow() {
             : ''}",
         "badge": "${course.location.badge ? course.location.badge : ''}"
       },
-      "buttons": ${JSON.stringify(course.buttons) || ''},
-      "icons": ${JSON.stringify(course.icons) || ''},
+      "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+      "icons": ${JSON.stringify(course.icons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "price": {
         "from": "${course.price.pre}",
         "amount": "${course.price.amount}",
@@ -186,11 +201,12 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfoNearBy (course) {
+    // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     return `
       "title": "${course.bezeichnung}",
-      "iconTooltip": ${JSON.stringify(course.infotextshort.replace(/'/g, 'ʼ')) || ''},
-      "icons": ${JSON.stringify(course.icons) || ''},
-      "buttons": ${JSON.stringify(course.buttons) || ''}
+      "iconTooltip": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+      "icons": ${JSON.stringify(course.icons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+      "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''}
     `
   }
 
