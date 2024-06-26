@@ -154,7 +154,6 @@ export default class TileList extends Shadow() {
 
       :host .o-tile-list__details {
         height: 0;
-        overflow: hidden;
       }
 
       :host .o-tile-list__details--expanded {
