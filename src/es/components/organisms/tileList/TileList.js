@@ -329,22 +329,24 @@ export default class TileList extends Shadow() {
               <ks-m-buttons data-buttons='${JSON.stringify(data.buttons).replace(/'/g, '’').replace(/"/g, '\"')}' small></ks-m-buttons>
             </div>
             <div class="o-tile-list__bottom-right">
-              <div class="o-tile-list__icons">
-              ${data.icons.reduce((acc, icon) => acc + /* html */`
-                <div class="o-tile-list__icon-box">
-                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.text.replaceAll('"', '\"')}">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
-                  </ks-m-tooltip>
+              ${this.isNearbySearch ? '' : /* html */ `
+                <div class="o-tile-list__icons">
+                  ${data.icons.reduce((acc, icon) => acc + /* html */`
+                    <div class="o-tile-list__icon-box">
+                      <ks-m-tooltip namespace="tooltip-right-" text="${icon.text.replaceAll('"', "'")}">
+                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
+                      </ks-m-tooltip>
+                    </div>
+                  `, '')}           
                 </div>
-              `, '')}           
-              </div>
+              `}
               <span class="o-tile-list__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
             </div>          
           </div>
         </div>
         <div class="o-tile-list__details">
           <div class="o-tile-list__tiles">
-            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`, '') : ''}
+            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" inside-tile-list data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`, '') : ''}
           </div>
           <div
             id="request-more-locations"
@@ -401,10 +403,13 @@ export default class TileList extends Shadow() {
     this.loadMore.style.display = tileData.ppage === -1 ? 'none' : 'flex'
     const tileString = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
       // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
-      tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
-      if (tile.bezeichnung) tile.location.name = ''
+      if (!this.isNearbySearch) {
+        tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
+        if (tile.bezeichnung)  tile.location.name = ''
+      }
+
       // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
-      return acc + /* html */`<ks-m-tile namespace="tile-default-" data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>`
+      return acc + /* html */`<ks-m-tile namespace="tile-default-" inside-tile-list data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`
     }, '')
     if (add) {
       const div = document.createElement('div')
@@ -417,5 +422,9 @@ export default class TileList extends Shadow() {
 
   get tileList () {
     return this.root.querySelector('.o-tile-list')
+  }
+
+  get isNearbySearch () {
+    return this.hasAttribute("nearby-search")
   }
 }

@@ -51,6 +51,9 @@ export default class Tile extends Shadow() {
         position: relative;
         height: 100%;
         padding: 1.5em;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
     
       :host .m-tile__overlay {
@@ -87,16 +90,20 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__body {
-          display: flex;
-          align-items: center;
-          padding-bottom: 2em;
+        display: flex;
+        align-items: center;
+        padding-bottom: 2em;
       }
       
       :host .m-tile__content {
           font-size: 1em;
           line-height: 1.25em;
-          font-weight: 400;
-          padding: 0 0.5em;
+          font-weight: 400;          
+          padding: 0 0.5em 0 0;
+      }
+
+      :host .m-tile__body a-icon-mdx {
+        padding-right: 0.5em
       }
       
       :host .m-tile__foot {
@@ -125,8 +132,11 @@ export default class Tile extends Shadow() {
       
       :host .m-tile__foot-right {
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           align-items: flex-end;
+          flex-wrap: wrap;
+          width: calc(50% - 0.5em);
+          justify-content: end;
       }
       
       :host .m-tile__price {
@@ -135,6 +145,7 @@ export default class Tile extends Shadow() {
           line-height: var(--price-line-height);
           font-weight: var(--price-font-weight);  
           padding-left: 0.75em;
+          text-align: end;
       }
       
       :host .m-tile__price strong {
@@ -282,7 +293,7 @@ export default class Tile extends Shadow() {
             `
             : ''
           }
-          ${data.location?.badge
+          ${data.location?.badge && ((this.isNearbySearch && this.isInsideTileList) || !this.isInsideTileList)
             ? /* html */`
               <ks-a-button badge namespace="button-secondary-" color="tertiary">
                 <span>${data.location.badge}</span>
@@ -344,5 +355,13 @@ export default class Tile extends Shadow() {
 
   get title () {
     return this.root.querySelector('.m-tile')
+  }
+
+  get isNearbySearch () {
+    return this.hasAttribute("nearby-search")
+  }
+
+  get isInsideTileList () {
+    return this.hasAttribute("inside-tile-list")
   }
 }

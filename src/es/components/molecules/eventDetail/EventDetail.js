@@ -23,8 +23,12 @@ export default class EventDetail extends Shadow() {
       if (this.icon) {
         if (this.icon.getAttribute('icon-name') === 'ChevronDown') {
           this.icon.setAttribute('icon-name', 'ChevronUp')
+          this.root.querySelector('.more.show').classList.remove('show')
+          this.root.querySelector('.less').classList.add('show')
         } else {
           this.icon.setAttribute('icon-name', 'ChevronDown')
+          this.root.querySelector('.less.show').classList.remove('show')
+          this.root.querySelector('.more').classList.add('show')
         }
       }
     }
@@ -237,6 +241,15 @@ export default class EventDetail extends Shadow() {
         display: none;
       }
 
+      :host .link-more .more,
+      :host .link-more .less {
+        display: none;
+      }
+
+      :host .link-more .show {
+        display: block;
+      }      
+
       @media only screen and (max-width: _max-width_) {
         :host {
           grid-template-columns: 100%;
@@ -373,7 +386,8 @@ export default class EventDetail extends Shadow() {
             </table>
             ${this.data.termine?.length > 5 && this.data.termin_label ? /* html */ `
               <button class="link-more">
-                <span>${this.data.termin_alle_label}</span>
+                <span class="more show">${this.data.termin_alle_label}</span>
+                <span class="less">${this.data.termin_weniger_label}</span>
                 <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em"></a-icon-mdx>
               </button>
             ` : ''}
