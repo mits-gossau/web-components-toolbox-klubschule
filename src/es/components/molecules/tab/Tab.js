@@ -78,6 +78,7 @@ export default class Tab extends Shadow() {
           font-weight: var(--mdx-comp-tabs-font-label-default-font-weight, 500);
           cursor: pointer;
           padding: 1em 0;
+          color: var(--mdx-comp-tabs-label-color-default);
         }
 
         :host ul li button.active {
