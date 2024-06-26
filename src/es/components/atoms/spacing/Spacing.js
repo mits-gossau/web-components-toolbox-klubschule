@@ -129,14 +129,14 @@ export default class Spacing extends Shadow() {
    * @returns Promise<void>
    */
     renderHTML () {
-      if (this.previousSibling) this.removeMarginTopBottom(this.previousSibling)
-      if (this.nextSibling) this.removeMarginTopBottom(this.nextSibling)
+      if (this.previousSibling) this.removeMargin(this.previousSibling, 'margin-bottom: 0 !important;')
+      if (this.nextSibling) this.removeMargin(this.nextSibling, 'margin-top: 0 !important;')
       this.html = /* HTML */`
       <div class="spacing spacing-${this.type}"></div>
       `
     }
 
-    removeMarginTopBottom(node) {
-      node.setAttribute('style', `margin-top: 0 !important;margin-bottom: 0 !important;${node.getAttribute('style') ?? ''}`)
+    removeMargin(node, style) {
+      node.setAttribute('style', `${style}${node.getAttribute('style') ?? ''}`)
     }
 }

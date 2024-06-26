@@ -15,7 +15,8 @@ export default class NavLevelItem extends Shadow() {
             },
             target: {
               checked: this.getAttribute('namespace') !== 'nav-level-item-active-',
-              label: this.text.textContent
+              label: this.text.textContent,
+              filterId: this.getAttribute('filter-id')
             }
           },
           bubbles: true,

@@ -175,13 +175,10 @@ export default class Sort extends Shadow() {
       if (this.hasAttribute('with-facet')) {
         li.addEventListener('click',
           (event) => {
-            if (window.location.search.includes('clat') && window.location.search.includes('clong')) {
+            if (event.composedPath()[0].getAttribute('id') === '2' && !window.location.search.includes('clat') && !window.location.search.includes('clong')) {
               this.dispatchEvent(
-                new CustomEvent('request-with-facet', {
-                    detail: {
-                      key: 'sorting',
-                      id: event.currentTarget?.id
-                    },
+                new CustomEvent('show-location-search-dialog', {
+                    detail: {},
                     bubbles: true,
                     cancelable: true,
                     composed: true
@@ -189,8 +186,11 @@ export default class Sort extends Shadow() {
               )
             } else {
               this.dispatchEvent(
-                new CustomEvent('show-location-search-dialog', {
-                    detail: {},
+                new CustomEvent('request-with-facet', {
+                    detail: {
+                      key: 'sorting',
+                      id: event.currentTarget?.id
+                    },
                     bubbles: true,
                     cancelable: true,
                     composed: true
