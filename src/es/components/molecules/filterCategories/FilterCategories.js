@@ -257,13 +257,15 @@ export default class FilterCategories extends Shadow() {
       ])
     ]).then(() => {
       fetch.then(response => {
-        this.html = ''
-
-        if (response.filters.length === 0) return
-
-        response.filters.forEach((filterItem) => {
-          this.generateFilters(response, filterItem)
-        })
+        setTimeout(() => {
+          this.html = ''
+  
+          if (response.filters.length === 0) return
+  
+          response.filters.forEach((filterItem) => {
+            this.generateFilters(response, filterItem)
+          })
+        }, 0)
       })
     })
   }

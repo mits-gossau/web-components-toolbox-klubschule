@@ -183,9 +183,11 @@ export default class WithFacet extends Shadow() {
                 // store initial response
                 this.lastResponse = json
 
-                this.checkFiltersInURL(json.filters)
-                this.updateUrlSearchFromResponse(json)
-                this.updateUrlParamsFromResponse(json)
+                setTimeout(() => {
+                  this.checkFiltersInURL(json.filters)
+                  this.updateUrlSearchFromResponse(json)
+                  this.updateUrlParamsFromResponse(json)
+                }, 0)
                 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })

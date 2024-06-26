@@ -109,41 +109,43 @@ export default class TileFactory extends Shadow() {
     this.html = '<a-loading></a-loading>'
     */
     return fetch.then(data => {
-      if (!data.isNextPage) this.html = ''
-      if (!data) {
-        this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
-        return
-      }
-      this.html = data.courses.reduce(
-        (acc, course) => {
-          const tile = this.isEventSearch ? /* html */ `
-            <ks-m-event
-              data='{
-                "course": ${JSON.stringify(course)},
-                "sprachid": "${data.sprachid}"
-              }'
-            ></ks-m-event>
-          ` : (
-            (course.locations?.length > 1 || data.sort.sort === 2) && course.filter?.length
-              ? /* html */`
-                <ks-o-tile-list data='{
-                  ${data.sort.sort === 2 ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
-                  "filter": ${JSON.stringify(course.filter) || ''},
-                  "locations": ${JSON.stringify(course.locations) || ''},
-                  "sort": ${JSON.stringify(data.sort.sort) || ''}
-                }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
-                </ks-o-tile-list>
-              `
-              : /* html */`
-                <ks-m-tile namespace="tile-default-" data='{
-                  ${this.fillGeneralTileInfo(course)}
-                }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>
-              `
-          )
-          return acc = acc + tile
-        },
-        '<section>'
-      ) + '</section>'
+      setTimeout(() => {
+        if (!data.isNextPage) this.html = ''
+        if (!data) {
+          this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
+          return
+        }
+        this.html = data.courses.reduce(
+          (acc, course) => {
+            const tile = this.isEventSearch ? /* html */ `
+              <ks-m-event
+                data='{
+                  "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
+                  "sprachid": "${data.sprachid}"
+                }'
+              ></ks-m-event>
+            ` : (
+              (course.locations?.length > 1 || data.sort.sort === 2) && course.filter?.length
+                ? /* html */`
+                  <ks-o-tile-list data='{
+                    ${data.sort.sort === 2 ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
+                    "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+                    "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+                    "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
+                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
+                  </ks-o-tile-list>
+                `
+                : /* html */`
+                  <ks-m-tile namespace="tile-default-" data='{
+                    ${this.fillGeneralTileInfo(course)}
+                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>
+                `
+            )
+            return acc = acc + tile
+          },
+          '<section>'
+        ) + '</section>'
+      }, 0)
     }).catch(error => {
       console.error(error)
       this.html = ''
