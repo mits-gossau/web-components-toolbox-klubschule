@@ -268,6 +268,11 @@ export default class FilterCategories extends Shadow() {
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
       // TODO: updateNavLevelItem - Button Update only
+      const dialog = generatedNavLevelItem.navLevelItem.root.querySelector('dialog')
+      const dialogFooter = dialog.querySelector('.dialog-footer')
+      const buttonShowAllOffers = dialogFooter.querySelector('.button-show-all-offers')
+      console.log(buttonShowAllOffers)
+      // buttonShowAllOffers = `${response.total.toString()} ${response.total_label}`
     } else {
       this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)))
     }
