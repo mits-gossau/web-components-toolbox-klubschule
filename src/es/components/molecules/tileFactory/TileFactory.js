@@ -115,6 +115,9 @@ export default class TileFactory extends Shadow() {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
         }
+        this.isNearbySearch = data.sort.sort === 2
+        this.psize = data.psize
+        this.pnext = data.pnext
         this.html = data.courses.reduce(
           (acc, course) => {
             const tile = this.isEventSearch ? /* html */ `
@@ -125,20 +128,20 @@ export default class TileFactory extends Shadow() {
                 }'
               ></ks-m-event>
             ` : (
-              (course.locations?.length > 1 || data.sort.sort === 2) && course.filter?.length
+              (course.locations?.length > 1 || this.isNearbySearch) && course.filter?.length
                 ? /* html */`
                   <ks-o-tile-list data='{
-                    ${data.sort.sort === 2 ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
+                    ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
                     "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
-                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
+                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}>
                   </ks-o-tile-list>
                 `
                 : /* html */`
                   <ks-m-tile namespace="tile-default-" data='{
                     ${this.fillGeneralTileInfo(course)}
-                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile>
+                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
                 `
             )
             return acc = acc + tile
