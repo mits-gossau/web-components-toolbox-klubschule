@@ -28,6 +28,12 @@
 
 :host ks-m-sort {
     --sort-default-item-min-width: 10rem;
+    --sort-default-item-padding: 0;
+    --sort-default-item-a-padding: 1em 1.5em;
+    --sort-default-item-display: flex;
+    --sort-default-item-a-width: 100%;
+    --sort-default-a-margin: 0;
+
 }
 
 :host > section > a:hover {
