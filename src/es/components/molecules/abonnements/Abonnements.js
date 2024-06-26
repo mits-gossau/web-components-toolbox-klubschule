@@ -150,10 +150,10 @@ export default class Abonnements extends Shadow() {
       ? data.courses.reduce(
         (acc, abonnement) => acc + (
           abonnement.locations?.length ? /* html */ `
-            <ks-o-tile-list data='${JSON.stringify(abonnement).replace(/'/g, "\'").replace(/"/g, '\"')}'>
+            <ks-o-tile-list data='${JSON.stringify(abonnement).replace(/'/g, 'ʼ')}'>
             </ks-o-tile-list>
           ` : /* html */ `
-            <ks-m-tile namespace="tile-default-" data='${JSON.stringify(abonnement).replace(/'/g, "\'").replace(/"/g, '\"')}'>
+            <ks-m-tile namespace="tile-default-" data='${JSON.stringify(abonnement).replace(/'/g, 'ʼ')}'>
             </ks-m-tile>
           `
         ),
