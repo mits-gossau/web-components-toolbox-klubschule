@@ -112,32 +112,19 @@ export default class FilterCategories extends Shadow() {
         const checked = center.selected ? 'checked' : ''
         const visible = center.visible ? 'visible' : ''
         const id = `[filter-id=${region.urlpara}-${center.id}]`
-        let centerFilterCheckbox
-        if (centerFilters.find(centerFilter => (centerFilterCheckbox = centerFilter.querySelector(id)))) {
-          console.log(centerFilterCheckbox)
-          // @ts-ignore
+        const centerFilterCheckbox = centerFilters.map(centerFilter => centerFilter.querySelector(id)).find(el => el !== null)
+
+        if (centerFilterCheckbox) {
           centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
-          if (disabled) {
-            // @ts-ignore
-            centerFilterCheckbox.setAttribute('disabled', '')
-          } else {
-            // @ts-ignore
-            centerFilterCheckbox.removeAttribute('disabled')
-          }
-          if (checked) {
-            // @ts-ignore
-            centerFilterCheckbox.setAttribute('checked', '')
-          } else {
-            // @ts-ignore
-            centerFilterCheckbox.removeAttribute('checked')
-          }
-          if (visible) {
-            // @ts-ignore
-            centerFilterCheckbox.setAttribute('visible', '')
-          } else {
-            // @ts-ignore
-            centerFilterCheckbox.removeAttribute('visible')
-          }
+          const attributes = { disabled, checked, visible }
+          
+          Object.entries(attributes).forEach(([key, value]) => {
+            if (value) {
+              centerFilterCheckbox.setAttribute(key, '')
+            } else {
+              centerFilterCheckbox.removeAttribute(key)
+            }
+          })
         }
       })
     })
