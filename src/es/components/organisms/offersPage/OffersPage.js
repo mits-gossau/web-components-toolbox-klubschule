@@ -36,7 +36,7 @@ export default class OffersPage extends Shadow() {
           sort.innerHTML = /* html */ `
             <ks-m-sort namespace="sort-right-" with-facet>
               ${this.data?.sort?.items?.length ? /* html */ `
-                <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort).label}">
+                <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort)?.label || ''}">
                   ${listElements}
                 </ul>
               ` : ''}

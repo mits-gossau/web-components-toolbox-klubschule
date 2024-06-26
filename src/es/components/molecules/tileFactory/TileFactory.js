@@ -120,7 +120,7 @@ export default class TileFactory extends Shadow() {
             const tile = this.isEventSearch ? /* html */ `
               <ks-m-event
                 data='{
-                  "course": ${JSON.stringify(course)},
+                  "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
                   "sprachid": "${data.sprachid}"
                 }'
               ></ks-m-event>
@@ -129,9 +129,9 @@ export default class TileFactory extends Shadow() {
                 ? /* html */`
                   <ks-o-tile-list data='{
                     ${data.sort.sort === 2 ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
-                    "filter": ${JSON.stringify(course.filter) || ''},
-                    "locations": ${JSON.stringify(course.locations) || ''},
-                    "sort": ${JSON.stringify(data.sort.sort) || ''}
+                    "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+                    "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+                    "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
                   </ks-o-tile-list>
                 `
