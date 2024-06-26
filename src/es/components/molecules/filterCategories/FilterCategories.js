@@ -15,6 +15,9 @@ export default class FilterCategories extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.generatedNavLevelItemMap = new Map()
+    this.generateCenterFilterMap = new Map()
+    
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
     this.keepDialogOpenEventListener = event => {
@@ -98,6 +101,45 @@ export default class FilterCategories extends Shadow() {
     })
 
     return centerNav
+  }
+
+  updateCenterFilter (centerFilters, filterItem) {
+    filterItem.children.forEach(region => {
+      region.children.forEach(center => {
+        const count = center.count ? `(${center.count})` : ''
+        const disabled = center.disabled ? 'disabled' : ''
+        const checked = center.selected ? 'checked' : ''
+        const visible = center.visible ? 'visible' : ''
+        const id = `[filter-id=${region.urlpara}-${center.id}]`
+        let centerFilterCheckbox
+        if (centerFilters.find(centerFilter => (centerFilterCheckbox = centerFilter.querySelector(id)))) {
+          console.log(centerFilterCheckbox)
+          // @ts-ignore
+          centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
+          if (disabled) {
+            // @ts-ignore
+            centerFilterCheckbox.setAttribute('disabled', '')
+          } else {
+            // @ts-ignore
+            centerFilterCheckbox.removeAttribute('disabled')
+          }
+          if (checked) {
+            // @ts-ignore
+            centerFilterCheckbox.setAttribute('checked', '')
+          } else {
+            // @ts-ignore
+            centerFilterCheckbox.removeAttribute('checked')
+          }
+          if (visible) {
+            // @ts-ignore
+            centerFilterCheckbox.setAttribute('visible', '')
+          } else {
+            // @ts-ignore
+            centerFilterCheckbox.removeAttribute('visible')
+          }
+        }
+      })
+    })
   }
 
   generateFilterElement (response, child, parentItem, firstFilterItemId) {
@@ -214,24 +256,37 @@ export default class FilterCategories extends Shadow() {
     return {
       navLevelItem: div.children[0],
       // @ts-ignore
-      subLevel: div.querySelector('m-dialog')?.root.querySelector('.sub-level')
+      subLevel: div.querySelector('m-dialog')?.root.querySelector('.sub-level'),
+      id: filterItem.id
     }
   }
 
-  generateFilters (response, filterItem, parentItem = this.mainNav, firstFilterItemId = null) {
+  generateFilters (response, filterItem, parentItem = this.mainNav, firstFilterItemId = null, level = 0) {
     if (!filterItem.visible) return
     if (firstFilterItemId === null) firstFilterItemId = filterItem.id
     
-    const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
-    parentItem.appendChild(generatedNavLevelItem.navLevelItem)
-
+    let generatedNavLevelItem
+    if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
+      // TODO: updateNavLevelItem - Button Update only
+    } else {
+      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)))
+    }
+    if (!Array.from(parentItem.childNodes).includes(generatedNavLevelItem.navLevelItem)) parentItem.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+      
       if (filterItem.id === '13') { // center filters
-        Array.from(this.generateCenterFilter(response, filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+        const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, Array.from(this.generateCenterFilter(response, filterItem))).get(level + '_' + filterItem.id)
+        if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedCenterFilters[0])) {
+          this.updateCenterFilter(generatedCenterFilters, filterItem)
+        } else {
+          generatedCenterFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+        }
       } else {
+        // TODO: for the moment clear has to be removed
+        generatedNavLevelItem.subLevel.innerHTML = ''
         filterItem.children.forEach(child => {
           if (child.children && child.children.length > 0) {
-            this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId) // recursive call
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId, level++) // recursive call
           } else {
             this.generateFilterElement(response, child, filterItem, firstFilterItemId).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
           }
@@ -258,8 +313,6 @@ export default class FilterCategories extends Shadow() {
     ]).then(() => {
       fetch.then(response => {
         setTimeout(() => {
-          this.html = ''
-  
           if (response.filters.length === 0) return
   
           response.filters.forEach((filterItem) => {
