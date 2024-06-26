@@ -45,6 +45,9 @@ export default class Contact extends Shadow() {
       :host {
         --a-text-decoration-hover: underline;
         --icon-mdx-ks-color: var(--a-color);
+
+        display: block;
+        margin-bottom: var(--mdx-sys-spacing-fix-m);
       }
       :host a:hover a-icon-mdx {
         --icon-mdx-ks-color: var(--a-color-hover);
@@ -53,6 +56,7 @@ export default class Contact extends Shadow() {
         --a-text-decoration: none !important;
         text-decoration: var(--a-text-decoration) !important;
         text-decoration-line: var(--a-text-decoration) !important;
+        margin-bottom: 0 !important;
       }
       :host .contact-row {
         display: flex !important;
