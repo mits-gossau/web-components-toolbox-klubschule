@@ -113,7 +113,12 @@ export default class DialogStatusButton extends Shadow() {
         width: 100%;
       }
       @media only screen and (max-width: _max-width_) {
-        :host {}
+        :host {
+          .only-close-mobile {
+            width: 100%;
+            text-align: center;
+          }
+        }
       }
     `
     return this.fetchTemplate()
@@ -209,7 +214,7 @@ export default class DialogStatusButton extends Shadow() {
 
   renderOnlyCloseButton () {
     this.html = ''
-    this.html = this.closeButton
+    this.html = `<div class="only-close-mobile">${this.closeButton}</div>`
   }
 
   get closeButton () {

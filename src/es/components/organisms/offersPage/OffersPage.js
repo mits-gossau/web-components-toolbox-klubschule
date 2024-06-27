@@ -529,7 +529,7 @@ export default class OffersPage extends Shadow() {
                   </div>
                 </dialog>
               </m-dialog>
-              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              <ks-a-spacing type="s-flex"></ks-a-spacing>
               <o-grid namespace="grid-432-auto-colums-auto-rows-">
                 <section>
                   <style>
@@ -547,7 +547,7 @@ export default class OffersPage extends Shadow() {
                   <ks-m-filter-select ${this.hasAttribute('with-filter-search') ? 'with-search' : ''}></ks-m-filter-select>
                 </section>
               </o-grid>
-              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              <ks-a-spacing type="s-flex"></ks-a-spacing>
               <section id="sort-options"></section>
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
@@ -564,23 +564,31 @@ export default class OffersPage extends Shadow() {
                 ${this.isEasyPortal
                   ? /* html */`
                   <div>
-                    <ks-m-badge type="primary" icon-name="Key"></ks-m-badge>
+                    <div class="badge-icon-only">
+                      <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Key" size="1em"></a-icon-mdx>
+                    </div>
                     <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
                   </div> 
                   `
                   : ''
                 }
                 <div>
-                  <ks-m-badge type="primary" icon-name="Abo"></ks-m-badge>
-                    <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
+                  <div class="badge-icon-only">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
+                  </div>
+                  <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
                 </div>
                 <div>
-                  <ks-m-badge type="primary" icon-name="AboPlus"></ks-m-badge>
-                  <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>
+                  <div class="badge-icon-only">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
+                  </div>
+                  <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
                 </div>
                 <div>
-                  <ks-m-badge type="primary" icon-name="Percent"></ks-m-badge>
-                  <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
+                  <div class="badge-icon-only">
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Percent" size="1em"></a-icon-mdx>
+                  </div>
+                  <span>${this.getTranslation('Badge.Legend.PercentPlaceholder')}</span>
                 </div>
               </ks-m-badge-legend>
           </ks-o-body-section>
