@@ -17,6 +17,7 @@ export default class FilterCategories extends Shadow() {
 
     this.generatedNavLevelItemMap = new Map()
     this.generateCenterFilterMap = new Map()
+    this.generateFilterMap = new Map()
     this.total = 0
     
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
@@ -111,8 +112,8 @@ export default class FilterCategories extends Shadow() {
         const disabled = center.disabled ? 'disabled' : ''
         const checked = center.selected ? 'checked' : ''
         const visible = center.visible ? 'visible' : ''
-        const id = `[filter-id=${region.urlpara}-${center.id}]`
-        const centerFilterCheckbox = centerFilters.map(centerFilter => centerFilter.querySelector(id)).find(el => el !== null)
+        const id = `[filter-id="${region.urlpara}-${center.id}"]`
+        const centerFilterCheckbox = centerFilters.map(centerFilter => centerFilter.querySelector(id) || (centerFilter.matches(id) && centerFilter)).find(el => el !== null)
 
         if (centerFilterCheckbox) {
           centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
@@ -162,8 +163,30 @@ export default class FilterCategories extends Shadow() {
     return subNav
   }
 
+  updateFilter (generatedFilters, child, parentItem) {
+    const count = child.count ? `(${child.count})` : ''
+    const disabled = child.disabled ? 'disabled' : ''
+    const checked = child.selected ? 'checked' : ''
+    const visible = child.visible ? 'visible' : ''
+    const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
+    const filterCheckbox = generatedFilters.map(filter => filter.querySelector(id) || (filter.matches(id) && filter)).find(el => el !== null)
+
+    if (filterCheckbox) {
+      filterCheckbox.setAttribute('label', `${child.label} ${count}`)
+      const attributes = { disabled, checked, visible }
+      
+      Object.entries(attributes).forEach(([key, value]) => {
+        if (value) {
+          filterCheckbox.setAttribute(key, '')
+        } else {
+          filterCheckbox.removeAttribute(key)
+        }
+      })
+    }
+  }
+
   getSelectedFilters (filterItem) {
-    console.log(filterItem)
+    // console.log(filterItem)
     if (!filterItem.children || filterItem.children.length === 0) return
     let selectedFilters = []
 
@@ -249,7 +272,7 @@ export default class FilterCategories extends Shadow() {
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
       // update total button
       generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
-      // update additional text with selected filter
+      // update additional text with selected filter(s)
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
     } else {
       this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)))
@@ -257,20 +280,23 @@ export default class FilterCategories extends Shadow() {
     if (!Array.from(parentItem.childNodes).includes(generatedNavLevelItem.navLevelItem)) parentItem.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
       if (filterItem.id === '13') { // center filters
-        const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, Array.from(this.generateCenterFilter(response, filterItem))).get(level + '_' + filterItem.id)
+        const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, this.generateCenterFilter(response, filterItem)).get(level + '_' + filterItem.id)
         if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedCenterFilters[0])) {
           this.updateCenterFilter(generatedCenterFilters, filterItem)
         } else {
           generatedCenterFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
         }
       } else {
-        // TODO: for the moment clear has to be removed
-        generatedNavLevelItem.subLevel.innerHTML = ''
-        filterItem.children.forEach(child => {
+        filterItem.children.forEach((child, i) => {
           if (child.children && child.children.length > 0) {
             this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId, level++) // recursive call
           } else {
-            this.generateFilterElement(response, child, filterItem, firstFilterItemId).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+            const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
+            if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedFilters[i])) {
+              this.updateFilter(generatedFilters, child, filterItem)
+            } else {
+              generatedFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+            }
           }
         })
       }

@@ -60,10 +60,13 @@ export default class WithFacet extends Shadow() {
     // recursion depth counter
     this.filtersInURLRecursionDepth = 0
 
+    this.abortController = null
     this.requestWithFacetListener = (event) => {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
-
+      if (this.abortController) this.abortController.abort()
+      this.abortController = new AbortController()
+      
       if (event?.detail?.wrapper?.filterItem) this.updateFilterAndParamsWithSelectedFilter(event)
 
       let request
@@ -167,7 +170,8 @@ export default class WithFacet extends Shadow() {
             'Accept-Language': LanguageEnum[this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd']
           },
           mode: 'cors',
-          body: request
+          body: request,
+          signal: this.abortController.signal
         }
       }
 
@@ -327,6 +331,9 @@ export default class WithFacet extends Shadow() {
     let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
     if (key) filteredURLKeys = [key] // set first filter key
     const filterItems = []
+
+    // TODO: @Alex get center filter from url
+    // console.log(filteredURLKeys, this.filterKeys, this.lastResponse.filters)
 
     // if there are filters in the url
     if (this.filterKeys.length !== 0 && this.lastResponse.filters) {

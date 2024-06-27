@@ -15,6 +15,9 @@ export default class filterSelect extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.generatedNavLevelItemMap = new Map()
+    this.generateCenterFilterMap = new Map()
+
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
   }
 
@@ -96,6 +99,42 @@ export default class filterSelect extends Shadow() {
     return lastSelectedChild
   }
 
+  generateFilterButton (response, filterItem) {
+    const selectedFilters = []
+    const filter = response.filters.find(filter => filter.id === filterItem.id)
+
+    // console.log(filter.children)
+
+    filter.children.forEach(child => {
+      // console.log("🚀 ~ child", child.label, child.selected)
+      if (child.selected) {
+        selectedFilters.push(child.label)
+      }
+    })
+
+    // console.log("🚀 selectedFilters", selectedFilters)
+    
+    const doubleButton = /* html */`
+      <m-double-button namespace="double-button-default-" width="100%">
+        <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="dialog-open-first-level,dialog-open-${filterItem.id}" click-no-toggle-active>
+          <span part="label1">${selectedFilters.join(', ')}</span>
+          <span part="label2" dynamic></span>
+        </ks-a-button>
+        <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="${filterItem.urlpara}" filter-value="${selectedFilters.join(', ')}">
+          <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+        </ks-a-button>
+      </m-double-button>
+    `
+
+    if (selectedFilters.length > 0) {
+      this.html = doubleButton
+    }
+  }
+
+  generateFilterButtons (response, filterItem, parentItem = this.filterSelect, firstFilterItemId = null, level = 0) {
+
+  }
+
   renderHTML (fetch) {
     this.fetchModules([{
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
@@ -127,24 +166,43 @@ export default class filterSelect extends Shadow() {
     }]).then(() => {
       Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
         const filterData = response?.filters
+        // console.log("🚀 ~ filterSelect ~ Promise.all ~ filterData:", filterData)
         
         this.html = ''
+        const level = 0
 
         // loop through the filter data and generate the filter select
         filterData.forEach((filterItem) => {
           if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
             let childItems = ''
-            if (filterItem.typ === 'multi') {
-              const selectedChildren = filterItem.children.filter(child => child.selected)
-              if (selectedChildren.length > 0) {
-                selectedChildren.forEach(child => {
-                  childItems += `${child.label}, `
-                })
-              }
+
+            let generatedNavLevelItem
+            if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
+              // update selected filter(s)
             } else {
-              const lastSelectedChild = this.getLastSelectedChild(filterItem)
-              if (lastSelectedChild) childItems = `${lastSelectedChild.label}, `
+              this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateFilterButton(response, filterItem)))
             }
+
+            // if (filterItem.id === '13') {
+            //   const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, Array.from(this.generateCenterFilter(response, filterItem))).get(level + '_' + filterItem.id)
+            //   if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedCenterFilters[0])) {
+            //     this.updateCenterFilter(generatedCenterFilters, filterItem)
+            //   } else {
+            //     generatedCenterFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+            //   }
+            // }
+
+            // if (filterItem.typ === 'multi') {
+            //   const selectedChildren = filterItem.children.filter(child => child.selected)
+            //   if (selectedChildren.length > 0) {
+            //     selectedChildren.forEach(child => {
+            //       childItems += `${child.label}, `
+            //     })
+            //   }
+            // } else {
+            //   const lastSelectedChild = this.getLastSelectedChild(filterItem)
+            //   if (lastSelectedChild) childItems = `${lastSelectedChild.label}, `
+            // }
 
             const doubleButton = /* html */`
               <m-double-button namespace="double-button-default-" width="100%">
@@ -187,6 +245,8 @@ export default class filterSelect extends Shadow() {
 
     const filterSelect = document.createElement('div')
     filterSelect.setAttribute('class', 'filter-select')
+
+    this.html = filterSelect
 
     return filterSelect
   }
