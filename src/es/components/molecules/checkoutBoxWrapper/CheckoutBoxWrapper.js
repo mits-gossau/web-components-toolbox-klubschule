@@ -66,7 +66,6 @@ export default class CheckoutBoxWrapper extends Shadow() {
       :host > div,
       :host ks-m-info-list > * {
         background-color: var(--background-color);
-        margin-bottom: var(--mdx-sys-spacing-fix-m);
         padding: var(--mdx-sys-spacing-fix-m);
         width: 100%;
       }
