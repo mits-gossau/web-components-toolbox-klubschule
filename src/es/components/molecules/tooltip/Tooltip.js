@@ -11,11 +11,25 @@ export default class Tooltip extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.clickEventListener = event => {
-      this.tooltip.classList.toggle('tooltip-open')
-      if (this.tooltip.classList.contains('tooltip-open')) {
-        this.classList.add('open')
+      const target = event.composedPath()?.[0] /* like event target but compatible with shadow dom */
+
+      if (!this.tooltip.contains(target)) {
+        this.classList.toggle('open')
+      }
+
+      if (this.classList.contains('open')) {
+        setTimeout(() => {
+          document.body.addEventListener('click', this.clickOutsideListener)
+        }, 50)
       } else {
+        document.body.removeEventListener('click', this.clickOutsideListener)
+      }
+    }
+    this.clickOutsideListener = event => {
+      const target = event.composedPath()?.[0]
+      if (!this.root.contains(target) && !this.icon.root.contains(target)) {
         this.classList.remove('open')
+        document.body.removeEventListener('click', this.clickOutsideListener)
       }
     }
   }
@@ -34,6 +48,7 @@ export default class Tooltip extends Shadow() {
 
   disconnectedCallback () {
     this.root.removeEventListener('click', this.clickEventListener)
+    document.body.removeEventListener('click', this.clickOutsideListener)
   }
 
   /**
@@ -102,7 +117,7 @@ export default class Tooltip extends Shadow() {
         bottom: var(--before-bottom);
       }
 
-      :host .tooltip-open {
+      :host(.open) .tooltip {
         display: block;
       }
 
@@ -196,5 +211,9 @@ export default class Tooltip extends Shadow() {
 
   get hasTooltip () {
     return this.root.querySelector('.tooltip')
+  }
+
+  get icon () {
+    return this.root.querySelector('a-icon-mdx')
   }
 }
