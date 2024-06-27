@@ -237,17 +237,36 @@ export default class FilterCategories extends Shadow() {
     return selectedFilters
   }
 
-  generateNavLevelItem (response, filterItem) {
+  generateNavLevelItem (response, filterItem, parentItem) {
     const filterIdPrefix = 'filter-'
     const shouldRemainOpen = filterIdPrefix+filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
     this.total = response.total
     const selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ') || ''
-
-    console.log(filterItem.checked)
+    const checked = filterItem.selected ? 'checked' : ''
+    const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
+    const filterId = parentItem.urlpara ? `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"` : ''
     
     // TODO: dispatch event on certain "sparten" when clicked analog: <ks-m-nav-level-item namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}">
     // TODO: <span class="additional">${selectedFilters}</span> on first level ("sparten")
+
+    if (parentItem.urlpara) {
+      this.dispatchEvent(new CustomEvent(this.getAttribute('request-event-name'), {
+        detail: {
+          wrapper: {
+            filterItem: filterItem
+          },
+          target: {
+            checked: namespace !== 'nav-level-item-active-',
+            label: filterItem.label,
+            filterId: filterId
+          }
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }
 
     div.innerHTML = /* html */`
       <m-dialog id="${filterIdPrefix+filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
@@ -272,7 +291,7 @@ export default class FilterCategories extends Shadow() {
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
           <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `${response.total.toString()}` : ''} ${response.total_label}</a-button>
         </div>
-        <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal" filter-key="${filterItem.urlpara}">
+        <ks-m-nav-level-item namespace="${namespace}" request-event-name="request-with-facet" id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
           <div class="wrap">
             <span class="text">${filterItem.label} ${filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : ''}</span>
             <span class="additional">${selectedFilters}</span>
@@ -301,7 +320,7 @@ export default class FilterCategories extends Shadow() {
       // update additional text with selected filter(s)
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
     } else {
-      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)))
+      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem, parentItem)))
     }
     if (!Array.from(parentItem.childNodes).includes(generatedNavLevelItem.navLevelItem)) parentItem.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
