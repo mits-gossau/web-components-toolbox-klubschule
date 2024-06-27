@@ -101,6 +101,10 @@ export default class Sort extends Shadow() {
         background-color: var(--hover-color);
       }
 
+      :host .m-sort__item.m-sort__item-active {
+        padding: var(--active-item-padding, 1em 1.5em);
+      }
+
       :host .m-sort__item-active,
       :host .m-sort__item-active * {
         font-weight: 500;
