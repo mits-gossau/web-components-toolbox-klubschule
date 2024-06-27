@@ -326,6 +326,37 @@ export default class WithFacet extends Shadow() {
     }
   }
 
+  findFilterItemByUrlpara(filters, key) {
+    for (let filterItem of filters) {
+      if (filterItem.urlpara === key) {
+        return filterItem
+      }
+      if (filterItem.children) {
+        const child = this.findFilterItemByUrlpara(filterItem.children, key)
+        if (child) {
+          return child
+        }
+      }
+    }
+
+    return null
+  }
+
+  setSelectedByUrlpara(filters, keys) {
+    for (let filterItem of filters) {
+      if (keys.includes(filterItem.urlpara)) {
+        if (!filterItem.selected) {
+          filterItem.selected = true
+        }
+        keys = keys.filter(key => key !== filterItem.urlpara) // Remove the matched key
+      }
+      if (filterItem.children) {
+        this.setSelectedByUrlpara(filterItem.children, keys)
+      }
+    }
+  }
+
+
   updateFilterFromURLParams (key = null, filters = []) {
     this.filters = filters
     let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
@@ -338,39 +369,41 @@ export default class WithFacet extends Shadow() {
 
     // if there are filters in the url
     if (this.filterKeys.length !== 0 && this.lastResponse.filters) {
-      this.filterKeys.forEach(key => {
-        let filterItem = this.lastResponse.filters.find(filterItem => filterItem.urlpara === key) // checkbox filters
+      console.log('🚀', this.filterKeys, this.lastResponse.filters)
+      // this.filterKeys.forEach(key => {
+        // let filterItem = this.findFilterItemByUrlpara(this.lastResponse.filters, key)
+        // console.log(filterItem)
 
-        if (filterItem) {
-          filterItems.push(filterItem)
-        } else {
-          // remove filter key if it is not in the response
-          this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
-          filteredURLKeys = filteredURLKeys.filter(urlKey => urlKey !== key)
-        }
-      })
+        let filterItem = this.setSelectedByUrlpara(this.lastResponse.filters, this.filterKeys)
+        console.log('🚀 ~ filterItem', filterItem)
 
-      // select children based on url params
-      filterItems.forEach(item => {
-        if (filteredURLKeys.includes(item.urlpara)) {
-          item.children.forEach(child => {
-            if (this.params.get(item.urlpara)?.split('-').includes(child.urlpara)) {
-              child.selected = true
-            } else {
-              child.selected = false
-            }
-          })
-        }
-      })
 
-      // construct filter items
-      if (filterItems.length > 0) {
-        filterItems.forEach(item => {
-          const filter = this.constructFilterItem(item)
-          if (filter) this.filters.push(JSON.stringify(filter))
-            // console.log('🚀 ~ filter', filter)
-        })
-      }
+        // filterItem.children.forEach(child => {
+      //     if (this.params.get(filterItem.urlpara)?.split('-').includes(child.urlpara || child.id)) {
+      //       child.selected = true
+      //     } else {
+      //       child.selected = false
+      //     }
+      //   })
+
+      //   if (filterItem) {
+      //     filterItems.push(filterItem)
+      //   } else {
+      //     // remove filter key if it is not in the response
+      //     this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
+      //     filteredURLKeys = filteredURLKeys.filter(urlKey => urlKey !== key)
+      //   }
+      // })
+
+      // // construct filter items
+      // if (filterItems.length > 0) {
+      //   filterItems.forEach(item => {
+      //     const filter = this.constructFilterItem(item)
+      //     if (filter) this.filters.push(JSON.stringify(filter))
+      //       console.log('🚀 ~ filter', filter)
+      //   })
+      // }
+      // })
     }
   }
 
@@ -497,7 +530,7 @@ export default class WithFacet extends Shadow() {
             : event.detail.target.checked
           : (child.selected || false)
       
-        if (filterItem.urlpara === filterKey || filterItem.urlpara !== filterKey) {
+        if (filterItem.urlpara !== filterKey || filterItem.id !== filterValue) {
           this.toggleFilterItem(child, filterKey, filterValue, event) // recursive call
         }
       })
@@ -514,6 +547,7 @@ export default class WithFacet extends Shadow() {
 
   constructFilterItem (event) {
     let filterItem = event?.detail?.wrapper?.filterItem
+    if (filterItem) console.log('🚀 ~ constructFilterItem ~ filterItem', filterItem)
     if (!event) return
     const filterId = (typeof event.detail?.target?.getAttribute === 'function' && event.detail?.target?.getAttribute('filter-id')) || event.detail?.target?.filterId
     // if event is not an Event object, it is a filterItem

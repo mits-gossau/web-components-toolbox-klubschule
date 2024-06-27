@@ -116,6 +116,7 @@ export default class FilterCategories extends Shadow() {
         const centerFilterCheckbox = centerFilters.map(centerFilter => centerFilter.querySelector(id) || (centerFilter.matches(id) && centerFilter)).find(el => el !== null)
 
         if (centerFilterCheckbox) {
+          console.log(centerFilterCheckbox)
           // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
           centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
           const attributes = { disabled, checked, visible }
@@ -171,18 +172,22 @@ export default class FilterCategories extends Shadow() {
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
-    const filterCheckbox = generatedFilters.map(filter => filter.querySelector(id) || (filter.matches(id) && filter)).find(el => el !== null)
+    const filterItem = generatedFilters.map(filter => filter.querySelector(id) || (filter.matches(id) && filter)).find(el => el !== null)
 
-    if (filterCheckbox) {
+    if (filterItem) {
       // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
-      filterCheckbox.setAttribute('label', `${child.label} ${count}`)
+      if (filterItem.tagName === 'KS-M-NAV-LEVEL-ITEM') {
+        // console.log("🚀 updateFilter ~ filterItem:", filterItem, disabled, checked, visible)
+      }
+
+      filterItem.setAttribute('label', `${child.label} ${count}`)
       const attributes = { disabled, checked, visible }
       
       Object.entries(attributes).forEach(([key, value]) => {
         if (value) {
-          filterCheckbox.setAttribute(key, '')
+          filterItem.setAttribute(key, '')
         } else {
-          filterCheckbox.removeAttribute(key)
+          filterItem.removeAttribute(key)
         }
       })
     }
@@ -252,7 +257,8 @@ export default class FilterCategories extends Shadow() {
     // TODO: <span class="additional">${selectedFilters}</span> on first level ("sparten")
 
     navLevelItem.innerHTML = /* html */`
-    <ks-m-nav-level-item namespace="${namespace}" request-event-name="request-with-facet" id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
+    <!--<ks-m-nav-level-item namespace="${namespace}" request-event-name="request-with-facet" id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">-->
+    <ks-m-nav-level-item namespace="${namespace}" id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
       <div class="wrap">
         <span class="text">${filterItem.label} ${filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : ''}</span>
         <span class="additional">${selectedFilters}</span>
