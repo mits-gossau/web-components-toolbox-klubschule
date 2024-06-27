@@ -166,6 +166,7 @@ export default class Tile extends Shadow() {
       :host .m-tile__icons {
           display: flex;
           align-items: center;
+          gap: 0.5em;;
       }
       
       :host .m-tile__icon-box {
@@ -176,10 +177,6 @@ export default class Tile extends Shadow() {
           display: flex;
           justify-content: center;
           align-items: center;
-      }
-      
-      :host .m-tile__icon-box + .m-tile__icon-box {
-          margin-left: 0.5em;
       }
       
       :host .m-tile__icon-box a-icon-mdx {
@@ -310,11 +307,11 @@ export default class Tile extends Shadow() {
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
-                <div class="m-tile__icon-box">
-                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.text}">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
-                  </ks-m-tooltip>
-                </div>
+                <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text}">
+                  <div class="m-tile__icon-box">
+                      <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>  
+                  </div>
+                </ks-m-tooltip>
               `, '')}           
             </div>
             <span class="m-tile__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>

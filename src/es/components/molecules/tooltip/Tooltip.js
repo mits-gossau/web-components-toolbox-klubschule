@@ -17,6 +17,10 @@ export default class Tooltip extends Shadow() {
         this.classList.toggle('open')
       }
 
+      if (this.closeBtn.contains(target)) {
+        this.classList.remove('open')
+      }
+
       if (this.classList.contains('open')) {
         setTimeout(() => {
           document.body.addEventListener('click', this.clickOutsideListener)
@@ -27,7 +31,7 @@ export default class Tooltip extends Shadow() {
     }
     this.clickOutsideListener = event => {
       const target = event.composedPath()?.[0]
-      if (!this.root.contains(target) && !this.icon.root.contains(target)) {
+      if (!this.root.contains(target)) {
         this.classList.remove('open')
         document.body.removeEventListener('click', this.clickOutsideListener)
       }
@@ -97,6 +101,7 @@ export default class Tooltip extends Shadow() {
         left: var(--left);
         right: var(--right);
         bottom: var(--bottom);
+        cursor: default;
       }
 
       :host .tooltip::before {
@@ -118,13 +123,19 @@ export default class Tooltip extends Shadow() {
       }
 
       :host(.open) .tooltip {
-        display: block;
+        display: flex;
+        flex-direction: column;
       }
 
       :host .close {
         display: flex;
         justify-content: flex-end;
         margin-bottom: 1.5em;
+        margin-left: auto;
+      }
+
+      :host .close a-icon-mdx {
+        color: var(--color);
       }
 
       :host .text a {
@@ -213,7 +224,7 @@ export default class Tooltip extends Shadow() {
     return this.root.querySelector('.tooltip')
   }
 
-  get icon () {
-    return this.root.querySelector('a-icon-mdx')
+  get closeBtn () {
+    return this.root.querySelector('.close')
   }
 }
