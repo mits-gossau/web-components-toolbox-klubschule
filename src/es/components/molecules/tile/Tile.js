@@ -307,7 +307,7 @@ export default class Tile extends Shadow() {
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
-                <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text}">
+                <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
                   <div class="m-tile__icon-box">
                       <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>  
                   </div>

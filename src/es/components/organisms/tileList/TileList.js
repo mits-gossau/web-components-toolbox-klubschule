@@ -330,11 +330,11 @@ export default class TileList extends Shadow() {
               ${this.isNearbySearch ? '' : /* html */ `
                 <div class="o-tile-list__icons">
                   ${data.icons.reduce((acc, icon) => acc + /* html */`
-                    <div class="o-tile-list__icon-box">
-                      <ks-m-tooltip namespace="tooltip-right-" text="${icon.text.replaceAll('"', "'")}">
-                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
-                      </ks-m-tooltip>
-                    </div>
+                    <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
+                      <div class="o-tile-list__icon-box">
+                          <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
+                      </div>
+                    </ks-m-tooltip>
                   `, '')}           
                 </div>
               `}
