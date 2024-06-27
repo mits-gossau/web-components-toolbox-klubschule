@@ -116,6 +116,7 @@ export default class FilterCategories extends Shadow() {
         const centerFilterCheckbox = centerFilters.map(centerFilter => centerFilter.querySelector(id) || (centerFilter.matches(id) && centerFilter)).find(el => el !== null)
 
         if (centerFilterCheckbox) {
+          // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
           centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
           const attributes = { disabled, checked, visible }
           
@@ -164,6 +165,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   updateFilter (generatedFilters, child, parentItem) {
+    // console.log(generatedFilters, child, parentItem)
     const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
@@ -172,6 +174,7 @@ export default class FilterCategories extends Shadow() {
     const filterCheckbox = generatedFilters.map(filter => filter.querySelector(id) || (filter.matches(id) && filter)).find(el => el !== null)
 
     if (filterCheckbox) {
+      // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
       filterCheckbox.setAttribute('label', `${child.label} ${count}`)
       const attributes = { disabled, checked, visible }
       
@@ -186,21 +189,11 @@ export default class FilterCategories extends Shadow() {
   }
 
   getSelectedFilters (filterItem) {
-    // console.log(filterItem)
     if (!filterItem.children || filterItem.children.length === 0) return
+
     let selectedFilters = []
 
-    if (filterItem.typ === 'multi') { // get selected checkbox filters
-      filterItem.children.forEach(child => {
-        if (child.selected) {
-          selectedFilters.push(child)
-          const result = this.getSelectedFilters(child) // recursive call
-          if (result) selectedFilters = selectedFilters.concat(result)
-        }
-      })
-    }
-
-    if (filterItem.id === '13') { // get selected center
+    if (filterItem.typ === 'group') { // get selected centers
       selectedFilters = []
       filterItem.children.forEach(region => {
         region.children.forEach(center => {
@@ -212,7 +205,35 @@ export default class FilterCategories extends Shadow() {
         })
       })
     }
-    
+  
+    if (filterItem.typ === 'multi') { // get selected checkbox filters
+      filterItem.children.forEach(child => {
+        if (child.selected) {
+          selectedFilters.push(child)
+          const result = this.getSelectedFilters(child) // recursive call
+          if (result) selectedFilters = selectedFilters.concat(result)
+        }
+      })
+    }
+
+    if (filterItem.typ === 'tree') { // get sparte filters
+      filterItem.children.forEach(child => {
+        this.getSelectedFilters(child) // recursive call
+      })
+    }
+
+    if (filterItem.typ === 'value') { // get selected sparte filters
+      filterItem.children.forEach(child => {
+        if (child.selected) {
+          selectedFilters.push(child)
+          const result = this.getSelectedFilters(child) // recursive call
+          if (result) selectedFilters = selectedFilters.concat(result)
+        } else {
+          this.getSelectedFilters(child) // recursive call
+        }
+      })
+    }
+
     return selectedFilters
   }
 
@@ -222,6 +243,11 @@ export default class FilterCategories extends Shadow() {
     const div = document.createElement('div')
     this.total = response.total
     const selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ') || ''
+
+    console.log(filterItem.checked)
+    
+    // TODO: dispatch event on certain "sparten" when clicked analog: <ks-m-nav-level-item namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}">
+    // TODO: <span class="additional">${selectedFilters}</span> on first level ("sparten")
 
     div.innerHTML = /* html */`
       <m-dialog id="${filterIdPrefix+filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
@@ -248,7 +274,7 @@ export default class FilterCategories extends Shadow() {
         </div>
         <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal" filter-key="${filterItem.urlpara}">
           <div class="wrap">
-            <span class="text">${filterItem.label}</span>
+            <span class="text">${filterItem.label} ${filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : ''}</span>
             <span class="additional">${selectedFilters}</span>
           </div>
           <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>

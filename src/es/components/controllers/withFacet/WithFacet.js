@@ -333,12 +333,14 @@ export default class WithFacet extends Shadow() {
     const filterItems = []
 
     // TODO: @Alex get center filter from url
-    // console.log(filteredURLKeys, this.filterKeys, this.lastResponse.filters)
+    // console.log(filteredURLKeys, this.filterKeys, this.lastResponse.filters, this.filters)
+    // if (this.lastResponse.filters) this.filters = this.lastResponse.filters
 
     // if there are filters in the url
     if (this.filterKeys.length !== 0 && this.lastResponse.filters) {
       this.filterKeys.forEach(key => {
-        const filterItem = this.lastResponse.filters.find(filterItem => filterItem.urlpara === key)
+        let filterItem = this.lastResponse.filters.find(filterItem => filterItem.urlpara === key) // checkbox filters
+
         if (filterItem) {
           filterItems.push(filterItem)
         } else {
@@ -366,6 +368,7 @@ export default class WithFacet extends Shadow() {
         filterItems.forEach(item => {
           const filter = this.constructFilterItem(item)
           if (filter) this.filters.push(JSON.stringify(filter))
+            // console.log('🚀 ~ filter', filter)
         })
       }
     }
