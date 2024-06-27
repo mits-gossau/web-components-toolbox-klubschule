@@ -18,7 +18,6 @@
 }} fetchAutoCompleteEventDetail */
 
 /* global fetch */
-/* global AbortController */
 /* global CustomEvent */
 
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
@@ -39,7 +38,6 @@ export default class AutoCompleteLocation extends Shadow() {
       mode: 'false',
       ...options
     }, ...args)
-    this.abortController = null
     this.RESOLVE_MSG = 'LOADED'
   }
 
@@ -203,8 +201,6 @@ export default class AutoCompleteLocation extends Shadow() {
       )
     }
     if (this.hasAttribute('mock')) return this.dispatchMock()
-    if (this.abortController) this.abortController.abort()
-    this.abortController = new AbortController()
 
     if (this.service) {
       this.service.getPlacePredictions({ input: token, componentRestrictions: { country: 'ch' }, types: ['geocode'] }, async (predictions) => {
