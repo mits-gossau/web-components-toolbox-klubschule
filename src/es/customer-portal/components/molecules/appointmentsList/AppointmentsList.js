@@ -232,7 +232,17 @@ export default class AppointmentsList extends Shadow() {
       select.appendChild(option)
     })
     const html = /* html */ `
+      <style>
+        .select-label {
+          color: var(--mdx-comp-select-label-color-default);
+          font: var(--mdx-comp-select-font-label);
+        }
+      </style>
       <div>
+        <div class="select-label">
+          <!-- trans value = zeige Termine mit dem Abo -->
+          <a-translation data-trans-key="CP.cpShowAppointmentsFromSubscription"></a-translation>
+        </div>
         <ks-m-select>
           <div>
             ${select.outerHTML}

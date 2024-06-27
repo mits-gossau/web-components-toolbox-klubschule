@@ -380,7 +380,7 @@ export default class OffersPage extends Shadow() {
                       search
                       autofocus 
                       submit-search="request-auto-complete-location" 
-                      any-key-listener 
+                      any-key-listener="500" 
                       type="search"
                       delete-listener
                       answer-event-name="location-change"
@@ -540,7 +540,7 @@ export default class OffersPage extends Shadow() {
                     }
                   </style>
                   <!-- button to filter all -->
-                  <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
+                  <ks-a-button small namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.getTranslation('CourseList.FilterAllPlaceholder')}
                   </ks-a-button>
                   <!-- buttons to filter -->
