@@ -162,7 +162,13 @@ export default class AppointmentsFilter extends Shadow() {
     const startDate = this.formatDate(dateListClone.find((day) => day.selected === true).date)
     const endDate = this.formatDate(dateListClone.findLast((day) => day.selected === true).date)
     const defaultPickrValue = startDate === endDate ? [startDate] : [startDate, endDate]
-    const pickerLabelValue = defaultPickrValue.join(' - ')
+    // const pickerLabelValue = defaultPickrValue.join(' - ')
+    let displayValue = ''
+    if (minRange === startDate) {
+      displayValue = '<a-translation data-trans-key="CP.cpFilterTitleStartDate"></a-translation>'
+    } else {
+      displayValue = `${this.getLang()}: ${startDate}`
+    }
 
     const configOptions = {
       minDate: minRange,
@@ -187,7 +193,7 @@ export default class AppointmentsFilter extends Shadow() {
           options="${escapeForHtml(JSON.stringify(configOptions))}"
           request-event-name="request-appointments-filter">
           <div>
-            <span>${pickerLabelValue}</span>
+            <span>${displayValue}</span>
             <a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx>
           </div>
         </a-flatpickr>
@@ -339,5 +345,22 @@ export default class AppointmentsFilter extends Shadow() {
     const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
     const ds = new Date(dateString)
     return formatter.format(ds)
+  }
+
+  getLang () {
+    // @ts-ignore
+    switch (self.Environment.language) {
+      case 'fr-CH':
+      case 'fr':
+        return 'De'
+      case 'it-CH':
+      case 'it':
+        return 'Da'
+      case 'de-CH':
+      case 'de':
+        return 'Ab'
+      default:
+        return 'Ab'
+    }
   }
 }
