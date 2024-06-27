@@ -1,5 +1,5 @@
 :host {
     --badge-legend-default-icon-spacing: var(--mdx-sys-spacing-fix-xs);
     --badge-legend-default-item-spacing: 40px;
-
+    --badge-legend-default-badge-icon-only-background-color: var(--mdx-sys-color-primary-default);
 }
