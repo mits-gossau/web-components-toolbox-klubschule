@@ -138,6 +138,10 @@ export default class Tooltip extends Shadow() {
         color: var(--color);
       }
 
+      :host .text {
+        width: 100%;
+      }
+
       :host .text a {
         color: var(--a-color);
       }
