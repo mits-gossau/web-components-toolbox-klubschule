@@ -541,7 +541,7 @@ export default class OffersPage extends Shadow() {
                     }
                   </style>
                   <!-- button to filter all -->
-                  <ks-a-button namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
+                  <ks-a-button small namespace="button-primary-" color="secondary" request-event-name="dialog-open-first-level" click-no-toggle-active>
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.getTranslation('CourseList.FilterAllPlaceholder')}
                   </ks-a-button>
                   <!-- buttons to filter -->
