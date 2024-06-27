@@ -1,7 +1,9 @@
 <!-- Figma Link: Do not copy -->
 <code><a href="https://www.figma.com/file/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?type=design&node-id=15485-323914&mode=design&t=z4vWQvXjEXGcnFpq-4" target="_blank">figma</a></code>
-<!-- Jira Link: Do not copy -->
-<code><a href="https://jira.migros.net/browse/MIDUWEB-866" target="_blank">jira</a></code>
+<!-- Readme Link: Do not copy -->
+<code><a href="https://github.com/mits-gossau/web-components-toolbox-klubschule/blob/master/src/es/components/controllers/wishList/readme.md" target="_blank">Controller</a></code>
+<code><a href="https://github.com/mits-gossau/web-components-toolbox-klubschule/blob/master/src/es/components/organisms/wishList/readme.md" target="_blank">Organism</a></code>
+<code><a href="https://github.com/mits-gossau/web-components-toolbox-klubschule/blob/master/src/es/components/molecules/favoriteButton/readme.md" target="_blank">Button</a></code>
 
 <!-- Stage -->
 <ks-m-checkout-color-stage
@@ -15,8 +17,8 @@
 <!-- Content -->
 <ks-o-body-section no-margin-y variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
   <!-- the ks-c-wish-list controller has to be placed on the basepage -->
-  <!--<ks-c-wish-list endpoint="https://dev.klubschule.ch/Umbraco/api/watchlistAPI" guid="2728e4e9-da4e-4b11-988b-7caa90b10a77">-->
-    <ks-o-wish-list endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search">
+  <!--<ks-c-wish-list endpoint="https://dev.klubschule.ch/Umbraco/api/watchlistAPI">-->
+    <ks-o-wish-list endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search" mandant-id="111" portal-id="29" sprach-id="d">
       <section id=message hidden>
         <h2>Ihre Merkliste ist leer.</h2>
         <p>Fügen Sie Angebote und Veranstaltungen über die jeweiligen Angebotsseiten hinzu.</p>

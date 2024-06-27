@@ -121,13 +121,13 @@ export default class WishList extends Shadow() {
           typ: ''
         }
         const initialRequest = {
-          MandantId:  111,
-          PortalId: 29,
+          MandantId:  this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 111,
+          PortalId: this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29,
+          sprachid: this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd',
           filter: [{
             children: [],
             ...filter
-          }],
-          sprachid: 'd'
+          }]
         }
         // id assembly: courseType_courseId_centerid
         // @ts-ignore
