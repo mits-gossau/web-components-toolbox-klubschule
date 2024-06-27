@@ -11,6 +11,7 @@
 - [Demo Button](https://mits-gossau.github.io/web-components-toolbox-klubschule/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=.%2Fsrc%2Fcss%2FvariablesCustomKlubschule.css&login=.%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2Flogin%2Fdefault-%2Fdefault-.html&logo=.%2Fsrc%2Fes%2Fcomponents%2Fatoms%2Flogo%2Fdefault-%2Fdefault-.html&nav=.%2Fsrc%2Fes%2Fcomponents%2Fweb-components-toolbox%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2FmultiLevelNavigation%2Fdefault-%2Fdefault-.html&footer=.%2Fsrc%2Fes%2Fcomponents%2Forganisms%2Ffooter%2Fdefault-%2Fdefault-.html&content=.%2Fsrc%2Fes%2Fcomponents%2Fpages%2FAngebotsDetailPage.html)
 
 ## CMS Integration
+```
 <!-- the ks-c-wish-list controller has to be placed as an ancestor further up the dom tree -->
 <!--<ks-c-wish-list endpoint="https://dev.klubschule.ch/Umbraco/api/watchlistAPI">-->
   <ks-o-wish-list endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search" mandant-id="111" portal-id="29" sprach-id="d">
@@ -26,6 +27,7 @@
       </section>
   </ks-o-wish-list>
 <!--</ks-c-wish-list>-->
+```
 
 ### Variations (check out example Organism aka. List page above):
 - *endpoint*: Add attribute `endpoint` to `ks-o-wish-list` to the search aka. WithFacet api expl.: https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search.

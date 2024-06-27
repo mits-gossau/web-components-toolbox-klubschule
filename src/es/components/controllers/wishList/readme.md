@@ -11,10 +11,12 @@
 - [Demo Button](https://mits-gossau.github.io/web-components-toolbox-klubschule/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=.%2Fsrc%2Fcss%2FvariablesCustomKlubschule.css&login=.%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2Flogin%2Fdefault-%2Fdefault-.html&logo=.%2Fsrc%2Fes%2Fcomponents%2Fatoms%2Flogo%2Fdefault-%2Fdefault-.html&nav=.%2Fsrc%2Fes%2Fcomponents%2Fweb-components-toolbox%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2FmultiLevelNavigation%2Fdefault-%2Fdefault-.html&footer=.%2Fsrc%2Fes%2Fcomponents%2Forganisms%2Ffooter%2Fdefault-%2Fdefault-.html&content=.%2Fsrc%2Fes%2Fcomponents%2Fpages%2FAngebotsDetailPage.html)
 
 ## CMS Integration
+```
 <ks-c-wish-list endpoint="https://dev.klubschule.ch/Umbraco/api/watchlistAPI">
     <!-- this wraps p-general or is even further up the dom tree, example at src/es/components/web-components-toolbox/docs/TemplateMiduweb.html -->
     <!-- important that ks-c-wish-list is an ancestor of ks-o-wish-list and ks-m-favorite-button -->
 </ks-c-wish-list>
+```
 
 
 ### Variations (check out example Controller template html above):
