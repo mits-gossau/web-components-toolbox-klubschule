@@ -1,0 +1,371 @@
+<m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test" method="POST"
+  schema="{
+    'teilnehmerdaten': {
+      'adresse': 'gespeichert',
+      'anrede': '',
+      'vorname': '',
+      'nachname': '',
+      'strasse': '',
+      'zusatz': '',
+      'plz': '',
+      'ort': '',
+      'land': '',
+      'geburtsdatum': '',
+      'telefon': '',
+      'email': '',
+      'schenken': false,
+      'kommunikationsdatum': '',
+      'rechnung': false,
+      'rechnungsadresse': {
+        'rechnung-adresse': 'gespeichert',
+        'rechnung-anrede': '',
+        'rechnung-vorname': '',
+        'rechnung-nachname': '',
+        'rechnung-strasse': '',
+        'rechnung-zusatz': '',
+        'rechnung-plz': '',
+        'rechnung-ort': '',
+        'rechnung-land': '',
+        'rechnung-telefon': '',
+        'rechnung-email': ''
+      }
+    }
+  }">
+  <form>
+    <ks-o-checkout mode="false">
+      <ks-o-checkout-layout>
+
+        <section id="top">
+
+          <!-- stepper with back-link start -->
+          <ks-a-back-link href="#" icon="ArrowLeft">
+            Zur&uuml;ck
+          </ks-a-back-link>
+          <ks-m-checkout-stepper steps='[
+                    {
+                        "label": "Anmeldedaten",
+                        "status": "done",
+                        "link": "#anmeldedaten"
+                    },
+                    {
+                        "label": "Zahlung",
+                        "status": "current",
+                        "link": "#zahlung"
+                    },
+                    {
+                        "label": "Abschluss",
+                        "status": "default",
+                        "link": "#abschluss"
+                    }
+                ]'></ks-m-checkout-stepper>
+          <!-- stepper with back-link end -->
+        </section>
+
+        <section id="main">
+          <ks-o-body-section>
+            <h2>Teilnehmerdaten</h2>
+            <div>
+              <ks-m-select mode="false">
+                <div class="wrap">
+                  <label for="adresse">Adresse aus Ihrem Migros Konto</label>
+                  <select id="adresse" name="adresse">
+                    <option value="gespeichert">Gespeicherte Adresse wählen</option>
+                    <option value="neu">Neue Adresse wählen</option>
+                  </select>
+                </div>
+              </ks-m-select>
+            </div>
+            <br>
+            <br>
+            <div>
+              <label>Anrede *</label>
+              <ks-a-radio row mode="false">
+                <div class="wrap">
+                  <label for="anrede-herr">Herr</label>
+                  <input type="radio" id="anrede-herr" name="anrede" value="Herr" required
+                    error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Anrede wählen."}}'>
+                  <div class="box"></div>
+                </div>
+                <div class="wrap">
+                  <label for="anrede-frau">Frau</label>
+                  <input type="radio" id="anrede-frau" name="anrede" value="Frau"
+                    error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Anrede wählen."}}'>
+                  <div class="box"></div>
+                </div>
+                <div class="message">
+                  <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                    rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
+                </div>
+              </ks-a-radio>
+            </div>
+            <br>
+            <div>
+              <o-grid namespace="grid-12er-" mobile-breakpoint="600px" tablet-breakpoint="1300px" mode="false"
+                id="checkout-bewilliger-grid">
+                <div col-lg="6" col-md="6" col-sm="12">
+                  <ks-a-input mode="false">
+                    <div class="wrap">
+                      <label for="vorname">Vorname *</label>
+                      <input id="vorname" name="vorname" type="text" required
+                        error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                        data-m-v-rules='{"required": {"error-message": "Bitte Vornamen angeben."}}'>
+                      <div class="message">
+                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle"
+                          size="var(--ks-error-icon-size)" class="icon-left"
+                          new-error-message-reference-point="true"></a-icon-mdx>
+                      </div>
+                    </div>
+                  </ks-a-input>
+                </div>
+                <div col-lg="6" col-md="6" col-sm="12">
+                  <ks-a-input mode="false">
+                    <div class="wrap">
+                      <label for="nachname">Nachname *</label>
+                      <input id="nachname" name="nachname" type="text" required
+                        error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                        data-m-v-rules='{"required": {"error-message": "Bitte Nachnamen angeben."}}'>
+                      <div class="message">
+                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle"
+                          size="var(--ks-error-icon-size)" class="icon-left"
+                          new-error-message-reference-point="true"></a-icon-mdx>
+                      </div>
+                    </div>
+                  </ks-a-input>
+                </div>
+              </o-grid>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="strasse">Strasse / Nr. *</label>
+                  <input id="strasse" name="strasse" type="text" required error-message-reference-point-changed="true"
+                    no-error-text-p error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Strasse angeben."}}'>
+                  <div class="message">
+                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                      class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                  </div>
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="zusatz">Zusatz</label>
+                  <input id="zusatz" name="zusatz" type="text">
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <o-grid namespace="grid-12er-" mobile-breakpoint="600px" tablet-breakpoint="1300px" mode="false"
+                id="checkout-teilnehmer-grid">
+                <div col-lg="4" col-md="4" col-sm="12">
+                  <ks-a-input mode="false">
+                    <div class="wrap">
+                      <label for="plz">PLZ *</label>
+                      <input id="plz" name="plz" type="number" maxlength="5" required
+                        error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                        data-m-v-rules='{"required": {"error-message": "Bitte PLZ angeben."}}'>
+                      <div class="message">
+                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle"
+                          size="var(--ks-error-icon-size)" class="icon-left"
+                          new-error-message-reference-point="true"></a-icon-mdx>
+                      </div>
+                    </div>
+                  </ks-a-input>
+                </div>
+                <div col-lg="8" col-md="8" col-sm="12">
+                  <ks-a-input mode="false">
+                    <div class="wrap">
+                      <label for="ort">Ort *</label>
+                      <input id="ort" name="ort" type="text" required error-message-reference-point-changed="true"
+                        no-error-text-p error-text-tag-name="span"
+                        data-m-v-rules='{"required": {"error-message": "Bitte Ort angeben."}}'>
+                      <div class="message">
+                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle"
+                          size="var(--ks-error-icon-size)" class="icon-left"
+                          new-error-message-reference-point="true"></a-icon-mdx>
+                      </div>
+                    </div>
+                  </ks-a-input>
+                </div>
+              </o-grid>
+            </div>
+            <br>
+            <div>
+              <ks-m-select mode="false">
+                <div class="wrap">
+                  <label for="land">Land *</label>
+                  <select id="land" name="land" required error-message-reference-point-changed="true" no-error-text-p
+                    error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Land auswählen."}}'>
+                    <option value="">Land wählen</option>
+                    <option value="ch">Schweiz</option>
+                    <option value="de">Deutschland</option>
+                    <option value="fr">Frankreich</option>
+                  </select>
+                  <div class="message">
+                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                      rotate="0" class="icon-right" new-error-message-reference-point="true"></a-icon-mdx>
+                  </div>
+                </div>
+              </ks-m-select>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div>
+                  <label for="geburtsdatum">Geburtsdatum *</label>
+                  <input type="date" id="geburtsdatum" name="geburtsdatum" required
+                    data-m-v-rules='{"required": {"error-message": "Bitte Geburtsdatum angeben."}}'>
+                  <div class="hint">
+                    <span>This is a hint.</span>
+                  </div>
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="telefon">Telefon *</label>
+                  <input id="telefon" name="telefon" type="number" required error-message-reference-point-changed="true"
+                    no-error-text-p error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Telefon angeben."}}'>
+                  <div class="message">
+                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                      class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                  </div>
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="email">Email *</label>
+                  <input id="email" name="email" type="email" pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required
+                    error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte E-Mail angeben."}}'>
+                  <div class="message">
+                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em" class="icon-left"
+                      new-error-message-reference-point="true"></a-icon-mdx>
+                  </div>
+                </div>
+              </ks-a-input>
+            </div>
+
+            <h2 class="margin-y-s">Firmenangaben</h2>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="division">Division *</label>
+                  <input id="division" name="division" type="text" required error-message-reference-point-changed="true"
+                    no-error-text-p error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Division angeben."}}'>
+                  <div class="message">
+                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                      class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                  </div>
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="abteilung">Abteilung</label>
+                  <input id="abteilung" name="abteilung" type="text">
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="kostenstelle">Kostenstelle / OE</label>
+                  <input id="kostenstelle" name="kostenstelle" type="text">
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="betriebsnummer">Betriebs-Nr.</label>
+                  <input id="betriebsnummer" name="betriebsnummer" type="text">
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="rechnungsinformation">Info für Rechnung *</label>
+                  <input id="rechnungsinformation" name="rechnungsinformation" type="text" required
+                    error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span"
+                    data-m-v-rules='{"required": {"error-message": "Bitte Info für Rechnung angeben."}}'>
+                  <div class="message">
+                    <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)"
+                      class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                  </div>
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="zusatzfeld1">Zusatzfeld 1</label>
+                  <input id="zusatzfeld1" name="zusatzfeld1" type="text">
+                </div>
+              </ks-a-input>
+            </div>
+            <br>
+            <div>
+              <ks-a-input mode="false">
+                <div class="wrap">
+                  <label for="zusatzfeld2">Zusatzfeld 2</label>
+                  <input id="zusatzfeld2" name="zusatzfeld2" type="text">
+                </div>
+              </ks-a-input>
+            </div>
+
+          </ks-o-body-section>
+        </section>
+
+
+        <section id="sidebar">
+          <ks-m-checkout-booked-offer headline="Headline" name="Angebotsname"
+            status="{'code': '1', 'label': 'Garantiert Durchgeführt'}" date="22.4.2023 - 19.6.2023"
+            time="Mo, 18:00 - 20:00 Uhr" street="Hofwiesenstrasse 350" city="8050 Zürich" course-price="630.00 CHF"
+            price-labels='{
+              "coursePrice": "Kurspreis",
+              "material": "Material",
+              "teachingAids": "Lehrmittel",
+              "insurance": "Annulationskostenversicherung",
+              "tax": "inkl. allfälliger MwSt",
+              "total": "Gesamtbetrag"
+          }' initial-configuration-price-data='{
+                  "annulationskostenversicherungPreis": "16.75 CHF",
+                  "lehrmittelPreis": "16.90 CHF",
+                  "materialPreis": "0.00 CHF",
+                  "totalPreis": "646.90 CHF"
+              }'>
+          </ks-m-checkout-booked-offer>
+        </section>
+
+        <section id="bottom">
+          <ks-m-back-forward mode="false" back-label="Zurück" back-link="#back" forward-label="Weiter"
+            submit></ks-m-back-forward>
+        </section>
+
+      </ks-o-checkout-layout>
+    </ks-o-checkout>
+  </form>
+</m-simple-form-validation>
