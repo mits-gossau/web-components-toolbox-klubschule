@@ -68,6 +68,23 @@ export default class CheckoutLayout extends Shadow() {
         color: var(--mdx-sys-color-success-default);
       }
 
+      :host #checkout-booking-body-section .flex-wrapper {
+        display: flex !important;
+        flex-direction: column;
+        gap: var(--mdx-sys-spacing-fix-m);
+        margin-top: var(--mdx-sys-spacing-flex-large-m) !important;
+        margin-bottom: var(--mdx-sys-spacing-flex-large-l) !important;
+      }
+
+      :host .flex-wrapper>p.booking-page {
+        --p-margin: 0;
+        color: var(--mdx-sys-color-neutral-bold4) !important;
+        font: var(--mdx-sys-font-flex-desktop-body-small) !important;
+      }
+      :host .flex-wrapper>ks-a-heading {
+        --h2-margin: 0;
+      }
+
       /* style back link */
       #top > ks-a-back-link {
         --back-link-color: var(--mdx-sys-color-primary-default);
@@ -107,18 +124,20 @@ export default class CheckoutLayout extends Shadow() {
   renderHTML () {
     const div = document.createElement('div')
     const bottom = this.root.querySelector('#bottom')
-
+    const sidebar = this.root.querySelector('#sidebar')
     div.innerHTML = /* html */`
       <div class="checkout-layout">
           <slot name="top"></slot>
-          <o-grid mode="false" namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border id="checkout-layout-grid">
+          <o-grid mode="false" namespace="${sidebar ? "grid-2columns-content-section-" : "1column-align-center-"}" first-container-vertical first-column-with="66%" with-border id="checkout-layout-grid">
               <section>
                   <div>
                       <slot name="main"></slot>
                   </div>
-                  <aside class="checkout-layout__aside">
-                      <slot name="sidebar"></slot>
-                  </aside>
+                  ${sidebar ? /* html */ `
+                      <aside class="checkout-layout__aside">
+                          <slot name="sidebar"></slot>
+                      </aside>
+                    ` : ''}
               </section>
           </o-grid>
           ${bottom
@@ -134,8 +153,10 @@ export default class CheckoutLayout extends Shadow() {
     if ((top = this.root.querySelector('#top'))) div.querySelector('slot[name=top]')?.replaceWith(top)
     let main
     if ((main = this.root.querySelector('#main'))) div.querySelector('slot[name=main]')?.replaceWith(main)
-    let sidebar
-    if ((sidebar = this.root.querySelector('#sidebar'))) div.querySelector('slot[name=sidebar]')?.replaceWith(sidebar)
+    if (sidebar) {
+      div.querySelector('slot[name=sidebar]')?.replaceWith(sidebar)
+      console.log(sidebar)
+    }
     if (bottom) { div.querySelector('slot[name=bottom]')?.replaceWith(bottom) }
     this.html = div.children
     return this.fetchModules([
