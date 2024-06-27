@@ -205,6 +205,10 @@ export default class Tile extends Shadow() {
             padding-left: 0;
         }
 
+        :host .m-tile__foot {
+          gap: 0;
+        }
+
         :host .m-tile__foot-right {
             margin-left: auto;
             flex-direction: column;
