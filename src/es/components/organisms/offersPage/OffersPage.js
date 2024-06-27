@@ -45,6 +45,8 @@ export default class OffersPage extends Shadow() {
         }
       })
     }
+
+    this.isEasyPortal = this.hasAttribute('is-easy-portal') ? true : false;
   }
 
   connectedCallback () {
@@ -134,6 +136,7 @@ export default class OffersPage extends Shadow() {
     this.css = /* css */`
       :host {
         display: contents !important;
+        --any-content-spacing: 0;
       }
       :host ks-o-body-section {
         padding: 3.375em 0 5em;
@@ -189,10 +192,6 @@ export default class OffersPage extends Shadow() {
         `
       }
     </ks-c-with-facet>`
-
-    if (this.badgeContainer) {
-      this.badgeContainer.remove()
-    }
 
     return this.fetchModules([
       {
@@ -302,6 +301,10 @@ export default class OffersPage extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/tab/Tab.js`,
         name: 'ks-m-tab'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/badge/Badge.js`,
+        name: 'ks-m-badge'
       }
     ])
   }
@@ -383,6 +386,7 @@ export default class OffersPage extends Shadow() {
                       answer-event-name="location-change"
                       autocomplete="off"
                     >
+                    ${this.getTranslation('CourseList.SearchInYourAreaPlaceholder')}
                     </a-input>
                     <div id="close">
                         <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
@@ -412,6 +416,7 @@ export default class OffersPage extends Shadow() {
                 pointer
                 autocomplete="off"
               >
+              ${this.getTranslation('CourseList.SearchInYourAreaPlaceholder')}
               </a-input>
             </m-dialog>
         </ks-c-auto-complete-location>
@@ -477,7 +482,12 @@ export default class OffersPage extends Shadow() {
               ? ''
               : /* html */`
               <o-grid namespace="grid-12er-">
-                <section>
+                <style>
+                  :host .input-section {
+                    align-items: flex-end;
+                  }
+                </style>
+                <section class="input-section">
                   ${this.hasAttribute('no-search-tab')
                     ? /* html */`<div col-lg="12" col-md="12" col-sm="12">
                         <ks-a-with-facet-counter></ks-a-with-facet-counter>
@@ -519,7 +529,8 @@ export default class OffersPage extends Shadow() {
                   </div>
                 </dialog>
               </m-dialog>
-              <o-grid namespace="grid-432-auto-colums-auto-rows-" class="margin-top-s margin-bottom-s">
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              <o-grid namespace="grid-432-auto-colums-auto-rows-">
                 <section>
                   <style>
                     :host {
@@ -536,17 +547,11 @@ export default class OffersPage extends Shadow() {
                   <ks-m-filter-select ${this.hasAttribute('with-filter-search') ? 'with-search' : ''}></ks-m-filter-select>
                 </section>
               </o-grid>
-              <section id="sort-options" class="margin-bottom-fix-s">
-              </section>
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              <section id="sort-options"></section>
+              <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
               <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile-factory>
-              ${this.badgeContainer
-                ? /* HTML */ `
-                  <ks-m-badge-legend>
-                    ${this.badgeContainer.innerHTML}
-                  </ks-m-badge-legend>
-                `
-                : ''}
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               <ks-a-with-facet-pagination class="hidden" id="pagination">
                 <ks-a-button namespace="button-primary-" color="secondary">
@@ -555,6 +560,29 @@ export default class OffersPage extends Shadow() {
                 </ks-a-button>
               </ks-a-with-facet-pagination>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              <ks-m-badge-legend namespace="badge-legend-default-">
+                ${this.isEasyPortal
+                  ? /* html */`
+                  <div>
+                    <ks-m-badge type="primary" icon-name="Key"></ks-m-badge>
+                    <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
+                  </div> 
+                  `
+                  : ''
+                }
+                <div>
+                  <ks-m-badge type="primary" icon-name="Abo"></ks-m-badge>
+                    <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
+                </div>
+                <div>
+                  <ks-m-badge type="primary" icon-name="AboPlus"></ks-m-badge>
+                  <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>
+                </div>
+                <div>
+                  <ks-m-badge type="primary" icon-name="Percent"></ks-m-badge>
+                  <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
+                </div>
+              </ks-m-badge-legend>
           </ks-o-body-section>
         ${this.eventDetailURL ? /* html */'</ks-c-event-detail>' : ''}
     `
@@ -576,10 +604,6 @@ export default class OffersPage extends Shadow() {
 
   get ksMTab () {
     return this.root.querySelector('ks-m-tab')
-  }
-
-  get badgeContainer () {
-    return this.root.querySelector('ks-m-badge-legend')
   }
 
   get eventDetailURL () {

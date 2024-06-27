@@ -179,6 +179,7 @@ export default class AppointmentsFilter extends Shadow() {
             --flatpickr-ks-border-radius: var(--button-secondary-border-radius,0);
             --flatpickr-ks-label-font-weight: var(--button-secondary-font-weight, normal);
             --flatpickr-ks-padding: var(--button-secondary-padding, 0);
+            --flatpickr-ks-label-line-height: var(--button-secondary-line-height);
           }
         </style>
         <a-flatpickr

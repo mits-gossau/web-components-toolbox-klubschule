@@ -30,7 +30,7 @@ export default class Navigation extends Shadow() {
     }
   }
 
-  updateActiveStates(currentElement = null) {
+  updateActiveStates (currentElement = null) {
     const links = this.root.querySelectorAll('li')
     const linkElements = Array.from(links)
     if (!currentElement) {
@@ -42,7 +42,6 @@ export default class Navigation extends Shadow() {
       if (link.classList.contains('active') && link.id !== currentElement.id) link.classList.remove('active')
       // @ts-ignore
       if (link.id === currentElement.id) link.classList.add('active')
-
     })
   }
 
