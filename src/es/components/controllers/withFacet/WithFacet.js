@@ -64,8 +64,8 @@ export default class WithFacet extends Shadow() {
     this.requestWithFacetListener = (event) => {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
-      if (this.abortController) this.abortController.abort()
-      this.abortController = new AbortController()
+      // if (this.abortController) this.abortController.abort()
+      // this.abortController = new AbortController()
       
       if (event?.detail?.wrapper?.filterItem) this.updateFilterAndParamsWithSelectedFilter(event)
 
@@ -171,7 +171,7 @@ export default class WithFacet extends Shadow() {
           },
           mode: 'cors',
           body: request,
-          signal: this.abortController.signal
+          // signal: this.abortController.signal
         }
       }
 
