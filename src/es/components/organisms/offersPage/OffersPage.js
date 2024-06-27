@@ -45,6 +45,8 @@ export default class OffersPage extends Shadow() {
         }
       })
     }
+
+    this.isEasyPortal = this.hasAttribute('is-easy-portal') ? true : false;
   }
 
   connectedCallback () {
@@ -560,10 +562,15 @@ export default class OffersPage extends Shadow() {
               </ks-a-with-facet-pagination>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               <ks-m-badge-legend namespace="badge-legend-default-">
-                <div>
-                  <ks-m-badge type="primary" icon-name="Key"></ks-m-badge>
-                  <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
-                </div>
+                ${this.isEasyPortal
+                  ? /* html */`
+                  <div>
+                    <ks-m-badge type="primary" icon-name="Key"></ks-m-badge>
+                    <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
+                  </div> 
+                  `
+                  : ''
+                }
                 <div>
                   <ks-m-badge type="primary" icon-name="Abo"></ks-m-badge>
                     <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>

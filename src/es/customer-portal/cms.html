@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr-CH">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,21 +13,27 @@
         <link href=../../../src/es/components/web-components-toolbox/src/css/variables.css rel="stylesheet"
             type="text/css">
         <link href="../../css/variablesCustomKlubschule.css" rel=stylesheet type="text/css">
+        <link href="../../css/variablesCustom.css" rel=stylesheet type="text/css">
         <script async rel=preload as="script" type="text/javascript"
             src="../../../src/es/helpers/Environment.js"></script>
         <script src="../../../wc-config.js"></script>
         <title>Customer Portal</title>
     </head>
+
     <body>
         <c-fetch-html>
             <c-fetch-css>
                 <c-fetch-modules>
-                    <c-translations translation-api-url="https://dev.klubschule.ch/umbraco/api/v1/Dictionaries/all/fr/CP">
-                    <!-- <c-translations translation-api-url="./controllers/dummy.json"> -->
+                    <c-translations
+                        translation-api-url="https://dev.klubschule.ch/umbraco/api/v1/Dictionaries/all/fr/CP">
+                        <!-- <c-translations translation-api-url="./controllers/dummy.json"> -->
                         <cp-c-appointments data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
-                                <cp-c-subscriptions data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
+                            <cp-c-subscriptions data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
+                                <p-general>
                                     <o-body>
-                                        <ks-o-body-section variant="default" id="with-facet-body-section" background-color="var(--mdx-sys-color-accent-6-subtle1)" tabindex="0">
+                                        <ks-o-body-section variant="default"
+                                            background-color="var(--mdx-sys-color-accent-6-subtle1)" tabindex="0"
+                                            aria-label="Section">
                                             <cp-m-navigation namespace="navigation-default-"></cp-m-navigation>
                                             <c-router routes="[
                                                 {
@@ -48,11 +55,13 @@
                                             </c-router>
                                         </ks-o-body-section>
                                     </o-body>
-                                </cp-c-subscriptions>
+                                </p-general>
+                            </cp-c-subscriptions>
                         </cp-c-appointments>
                     </c-translations>
                 </c-fetch-modules>
             </c-fetch-css>
         </c-fetch-html>
     </body>
+
 </html>
