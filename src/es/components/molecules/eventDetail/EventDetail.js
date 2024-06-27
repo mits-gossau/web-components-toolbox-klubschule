@@ -295,14 +295,14 @@ export default class EventDetail extends Shadow() {
             </h3>
             <div>
               <address>
-                <a href="${this.data.durchfuehrungaddresse.link}" target="_blank">
-                  <span class="description">${this.data.durchfuehrungaddresse.beschreibung}</span>
-                  <span>${this.data.durchfuehrungaddresse.strasse}</span>
-                  <div>
-                    <span>${this.data.durchfuehrungaddresse.plz}</span>
-                    <span>${this.data.durchfuehrungaddresse.ort}</span>
-                  </div>
-                </a>
+                    <a href="${this.data.durchfuehrungaddresse.link}" target="_blank">
+                    ${this.this.data.durchfuehrungaddresse.beschreibung ? /*html */ `<span class="description">${this.data.durchfuehrungaddresse.beschreibung}</span>` : ''}
+                    ${this.this.data.durchfuehrungaddresse.strasse ? /*html */ `<span>${this.data.durchfuehrungaddresse.strasse}</span>` : ''}
+                      <div>
+                      ${this.this.data.durchfuehrungaddresse.plz ? /*html */ `<span>${this.data.durchfuehrungaddresse.plz}</span>` : ''}
+                      ${this.this.data.durchfuehrungaddresse.ort ? /*html */ `<span>${this.data.durchfuehrungaddresse.ort}</span>` : ''}
+                      </div>
+                    </a>
               </address>
               ${this.data.badge ? /* html */ `<div class="badge">${this.data.badge}</div>` : ''}
             </div>
