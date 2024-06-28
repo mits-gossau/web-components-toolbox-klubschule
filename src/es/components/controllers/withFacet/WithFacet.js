@@ -130,21 +130,34 @@ export default class WithFacet extends Shadow() {
 
         this.hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
         if (this.hasSearchTerm) this.searchTerm = event?.detail?.value || this.params.get('q')
-        let hasSorting = false
         let hasSearchLocation = false
+        
+        let sorting = 3;
+        switch(event?.detail?.key) {
+          case 'location-search':
+            sorting = 2
+            break
+          case 'input-search':
+            sorting = 1
+            break
+          default:
+            break
+        }
+        if (this.filters?.length > 1) sorting = 1
+
         const filterRequest = `{
           "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
           "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
           "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
           "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
           "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
-          "searchcontent": ${!this.hasAttribute('no-search-tab')}
-          ${(hasSorting = (event?.detail?.key === 'sorting' && !!event.detail.id) || (event?.detail?.key === 'location-search')) ? `,"sorting": "${event.detail.id || 2}"` : ''}
+          "searchcontent": ${!this.hasAttribute('no-search-tab')},
+          "sorting": ${sorting}
           ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"`: ''}
           ${(hasSearchLocation = !!initialRequestObj.clat) ? `,"clat": "${initialRequestObj.clat}"` : ''}
           ${(hasSearchLocation = !!initialRequestObj.clong) ? `,"clong": "${initialRequestObj.clong}"` : ''}
         }`
-        request = this.lastRequest = this.filters.length > 0 || this.hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
+        request = this.lastRequest = this.filters.length > 0 || this.hasSearchTerm || hasSearchLocation ? filterRequest : JSON.stringify(initialRequestObj)
       }
       
 
@@ -244,7 +257,8 @@ export default class WithFacet extends Shadow() {
         "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
-        "onlycourse": true
+        "onlycourse": true,
+        "sorting": 2
         ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"`: ''}
         ${initialRequestObj.clat ? `,"clat": "${initialRequestObj.clat}"` : ''}
         ${initialRequestObj.clong ? `,"clong": "${initialRequestObj.clong}"` : ''}
