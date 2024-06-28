@@ -209,6 +209,11 @@ export default class WithFacet extends Shadow() {
                 }))
                 const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
                 if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+
+                // Read location name from URL
+                let cname
+                if (cname = new URLSearchParams(window.location.search).get("cname")) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
+
                 this.dispatchEvent(new CustomEvent('location-change', {
                   detail: {
                     searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
