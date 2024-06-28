@@ -46,6 +46,16 @@ export default class KsBadgeLegend extends Shadow() {
       :host ks-m-badge {
         margin: auto 0;
       }
+
+      :host .badge-icon-only {
+        width: 1.5rem;
+        height: 1.5rem;
+        background-color: var(--badge-icon-only-background-color);
+        border-radius:  0.1875em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       @media only screen and (max-width: _max-width_) {
         :host > div {
           flex-basis: 100%;

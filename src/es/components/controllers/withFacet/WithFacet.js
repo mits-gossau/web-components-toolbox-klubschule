@@ -73,10 +73,8 @@ export default class WithFacet extends Shadow() {
       let isNextPage = false
 
       if (event?.detail?.ppage && this.lastRequest) {
-        const lastRequestAsJson = JSON.parse(this.lastRequest)
-        lastRequestAsJson.psize = 2 * lastRequestAsJson.psize
         // ppage reuse last request
-        request = JSON.stringify(Object.assign(lastRequestAsJson, { ppage: event.detail.ppage }))
+        request = JSON.stringify(Object.assign(JSON.parse(this.lastRequest), { ppage: event.detail.ppage }))
         isNextPage = true
       } else {
         // new request

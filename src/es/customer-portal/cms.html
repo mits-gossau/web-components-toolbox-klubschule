@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr-CH">
+<html lang="de-CH">
 
     <head>
         <meta charset="UTF-8">
@@ -25,16 +25,17 @@
             <c-fetch-css>
                 <c-fetch-modules>
                     <c-translations
-                        translation-api-url="https://dev.klubschule.ch/umbraco/api/v1/Dictionaries/all/fr/CP">
+                        translation-api-url="https://dev.klubschule.ch/umbraco/api/v1/Dictionaries/all/de/CP">
                         <!-- <c-translations translation-api-url="./controllers/dummy.json"> -->
-                        <cp-c-appointments data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
-                            <cp-c-subscriptions data-user-id="50505A02-2AA4-47AA-9AED-0B759902A0C2">
+                        <cp-c-appointments data-user-id="fede401c-ffe7-421f-ab14-61639c43cb75">
+                            <cp-c-subscriptions data-user-id="fede401c-ffe7-421f-ab14-61639c43cb75">
                                 <p-general>
                                     <o-body>
+                                        <cp-m-navigation namespace="navigation-default-"></cp-m-navigation>
                                         <ks-o-body-section variant="default"
                                             background-color="var(--mdx-sys-color-accent-6-subtle1)" tabindex="0"
-                                            aria-label="Section">
-                                            <cp-m-navigation namespace="navigation-default-"></cp-m-navigation>
+                                            aria-label="Section"
+                                            no-margin-y>
                                             <c-router routes="[
                                                 {
                                                     'name': 'p-appointments',

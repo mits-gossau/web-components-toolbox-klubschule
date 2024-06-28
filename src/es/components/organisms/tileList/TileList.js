@@ -159,6 +159,7 @@ export default class TileList extends Shadow() {
 
       :host .o-tile-list__details--expanded {
         height: auto;
+        overflow: visible; /* to make tooltips fully visible */
       }
 
       :host .o-tile-list__bottom-right {
@@ -191,6 +192,7 @@ export default class TileList extends Shadow() {
         display: flex;
         align-items: center;
         justify-content: flex-end;
+        gap: 0.5em;
       }
     
       :host .o-tile-list__icon-box {
@@ -201,10 +203,6 @@ export default class TileList extends Shadow() {
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-      
-      :host .o-tile-list__icon-box + .o-tile-list__icon-box {
-          margin-left: 0.5em;
       }
       
       :host .o-tile-list__icon-box a-icon-mdx {
@@ -332,11 +330,11 @@ export default class TileList extends Shadow() {
               ${this.isNearbySearch ? '' : /* html */ `
                 <div class="o-tile-list__icons">
                   ${data.icons.reduce((acc, icon) => acc + /* html */`
-                    <div class="o-tile-list__icon-box">
-                      <ks-m-tooltip namespace="tooltip-right-" text="${icon.text.replaceAll('"', "'")}">
-                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
-                      </ks-m-tooltip>
-                    </div>
+                    <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
+                      <div class="o-tile-list__icon-box">
+                          <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
+                      </div>
+                    </ks-m-tooltip>
                   `, '')}           
                 </div>
               `}

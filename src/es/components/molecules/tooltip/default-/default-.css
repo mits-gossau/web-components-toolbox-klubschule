@@ -1,5 +1,5 @@
 :host {
-    --tooltip-default-top: 2em;
+    --tooltip-default-top: calc(100% + 0.75em);
     --tooltip-default-left: -1em;
     --tooltip-default-right: auto;
     --tooltip-default-bottom: auto;
