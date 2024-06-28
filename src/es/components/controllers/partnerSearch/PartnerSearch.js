@@ -66,10 +66,11 @@ export default class PartnerSearch extends HTMLElement {
       event.detail.resolve(fetch(this.getAttribute('endpoint'), {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept-Language': sprachid || 'd'
         },
         mode: 'cors',
-        body,
+        body: JSON.stringify(body),
         signal: this.abortControllerLocations.signal
       }).then(response => {
         if (response.status >= 200 && response.status <= 299) return response.json()
@@ -79,10 +80,10 @@ export default class PartnerSearch extends HTMLElement {
   }
 
   connectedCallback () {
-    this.addEventListener('request-wish-list', this.requestPartnerSearchListener)
+    this.addEventListener('request-partner-search', this.requestPartnerSearchListener)
   }
   
   disconnectedCallback () {
-    this.removeEventListener('request-wish-list', this.requestPartnerSearchListener)
+    this.removeEventListener('request-partner-search', this.requestPartnerSearchListener)
   }
 }

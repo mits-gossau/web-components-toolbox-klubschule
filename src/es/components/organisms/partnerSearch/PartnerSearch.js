@@ -12,6 +12,7 @@ export default class PartnerSearch extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.hiddenMessages = this.hiddenSections
     this.partnerSearchListener = event => this.renderHTML(event.detail.fetch)
   }
 
@@ -22,11 +23,16 @@ export default class PartnerSearch extends Shadow() {
     if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
     Promise.all(showPromises).then(() => (this.hidden = false))
     document.body.addEventListener('partner-search', this.partnerSearchListener)
-    this.dispatchEvent(new CustomEvent('request-partner-search', {
+    new Promise(resolve => this.dispatchEvent(new CustomEvent('request-partner-search', {
+      detail: {
+        searchText: this.getAttribute('search-text'),
+        resolve
+      },
       bubbles: true,
       cancelable: true,
       composed: true
-    }))
+    }))).then(fetch => this.renderHTML(fetch))
+    
   }
 
   disconnectedCallback () {
@@ -92,18 +98,20 @@ export default class PartnerSearch extends Shadow() {
     this.html = ''
     this.renderLoading()
     if (fetch) {
-      fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
-      const data = this.lastData = await fetch
+      console.log('*********', fetch, this.hiddenMessages)
+      //fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
+      //const data = this.lastData = await fetch
       this.html = ''
-      console.log('*********', fetch)
-      if (data?.partnerListEntries.length) {
-        this.html = /* html */`Duuuuude`
-      } else {
-        /*
-        this.html = this.message
-        this.message.removeAttribute('hidden')
-        */
-      }
+      this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
+      this.html = this.hiddenMessages
+      // if (data?.partnerListEntries.length) {
+      //   this.html = /* html */`Duuuuude`
+      // } else {
+      //   /*
+      //   this.html = this.message
+      //   this.message.removeAttribute('hidden')
+      //   */
+      // }
     }
     return this.fetchModules([
       {
@@ -129,7 +137,7 @@ export default class PartnerSearch extends Shadow() {
     return this.root.querySelector('mdx-loading-bar')
   }
 
-  get messages () {
-    return this.root.querySelectorAll('[hidden]')
+  get hiddenSections () {
+    return Array.from(this.root.querySelectorAll('section[hidden]'))
   }
 }

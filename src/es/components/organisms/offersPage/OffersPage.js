@@ -164,7 +164,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
         ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
       >
-      <ks-c-partner-search ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}>
+      <ks-c-partner-search ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''} ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}>
         ${this.eventDetailURL || this.hasAttribute('no-search-tab')
           ? this.tabContentOne
           : /* html */`
@@ -558,7 +558,9 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options"></section>
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
-              <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile-factory>
+              <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
+                ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+              </ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               <ks-a-with-facet-pagination class="hidden" id="pagination">
                 <ks-a-button namespace="button-primary-" color="secondary">
@@ -615,5 +617,9 @@ export default class OffersPage extends Shadow() {
 
   get eventDetailURL () {
     return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
+  }
+
+  get hiddenSections () {
+    return Array.from(this.root.querySelectorAll('section[hidden]'))
   }
 }

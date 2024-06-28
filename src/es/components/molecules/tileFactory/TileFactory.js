@@ -13,6 +13,8 @@ export default class TileFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
+
+    this.hiddenMessages = this.hiddenSections
   }
 
   connectedCallback () {
@@ -148,7 +150,11 @@ export default class TileFactory extends Shadow() {
           },
           '<section>'
         ) + '</section>'
-        if (!data.courses.length && this.section) this.section.innerHTML = /* html */`<ks-o-partner-search></ks-o-partner-search>`
+        if (!data.courses.length && this.section) this.section.innerHTML = /* html */`
+          <ks-o-partner-search search-text="${data.searchText}">
+            ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+          </ks-o-partner-search>
+        `
       }, 0)
     }).catch(error => {
       console.error(error)
@@ -258,5 +264,9 @@ export default class TileFactory extends Shadow() {
 
   get section () {
     return this.root.querySelector('section')
+  }
+
+  get hiddenSections () {
+    return Array.from(this.root.querySelectorAll('section[hidden]'))
   }
 }
