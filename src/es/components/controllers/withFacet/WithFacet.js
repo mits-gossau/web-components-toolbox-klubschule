@@ -44,6 +44,7 @@ export default class WithFacet extends Shadow() {
     this.params = this.catchURLParams()
     this.filters = []
     this.filterKeys = []
+    this.setFilters = []
     this.ignoreURLKeys = [
       'rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
       'q', // search term, handled separately
@@ -66,8 +67,30 @@ export default class WithFacet extends Shadow() {
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
       // if (this.abortController) this.abortController.abort()
       // this.abortController = new AbortController()
+
       
-      if (event?.detail?.wrapper?.filterItem) this.updateFilterAndParamsWithSelectedFilter(event)
+      
+      // if (event?.detail?.wrapper?.filterItem) this.updateFilterAndParamsWithSelectedFilter(event)
+      if (event?.detail?.wrapper?.filterItem) {
+        // console.log('🚀 ----------------------------------- event', event)
+        console.log('🚀 ~ event.detail.wrapper.filterItem', event.detail?.target?.getAttribute('filter-id'), event.detail.wrapper.filterItem)
+
+        // check for checked children in filterItem and update this.filters
+        // const filter = this.constructFilterItem(event)
+        // if (filter) this.filters.push(JSON.stringify(filter))
+
+        const filterId = event.detail?.target?.getAttribute('filter-id') || event.detail?.target?.filterId
+        const [filterKey, filterValue] = filterId.split('-')
+        console.log(filterKey, filterValue, this.lastResponse.filters)
+
+        // find recursive in this.lastResponse.filters the item with urlpara === filterKey and in this item the child with id or urlpara === filterValue
+        // const filter = this.setFilterItemChecked(this.lastResponse.filters, filterKey, filterValue, event)
+        console.log('🚀 ~ filters', this.setFilterItemChecked(this.lastResponse.filters, filterKey, filterValue, event))
+        this.setFilters = this.setFilterItemChecked(this.lastResponse.filters, filterKey, filterValue, event)
+        // this.filters.push(this.setFilterItemChecked(this.lastResponse.filters, filterKey, filterValue, event))
+
+        console.log('🚀 ~ this.setFilters', this.setFilters)
+      }
 
       let request
       const shouldResetAllFilters = event?.type === 'reset-all-filters'
@@ -78,22 +101,34 @@ export default class WithFacet extends Shadow() {
       if (event?.detail?.ppage && this.lastRequest) {
         // ppage reuse last request
         request = JSON.stringify(Object.assign(JSON.parse(this.lastRequest), { ppage: event.detail.ppage }))
+        console.log('🚀 ~ request', request)
         isNextPage = true
       } else {
         // new request
         const initialFilters = initialRequestObj?.filter
         const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
-
-        this.updateFilterFromURLParams()
-
-        // construct filter item
-        const filter = this.constructFilterItem(event)
-        if (filter) this.filters.push(JSON.stringify(filter))
-
-        // if there is an initial filter set (e.g. for events) we want to keep it
-        if (initialFiltersAsString?.length) {
+        // add initialFiltersAsString to this.filters only once
+        if (initialFiltersAsString?.length && this.filters.length === 0) {
           this.filters.push(initialFiltersAsString)
         }
+
+        if (this.setFilters.length && this.filters.length === 1) {
+          this.filters = this.setFilters.map((filter) => JSON.stringify(filter))
+        }
+        console.log(this.filters)
+
+
+
+        // this.updateFilterFromURLParams()
+
+        // construct filter item
+        // const filter = this.constructFilterItem(event)
+        // if (filter) this.filters.push(JSON.stringify(filter))
+
+        // if there is an initial filter set (e.g. for events) we want to keep it
+        // if (initialFiltersAsString?.length) {
+        //   this.filters.push(initialFiltersAsString)
+        // }
 
         if (shouldResetAllFilters) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
@@ -108,6 +143,8 @@ export default class WithFacet extends Shadow() {
         if (shouldResetFilterFromFilterSelectButton) {
           initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
         }
+
+        // console.log('🚀 ~ this.filters', this.filters)
 
         // keep the last search location inside initialRequestObj and store it in url params
         if (event?.detail?.key === 'location-search') {
@@ -173,6 +210,8 @@ export default class WithFacet extends Shadow() {
         }
       }
 
+      // console.log('🚀 ~ request', request)
+
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
@@ -187,11 +226,12 @@ export default class WithFacet extends Shadow() {
               }).then(json => {
                 // store initial response
                 this.lastResponse = json
+                console.log('🚀 ~ json', json)
 
                 setTimeout(() => {
-                  this.checkFiltersInURL(json.filters)
-                  this.updateUrlSearchFromResponse(json)
-                  this.updateUrlParamsFromResponse(json)
+                  // this.checkFiltersInURL(json.filters)
+                  // this.updateUrlSearchFromResponse(json)
+                  // this.updateUrlParamsFromResponse(json)
                 }, 0)
                 
                 if (isNextPage) json = Object.assign(json, { isNextPage })
@@ -239,6 +279,7 @@ export default class WithFacet extends Shadow() {
       // merge both user Filter with sublevel filter
       const subLevelFilter = event.detail.filter
       if (this.filters?.length) subLevelFilter.push(JSON.parse(this.filters.reduce((acc, filter) => acc + `${filter}`)))
+        console.log('🚀 ~ subLevelFilter', subLevelFilter)
 
       let body = `{
         "filter": ${JSON.stringify(subLevelFilter)},
@@ -255,6 +296,7 @@ export default class WithFacet extends Shadow() {
         // ppage reuse last request
         body = JSON.stringify(Object.assign(JSON.parse(this.requestLocationsLastBody), { ppage: event.detail.ppage }))
       }
+      console.log('🚀 ~ body', body)
       const requestInit = {
         method: 'POST',
         headers: {
@@ -293,6 +335,24 @@ export default class WithFacet extends Shadow() {
     this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.removeEventListener('request-locations', this.requestLocations)
     self.removeEventListener('popstate', this.popstateListener)
+  }
+
+  setFilterItemChecked(filters, filterKey, filterValue, event) {
+    for (let filterItem of filters) {
+      if (filterItem.urlpara === filterKey) {
+        console.log('🚀 ~ filterItem', filterItem)
+        filterItem.children.forEach(child => {
+          if (child.id === filterValue || child.urlpara === filterValue) {
+            child.selected = true
+            console.log('🚀 ~ child', child)
+          }
+        })
+      } else if (filterItem.children) {
+        this.setFilterItemChecked(filterItem.children, filterKey, filterValue, event)
+      }
+    }
+
+    return filters
   }
 
   catchURLParams () {
