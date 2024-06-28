@@ -454,9 +454,6 @@
   --simple-form-miduweb-p-margin: var(--simple-form-miduweb-hr-margin);
   --mdx-comp–inputfield-label-color-default: var(--mdx-comp-inputfield-label-color-default);
 
-  --dialog-left-slide-in-checkout-max-width-custom: 1120px;
-  --dialog-left-slide-in-checkout-max-width-container-custom: 100%;
-
   /* datepicker */
   --flatpickr-ks-background: var(--mdx-comp-inputfield-background-color-default);
   --flatpickr-ks-border-radius: var(--mdx-comp-inputfield-border-radius-default);
