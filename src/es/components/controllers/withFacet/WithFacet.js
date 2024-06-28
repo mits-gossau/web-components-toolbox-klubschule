@@ -73,6 +73,7 @@ export default class WithFacet extends WebWorker() {
         const filterKey = event.detail.this.getAttribute('filter-key')
         this.deleteFilterFromUrl(filterKey)
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, undefined, true)
+        if (filterKey === 'q') delete currentRequestObj.searchText
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
@@ -91,9 +92,8 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
       } else if (event?.detail?.key === 'input-search') {
         if (event?.detail?.value) {
-          currentRequestObj.searchText = event?.detail?.value
-        } else {
-          if (currentRequestObj.searchText) delete currentRequestObj.searchText
+          this.updateFilterToURLParams('q', event.detail.value)
+          currentRequestObj.searchText = event.detail.value
         }
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
       } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
