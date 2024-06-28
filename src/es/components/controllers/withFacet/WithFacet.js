@@ -17,7 +17,7 @@
 /* global self */
 /* global CustomEvent */
 
-import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import { WebWorker } from '../../web-components-toolbox/src/es/components/prototypes/WebWorker.js'
 
 /**
  * WithFacet are retrieved via the corresponding endpoint as set as an attribute
@@ -28,7 +28,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
  * @class WithFacet
  * @type {CustomElementConstructor}
  */
-export default class WithFacet extends Shadow() {
+export default class WithFacet extends WebWorker() {
   constructor (options = {}, ...args) {
     super({
       importMetaUrl: import.meta.url,
@@ -50,17 +50,21 @@ export default class WithFacet extends Shadow() {
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
     this.abortController = null
     
-    this.requestWithFacetListener = event => {
+    this.requestWithFacetListener = async event => {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
 
+      console.log('🚀 ~ event', event)
+
       let isNextPage = false
+      let filterId = null
       if (event?.detail?.ppage) {
         // ppage reuse last request
         currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
         isNextPage = true
+        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
         currentRequestObj = structuredClone(initialRequestObj)
@@ -68,14 +72,13 @@ export default class WithFacet extends Shadow() {
         // TODO: Test if reset works nicely
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
-        currentRequestObj.filter = WithFacet.updateFilters(currentRequestObj.filter, filterKey, undefined, true)
-      } else if (event?.detail?.wrapper?.filterItem) {
+        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, undefined, true)
+      } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // TODO: Test if checkbox and nav level item reaches here
         // build dynamic filters according to the event
-        const filterId = event.detail?.target?.getAttribute('filter-id') || event.detail?.target?.filterId
+        console.log('🚀 ~ filterId', filterId, event.detail?.target?.getAttribute?.('filter-id'), event.detail?.target?.filterId)
         const [filterKey, filterValue] = filterId.split('-')
-        debugger
-        currentRequestObj.filter = WithFacet.updateFilters(currentRequestObj.filter, filterKey, filterValue)
+        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, filterValue)
       } else if (event?.detail?.key === 'location-search') {
         // keep the last search location inside currentRequestObj and store it in url params
         if (!!event.detail.lat && !!event.detail.lng) {
@@ -86,16 +89,24 @@ export default class WithFacet extends Shadow() {
           if (currentRequestObj.clong) delete currentRequestObj.clong
         }
         currentRequestObj.sorting = event.detail.id || 2
+        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
       } else if (event?.detail?.key === 'input-search') {
         if (event?.detail?.value) {
           currentRequestObj.searchText = event?.detail?.value
         } else {
           if (currentRequestObj.searchText) delete currentRequestObj.searchText
         }
+        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
       } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
         // TODO: Test if sorting still works
         currentRequestObj.sorting = event.detail.id || 2
+        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
+      } else {
+        // always shake out the response filters to only include selected filters or selected in ancestry
+        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
       }
+
+      if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
    
       const LanguageEnum = {
         'd': 'de',
@@ -124,9 +135,9 @@ export default class WithFacet extends Shadow() {
       }
 
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
+      console.log('request', structuredClone(currentRequestObj))
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
-        console.log('request', structuredClone(currentRequestObj))
         this.dispatchEvent(new CustomEvent('with-facet', {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
@@ -250,25 +261,27 @@ export default class WithFacet extends Shadow() {
     self.removeEventListener('popstate', this.popstateListener)
   }
 
+  // always shake out the response filters to only include selected filters or selected in ancestry
   static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true) {
     const newFilters = []
     filters.forEach(filterItem => {
+      const isMatchingKey = filterItem.urlpara === filterKey
       // only the first level has the urlpara === filterKey check
-      if (!zeroLevel || filterItem.urlpara === filterKey) {
-        if (reset) {
-          filterItem.selected = false
-        } else {
-          const isIdOrUrlpara = filterItem.id === filterValue || filterItem.urlpara === filterValue
-          if (filterItem.selected && isIdOrUrlpara) {
-            filterItem.selected = false // toggle filterItem if is is already selected 
-          } else if (filterItem.selected && !isIdOrUrlpara) {
-            filterItem.selected = true // keep filterItem selected if it is already selected
-          } else if (!filterItem.selected && isIdOrUrlpara) {
-            filterItem.selected = true // select filterItem if it is not selected
-          }
+      if (!zeroLevel || isMatchingKey) {
+        const isIdOrUrlpara = filterItem.id === filterValue || filterItem.urlpara === filterValue
+        if (filterItem.selected && isIdOrUrlpara) {
+          filterItem.selected = false // toggle filterItem if is is already selected 
+        } else if (filterItem.selected && !isIdOrUrlpara) {
+          filterItem.selected = true // keep filterItem selected if it is already selected
+        } else if (!filterItem.selected && isIdOrUrlpara) {
+          filterItem.selected = true // select filterItem if it is not selected
         }
       }
-      if (filterItem.children) filterItem.children = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false)
+      if (reset && isMatchingKey) {
+        filterItem.children = []
+      } else if (filterItem.children) {
+        filterItem.children = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false)
+      }
       // only the first level allows selected falls when including selected children
       if (filterItem.children?.length || filterItem.selected) newFilters.push(filterItem)
     })

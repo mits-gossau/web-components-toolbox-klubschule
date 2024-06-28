@@ -113,18 +113,20 @@ export default class FilterCategories extends Shadow() {
         const checked = center.selected ? 'checked' : ''
         const visible = center.visible ? 'visible' : ''
         const id = `[filter-id="${region.urlpara}-${center.id}"]`
-        const centerFilterCheckbox = centerFilters.map(centerFilter => centerFilter.querySelector(id) || (centerFilter.matches(id) && centerFilter)).find(el => el !== null)
-
-        if (centerFilterCheckbox) {
-          console.log(centerFilterCheckbox)
+        let centerFilterCheckbox = null
+        
+        if (centerFilters.find(centerFilter => (centerFilterCheckbox = centerFilter.querySelector(id) || (centerFilter.matches(id) && centerFilter)))) {
           // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
+          // @ts-ignore
           centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
           const attributes = { disabled, checked, visible }
           
           Object.entries(attributes).forEach(([key, value]) => {
             if (value) {
+              // @ts-ignore
               centerFilterCheckbox.setAttribute(key, '')
             } else {
+              // @ts-ignore
               centerFilterCheckbox.removeAttribute(key)
             }
           })
@@ -171,14 +173,14 @@ export default class FilterCategories extends Shadow() {
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
-    const filterItem = generatedFilters.map(filter => filter.querySelector(id) || (filter.matches(id) && filter)).find(el => el !== null)
-
-    if (filterItem) {
+    let filterItem = null
+    if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
       // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
+      // @ts-ignore
       if (filterItem.tagName === 'KS-M-NAV-LEVEL-ITEM') {
-        // console.log("🚀 updateFilter ~ filterItem:", filterItem, disabled, checked, visible)
       }
 
+      // @ts-ignore
       filterItem.setAttribute('label', `${child.label} ${count}`)
       const attributes = { disabled, checked, visible }
       
@@ -251,13 +253,13 @@ export default class FilterCategories extends Shadow() {
     const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
     const filterId = parentItem.urlpara ? `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"` : ''
     this.total = response.total
+    console.log("🚀 filterId:", filterId, parentItem)
     
-    // TODO: dispatch event on certain "sparten" when clicked analog: <ks-m-nav-level-item namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}">
+    // TODO: dispatch event on certain "sparten" when clicked analog: request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}"
     // TODO: <span class="additional">${selectedFilters}</span> on first level ("sparten")
 
     navLevelItem.innerHTML = /* html */`
-    <!--<ks-m-nav-level-item namespace="${namespace}" request-event-name="request-with-facet" id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">-->
-    <ks-m-nav-level-item namespace="${namespace}" id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
+    <ks-m-nav-level-item namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
       <div class="wrap">
         <span class="text">${filterItem.label} ${filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : ''}</span>
         <span class="additional">${selectedFilters}</span>
@@ -265,21 +267,6 @@ export default class FilterCategories extends Shadow() {
       <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
     </ks-m-nav-level-item>
     `
-    // navLevelItem.onclick = () => this.dispatchEvent(new CustomEvent(this.getAttribute('request-event-name'), {
-    //   detail: {
-    //     wrapper: {
-    //       filterItem: filterItem
-    //     },
-    //     target: {
-    //       checked: namespace !== 'nav-level-item-active-',
-    //       label: filterItem.label,
-    //       filterId: filterId
-    //     }
-    //   },
-    //   bubbles: true,
-    //   cancelable: true,
-    //   composed: true
-    // }))
 
     div.innerHTML = /* html */`
       <m-dialog id="${filterIdPrefix+filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
@@ -316,7 +303,8 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  generateFilters (response, filterItem, parentItem = this.mainNav, firstFilterItemId = null, level = 0) {
+  generateFilters (response, filterItem, parentItem = this.mainNav, firstFilterItemId = null, level = -1) {
+    level++
     if (!filterItem.visible) return
     if (firstFilterItemId === null) firstFilterItemId = filterItem.id
     
@@ -327,7 +315,7 @@ export default class FilterCategories extends Shadow() {
       // update additional text with selected filter(s)
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
     } else {
-      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem, parentItem, level)))
+      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem, filterItem, level)))
     }
     if (!Array.from(parentItem.childNodes).includes(generatedNavLevelItem.navLevelItem)) parentItem.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
@@ -341,7 +329,7 @@ export default class FilterCategories extends Shadow() {
       } else {
         filterItem.children.forEach((child, i) => {
           if (child.children && child.children.length > 0) {
-            this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId, level++) // recursive call
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId, level) // recursive call
           } else {
             const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
             if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedFilters[0])) {
