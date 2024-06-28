@@ -253,7 +253,6 @@ export default class FilterCategories extends Shadow() {
     const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
     const filterId = parentItem.urlpara ? `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"` : ''
     this.total = response.total
-    console.log("🚀 filterId:", filterId, parentItem)
     
     // TODO: dispatch event on certain "sparten" when clicked analog: request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}"
     // TODO: <span class="additional">${selectedFilters}</span> on first level ("sparten")

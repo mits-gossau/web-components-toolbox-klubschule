@@ -149,10 +149,9 @@ export default class WithFacet extends WebWorker() {
               }).then(json => {
                 // update filters with api response
                 currentRequestObj.filter = json.filters
-                console.log('🚀 ~ json', json)
 
                 setTimeout(() => {
-                  // this.checkFiltersInURL(json.filters)
+                  this.checkFiltersInURL(json.filters)
                   // this.updateUrlSearchFromResponse(json)
                   // this.updateUrlParamsFromResponse(json)
 
@@ -303,12 +302,12 @@ export default class WithFacet extends WebWorker() {
 
     filters.forEach(filterItem => {
       this.params.forEach((value, key) => {
-        if (this.filterKeys.includes(key)) return
+        
         if (key === 'q' || key === 'clat' || key === 'clong' || key === 'cname') {
-          this.filterKeys.push(key)
+          console.log('🚀 ~ key', key, value)
         }
         if (filterItem.urlpara.includes(key)) {
-          this.filterKeys.push(key)
+          console.log('🚀 ~ key', key, filterItem)
         }
         if (filterItem.children && filterItem.children.length > 0) {
           this.checkFiltersInURL(filterItem.children) // Recursive call
@@ -352,57 +351,6 @@ export default class WithFacet extends WebWorker() {
       }
     }
   }
-
-
-  // updateFilterFromURLParams (key = null, filters = []) {
-  //   this.filters = filters
-  //   let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
-  //   if (key) filteredURLKeys = [key] // set first filter key
-  //   const filterItems = []
-
-  //   // TODO: @Alex get center filter from url
-  //   // console.log(filteredURLKeys, this.filterKeys, currentRequestObj.filter, this.filters)
-  //   // if (currentRequestObj.filter) this.filters = currentRequestObj.filter
-
-  //   // if there are filters in the url
-  //   if (this.filterKeys.length !== 0 && currentRequestObj.filter) {
-  //     console.log('🚀', this.filterKeys, currentRequestObj.filter)
-  //     // this.filterKeys.forEach(key => {
-  //       // let filterItem = this.findFilterItemByUrlpara(currentRequestObj.filter, key)
-  //       // console.log(filterItem)
-
-  //       let filterItem = this.setSelectedByUrlpara(currentRequestObj.filter, this.filterKeys)
-  //       console.log('🚀 ~ filterItem', filterItem)
-
-
-  //       // filterItem.children.forEach(child => {
-  //     //     if (this.params.get(filterItem.urlpara)?.split('-').includes(child.urlpara || child.id)) {
-  //     //       child.selected = true
-  //     //     } else {
-  //     //       child.selected = false
-  //     //     }
-  //     //   })
-
-  //     //   if (filterItem) {
-  //     //     filterItems.push(filterItem)
-  //     //   } else {
-  //     //     // remove filter key if it is not in the response
-  //     //     this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
-  //     //     filteredURLKeys = filteredURLKeys.filter(urlKey => urlKey !== key)
-  //     //   }
-  //     // })
-
-  //     // // construct filter items
-  //     // if (filterItems.length > 0) {
-  //     //   filterItems.forEach(item => {
-  //     //     const filter = this.constructFilterItem(item)
-  //     //     if (filter) this.filters.push(JSON.stringify(filter))
-  //     //       console.log('🚀 ~ filter', filter)
-  //     //   })
-  //     // }
-  //     // })
-  //   }
-  // }
 
   updateUrlSearchFromResponse (response) {
     if (!response.searchText) {
@@ -488,76 +436,6 @@ export default class WithFacet extends WebWorker() {
     })
 
     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-  }
-
-  removeAllFilterParams () {
-    if (this.params) {
-      this.filterKeys.forEach(key => {
-        this.params.delete(key)
-      })
-      
-      this.filterKeys = []
-      this.filters = []
-
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    }
-  }
-
-  removeFilterParam (key) {
-    if (this.params) {
-      this.params.delete(key)
-      this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
-      this.filters = this.filters.filter(filter => !filter.includes(`"${key}"`))
-
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
-    }
-  }
-
-  toggleFilterItem(filterItem, filterKey, filterValue, event) {
-    if (filterItem.children) {
-      filterItem.children.forEach(child => {
-        const count = child.count ? `(${child.count})` : ''
-        const label = count ? `${child.label} ${count}` : child.label
-        const hasSameLabel = label.trim() === event.detail?.target.label.trim()
-        const isCheckedNullOrUndefined = event.detail?.target.checked === null || event.detail?.target.checked === undefined
-
-        child.selected = hasSameLabel
-          ? isCheckedNullOrUndefined
-            ? (child.selected || false)
-            : event.detail.target.checked
-          : (child.selected || false)
-      
-        if (filterItem.urlpara !== filterKey || filterItem.id !== filterValue) {
-          this.toggleFilterItem(child, filterKey, filterValue, event) // recursive call
-        }
-      })
-
-      // if all children are deselected, remove filterKey from url
-      const allChildrenDeselected = filterItem.children.every(child => !child.selected)
-      if (allChildrenDeselected) {
-        this.removeFilterParam(filterItem.urlpara)
-      }
-    }
-
-    return filterItem
-  }
-
-  constructFilterItem (event) {
-    let filterItem = event?.detail?.wrapper?.filterItem
-    if (filterItem) console.log('🚀 ~ constructFilterItem ~ filterItem', filterItem)
-    if (!event) return
-    const filterId = (typeof event.detail?.target?.getAttribute === 'function' && event.detail?.target?.getAttribute('filter-id')) || event.detail?.target?.filterId
-    // if event is not an Event object, it is a filterItem
-    if (!(event instanceof Event)) {
-      filterItem = event
-    }
-
-    if (filterItem && filterId) {
-      const [filterKey, filterValue] = filterId.split('-')
-      filterItem = this.toggleFilterItem(filterItem, filterKey, filterValue, event)
-    }
-
-    return filterItem ? filterItem : ''
   }
 
   static historyPushState (...args) {
