@@ -67,12 +67,10 @@ export default class WithFacet extends WebWorker() {
         // reset all filters
         currentRequestObj = structuredClone(initialRequestObj)
       } else if (event?.type === 'reset-filter') {
-        // TODO: Test if reset works nicely
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, undefined, true)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
-        // TODO: Test if checkbox and nav level item reaches here
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, filterValue)
@@ -278,6 +276,8 @@ export default class WithFacet extends WebWorker() {
         }
       }
       if (reset && isMatchingKey) {
+        // get params from url
+        console.log(new URLSearchParams(self.location.search))
         filterItem.children = []
       } else if (filterItem.children) {
         filterItem.children = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false)
