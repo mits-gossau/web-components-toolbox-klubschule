@@ -56,8 +56,6 @@ export default class WithFacet extends WebWorker() {
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
 
-      console.log('🚀 ~ event', event)
-
       let isNextPage = false
       let filterId = null
       if (event?.detail?.ppage) {
@@ -135,7 +133,6 @@ export default class WithFacet extends WebWorker() {
       }
 
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
-      console.log('request', structuredClone(currentRequestObj))
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
         this.dispatchEvent(new CustomEvent('with-facet', {
@@ -151,7 +148,7 @@ export default class WithFacet extends WebWorker() {
                 currentRequestObj.filter = json.filters
 
                 setTimeout(() => {
-                  this.checkFiltersInURL(json.filters)
+                  // this.checkFiltersInURL(json.filters)
                   // this.updateUrlSearchFromResponse(json)
                   // this.updateUrlParamsFromResponse(json)
 
