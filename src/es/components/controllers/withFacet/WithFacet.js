@@ -74,7 +74,6 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // TODO: Test if checkbox and nav level item reaches here
         // build dynamic filters according to the event
-        console.log('🚀 ~ filterId', filterId, event.detail?.target?.getAttribute?.('filter-id'), event.detail?.target?.filterId)
         const [filterKey, filterValue] = filterId.split('-')
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, filterValue)
       } else if (event?.detail?.key === 'location-search') {
@@ -301,10 +300,10 @@ export default class WithFacet extends WebWorker() {
       this.params.forEach((value, key) => {
         
         if (key === 'q' || key === 'clat' || key === 'clong' || key === 'cname') {
-          console.log('🚀 ~ key', key, value)
+          // console.log('🚀 ~ key', key, value)
         }
         if (filterItem.urlpara.includes(key)) {
-          console.log('🚀 ~ key', key, filterItem)
+          // console.log('🚀 ~ key', key, filterItem)
         }
         if (filterItem.children && filterItem.children.length > 0) {
           this.checkFiltersInURL(filterItem.children) // Recursive call
