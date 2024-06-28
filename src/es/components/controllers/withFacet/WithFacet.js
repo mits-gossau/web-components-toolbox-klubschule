@@ -44,6 +44,7 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
+    this.params = this.catchURLParams()
     const isMocked = this.hasAttribute('mock')
     const endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
@@ -65,14 +66,17 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
+        this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
+        this.deleteFilterFromUrl(filterKey)
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, undefined, true)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
+        this.updateFilterToURLParams(filterKey, filterValue)
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, filterValue)
       } else if (event?.detail?.key === 'location-search') {
         // keep the last search location inside currentRequestObj and store it in url params
@@ -436,6 +440,51 @@ export default class WithFacet extends WebWorker() {
 
     WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
   }
+
+  updateFilterToURLParams (key, value) {
+    if (this.params) {
+      if (this.params.has(key)) {
+        const currentValues = this.params.get(key)?.split('-')
+        if (!currentValues?.includes(value)) {
+          currentValues?.push(value)
+          // @ts-ignore
+          this.params.set(key, currentValues?.join('-'))
+        } else {
+          currentValues?.splice(currentValues.indexOf(value), 1)
+          if (currentValues.length > 0) {
+            this.params.set(key, currentValues.join('-'))
+          } else {
+            this.params.delete(key)
+          }
+        }
+      } else {
+        this.params.set(key, value)
+      }
+
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    }
+  }
+
+  deleteAllFiltersFromUrl (filters) {
+    if (this.params) {
+
+      filters.forEach(filterItem => {
+        if (filterItem.children && filterItem.children.length > 0) {
+          this.deleteAllFiltersFromUrl(filterItem.children)
+        }
+        this.params.delete(filterItem.urlpara)
+      })
+
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    }
+  }
+
+  deleteFilterFromUrl (filterKey) {
+    if (this.params) {
+      this.params.delete(filterKey)
+      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+    }
+  } 
 
   static historyPushState (...args) {
     // Avoid multiple empty pushes, otherwise the navigation history becomes jammed
