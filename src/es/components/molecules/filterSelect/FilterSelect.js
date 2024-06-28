@@ -148,11 +148,11 @@ export default class filterSelect extends Shadow() {
 
             const doubleButton = /* html */`
               <m-double-button namespace="double-button-default-" width="100%">
-                <ks-a-button small filter namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="dialog-open-first-level,dialog-open-${filterItem.id}" click-no-toggle-active>
+                <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="dialog-open-first-level,dialog-open-${filterItem.id}" click-no-toggle-active>
                   <span part="label1">${childItems.slice(0, -2)/* remove last comma and space */}</span>
                   <span part="label2" dynamic></span>
                 </ks-a-button>
-                <ks-a-button small filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="${filterItem.urlpara}" filter-value="${childItems.slice(0, -2)}">
+                <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="${filterItem.urlpara}" filter-value="${childItems.slice(0, -2)}">
                   <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
                 </ks-a-button>
               </m-double-button>
@@ -172,7 +172,7 @@ export default class filterSelect extends Shadow() {
                 <span part="label1">${response.searchText}</span>
                 <span part="label2" dynamic></span>
               </ks-a-button>
-              <ks-a-button small search-filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="q" filter-value="${response.searchText}">
+              <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="q" filter-value="${response.searchText}">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
               </ks-a-button>
             </m-double-button>

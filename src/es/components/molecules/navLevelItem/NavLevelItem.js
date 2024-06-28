@@ -11,7 +11,7 @@ export default class NavLevelItem extends Shadow() {
         this.dispatchEvent(new CustomEvent(this.getAttribute('request-event-name'), {
           detail: {
             wrapper: {
-              filterItem: this.filterItem
+              filterItem: this
             },
             target: {
               checked: this.getAttribute('namespace') !== 'nav-level-item-active-',
