@@ -47,8 +47,13 @@ export default class DialogStatusButton extends Shadow() {
       const type = event.detail.type
       event.detail.fetch.then(courseDetail => {
         this.courseAppointmentStatus = courseDetail.courseAppointmentStatus
-        let btn = this.renderDialogActionButton(this.dataset.id, type, subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
-        btn += this.closeButton
+        let btn = ''
+        if (this.courseAppointmentStatus === 2) {
+          btn = `<div class='only-close-mobile'>${this.closeButton}</div`
+        } else {
+          btn = this.renderDialogActionButton(this.dataset.id, type, subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
+          btn += this.closeButton
+        }
         this.html = ''
         this.html = btn
       })

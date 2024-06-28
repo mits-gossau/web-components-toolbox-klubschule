@@ -362,12 +362,14 @@ export default class Appointments extends HTMLElement {
   requestBookedSubscriptionCourseAppointmentsListener = async (event) => {
     if (this.abortControllerBookedSubscriptionCourseAppointments) this.abortControllerBookedSubscriptionCourseAppointments.abort()
     this.abortControllerBookedSubscriptionCourseAppointments = new AbortController()
-    const { subscriptionType, subscriptionId } = event.detail
+    // Keep temporarily.
+    // You never know how things will turn out...
+    // const { subscriptionType, subscriptionId } = event.detail
     const { userId } = this.dataset
     const data = {
       userId,
-      subscriptionType,
-      subscriptionId,
+      subscriptionType: '',
+      subscriptionId: 0,
       includeConsumedAppointments: true,
       language: this.getLanguage()
     }

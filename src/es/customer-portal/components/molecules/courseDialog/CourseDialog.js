@@ -224,6 +224,9 @@ export default class CourseDialog extends Shadow() {
         .downloads {
           margin-bottom: 1.5em;
         }
+        .alert {
+          color: var(--alert-color, #F4001B);
+        }
       </style>
       <div id="content">
         <div class="details">
@@ -274,6 +277,9 @@ export default class CourseDialog extends Shadow() {
         .detail > span:first-child {
           font-weight: 500;
           line-height: 110%;
+        }
+        .alert {
+          color: var(--alert-color, #F4001B);
         }
       </style>
       <div id="content">
