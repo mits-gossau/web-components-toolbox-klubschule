@@ -276,8 +276,6 @@ export default class WithFacet extends WebWorker() {
         }
       }
       if (reset && isMatchingKey) {
-        // get params from url
-        console.log(new URLSearchParams(self.location.search))
         filterItem.children = []
       } else if (filterItem.children) {
         filterItem.children = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false)
