@@ -44,6 +44,7 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
+    this.params = this.catchURLParams()
     const isMocked = this.hasAttribute('mock')
     const endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
@@ -70,6 +71,8 @@ export default class WithFacet extends WebWorker() {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, undefined, true)
+        this.params.delete(filterKey)
+        WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
