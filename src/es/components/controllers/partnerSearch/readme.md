@@ -21,3 +21,4 @@
 - *mandant-id*: Add attribute `mandant-id` to `ks-c-partner-search` default: 111
 - *portal-id*: Add attribute `portal-id` to `ks-c-partner-search` default: 29
 - *sprach-id*: Add attribute `sprach-id` to `ks-c-partner-search` default: document.documentElement.getAttribute('lang')?.substring(0, 1) || d
+- (alternative) *initial-request*: Add attribute `initial-request`

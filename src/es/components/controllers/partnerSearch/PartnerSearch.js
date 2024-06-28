@@ -17,6 +17,16 @@ export default class PartnerSearch extends HTMLElement {
   constructor () {
     super()
 
+    let MandantId = this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 110
+    let PortalId = this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29
+    let sprachid = this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd'
+    if (this.hasAttribute('initial-request')) {
+      const initialRequest = JSON.parse(this.getAttribute('initial-request') || '{}')
+      if (initialRequest.MandantId) MandantId = initialRequest.MandantId
+      if (initialRequest.PortalId) PortalId = initialRequest.PortalId
+      if (initialRequest.sprachid) sprachid = initialRequest.sprachid
+    }
+
     this.abortControllerLocations = null
     this.requestPartnerSearchListener = event => {
       if (this.abortControllerLocations) this.abortControllerLocations.abort()
@@ -34,9 +44,9 @@ export default class PartnerSearch extends HTMLElement {
         hideCount: false,
       }
       const body = {
-        MandantId:  this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 110,
-        PortalId: this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29,
-        sprachid: this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd',
+        MandantId,
+        PortalId,
+        sprachid,
         searchText: event.detail.searchText,
         filter: [{
           ...filter,

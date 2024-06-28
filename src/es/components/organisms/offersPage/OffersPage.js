@@ -164,7 +164,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
         ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
       >
-      <ks-c-partner-search>
+      <ks-c-partner-search ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}>
         ${this.eventDetailURL || this.hasAttribute('no-search-tab')
           ? this.tabContentOne
           : /* html */`

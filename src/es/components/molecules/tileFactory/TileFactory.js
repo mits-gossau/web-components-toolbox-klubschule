@@ -148,6 +148,7 @@ export default class TileFactory extends Shadow() {
           },
           '<section>'
         ) + '</section>'
+        if (!data.courses.length && this.section) this.section.innerHTML = /* html */`<ks-o-partner-search></ks-o-partner-search>`
       }, 0)
     }).catch(error => {
       console.error(error)
@@ -174,6 +175,10 @@ export default class TileFactory extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
         name: 'a-translation'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
+        name: 'ks-o-partner-search'
       }
     ])
   }
@@ -249,5 +254,9 @@ export default class TileFactory extends Shadow() {
 
   get isEventSearch () {
     return this.hasAttribute('is-event')
+  }
+
+  get section () {
+    return this.root.querySelector('section')
   }
 }
