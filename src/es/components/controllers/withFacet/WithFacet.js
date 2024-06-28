@@ -59,6 +59,7 @@ export default class WithFacet extends WebWorker() {
 
       let isNextPage = false
       let filterId = null
+      currentRequestObj.sorting = 3;
       if (event?.detail?.ppage) {
         // ppage reuse last request
         currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
@@ -79,6 +80,7 @@ export default class WithFacet extends WebWorker() {
         const [filterKey, filterValue] = filterId.split('-')
         this.updateFilterToURLParams(filterKey, filterValue)
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, filterValue)
+        currentRequestObj.sorting = 1;
       } else if (event?.detail?.key === 'location-search') {
         // keep the last search location inside currentRequestObj and store it in url params
         if (!!event.detail.lat && !!event.detail.lng) {
@@ -90,15 +92,18 @@ export default class WithFacet extends WebWorker() {
         }
         currentRequestObj.sorting = event.detail.id || 2
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
+        currentRequestObj.sorting = 2;
       } else if (event?.detail?.key === 'input-search') {
         if (event?.detail?.value) {
           this.updateFilterToURLParams('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
         }
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
+        currentRequestObj.sorting = 1;
       } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
+        debugger;
         // TODO: Test if sorting still works
-        currentRequestObj.sorting = event.detail.id || 2
+        currentRequestObj.sorting = event.detail.id || 3
         currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
       } else {
         // always shake out the response filters to only include selected filters or selected in ancestry
@@ -196,11 +201,12 @@ export default class WithFacet extends WebWorker() {
 
       let body = `{
         "filter": ${JSON.stringify(subLevelFilter)},
-        "MandantId": ${this.getAttribute('mandant-id') || currentRequestObj.MandantId || 110},
-        "PortalId": ${this.getAttribute('portal-id') || currentRequestObj.PortalId || 29},
-        "sprachid": "${this.getAttribute('sprach-id') || currentRequestObj.sprachid || 'd'}",
-        "psize": ${this.getAttribute('p-size') || currentRequestObj.psize || 12},
-        "onlycourse": true
+        "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
+        "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
+        "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
+        "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
+        "onlycourse": true,
+        "sorting": 2
         ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"`: ''}
         ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}
         ${currentRequestObj.clong ? `,"clong": "${currentRequestObj.clong}"` : ''}

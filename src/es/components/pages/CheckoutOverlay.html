@@ -1,36 +1,34 @@
-<ks-c-centers mock>
-    <section>
-        <m-dialog
-            namespace="dialog-left-slide-in-checkout-"
-        >
-            <div class="container dialog-header" tabindex="0">
-                <div></div>
-                <h3>Hinweis</h3>
-                <div id="close">
-                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                </div>
+<section>
+    <m-dialog
+        namespace="dialog-left-slide-in-checkout-"
+    >
+        <div class="container dialog-header" tabindex="0">
+            <div></div>
+            <h3>Hinweis</h3>
+            <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
             </div>
-            <div class="container dialog-content">
-                <div class="sub-content">
-                    <h3>Einstufungstext</h3>
-                    <p>Für den Eintritt in diesen Kurs ist eine Einstufung oder ein Beratungsgespräch erforderlich. Falls dies nicht schon erfolgt ist, können Sie den Einstufungstest online absolvieren. Dauer ca. 20 Minuten.</p>
-                    <ks-a-link 
-                        href="https://www.migros.ch/en" 
-                        target="_self"
-                        icon-right="ArrowRight"
-                    >Zum Onlinetest</ks-a-link>
-                    <h3>Kurs gestartet</h3>
-                    <p>Dieser Kurs hat bereits begonnen. Bei einer Anmeldung werden nur die effektiv gebuchten Lektionen verrechnet.</p>
-                </div>        
-            </div>
-            <div class="container dialog-footer">
-                <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
-                <a-button namespace="button-primary-">
-                    <span>Zur Kurskonfiguration</span>
-                    <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>
-                </a-button>
-            </div>
-            <a-button namespace="button-primary-" id="show-modal" no-pointer-events>&Ouml;ffne Checkout Overlay</a-button>
-        </m-dialog>
-    </section>
-</ks-c-centers>
+        </div>
+        <div class="container dialog-content">
+            <div class="sub-content">
+                <h3>Einstufungstext</h3>
+                <p>Für den Eintritt in diesen Kurs ist eine Einstufung oder ein Beratungsgespräch erforderlich. Falls dies nicht schon erfolgt ist, können Sie den Einstufungstest online absolvieren. Dauer ca. 20 Minuten.</p>
+                <ks-a-link 
+                    href="https://www.migros.ch/en" 
+                    target="_self"
+                    icon-right="ArrowRight"
+                >Zum Onlinetest</ks-a-link>
+                <h3>Kurs gestartet</h3>
+                <p>Dieser Kurs hat bereits begonnen. Bei einer Anmeldung werden nur die effektiv gebuchten Lektionen verrechnet.</p>
+            </div>        
+        </div>
+        <div class="container dialog-footer">
+            <a-button id="close" namespace="button-secondary-" no-pointer-events>Schliessen</a-button>
+            <a-button namespace="button-primary-">
+                <span>Zur Kurskonfiguration</span>
+                <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>
+            </a-button>
+        </div>
+        <a-button namespace="button-primary-" id="show-modal" no-pointer-events>&Ouml;ffne Checkout Overlay</a-button>
+    </m-dialog>
+</section>
