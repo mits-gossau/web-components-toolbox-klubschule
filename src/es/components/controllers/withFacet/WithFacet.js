@@ -38,179 +38,91 @@ export default class WithFacet extends Shadow() {
 
     let timeoutId = null
     const coordinatesToTerm = new Map()
-    // additional setting for initial request
-    let initialRequestObj = Object.assign(JSON.parse(this.getAttribute('initial-request')), { searchcontent: !this.hasAttribute('no-search-tab') })
+    // the initial request object received through the attribute, never changes and is always included
+    const initialRequestObj = JSON.parse(this.getAttribute('initial-request'))
+    // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
+    let currentRequestObj = structuredClone(initialRequestObj)
+    // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
-    this.params = this.catchURLParams()
-    this.filters = []
-    this.filterKeys = []
-    this.setFilters = []
-    this.ignoreURLKeys = [
-      'rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
-      'q', // search term, handled separately
-      'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content' // GA parameters
-    ] 
-    this.isMocked = this.hasAttribute('mock')
-    const apiUrl = this.isMocked
+    const isMocked = this.hasAttribute('mock')
+    const endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
-    // simply the last body of the last request
-    this.lastResponse = {}
-    // simply the payload of the last request
-    this.lastRequest = null
-    // recursion depth counter
-    this.filtersInURLRecursionDepth = 0
-
     this.abortController = null
-    this.requestWithFacetListener = (event) => {
+    
+    this.requestWithFacetListener = event => {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
-      // if (this.abortController) this.abortController.abort()
-      // this.abortController = new AbortController()
+      if (this.abortController) this.abortController.abort()
+      this.abortController = new AbortController()
 
-      
-      
-      // if (event?.detail?.wrapper?.filterItem) this.updateFilterAndParamsWithSelectedFilter(event)
-      if (event?.detail?.wrapper?.filterItem) {
-        // console.log('🚀 ----------------------------------- event', event)
-        console.log('🚀 ~ event.detail.wrapper.filterItem', event.detail?.target?.getAttribute('filter-id'), event.detail.wrapper.filterItem)
-
-        // check for checked children in filterItem and update this.filters
-        // const filter = this.constructFilterItem(event)
-        // if (filter) this.filters.push(JSON.stringify(filter))
-
+      let isNextPage = false
+      if (event?.detail?.ppage) {
+        // ppage reuse last request
+        currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
+        isNextPage = true
+      } else if (event?.type === 'reset-all-filters') {
+        // reset all filters
+        currentRequestObj = structuredClone(initialRequestObj)
+      } else if (event?.type === 'reset-filter') {
+        // TODO: Test if reset works nicely
+        // reset particular filter, ks-a-button
+        const filterKey = event.detail?.target?.getAttribute('filter-key')
+        const filterValue = event.detail?.target?.getAttribute('filter-value')
+        currentRequestObj.filter = WithFacet.updateFiltersDrillDown(currentRequestObj.filter, filterKey, filterValue, true)
+      } else if (event?.detail?.wrapper?.filterItem) {
+        // TODO: Test if checkbox and nav level item reaches here
+        // build dynamic filters according to the event
         const filterId = event.detail?.target?.getAttribute('filter-id') || event.detail?.target?.filterId
         const [filterKey, filterValue] = filterId.split('-')
-        console.log(filterKey, filterValue, this.lastResponse.filters)
-
-        // find recursive in this.lastResponse.filters the item with urlpara === filterKey and in this item the child with id or urlpara === filterValue
-        // const filter = this.setFilterItemChecked(this.lastResponse.filters, filterKey, filterValue, event)
-        console.log('🚀 ~ filters', this.setFilterItemChecked(this.lastResponse.filters, filterKey, filterValue, event))
-        this.setFilters = this.setFilterItemChecked(this.lastResponse.filters, filterKey, filterValue, event)
-        // this.filters.push(this.setFilterItemChecked(this.lastResponse.filters, filterKey, filterValue, event))
-
-        console.log('🚀 ~ this.setFilters', this.setFilters)
+        debugger
+        currentRequestObj.filter = WithFacet.updateFiltersDrillDown(currentRequestObj.filter, filterKey, filterValue)
+      } else if (event?.detail?.key === 'location-search') {
+        // keep the last search location inside currentRequestObj and store it in url params
+        if (!!event.detail.lat && !!event.detail.lng) {
+          currentRequestObj.clat = event.detail.lat
+          currentRequestObj.clong = event.detail.lng
+        } else {
+          if (currentRequestObj.clat) delete currentRequestObj.clat
+          if (currentRequestObj.clong) delete currentRequestObj.clong
+        }
+        currentRequestObj.sorting = event.detail.id || 2
+      } else if (event?.detail?.key === 'input-search') {
+        if (event?.detail?.value) {
+          currentRequestObj.searchText = event?.detail?.value
+        } else {
+          if (currentRequestObj.searchText) delete currentRequestObj.searchText
+        }
+      } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
+        // TODO: Test if sorting still works
+        currentRequestObj.sorting = event.detail.id || 2
       }
-
-      let request
-      const shouldResetAllFilters = event?.type === 'reset-all-filters'
-      const shouldResetFilter = event?.type === 'reset-filter'
-      const shouldResetFilterFromFilterSelectButton = event?.detail?.this?.hasAttribute('filter')
-      let isNextPage = false
-
-      if (event?.detail?.ppage && this.lastRequest) {
-        // ppage reuse last request
-        request = JSON.stringify(Object.assign(JSON.parse(this.lastRequest), { ppage: event.detail.ppage }))
-        console.log('🚀 ~ request', request)
-        isNextPage = true
-      } else {
-        // new request
-        const initialFilters = initialRequestObj?.filter
-        const initialFiltersAsString = initialFilters?.map((filter) => JSON.stringify(filter))
-        // add initialFiltersAsString to this.filters only once
-        if (initialFiltersAsString?.length && this.filters.length === 0) {
-          this.filters.push(initialFiltersAsString)
-        }
-
-        if (this.setFilters.length && this.filters.length === 1) {
-          this.filters = this.setFilters.map((filter) => JSON.stringify(filter))
-        }
-        console.log(this.filters)
-
-
-
-        // this.updateFilterFromURLParams()
-
-        // construct filter item
-        // const filter = this.constructFilterItem(event)
-        // if (filter) this.filters.push(JSON.stringify(filter))
-
-        // if there is an initial filter set (e.g. for events) we want to keep it
-        // if (initialFiltersAsString?.length) {
-        //   this.filters.push(initialFiltersAsString)
-        // }
-
-        if (shouldResetAllFilters) {
-          initialRequestObj = Object.assign(initialRequestObj, { shouldResetAllFilters })
-          this.removeAllFilterParams()
-        }
-
-        if (shouldResetFilter) {
-          initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilter })
-          this.removeFilterParam(event.detail.this.getAttribute('filter-key'))
-        }
-
-        if (shouldResetFilterFromFilterSelectButton) {
-          initialRequestObj = Object.assign(initialRequestObj, { shouldResetFilterFromFilterSelectButton })
-        }
-
-        // console.log('🚀 ~ this.filters', this.filters)
-
-        // keep the last search location inside initialRequestObj and store it in url params
-        if (event?.detail?.key === 'location-search') {
-          if (!!event.detail.lat && !!event.detail.lng ) {
-            initialRequestObj.clat = event.detail.lat
-            initialRequestObj.clong = event.detail.lng
-            this.params.set('clat', event.detail.lat)
-            this.params.set('clong', event.detail.lng)
-            this.params.set('cname', encodeURIComponent(event.detail.description))
-          } else {
-            if (initialRequestObj.clat) delete initialRequestObj.clat
-            if (initialRequestObj.clong) delete initialRequestObj.clong
-            this.params.delete('clat')
-            this.params.delete('clong')
-            this.params.delete('cname')
-          }
-        } else if (this.params.has('clat') || this.params.has('clong') || this.params.has('cname')) {
-          initialRequestObj.clat = this.params.get('clat')
-          initialRequestObj.clong = this.params.get('clong')
-        }
-
-        this.hasSearchTerm = event?.detail?.key === 'input-search' || this.params.get('q') !== ('' || null)
-        if (this.hasSearchTerm) this.searchTerm = event?.detail?.value || this.params.get('q')
-        let hasSorting = false
-        let hasSearchLocation = false
-        const filterRequest = `{
-          "filter": ${this.filters.length > 0 ? `[${this.filters.join(',')}]` : '[]'},
-          "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
-          "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
-          "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
-          "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
-          "searchcontent": ${!this.hasAttribute('no-search-tab')}
-          ${(hasSorting = (event?.detail?.key === 'sorting' && !!event.detail.id) || (event?.detail?.key === 'location-search')) ? `,"sorting": "${event.detail.id || 2}"` : ''}
-          ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"`: ''}
-          ${(hasSearchLocation = !!initialRequestObj.clat) ? `,"clat": "${initialRequestObj.clat}"` : ''}
-          ${(hasSearchLocation = !!initialRequestObj.clong) ? `,"clong": "${initialRequestObj.clong}"` : ''}
-        }`
-        request = this.lastRequest = this.filters.length > 0 || this.hasSearchTerm || hasSearchLocation || hasSorting ? filterRequest : JSON.stringify(initialRequestObj)
-      }
-      
-
+   
       const LanguageEnum = {
         'd': 'de',
         'f': 'fr',
         'i': 'it'
       }
-
-      let requestInit = {}
-      if (this.isMocked) {
-        requestInit = {
+      let request = {}
+      if (isMocked) {
+        request = {
           method: 'GET'
         }
       } else {
-        requestInit = {
+        request = {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept-Language': LanguageEnum[this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd']
+            'Accept-Language': LanguageEnum[this.getAttribute('sprach-id') || currentRequestObj.sprachid || 'd']
           },
           mode: 'cors',
-          body: request,
-          // signal: this.abortController.signal
+          body: JSON.stringify({
+            ...WithFacet.cleanRequest(structuredClone(currentRequestObj), structuredClone(initialRequestObj)),
+            searchcontent: !this.hasAttribute('no-search-tab')
+          }),
+          signal: this.abortController.signal
         }
       }
-
-      // console.log('🚀 ~ request', request)
 
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
       clearTimeout(timeoutId)
@@ -218,40 +130,42 @@ export default class WithFacet extends Shadow() {
         this.dispatchEvent(new CustomEvent('with-facet', {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
-            fetch: fetch(apiUrl, requestInit).then(response => {
+            fetch: fetch(endpoint, request).then(response => {
                 if (response.status >= 200 && response.status <= 299) {
                   return response.json()
                 }
                 throw new Error(response.statusText)
               }).then(json => {
-                // store initial response
-                this.lastResponse = json
+                // update filters with api response
+                currentRequestObj.filter = json.filters
                 console.log('🚀 ~ json', json)
 
                 setTimeout(() => {
                   // this.checkFiltersInURL(json.filters)
                   // this.updateUrlSearchFromResponse(json)
                   // this.updateUrlParamsFromResponse(json)
+
+                  // if (event?.detail?.wrapper?.filterItem) this.updateFilterAndParamsWithSelectedFilter(event)
                 }, 0)
-                
+                /*
                 if (isNextPage) json = Object.assign(json, { isNextPage })
                 if (shouldResetAllFilters) json = Object.assign(json, { shouldResetAllFilters })
                 if (shouldResetFilter) json = Object.assign(json, { shouldResetFilter })
                 if (shouldResetFilterFromFilterSelectButton) json = Object.assign(json, { shouldResetFilterFromFilterSelectButton })
+                  */
 
                 return json
               }).finally(json => {
-                const requestObj = JSON.parse(request)
                 // update inputs
                 this.dispatchEvent(new CustomEvent('search-change', {
                   detail: {
-                    searchTerm: (json || requestObj)?.searchText
+                    searchTerm: (json || currentRequestObj)?.searchText
                   },
                   bubbles: true,
                   cancelable: true,
                   composed: true
                 }))
-                const searchCoordinates = !(json || requestObj)?.clat || !(json || requestObj)?.clong ? '' : `${(json || requestObj).clat}, ${(json || requestObj).clong}`
+                const searchCoordinates = !(json || currentRequestObj)?.clat || !(json || currentRequestObj)?.clong ? '' : `${(json || currentRequestObj).clat}, ${(json || currentRequestObj).clong}`
                 if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
                 this.dispatchEvent(new CustomEvent('location-change', {
                   detail: {
@@ -276,28 +190,27 @@ export default class WithFacet extends Shadow() {
       if (this.abortControllerLocations) this.abortControllerLocations.abort()
       this.abortControllerLocations = new AbortController()
       
+      // TODO: Fix request locations
       // merge both user Filter with sublevel filter
       const subLevelFilter = event.detail.filter
       if (this.filters?.length) subLevelFilter.push(JSON.parse(this.filters.reduce((acc, filter) => acc + `${filter}`)))
-        console.log('🚀 ~ subLevelFilter', subLevelFilter)
 
       let body = `{
         "filter": ${JSON.stringify(subLevelFilter)},
-        "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
-        "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
-        "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
-        "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
+        "MandantId": ${this.getAttribute('mandant-id') || currentRequestObj.MandantId || 110},
+        "PortalId": ${this.getAttribute('portal-id') || currentRequestObj.PortalId || 29},
+        "sprachid": "${this.getAttribute('sprach-id') || currentRequestObj.sprachid || 'd'}",
+        "psize": ${this.getAttribute('p-size') || currentRequestObj.psize || 12},
         "onlycourse": true
         ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"`: ''}
-        ${initialRequestObj.clat ? `,"clat": "${initialRequestObj.clat}"` : ''}
-        ${initialRequestObj.clong ? `,"clong": "${initialRequestObj.clong}"` : ''}
+        ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}
+        ${currentRequestObj.clong ? `,"clong": "${currentRequestObj.clong}"` : ''}
       }`
       if (event?.detail?.ppage && this.requestLocationsLastBody) {
         // ppage reuse last request
         body = JSON.stringify(Object.assign(JSON.parse(this.requestLocationsLastBody), { ppage: event.detail.ppage }))
       }
-      console.log('🚀 ~ body', body)
-      const requestInit = {
+      const request = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -307,7 +220,7 @@ export default class WithFacet extends Shadow() {
         signal: this.abortControllerLocations.signal
       }
       // @ts-ignore
-      event.detail.resolve(fetch(apiUrl, requestInit).then(response => {
+      event.detail.resolve(fetch(endpoint, request).then(response => {
         if (response.status >= 200 && response.status <= 299) {
           return response.json()
         }
@@ -337,22 +250,74 @@ export default class WithFacet extends Shadow() {
     self.removeEventListener('popstate', this.popstateListener)
   }
 
-  setFilterItemChecked(filters, filterKey, filterValue, event) {
-    for (let filterItem of filters) {
+  static updateFiltersDrillDown (filters, filterKey, filterValue, reset = false) {
+    const filterItem = filters.find(filterItem => {
       if (filterItem.urlpara === filterKey) {
-        console.log('🚀 ~ filterItem', filterItem)
         filterItem.children.forEach(child => {
-          if (child.id === filterValue || child.urlpara === filterValue) {
-            child.selected = true
-            console.log('🚀 ~ child', child)
+          if (reset) {
+            child.selected = false
+          } else {
+            // TODO: Figure if || has any true, false issues
+            child.selected = child.id === filterValue || child.urlpara === filterValue
           }
         })
-      } else if (filterItem.children) {
-        this.setFilterItemChecked(filterItem.children, filterKey, filterValue, event)
+        return true
+      }
+      return false
+    })
+    if (filterItem) {
+      return [structuredClone(filterItem)]
+    } else if (filterItem?.children) {
+      return Object.assign(structuredClone(filters), {children: WithFacet.updateFiltersDrillDown(filterItem.children, filterKey, filterValue, reset) || []})
+    }
+    //return []
+  }
+
+  static updateFilters (filters, filterKey, filterValue, reset = false) {
+    for (const key in filters) {
+      let filterItem = filters[key]
+
+      // Bad API cant swallow the following props
+      if (filterItem.color || filterItem.color === '') delete filterItem.color
+      if (filterItem.count || filterItem.count === 0) delete filterItem.count
+      if (filterItem.disabled || filterItem.disabled === false) delete filterItem.disabled
+      if (filterItem.hideCount || filterItem.hideCount === false) delete filterItem.hideCount
+      if (filterItem.level || filterItem.level === '') delete filterItem.level
+
+      if (filterItem.urlpara === filterKey) {
+        filterItem.children.forEach(child => {
+          if (reset) {
+            child.selected = false
+          } else {
+            // TODO: Figure if || has any true, false issues
+            child.selected = child.id === filterValue || child.urlpara === filterValue
+          }
+        })
+        if (filterItem.children) {
+          WithFacet.updateFilters(filterItem.children, filterKey, filterValue)
+        }
+      } else {
+        if (filterItem.children) {
+          WithFacet.updateFilters(filterItem.children, filterKey, filterValue)
+        }
+        delete filters[key]
       }
     }
+    return filters.filter(filter => filter)
+  }
 
-    return filters
+  static cleanRequest (requestObj, initialRequestObj) {
+    // Bad API needs filter for payload but responses with filters
+    if (requestObj.filters) delete requestObj.filters
+    // Bad API cant digest s...
+    if (requestObj.searchText === '') delete requestObj.searchText
+    // Bad API can not digest null or empty filters
+    for (const key in requestObj) {
+      if (requestObj[key] === null) delete requestObj[key]
+    }
+    // Bad API needs initial filter
+    if (initialRequestObj?.filter?.[0]) requestObj.filter.push(initialRequestObj.filter[0])
+    return requestObj
   }
 
   catchURLParams () {
@@ -415,55 +380,55 @@ export default class WithFacet extends Shadow() {
   }
 
 
-  updateFilterFromURLParams (key = null, filters = []) {
-    this.filters = filters
-    let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
-    if (key) filteredURLKeys = [key] // set first filter key
-    const filterItems = []
+  // updateFilterFromURLParams (key = null, filters = []) {
+  //   this.filters = filters
+  //   let filteredURLKeys = Array.from(this.params.keys()).filter(key => !this.ignoreURLKeys.includes(key))
+  //   if (key) filteredURLKeys = [key] // set first filter key
+  //   const filterItems = []
 
-    // TODO: @Alex get center filter from url
-    // console.log(filteredURLKeys, this.filterKeys, this.lastResponse.filters, this.filters)
-    // if (this.lastResponse.filters) this.filters = this.lastResponse.filters
+  //   // TODO: @Alex get center filter from url
+  //   // console.log(filteredURLKeys, this.filterKeys, currentRequestObj.filter, this.filters)
+  //   // if (currentRequestObj.filter) this.filters = currentRequestObj.filter
 
-    // if there are filters in the url
-    if (this.filterKeys.length !== 0 && this.lastResponse.filters) {
-      console.log('🚀', this.filterKeys, this.lastResponse.filters)
-      // this.filterKeys.forEach(key => {
-        // let filterItem = this.findFilterItemByUrlpara(this.lastResponse.filters, key)
-        // console.log(filterItem)
+  //   // if there are filters in the url
+  //   if (this.filterKeys.length !== 0 && currentRequestObj.filter) {
+  //     console.log('🚀', this.filterKeys, currentRequestObj.filter)
+  //     // this.filterKeys.forEach(key => {
+  //       // let filterItem = this.findFilterItemByUrlpara(currentRequestObj.filter, key)
+  //       // console.log(filterItem)
 
-        let filterItem = this.setSelectedByUrlpara(this.lastResponse.filters, this.filterKeys)
-        console.log('🚀 ~ filterItem', filterItem)
+  //       let filterItem = this.setSelectedByUrlpara(currentRequestObj.filter, this.filterKeys)
+  //       console.log('🚀 ~ filterItem', filterItem)
 
 
-        // filterItem.children.forEach(child => {
-      //     if (this.params.get(filterItem.urlpara)?.split('-').includes(child.urlpara || child.id)) {
-      //       child.selected = true
-      //     } else {
-      //       child.selected = false
-      //     }
-      //   })
+  //       // filterItem.children.forEach(child => {
+  //     //     if (this.params.get(filterItem.urlpara)?.split('-').includes(child.urlpara || child.id)) {
+  //     //       child.selected = true
+  //     //     } else {
+  //     //       child.selected = false
+  //     //     }
+  //     //   })
 
-      //   if (filterItem) {
-      //     filterItems.push(filterItem)
-      //   } else {
-      //     // remove filter key if it is not in the response
-      //     this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
-      //     filteredURLKeys = filteredURLKeys.filter(urlKey => urlKey !== key)
-      //   }
-      // })
+  //     //   if (filterItem) {
+  //     //     filterItems.push(filterItem)
+  //     //   } else {
+  //     //     // remove filter key if it is not in the response
+  //     //     this.filterKeys = this.filterKeys.filter(filterKey => filterKey !== key)
+  //     //     filteredURLKeys = filteredURLKeys.filter(urlKey => urlKey !== key)
+  //     //   }
+  //     // })
 
-      // // construct filter items
-      // if (filterItems.length > 0) {
-      //   filterItems.forEach(item => {
-      //     const filter = this.constructFilterItem(item)
-      //     if (filter) this.filters.push(JSON.stringify(filter))
-      //       console.log('🚀 ~ filter', filter)
-      //   })
-      // }
-      // })
-    }
-  }
+  //     // // construct filter items
+  //     // if (filterItems.length > 0) {
+  //     //   filterItems.forEach(item => {
+  //     //     const filter = this.constructFilterItem(item)
+  //     //     if (filter) this.filters.push(JSON.stringify(filter))
+  //     //       console.log('🚀 ~ filter', filter)
+  //     //   })
+  //     // }
+  //     // })
+  //   }
+  // }
 
   updateUrlSearchFromResponse (response) {
     if (!response.searchText) {
