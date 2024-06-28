@@ -26,6 +26,14 @@ export default class TileList extends Shadow() {
       if (this.details.classList.contains('o-tile-list__details--expanded')) {
         // no tiles are delivered as attribute. here we got to fetch the location data for the tiles
         if (!this.data.tiles?.length) {
+          /* set loading state */
+          console.log('this.tilesContainer', this.tilesContainer)
+          this.tilesContainer.innerHTML = /* html */`
+              <mdx-component class="o-tile-list__loading-bar">
+                  <mdx-loading-bar></mdx-loading-bar>
+              </mdx-component>
+          `
+
           return new Promise(resolve => this.dispatchEvent(new CustomEvent('request-locations', {
             detail: {
               resolve,
@@ -230,6 +238,11 @@ export default class TileList extends Shadow() {
         padding: 1.5em 0 4em;
       }
 
+      :host .o-tile-list__loading-bar {
+        display: block;
+        width: 100%;
+      }
+
       @media only screen and (min-width: 1025px) and (max-width: 1600px) {
         :host ks-m-tile {
           width: 49%
@@ -392,6 +405,10 @@ export default class TileList extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+        name: 'mdx-component'
       }
     ])
   }
