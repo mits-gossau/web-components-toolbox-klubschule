@@ -67,9 +67,8 @@ export default class WithFacet extends Shadow() {
       } else if (event?.type === 'reset-filter') {
         // TODO: Test if reset works nicely
         // reset particular filter, ks-a-button
-        const filterKey = event.detail?.target?.getAttribute('filter-key')
-        const filterValue = event.detail?.target?.getAttribute('filter-value')
-        currentRequestObj.filter = WithFacet.updateFiltersDrillDown(currentRequestObj.filter, filterKey, filterValue, true)
+        const filterKey = event.detail.this.getAttribute('filter-key')
+        currentRequestObj.filter = WithFacet.updateFiltersDrillDown(currentRequestObj.filter, filterKey, undefined, true)
       } else if (event?.detail?.wrapper?.filterItem) {
         // TODO: Test if checkbox and nav level item reaches here
         // build dynamic filters according to the event
@@ -251,6 +250,7 @@ export default class WithFacet extends Shadow() {
   }
 
   static updateFiltersDrillDown (filters, filterKey, filterValue, reset = false) {
+    console.log(filters, filterKey, filterValue, reset)
     const filterItem = filters.find(filterItem => {
       if (filterItem.urlpara === filterKey) {
         filterItem.children.forEach(child => {
@@ -258,7 +258,14 @@ export default class WithFacet extends Shadow() {
             child.selected = false
           } else {
             // TODO: Figure if || has any true, false issues
-            child.selected = child.id === filterValue || child.urlpara === filterValue
+            const isIdOrUrlpara = child.id === filterValue || child.urlpara === filterValue
+            if (child.selected && isIdOrUrlpara) {
+              child.selected = false // toggle child if is is already selected 
+            } else if (child.selected && !isIdOrUrlpara) {
+              child.selected = true // keep child selected if it is already selected
+            } else if (!child.selected && isIdOrUrlpara) {
+              child.selected = true // select child if it is not selected
+            } 
           }
         })
         return true
