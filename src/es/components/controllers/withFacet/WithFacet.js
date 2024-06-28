@@ -68,14 +68,14 @@ export default class WithFacet extends Shadow() {
         // TODO: Test if reset works nicely
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
-        currentRequestObj.filter = WithFacet.updateFiltersDrillDown(currentRequestObj.filter, filterKey, undefined, true)
+        currentRequestObj.filter = WithFacet.updateFilters(currentRequestObj.filter, filterKey, undefined, true)
       } else if (event?.detail?.wrapper?.filterItem) {
         // TODO: Test if checkbox and nav level item reaches here
         // build dynamic filters according to the event
         const filterId = event.detail?.target?.getAttribute('filter-id') || event.detail?.target?.filterId
         const [filterKey, filterValue] = filterId.split('-')
         debugger
-        currentRequestObj.filter = WithFacet.updateFiltersDrillDown(currentRequestObj.filter, filterKey, filterValue)
+        currentRequestObj.filter = WithFacet.updateFilters(currentRequestObj.filter, filterKey, filterValue)
       } else if (event?.detail?.key === 'location-search') {
         // keep the last search location inside currentRequestObj and store it in url params
         if (!!event.detail.lat && !!event.detail.lng) {
@@ -116,7 +116,7 @@ export default class WithFacet extends Shadow() {
           },
           mode: 'cors',
           body: JSON.stringify({
-            ...WithFacet.cleanRequest(structuredClone(currentRequestObj), structuredClone(initialRequestObj)),
+            ...WithFacet.cleanRequest(structuredClone(currentRequestObj)),
             searchcontent: !this.hasAttribute('no-search-tab')
           }),
           signal: this.abortController.signal
@@ -126,6 +126,7 @@ export default class WithFacet extends Shadow() {
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
+        console.log('request', structuredClone(currentRequestObj))
         this.dispatchEvent(new CustomEvent('with-facet', {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
@@ -249,81 +250,34 @@ export default class WithFacet extends Shadow() {
     self.removeEventListener('popstate', this.popstateListener)
   }
 
-  static updateFiltersDrillDown (filters, filterKey, filterValue, reset = false) {
-    console.log(filters, filterKey, filterValue, reset)
-    const filterItem = filters.find(filterItem => {
-      if (filterItem.urlpara === filterKey) {
-        filterItem.children.forEach(child => {
-          if (reset) {
-            child.selected = false
-          } else {
-            // TODO: Figure if || has any true, false issues
-            const isIdOrUrlpara = child.id === filterValue || child.urlpara === filterValue
-            if (child.selected && isIdOrUrlpara) {
-              child.selected = false // toggle child if is is already selected 
-            } else if (child.selected && !isIdOrUrlpara) {
-              child.selected = true // keep child selected if it is already selected
-            } else if (!child.selected && isIdOrUrlpara) {
-              child.selected = true // select child if it is not selected
-            } 
+  static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true) {
+    const newFilters = []
+    filters.forEach(filterItem => {
+      // only the first level has the urlpara === filterKey check
+      if (!zeroLevel || filterItem.urlpara === filterKey) {
+        if (reset) {
+          filterItem.selected = false
+        } else {
+          const isIdOrUrlpara = filterItem.id === filterValue || filterItem.urlpara === filterValue
+          if (filterItem.selected && isIdOrUrlpara) {
+            filterItem.selected = false // toggle filterItem if is is already selected 
+          } else if (filterItem.selected && !isIdOrUrlpara) {
+            filterItem.selected = true // keep filterItem selected if it is already selected
+          } else if (!filterItem.selected && isIdOrUrlpara) {
+            filterItem.selected = true // select filterItem if it is not selected
           }
-        })
-        return true
+        }
       }
-      return false
+      if (filterItem.children) filterItem.children = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false)
+      // only the first level allows selected falls when including selected children
+      if (filterItem.children?.length || filterItem.selected) newFilters.push(filterItem)
     })
-    if (filterItem) {
-      return [structuredClone(filterItem)]
-    } else if (filterItem?.children) {
-      return Object.assign(structuredClone(filters), {children: WithFacet.updateFiltersDrillDown(filterItem.children, filterKey, filterValue, reset) || []})
-    }
-    //return []
+    return newFilters
   }
 
-  static updateFilters (filters, filterKey, filterValue, reset = false) {
-    for (const key in filters) {
-      let filterItem = filters[key]
-
-      // Bad API cant swallow the following props
-      if (filterItem.color || filterItem.color === '') delete filterItem.color
-      if (filterItem.count || filterItem.count === 0) delete filterItem.count
-      if (filterItem.disabled || filterItem.disabled === false) delete filterItem.disabled
-      if (filterItem.hideCount || filterItem.hideCount === false) delete filterItem.hideCount
-      if (filterItem.level || filterItem.level === '') delete filterItem.level
-
-      if (filterItem.urlpara === filterKey) {
-        filterItem.children.forEach(child => {
-          if (reset) {
-            child.selected = false
-          } else {
-            // TODO: Figure if || has any true, false issues
-            child.selected = child.id === filterValue || child.urlpara === filterValue
-          }
-        })
-        if (filterItem.children) {
-          WithFacet.updateFilters(filterItem.children, filterKey, filterValue)
-        }
-      } else {
-        if (filterItem.children) {
-          WithFacet.updateFilters(filterItem.children, filterKey, filterValue)
-        }
-        delete filters[key]
-      }
-    }
-    return filters.filter(filter => filter)
-  }
-
-  static cleanRequest (requestObj, initialRequestObj) {
+  static cleanRequest (requestObj) {
     // Bad API needs filter for payload but responses with filters
     if (requestObj.filters) delete requestObj.filters
-    // Bad API cant digest s...
-    if (requestObj.searchText === '') delete requestObj.searchText
-    // Bad API can not digest null or empty filters
-    for (const key in requestObj) {
-      if (requestObj[key] === null) delete requestObj[key]
-    }
-    // Bad API needs initial filter
-    if (initialRequestObj?.filter?.[0]) requestObj.filter.push(initialRequestObj.filter[0])
     return requestObj
   }
 

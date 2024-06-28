@@ -166,7 +166,6 @@ export default class FilterCategories extends Shadow() {
   }
 
   updateFilter (generatedFilters, child, parentItem) {
-    // console.log(generatedFilters, child, parentItem)
     const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
@@ -345,7 +344,7 @@ export default class FilterCategories extends Shadow() {
             this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId, level++) // recursive call
           } else {
             const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
-            if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedFilters[i])) {
+            if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedFilters[0])) {
               this.updateFilter(generatedFilters, child, filterItem)
             } else {
               generatedFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
