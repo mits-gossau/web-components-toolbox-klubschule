@@ -518,7 +518,6 @@ export default class OffersPage extends Shadow() {
                           ${filterSearch}
                           <ks-m-filter-categories
                             namespace="filter-default-" 
-                            lang="de" 
                             translation-key-close="${this.getTranslation('Filter.closeOverlayer')}" 
                             translation-key-reset="${this.getTranslation('Filter.ResetFilter')}"
                           ></ks-m-filter-categories>
