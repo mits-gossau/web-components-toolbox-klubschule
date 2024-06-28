@@ -155,7 +155,6 @@ export default class CheckoutLayout extends Shadow() {
     if ((main = this.root.querySelector('#main'))) div.querySelector('slot[name=main]')?.replaceWith(main)
     if (sidebar) {
       div.querySelector('slot[name=sidebar]')?.replaceWith(sidebar)
-      console.log(sidebar)
     }
     if (bottom) { div.querySelector('slot[name=bottom]')?.replaceWith(bottom) }
     this.html = div.children
