@@ -97,17 +97,20 @@ export default class TileFactory extends Shadow() {
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
   async renderHTML (fetch) {
-    /*
-    // TODO: If needed do the loading animation
+    /* loading */
     this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/loading/Loading.js`,
-        name: 'a-loading'
+        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+        name: 'mdx-component'
       }
     ])
     this.html = ''
-    this.html = '<a-loading></a-loading>'
-    */
+    this.html = /* html */`
+      <mdx-component>
+          <mdx-loading-bar></mdx-loading-bar>
+      </mdx-component>
+    `
+
     return fetch.then(data => {
       setTimeout(() => {
         if (!data.isNextPage) this.html = ''
