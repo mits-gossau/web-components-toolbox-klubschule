@@ -267,6 +267,6 @@ export default class TileFactory extends Shadow() {
   }
 
   get hiddenSections () {
-    return Array.from(this.root.querySelectorAll('section[hidden]'))
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }

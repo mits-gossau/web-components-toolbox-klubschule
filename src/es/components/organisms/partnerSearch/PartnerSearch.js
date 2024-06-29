@@ -45,7 +45,7 @@ export default class PartnerSearch extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**
@@ -138,6 +138,6 @@ export default class PartnerSearch extends Shadow() {
   }
 
   get hiddenSections () {
-    return Array.from(this.root.querySelectorAll('section[hidden]'))
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }

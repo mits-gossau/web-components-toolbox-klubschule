@@ -479,7 +479,7 @@ export default class OffersPage extends Shadow() {
         </m-dialog>
       </ks-c-auto-complete>
     ` : ''
-
+    
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
@@ -620,6 +620,6 @@ export default class OffersPage extends Shadow() {
   }
 
   get hiddenSections () {
-    return Array.from(this.root.querySelectorAll('section[hidden]'))
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }
