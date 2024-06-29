@@ -42,6 +42,8 @@ export default class WithFacet extends WebWorker() {
     const initialRequestObj = JSON.parse(this.getAttribute('initial-request'))
     // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
     let currentRequestObj = structuredClone(initialRequestObj)
+    // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
+    let currentCompleteFilterObj = currentRequestObj.filter
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
@@ -57,14 +59,12 @@ export default class WithFacet extends WebWorker() {
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
 
-      let isNextPage = false
       let filterId = null
-      currentRequestObj.sorting = 3;
+      currentRequestObj.sorting = 3
       if (event?.detail?.ppage) {
         // ppage reuse last request
-        currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
-        isNextPage = true
-        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
+        currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage });
+        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
@@ -72,16 +72,18 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
-        this.deleteFilterFromUrl(filterKey)
-        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, undefined, true)
+        this.deleteFilterFromUrl(filterKey);
+        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         if (filterKey === 'q') delete currentRequestObj.searchText
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
+        // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
-        this.updateFilterToURLParams(filterKey, filterValue)
-        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, filterKey, filterValue)
-        currentRequestObj.sorting = 1;
+        this.updateFilterToURLParams(filterKey, filterValue);
+        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue)
+        currentRequestObj.sorting = 1
       } else if (event?.detail?.key === 'location-search') {
+        // location search
         // keep the last search location inside currentRequestObj and store it in url params
         if (!!event.detail.lat && !!event.detail.lng) {
           currentRequestObj.clat = event.detail.lat
@@ -90,28 +92,29 @@ export default class WithFacet extends WebWorker() {
           if (currentRequestObj.clat) delete currentRequestObj.clat
           if (currentRequestObj.clong) delete currentRequestObj.clong
         }
-        currentRequestObj.sorting = event.detail.id || 2
-        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
-        currentRequestObj.sorting = 2;
+        currentRequestObj.sorting = event.detail.id || 2;
+        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
       } else if (event?.detail?.key === 'input-search') {
+        // text field search
         if (event?.detail?.value) {
           this.updateFilterToURLParams('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
         }
-        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
-        currentRequestObj.sorting = 1;
+        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        currentRequestObj.sorting = 1
       } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
-        debugger;
+        // sorting
         // TODO: Test if sorting still works
-        currentRequestObj.sorting = event.detail.id || 3
-        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
+        currentRequestObj.sorting = event.detail.id || 3;
+        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
       } else {
+        // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
-        currentRequestObj.filter = await this.webWorker(WithFacet.updateFilters, currentRequestObj.filter, undefined, undefined)
+        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
       }
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
-   
+
       const LanguageEnum = {
         'd': 'de',
         'f': 'fr',
@@ -151,7 +154,7 @@ export default class WithFacet extends WebWorker() {
                 throw new Error(response.statusText)
               }).then(json => {
                 // update filters with api response
-                currentRequestObj.filter = json.filters
+                currentRequestObj.filter = currentCompleteFilterObj = json.filters
 
                 return json
               }).finally(json => {
@@ -257,7 +260,7 @@ export default class WithFacet extends WebWorker() {
 
   // always shake out the response filters to only include selected filters or selected in ancestry
   static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true) {
-    const newFilters = []
+    const treeShookFilters = []
     filters.forEach(filterItem => {
       const isMatchingKey = filterItem.urlpara === filterKey
       // only the first level has the urlpara === filterKey check
@@ -271,15 +274,16 @@ export default class WithFacet extends WebWorker() {
           filterItem.selected = true // select filterItem if it is not selected
         }
       }
+      const treeShookFilterItem = structuredClone(filterItem)
       if (reset && isMatchingKey) {
-        filterItem.children = []
+        treeShookFilterItem.children = []
       } else if (filterItem.children) {
-        filterItem.children = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false)
+        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false)
       }
       // only the first level allows selected falls when including selected children
-      if (filterItem.children?.length || filterItem.selected) newFilters.push(filterItem)
+      if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
     })
-    return newFilters
+    return [filters, treeShookFilters]
   }
 
   static cleanRequest (requestObj) {
