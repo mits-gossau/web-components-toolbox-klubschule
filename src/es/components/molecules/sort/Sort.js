@@ -7,28 +7,38 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class Sort extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.closeEventListener = event => this.root.querySelector('.m-sort__tooltip-open')?.classList.remove('m-sort__tooltip-open')
+
+    this.selfCloseEventListener = event => {
+      const target = Array.from(event.composedPath()).find(node => node.tagName === 'KS-M-SORT')
+      if (target) return event.stopPropagation()
+      else  this.root.querySelector('.m-sort__tooltip-open')?.classList.remove('m-sort__tooltip-open')
+    }
   }
 
-  connectedCallback () {
+  connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
     this.toggleTooltip()
     if (this.getAttribute('close-event-name')) document.body.addEventListener(this.getAttribute('close-event-name'), this.closeEventListener)
+
+    self.addEventListener('click', this.selfCloseEventListener)
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     if (this.getAttribute('close-event-name')) document.body.removeEventListener(this.getAttribute('close-event-name'), this.closeEventListener)
+
+    self.removeEventListener('click', this.selfCloseEventListener)
   }
 
   /**
    * Toggle tooltip
    */
-  toggleTooltip () {
+  toggleTooltip() {
     const toggle = this.root.querySelector('.m-sort')
     if (toggle) {
       toggle.addEventListener('click', () => {
@@ -43,7 +53,7 @@ export default class Sort extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
@@ -52,14 +62,14 @@ export default class Sort extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML () {
+  shouldRenderHTML() {
     return !this.sort
   }
 
   /**
    * renders the css
    */
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */`
       :host .m-sort {
         position: relative;
@@ -79,6 +89,7 @@ export default class Sort extends Shadow() {
         border-radius: 0.5em;
         box-shadow: 0em 0em 0.75em 0em rgba(51, 51, 51, 0.1);
         z-index: 11;
+        overflow: hidden;
       }
 
       :host .m-sort__list {
@@ -131,7 +142,7 @@ export default class Sort extends Shadow() {
   /**
    * fetches the template
    */
-  fetchTemplate () {
+  fetchTemplate() {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
@@ -172,7 +183,7 @@ export default class Sort extends Shadow() {
    * Render HTML
    * @returns Promise<void>
    */
-  renderHTML () {
+  renderHTML() {
     const ul = this.root.querySelector('ul')
     if (!ul) return console.warn('element empty')
     const currentText = ul.getAttribute('main-text') || ''
@@ -189,22 +200,22 @@ export default class Sort extends Shadow() {
             if (event.composedPath()[0].getAttribute('id') === '2' && !window.location.search.includes('clat') && !window.location.search.includes('clong')) {
               this.dispatchEvent(
                 new CustomEvent('show-location-search-dialog', {
-                    detail: {},
-                    bubbles: true,
-                    cancelable: true,
-                    composed: true
+                  detail: {},
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
                 })
               )
             } else {
               this.dispatchEvent(
                 new CustomEvent('request-with-facet', {
-                    detail: {
-                      key: 'sorting',
-                      id: event.currentTarget?.id
-                    },
-                    bubbles: true,
-                    cancelable: true,
-                    composed: true
+                  detail: {
+                    key: 'sorting',
+                    id: event.currentTarget?.id
+                  },
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
                 })
               )
             }
@@ -239,7 +250,7 @@ export default class Sort extends Shadow() {
     ])
   }
 
-  get sort () {
+  get sort() {
     return this.root.querySelector('.m-sort')
   }
 }
