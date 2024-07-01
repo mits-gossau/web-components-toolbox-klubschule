@@ -170,7 +170,7 @@ export default class Badge extends Shadow() {
         : `${this.text}`
       }
             ${this.iconName || this.iconURL ? /* html */ `
-              <a-icon-mdx ${this.iconName ? `icon-name="${this.iconName}"` : ''} ${this.iconURL ? `icon-url="${this.iconURL}"` : ''} ${this.iconSize ? `size="${this.iconSize}"` : ''} class="icon-right"></a-icon-mdx>
+              <a-icon-mdx ${this.iconName ? `icon-name="${this.iconName}"` : ''} ${this.iconURL ? `icon-url="${this.iconURL}"` : ''} ${this.iconSize ? `size="${this.iconSize}"` : ''} class="${this.text ? 'icon-right' : ''}"></a-icon-mdx>
             ` : ''}
         </ks-a-button>
         ${this.tooltip ? /* html */ `

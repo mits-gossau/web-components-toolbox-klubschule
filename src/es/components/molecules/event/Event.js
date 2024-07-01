@@ -218,10 +218,7 @@ export default class Event extends Shadow() {
         display: flex;
         flex-direction: row;
         align-items: center;
-      }
-
-      :host ks-m-badge + ks-m-badge {
-        margin-left: 0.5em;
+        gap: 0.5em;
       }
       
       :host ks-m-badge a-icon-mdx {
@@ -508,8 +505,10 @@ export default class Event extends Shadow() {
           <div class="controls-right">
             <div class="icons">
               ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
-                <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}" tooltip="${icon.text}">
-                </ks-m-badge>
+                <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
+                  <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}">
+                  </ks-m-badge>
+                </ks-m-tooltip>
               `, '') : ''}
             </div>
             <span class="price">${price?.pre ? price?.pre + ' ' : ''}<strong>${price?.amount || ''}</strong>${price?.per ? ' / ' + price?.per : ''}</span>
@@ -530,6 +529,10 @@ export default class Event extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/badge/Badge.js`,
         name: 'ks-m-badge'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
+        name: 'ks-m-tooltip'
       }
     ])
   }

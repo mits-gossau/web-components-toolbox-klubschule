@@ -230,11 +230,14 @@ export default class EventDetail extends Shadow() {
         color: var(--mdx-base-color-grey-950);
       }
 
-      :host .with-border {
+      :host .badge-with-border {
+        box-sizing: border-box;
         padding: var(--mdx-sys-spacing-fix-3xs);
         background-color: tranparent;
         border: var(--mdx-sys-border-width-default) solid var(--mdx-sys-color-neutral-bold4);
         border-radius: 3px;
+        width: 1.75rem;
+        height: 1.75rem;
       }
 
       :host tr.hidden {
@@ -396,8 +399,8 @@ export default class EventDetail extends Shadow() {
         ${this.data.abo_typen_label && (this.data.abo_typen?.length || this.data.abo_typen_link_label) ? /* html */ `
           <div>
             <h3>
-              <div class="with-border">
-                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="AboPlus" size="1em"></a-icon-mdx>
+              <div class="badge-with-border">
+                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="AboPlus" size="1rem"></a-icon-mdx>
               </div>
               <span>${this.data.abo_typen_label}</span>
             </h3>

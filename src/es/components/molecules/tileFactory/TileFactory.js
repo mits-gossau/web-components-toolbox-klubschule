@@ -104,16 +104,18 @@ export default class TileFactory extends Shadow() {
         name: 'mdx-component'
       }
     ])
-    this.html = ''
     this.html = /* html */`
-      <mdx-component>
+      <mdx-component class="mdx-loading">
           <mdx-loading-bar></mdx-loading-bar>
       </mdx-component>
     `
 
     return fetch.then(data => {
       setTimeout(() => {
-        if (!data.isNextPage) this.html = ''
+        // remove loading component
+        this.root.querySelector('.mdx-loading')?.remove()
+
+        if (data.ppage === 1) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
