@@ -21,6 +21,7 @@ export default class AppointmentsList extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
     document.body.addEventListener('update-subscriptions', this.subscriptionsListener)
+    this.addEventListener('force-reload-list', this.forceReloadList)
     // get first subscription information for current user
     // then request the appointments with received 'subscriptionType' and 'subscriptionId'
     // pointless thing, due to poor api design
@@ -37,7 +38,22 @@ export default class AppointmentsList extends Shadow() {
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
     document.body.removeEventListener('update-subscriptions', this.subscriptionsListener)
+    this.removeEventListener('force-reload-list', this.forceReloadList)
     this.select?.removeEventListener('change', this.selectEventListener)
+  }
+
+  forceReloadList (event) {
+    this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
+      {
+        detail: {
+          subscriptionType: event.detail.subscriptionType,
+          subscriptionId: event.detail.subscriptionId
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }
+    ))
   }
 
   /**
