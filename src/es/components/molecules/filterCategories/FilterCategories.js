@@ -137,21 +137,22 @@ export default class FilterCategories extends Shadow() {
 
   generateFilterElement (response, child, parentItem, firstFilterItemId) {
     const subNav = []
-    const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
     const isMultipleChoice = parentItem.typ === 'multi'
+    let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
+    if (child.hideCount) numberOfOffers = ''
 
     const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
-        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}" filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
+        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${numberOfOffers}" filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
       </mdx-component>
     `
     const navLevelItem = /* html */`
       <ks-m-nav-level-item namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}">
         <div class="wrap">
-          <span class="text">${child.label} ${count}</span>
+          <span class="text">${child.label} ${numberOfOffers}</span>
         </div>
       </ks-m-nav-level-item>
     `
@@ -168,20 +169,16 @@ export default class FilterCategories extends Shadow() {
   }
 
   updateFilter (generatedFilters, child, parentItem) {
-    const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
+    let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
+    if (child.hideCount) numberOfOffers = ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
     let filterItem = null
     if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
-      // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
       // @ts-ignore
-      if (filterItem.tagName === 'KS-M-NAV-LEVEL-ITEM') {
-      }
-
-      // @ts-ignore
-      filterItem.setAttribute('label', `${child.label} ${count}`)
+      filterItem.setAttribute('label', `${child.label} ${numberOfOffers}`)
       const attributes = { disabled, checked, visible }
 
       Object.entries(attributes).forEach(([key, value]) => {
@@ -244,6 +241,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateNavLevelItem (response, filterItem, parentItem, level) {
+    // console.log(filterItem.label, filterItem.count, filterItem.hideCount)
     const filterIdPrefix = 'filter-'
     const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
@@ -252,6 +250,8 @@ export default class FilterCategories extends Shadow() {
     const checked = filterItem.selected ? 'checked' : ''
     const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
     const filterId = parentItem.urlpara ? `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"` : ''
+    let numberOfOffers = filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'
+    if (filterItem.hideCount || level === 0) numberOfOffers = ''
     this.total = response.total
 
     // TODO: dispatch event on certain "sparten" when clicked analog: request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}"
@@ -260,7 +260,7 @@ export default class FilterCategories extends Shadow() {
     navLevelItem.innerHTML = /* html */`
     <ks-m-nav-level-item namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
       <div class="wrap">
-        <span class="text">${filterItem.label} ${filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : ''}</span>
+        <span class="text">${filterItem.label} ${numberOfOffers}</span>
         <span class="additional">${selectedFilters}</span>
       </div>
       <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
@@ -306,6 +306,8 @@ export default class FilterCategories extends Shadow() {
     level++
     if (!filterItem.visible) return
     if (firstFilterItemId === null) firstFilterItemId = filterItem.id
+
+    console.log(filterItem)
 
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
