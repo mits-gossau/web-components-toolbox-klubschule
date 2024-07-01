@@ -123,9 +123,9 @@ export default class FavoriteButton extends Shadow() {
   renderHTML () {
     this.html = ''
     const div = document.createElement('div')
-    div.innerHTML = /* html */'<ks-a-button namespace="button-tertiary-" color="secondary"></ks-a-button>'
+    div.innerHTML = '<ks-a-button namespace="button-tertiary-" color="secondary"></ks-a-button>'
     this.button = div.children[0]
-    div.innerHTML = /* html */'<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>'
+    div.innerHTML = '<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>'
     this.icon = div.children[0]
     div.innerHTML = /* html */`<a-translation data-trans-key="${this.getAttribute('off-text') ?? 'Wishlist.Remember'}" part=text></a-translation>`
     this.text = div.children[0]

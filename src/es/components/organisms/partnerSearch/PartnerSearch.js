@@ -62,7 +62,7 @@ export default class PartnerSearch extends Shadow() {
    * @return {Promise<void>}
    */
   renderCSS () {
-    this.css = /* css */''
+    this.css = /* css */``
     return this.fetchTemplate()
   }
 
