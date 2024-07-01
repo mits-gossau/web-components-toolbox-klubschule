@@ -189,22 +189,22 @@ export default class Sort extends Shadow() {
             if (event.composedPath()[0].getAttribute('id') === '2' && !window.location.search.includes('clat') && !window.location.search.includes('clong')) {
               this.dispatchEvent(
                 new CustomEvent('show-location-search-dialog', {
-                    detail: {},
-                    bubbles: true,
-                    cancelable: true,
-                    composed: true
+                  detail: {},
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
                 })
               )
             } else {
               this.dispatchEvent(
                 new CustomEvent('request-with-facet', {
-                    detail: {
-                      key: 'sorting',
-                      id: event.currentTarget?.id
-                    },
-                    bubbles: true,
-                    cancelable: true,
-                    composed: true
+                  detail: {
+                    key: 'sorting',
+                    id: event.currentTarget?.id
+                  },
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
                 })
               )
             }

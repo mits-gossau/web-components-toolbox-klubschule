@@ -128,7 +128,7 @@ export default class CheckoutLayout extends Shadow() {
     div.innerHTML = /* html */`
       <div class="checkout-layout">
           <slot name="top"></slot>
-          <o-grid mode="false" namespace="${sidebar ? "grid-2columns-content-section-" : "1column-align-center-"}" first-container-vertical first-column-with="66%" with-border id="checkout-layout-grid">
+          <o-grid mode="false" namespace="${sidebar ? 'grid-2columns-content-section-' : '1column-align-center-'}" first-container-vertical first-column-with="66%" with-border id="checkout-layout-grid">
               <section>
                   <div>
                       <slot name="main"></slot>

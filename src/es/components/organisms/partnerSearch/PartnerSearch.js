@@ -3,7 +3,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 
 /**
  * Communicates with the src/es/components/controllers/partnerSearch/PartnerSearch.js controller
- * 
+ *
  * @export
  * @class PartnerSearch
  * @type {CustomElementConstructor}
@@ -32,7 +32,6 @@ export default class PartnerSearch extends Shadow() {
       cancelable: true,
       composed: true
     }))).then(fetch => this.renderHTML(fetch))
-    
   }
 
   disconnectedCallback () {
@@ -63,7 +62,7 @@ export default class PartnerSearch extends Shadow() {
    * @return {Promise<void>}
    */
   renderCSS () {
-    this.css = /* css */``
+    this.css = /* css */''
     return this.fetchTemplate()
   }
 
@@ -99,8 +98,8 @@ export default class PartnerSearch extends Shadow() {
     this.renderLoading()
     if (fetch) {
       console.log('*********', fetch, this.hiddenMessages)
-      //fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
-      //const data = this.lastData = await fetch
+      // fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
+      // const data = this.lastData = await fetch
       this.html = ''
       this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
       this.html = this.hiddenMessages

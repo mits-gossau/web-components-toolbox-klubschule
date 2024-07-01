@@ -10,7 +10,7 @@ export default class Spacing extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.type = this.getAttribute('type') || '2xl-flex';
+    this.type = this.getAttribute('type') || '2xl-flex'
   }
 
   connectedCallback () {

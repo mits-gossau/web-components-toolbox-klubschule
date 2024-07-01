@@ -52,7 +52,7 @@ export default class WithFacet extends WebWorker() {
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
     this.abortController = null
-    
+
     this.requestWithFacetListener = async event => {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
@@ -116,9 +116,9 @@ export default class WithFacet extends WebWorker() {
       if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
 
       const LanguageEnum = {
-        'd': 'de',
-        'f': 'fr',
-        'i': 'it'
+        d: 'de',
+        f: 'fr',
+        i: 'it'
       }
       let request = {}
       if (isMocked) {
@@ -148,42 +148,42 @@ export default class WithFacet extends WebWorker() {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
             fetch: fetch(endpoint, request).then(response => {
-                if (response.status >= 200 && response.status <= 299) {
-                  return response.json()
-                }
-                throw new Error(response.statusText)
-              }).then(json => {
-                // update filters with api response
-                currentRequestObj.filter = currentCompleteFilterObj = json.filters
+              if (response.status >= 200 && response.status <= 299) {
+                return response.json()
+              }
+              throw new Error(response.statusText)
+            }).then(json => {
+              // update filters with api response
+              currentRequestObj.filter = currentCompleteFilterObj = json.filters
 
-                return json
-              }).finally(json => {
-                // update inputs
-                this.dispatchEvent(new CustomEvent('search-change', {
-                  detail: {
-                    searchTerm: (json || currentRequestObj)?.searchText
-                  },
-                  bubbles: true,
-                  cancelable: true,
-                  composed: true
-                }))
-                const searchCoordinates = !(json || currentRequestObj)?.clat || !(json || currentRequestObj)?.clong ? '' : `${(json || currentRequestObj).clat}, ${(json || currentRequestObj).clong}`
-                if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+              return json
+            }).finally(json => {
+              // update inputs
+              this.dispatchEvent(new CustomEvent('search-change', {
+                detail: {
+                  searchTerm: (json || currentRequestObj)?.searchText
+                },
+                bubbles: true,
+                cancelable: true,
+                composed: true
+              }))
+              const searchCoordinates = !(json || currentRequestObj)?.clat || !(json || currentRequestObj)?.clong ? '' : `${(json || currentRequestObj).clat}, ${(json || currentRequestObj).clong}`
+              if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
 
-                // Read location name from URL
-                let cname
-                if (cname = new URLSearchParams(window.location.search).get("cname")) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
+              // Read location name from URL
+              let cname
+              if (cname = new URLSearchParams(window.location.search).get('cname')) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
 
-                this.dispatchEvent(new CustomEvent('location-change', {
-                  detail: {
-                    searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
-                    searchCoordinates
-                  },
-                  bubbles: true,
-                  cancelable: true,
-                  composed: true
-                }))
-              })
+              this.dispatchEvent(new CustomEvent('location-change', {
+                detail: {
+                  searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
+                  searchCoordinates
+                },
+                bubbles: true,
+                cancelable: true,
+                composed: true
+              }))
+            })
           },
           bubbles: true,
           cancelable: true,
@@ -196,7 +196,7 @@ export default class WithFacet extends WebWorker() {
     this.requestLocations = event => {
       if (this.abortControllerLocations) this.abortControllerLocations.abort()
       this.abortControllerLocations = new AbortController()
-      
+
       // TODO: Fix request locations
       // merge both user Filter with sublevel filter
       const subLevelFilter = event.detail.filter
@@ -210,7 +210,7 @@ export default class WithFacet extends WebWorker() {
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
         "onlycourse": true,
         "sorting": 2
-        ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"`: ''}
+        ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"` : ''}
         ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}
         ${currentRequestObj.clong ? `,"clong": "${currentRequestObj.clong}"` : ''}
       }`
@@ -249,7 +249,7 @@ export default class WithFacet extends WebWorker() {
     this.addEventListener('request-locations', this.requestLocations)
     self.addEventListener('popstate', this.popstateListener)
   }
-  
+
   disconnectedCallback () {
     this.removeEventListener('request-with-facet', this.requestWithFacetListener)
     this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
@@ -267,7 +267,7 @@ export default class WithFacet extends WebWorker() {
       if (!zeroLevel || isMatchingKey) {
         const isIdOrUrlpara = filterItem.id === filterValue || filterItem.urlpara === filterValue
         if (filterItem.selected && isIdOrUrlpara) {
-          filterItem.selected = false // toggle filterItem if is is already selected 
+          filterItem.selected = false // toggle filterItem if is is already selected
         } else if (filterItem.selected && !isIdOrUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isIdOrUrlpara) {
@@ -322,7 +322,6 @@ export default class WithFacet extends WebWorker() {
 
   deleteAllFiltersFromUrl (filters) {
     if (this.params) {
-
       filters.forEach(filterItem => {
         if (filterItem.children && filterItem.children.length > 0) {
           this.deleteAllFiltersFromUrl(filterItem.children)
@@ -339,7 +338,7 @@ export default class WithFacet extends WebWorker() {
       this.params.delete(filterKey)
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
-  } 
+  }
 
   static historyPushState (...args) {
     // Avoid multiple empty pushes, otherwise the navigation history becomes jammed

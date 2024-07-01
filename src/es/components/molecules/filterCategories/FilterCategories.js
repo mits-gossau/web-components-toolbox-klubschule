@@ -19,7 +19,7 @@ export default class FilterCategories extends Shadow() {
     this.generateCenterFilterMap = new Map()
     this.generateFilterMap = new Map()
     this.total = 0
-    
+
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
     this.keepDialogOpenEventListener = event => {
@@ -77,7 +77,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateCenterFilter (response, filterItem) {
-    let centerNav = []
+    const centerNav = []
 
     filterItem.children.forEach(region => {
       const divRegion = document.createElement('div')
@@ -114,13 +114,13 @@ export default class FilterCategories extends Shadow() {
         const visible = center.visible ? 'visible' : ''
         const id = `[filter-id="${region.urlpara}-${center.id}"]`
         let centerFilterCheckbox = null
-        
+
         if (centerFilters.find(centerFilter => (centerFilterCheckbox = centerFilter.querySelector(id) || (centerFilter.matches(id) && centerFilter)))) {
           // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
           // @ts-ignore
           centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
           const attributes = { disabled, checked, visible }
-          
+
           Object.entries(attributes).forEach(([key, value]) => {
             if (value) {
               // @ts-ignore
@@ -183,7 +183,7 @@ export default class FilterCategories extends Shadow() {
       // @ts-ignore
       filterItem.setAttribute('label', `${child.label} ${count}`)
       const attributes = { disabled, checked, visible }
-      
+
       Object.entries(attributes).forEach(([key, value]) => {
         if (value) {
           filterItem.setAttribute(key, '')
@@ -211,7 +211,7 @@ export default class FilterCategories extends Shadow() {
         })
       })
     }
-  
+
     if (filterItem.typ === 'multi') { // get selected checkbox filters
       filterItem.children.forEach(child => {
         if (child.selected) {
@@ -245,7 +245,7 @@ export default class FilterCategories extends Shadow() {
 
   generateNavLevelItem (response, filterItem, parentItem, level) {
     const filterIdPrefix = 'filter-'
-    const shouldRemainOpen = filterIdPrefix+filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
     const navLevelItem = document.createElement('div')
     const selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ') || ''
@@ -253,7 +253,7 @@ export default class FilterCategories extends Shadow() {
     const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
     const filterId = parentItem.urlpara ? `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"` : ''
     this.total = response.total
-    
+
     // TODO: dispatch event on certain "sparten" when clicked analog: request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}"
     // TODO: <span class="additional">${selectedFilters}</span> on first level ("sparten")
 
@@ -268,7 +268,7 @@ export default class FilterCategories extends Shadow() {
     `
 
     div.innerHTML = /* html */`
-      <m-dialog id="${filterIdPrefix+filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
@@ -306,7 +306,7 @@ export default class FilterCategories extends Shadow() {
     level++
     if (!filterItem.visible) return
     if (firstFilterItemId === null) firstFilterItemId = filterItem.id
-    
+
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
       // update total button
@@ -361,7 +361,7 @@ export default class FilterCategories extends Shadow() {
       fetch.then(response => {
         setTimeout(() => {
           if (response.filters.length === 0) return
-  
+
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)
           })

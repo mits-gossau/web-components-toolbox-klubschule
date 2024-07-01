@@ -127,7 +127,7 @@ export default class filterSelect extends Shadow() {
     }]).then(() => {
       Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
         const filterData = response?.filters
-        
+
         this.html = ''
 
         // loop through the filter data and generate the filter select

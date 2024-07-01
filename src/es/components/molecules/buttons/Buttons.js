@@ -104,7 +104,7 @@ export default class Buttons extends Shadow() {
 
     const buttons = dataButtons?.reduce((acc, button) => {
       // keep existing url params
-      if (shouldKeepURLParams && button.link){
+      if (shouldKeepURLParams && button.link) {
         if (button.link.includes('?')) {
           button.link = button.link + '&' + filteredURLParams
         } else {
@@ -113,7 +113,7 @@ export default class Buttons extends Shadow() {
       }
 
       return acc + (
-      button.event === 'bookmark' ? '' : /* html */`
+        button.event === 'bookmark' ? '' : /* html */`
         <ks-a-button 
           ${button.iconName && !button.text ? 'icon' : ''} 
           namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
@@ -127,7 +127,8 @@ export default class Buttons extends Shadow() {
           ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
         </ks-a-button>
       `
-    )}, '')
+      )
+    }, '')
 
     this.html = /* html */`
       <div class="buttons-container">

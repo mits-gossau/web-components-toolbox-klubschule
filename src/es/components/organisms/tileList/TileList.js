@@ -420,7 +420,7 @@ export default class TileList extends Shadow() {
       // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
       if (!this.isNearbySearch) {
         tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
-        if (tile.bezeichnung)  tile.location.name = ''
+        if (tile.bezeichnung) tile.location.name = ''
       }
 
       // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
@@ -440,6 +440,6 @@ export default class TileList extends Shadow() {
   }
 
   get isNearbySearch () {
-    return this.hasAttribute("nearby-search")
+    return this.hasAttribute('nearby-search')
   }
 }

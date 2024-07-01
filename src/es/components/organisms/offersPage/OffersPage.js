@@ -46,7 +46,7 @@ export default class OffersPage extends Shadow() {
       })
     }
 
-    this.isEasyPortal = this.hasAttribute('is-easy-portal') ? true : false;
+    this.isEasyPortal = !!this.hasAttribute('is-easy-portal')
   }
 
   connectedCallback () {

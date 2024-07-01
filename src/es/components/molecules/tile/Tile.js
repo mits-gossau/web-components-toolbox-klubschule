@@ -359,10 +359,10 @@ export default class Tile extends Shadow() {
   }
 
   get isNearbySearch () {
-    return this.hasAttribute("nearby-search")
+    return this.hasAttribute('nearby-search')
   }
 
   get isInsideTileList () {
-    return this.hasAttribute("inside-tile-list")
+    return this.hasAttribute('inside-tile-list')
   }
 }

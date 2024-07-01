@@ -3,7 +3,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 
 /**
  * Communicates with the src/es/components/controllers/wishList/WishList.js controller
- * 
+ *
  * @export
  * @class WishList
  * @type {CustomElementConstructor}
@@ -121,7 +121,7 @@ export default class WishList extends Shadow() {
           typ: ''
         }
         const initialRequest = {
-          MandantId:  this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 111,
+          MandantId: this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 111,
           PortalId: this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29,
           sprachid: this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd',
           filter: [{
@@ -131,7 +131,7 @@ export default class WishList extends Shadow() {
         }
         // id assembly: courseType_courseId_centerid
         // @ts-ignore
-        initialRequest.filter[0].children = data.watchlistEntries.map(entry => ({...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true}))
+        initialRequest.filter[0].children = data.watchlistEntries.map(entry => ({ ...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true }))
         this.html = /* html */`
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
             <div part="delete-btn-wrapper">
