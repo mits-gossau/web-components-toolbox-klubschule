@@ -79,7 +79,7 @@ export default class WithFacet extends WebWorker() {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
-        this.updateURLParams(filterKey, filterValue);
+        this.updateURLParam(filterKey, filterValue);
         [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue)
         currentRequestObj.sorting = 1
       } else if (event?.detail?.key === 'location-search') {
@@ -88,9 +88,9 @@ export default class WithFacet extends WebWorker() {
         if (!!event.detail.lat && !!event.detail.lng) {
           currentRequestObj.clat = event.detail.lat
           currentRequestObj.clong = event.detail.lng
-          this.updateURLParams('clat', event.detail.lat)
-          this.updateURLParams('clong', event.detail.lng)
-          this.updateURLParams('cname', encodeURIComponent(event.detail.description))
+          this.updateURLParam('clat', event.detail.lat)
+          this.updateURLParam('clong', event.detail.lng)
+          this.updateURLParam('cname', encodeURIComponent(event.detail.description))
         } else {
           if (currentRequestObj.clat) delete currentRequestObj.clat
           if (currentRequestObj.clong) delete currentRequestObj.clong
@@ -104,7 +104,7 @@ export default class WithFacet extends WebWorker() {
         console.log('input-search', event.detail.value)
         // text field search
         if (event?.detail?.value) {
-          this.updateURLParams('q', event.detail.value)
+          this.updateURLParam('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
         }
         [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
@@ -303,7 +303,7 @@ export default class WithFacet extends WebWorker() {
     return new URLSearchParams(self.location.search)
   }
 
-  updateURLParams (key, value) {
+  updateURLParam (key, value) {
     if (this.params) {
       if (this.params.has(key)) {
         const currentValues = this.params.get(key)?.split('-')
