@@ -111,7 +111,53 @@ export default class Buttons extends Shadow() {
           button.link = button.link + '?' + filteredURLParams
         }
       }
+      if (button.event?.includes('AdvisoryText')) {
+        const parentDiv = document.createElement("div")
 
+        this.overLayButton = document.createElement("ks-a-button")
+        this.overLayButton.setAttribute("namespace", "button-primary-")
+        this.overLayButton.setAttribute("color", "secondary")
+        this.overLayButton.setAttribute("request-event-name", "dialog-open-checkout-overlay")
+        this.overLayButton.setAttribute("click-no-toggle-active", "")
+        this.overLayButton.innerHTML = button.text
+
+        this.addEventListener("dialog-open-checkout-overlay", () => {
+          new Promise(resolveCheckout => {
+            this.dispatchEvent(new CustomEvent('checkout-overlay-api', {
+              detail: {
+                resolveCheckout,
+                checkoutOverlayAPI: `https://dev.klubschule.ch${button.event}`
+              },
+              bubbles: true,
+              cancelable: true,
+              composed: true
+            }))
+          }).then((data) => {
+            this.renderDialogContent(data)
+          })
+        })
+
+        parentDiv.innerHTML = /* html */ `
+          <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay" close-event-name="backdrop-clicked" id="checkout-overlay">
+              <div class="container dialog-header" tabindex="0">
+                <div></div>
+                <h3 id="hinweis"></h3>
+                <div id="close">
+                  <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                </div>
+              </div>
+              <ks-a-spacing type="xs-flex" tabindex="0"></ks-a-spacing>
+              <div class="container dialog-content">
+                <div class="sub-content">
+                </div>   
+              </div>
+              <div class="container dialog-footer">
+              </div>
+          </m-dialog>
+        `
+        parentDiv.appendChild(this.overLayButton)
+        return acc + parentDiv.innerHTML;
+      }
       return acc + (
         button.event === 'bookmark' ? '' : /* html */`
         <ks-a-button 
@@ -138,13 +184,53 @@ export default class Buttons extends Shadow() {
 
     return this.fetchModules([
       {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
+        name: 'm-dialog'
+      },
+      {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
         name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../atoms/spacing/Spacing.js`,
+        name: 'ks-a-spacing'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
       }
     ])
+  }
+
+  renderDialogContent(content) {
+    if (content.texte?.length) {
+      const buttonContainer = this.root.querySelector(".buttons-container")
+
+      this.root.querySelector(".container.dialog-header #hinweis").innerHTML = /* html */ `
+        ${content.title}
+      `
+      this.root.querySelector(".container.dialog-content .sub-content").innerHTML = content.texte.reduce(
+        (acc, text, index) => acc + /* html */ `
+          ${index > 0 ? /* html */ `<ks-a-spacing type="l-flex" tabindex="0"></ks-a-spacing>` : ''}
+          <h3>${text.titel}</h3>
+          <p>${text.text}</p>
+        `, '')
+        
+      this.root.querySelector(".container.dialog-footer").innerHTML = content.buttons?.reduce((acc, button) => acc + /* html */ `
+        <ks-a-button 
+          ${button.event === "close" ? 'id="close"' : ''}
+          ${button.iconName && !button.text ? 'icon' : ''} 
+          namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
+          color="secondary" 
+          ${button.link ? `href=${button.link}` : ''}
+        >
+          ${button.text ? '<span>' + button.text + '</span>' : ''}
+          ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
+          ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
+        </ks-a-button>
+      `,'')
+    } else {
+      window.location.href = content.link
+    }
   }
 }
