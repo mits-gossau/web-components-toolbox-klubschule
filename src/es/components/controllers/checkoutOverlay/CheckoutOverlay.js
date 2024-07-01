@@ -1,22 +1,9 @@
-// @ts-check
-
-/** @typedef {{
-  term: string,
-  typ: 1|2 // TYP 1 ist Kurs, TYP 2 ist Sparte
-}} Item */
-
-/** @typedef {{
-  total: number,
-  success: boolean,ange
-  searchText: string,
-  items: Item[],
-  cms: []
-}} fetchAutoCompleteCheckoutOverlay */
 
 /* global fetch */
 /* global self */
 /* global CustomEvent */
 
+// @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /**
