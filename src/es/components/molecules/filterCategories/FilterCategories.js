@@ -241,7 +241,6 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateNavLevelItem (response, filterItem, parentItem, level) {
-    // console.log(filterItem.label, filterItem.count, filterItem.hideCount)
     const filterIdPrefix = 'filter-'
     const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
@@ -306,8 +305,6 @@ export default class FilterCategories extends Shadow() {
     level++
     if (!filterItem.visible) return
     if (firstFilterItemId === null) firstFilterItemId = filterItem.id
-
-    console.log(filterItem)
 
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
