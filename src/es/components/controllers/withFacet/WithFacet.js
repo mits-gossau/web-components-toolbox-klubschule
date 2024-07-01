@@ -72,14 +72,14 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
-        this.deleteFilterFromUrl(filterKey);
+        this.deleteParamFromUrl(filterKey);
         [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         if (filterKey === 'q') delete currentRequestObj.searchText
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
-        this.updateFilterToURLParams(filterKey, filterValue);
+        this.updateURLParams(filterKey, filterValue);
         [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue)
         currentRequestObj.sorting = 1
       } else if (event?.detail?.key === 'location-search') {
@@ -88,16 +88,23 @@ export default class WithFacet extends WebWorker() {
         if (!!event.detail.lat && !!event.detail.lng) {
           currentRequestObj.clat = event.detail.lat
           currentRequestObj.clong = event.detail.lng
+          this.updateURLParams('clat', event.detail.lat)
+          this.updateURLParams('clong', event.detail.lng)
+          this.updateURLParams('cname', encodeURIComponent(event.detail.description))
         } else {
           if (currentRequestObj.clat) delete currentRequestObj.clat
           if (currentRequestObj.clong) delete currentRequestObj.clong
+          this.deleteParamFromUrl('clat')
+          this.deleteParamFromUrl('clong')
+          this.deleteParamFromUrl('cname')
         }
         currentRequestObj.sorting = event.detail.id || 2;
         [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
       } else if (event?.detail?.key === 'input-search') {
+        console.log('input-search', event.detail.value)
         // text field search
         if (event?.detail?.value) {
-          this.updateFilterToURLParams('q', event.detail.value)
+          this.updateURLParams('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
         }
         [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
@@ -296,7 +303,7 @@ export default class WithFacet extends WebWorker() {
     return new URLSearchParams(self.location.search)
   }
 
-  updateFilterToURLParams (key, value) {
+  updateURLParams (key, value) {
     if (this.params) {
       if (this.params.has(key)) {
         const currentValues = this.params.get(key)?.split('-')
@@ -333,7 +340,7 @@ export default class WithFacet extends WebWorker() {
     }
   }
 
-  deleteFilterFromUrl (filterKey) {
+  deleteParamFromUrl (filterKey) {
     if (this.params) {
       this.params.delete(filterKey)
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
