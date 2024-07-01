@@ -141,7 +141,7 @@ export default class Buttons extends Shadow() {
           <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay" close-event-name="backdrop-clicked" id="checkout-overlay">
               <div class="container dialog-header" tabindex="0">
                 <div></div>
-                <h3 id="hinweis"></h3>
+                <h3 id="overlay-title"></h3>
                 <div id="close">
                   <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                 </div>
@@ -206,8 +206,8 @@ export default class Buttons extends Shadow() {
     if (content.texte?.length) {
       const buttonContainer = this.root.querySelector(".buttons-container")
 
-      this.root.querySelector(".container.dialog-header #hinweis").innerHTML = /* html */ `
-        ${content.title}
+      this.root.querySelector(".container.dialog-header #overlay-title").innerHTML = /* html */ `
+        ${content.titel}
       `
       this.root.querySelector(".container.dialog-content .sub-content").innerHTML = content.texte.reduce(
         (acc, text, index) => acc + /* html */ `
