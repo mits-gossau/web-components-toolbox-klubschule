@@ -1,10 +1,72 @@
+<ks-a-spacing type="2xl-fix"></ks-a-spacing>
+
+<!-- demo search above offers page; offers page see below -->
+<ks-c-with-facet
+    endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
+    initial-request='{"searchcontent":true,"CurrentPageId":0,"filter":[{"PartitionKey":null,"RowKey":null,"label":null,"id":"","typ":null,"level":"","count":0,"color":"","urlpara":"","selected":false,"disabled":false,"visible":false,"sort":0,"hideCount":false,"children":null,"HasChilds":false}],"sorting":1,"SaveNulltreffer":null,"onlyfaceted":null,"onlycourse":false,"clat":null,"clong":null,"cdist":null,"abo_kurs_typ":null,"abo_kurs_id":null,"SearchTitle":null,"SearchKeyword":null,"SearchDescription":null,"hasCollapse":false,"hasCollapseOrt":false,"PortalId":29,"sprachid":"d","MandantId":111,"ppage":0,"psize":12,"pnext":24,"SearchText":null}'
+    no-search-tab
+>
+    <div col-lg="6" col-md="6" col-sm="12">
+        <ks-c-auto-complete
+            disabled
+            no-forwarding
+            endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
+            search-url="http://localhost:3000/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=.%2Fsrc%2Fcss%2FvariablesCustomKlubschule.css&login=.%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2Flogin%2Fdefault-%2Fdefault-.html&logo=.%2Fsrc%2Fes%2Fcomponents%2Fatoms%2Flogo%2Fdefault-%2Fdefault-.html&nav=.%2Fsrc%2Fes%2Fcomponents%2Fweb-components-toolbox%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2FmultiLevelNavigation%2Fdefault-%2Fdefault-.html&footer=.%2Fsrc%2Fes%2Fcomponents%2Forganisms%2Ffooter%2Fdefault-%2Fdefault-.html&content=.%2Fsrc%2Fes%2Fcomponents%2Fpages%2FAngebotsliste-Suchergebnis.html"
+        >
+            <m-dialog 
+                namespace="dialog-top-slide-in-" 
+                id="keyword-search" 
+                show-event-name="show-search-dialog" 
+                close-event-name="close-search-dialog"
+            >
+                <dialog>
+                    <div class="container">
+                        <a-input
+                            inputid="page-input-search"
+                            autofocus
+                            placeholder="Suchen"
+                            icon-name="Search"
+                            icon-size="1.5em"
+                            submit-search="request-auto-complete"
+                            any-key-listener
+                            type="search"
+                            answer-event-name="search-change"
+                            delete-listener
+                            search
+                            autocomplete="off"
+                        >
+                        </a-input>
+                        <div id="close">
+                            <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection"></ks-m-auto-complete-list>
+                    </div>
+                </dialog>
+                <a-input
+                    id="show-modal"
+                    inputid="show-modal"
+                    placeholder="Suchen"
+                    icon-name="Search"
+                    icon-size="1.25em"
+                    search type="search"
+                    answer-event-name="search-change"
+                    readonly
+                    pointer
+                    autocomplete="off"
+                >
+                </a-input>
+            </m-dialog>
+        </ks-c-auto-complete>
+    </div>
+</ks-c-with-facet>
+
 <ks-o-offers-page
     endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
     initial-request='{"searchcontent":true,"CurrentPageId":0,"filter":[{"PartitionKey":null,"RowKey":null,"label":null,"id":"","typ":null,"level":"","count":0,"color":"","urlpara":"","selected":false,"disabled":false,"visible":false,"sort":0,"hideCount":false,"children":null,"HasChilds":false}],"sorting":1,"SaveNulltreffer":null,"onlyfaceted":null,"onlycourse":false,"clat":null,"clong":null,"cdist":null,"abo_kurs_typ":null,"abo_kurs_id":null,"SearchTitle":null,"SearchKeyword":null,"SearchDescription":null,"hasCollapse":false,"hasCollapseOrt":false,"PortalId":29,"sprachid":"d","MandantId":111,"ppage":0,"psize":12,"pnext":24,"SearchText":null}'
     endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
     google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"
     search-url="http://localhost:3000/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=.%2Fsrc%2Fcss%2FvariablesCustomKlubschule.css&login=.%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2Flogin%2Fdefault-%2Fdefault-.html&logo=.%2Fsrc%2Fes%2Fcomponents%2Fatoms%2Flogo%2Fdefault-%2Fdefault-.html&nav=.%2Fsrc%2Fes%2Fcomponents%2Fweb-components-toolbox%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2FmultiLevelNavigation%2Fdefault-%2Fdefault-.html&footer=.%2Fsrc%2Fes%2Fcomponents%2Forganisms%2Ffooter%2Fdefault-%2Fdefault-.html&content=.%2Fsrc%2Fes%2Fcomponents%2Fpages%2FAngebotsliste-Suchergebnis.html"
-    with-filter-search
-    with-search-input
     with-location-input
 ></ks-o-offers-page>

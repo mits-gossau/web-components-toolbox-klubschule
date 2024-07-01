@@ -53,6 +53,8 @@ export default class WithFacet extends WebWorker() {
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
     this.abortController = null
 
+    if (this.params.has('q')) currentRequestObj.searchText = this.params.get('q')
+
     this.requestWithFacetListener = async event => {
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
@@ -101,7 +103,6 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.sorting = event.detail.id || 2;
         [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
       } else if (event?.detail?.key === 'input-search') {
-        console.log('input-search', event.detail.value)
         // text field search
         if (event?.detail?.value) {
           this.updateURLParam('q', event.detail.value)
