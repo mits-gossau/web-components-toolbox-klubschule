@@ -222,7 +222,7 @@ export default class FilterCategories extends Shadow() {
       })
     }
 
-    if (filterItem.typ === 'tree') { // get sparte filters
+    if (filterItem.id === '7') { // get sparte filters
       filterItem.children.forEach(child => {
         this.getSelectedFilters(child) // recursive call
       })
