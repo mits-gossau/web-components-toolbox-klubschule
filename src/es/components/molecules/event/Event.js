@@ -415,7 +415,7 @@ export default class Event extends Shadow() {
         }
 
         :host .controls-left {
-          justify-content: space-between;
+          justify-content: flex-end;
           margin-top: 2rem;
           width: 100%;
         }

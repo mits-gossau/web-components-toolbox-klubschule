@@ -46,6 +46,18 @@ export default class Buttons extends Shadow() {
         display: flex;
         gap: 1rem;
       }
+
+      :host m-dialog {
+        margin-right: -1rem; /* to compensate the gap */
+      }
+
+      @media only screen and (max-width: _max-width_) {
+        :host .dialog-footer ks-a-button {
+          --button-primary-width: 100%;
+          --button-secondary-width: 100%;
+          text-align: center;
+        }
+      }
     `
     return this.fetchTemplate()
   }
