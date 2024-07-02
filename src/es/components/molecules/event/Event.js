@@ -457,6 +457,7 @@ export default class Event extends Shadow() {
       detail_label_less,
       buttons,
       icons,
+      kurs_id,
       price
     } = this.data.course
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
@@ -501,7 +502,7 @@ export default class Event extends Shadow() {
         <ks-c-checkout-overlay>
           <div class="controls">
             <div class="controls-left">
-              <ks-m-buttons data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
+              <ks-m-buttons dialog-id="${kurs_id}" data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
             </div>
             <div class="controls-right">
               <div class="icons">

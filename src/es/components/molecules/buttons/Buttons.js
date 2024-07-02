@@ -114,7 +114,7 @@ export default class Buttons extends Shadow() {
       filteredURLParams = filteredURLKeys.map(key => `${key}=${urlParamsMap.get(key)}`).join('&')
     }
 
-    const buttons = dataButtons?.reduce((acc, button, index) => {
+    const buttons = dataButtons?.reduce((acc, button) => {
       // keep existing url params
       if (shouldKeepURLParams && button.link) {
         if (button.link.includes('?')) {
@@ -124,21 +124,23 @@ export default class Buttons extends Shadow() {
         }
       }
       if (button.event?.includes('AdvisoryText')) {
+        const dialogId = this.getAttribute("dialog-id") || 0
         const parentDiv = document.createElement("div")
 
         this.overLayButton = document.createElement("ks-a-button")
         this.overLayButton.setAttribute("namespace", "button-primary-")
         this.overLayButton.setAttribute("color", "secondary")
-        this.overLayButton.setAttribute("request-event-name", "dialog-open-checkout-overlay")
+        this.overLayButton.setAttribute("request-event-name", `dialog-open-checkout-overlay-${dialogId}`)
         this.overLayButton.setAttribute("click-no-toggle-active", "")
         this.overLayButton.innerHTML = button.text
 
-        this.addEventListener("dialog-open-checkout-overlay", () => {
+        this.addEventListener(`dialog-open-checkout-overlay-${dialogId}`, () => {
+          // for local testing add `https://dev.klubschule.ch${button.event}` to the checkoutOverlayAPI
           new Promise(resolveCheckout => {
             this.dispatchEvent(new CustomEvent('checkout-overlay-api', {
               detail: {
                 resolveCheckout,
-                checkoutOverlayAPI: button.event
+                checkoutOverlayAPI: `${button.event}`
               },
               bubbles: true,
               cancelable: true,
@@ -150,7 +152,7 @@ export default class Buttons extends Shadow() {
         })
 
         parentDiv.innerHTML = /* html */ `
-          <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay" close-event-name="backdrop-clicked" id="checkout-overlay-${index}">
+          <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay-${dialogId}" close-event-name="backdrop-clicked-${dialogId}" id="checkout-overlay-${dialogId}">
             <div class="container dialog-header" tabindex="0">
               <div></div>
               <h3 id="overlay-title"></h3>
