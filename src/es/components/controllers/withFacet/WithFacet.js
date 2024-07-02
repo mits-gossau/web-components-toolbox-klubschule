@@ -141,6 +141,7 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
+        console.log('result', result)
       }
 
       console.log('currentRequestObj', currentRequestObj)
@@ -306,7 +307,8 @@ export default class WithFacet extends WebWorker() {
         const isParentSelected = selectedParent?.urlpara === filterKey
         // @ts-ignore
         if (filterItem.selected && isIdOrUrlpara) {
-          filterItem.selected = false // toggle filterItem if is is already selected
+          /* This is the issue that breaks wishlist, because if it is not selected it will not be added to the treeShookFilters */
+          // filterItem.selected = false // toggle filterItem if is is already selected
         } else if (filterItem.selected && !isIdOrUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isIdOrUrlpara && isParentSelected) {
@@ -317,6 +319,7 @@ export default class WithFacet extends WebWorker() {
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
+        console.log('something is about to break');
         [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem)
       }
       // only the first level allows selected falls when including selected children
