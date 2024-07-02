@@ -60,6 +60,7 @@ export default class Select extends Shadow() {
         :host .message a-icon-mdx {
           color: var(--mdx-comp-error-message-color-default);
           display: flex;
+          align-items: center;
         }
 
         :host .message span {
