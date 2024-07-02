@@ -51,6 +51,10 @@ export default class Buttons extends Shadow() {
         margin-right: -1rem; /* to compensate the gap */
       }
 
+      .hidden {
+        display: none;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host .dialog-footer ks-a-button {
           --button-primary-width: 100%;
@@ -152,7 +156,7 @@ export default class Buttons extends Shadow() {
         })
 
         parentDiv.innerHTML = /* html */ `
-          <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay-${dialogId}" close-event-name="backdrop-clicked-${dialogId}" id="checkout-overlay-${dialogId}">
+          <m-dialog namespace="dialog-left-slide-in-" class="hidden" mode="false" show-event-name="dialog-open-checkout-overlay-${dialogId}" close-event-name="backdrop-clicked-${dialogId}" id="checkout-overlay-${dialogId}">
             <div class="container dialog-header" tabindex="0">
               <div></div>
               <h3 id="overlay-title"></h3>
@@ -221,6 +225,9 @@ export default class Buttons extends Shadow() {
 
   renderDialogContent(content) {
     if (content.texte?.length) {
+      const dialog = this.root.querySelector("m-dialog")
+      dialog.classList.remove("hidden")
+
       this.root.querySelector(".container.dialog-header #overlay-title").innerHTML = /* html */ `
         ${content.titel}
       `
