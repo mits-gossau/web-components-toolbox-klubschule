@@ -130,7 +130,6 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.sorting = 1
       } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
         // sorting
-        // TODO: Test if sorting still works
         currentRequestObj.sorting = event.detail.id || 3;
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
