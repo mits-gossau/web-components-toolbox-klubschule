@@ -351,7 +351,7 @@ export default class TileList extends Shadow() {
                   `, '')}           
                 </div>
               `}
-              <span class="o-tile-list__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
+              <span class="o-tile-list__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
             </div>          
           </div>
         </div>

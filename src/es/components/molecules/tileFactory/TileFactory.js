@@ -200,7 +200,7 @@ export default class TileFactory extends Shadow() {
       "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "icons": ${JSON.stringify(course.icons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "price": {
-        "from": "${course.price.pre}",
+        "pre": "${course.price.pre}",
         "amount": "${course.price.amount}",
         "per": "${course.price.per}"
       },
