@@ -54,6 +54,15 @@ export default class WithFacet extends WebWorker() {
     this.abortController = null
 
     if (this.params.has('q')) currentRequestObj.searchText = this.params.get('q')
+    if (this.params.has('clat')) currentRequestObj.clat = this.params.get('clat')
+    if (this.params.has('clong')) currentRequestObj.clong = this.params.get('clong')
+
+    // intial sorting when page is refreshed
+    if (!currentRequestObj.sorting) {
+      currentRequestObj.sorting = 3
+      if (currentRequestObj.searchText) currentRequestObj.sorting = 1
+      if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 2
+    }
 
     this.requestWithFacetListener = async event => {
       // mdx prevent double event
@@ -62,11 +71,12 @@ export default class WithFacet extends WebWorker() {
       this.abortController = new AbortController()
 
       let filterId = null
-      currentRequestObj.sorting = 3
       if (event?.detail?.ppage) {
         // ppage reuse last request
-        currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage });
-        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = result[1]
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
@@ -74,15 +84,19 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
-        this.deleteParamFromUrl(filterKey);
-        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
+        this.deleteParamFromUrl(filterKey)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = result[1]
         if (filterKey === 'q') delete currentRequestObj.searchText
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
-        this.updateURLParam(filterKey, filterValue);
-        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue)
+        this.updateURLParam(filterKey, filterValue)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = result[1]
         currentRequestObj.sorting = 1
       } else if (event?.detail?.key === 'location-search') {
         // location search
@@ -101,26 +115,33 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('cname')
         }
         currentRequestObj.sorting = event.detail.id || 2;
-        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = result[1]
       } else if (event?.detail?.key === 'input-search') {
         // text field search
         if (event?.detail?.value) {
           this.updateURLParam('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
         }
-        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = result[1]
         currentRequestObj.sorting = 1
       } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
         // sorting
-        // TODO: Test if sorting still works
         currentRequestObj.sorting = event.detail.id || 3;
-        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = result[1]
       } else {
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
-        [currentCompleteFilterObj, currentRequestObj.filter] = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = result[1]
       }
-
+      
       if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
 
       const LanguageEnum = {
@@ -210,6 +231,9 @@ export default class WithFacet extends WebWorker() {
       const subLevelFilter = event.detail.filter
       if (this.filters?.length) subLevelFilter.push(JSON.parse(this.filters.reduce((acc, filter) => acc + `${filter}`)))
 
+      const sorting = currentRequestObj.sorting || initialRequestObj.sorting
+      const searchText = currentRequestObj.searchText || initialRequestObj.searchText
+
       let body = `{
         "filter": ${JSON.stringify(subLevelFilter)},
         "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
@@ -217,8 +241,8 @@ export default class WithFacet extends WebWorker() {
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
         "onlycourse": true,
-        "sorting": 2
-        ${this.hasSearchTerm ? `,"searchText": "${this.searchTerm}"` : ''}
+        "sorting": ${sorting === 2 ? 1 : 2}
+        ${searchText ? `,"searchText": "${searchText}"` : ''}
         ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}
         ${currentRequestObj.clong ? `,"clong": "${currentRequestObj.clong}"` : ''}
       }`
