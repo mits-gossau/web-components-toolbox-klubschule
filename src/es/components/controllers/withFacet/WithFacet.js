@@ -114,7 +114,7 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
         }
-        currentRequestObj.sorting = event.detail.id || 2;
+        currentRequestObj.sorting = event.detail.id || 2
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
@@ -130,18 +130,22 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.sorting = 1
       } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
         // sorting
-        currentRequestObj.sorting = event.detail.id || 3;
+        currentRequestObj.sorting = event.detail.id || 3
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
       } else {
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
+        console.log('else')
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
+        console.log('result', result)
       }
-      
+
+      console.log('currentRequestObj', currentRequestObj)
+
       if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
 
       const LanguageEnum = {
@@ -200,8 +204,8 @@ export default class WithFacet extends WebWorker() {
               if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
 
               // Read location name from URL
-              let cname
-              if (cname = new URLSearchParams(window.location.search).get('cname')) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
+              const cname = this.params.get('cname')
+              if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
 
               this.dispatchEvent(new CustomEvent('location-change', {
                 detail: {
@@ -228,7 +232,7 @@ export default class WithFacet extends WebWorker() {
 
       // merge both user Filter with sublevel filter
       let subLevelFilter = event.detail.filter
-      
+
       if (currentRequestObj.filter?.length) subLevelFilter = [...event.detail.filter, ...currentRequestObj.filter]
 
       const sorting = currentRequestObj.sorting || initialRequestObj.sorting
@@ -303,7 +307,8 @@ export default class WithFacet extends WebWorker() {
         const isParentSelected = selectedParent?.urlpara === filterKey
         // @ts-ignore
         if (filterItem.selected && isIdOrUrlpara) {
-          filterItem.selected = false // toggle filterItem if is is already selected
+          /* This is the issue that breaks wishlist, because if it is not selected it will not be added to the treeShookFilters */
+          // filterItem.selected = false // toggle filterItem if is is already selected
         } else if (filterItem.selected && !isIdOrUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isIdOrUrlpara && isParentSelected) {
@@ -314,11 +319,13 @@ export default class WithFacet extends WebWorker() {
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
+        console.log('something is about to break');
         [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem)
       }
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
     })
+    console.log('updateFilters', filters, treeShookFilters)
     return [filters, treeShookFilters]
   }
 
