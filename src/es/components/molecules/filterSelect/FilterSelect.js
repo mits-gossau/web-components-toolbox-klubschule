@@ -55,7 +55,7 @@ export default class filterSelect extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        display: contents
+        display: contents;
       }
     `
     return this.fetchTemplate()
