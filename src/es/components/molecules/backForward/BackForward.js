@@ -41,7 +41,9 @@ export default class BackForward extends Shadow() {
           gap: 1rem;
         }
 
-        :host ks-a-button {
+        :host ks-a-button,
+        :host ks-a-button a[type="button"],
+        :host ks-a-button button {
           width: 100%;
         }
 

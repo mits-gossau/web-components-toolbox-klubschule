@@ -313,7 +313,7 @@ export default class FilterCategories extends Shadow() {
       // update additional text with selected filter(s)
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
     } else {
-      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem, filterItem, level)))
+      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem, parentItem, level)))
     }
     if (!Array.from(parentItem.childNodes).includes(generatedNavLevelItem.navLevelItem)) parentItem.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {

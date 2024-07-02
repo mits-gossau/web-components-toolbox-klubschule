@@ -267,18 +267,21 @@ export default class WithFacet extends WebWorker() {
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true) {
+  static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null) {
     const treeShookFilters = []
     filters.forEach(filterItem => {
       const isMatchingKey = filterItem.urlpara === filterKey
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
         const isIdOrUrlpara = filterItem.id === filterValue || filterItem.urlpara === filterValue
+        // @ts-ignore
+        const isParentSelected = selectedParent?.urlpara === filterKey
+        // @ts-ignore
         if (filterItem.selected && isIdOrUrlpara) {
           filterItem.selected = false // toggle filterItem if is is already selected
         } else if (filterItem.selected && !isIdOrUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
-        } else if (!filterItem.selected && isIdOrUrlpara) {
+        } else if (!filterItem.selected && isIdOrUrlpara && isParentSelected) {
           filterItem.selected = true // select filterItem if it is not selected
         }
       }
@@ -286,7 +289,7 @@ export default class WithFacet extends WebWorker() {
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
-        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false)
+        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem)
       }
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
