@@ -27,7 +27,6 @@ export default class TileList extends Shadow() {
         // no tiles are delivered as attribute. here we got to fetch the location data for the tiles
         if (!this.data.tiles?.length) {
           /* set loading state */
-          console.log('this.tilesContainer', this.tilesContainer)
           this.tilesContainer.innerHTML = /* html */`
               <mdx-component class="o-tile-list__loading-bar">
                   <mdx-loading-bar></mdx-loading-bar>
