@@ -139,20 +139,23 @@ export default class Buttons extends Shadow() {
 
         parentDiv.innerHTML = /* html */ `
           <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay" close-event-name="backdrop-clicked" id="checkout-overlay">
-              <div class="container dialog-header" tabindex="0">
-                <div></div>
-                <h3 id="overlay-title"></h3>
-                <div id="close">
-                  <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                </div>
+            <div class="container dialog-header" tabindex="0">
+              <div></div>
+              <h3 id="overlay-title"></h3>
+              <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
               </div>
-              <ks-a-spacing type="xs-flex" tabindex="0"></ks-a-spacing>
-              <div class="container dialog-content">
-                <div class="sub-content">
-                </div>   
+            </div>
+            <ks-a-spacing type="xs-flex" tabindex="0"></ks-a-spacing>
+            <div class="container dialog-content">
+              <div class="sub-content">
               </div>
-              <div class="container dialog-footer">
-              </div>
+            </div>
+            <div class="container dialog-footer">
+              <!-- In order to have the close funtionality we need to render the Close button intially, we only change the label! -->
+              <ks-a-button id="close" namespace="button-secondary-" color="secondary">
+              </ks-a-button>
+            </div>
           </m-dialog>
         `
         parentDiv.appendChild(this.overLayButton)
@@ -204,8 +207,6 @@ export default class Buttons extends Shadow() {
 
   renderDialogContent(content) {
     if (content.texte?.length) {
-      const buttonContainer = this.root.querySelector(".buttons-container")
-
       this.root.querySelector(".container.dialog-header #overlay-title").innerHTML = /* html */ `
         ${content.titel}
       `
@@ -216,19 +217,33 @@ export default class Buttons extends Shadow() {
           <p>${text.text}</p>
         `, '')
         
-      this.root.querySelector(".container.dialog-footer").innerHTML = content.buttons?.reduce((acc, button) => acc + /* html */ `
-        <ks-a-button 
-          ${button.event === "close" ? 'id="close"' : ''}
-          ${button.iconName && !button.text ? 'icon' : ''} 
-          namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
-          color="secondary" 
-          ${button.link ? `href=${button.link}` : ''}
-        >
-          ${button.text ? '<span>' + button.text + '</span>' : ''}
-          ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
-          ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
-        </ks-a-button>
-      `,'')
+      const buttons = this.root.querySelector(".container.dialog-footer")
+      
+      // In order to have the close funtionality we need to render the Close button intially, we only change the label!
+      content.buttons.forEach((button) => {
+        if (button.event === "close") {
+          const closeButtonLabel = buttons.querySelector('#close').shadowRoot.querySelector('button > #label')
+          closeButtonLabel.textContent = button.text
+          closeButtonLabel.classList.remove("hide")
+          return
+        }
+        
+        const wrapperDiv = document.createElement('div')
+        wrapperDiv.innerHTML = /* html */ `
+          <ks-a-button 
+            ${button.event === "close" ? 'id="close"' : ''}
+            ${button.iconName && !button.text ? 'icon' : ''} 
+            namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
+            color="secondary" 
+            ${button.link ? `href=${button.link}` : ''}
+          >
+            ${button.text ? '<span>' + button.text + '</span>' : ''}
+            ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
+            ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
+          </ks-a-button>
+        `
+        if (buttons.children?.length < 2) buttons.appendChild(wrapperDiv.querySelector('ks-a-button'))
+      })
     } else {
       window.location.href = content.link
     }
