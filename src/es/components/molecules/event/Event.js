@@ -498,22 +498,24 @@ export default class Event extends Shadow() {
         <div class="details">
           
         </div>
-        <div class="controls">
-          <div class="controls-left">
-            <ks-m-buttons data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
-          </div>
-          <div class="controls-right">
-            <div class="icons">
-              ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
-                <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
-                  <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}">
-                  </ks-m-badge>
-                </ks-m-tooltip>
-              `, '') : ''}
+        <ks-c-checkout-overlay>
+          <div class="controls">
+            <div class="controls-left">
+              <ks-m-buttons data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
             </div>
-            <span class="price">${price?.pre ? price?.pre + ' ' : ''}<strong>${price?.amount || ''}</strong>${price?.per ? ' / ' + price?.per : ''}</span>
+            <div class="controls-right">
+              <div class="icons">
+                ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
+                  <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
+                    <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}">
+                    </ks-m-badge>
+                  </ks-m-tooltip>
+                `, '') : ''}
+              </div>
+              <span class="price">${price?.pre ? price?.pre + ' ' : ''}<strong>${price?.amount || ''}</strong>${price?.per ? ' / ' + price?.per : ''}</span>
+            </div>
           </div>
-        </div>
+        </ks-c-checkout-overlay>
       </div>
     `
 
@@ -521,6 +523,10 @@ export default class Event extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../controllers/checkoutOverlay/CheckoutOverlay.js`,
+        name: 'ks-c-checkout-overlay'
       },
       {
         path: `${this.importMetaUrl}../../molecules/buttons/Buttons.js`,
