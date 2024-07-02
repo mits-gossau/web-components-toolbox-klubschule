@@ -268,7 +268,6 @@ export default class WithFacet extends WebWorker() {
       }))
     }
 
-    // @ts-ignore
     this.popstateListener = event => {
       this.params = this.catchURLParams()
       this.requestWithFacetListener()
