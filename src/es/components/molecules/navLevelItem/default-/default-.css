@@ -10,3 +10,8 @@
     --nav-level-item-default-background-color: transparent;
     --nav-level-item-default-color: var(--mdx-comp-checkbox-unchecked-label-color-disabled, #262626);
 }
+:host([disabled]) {
+    --nav-level-item-default-background-color: transparent;
+    --nav-level-item-default-color: var(--mdx-comp-checkbox-unchecked-label-color-disabled, #262626);
+    pointer-events: none;
+}
