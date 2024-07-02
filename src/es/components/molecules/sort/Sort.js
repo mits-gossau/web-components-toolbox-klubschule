@@ -7,7 +7,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class Sort extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.closeEventListener = event => this.root.querySelector('.m-sort__tooltip-open')?.classList.remove('m-sort__tooltip-open')
@@ -15,11 +15,11 @@ export default class Sort extends Shadow() {
     this.selfCloseEventListener = event => {
       const target = Array.from(event.composedPath()).find(node => node.tagName === 'KS-M-SORT')
       if (target) return event.stopPropagation()
-      else  this.root.querySelector('.m-sort__tooltip-open')?.classList.remove('m-sort__tooltip-open')
+      else this.root.querySelector('.m-sort__tooltip-open')?.classList.remove('m-sort__tooltip-open')
     }
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
@@ -29,7 +29,7 @@ export default class Sort extends Shadow() {
     self.addEventListener('click', this.selfCloseEventListener)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     if (this.getAttribute('close-event-name')) document.body.removeEventListener(this.getAttribute('close-event-name'), this.closeEventListener)
 
     self.removeEventListener('click', this.selfCloseEventListener)
@@ -38,7 +38,7 @@ export default class Sort extends Shadow() {
   /**
    * Toggle tooltip
    */
-  toggleTooltip() {
+  toggleTooltip () {
     const toggle = this.root.querySelector('.m-sort')
     if (toggle) {
       toggle.addEventListener('click', () => {
@@ -53,7 +53,7 @@ export default class Sort extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
@@ -62,14 +62,14 @@ export default class Sort extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.sort
   }
 
   /**
    * renders the css
    */
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host .m-sort {
         position: relative;
@@ -142,7 +142,7 @@ export default class Sort extends Shadow() {
   /**
    * fetches the template
    */
-  fetchTemplate() {
+  fetchTemplate () {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
@@ -183,7 +183,7 @@ export default class Sort extends Shadow() {
    * Render HTML
    * @returns Promise<void>
    */
-  renderHTML() {
+  renderHTML () {
     const ul = this.root.querySelector('ul')
     if (!ul) return console.warn('element empty')
     const currentText = ul.getAttribute('main-text') || ''
@@ -250,7 +250,7 @@ export default class Sort extends Shadow() {
     ])
   }
 
-  get sort() {
+  get sort () {
     return this.root.querySelector('.m-sort')
   }
 }
