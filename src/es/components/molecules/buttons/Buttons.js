@@ -114,7 +114,7 @@ export default class Buttons extends Shadow() {
       filteredURLParams = filteredURLKeys.map(key => `${key}=${urlParamsMap.get(key)}`).join('&')
     }
 
-    const buttons = dataButtons?.reduce((acc, button) => {
+    const buttons = dataButtons?.reduce((acc, button, index) => {
       // keep existing url params
       if (shouldKeepURLParams && button.link) {
         if (button.link.includes('?')) {
@@ -150,7 +150,7 @@ export default class Buttons extends Shadow() {
         })
 
         parentDiv.innerHTML = /* html */ `
-          <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay" close-event-name="backdrop-clicked" id="checkout-overlay">
+          <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay" close-event-name="backdrop-clicked" id="checkout-overlay-${index}">
             <div class="container dialog-header" tabindex="0">
               <div></div>
               <h3 id="overlay-title"></h3>
