@@ -226,10 +226,10 @@ export default class WithFacet extends WebWorker() {
       if (this.abortControllerLocations) this.abortControllerLocations.abort()
       this.abortControllerLocations = new AbortController()
 
-      // TODO: Fix request locations
       // merge both user Filter with sublevel filter
-      const subLevelFilter = event.detail.filter
-      if (this.filters?.length) subLevelFilter.push(JSON.parse(this.filters.reduce((acc, filter) => acc + `${filter}`)))
+      let subLevelFilter = event.detail.filter
+      
+      if (currentRequestObj.filter?.length) subLevelFilter = [...event.detail.filter, ...currentRequestObj.filter]
 
       const sorting = currentRequestObj.sorting || initialRequestObj.sorting
       const searchText = currentRequestObj.searchText || initialRequestObj.searchText
@@ -246,6 +246,7 @@ export default class WithFacet extends WebWorker() {
         ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}
         ${currentRequestObj.clong ? `,"clong": "${currentRequestObj.clong}"` : ''}
       }`
+
       if (event?.detail?.ppage && this.requestLocationsLastBody) {
         // ppage reuse last request
         body = JSON.stringify(Object.assign(JSON.parse(this.requestLocationsLastBody), { ppage: event.detail.ppage }))
