@@ -18,7 +18,9 @@ export default class KsButton extends Button {
       this.buttonSpan.textContent = this.getAttribute('default-label') || 'No added placeholder'
       const params = new URLSearchParams(self.location.search)
       if (params.has(`${this.getSearchFromUrlValue}`)) {
-        this.buttonSpan.textContent = params.get(`${this.getSearchFromUrlValue}`)
+        // @ts-ignore
+        let decodedParam = decodeURIComponent(params.get(`${this.getSearchFromUrlValue}`)) 
+        this.buttonSpan.textContent = decodedParam
       }
       this.buttonSpan.classList.remove('hide')
     }
