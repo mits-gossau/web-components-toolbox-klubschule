@@ -365,6 +365,11 @@ export default class WithFacet extends WebWorker() {
         this.params.delete(filterItem.urlpara)
       })
 
+      this.params.delete('q')
+      this.params.delete('clat')
+      this.params.delete('clong')
+      this.params.delete('cname')
+
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
