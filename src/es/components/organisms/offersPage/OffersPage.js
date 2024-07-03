@@ -428,52 +428,26 @@ export default class OffersPage extends Shadow() {
 
     const filterSearch = this.hasAttribute('with-filter-search') ? /* html */`
       <ks-c-auto-complete
-        input-change="search-change"
+        no-forwarding
         ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
-        ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
-        ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''}
-        ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'}
+        ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
+        ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
       >
-        <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog">
-          <dialog>
-            <div class="container">
-              <a-input
-                inputid="offers-page-input-search"
-                autofocus
-                placeholder="${this.getTranslation('Search.InputPlaceholder')}"
-                icon-name="Search" 
-                icon-size="calc(20rem/18)"
-                submit-search="request-auto-complete"
-                submit-search="request-with-facet"
-                any-key-listener
-                type="search"
-                answer-event-name="search-change"
-                delete-listener
-                search
-                autocomplete="off"
-              >
-              </a-input>
-              <div id="close">
-                  <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-              </div>
-            </div>
-            <div class="container">
-              <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
-              </ks-m-auto-complete-list>
-            </div>
-          </dialog>
-          <a-input
-            id="show-modal"
-            inputid="show-modal"
-            placeholder="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
-            icon-name="Search"
-            icon-size="1.25em"
-            search type="search"
-            answer-event-name="search-change"
-            autocomplete="off"
-          >
-          </a-input>
-        </m-dialog>
+        <a-input
+          inputid="offers-page-input-search"
+          autofocus
+          placeholder="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
+          icon-name="Search"
+          icon-size="1.25em"
+          submit-search="request-auto-complete"
+          any-key-listener
+          type="search"
+          answer-event-name="search-change"
+          delete-listener
+          autocomplete="off"
+          search
+        >
+        </a-input>
       </ks-c-auto-complete>
     ` : ''
 
