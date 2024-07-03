@@ -140,19 +140,13 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__price {
-          font-family: var(--price-font-family);
-          font-size: var(--price-font-size);
-          line-height: var(--price-line-height);
-          font-weight: var(--price-font-weight);  
+          font: var(--price-font); 
           padding-left: 0.75em;
           text-align: end;
       }
       
       :host .m-tile__price strong {
-          font-family: var(--price-strong-font-family);
-          font-size: var(--price-strong-font-size);
-          line-height: var(--price-strong-line-height);
-          font-weight: var(--price-strong-font-weight);   
+          font: var(--price-strong-font);
       }
       
       :host a-icon-mdx {
@@ -187,10 +181,13 @@ export default class Tile extends Shadow() {
         font-size: 1.5em;
       }
 
-      @media only screen and (max-width: _max-width_) {
+      @media only screen and (max-width: 1024px) {
         :host .m-tile__wrap {
-            padding: 1rem 0.5rem;
+          padding: 1rem 0.5rem;
         }
+      }
+
+      @media only screen and (max-width: _max-width_) {
 
         :host .m-tile__content {
             font-size: 0.875em;
