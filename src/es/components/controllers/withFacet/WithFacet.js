@@ -334,7 +334,7 @@ export default class WithFacet extends WebWorker() {
 
   updateURLParam (key, value) {
     if (this.params) {
-      if (this.params.has(key)) {
+      if (this.params.has(key) && key !== 'q') {
         const currentValues = this.params.get(key)?.split('-')
         if (!currentValues?.includes(value)) {
           currentValues?.push(value)
