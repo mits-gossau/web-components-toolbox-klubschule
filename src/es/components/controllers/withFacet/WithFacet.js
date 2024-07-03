@@ -99,7 +99,7 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = result[1]
         currentRequestObj.sorting = 1
         console.log(event)
-        if (event?.detail?.wrapper?.filterItem.typ === "tree") {
+        if (event?.detail?.target?.type === "tree") {
           this.getLastSelectedFilterItem(currentRequestObj.filter.filter(filterItem => filterItem.typ === "tree"))
         }
       } else if (event?.detail?.key === 'location-search') {
@@ -331,16 +331,20 @@ export default class WithFacet extends WebWorker() {
   }
 
   getLastSelectedFilterItem (filterItems) {
-    console.log(filterItems)
     filterItems.forEach(filterItem => {
       const selectedItem = filterItem.children.filter(child => child.selected)
-      if (filterItem.children && selectedItem) {
+      // const selectedItem = filterItem.children
+      if (filterItem.children && selectedItem?.length) {
+        console.log("SeclectedItem", selectedItem, filterItem.label)
         filterItem.selected = false
         this.getLastSelectedFilterItem(selectedItem)
       } else {
+        // @alex nach dem 3-4 mal springen wir hier wieder aufs oberste lvl. Glaub das ist der Fehler
+        console.log(filterItem.label, ": False")
         return filterItem.selected = true
       }
     })
+    console.log(filterItems)
   }
 
   static cleanRequest (requestObj) {
