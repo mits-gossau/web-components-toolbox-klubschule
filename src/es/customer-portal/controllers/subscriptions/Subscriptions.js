@@ -49,8 +49,7 @@ export default class Subscriptions extends HTMLElement {
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscriptions') || 'update-subscriptions', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
-          if (response.status >= 200 && response.status <= 299) return await response.json()
-          throw new Error(response.statusText)
+          return await response.json()
         }),
         type: 'subscriptions'
       },

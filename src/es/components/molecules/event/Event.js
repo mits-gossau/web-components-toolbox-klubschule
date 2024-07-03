@@ -457,10 +457,13 @@ export default class Event extends Shadow() {
       detail_label_less,
       buttons,
       icons,
-      price
+      kurs_id,
+      price,
+      ist_abokurs_offen
     } = this.data.course
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
+
     this.html = /* HTML */`
       <div class="event">
         <div class="head">
@@ -501,7 +504,9 @@ export default class Event extends Shadow() {
         <ks-c-checkout-overlay>
           <div class="controls">
             <div class="controls-left">
-              <ks-m-buttons data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
+              ${!ist_abokurs_offen ? /* html */ `
+              <ks-m-buttons dialog-id="${kurs_id}" data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
+              ` : ''}
             </div>
             <div class="controls-right">
               <div class="icons">

@@ -27,7 +27,6 @@ export default class TileList extends Shadow() {
         // no tiles are delivered as attribute. here we got to fetch the location data for the tiles
         if (!this.data.tiles?.length) {
           /* set loading state */
-          console.log('this.tilesContainer', this.tilesContainer)
           this.tilesContainer.innerHTML = /* html */`
               <mdx-component class="o-tile-list__loading-bar">
                   <mdx-loading-bar></mdx-loading-bar>
@@ -309,9 +308,9 @@ export default class TileList extends Shadow() {
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
             <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
-            ${data.iconTooltip
+            ${data.infotextshort
               ? /* html */`
-                <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
+                <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
                   <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
                 </ks-m-tooltip>
                   `
@@ -351,7 +350,7 @@ export default class TileList extends Shadow() {
                   `, '')}           
                 </div>
               `}
-              <span class="o-tile-list__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
+              <span class="o-tile-list__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
             </div>          
           </div>
         </div>

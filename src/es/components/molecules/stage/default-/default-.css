@@ -94,14 +94,16 @@
 }
 
 @media screen and (max-width: _max-width_) {
-    :host {
-        aspect-ratio: 4/3;
-        padding: var(--mdx-sys-spacing-flex-s);
-    }
-
     :host([has-background-mobile]) {
         background: var(--mdx-sys-color-accent-6-subtle1);
         margin-bottom: -1px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    :host {
+        aspect-ratio: 4/3;
+        padding: var(--mdx-sys-spacing-flex-s);
     }
 }
 

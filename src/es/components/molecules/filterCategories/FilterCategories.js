@@ -240,7 +240,7 @@ export default class FilterCategories extends Shadow() {
     return selectedFilters
   }
 
-  generateNavLevelItem (response, filterItem, parentItem, level) {
+  generateNavLevelItem (response, parentItem, filterItem, mainNav, level) {
     const filterIdPrefix = 'filter-'
     const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
@@ -248,7 +248,7 @@ export default class FilterCategories extends Shadow() {
     const selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ') || ''
     const checked = filterItem.selected ? 'checked' : ''
     const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
-    const filterId = parentItem.urlpara ? `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"` : ''
+    const filterId = `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"`
     let numberOfOffers = filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'
     if (filterItem.hideCount || level === 0) numberOfOffers = ''
     this.total = response.total
@@ -301,9 +301,10 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  generateFilters (response, filterItem, parentItem = this.mainNav, firstFilterItemId = null, level = -1) {
+  generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
     level++
     if (!filterItem.visible) return
+    if (parentItem === null) parentItem = filterItem
     if (firstFilterItemId === null) firstFilterItemId = filterItem.id
 
     let generatedNavLevelItem
@@ -313,9 +314,9 @@ export default class FilterCategories extends Shadow() {
       // update additional text with selected filter(s)
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
     } else {
-      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, filterItem, parentItem, level)))
+      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, parentItem, filterItem, mainNav, level)))
     }
-    if (!Array.from(parentItem.childNodes).includes(generatedNavLevelItem.navLevelItem)) parentItem.appendChild(generatedNavLevelItem.navLevelItem)
+    if (!Array.from(mainNav.childNodes).includes(generatedNavLevelItem.navLevelItem)) mainNav.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
       if (filterItem.id === '13') { // center filters
         const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, this.generateCenterFilter(response, filterItem)).get(level + '_' + filterItem.id)
@@ -327,7 +328,7 @@ export default class FilterCategories extends Shadow() {
       } else {
         filterItem.children.forEach((child, i) => {
           if (child.children && child.children.length > 0) {
-            this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId, level) // recursive call
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel, filterItem, firstFilterItemId, level) // recursive call
           } else {
             const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
             if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedFilters[0])) {

@@ -81,6 +81,22 @@ export default class SubscriptionsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     fetch.then(subscriptions => {
+      if (subscriptions.code === 500) {
+        this.html = ''
+        // trans value = Termine können nicht angezeigt werden. Versuchen sie es später nochmals
+        this.html = /* html */ `
+          <style>
+            :host > div {
+              padding: 1.5em 0;
+            }
+          </style>
+          <div>
+            <span>
+              <a-translation data-trans-key="CP.cpAppointmentsListingFailed"></a-translation>
+            </span>
+          </div>`
+        return
+      }
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,

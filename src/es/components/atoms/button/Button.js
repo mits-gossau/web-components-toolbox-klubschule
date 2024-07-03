@@ -10,19 +10,39 @@ import Button from '../../web-components-toolbox/src/es/components/atoms/button/
  * @type {CustomElementConstructor}
  */
 export default class KsButton extends Button {
+  connectedCallback() {
+    super.connectedCallback()
+    this.getSearchFromUrlValue = this.getAttribute('get-param-from-url')
+    if (this.getSearchFromUrlValue) {
+      this.buttonSpan = this.root.querySelector('button > span')
+      this.buttonSpan.textContent = this.getAttribute('default-label') || 'No added placeholder'
+      const params = new URLSearchParams(self.location.search)
+      if (params.has(`${this.getSearchFromUrlValue}`)) {
+        // @ts-ignore
+        let decodedParam = decodeURIComponent(params.get(`${this.getSearchFromUrlValue}`)) 
+        this.buttonSpan.textContent = decodedParam
+      }
+      this.buttonSpan.classList.remove('hide')
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback()
+  }
+
   /**
    * fetches the template
    *
    * @return {Promise<void>}
    */
-  fetchTemplate () {
+  fetchTemplate() {
     if (!this.hasAttribute('color') && !this.hasAttribute('justify-content') && !this.hasAttribute('small') && !this.hasAttribute('big')) return super.fetchTemplate()
     const replaces = this.buttonTagName === 'a'
       ? [{
-          pattern: '([^-=]{1})button',
-          flags: 'g',
-          replacement: '$1a'
-        }]
+        pattern: '([^-=]{1})button',
+        flags: 'g',
+        replacement: '$1a'
+      }]
       : []
     switch (this.getAttribute('namespace')) {
       case 'button-primary-':

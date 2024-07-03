@@ -34,12 +34,16 @@ export default class AppointmentTile extends Tile {
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(data => {
-        if (data.lowBalance && this.dataset.listType === '') {
+          if (data.code === 500) {
+              return
+          }
+          if (data.lowBalance && this.dataset.listType === '') {
           // when the dialogue is closed, it is checked whether the list should be reloaded or not.
           // this is what this data attribute is for.
           // the event that checks this, is in 'CourseDialog.js' on line 58
           this.currentCourseDialog.dataset.forceReload = 'true'
         }
+
         const tileState = getTileState(courseAppointmentStatusMapping[data.courseAppointmentStatus], data)
         this.currentTile.classList.add(tileState.css.border)
       })
@@ -50,10 +54,6 @@ export default class AppointmentTile extends Tile {
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(data => {
-        if (data.lowBalance && this.dataset.listType === '') {
-          // same here... see line 39
-          this.currentCourseDialog.dataset.forceReload = 'true'
-        }
         const tileState = getTileState(courseAppointmentStatusMapping[data.courseAppointmentStatus], data)
         const defaultClass = this.currentTile.classList[0]
         this.currentTile.classList.remove(...this.currentTile.classList)

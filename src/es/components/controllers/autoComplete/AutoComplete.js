@@ -31,7 +31,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
  * @type {CustomElementConstructor}
  */
 export default class AutoComplete extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({
       importMetaUrl: import.meta.url,
       mode: 'false',
@@ -117,19 +117,39 @@ export default class AutoComplete extends Shadow() {
     }
   }
 
-  connectedCallback () {
+  connectedCallback() {
+    if (this.shouldRenderCSS()) this.renderCSS()
     // disabled dispatches (forwards) the input submit event to with facet controller
     this.addEventListener('request-auto-complete', this.hasAttribute('disabled') ? this.requestWithFacet : this.requestAutoCompleteListener)
     this.addEventListener('auto-complete-selection', this.clickOnPredictionListener)
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     // disabled dispatches (forwards) the input submit event to with facet controller
     this.removeEventListener('request-auto-complete', this.hasAttribute('disabled') ? this.requestWithFacet : this.requestAutoCompleteListener)
     this.removeEventListener('auto-complete-selection', this.clickOnPredictionListener)
   }
 
-  homeSearchInput (searchText) {
+  shouldRenderCSS() {
+    return !this.root.querySelector(
+      `${this.cssSelector} > style[_css]`
+    )
+  }
+
+  /**
+* renders the css
+*
+* @return {void}
+*/
+  renderCSS() {
+    this.css = /* css */`
+      :host {
+        cursor: default;
+      }
+      `
+  }
+
+  homeSearchInput(searchText) {
     const searchUrl = this.getAttribute('search-url')
     // redirect to search page
     if (searchText !== '') {
@@ -146,7 +166,7 @@ export default class AutoComplete extends Shadow() {
     }
   }
 
-  clearAutocomplete () {
+  clearAutocomplete() {
     this.dispatchEvent(new CustomEvent('auto-complete', {
       detail: {
         fetch: Promise.resolve({
@@ -163,7 +183,7 @@ export default class AutoComplete extends Shadow() {
     }))
   }
 
-  dispatchMock () {
+  dispatchMock() {
     return this.dispatchEvent(new CustomEvent('auto-complete', {
       detail: {
         /** @type {Promise<fetchAutoCompleteEventDetail>} */
