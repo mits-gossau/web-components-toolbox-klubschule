@@ -503,10 +503,11 @@ export default class Event extends Shadow() {
         </div>
         <ks-c-checkout-overlay>
           <div class="controls">
-            ${!ist_abokurs_offen ? /* html */ `
             <div class="controls-left">
+              ${!ist_abokurs_offen ? /* html */ `
               <ks-m-buttons dialog-id="${kurs_id}" data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
-            </div>` : ''}
+              ` : ''}
+            </div>
             <div class="controls-right">
               <div class="icons">
                 ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
