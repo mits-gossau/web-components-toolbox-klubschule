@@ -72,7 +72,11 @@ export default class Appointments extends HTMLElement {
     this.dispatchEvent(new CustomEvent('update-subscription-course-appointments', {
       detail: {
         fetch: (this.subscriptionCourseAppointments = fetch(endpoint, fetchOptions).then(async response => {
-          if (response.status >= 200 && response.status <= 299) return await response.json()
+          if (response.status >= 200 && response.status <= 299) {
+            const appointments = await response.json()
+            this.lastFilters = appointments.filters
+            return appointments
+          }
         }))
       },
       bubbles: true,
@@ -395,7 +399,22 @@ export default class Appointments extends HTMLElement {
   }
 
   requestCourseListFilterSettingsListener = async (event) => {
-    debugger
+    if (this.abortControllerCourseListFilterSettings) this.abortControllerCourseListFilterSettings.abort()
+    this.abortControllerCourseListFilterSettings = new AbortController()
+    const { userId } = this.dataset
+    const filterCriterias = event.detail.requestData.filterCriterias
+    const { subscriptionId, subscriptionType } = event.detail.requestData
+    const data = {
+      userId,
+      filterCriterias,
+      subscriptionId,
+      subscriptionType,
+      language: this.getLanguage()
+    }
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiCourseListFilterSettings}`
+    const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerCourseListFilterSettings)
+    fetch(endpoint, fetchOptions)
   }
 
   /**

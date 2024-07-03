@@ -156,8 +156,10 @@ export default class AppointmentsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     return fetch.then(appointments => {
-      debugger
-      this.updateCourseListFilterSettings(appointments.filters, appointments.selectedSubscription.subscriptionId, appointments.selectedSubscription.subscriptionType)
+      // update filters only for subscription list
+      if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
+        this.updateCourseListFilterSettings(appointments.filters, appointments.selectedSubscription.subscriptionId, appointments.selectedSubscription.subscriptionType)
+      }
       this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       const fetchModules = this.fetchModules([
         {
@@ -383,7 +385,6 @@ export default class AppointmentsList extends Shadow() {
       subscriptionId,
       subscriptionType
     }
-    debugger
     this.dispatchEvent(new CustomEvent('request-course-list-filter-settings',
       {
         detail: {
