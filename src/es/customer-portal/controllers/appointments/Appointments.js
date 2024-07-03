@@ -75,6 +75,7 @@ export default class Appointments extends HTMLElement {
           if (response.status >= 200 && response.status <= 299) {
             const appointments = await response.json()
             this.lastFilters = appointments.filters
+            this.requestAppointmentsFilterListener(event, true, false)
             return appointments
           }
         }))
@@ -399,7 +400,6 @@ export default class Appointments extends HTMLElement {
   }
 
   requestCourseListFilterSettingsListener = async (event) => {
-    if (this.abortControllerCourseListFilterSettings) this.abortControllerCourseListFilterSettings.abort()
     this.abortControllerCourseListFilterSettings = new AbortController()
     const { userId } = this.dataset
     const filterCriterias = event.detail.requestData.filterCriterias
