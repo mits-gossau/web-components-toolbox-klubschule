@@ -383,7 +383,7 @@ export default class OffersPage extends Shadow() {
                       search
                       autofocus 
                       submit-search="request-auto-complete-location" 
-                      any-key-listener="500" 
+                      any-key-listener="200" 
                       type="search"
                       delete-listener
                       answer-event-name="location-change"
