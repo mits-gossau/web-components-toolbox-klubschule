@@ -66,7 +66,14 @@ export default class DialogStatusButton extends Shadow() {
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentReversalListener = event => {
-    if (this.dataset.id === event.detail.id) this.renderOnlyCloseButton()
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(courseDetail => {
+        if (courseDetail.code === 500) {
+          return
+        }
+        this.renderOnlyCloseButton()
+      })
+    }
   }
 
   /**
@@ -75,7 +82,14 @@ export default class DialogStatusButton extends Shadow() {
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentBookingListener = event => {
-    if (this.dataset.id === event.detail.id) this.renderOnlyCloseButton()
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(courseDetail => {
+        if (courseDetail.code === 500) {
+          return
+        }
+        this.renderOnlyCloseButton()
+      })
+    }
   }
 
   /**

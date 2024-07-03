@@ -271,7 +271,7 @@ export default class Appointments extends HTMLElement {
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
-          if (response.status >= 200 && response.status <= 299) return await response.json()
+          return await response.json()
         }),
         id: courseId,
         type: 'booking'
@@ -344,7 +344,8 @@ export default class Appointments extends HTMLElement {
     this.dispatchEvent(new CustomEvent(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', {
       detail: {
         fetch: fetch(endpoint, fetchOptions).then(async response => {
-          if (response.status >= 200 && response.status <= 299) return await response.json()
+          // if (response.status >= 200 && response.status <= 299) return await response.json()
+          return await response.json()
         }),
         id: courseId,
         type: 'reversal'
@@ -370,7 +371,7 @@ export default class Appointments extends HTMLElement {
       userId,
       subscriptionType: '',
       subscriptionId: 0,
-      includeConsumedAppointments: true,
+      includeConsumedAppointments: false,
       language: this.getLanguage()
     }
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerBookedSubscriptionCourseAppointments)

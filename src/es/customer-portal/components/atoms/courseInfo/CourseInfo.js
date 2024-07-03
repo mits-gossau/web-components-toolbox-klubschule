@@ -32,6 +32,9 @@ export default class CourseInfo extends Shadow() {
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
+        if (courseDetail.code === 500) {
+          return
+        }
         this.html = ''
         const tileState = getTileState(courseAppointmentStatusMapping[courseDetail.courseAppointmentStatus], courseDetail)
         this.renderHTML(tileState)
@@ -42,6 +45,9 @@ export default class CourseInfo extends Shadow() {
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
+        if (courseDetail.code === 500) {
+          return
+        }
         this.html = ''
         const tileState = getTileState(courseAppointmentStatusMapping[courseDetail.courseAppointmentStatus], courseDetail)
         this.renderHTML(tileState)

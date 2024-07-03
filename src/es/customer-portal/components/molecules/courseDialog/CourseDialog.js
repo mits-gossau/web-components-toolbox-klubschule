@@ -305,9 +305,10 @@ export default class CourseDialog extends Shadow() {
    */
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(() => {
+      event.detail.fetch.then((response) => {
+        const showErrorNotification = response?.code === 500
         this.viewContent.innerHTML = ''
-        this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseData, this.courseDetail)
+        this.viewContent.innerHTML = this.renderDialogContentBookingSuccess(this.courseData, this.courseDetail, showErrorNotification)
       })
     }
   }
@@ -318,14 +319,14 @@ export default class CourseDialog extends Shadow() {
    * @param {*} detail
    * @returns
    */
-  renderDialogContentBookingSuccess (data, detail = {}) {
+  renderDialogContentBookingSuccess (data, detail = {}, renderErrorNotification) {
     return /* html */`
       <style>
         .success-message {
           display: flex;
           align-items: flex-start;
           flex-direction: row;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
           gap: 1em;
           width: fit-content;
         }
@@ -339,13 +340,9 @@ export default class CourseDialog extends Shadow() {
           margin: 4em 0 1.5em 0;
         }
       </style>
-      <div class="success-message">
-        <a-icon-mdx icon-name="CheckCircle" size="3em" class="success"></a-icon-mdx>
-        <h2>
-          <!-- trans value = Sie haben den Termin erfolgreich gebucht -->
-          <a-translation data-trans-key="CP.cpYouHaveBookedTheAppointmentSuccessfully"></a-translation>
-        </h2>
-      </div>
+      <!-- trans value = "Buchen nicht möglich versuchen sie es später nochmals" -->
+      ${this.renderErrorNotification(renderErrorNotification, 'CP.cpBookingErrorTryLater')}
+      ${this.renderSuccessNotification(renderErrorNotification)} 
       <div class="downloads">
         <h3>Downloads</h3>
         <div>${this.renderDownloads(data, detail)}</div>
@@ -421,9 +418,10 @@ export default class CourseDialog extends Shadow() {
    */
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
-      event.detail.fetch.then(() => {
+      event.detail.fetch.then((response) => {
+        const showErrorNotification = response.code === 500
         this.viewContent.innerHTML = ''
-        this.viewContent.innerHTML = this.renderDialogContentReversalSuccess(this.courseData, this.courseDetail)
+        this.viewContent.innerHTML = this.renderDialogContentReversalSuccess(this.courseData, this.courseDetail, showErrorNotification)
         this.dispatchEvent(new CustomEvent('update-counter',
           {
             detail: {
@@ -445,14 +443,27 @@ export default class CourseDialog extends Shadow() {
    * @param {*} detail
    * @returns
    */
-  renderDialogContentReversalSuccess (data, detail = {}) {
+  renderDialogContentReversalSuccess (data, detail = {}, showErrorNotification) {
+    let successMessage = /* html */ `
+      <div class="success-message">
+        <a-icon-mdx icon-name="CheckCircle" size="3em" class="success"></a-icon-mdx>
+          <h2>
+            <!-- trans value = Sie haben den Termin erfolgreich storniert -->
+            <a-translation data-trans-key="CP.cpYouHaveSuccessfullyCanceledTheAppointment"></a-translation>
+          </h2>
+      </div>
+    `
+
+    // trans value = "Stornieren nicht möglich versuchen sie es später nochmals"
+    if (showErrorNotification) successMessage = this.renderErrorNotification(showErrorNotification, 'CP.cpReversalErrorTryLater')
+
     return /* html */`
       <style>
         .success-message{
           display: flex;
           align-items: flex-start;
           flex-direction: row;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
           gap: 1em;
           width: fit-content;
         }
@@ -463,13 +474,7 @@ export default class CourseDialog extends Shadow() {
           color: #00997F !important;
         }
       </style>
-      <div class="success-message">
-        <a-icon-mdx icon-name="CheckCircle" size="3em" class="success"></a-icon-mdx>
-          <h2>
-            <!-- trans value = Sie haben den Termin erfolgreich storniert -->
-            <a-translation data-trans-key="CP.cpYouHaveSuccessfullyCanceledTheAppointment"></a-translation>
-          </h2>   
-      </div>
+      ${successMessage}
     `
   }
 
@@ -585,7 +590,7 @@ export default class CourseDialog extends Shadow() {
             <div class="container dialog-content">
               <p class="reset-link"></p>
               <div class="sub-content" >
-                <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>
+                <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>     
                 <div id="view-content">
                   ${this.renderDialogContentDetails(content)}
                 </div>
@@ -788,6 +793,37 @@ export default class CourseDialog extends Shadow() {
         </ul>
       </ks-m-link-list>
     `
+  }
+
+  renderErrorNotification (showError, translationKey) {
+    if (showError) {
+      return /* html */ `
+        <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
+          <div slot="description">
+            <p><a-translation data-trans-key="${translationKey}"></a-translation></p>
+            <a-link namespace="underline-"><a> Error Link </a></a-link>
+          </div>
+        </ks-m-system-notification>
+      `
+    } else {
+      return ''
+    }
+  }
+
+  renderSuccessNotification (showNotification) {
+    if (!showNotification) {
+      return /* html */ `
+       <div class="success-message">
+        <a-icon-mdx icon-name="CheckCircle" size="3em" class="success"></a-icon-mdx>
+        <h2>
+          <!-- trans value = Sie haben den Termin erfolgreich gebucht -->
+          <a-translation data-trans-key="CP.cpYouHaveBookedTheAppointmentSuccessfully"></a-translation>
+        </h2>
+      </div>
+      `
+    } else {
+      return ''
+    }
   }
 
   /**

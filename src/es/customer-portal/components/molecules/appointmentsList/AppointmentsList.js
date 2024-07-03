@@ -46,6 +46,22 @@ export default class AppointmentsList extends Shadow() {
    */
   subscriptionsListener = (event) => {
     event.detail.fetch.then((subscriptionData) => {
+      if (subscriptionData.code === 500) {
+        this.html = ''
+        // trans value = Termine können nicht angezeigt werden. Versuchen sie es später nochmals
+        this.html = /* html */ `
+          <style>
+            :host > div {
+              padding:1.5em 0;
+            }
+          </style>
+          <div>
+            <span>
+              <a-translation data-trans-key="CP.cpAppointmentsListingFailed"></a-translation>
+            </span>
+          </div>`
+        return
+      }
       const { subscriptionType, subscriptionId } = subscriptionData.activeSubscriptions[0]
       this.dispatchEvent(new CustomEvent(this.dataset.requestSubscription || 'request-appointments',
         {
