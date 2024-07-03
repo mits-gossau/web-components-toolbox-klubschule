@@ -122,15 +122,17 @@ export default class filterSelect extends Shadow() {
               selectedFilterItems.push(`${child.label}`)
             })
           }
-        } else {
+        } 
+        
+        if (filterItem.typ === 'group') {
           const lastSelectedChild = this.getLastSelectedChild(filterItem)
           if (lastSelectedChild) selectedFilterItems.push(`${lastSelectedChild.label}`)
         }
-  
+
         if (selectedFilterItems.length > 0) {
           this.html = this.createFilterButton(filterItem, selectedFilterItems)
         }
-  
+      
         filterItem.children.forEach(child => processFilterItem(child)) // recursive call
       }
     }

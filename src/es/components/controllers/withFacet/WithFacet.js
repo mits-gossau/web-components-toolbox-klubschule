@@ -98,6 +98,9 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
         currentRequestObj.sorting = 1
+        if (event?.detail?.target?.type === "tree") {
+          currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
+        }
       } else if (event?.detail?.key === 'location-search') {
         // location search
         // keep the last search location inside currentRequestObj and store it in url params
@@ -308,6 +311,9 @@ export default class WithFacet extends WebWorker() {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isIdOrUrlpara && isParentSelected) {
           filterItem.selected = true // select filterItem if it is not selected
+        } else if (isParentSelected) {
+          // @ts-ignore
+          selectedParent.selected = false // deselect filterItem if it is not selected
         }
       }
       const treeShookFilterItem = structuredClone(filterItem)
@@ -320,6 +326,19 @@ export default class WithFacet extends WebWorker() {
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
     })
     return [filters, treeShookFilters]
+  }
+
+  getLastSelectedFilterItem (filterItems) {
+    filterItems.forEach(filterItem => {
+      if (filterItem.children?.length) {
+        filterItem.selected = false
+        this.getLastSelectedFilterItem(filterItem.children)
+      } else {
+        return filterItem.selected = true
+      }
+    })
+
+    return filterItems
   }
 
   static cleanRequest (requestObj) {
