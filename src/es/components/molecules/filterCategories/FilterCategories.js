@@ -151,7 +151,7 @@ export default class FilterCategories extends Shadow() {
       </mdx-component>
     `
     const navLevelItem = /* html */`
-      <ks-m-nav-level-item namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}">
+      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}">
         <div class="wrap">
           <span class="text">${child.label} ${numberOfOffers}</span>
         </div>
@@ -260,13 +260,13 @@ export default class FilterCategories extends Shadow() {
     // TODO: <span class="additional">${selectedFilters}</span> on first level ("sparten")
 
     navLevelItem.innerHTML = /* html */`
-    <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
-      <div class="wrap">
-        <span class="text">${filterItem.label} ${numberOfOffers}</span>
-        <span class="additional">${selectedFilters}</span>
-      </div>
-      <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-    </ks-m-nav-level-item>
+      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
+        <div class="wrap">
+          <span class="text">${filterItem.label} ${numberOfOffers}</span>
+          <span class="additional">${selectedFilters}</span>
+        </div>
+        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+      </ks-m-nav-level-item>
     `
 
     div.innerHTML = /* html */`

@@ -98,9 +98,9 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
         currentRequestObj.sorting = 1
-        console.log(event)
         if (event?.detail?.target?.type === "tree") {
-          this.getLastSelectedFilterItem(currentRequestObj.filter.filter(filterItem => filterItem.typ === "tree"))
+          // this.getLastSelectedFilterItem(currentRequestObj.filter.filter(filterItem => filterItem.typ === "tree"))
+          currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
         }
       } else if (event?.detail?.key === 'location-search') {
         // location search
@@ -306,7 +306,6 @@ export default class WithFacet extends WebWorker() {
         // @ts-ignore
         const isParentSelected = selectedParent?.urlpara === filterKey
         // @ts-ignore
-        // @ts-ignore
         if (filterItem.selected && isIdOrUrlpara) {
           filterItem.selected = false // toggle filterItem if is is already selected
         } else if (filterItem.selected && !isIdOrUrlpara) {
@@ -332,19 +331,15 @@ export default class WithFacet extends WebWorker() {
 
   getLastSelectedFilterItem (filterItems) {
     filterItems.forEach(filterItem => {
-      const selectedItem = filterItem.children.filter(child => child.selected)
-      // const selectedItem = filterItem.children
-      if (filterItem.children && selectedItem?.length) {
-        console.log("SeclectedItem", selectedItem, filterItem.label)
+      if (filterItem.children?.length) {
         filterItem.selected = false
-        this.getLastSelectedFilterItem(selectedItem)
+        this.getLastSelectedFilterItem(filterItem.children)
       } else {
-        // @alex nach dem 3-4 mal springen wir hier wieder aufs oberste lvl. Glaub das ist der Fehler
-        console.log(filterItem.label, ": False")
         return filterItem.selected = true
       }
     })
-    console.log(filterItems)
+
+    return filterItems
   }
 
   static cleanRequest (requestObj) {
