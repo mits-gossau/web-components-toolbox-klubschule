@@ -9,7 +9,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class OffersPage extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetListener = (event) => {
@@ -49,7 +49,7 @@ export default class OffersPage extends Shadow() {
     this.isEasyPortal = !!this.hasAttribute('is-easy-portal')
   }
 
-  connectedCallback () {
+  connectedCallback() {
     this.hidden = true
     new Promise(resolve => {
       this.dispatchEvent(new CustomEvent('request-translations',
@@ -72,11 +72,11 @@ export default class OffersPage extends Shadow() {
     this.addEventListener('with-facet', this.withFacetListener)
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     this.removeEventListener('with-facet', this.withFacetListener)
   }
 
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(
       `${this.cssSelector} > style[_css]`
     )
@@ -87,14 +87,14 @@ export default class OffersPage extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML () {
+  shouldRenderHTML() {
     return !this.root.querySelector('ks-c-with-facet') || !this.ksMTab
   }
 
   /**
    * Fill markup with none static data
    */
-  withFacetListener (event) {
+  withFacetListener(event) {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
       const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
@@ -132,7 +132,7 @@ export default class OffersPage extends Shadow() {
   /**
    * renders the css
    */
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */`
       :host {
         display: contents !important;
@@ -160,7 +160,7 @@ export default class OffersPage extends Shadow() {
    * Render HTML
    * @return Promise<void>
    */
-  renderHTML () {
+  renderHTML() {
     this.html = /* html */`<ks-c-with-facet
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
@@ -312,7 +312,7 @@ export default class OffersPage extends Shadow() {
     ])
   }
 
-  get tabContentOne () {
+  get tabContentOne() {
     const searchInput = this.hasAttribute('with-search-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
         <ks-c-auto-complete
@@ -406,21 +406,40 @@ export default class OffersPage extends Shadow() {
                     </ks-m-auto-complete-list>
                 </div>
               </dialog>
-              <a-input 
-                id="show-modal-location"
-                inputid="show-modal"
-                placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}"
-                icon-name="Location"
-                icon-size="1.25em"
-                search
-                type="search"
-                answer-event-name="location-change"
-                readonly
-                pointer
-                autocomplete="off"
-              >
-              ${this.getTranslation('CourseList.SearchInYourAreaPlaceholder')}
-              </a-input>
+              <style>
+                :host>ks-a-button {
+                  width: 100%;
+                  --button-secondary-background-color: var(--m-white);
+                  --button-secondary-background-color-hover: var(--m-white);
+                  --button-secondary-width: 100%;
+                  --button-secondary-border-color: var(--m-gray-700);
+                  --button-secondary-border-color-hover: var(--m-gray-700);
+                  --button-secondary-color: var(--m-gray-700);
+                  --button-secondary-color-hover: var(--m-gray-700);
+                  --button-secondary-cursor: text;
+                  --button-secondary-justify-content: space-between;
+                  --button-secondary-padding: 0.5rem 1.5rem;
+                  --button-secondary-font-size: 1.15rem;
+                  --button-secondary-height: 2.88rem;
+                  --svg-size: 1.5rem;
+                  --svg-size-mobile: 1.2rem;
+                  --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+                  --button-secondary-font-weight: 400;
+					    }
+
+              @media only screen and (max-width: 767px) {
+                :host>ks-a-button {
+                  --button-secondary-padding: 0.5rem 0.9rem;
+                  --button-secondary-font-size: 1rem;
+                  --button-secondary-height: 2.22rem;
+                }
+					}
+				</style>
+				<ks-a-button id="show-modal-location" namespace="button-secondary-" get-param-from-url="cname"
+					default-label="${this.getTranslation('CourseList.YourLocationPlaceholder')}">
+					<a-icon-mdx icon-name="Location" class="icon-right">
+					</a-icon-mdx>
+				</ks-a-button>
             </m-dialog>
         </ks-c-auto-complete-location>
       </div>
@@ -482,8 +501,8 @@ export default class OffersPage extends Shadow() {
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
             ${this.hasAttribute('headless')
-              ? ''
-              : /* html */`
+        ? ''
+        : /* html */`
               <o-grid namespace="grid-12er-">
                 <style>
                   :host .input-section {
@@ -492,10 +511,10 @@ export default class OffersPage extends Shadow() {
                 </style>
                 <section class="input-section">
                   ${this.hasAttribute('no-search-tab')
-                    ? /* html */`<div col-lg="12" col-md="12" col-sm="12">
+          ? /* html */`<div col-lg="12" col-md="12" col-sm="12">
                         <ks-a-with-facet-counter></ks-a-with-facet-counter>
                       </div>`
-                    : ''}
+          : ''}
                   ${this.eventDetailURL ? '' : searchInput}
                   ${locationInput}
                 </section>
@@ -565,7 +584,7 @@ export default class OffersPage extends Shadow() {
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               <ks-m-badge-legend namespace="badge-legend-default-">
                 ${this.isEasyPortal
-                  ? /* html */`
+        ? /* html */`
                   <div>
                     <div class="badge-icon-only">
                       <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Key" size="1em"></a-icon-mdx>
@@ -573,8 +592,8 @@ export default class OffersPage extends Shadow() {
                     <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
                   </div> 
                   `
-                  : ''
-                }
+        : ''
+      }
                 <div>
                   <div class="badge-icon-only">
                     <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
@@ -599,7 +618,7 @@ export default class OffersPage extends Shadow() {
     `
   }
 
-  get tabContentTwo () {
+  get tabContentTwo() {
     return /* HTML */ `
       <ks-o-body-section  variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
         <o-grid namespace="grid-12er-">
@@ -613,11 +632,11 @@ export default class OffersPage extends Shadow() {
     `
   }
 
-  get ksMTab () {
+  get ksMTab() {
     return this.root.querySelector('ks-m-tab')
   }
 
-  get eventDetailURL () {
+  get eventDetailURL() {
     return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
   }
 }
