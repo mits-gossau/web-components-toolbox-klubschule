@@ -137,14 +137,10 @@ export default class WithFacet extends WebWorker() {
       } else {
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
-        console.log('else')
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
-        console.log('result', result)
       }
-
-      console.log('currentRequestObj', currentRequestObj)
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
 
@@ -299,7 +295,7 @@ export default class WithFacet extends WebWorker() {
   static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null) {
     const treeShookFilters = []
     filters.forEach(filterItem => {
-      const isMatchingKey = filterItem.urlpara === filterKey
+      const isMatchingKey = (filterItem.urlpara !== undefined) && (filterItem.urlpara === filterKey)
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
         const isIdOrUrlpara = filterItem.id === filterValue || filterItem.urlpara === filterValue
@@ -308,7 +304,7 @@ export default class WithFacet extends WebWorker() {
         // @ts-ignore
         if (filterItem.selected && isIdOrUrlpara) {
           /* This is the issue that breaks wishlist, because if it is not selected it will not be added to the treeShookFilters */
-          // filterItem.selected = false // toggle filterItem if is is already selected
+          filterItem.selected = false // toggle filterItem if is is already selected
         } else if (filterItem.selected && !isIdOrUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isIdOrUrlpara && isParentSelected) {
@@ -319,13 +315,11 @@ export default class WithFacet extends WebWorker() {
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
-        console.log('something is about to break');
         [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem)
       }
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
     })
-    console.log('updateFilters', filters, treeShookFilters)
     return [filters, treeShookFilters]
   }
 

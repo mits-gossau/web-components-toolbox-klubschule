@@ -131,7 +131,8 @@ export default class WishList extends Shadow() {
         }
         // id assembly: courseType_courseId_centerid
         // @ts-ignore
-        initialRequest.filter[0].children = data.watchlistEntries.map(entry => ({ ...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true }))
+        initialRequest.filter[0].children = data.watchlistEntries.map(entry => ({ ...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: false }))
+
         this.html = /* html */`
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
             <div part="delete-btn-wrapper">
