@@ -12,22 +12,17 @@ import Button from '../../web-components-toolbox/src/es/components/atoms/button/
 export default class KsButton extends Button {
   connectedCallback() {
     super.connectedCallback()
-    this.getSearchFromUrlValue = this.getAttribute('get-param-from-url')
-    if (this.getSearchFromUrlValue) {
+    // set the default label if exists
+    if (this.hasAttribute('default-label')) {
       this.buttonSpan = this.root.querySelector('button > span')
       this.buttonSpan.textContent = this.getAttribute('default-label') || 'No added placeholder'
-      const params = new URLSearchParams(self.location.search)
-      if (params.has(`${this.getSearchFromUrlValue}`)) {
-        // @ts-ignore
-        let decodedParam = decodeURIComponent(params.get(`${this.getSearchFromUrlValue}`)) 
-        this.buttonSpan.textContent = decodedParam
-      }
-      this.buttonSpan.classList.remove('hide')
     }
+    if (this.getAttribute('answer-event-name')) document.body.addEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
   }
 
   disconnectedCallback() {
     super.disconnectedCallback()
+    if (this.getAttribute('answer-event-name')) document.body.removeEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
   }
 
   /**
@@ -111,6 +106,13 @@ export default class KsButton extends Button {
         })
       default:
         return super.fetchTemplate()
+    }
+  }
+
+  answerEventListener = async event => {
+    let searchTerm = event.detail.searchTerm
+    if (searchTerm) {
+      this.buttonSpan.textContent = searchTerm
     }
   }
 }
