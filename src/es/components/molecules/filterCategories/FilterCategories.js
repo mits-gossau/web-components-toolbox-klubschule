@@ -19,6 +19,7 @@ export default class FilterCategories extends Shadow() {
     this.generateCenterFilterMap = new Map()
     this.generateFilterMap = new Map()
     this.total = 0
+    this.firstTreeItem = null
 
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
@@ -241,6 +242,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateNavLevelItem (response, parentItem, filterItem, mainNav, level) {
+    if (level === 0 && filterItem.typ === 'tree') this.firstTreeItem = filterItem
     const filterIdPrefix = 'filter-'
     const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
@@ -249,6 +251,7 @@ export default class FilterCategories extends Shadow() {
     const checked = filterItem.selected ? 'checked' : ''
     const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
     const filterId = `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"`
+    
     let numberOfOffers = filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'
     if (filterItem.hideCount || level === 0) numberOfOffers = ''
     this.total = response.total
@@ -257,7 +260,7 @@ export default class FilterCategories extends Shadow() {
     // TODO: <span class="additional">${selectedFilters}</span> on first level ("sparten")
 
     navLevelItem.innerHTML = /* html */`
-    <ks-m-nav-level-item namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
+    <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
       <div class="wrap">
         <span class="text">${filterItem.label} ${numberOfOffers}</span>
         <span class="additional">${selectedFilters}</span>
