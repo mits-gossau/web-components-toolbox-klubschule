@@ -99,6 +99,9 @@ export default class Login extends Shadow() {
           max-height: 2.5em !important;
           z-index: 9999;
       }
+      :host > section > m-dialog {
+        margin-left:  calc(var(--content-spacing, 1em) * -1.5);
+      }
       @media only screen and (max-width: _max-width_) {
         :host,
         :host > section {
