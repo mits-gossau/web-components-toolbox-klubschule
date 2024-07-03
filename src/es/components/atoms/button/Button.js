@@ -15,6 +15,7 @@ export default class KsButton extends Button {
     // set the default label if exists
     if (this.hasAttribute('default-label')) {
       this.buttonSpan = this.root.querySelector('button > span')
+      this.buttonSpan.classList.remove('hide')
       this.buttonSpan.textContent = this.getAttribute('default-label') || 'No added placeholder'
     }
     if (this.getAttribute('answer-event-name')) document.body.addEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
@@ -112,6 +113,7 @@ export default class KsButton extends Button {
   answerEventListener = async event => {
     let searchTerm = event.detail.searchTerm
     if (searchTerm) {
+      this.buttonSpan.classList.remove('hide')
       this.buttonSpan.textContent = searchTerm
     }
   }
