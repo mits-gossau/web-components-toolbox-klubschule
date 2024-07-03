@@ -242,7 +242,7 @@ export default class WithFacet extends WebWorker() {
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
         "onlycourse": true,
         "sorting": ${sorting === 2 ? 1 : 2}
-        ${searchText ? `,"searchText": "${searchText}"` : ''}
+        ${searchText ? `,"SearchText": "${searchText}"` : ''}
         ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}
         ${currentRequestObj.clong ? `,"clong": "${currentRequestObj.clong}"` : ''}
       }`
