@@ -114,7 +114,7 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
         }
-        currentRequestObj.sorting = event.detail.id || 2;
+        currentRequestObj.sorting = event.detail.id || 2
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
@@ -130,7 +130,7 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.sorting = 1
       } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
         // sorting
-        currentRequestObj.sorting = event.detail.id || 3;
+        currentRequestObj.sorting = event.detail.id || 3
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
@@ -141,7 +141,7 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
       }
-      
+
       if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
 
       const LanguageEnum = {
@@ -200,8 +200,8 @@ export default class WithFacet extends WebWorker() {
               if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
 
               // Read location name from URL
-              let cname
-              if (cname = new URLSearchParams(window.location.search).get('cname')) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
+              const cname = this.params.get('cname')
+              if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
 
               this.dispatchEvent(new CustomEvent('location-change', {
                 detail: {
@@ -228,7 +228,7 @@ export default class WithFacet extends WebWorker() {
 
       // merge both user Filter with sublevel filter
       let subLevelFilter = event.detail.filter
-      
+
       if (currentRequestObj.filter?.length) subLevelFilter = [...event.detail.filter, ...currentRequestObj.filter]
 
       const sorting = currentRequestObj.sorting || initialRequestObj.sorting
@@ -295,7 +295,7 @@ export default class WithFacet extends WebWorker() {
   static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null) {
     const treeShookFilters = []
     filters.forEach(filterItem => {
-      const isMatchingKey = filterItem.urlpara === filterKey
+      const isMatchingKey = (filterItem.urlpara !== undefined) && (filterItem.urlpara === filterKey)
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
         const isIdOrUrlpara = filterItem.id === filterValue || filterItem.urlpara === filterValue
