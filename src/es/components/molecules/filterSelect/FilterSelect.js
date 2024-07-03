@@ -131,8 +131,7 @@ export default class filterSelect extends Shadow() {
           this.html = this.createFilterButton(filterItem, selectedFilterItems)
         }
   
-        // Recursively process children
-        filterItem.children.forEach(child => processFilterItem(child))
+        filterItem.children.forEach(child => processFilterItem(child)) // recursive call
       }
     }
   
@@ -141,28 +140,6 @@ export default class filterSelect extends Shadow() {
     })
   }
   
-
-  // generateFilterButtons (filterData) {
-  //   filterData.forEach((filterItem) => {
-  //     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-  //       let selectedFilterItems = []
-  //       if (filterItem.typ === 'multi') {
-  //         const selectedChildren = filterItem.children.filter(child => child.selected)
-  //         if (selectedChildren.length > 0) {
-  //           selectedChildren.forEach(child => {
-  //             selectedFilterItems.push(`${child.label}`)
-  //           })
-  //         }
-  //       } else {
-  //         const lastSelectedChild = this.getLastSelectedChild(filterItem)
-  //         if (lastSelectedChild) selectedFilterItems.push(`${lastSelectedChild.label}`)
-  //       }
-
-  //       if (selectedFilterItems.length > 0) this.html = this.createFilterButton(filterItem, selectedFilterItems)
-  //     }
-  //   })
-  // }
-
   renderHTML (fetch) {
     this.fetchModules([{
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,

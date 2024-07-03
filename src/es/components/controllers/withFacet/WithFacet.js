@@ -93,7 +93,6 @@ export default class WithFacet extends WebWorker() {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
-        console.log('filterKey', filterKey, 'filterValue', filterValue)
         this.updateURLParam(filterKey, filterValue)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue)
         currentCompleteFilterObj = result[0]
