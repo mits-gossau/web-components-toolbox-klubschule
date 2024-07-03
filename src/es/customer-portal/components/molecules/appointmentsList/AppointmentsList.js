@@ -156,6 +156,8 @@ export default class AppointmentsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     return fetch.then(appointments => {
+      debugger
+      this.updateCourseListFilterSettings(appointments.filters, appointments.selectedSubscription.subscriptionId, appointments.selectedSubscription.subscriptionType)
       this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       const fetchModules = this.fetchModules([
         {
@@ -365,5 +367,32 @@ export default class AppointmentsList extends Shadow() {
       selectedSubscription,
       dayList
     }
+  }
+
+  updateCourseListFilterSettings (filterList, subscriptionId, subscriptionType) {
+    // const getSelectedDayCodes = filterList.dayCodes
+    const dayCodes = filterList.dayCodes.filter(dayCode => dayCode.selected).map(dayCode => dayCode.dayCode)
+    const locations = filterList.locations.filter(location => location.selected).map(location => location.locationId)
+    const timeCodes = filterList.timeCodes.filter(timeCode => timeCode.selected).map(timeCode => timeCode.timeCode)
+    const requestData = {
+      filterCriterias: {
+        dayCodes,
+        locations,
+        timeCodes
+      },
+      subscriptionId,
+      subscriptionType
+    }
+    debugger
+    this.dispatchEvent(new CustomEvent('request-course-list-filter-settings',
+      {
+        detail: {
+          requestData
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }
+    ))
   }
 }
