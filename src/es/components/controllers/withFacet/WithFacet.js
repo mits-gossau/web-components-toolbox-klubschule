@@ -303,7 +303,6 @@ export default class WithFacet extends WebWorker() {
         const isParentSelected = selectedParent?.urlpara === filterKey
         // @ts-ignore
         if (filterItem.selected && isIdOrUrlpara) {
-          /* This is the issue that breaks wishlist, because if it is not selected it will not be added to the treeShookFilters */
           filterItem.selected = false // toggle filterItem if is is already selected
         } else if (filterItem.selected && !isIdOrUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
