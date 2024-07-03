@@ -99,7 +99,6 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = result[1]
         currentRequestObj.sorting = 1
         if (event?.detail?.target?.type === "tree") {
-          // this.getLastSelectedFilterItem(currentRequestObj.filter.filter(filterItem => filterItem.typ === "tree"))
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
         }
       } else if (event?.detail?.key === 'location-search') {
