@@ -164,6 +164,10 @@ export default class Input extends Shadow() {
         appearance: none;
       }
 
+      :host input[type="date"]::-webkit-date-and-time-value {
+        text-align: left;
+      }
+
       :host input[type="date"]::-webkit-datetime-edit-text,
       :host input[type="date"]::-webkit-datetime-edit-month-field,
       :host input[type="date"]::-webkit-datetime-edit-day-field,
