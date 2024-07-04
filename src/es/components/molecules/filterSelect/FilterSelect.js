@@ -115,7 +115,7 @@ export default class filterSelect extends Shadow() {
       if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
         let selectedFilterItems = []
   
-        if (filterItem.typ === 'multi' || filterItem.typ === 'value') {
+        if (filterItem.typ === 'multi' || filterItem.typ === 'value' || filterItem.typ === 'tree') {
           const selectedChildren = filterItem.children.filter(child => child.selected)
           if (selectedChildren.length > 0) {
             selectedChildren.forEach(child => {
