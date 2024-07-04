@@ -262,7 +262,7 @@ export default class FilterCategories extends Shadow() {
     if (level === 0 && filterItem.typ === 'tree') selectedFilters = this.getSelectedFilters(filterItem)[0]?.label || ""
     if (this.firstTreeItem) {
       selectedFilters = ''
-      console.log("FilterItem", filterItem, filterItem.selected)
+      // console.log("FilterItem", filterItem, filterItem.selected)
     }
     
     const checked = filterItem.selected ? 'checked' : ''

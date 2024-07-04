@@ -94,11 +94,12 @@ export default class WithFacet extends WebWorker() {
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
         this.updateURLParam(filterKey, filterValue)
-        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue)
+        const isTree = event?.detail?.target?.type === "tree"
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, true)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
         currentRequestObj.sorting = 1
-        if (event?.detail?.target?.type === "tree") {
+        if (isTree) {
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
         }
       } else if (event?.detail?.key === 'location-search') {
@@ -295,7 +296,7 @@ export default class WithFacet extends WebWorker() {
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null) {
+  static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isTree = false) {
     const treeShookFilters = []
     filters.forEach(filterItem => {
       const isMatchingKey = (filterItem.urlpara !== undefined) && (filterItem.urlpara === filterKey)
@@ -305,7 +306,7 @@ export default class WithFacet extends WebWorker() {
         // @ts-ignore
         const isParentSelected = selectedParent?.urlpara === filterKey
         // @ts-ignore
-        if (filterItem.selected && isIdOrUrlpara) {
+        if (filterItem.selected && isIdOrUrlpara && !isTree) {
           filterItem.selected = false // toggle filterItem if is is already selected
         } else if (filterItem.selected && !isIdOrUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
@@ -320,7 +321,7 @@ export default class WithFacet extends WebWorker() {
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
-        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem)
+        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isTree)
       }
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
