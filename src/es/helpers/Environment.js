@@ -81,6 +81,7 @@ self.Environment = {
           apiSubscriptions: `${this.getEnvUrl()}/api/CustomerPortal/subscriptions`,
           apiSubscriptionDetail: `${this.getEnvUrl()}/api/CustomerPortal/subscription`,
           apiSubscriptionPdf: `${this.getEnvUrl()}/api/CustomerPortal/subscriptionpdf`,
+          apiCourseListFilterSettings: `${this.getEnvUrl()}/api/CustomerPortal/courselistfiltersettings`,
           coursePDF: `${this.getEnvUrl()}/api/CustomerPortal/coursepdf`
         }
       }

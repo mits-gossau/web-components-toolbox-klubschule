@@ -62,12 +62,11 @@ export default class AppointmentsList extends Shadow() {
           </div>`
         return
       }
-      const { subscriptionType, subscriptionId } = subscriptionData.activeSubscriptions[0]
       this.dispatchEvent(new CustomEvent(this.dataset.requestSubscription || 'request-appointments',
         {
           detail: {
-            subscriptionType,
-            subscriptionId
+            subscriptionType: '',
+            subscriptionId: 0
           },
           bubbles: true,
           cancelable: true,
@@ -156,6 +155,10 @@ export default class AppointmentsList extends Shadow() {
     this.html = ''
     this.renderLoading()
     return fetch.then(appointments => {
+      // update filters only for subscription list
+      if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
+        this.updateCourseListFilterSettings(appointments.filters, appointments.selectedSubscription.subscriptionId, appointments.selectedSubscription.subscriptionType)
+      }
       this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       const fetchModules = this.fetchModules([
         {
@@ -365,5 +368,31 @@ export default class AppointmentsList extends Shadow() {
       selectedSubscription,
       dayList
     }
+  }
+
+  updateCourseListFilterSettings (filterList, subscriptionId, subscriptionType) {
+    // const getSelectedDayCodes = filterList.dayCodes
+    const dayCodes = filterList.dayCodes.filter(dayCode => dayCode.selected).map(dayCode => dayCode.dayCode)
+    const locations = filterList.locations.filter(location => location.selected).map(location => location.locationId)
+    const timeCodes = filterList.timeCodes.filter(timeCode => timeCode.selected).map(timeCode => timeCode.timeCode)
+    const requestData = {
+      filterCriterias: {
+        dayCodes,
+        locations,
+        timeCodes
+      },
+      subscriptionId,
+      subscriptionType
+    }
+    this.dispatchEvent(new CustomEvent('request-course-list-filter-settings',
+      {
+        detail: {
+          requestData
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }
+    ))
   }
 }
