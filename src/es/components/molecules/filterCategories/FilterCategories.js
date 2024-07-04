@@ -170,11 +170,9 @@ export default class FilterCategories extends Shadow() {
   }
 
   updateFilter (generatedFilters, child, parentItem) {
-    this.firstTreeItem && console.log('updateFilter', generatedFilters, child, parentItem)
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
-    this.firstTreeItem && console.log(disabled, checked, visible)
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
@@ -262,7 +260,6 @@ export default class FilterCategories extends Shadow() {
     if (level === 0 && filterItem.typ === 'tree') selectedFilters = this.getSelectedFilters(filterItem)[0]?.label || ""
     if (this.firstTreeItem) {
       selectedFilters = ''
-      // console.log("FilterItem", filterItem, filterItem.selected)
     }
     
     const checked = filterItem.selected ? 'checked' : ''
