@@ -95,7 +95,7 @@ export default class WithFacet extends WebWorker() {
         const [filterKey, filterValue] = filterId.split('-')
         this.updateURLParam(filterKey, filterValue)
         const isTree = event?.detail?.target?.type === "tree"
-        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, true)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
         currentRequestObj.sorting = 1

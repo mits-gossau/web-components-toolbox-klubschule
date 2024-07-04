@@ -270,9 +270,6 @@ export default class FilterCategories extends Shadow() {
     if (filterItem.hideCount || level === 0) numberOfOffers = ''
     this.total = response.total
 
-    // TODO: dispatch event on certain "sparten" when clicked analog: request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}"
-    // TODO: <span class="additional">${selectedFilters}</span> on first level ("sparten")
-
     navLevelItem.innerHTML = /* html */`
       <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
         <div class="wrap">
