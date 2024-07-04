@@ -222,9 +222,25 @@ export default class FilterCategories extends Shadow() {
 
     if (filterItem.typ === 'tree' || type === 'tree') { // get sparte filters
       filterItem.children.forEach(child => {
-        if (child.selected) selectedFilters.push(child)
-        this.getSelectedFilters(child, 'tree') // recursive call
+        if (child.selected) {
+          selectedFilters.push(child)
+        }
+        // if (selectedFilters.find((selectedFilter) =>  child === selectedFilter)) {
+        //   selectedFilters.push(filterItem)
+        // }
+        const result = this.getSelectedFilters(child, 'tree') // recursive call
+        if (result?.length) {
+          console.log("if", result)
+          selectedFilters = selectedFilters.concat(result)
+        }
       })
+      // if (filterItem.children.find((child2)  => selectedFilters[0])) selectedFilters.push(filterItem)
+
+      if (selectedFilters.find((selectedFilter) =>  filterItem.children.find(child2 => child2 === selectedFilter))) {
+        selectedFilters.push(filterItem)
+      }
+      if (filterItem.typ === "tree") selectedFilters = selectedFilters.reverse()
+      selectedFilters.length && console.log(filterItem.label, selectedFilters)
     }
 
     if (filterItem.typ === 'value' && type !== 'tree') { // get selected sparte filters
@@ -307,7 +323,7 @@ export default class FilterCategories extends Shadow() {
 
   generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
     level++
-    if (filterItem.typ === 'tree') console.log('tree', this.getSelectedFilters(filterItem, 'tree'))
+    if (filterItem.typ === 'tree') this.getSelectedFilters(filterItem, 'tree')
     if (!filterItem.visible) return
     if (parentItem === null) parentItem = filterItem
     if (firstFilterItemId === null) firstFilterItemId = filterItem.id
