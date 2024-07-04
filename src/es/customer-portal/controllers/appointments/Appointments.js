@@ -63,7 +63,8 @@ export default class Appointments extends HTMLElement {
       subscriptionId,
       language: this.getLanguage()
     }
-
+    // delete filters to prevent cache when change subscription
+    this.lastFilters = null
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionCourseAppointments)
     this.dispatchEvent(new CustomEvent('update-subscription-course-appointments', {
       detail: {

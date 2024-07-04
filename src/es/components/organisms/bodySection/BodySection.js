@@ -146,6 +146,11 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: 0;
         }
 
+        /* because of shadow DOM I need to style it here although the id actually is used in OffersPage */
+        :host #sort-options {
+            text-align: end;
+        }
+
         /* Utilities */
         /* responsive spacings */
         :host > .margin-y-l {

@@ -435,7 +435,7 @@ export default class OffersPage extends Shadow() {
                 }
 					}
 				</style>
-				<ks-a-button id="show-modal-location" namespace="button-secondary-" get-param-from-url="cname"
+				<ks-a-button id="show-modal-location" namespace="button-secondary-" answer-event-name="location-change"
 					default-label="${this.getTranslation('CourseList.YourLocationPlaceholder')}">
 					<a-icon-mdx icon-name="Location" class="icon-right">
 					</a-icon-mdx>
