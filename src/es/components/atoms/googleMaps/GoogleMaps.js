@@ -298,7 +298,7 @@ export default class KsGoogleMaps extends GoogleMaps {
       const markerClustererScript = document.createElement('script')
       markerClustererScript.setAttribute('type', 'text/javascript')
       markerClustererScript.setAttribute('async', '')
-      markerClustererScript.setAttribute('src', 'https://unpkg.com/@googlemaps/markerclusterer@2.5.3/dist/index.min.js')
+      markerClustererScript.setAttribute('src', `${this.importMetaUrl}/markerclusterer-2-5-3.min.js`)
       markerClustererScript.onload = () => {
         // @ts-ignore
         if ('google' in self) resolve(self.markerClusterer)
