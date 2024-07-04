@@ -21,6 +21,7 @@ export default class Appointments extends HTMLElement {
     this.abortControllerSubscriptionCourseAppointmentBooking = null
     this.abortControllerSubscriptionCourseAppointmentReversalListener = null
     this.abortControllerBookedSubscriptionCourseAppointments = null
+    this.abortControllerCourseListFilterSettings = null
     this.lastFilters = null
     this.currentDialogFilterOpen = null
   }
@@ -31,6 +32,7 @@ export default class Appointments extends HTMLElement {
     this.addEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.addEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.addEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
+    this.addEventListener('request-course-list-filter-settings', this.requestCourseListFilterSettingsListener)
     // due to the flatpickr dom connection timing issue use document.body in this case
     document.body.addEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
     this.addEventListener('reset-appointments-filter', this.resetFilterDayListener)
@@ -42,6 +44,7 @@ export default class Appointments extends HTMLElement {
     this.removeEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.removeEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.removeEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
+    this.removeEventListener('request-course-list-filter-settings', this.requestCourseListFilterSettingsListener)
     document.body.removeEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
     this.removeEventListener('reset-appointments-filter', this.resetFilterDayListener)
   }
@@ -69,7 +72,12 @@ export default class Appointments extends HTMLElement {
     this.dispatchEvent(new CustomEvent('update-subscription-course-appointments', {
       detail: {
         fetch: (this.subscriptionCourseAppointments = fetch(endpoint, fetchOptions).then(async response => {
-          if (response.status >= 200 && response.status <= 299) return await response.json()
+          if (response.status >= 200 && response.status <= 299) {
+            const appointments = await response.json()
+            this.lastFilters = appointments.filters
+            this.requestAppointmentsFilterListener(event, true, false)
+            return appointments
+          }
         }))
       },
       bubbles: true,
@@ -389,6 +397,24 @@ export default class Appointments extends HTMLElement {
       cancelable: true,
       composed: true
     }))
+  }
+
+  requestCourseListFilterSettingsListener = async (event) => {
+    this.abortControllerCourseListFilterSettings = new AbortController()
+    const { userId } = this.dataset
+    const filterCriterias = event.detail.requestData.filterCriterias
+    const { subscriptionId, subscriptionType } = event.detail.requestData
+    const data = {
+      userId,
+      filterCriterias,
+      subscriptionId,
+      subscriptionType,
+      language: this.getLanguage()
+    }
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiCourseListFilterSettings}`
+    const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerCourseListFilterSettings)
+    fetch(endpoint, fetchOptions)
   }
 
   /**
