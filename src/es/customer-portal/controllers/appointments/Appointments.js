@@ -66,6 +66,7 @@ export default class Appointments extends HTMLElement {
       subscriptionId,
       language: this.getLanguage()
     }
+    debugger
     // delete filters to prevent cache when change subscription
     this.lastFilters = null
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerSubscriptionCourseAppointments)
@@ -182,6 +183,7 @@ export default class Appointments extends HTMLElement {
         appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.map(time => {
           if (time) {
             time.subscriptionCourseAppointments = time.subscriptionCourseAppointments.filter(appointment => {
+              debugger
               return !!appointmentsClone.filters.timeCodes.find(timeCode => {
                 return appointment.courseAppointmentTimeCode.includes(timeCode.timeCode) && timeCode.selected
               })

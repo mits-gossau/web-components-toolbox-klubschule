@@ -158,6 +158,7 @@ export default class AppointmentsList extends Shadow() {
     return fetch.then(appointments => {
       // update filters only for subscription list
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
+        debugger
         this.updateCourseListFilterSettings(appointments.filters, appointments.selectedSubscription.subscriptionId, appointments.selectedSubscription.subscriptionType)
       }
       this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
@@ -375,6 +376,7 @@ export default class AppointmentsList extends Shadow() {
     // const getSelectedDayCodes = filterList.dayCodes
     const dayCodes = filterList.dayCodes.filter(dayCode => dayCode.selected).map(dayCode => dayCode.dayCode)
     const locations = filterList.locations.filter(location => location.selected).map(location => location.locationId)
+    debugger
     const timeCodes = filterList.timeCodes.filter(timeCode => timeCode.selected).map(timeCode => timeCode.timeCode)
     const requestData = {
       filterCriterias: {
