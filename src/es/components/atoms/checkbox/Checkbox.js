@@ -119,6 +119,9 @@ export default class Checkbox extends Shadow() {
         }
 
         :host input[type='checkbox'] {
+            position: absolute;
+            opacity: 0;
+            height: 0;
             width: 0;
             min-width: unset;
         }
