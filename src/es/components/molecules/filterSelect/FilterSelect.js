@@ -175,7 +175,7 @@ export default class filterSelect extends Shadow() {
         this.html = ''
 
         // render search button at first
-        if (response.searchText) {
+        if (response.searchText && this.hasAttribute('with-filter-search')) {
           this.html = /* html */`
             <m-double-button namespace="double-button-default-" width="100%">
               <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>

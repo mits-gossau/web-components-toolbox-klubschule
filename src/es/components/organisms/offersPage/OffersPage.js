@@ -540,7 +540,7 @@ export default class OffersPage extends Shadow() {
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.getTranslation('CourseList.FilterAllPlaceholder')}
                   </ks-a-button>
                   <!-- buttons to filter -->
-                  <ks-m-filter-select ${this.hasAttribute('with-filter-search') ? 'with-search' : ''}></ks-m-filter-select>
+                  <ks-m-filter-select ${this.hasAttribute('with-filter-search') ? 'with-filter-search' : ''}></ks-m-filter-select>
                 </section>
               </o-grid>
               <ks-a-spacing type="s-flex"></ks-a-spacing>
