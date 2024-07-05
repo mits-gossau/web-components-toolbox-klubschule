@@ -93,8 +93,8 @@ export default class WithFacet extends WebWorker() {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
-        this.updateURLParam(filterKey, filterValue)
         const isTree = event?.detail?.target?.type === "tree"
+        this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
@@ -352,7 +352,7 @@ export default class WithFacet extends WebWorker() {
     return new URLSearchParams(self.location.search)
   }
 
-  updateURLParam (key, value) {
+  updateURLParam (key, value, isTree = false) {
     if (this.params) {
       if (this.params.has(key) && key !== 'q') {
         const currentValues = this.params.get(key)?.split('-')
@@ -368,6 +368,14 @@ export default class WithFacet extends WebWorker() {
             this.params.delete(key)
           }
         }
+      } else if (key && isTree) {
+        // check all params if key is set as value of another key
+        const keys = Array.from(this.params.keys())
+        for (const k of keys) {
+          const value = this.params.get(k)
+          if (value === key) this.params.delete(k)
+        }
+        this.params.set(key, value)
       } else {
         this.params.set(key, value)
       }
