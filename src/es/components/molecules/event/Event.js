@@ -80,7 +80,7 @@ export default class Event extends Shadow() {
 
       :host .head {
         display: grid;
-        grid-template-columns: 50% 50%;
+        grid-template-columns: 1fr 1fr;
         column-gap: 3rem;       
       }
 
