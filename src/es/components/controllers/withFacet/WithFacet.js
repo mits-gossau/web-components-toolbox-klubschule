@@ -81,6 +81,7 @@ export default class WithFacet extends WebWorker() {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
+        delete currentRequestObj.searchText
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
