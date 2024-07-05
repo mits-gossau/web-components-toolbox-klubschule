@@ -111,10 +111,14 @@ export default class KsButton extends Button {
   }
 
   answerEventListener = async event => {
+    this.buttonSpan.classList.remove('hide')
+    this.removeBtn = this.parentElement
+    console.log("h", this)
     let searchTerm = event.detail.searchTerm
     if (searchTerm) {
-      this.buttonSpan.classList.remove('hide')
       this.buttonSpan.textContent = searchTerm
+    } else {
+      this.buttonSpan.textContent = this.getAttribute('default-label')
     }
   }
 }

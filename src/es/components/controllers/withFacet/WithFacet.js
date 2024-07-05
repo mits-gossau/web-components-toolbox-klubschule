@@ -84,11 +84,18 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
-        this.deleteParamFromUrl(filterKey)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
         if (filterKey === 'q') delete currentRequestObj.searchText
+        if (filterKey === 'cname') {
+          this.deleteParamFromUrl('clong')
+          this.deleteParamFromUrl('clat')
+          delete currentRequestObj.cname
+          delete currentRequestObj.clong
+          delete currentRequestObj.clat
+        }
+        this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event

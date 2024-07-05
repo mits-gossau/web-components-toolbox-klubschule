@@ -45,7 +45,6 @@ export default class OffersPage extends Shadow() {
         }
       })
     }
-
     this.isEasyPortal = !!this.hasAttribute('is-easy-portal')
   }
 
@@ -378,12 +377,33 @@ export default class OffersPage extends Shadow() {
                   --button-secondary-height: 2.22rem;
                 }
 					}
-				</style>
-				<ks-a-button id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
-					default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
-					<a-icon-mdx icon-name="Search" class="icon-right">
-					</a-icon-mdx>
-				</ks-a-button>
+          </style>
+          <ks-a-button id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
+                default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
+                  <a-icon-mdx icon-name="Search" class="icon-right">
+                  </a-icon-mdx>
+              </ks-a-button>
+              <style>
+              :host>a-button {
+              position: absolute;
+              right: 0;
+              --button-secondary-border-color: var(--m-gray-700);
+              --button-secondary-background-color: var(--m-white);
+              --button-secondary-background-color-hover: var(--m-white);
+              --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+              --button-secondary-padding: 0.65rem 1.5rem;
+              }
+    
+              @media only screen and (max-width: 767px) {
+                :host>a-button {
+                --button-secondary-padding: 0.3rem 0.9rem;
+                }
+              }
+            </style>
+              <a-button namespace="button-secondary-" id="clear-input" request-event-name="reset-filter" filter-key="q">
+                <a-icon-mdx icon-name="X" class="icon-right">
+                </a-icon-mdx>
+              </a-button>
           </m-dialog>
         </ks-c-auto-complete>
       </div>
@@ -461,6 +481,27 @@ export default class OffersPage extends Shadow() {
 					<a-icon-mdx icon-name="Location" class="icon-right">
 					</a-icon-mdx>
 				</ks-a-button>
+        <style>
+          :host>a-button {
+          position: absolute;
+          right: 0;
+          --button-secondary-border-color: var(--m-gray-700);
+          --button-secondary-background-color: var(--m-white);
+          --button-secondary-background-color-hover: var(--m-white);
+          --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+          --button-secondary-padding: 0.65rem 1.5rem;
+          }
+
+          @media only screen and (max-width: 767px) {
+            :host>a-button {
+            --button-secondary-padding: 0.3rem 0.9rem;
+            }
+          }
+        </style>
+        <a-button namespace="button-secondary-" id="clear-input" request-event-name="reset-filter" filter-key="cname">
+            <a-icon-mdx  icon-name="X" class="icon-right">
+            </a-icon-mdx>
+        </a-button>
             </m-dialog>
         </ks-c-auto-complete-location>
       </div>
