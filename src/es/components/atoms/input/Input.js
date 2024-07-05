@@ -148,6 +148,10 @@ export default class Input extends Shadow() {
         outline: none;
         width: 100%;
         box-sizing: border-box;
+        color: var(--mdx-comp-inputfield-input-color-default);
+
+        /* mdx variable not (yet) existing for ks */
+        min-height: 3.25rem;
       }
 
       :host input::placeholder,
@@ -162,6 +166,14 @@ export default class Input extends Shadow() {
 
       :host input[type="date"]:focus::-webkit-datetime-edit {
           color: var(--mdx-comp-inputfield-placeholder-color-default);
+      }
+
+      :host input[type=date] {
+        appearance: none;
+      }
+
+      :host input[type="date"]::-webkit-date-and-time-value {
+        text-align: left;
       }
 
       :host input:focus,
@@ -183,6 +195,7 @@ export default class Input extends Shadow() {
       }
 
       :host > div .hint {
+        margin-top: var(--mdx-comp-inputfield-gap-content-below);
         display: flex;
         flex-direction: row;
         justify-content: space-between;

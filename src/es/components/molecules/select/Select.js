@@ -4,6 +4,10 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Select extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    this.isReadonly = this.hasAttribute('readonly') || this.getAttribute('readonly') === 'true'
+    if (this.isReadonly) {
+      this.root.querySelector('select').setAttribute('readonly', '')
+    }
   }
 
   connectedCallback () {
@@ -77,6 +81,17 @@ export default class Select extends Shadow() {
         :host .hint span:first-child {
           color: var(--mdx-comp-select-hint-color-default);
           font: var(--mdx-comp-select-font-supporting);
+        }
+
+        :host select[readonly] {     
+          cursor:no-drop;     
+          user-select: none;     
+          pointer-events: none;     
+          opacity: 0.7; 
+        } 
+        
+        :host select[readonly] option:not([selected]) {
+          display:none; 
         }
 
         .wrap:not(:has(.has-error)) > .message {
