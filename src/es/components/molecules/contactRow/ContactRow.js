@@ -113,9 +113,7 @@ export default class Contact extends Shadow() {
         >
         </a-icon-mdx>
         ${isAddress ? /* html */ '<address>' : /* html */ '<div>'}
-          <span>
-            ${firstRow}
-          </span>
+          ${firstRow ? /* html */ `<span>${firstRow}</span>` : ''}
           ${secondRow ? /* html */ `<span>${secondRow}</span>` : ''}
           ${thirdRow ? /* html */ `<span>${thirdRow}</span>` : ''}
         ${isAddress ? /* html */ '</address>' : /* html */ '</div>'}
