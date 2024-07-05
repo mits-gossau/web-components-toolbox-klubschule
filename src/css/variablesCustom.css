@@ -231,6 +231,7 @@
   --header-nav-right-height-custom: calc(100rem/18);
   --header-nav-right-margin-custom: 0 0 1rem 0;
   --header-nav-right-padding: 0;
+  --header-nav-grid-a-menu-icon-border-radius-custom: 1px;
   --header-nav-grid-a-menu-icon-height: 2px;
   --header-content-width: calc(min(100%, var(--body-max-width)) - 2.5rem);
   --header-content-width-mobile: calc(min(100%, var(--body-max-width)) - 1rem);
