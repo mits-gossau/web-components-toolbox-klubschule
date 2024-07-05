@@ -369,7 +369,7 @@ export default class WithFacet extends WebWorker() {
           }
         }
       } else if (key && isTree) {
-        // check all params if key is set as value of another key
+        // for sector filters (isTree): check all params if key is set as value of another key
         const keys = Array.from(this.params.keys())
         for (const k of keys) {
           const value = this.params.get(k)
