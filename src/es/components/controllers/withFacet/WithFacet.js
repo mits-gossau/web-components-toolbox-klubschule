@@ -158,11 +158,21 @@ export default class WithFacet extends WebWorker() {
         i: 'it'
       }
       let request = {}
+      let requestCoursesOnly = {}
+      let requestFiltersOnly = {}
       if (isMocked) {
         request = {
           method: 'GET'
         }
+        requestCoursesOnly = {
+          method: 'GET'
+        }
       } else {
+        let requestBody = {
+          ...WithFacet.cleanRequest(structuredClone(currentRequestObj)),
+          searchcontent: !this.hasAttribute('no-search-tab')
+        }
+
         request = {
           method: 'POST',
           headers: {
@@ -170,10 +180,34 @@ export default class WithFacet extends WebWorker() {
             'Accept-Language': LanguageEnum[this.getAttribute('sprach-id') || currentRequestObj.sprachid || 'd']
           },
           mode: 'cors',
-          body: JSON.stringify({
-            ...WithFacet.cleanRequest(structuredClone(currentRequestObj)),
-            searchcontent: !this.hasAttribute('no-search-tab')
-          }),
+          body: JSON.stringify(requestBody),
+          signal: this.abortController.signal
+        }
+
+        requestBody.onlycourse = true
+
+        requestCoursesOnly = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept-Language': LanguageEnum[this.getAttribute('sprach-id') || currentRequestObj.sprachid || 'd']
+          },
+          mode: 'cors',
+          body: JSON.stringify(requestBody),
+          signal: this.abortController.signal
+        }
+
+        requestBody.onlycourse = false
+        requestBody.onlyfaceted = 1
+
+        requestFiltersOnly = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept-Language': LanguageEnum[this.getAttribute('sprach-id') || currentRequestObj.sprachid || 'd']
+          },
+          mode: 'cors',
+          body: JSON.stringify(requestBody),
           signal: this.abortController.signal
         }
       }
@@ -181,10 +215,105 @@ export default class WithFacet extends WebWorker() {
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
+        // dispatch "with-facet" event
         this.dispatchEvent(new CustomEvent('with-facet', {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
             fetch: fetch(endpoint, request).then(response => {
+              if (response.status >= 200 && response.status <= 299) {
+                return response.json()
+              }
+              throw new Error(response.statusText)
+            }).then(json => {
+              // update filters with api response
+              currentRequestObj.filter = currentCompleteFilterObj = json.filters
+
+              return json
+            }).finally(json => {
+              // update inputs
+              this.dispatchEvent(new CustomEvent('search-change', {
+                detail: {
+                  searchTerm: (json || currentRequestObj)?.searchText
+                },
+                bubbles: true,
+                cancelable: true,
+                composed: true
+              }))
+              const searchCoordinates = !(json || currentRequestObj)?.clat || !(json || currentRequestObj)?.clong ? '' : `${(json || currentRequestObj).clat}, ${(json || currentRequestObj).clong}`
+              if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+
+              // Read location name from URL
+              const cname = this.params.get('cname')
+              if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
+
+              this.dispatchEvent(new CustomEvent('location-change', {
+                detail: {
+                  searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
+                  searchCoordinates
+                },
+                bubbles: true,
+                cancelable: true,
+                composed: true
+              }))
+            })
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+
+        // dispatch "courses-only" event
+        this.dispatchEvent(new CustomEvent('courses-only', {
+          detail: {
+            /** @type {Promise<fetchAutoCompleteEventDetail>} */
+            fetch: fetch(endpoint, requestCoursesOnly).then(response => {
+              if (response.status >= 200 && response.status <= 299) {
+                return response.json()
+              }
+              throw new Error(response.statusText)
+            }).then(json => {
+              // update filters with api response
+              currentRequestObj.filter = currentCompleteFilterObj = json.filters
+
+              return json
+            }).finally(json => {
+              // update inputs
+              this.dispatchEvent(new CustomEvent('search-change', {
+                detail: {
+                  searchTerm: (json || currentRequestObj)?.searchText
+                },
+                bubbles: true,
+                cancelable: true,
+                composed: true
+              }))
+              const searchCoordinates = !(json || currentRequestObj)?.clat || !(json || currentRequestObj)?.clong ? '' : `${(json || currentRequestObj).clat}, ${(json || currentRequestObj).clong}`
+              if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+
+              // Read location name from URL
+              const cname = this.params.get('cname')
+              if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
+
+              this.dispatchEvent(new CustomEvent('location-change', {
+                detail: {
+                  searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
+                  searchCoordinates
+                },
+                bubbles: true,
+                cancelable: true,
+                composed: true
+              }))
+            })
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+
+        // dispatch "filters-only" event
+        this.dispatchEvent(new CustomEvent('filters-only', {
+          detail: {
+            /** @type {Promise<fetchAutoCompleteEventDetail>} */
+            fetch: fetch(endpoint, requestFiltersOnly).then(response => {
               if (response.status >= 200 && response.status <= 299) {
                 return response.json()
               }
