@@ -112,10 +112,11 @@ export default class KsButton extends Button {
 
   answerEventListener = async event => {
     this.buttonSpan.classList.remove('hide')
-    this.removeBtn = this.parentElement
-    console.log("h", this)
+    this.removeBtn = this.getRootNode().querySelector("a-button[id='clear-input']")
+    this.removeBtn.style.display = 'none'
     let searchTerm = event.detail.searchTerm
     if (searchTerm) {
+       this.removeBtn.style.display = 'inline'
       this.buttonSpan.textContent = searchTerm
     } else {
       this.buttonSpan.textContent = this.getAttribute('default-label')

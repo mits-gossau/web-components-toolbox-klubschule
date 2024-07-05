@@ -367,6 +367,7 @@ export default class OffersPage extends Shadow() {
                   --svg-size: 1.5rem;
                   --svg-size-mobile: 1.2rem;
                   --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+                  --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
                   --button-secondary-font-weight: 400;
 					    }
 
@@ -465,6 +466,7 @@ export default class OffersPage extends Shadow() {
                   --svg-size: 1.5rem;
                   --svg-size-mobile: 1.2rem;
                   --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+                  --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
                   --button-secondary-font-weight: 400;
 					    }
 
