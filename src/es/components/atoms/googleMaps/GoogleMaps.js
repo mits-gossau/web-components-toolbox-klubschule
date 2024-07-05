@@ -123,7 +123,16 @@ export default class KsGoogleMaps extends GoogleMaps {
 
           // Add a marker clusterer to manage the markers.
           this.loadMarkerClustererDependency().then(markerClusterer => {
-            new markerClusterer.MarkerClusterer({ markers, map, renderer: clusterRenderer })
+            return new markerClusterer.MarkerClusterer({
+              markers,
+              map,
+              renderer: clusterRenderer,
+              onClusterClick: (_, cluster, map) => {
+                /* zooming one step in instead of default behavior, so the user always has a smooth animation */
+                map.panTo(cluster.position)
+                map.setZoom(map.getZoom() + 1)
+              }
+            })
           })
 
           this.createControls(map, googleMap)
