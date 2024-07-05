@@ -220,7 +220,7 @@ export default class FilterCategories extends Shadow() {
       })
     }
 
-    if (filterItem.typ === 'tree' || type === 'tree') { // get sparte filters
+    if (filterItem.typ === 'tree' || type === 'tree') { // get sparte filter
       filterItem.children.forEach(child => {
         if (child.selected) {
           selectedFilters.push(child)
@@ -233,7 +233,7 @@ export default class FilterCategories extends Shadow() {
       })
     }
 
-    if (filterItem.typ === 'value' && type !== 'tree') { // get selected sparte filters
+    if (filterItem.typ === 'value' && type !== 'tree') { // get selected filters
       filterItem.children.forEach(child => {
         if (child.selected) {
           selectedFilters.push(child)
@@ -327,7 +327,7 @@ export default class FilterCategories extends Shadow() {
       // update total button
       generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
       // update additional text with selected filter(s) only for the first level 
-      if (level === 0 && filterItem.typ === 'tree') generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
+      if (level === 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
     } else {
       this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, parentItem, filterItem, mainNav, level)))
     }

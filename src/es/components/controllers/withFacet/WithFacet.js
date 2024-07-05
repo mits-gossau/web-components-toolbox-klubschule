@@ -47,6 +47,7 @@ export default class WithFacet extends WebWorker() {
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
+    this.filterKey = null
     const isMocked = this.hasAttribute('mock')
     const endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
@@ -92,6 +93,7 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
+        // sector filter is treated separately with isTree
         const [filterKey, filterValue] = filterId.split('-')
         const isTree = event?.detail?.target?.type === "tree"
         this.updateURLParam(filterKey, filterValue, isTree)
@@ -102,6 +104,8 @@ export default class WithFacet extends WebWorker() {
         if (isTree) {
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
         }
+        // currentRequestObj.onlycourse = true
+        // currentRequestObj.onlyfaceted = 1
       } else if (event?.detail?.key === 'location-search') {
         // location search
         // keep the last search location inside currentRequestObj and store it in url params
