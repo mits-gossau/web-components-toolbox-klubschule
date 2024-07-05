@@ -274,6 +274,9 @@
   --icon-color-blue: var(--mdx-sys-color-primary-default);
   --content-width: 80%;
   --body-no-scroll-overflow: visible;
+  --top-slide-in-close-height: 3rem; 
+  --left-slide-in-close-height: 3rem; 
+
 
   --search-input-tiles-search-input-border-color: var(--m-gray-700);
   --search-input-tiles-search-input-padding: 0.875em 1.5em;
