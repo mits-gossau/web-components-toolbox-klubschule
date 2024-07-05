@@ -170,8 +170,8 @@ export default class KsGoogleMaps extends GoogleMaps {
         <h4>${location.name}</h4>
         <hr />
         <ks-m-contact-row
-          name="${location.name}"
-          street="${location.address}"
+          street="${location.street}"
+          place="${location.city}"
           icon-name="Location"
         >
         </ks-m-contact-row>
