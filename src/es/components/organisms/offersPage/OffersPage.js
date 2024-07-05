@@ -322,7 +322,7 @@ export default class OffersPage extends Shadow() {
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
           ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
         >
-          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog">
+          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
             <dialog>
               <div class="container">
                 <a-input
@@ -350,19 +350,40 @@ export default class OffersPage extends Shadow() {
                 </ks-m-auto-complete-list>
               </div>
             </dialog>
-            <a-input
-              id="show-modal"
-              inputid="show-modal"
-              placeholder="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
-              icon-name="Search"
-              icon-size="1.25em"
-              search type="search"
-              answer-event-name="search-change"
-              readonly
-              pointer
-              autocomplete="off"
-            >
-            </a-input>
+            <style>
+                :host>ks-a-button {
+                  width: 100%;
+                  --button-secondary-background-color: var(--m-white);
+                  --button-secondary-background-color-hover: var(--m-white);
+                  --button-secondary-width: 100%;
+                  --button-secondary-border-color: var(--m-gray-700);
+                  --button-secondary-border-color-hover: var(--m-gray-700);
+                  --button-secondary-color: var(--m-gray-700);
+                  --button-secondary-color-hover: var(--m-gray-700);
+                  --button-secondary-cursor: text;
+                  --button-secondary-justify-content: space-between;
+                  --button-secondary-padding: 0.5rem 1.5rem;
+                  --button-secondary-font-size: 1.15rem;
+                  --button-secondary-height: 2.88rem;
+                  --svg-size: 1.5rem;
+                  --svg-size-mobile: 1.2rem;
+                  --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+                  --button-secondary-font-weight: 400;
+					    }
+
+              @media only screen and (max-width: 767px) {
+                :host>ks-a-button {
+                  --button-secondary-padding: 0.5rem 0.9rem;
+                  --button-secondary-font-size: 1rem;
+                  --button-secondary-height: 2.22rem;
+                }
+					}
+				</style>
+				<ks-a-button id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
+					default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
+					<a-icon-mdx icon-name="Search" class="icon-right">
+					</a-icon-mdx>
+				</ks-a-button>
           </m-dialog>
         </ks-c-auto-complete>
       </div>
