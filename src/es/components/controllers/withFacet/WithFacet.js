@@ -347,7 +347,7 @@ export default class WithFacet extends WebWorker() {
   }
 
   static cleanRequest (requestObj) {
-    // Bad API needs filter for payload but responses with filters
+    // Bad API needs "filter" for payload but responses with "filters"
     if (requestObj.filters) delete requestObj.filters
     return requestObj
   }
