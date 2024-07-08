@@ -144,10 +144,11 @@ export default class FilterCategories extends Shadow() {
     const isMultipleChoice = parentItem.typ === 'multi'
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
+    console.log('FilterItem', child.label, numberOfOffers)
 
     const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
-        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${numberOfOffers}" filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
+        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label='${child.label} ${numberOfOffers}' filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
       </mdx-component>
     `
     const navLevelItem = /* html */`
