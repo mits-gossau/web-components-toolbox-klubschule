@@ -174,7 +174,7 @@ export default class filterSelect extends Shadow() {
       Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
         this.html = ''
 
-        // render search button at first
+        // render search button at first, but not, if offers page has a filter search input
         if (response.searchText && this.hasAttribute('with-filter-search')) {
           this.html = /* html */`
             <m-double-button namespace="double-button-default-" width="100%">
