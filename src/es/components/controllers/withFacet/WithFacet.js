@@ -119,7 +119,8 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('clat')
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
-          currentRequestObj.sorting = 1
+          currentRequestObj.sorting = 3
+          if (currentRequestObj.searchText) currentRequestObj.sorting = 1
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
