@@ -123,6 +123,7 @@ export default class TileFactory extends Shadow() {
         this.isNearbySearch = data.sort.sort === 2
         this.psize = data.psize
         this.pnext = data.pnext
+        this.html = ''
         this.html = data.courses.reduce(
           (acc, course) => {
             const tile = this.isEventSearch ? /* html */ `
