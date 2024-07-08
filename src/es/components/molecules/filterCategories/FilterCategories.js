@@ -144,7 +144,6 @@ export default class FilterCategories extends Shadow() {
     const isMultipleChoice = parentItem.typ === 'multi'
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
-    console.log('FilterItem', child.label, numberOfOffers)
 
     const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
