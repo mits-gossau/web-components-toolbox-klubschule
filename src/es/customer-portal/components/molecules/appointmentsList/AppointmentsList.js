@@ -258,15 +258,12 @@ export default class AppointmentsList extends Shadow() {
         }
       </style>
       <div>
-        <div class="select-label">
-          <!-- trans value = zeige Termine mit dem Abo -->
-          <a-translation data-trans-key="CP.cpShowAppointmentsFromSubscription"></a-translation>
-        </div>
-        <ks-m-select>
-          <div>
-            ${select.outerHTML}
-          </div>
-        </ks-m-select>
+          <ks-m-select mode="false">
+              <div class="wrap">
+                  <label for="${select.id}"><a-translation data-trans-key="CP.cpShowAppointmentsFromSubscription"></a-translation></label>
+                  ${select.outerHTML}
+              </div>
+          </ks-m-select>
       </div>
     `
     return html
