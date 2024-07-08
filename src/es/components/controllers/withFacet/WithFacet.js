@@ -88,7 +88,7 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
         if (filterKey === 'q') delete currentRequestObj.searchText
-        if (filterKey === 'cname') {
+        if (filterKey === 'cdist') {
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('clat')
           delete currentRequestObj.cname
