@@ -246,6 +246,11 @@ export default class KsBodyStyle extends BodyStyle {
             margin-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
+        /* nested lists */
+        :host ul > li > ul {
+            margin-bottom: 0;
+        }
+
         @media screen and (max-width: _max-width_) {
 
             ${(this.hasAttribute('display-mobile'))
