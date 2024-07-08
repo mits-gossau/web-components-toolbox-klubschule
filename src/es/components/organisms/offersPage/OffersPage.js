@@ -98,9 +98,6 @@ export default class OffersPage extends Shadow() {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
       const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-      if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
-        bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
-      }
 
       // Set Sort
       const sort = bodySection.shadowRoot.querySelector('#sort-options')
@@ -549,7 +546,7 @@ export default class OffersPage extends Shadow() {
             `}
               <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
-              <ks-a-with-facet-pagination class="hidden" id="pagination">
+              <ks-a-with-facet-pagination id="pagination" pagination-event-name="request-with-facet" pagination-event-name="with-facet">
                 <ks-a-button namespace="button-primary-" color="secondary">
                     <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
