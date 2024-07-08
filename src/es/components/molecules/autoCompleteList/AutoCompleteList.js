@@ -2,25 +2,36 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class AutoCompleteList extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.useKeyUpNavigation = this.hasAttribute('use-keyup-navigation')
     this.locateMe = this.shadowRoot.querySelector('#user-location')
     this.autoCompleteListener = event => this.renderHTML(event.detail.fetch)
   }
 
-  connectedCallback () {
+  connectedCallback() {
     if (this.locateMe) {
       this.locateMe.addEventListener('click', this.clickOnLocateMe)
     }
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+
     document.body.addEventListener(this.getAttribute('auto-complete') || 'auto-complete', this.autoCompleteListener)
+
+    if (this.useKeyUpNavigation) {
+      this.activeListItemIndex = -2
+      this.currentDialog = this.getRootNode().querySelector('dialog')
+      this.currentDialog.addEventListener('keydown', this.navigateOnListElement)
+    }
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     if (this.locateMe) {
       this.locateMe.removeEventListener('click', this.clickOnLocateMe)
+    }
+    if (this.useKeyUpNavigation) {
+      this.currentDialog.removeEventListener('keydown', this.navigateOnListElement)
     }
     document.body.removeEventListener(this.getAttribute('auto-complete') || 'auto-complete', this.autoCompleteListener)
   }
@@ -59,7 +70,7 @@ export default class AutoCompleteList extends Shadow() {
     }))
   }
 
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(
       `${this.cssSelector} > style[_css]`
     )
@@ -70,11 +81,11 @@ export default class AutoCompleteList extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML () {
+  shouldRenderHTML() {
     return !this.list
   }
 
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */ `
         :host {
           padding-top: 1em;
@@ -89,21 +100,24 @@ export default class AutoCompleteList extends Shadow() {
           list-style: none;
           padding: 0;
           margin: 0;
-          width: 50%;
+          width: 100%;
         }
 
         :host ul li {
           display: flex;
           align-items: center;
+          padding: var(--li-item-padding, 0.4em 0.25em);
+          border-radius: var(--li-item-border-radius, 0.25em);
         }
 
-        :host ul li:hover {
+        :host ul li:hover,
+        :host ul li.active  {
           cursor: pointer;
-          color: var(--mdx-sys-color-primary-default); 
+          background-color: var(--m-blue-100); 
         }
 
         :host ul li + li {
-          margin-top: 1em;
+          margin-top: 0.25em;
         }
 
         :host a-icon-mdx {
@@ -201,7 +215,7 @@ export default class AutoCompleteList extends Shadow() {
     return this.fetchTemplate()
   }
 
-  fetchTemplate () {
+  fetchTemplate() {
     switch (this.getAttribute('namespace')) {
       case 'auto-complete-list-default-':
         return this.fetchCSS([
@@ -220,7 +234,7 @@ export default class AutoCompleteList extends Shadow() {
    * @param {Promise<import("../../controllers/autoComplete/AutoComplete.js").fetchAutoCompleteEventDetail>|null} [fetch=null]
    * @return {void}
    */
-  renderHTML (fetch = null) {
+  renderHTML(fetch = null) {
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
@@ -267,7 +281,57 @@ export default class AutoCompleteList extends Shadow() {
     })
   }
 
-  get list () {
+  get list() {
     return this.root.querySelector('ul')
+  }
+
+  navigateOnListElement = (event) => {
+    this.ulListItems = Array.from(this.list.querySelectorAll('li'))
+    if (event.key === "Enter") {
+      const currentActiveLiItem = this.ulListItems?.find((li) => li.classList.contains('active'))
+      if (currentActiveLiItem) {
+        this.ulListItems?.forEach((li) => li.classList.remove('active'))
+        currentActiveLiItem.click()
+      } else {
+        if (this.ulListItems && this.ulListItems[0] && !this.ulListItems[0].hasAttribute('id')) {
+          this.ulListItems[0].click()
+        }
+      }
+    } else {
+      const maxLength = this.ulListItems.length - 2
+      this.ulListItems.forEach((li) => li.classList.remove('active'))
+
+      if (this.ulListItems.length > 1) {
+        switch (event.key) {
+          case "ArrowUp":
+            if (this.activeListItemIndex === -2) {
+              this.ulListItems[0].classList.add('active')
+              this.activeListItemIndex = 0
+            } else if (this.activeListItemIndex === 0) {
+              this.activeListItemIndex = maxLength + 1
+              this.ulListItems[this.activeListItemIndex].classList.add('active')
+            }
+            else {
+              this.activeListItemIndex = this.activeListItemIndex - 1
+              this.ulListItems[this.activeListItemIndex].classList.add('active')
+            }
+            break;
+          case "ArrowDown":
+            if (this.activeListItemIndex === -2) {
+              this.ulListItems[0].classList.add('active')
+              this.activeListItemIndex = 0
+            }
+            else if (this.activeListItemIndex > maxLength) {
+              this.activeListItemIndex = 0
+              this.ulListItems[this.activeListItemIndex].classList.add('active')
+            }
+            else {
+              this.activeListItemIndex = this.activeListItemIndex + 1
+              this.ulListItems[this.activeListItemIndex].classList.add('active')
+            }
+            break;
+        }
+      }
+    }
   }
 }
