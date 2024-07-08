@@ -341,7 +341,7 @@ export default class CourseDialog extends Shadow() {
         }
       </style>
       <!-- trans value = "Buchen nicht möglich versuchen sie es später nochmals" -->
-      ${this.renderErrorNotification(renderErrorNotification, 'CP.cpBookingErrorTryLater')}
+      ${this.renderErrorNotification(renderErrorNotification, 'CP.cpErrorLoadingCourseDetail')}
       ${this.renderSuccessNotification(renderErrorNotification)} 
       <div class="downloads">
         <h3>Downloads</h3>
@@ -455,7 +455,7 @@ export default class CourseDialog extends Shadow() {
     `
 
     // trans value = "Stornieren nicht möglich versuchen sie es später nochmals"
-    if (showErrorNotification) successMessage = this.renderErrorNotification(showErrorNotification, 'CP.cpReversalErrorTryLater')
+    if (showErrorNotification) successMessage = this.renderErrorNotification(showErrorNotification, 'CP.cpErrorLoadingCourseDetail')
 
     return /* html */`
       <style>
