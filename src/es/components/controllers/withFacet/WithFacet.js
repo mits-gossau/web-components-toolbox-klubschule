@@ -119,6 +119,7 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('clat')
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
+          currentRequestObj.ppage = -1
           currentRequestObj.sorting = 3
           if (currentRequestObj.searchText) currentRequestObj.sorting = 1
         }
