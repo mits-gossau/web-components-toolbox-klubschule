@@ -11,6 +11,12 @@ export default class Sort extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.closeEventListener = event => this.root.querySelector('.m-sort__tooltip-open')?.classList.remove('m-sort__tooltip-open')
+
+    this.selfCloseEventListener = event => {
+      const target = Array.from(event.composedPath()).find(node => node.tagName === 'KS-M-SORT')
+      if (target) return event.stopPropagation()
+      else this.root.querySelector('.m-sort__tooltip-open')?.classList.remove('m-sort__tooltip-open')
+    }
   }
 
   connectedCallback () {
@@ -19,10 +25,14 @@ export default class Sort extends Shadow() {
 
     this.toggleTooltip()
     if (this.getAttribute('close-event-name')) document.body.addEventListener(this.getAttribute('close-event-name'), this.closeEventListener)
+
+    self.addEventListener('click', this.selfCloseEventListener)
   }
 
   disconnectedCallback () {
     if (this.getAttribute('close-event-name')) document.body.removeEventListener(this.getAttribute('close-event-name'), this.closeEventListener)
+
+    self.removeEventListener('click', this.selfCloseEventListener)
   }
 
   /**
@@ -63,7 +73,7 @@ export default class Sort extends Shadow() {
     this.css = /* css */`
       :host .m-sort {
         position: relative;
-        display: flex;
+        display: inline-flex;
         justify-content: var(--justify-content);
       }
 
@@ -79,6 +89,7 @@ export default class Sort extends Shadow() {
         border-radius: 0.5em;
         box-shadow: 0em 0em 0.75em 0em rgba(51, 51, 51, 0.1);
         z-index: 11;
+        overflow: hidden;
       }
 
       :host .m-sort__list {
@@ -99,6 +110,10 @@ export default class Sort extends Shadow() {
 
       :host .m-sort__item:hover {
         background-color: var(--hover-color);
+      }
+
+      :host .m-sort__item.m-sort__item-active {
+        padding: var(--active-item-padding, 1em 1.5em);
       }
 
       :host .m-sort__item-active,
@@ -185,22 +200,22 @@ export default class Sort extends Shadow() {
             if (event.composedPath()[0].getAttribute('id') === '2' && !window.location.search.includes('clat') && !window.location.search.includes('clong')) {
               this.dispatchEvent(
                 new CustomEvent('show-location-search-dialog', {
-                    detail: {},
-                    bubbles: true,
-                    cancelable: true,
-                    composed: true
+                  detail: {},
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
                 })
               )
             } else {
               this.dispatchEvent(
                 new CustomEvent('request-with-facet', {
-                    detail: {
-                      key: 'sorting',
-                      id: event.currentTarget?.id
-                    },
-                    bubbles: true,
-                    cancelable: true,
-                    composed: true
+                  detail: {
+                    key: 'sorting',
+                    id: event.currentTarget?.id
+                  },
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true
                 })
               )
             }

@@ -11,12 +11,13 @@ export default class NavLevelItem extends Shadow() {
         this.dispatchEvent(new CustomEvent(this.getAttribute('request-event-name'), {
           detail: {
             wrapper: {
-              filterItem: this.filterItem
+              filterItem: this
             },
             target: {
               checked: this.getAttribute('namespace') !== 'nav-level-item-active-',
               label: this.text.textContent,
-              filterId: this.getAttribute('filter-id')
+              filterId: this.getAttribute('filter-id'),
+              type: this.getAttribute('type')
             }
           },
           bubbles: true,
@@ -38,7 +39,7 @@ export default class NavLevelItem extends Shadow() {
 
   shouldRenderCSS () {
     return !this.root.querySelector(
-      `:host > style[_css], ${this.tagName} > style[_css]`
+      `${this.cssSelector} > style[_css]`
     )
   }
 

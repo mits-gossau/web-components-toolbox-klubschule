@@ -140,19 +140,13 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__price {
-          font-family: var(--price-font-family);
-          font-size: var(--price-font-size);
-          line-height: var(--price-line-height);
-          font-weight: var(--price-font-weight);  
+          font: var(--price-font); 
           padding-left: 0.75em;
           text-align: end;
       }
       
       :host .m-tile__price strong {
-          font-family: var(--price-strong-font-family);
-          font-size: var(--price-strong-font-size);
-          line-height: var(--price-strong-line-height);
-          font-weight: var(--price-strong-font-weight);   
+          font: var(--price-strong-font);
       }
       
       :host a-icon-mdx {
@@ -166,6 +160,7 @@ export default class Tile extends Shadow() {
       :host .m-tile__icons {
           display: flex;
           align-items: center;
+          gap: 0.5em;;
       }
       
       :host .m-tile__icon-box {
@@ -178,10 +173,6 @@ export default class Tile extends Shadow() {
           align-items: center;
       }
       
-      :host .m-tile__icon-box + .m-tile__icon-box {
-          margin-left: 0.5em;
-      }
-      
       :host .m-tile__icon-box a-icon-mdx {
           color: var(--icon-box-color);
       }
@@ -190,10 +181,13 @@ export default class Tile extends Shadow() {
         font-size: 1.5em;
       }
 
-      @media only screen and (max-width: _max-width_) {
+      @media only screen and (max-width: 1024px) {
         :host .m-tile__wrap {
-            padding: 1rem 0.5rem;
+          padding: 1rem 0.5rem;
         }
+      }
+
+      @media only screen and (max-width: _max-width_) {
 
         :host .m-tile__content {
             font-size: 0.875em;
@@ -203,6 +197,10 @@ export default class Tile extends Shadow() {
         :host .m-tile__price strong {
             padding-top: 0.75em;
             padding-left: 0;
+        }
+
+        :host .m-tile__foot {
+          gap: 0;
         }
 
         :host .m-tile__foot-right {
@@ -276,9 +274,9 @@ export default class Tile extends Shadow() {
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
           <span class="m-tile__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
-          ${data.iconTooltip
+          ${data.infotextshort
             ? /* html */`
-              <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
+              <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
                 <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
               </ks-m-tooltip>
             `
@@ -310,11 +308,11 @@ export default class Tile extends Shadow() {
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
-                <div class="m-tile__icon-box">
-                  <ks-m-tooltip namespace="tooltip-right-" text="${icon.text}">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
-                  </ks-m-tooltip>
-                </div>
+                <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
+                  <div class="m-tile__icon-box">
+                      <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>  
+                  </div>
+                </ks-m-tooltip>
               `, '')}           
             </div>
             <span class="m-tile__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
@@ -358,10 +356,10 @@ export default class Tile extends Shadow() {
   }
 
   get isNearbySearch () {
-    return this.hasAttribute("nearby-search")
+    return this.hasAttribute('nearby-search')
   }
 
   get isInsideTileList () {
-    return this.hasAttribute("inside-tile-list")
+    return this.hasAttribute('inside-tile-list')
   }
 }

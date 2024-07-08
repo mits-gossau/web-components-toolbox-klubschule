@@ -26,7 +26,7 @@ export default class CheckoutBoxWrapper extends Shadow() {
    * @return {boolean}
    */
   shouldRenderCSS () {
-    return !this.root.querySelector(`:host > style[_css], ${this.tagName} > style[_css]`)
+    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
   /**
@@ -66,7 +66,6 @@ export default class CheckoutBoxWrapper extends Shadow() {
       :host > div,
       :host ks-m-info-list > * {
         background-color: var(--background-color);
-        margin-bottom: var(--mdx-sys-spacing-fix-m);
         padding: var(--mdx-sys-spacing-fix-m);
         width: 100%;
       }

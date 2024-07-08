@@ -298,6 +298,7 @@ export default class KsFooter extends Footer {
             align-items: center;
             gap: 0.125em;
             flex-wrap: nowrap;
+            margin-bottom: 0;
         }
         :host .footer-links-row li > a > a-icon-mdx {
             --icon-mdx-svg-display: block;

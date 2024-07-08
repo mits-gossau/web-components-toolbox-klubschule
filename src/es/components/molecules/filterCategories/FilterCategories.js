@@ -15,6 +15,12 @@ export default class FilterCategories extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.generatedNavLevelItemMap = new Map()
+    this.generateCenterFilterMap = new Map()
+    this.generateFilterMap = new Map()
+    this.total = 0
+    this.firstTreeItem = null
+
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
     this.keepDialogOpenEventListener = event => {
@@ -72,7 +78,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateCenterFilter (response, filterItem) {
-    let centerNav = []
+    const centerNav = []
 
     filterItem.children.forEach(region => {
       const divRegion = document.createElement('div')
@@ -100,23 +106,54 @@ export default class FilterCategories extends Shadow() {
     return centerNav
   }
 
+  updateCenterFilter (centerFilters, filterItem) {
+    filterItem.children.forEach(region => {
+      region.children.forEach(center => {
+        const count = center.count ? `(${center.count})` : ''
+        const disabled = center.disabled ? 'disabled' : ''
+        const checked = center.selected ? 'checked' : ''
+        const visible = center.visible ? 'visible' : ''
+        const id = `[filter-id="${region.urlpara}-${center.id}"]`
+        let centerFilterCheckbox = null
+
+        if (centerFilters.find(centerFilter => (centerFilterCheckbox = centerFilter.querySelector(id) || (centerFilter.matches(id) && centerFilter)))) {
+          // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
+          // @ts-ignore
+          centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
+          const attributes = { disabled, checked, visible }
+
+          Object.entries(attributes).forEach(([key, value]) => {
+            if (value) {
+              // @ts-ignore
+              centerFilterCheckbox.setAttribute(key, '')
+            } else {
+              // @ts-ignore
+              centerFilterCheckbox.removeAttribute(key)
+            }
+          })
+        }
+      })
+    })
+  }
+
   generateFilterElement (response, child, parentItem, firstFilterItemId) {
     const subNav = []
-    const count = child.count ? `(${child.count})` : ''
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
     const visible = child.visible ? 'visible' : ''
     const isMultipleChoice = parentItem.typ === 'multi'
+    let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
+    if (child.hideCount) numberOfOffers = ''
 
     const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
-        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${child.label} ${count}" filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
+        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label='${child.label} ${numberOfOffers}' filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
       </mdx-component>
     `
     const navLevelItem = /* html */`
-      <ks-m-nav-level-item namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}">
+      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}">
         <div class="wrap">
-          <span class="text">${child.label} ${count}</span>
+          <span class="text">${child.label} ${numberOfOffers}</span>
         </div>
       </ks-m-nav-level-item>
     `
@@ -132,54 +169,119 @@ export default class FilterCategories extends Shadow() {
     return subNav
   }
 
-  getLastSelectedChild (filterItem) {
-    let lastSelectedChild = null
-    if (!filterItem.children || filterItem.children.length === 0) return
-    if (filterItem.children) {
-      for (const child of filterItem.children) {
-        if (child.selected) {
-          const result = this.getLastSelectedChild(child)
-          if (result) lastSelectedChild = result
+  updateFilter (generatedFilters, child, parentItem) {
+    const disabled = child.disabled ? 'disabled' : ''
+    const checked = child.selected ? 'checked' : ''
+    const visible = child.visible ? 'visible' : ''
+    let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
+    if (child.hideCount) numberOfOffers = ''
+    const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
+    let filterItem = null
+    if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
+      // @ts-ignore
+      filterItem.setAttribute('label', `${child.label} ${numberOfOffers}`)
+      const attributes = { disabled, checked, visible }
+
+      Object.entries(attributes).forEach(([key, value]) => {
+        if (value) {
+          filterItem.setAttribute(key, '')
+        } else {
+          filterItem.removeAttribute(key)
         }
-      }
+      })
     }
-    
-    return lastSelectedChild
   }
 
-  generateNavLevelItem (response, filterItem) {
-    const filterIdPrefix = 'filter-'
-    const shouldRemainOpen = filterIdPrefix+filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
-    const div = document.createElement('div')
+  getSelectedFilters (filterItem, type = '') {
+    if (!filterItem.children || filterItem.children.length === 0) return
 
-    let childItems = ''
-    if (filterItem.typ === 'multi') {
-      const selectedChildren = filterItem.children.filter(child => child.selected)
-      if (selectedChildren.length > 0) {
-        selectedChildren.forEach(child => {
-          childItems += `${child.label}, `
-        })
-      }
-    } else {
-      childItems = this.getLastSelectedChild(filterItem) ? this.getLastSelectedChild(filterItem).label : ''
-    }
-    if (filterItem.typ === 'group') {
-      const selectedChildren = filterItem.children.filter(child => child.selected)
-      if (selectedChildren.length > 0) {
-        selectedChildren.forEach(child => {
-          if (child.selected) {
-            child.children.forEach(subChild => {
-              if (subChild.selected) {
-                childItems += `${subChild.label}, `
-              }
-            })
+    let selectedFilters = []
+
+    if (filterItem.typ === 'group') { // get selected centers
+      selectedFilters = []
+      filterItem.children.forEach(region => {
+        region.children.forEach(center => {
+          if (center.selected) {
+            selectedFilters.push(center)
+            const result = this.getSelectedFilters(center) // recursive call
+            if (result) selectedFilters = selectedFilters.concat(result)
           }
         })
-      }
+      })
     }
 
+    if (filterItem.typ === 'multi') { // get selected checkbox filters
+      filterItem.children.forEach(child => {
+        if (child.selected) {
+          selectedFilters.push(child)
+          const result = this.getSelectedFilters(child) // recursive call
+          if (result) selectedFilters = selectedFilters.concat(result)
+        }
+      })
+    }
+
+    if (filterItem.typ === 'tree' || type === 'tree') { // get sparte filters
+      filterItem.children.forEach(child => {
+        if (child.selected) {
+          selectedFilters.push(child)
+        }
+
+        const result = this.getSelectedFilters(child, 'tree') // recursive call
+        if (result?.length) {
+          selectedFilters = selectedFilters.concat(result)
+        }
+      })
+    }
+
+    if (filterItem.typ === 'value' && type !== 'tree') { // get selected sparte filters
+      filterItem.children.forEach(child => {
+        if (child.selected) {
+          selectedFilters.push(child)
+          const result = this.getSelectedFilters(child) // recursive call
+          if (result) selectedFilters = selectedFilters.concat(result)
+        } else {
+          this.getSelectedFilters(child) // recursive call
+        }
+      })
+    }
+
+    return selectedFilters
+  }
+
+  generateNavLevelItem (response, parentItem, filterItem, mainNav, level) {
+    if (level === 0 && filterItem.typ === 'tree') this.firstTreeItem = filterItem
+    if (level === 0 && filterItem.typ !== 'tree') this.firstTreeItem = null
+    const filterIdPrefix = 'filter-'
+    const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    const div = document.createElement('div')
+    const navLevelItem = document.createElement('div')
+    let selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ') || ''
+    // @ts-ignore
+    if (level === 0 && filterItem.typ === 'tree') selectedFilters = this.getSelectedFilters(filterItem)[0]?.label || ""
+    if (this.firstTreeItem) {
+      selectedFilters = ''
+    }
+    
+    const checked = filterItem.selected ? 'checked' : ''
+    const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
+    const filterId = `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"`
+    
+    let numberOfOffers = filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'
+    if (filterItem.hideCount || level === 0) numberOfOffers = ''
+    this.total = response.total
+
+    navLevelItem.innerHTML = /* html */`
+      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}">
+        <div class="wrap">
+          <span class="text">${filterItem.label} ${numberOfOffers}</span>
+          <span class="additional">${selectedFilters}</span>
+        </div>
+        <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
+      </ks-m-nav-level-item>
+    `
+
     div.innerHTML = /* html */`
-      <m-dialog id="${filterIdPrefix+filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
@@ -201,39 +303,54 @@ export default class FilterCategories extends Shadow() {
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
           <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">${response.total > 0 ? `${response.total.toString()}` : ''} ${response.total_label}</a-button>
         </div>
-        <ks-m-nav-level-item namespace="nav-level-item-default-" id="show-modal" filter-key="${filterItem.urlpara}">
-          <div class="wrap">
-            <span class="text">${filterItem.label}</span>
-            <span class="additional">${childItems.slice(0, -2)}</span>
-          </div>
-          <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
-        </ks-m-nav-level-item>
+        ${navLevelItem.innerHTML}
       </m-dialog>
     `
 
     return {
       navLevelItem: div.children[0],
       // @ts-ignore
-      subLevel: div.querySelector('m-dialog')?.root.querySelector('.sub-level')
+      subLevel: div.querySelector('m-dialog')?.root.querySelector('.sub-level'),
+      id: filterItem.id
     }
   }
 
-  generateFilters (response, filterItem, parentItem = this.mainNav, firstFilterItemId = null) {
+  generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
+    level++
+    if (filterItem.typ === 'tree') this.getSelectedFilters(filterItem, 'tree')
     if (!filterItem.visible) return
+    if (parentItem === null) parentItem = filterItem
     if (firstFilterItemId === null) firstFilterItemId = filterItem.id
-    
-    const generatedNavLevelItem = this.generateNavLevelItem(response, filterItem)
-    parentItem.appendChild(generatedNavLevelItem.navLevelItem)
 
+    let generatedNavLevelItem
+    if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
+      // update total button
+      generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
+      // update additional text with selected filter(s) only for the first level 
+      if (level === 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
+    } else {
+      this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, parentItem, filterItem, mainNav, level)))
+    }
+    if (!Array.from(mainNav.childNodes).includes(generatedNavLevelItem.navLevelItem)) mainNav.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
       if (filterItem.id === '13') { // center filters
-        Array.from(this.generateCenterFilter(response, filterItem)).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+        const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, this.generateCenterFilter(response, filterItem)).get(level + '_' + filterItem.id)
+        if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedCenterFilters[0])) {
+          this.updateCenterFilter(generatedCenterFilters, filterItem)
+        } else {
+          generatedCenterFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+        }
       } else {
-        filterItem.children.forEach(child => {
+        filterItem.children.forEach((child, i) => {
           if (child.children && child.children.length > 0) {
-            this.generateFilters(response, child, generatedNavLevelItem.subLevel, firstFilterItemId) // recursive call
+            this.generateFilters(response, child, generatedNavLevelItem.subLevel, filterItem, firstFilterItemId, level) // recursive call
           } else {
-            this.generateFilterElement(response, child, filterItem, firstFilterItemId).forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+            const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
+            if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedFilters[0])) {
+              this.updateFilter(generatedFilters, child, filterItem)
+            } else {
+              generatedFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
+            }
           }
         })
       }
@@ -258,10 +375,8 @@ export default class FilterCategories extends Shadow() {
     ]).then(() => {
       fetch.then(response => {
         setTimeout(() => {
-          this.html = ''
-  
           if (response.filters.length === 0) return
-  
+
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)
           })

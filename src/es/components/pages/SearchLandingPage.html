@@ -1,72 +1,90 @@
 <div class="spacer"></div>
-	<o-grid namespace="grid-12er-">
-		<div col-lg="2" col-md="2"></div>
-		<div col-lg="8" col-md="8" col-sm="12">
-			<ks-c-auto-complete disabled endpoint-auto-complete="https://int.klubschule.ch/Umbraco/Api/Autocomplete/search?portal=29&mandant=111&lang=d"
-								search-url="https://int.klubschule.ch/suche/">
+<o-grid namespace="grid-12er-">
+	<div col-lg="2" col-md="2"></div>
+	<div col-lg="8" col-md="8" col-sm="12">
+		<ks-a-spacing type="s-flex"></ks-a-spacing>
+		<ks-c-auto-complete disabled
+			endpoint-auto-complete="https://int.klubschule.ch/Umbraco/Api/Autocomplete/search?portal=29&mandant=111&lang=d"
+			search-url="https://int.klubschule.ch/suche/">
 
-				<m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog">
-					<div class="container">
-						<a-input inputid="page-input-search"
-								 autofocus
-								 placeholder="Suchen"
-								 icon-name="Search"
-								 icon-size="1.25em"
-								 submit-search="request-auto-complete"
-								 any-key-listener
-								 type="search"
-								 answer-event-name="search-change"
-								 delete-listener
-								 search
-								 autocomplete="off">
-						</a-input>
-						<div id="close">
-							<a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-						</div>
-					</div>
-					<div class="container">
-						<ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
-						</ks-m-auto-complete-list>
-					</div>
-					<a-input id="show-modal"
-							 inputid="show-modal"
-							 placeholder="Suchen"
-							 icon-name="Search"
-							 icon-size="1.25em"
-							 search type="search"
-							 answer-event-name="search-change"
-							 autocomplete="off">
+			<m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog"
+				dialog-mobile-height="100vh" dialog-desktop-height="40%">
+				<div class="container">
+					<a-input inputid="page-input-search" autofocus placeholder="Suchen" icon-name="Search"
+						icon-size="1.25em" submit-search="request-auto-complete" any-key-listener type="search"
+						answer-event-name="search-change" delete-listener search autocomplete="off">
 					</a-input>
-				</m-dialog>
+					<div id="close">
+						<a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+					</div>
+				</div>
+				<div class="container">
+					<ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+					</ks-m-auto-complete-list>
+				</div>
+				<style>
+					:host>ks-a-button {
+						width: 100%;
+						--button-secondary-background-color: var(--m-white);
+						--button-secondary-background-color-hover: var(--m-white);
+						--button-secondary-width: 100%;
+						--button-secondary-border-color: var(--m-gray-700);
+						--button-secondary-border-color-hover: var(--m-gray-700);
+						--button-secondary-color: var(--m-gray-700);
+						--button-secondary-color-hover: var(--m-gray-700);
+						--button-secondary-cursor: text;
+						--button-secondary-justify-content: space-between;
+						--button-secondary-padding: 0.5rem 1.5rem;
+						--button-secondary-font-size: 1.15rem;
+						--button-secondary-height: 2.88rem;
+						--svg-size: 1.5rem;
+						--svg-size-mobile: 1.2rem;
+						--button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+						--button-secondary-font-weight: 400;
+					}
 
-			</ks-c-auto-complete>
+					@media only screen and (max-width: 767px) {
+						:host>ks-a-button {
+							--button-secondary-padding: 0.5rem 0.9rem;
+							--button-secondary-font-size: 1rem;
+							--button-secondary-height: 2.22rem;
+						}
+					}
+				</style>
+				<ks-a-button id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
+					default-label="Suchen...">
+					<a-icon-mdx icon-name="Search" class="icon-right">
+					</a-icon-mdx>
+				</ks-a-button>
+			</m-dialog>
 
-		</div>
-	</o-grid>
+		</ks-c-auto-complete>
+		<ks-a-spacing type="s-flex"></ks-a-spacing>
+	</div>
+</o-grid>
 
-	
+
 <!-- TODO: set Endpoints below into appsettings -->
-<ks-o-offers-page with-location-input endpoint-auto-complete="https://int.klubschule.ch/Umbraco/Api/Autocomplete/search?portal=29&mandant=111&lang=d"
-				  search-url="https://int.klubschule.ch/suche/"
-				  google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"
-				  endpoint="https://int.klubschule.ch/Umbraco/Api/CourseApi/Search"
-				  endpoint-partner="https://int.klubschule.ch/Umbraco/Api/CourseApi/SearchPartner"
-				  initial-request={"searchcontent":true,"CurrentPageId":0,"filter":[{"PartitionKey":null,"RowKey":null,"label":null,"id":"","typ":null,"level":"","count":0,"color":"","urlpara":"","selected":false,"disabled":false,"visible":false,"sort":0,"hideCount":false,"children":null,"HasChilds":false}],"sorting":1,"SaveNulltreffer":null,"onlyfaceted":null,"onlycourse":false,"clat":null,"clong":null,"cdist":null,"abo_kurs_typ":null,"abo_kurs_id":null,"SearchTitle":null,"SearchKeyword":null,"SearchDescription":null,"hasCollapse":false,"hasCollapseOrt":false,"PortalId":29,"sprachid":"d","MandantId":111,"ppage":0,"psize":12,"pnext":24,"SearchText":"zumba"}
-				  with-location-search
-without-search-in-overlay
->
+<ks-o-offers-page with-location-input
+	endpoint-auto-complete="https://int.klubschule.ch/Umbraco/Api/Autocomplete/search?portal=29&mandant=111&lang=d"
+	search-url="https://int.klubschule.ch/suche/" google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"
+	endpoint="https://int.klubschule.ch/Umbraco/Api/CourseApi/Search"
+	endpoint-partner="https://int.klubschule.ch/Umbraco/Api/CourseApi/SearchPartner"
+	initial-request={"searchcontent":true,"CurrentPageId":0,"filter":[{"PartitionKey":null,"RowKey":null,"label":null,"id":"","typ":null,"level":"","count":0,"color":"","urlpara":"","selected":false,"disabled":false,"visible":false,"sort":0,"hideCount":false,"children":null,"HasChilds":false}],"sorting":1,"SaveNulltreffer":null,"onlyfaceted":null,"onlycourse":false,"clat":null,"clong":null,"cdist":null,"abo_kurs_typ":null,"abo_kurs_id":null,"SearchTitle":null,"SearchKeyword":null,"SearchDescription":null,"hasCollapse":false,"hasCollapseOrt":false,"PortalId":29,"sprachid":"d","MandantId":111,"ppage":0,"psize":12,"pnext":24,"SearchText":"zumba"}
+	with-location-search without-search-in-overlay>
 	<section hidden id="empty-courses">
 		<h2>Es konnten keine Angebote gefunden werden.</h2>
 		Tipps für ein besseres Suchresultat
-- Geben sie einen anderen Suchbegriff ein.
-- Reduzieren sie gesetzte Filter.
-- Suchen sie direkt in unseren Angebotsbereichen Sprachen, Kreativität oder Gesundheit nach einem passenden Angebot.
+		- Geben sie einen anderen Suchbegriff ein.
+		- Reduzieren sie gesetzte Filter.
+		- Suchen sie direkt in unseren Angebotsbereichen Sprachen, Kreativität oder Gesundheit nach einem passenden
+		Angebot.
 	</section>
 	<section hidden id="empty-content">
 		<h2>Es konnten keine Stories oder Informationen gefunden werden.</h2>
 		Tipps für ein besseres Suchresultat
-- Geben sie einen anderen Suchbegriff ein.
-- Reduzieren sie gesetzte Filter.
+		- Geben sie einen anderen Suchbegriff ein.
+		- Reduzieren sie gesetzte Filter.
 	</section>
 	<section hidden id="partner-results">
 		<h2>Mit &#xAB;{0}&#xBB; konnten wir auf unseren Partnerseiten passende Angebote finden</h2>

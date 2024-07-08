@@ -34,6 +34,9 @@ export default class AppointmentTile extends Tile {
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(data => {
+        if (data.code === 500) {
+          return
+        }
         const tileState = getTileState(courseAppointmentStatusMapping[data.courseAppointmentStatus], data)
         this.currentTile.classList.add(tileState.css.border)
       })
@@ -44,6 +47,9 @@ export default class AppointmentTile extends Tile {
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(data => {
+        if (data.code === 500) {
+          return
+        }
         const tileState = getTileState(courseAppointmentStatusMapping[data.courseAppointmentStatus], data)
         const defaultClass = this.currentTile.classList[0]
         this.currentTile.classList.remove(...this.currentTile.classList)

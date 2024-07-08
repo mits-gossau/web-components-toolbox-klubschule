@@ -2,3 +2,16 @@
     --nav-level-item-default-background-color: transparent;
     --nav-level-item-default-color: #262626;
 }
+:host([checked]) {
+    --nav-level-item-default-background-color: #E0F0FF;
+    --nav-level-item-default-color: #0053A6;
+}
+:host([disabled]) {
+    --nav-level-item-default-background-color: transparent;
+    --nav-level-item-default-color: var(--mdx-comp-checkbox-unchecked-label-color-disabled, #262626);
+}
+:host([disabled]) {
+    --nav-level-item-default-background-color: transparent;
+    --nav-level-item-default-color: var(--mdx-comp-checkbox-unchecked-label-color-disabled, #262626);
+    pointer-events: none;
+}

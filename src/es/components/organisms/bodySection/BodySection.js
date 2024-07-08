@@ -20,7 +20,7 @@ export default class KsBodyStyle extends BodyStyle {
      */
   shouldRenderCSS () {
     return !this.root.querySelector(
-        `:host > style[_css], ${this.tagName} > style[_css]`
+        `${this.cssSelector} > style[_css]`
     )
   }
 
@@ -144,6 +144,11 @@ export default class KsBodyStyle extends BodyStyle {
         :host([has-background]) > a.ks-o-body-section__last-child[namespace="teaser-fullwidth-"][wrapper],
         :host([has-background]) > a.ks-o-body-section__last-child[namespace="teaser-text-image-"][wrapper] {
             margin-bottom: 0;
+        }
+
+        /* because of shadow DOM I need to style it here although the id actually is used in OffersPage */
+        :host #sort-options {
+            text-align: end;
         }
 
         /* Utilities */

@@ -80,7 +80,7 @@ export default class Event extends Shadow() {
 
       :host .head {
         display: grid;
-        grid-template-columns: 50% 50%;
+        grid-template-columns: 1fr 1fr;
         column-gap: 3rem;       
       }
 
@@ -218,10 +218,7 @@ export default class Event extends Shadow() {
         display: flex;
         flex-direction: row;
         align-items: center;
-      }
-
-      :host ks-m-badge + ks-m-badge {
-        margin-left: 0.5em;
+        gap: 0.5em;
       }
       
       :host ks-m-badge a-icon-mdx {
@@ -418,7 +415,7 @@ export default class Event extends Shadow() {
         }
 
         :host .controls-left {
-          justify-content: space-between;
+          justify-content: flex-end;
           margin-top: 2rem;
           width: 100%;
         }
@@ -460,10 +457,13 @@ export default class Event extends Shadow() {
       detail_label_less,
       buttons,
       icons,
-      price
+      kurs_id,
+      price,
+      ist_abokurs_offen
     } = this.data.course
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
+
     this.html = /* HTML */`
       <div class="event">
         <div class="head">
@@ -501,20 +501,26 @@ export default class Event extends Shadow() {
         <div class="details">
           
         </div>
-        <div class="controls">
-          <div class="controls-left">
-            <ks-m-buttons data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
-          </div>
-          <div class="controls-right">
-            <div class="icons">
-              ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
-                <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}" tooltip="${icon.text}">
-                </ks-m-badge>
-              `, '') : ''}
+        <ks-c-checkout-overlay>
+          <div class="controls">
+            <div class="controls-left">
+              ${!ist_abokurs_offen ? /* html */ `
+              <ks-m-buttons dialog-id="${kurs_id}" data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
+              ` : ''}
             </div>
-            <span class="price">${price?.pre ? price?.pre + ' ' : ''}<strong>${price?.amount || ''}</strong>${price?.per ? ' / ' + price?.per : ''}</span>
+            <div class="controls-right">
+              <div class="icons">
+                ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
+                  <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
+                    <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}">
+                    </ks-m-badge>
+                  </ks-m-tooltip>
+                `, '') : ''}
+              </div>
+              <span class="price">${price?.pre ? price?.pre + ' ' : ''}<strong>${price?.amount || ''}</strong>${price?.per ? ' / ' + price?.per : ''}</span>
+            </div>
           </div>
-        </div>
+        </ks-c-checkout-overlay>
       </div>
     `
 
@@ -524,12 +530,20 @@ export default class Event extends Shadow() {
         name: 'a-icon-mdx'
       },
       {
+        path: `${this.importMetaUrl}../../controllers/checkoutOverlay/CheckoutOverlay.js`,
+        name: 'ks-c-checkout-overlay'
+      },
+      {
         path: `${this.importMetaUrl}../../molecules/buttons/Buttons.js`,
         name: 'ks-m-buttons'
       },
       {
         path: `${this.importMetaUrl}../../molecules/badge/Badge.js`,
         name: 'ks-m-badge'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
+        name: 'ks-m-tooltip'
       }
     ])
   }

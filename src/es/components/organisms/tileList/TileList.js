@@ -26,6 +26,13 @@ export default class TileList extends Shadow() {
       if (this.details.classList.contains('o-tile-list__details--expanded')) {
         // no tiles are delivered as attribute. here we got to fetch the location data for the tiles
         if (!this.data.tiles?.length) {
+          /* set loading state */
+          this.tilesContainer.innerHTML = /* html */`
+              <mdx-component class="o-tile-list__loading-bar">
+                  <mdx-loading-bar></mdx-loading-bar>
+              </mdx-component>
+          `
+
           return new Promise(resolve => this.dispatchEvent(new CustomEvent('request-locations', {
             detail: {
               resolve,
@@ -159,6 +166,7 @@ export default class TileList extends Shadow() {
 
       :host .o-tile-list__details--expanded {
         height: auto;
+        overflow: visible; /* to make tooltips fully visible */
       }
 
       :host .o-tile-list__bottom-right {
@@ -169,21 +177,13 @@ export default class TileList extends Shadow() {
       }
 
       :host .o-tile-list__price {
-        font-family: var(--mdx-sys-font-fix-label3-font-family);
-        font-size: var(--mdx-sys-font-fix-label3-font-size);
-        font-weight: var(--mdx-sys-font-fix-label3-font-weight);
-        line-height: var(--mdx-sys-font-fix-label3-line-height);
-        letter-spacing: var(--mdx-sys-font-fix-label3-letter-spacing);
+        font: var(--mdx-sys-font-fix-label4);
         text-align: end;
         white-space: nowrap;
       }
       
       :host .o-tile-list__price strong {
-        font-family: var(--mdx-sys-font-flex-headline3-font-family);
-        font-size: var(--mdx-sys-font-flex-headline3-font-size);
-        font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
-        line-height: var(--mdx-sys-font-flex-headline3-line-height);
-        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);
+        font: var(--mdx-sys-font-fix-label1);
         white-space: initial;
       }
 
@@ -191,6 +191,7 @@ export default class TileList extends Shadow() {
         display: flex;
         align-items: center;
         justify-content: flex-end;
+        gap: 0.5em;
       }
     
       :host .o-tile-list__icon-box {
@@ -201,10 +202,6 @@ export default class TileList extends Shadow() {
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-      
-      :host .o-tile-list__icon-box + .o-tile-list__icon-box {
-          margin-left: 0.5em;
       }
       
       :host .o-tile-list__icon-box a-icon-mdx {
@@ -230,6 +227,11 @@ export default class TileList extends Shadow() {
         justify-content: center;
         align-items: center;
         padding: 1.5em 0 4em;
+      }
+
+      :host .o-tile-list__loading-bar {
+        display: block;
+        width: 100%;
       }
 
       @media only screen and (min-width: 1025px) and (max-width: 1600px) {
@@ -298,9 +300,9 @@ export default class TileList extends Shadow() {
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
             <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
-            ${data.iconTooltip
+            ${data.infotextshort
               ? /* html */`
-                <ks-m-tooltip namespace="tooltip-right-" text='${data.iconTooltip}'>
+                <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
                   <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
                 </ks-m-tooltip>
                   `
@@ -332,15 +334,15 @@ export default class TileList extends Shadow() {
               ${this.isNearbySearch ? '' : /* html */ `
                 <div class="o-tile-list__icons">
                   ${data.icons.reduce((acc, icon) => acc + /* html */`
-                    <div class="o-tile-list__icon-box">
-                      <ks-m-tooltip namespace="tooltip-right-" text="${icon.text.replaceAll('"', "'")}">
-                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
-                      </ks-m-tooltip>
-                    </div>
+                    <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
+                      <div class="o-tile-list__icon-box">
+                          <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>
+                      </div>
+                    </ks-m-tooltip>
                   `, '')}           
                 </div>
               `}
-              <span class="o-tile-list__price">${data.price?.from ? data.price?.from + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
+              <span class="o-tile-list__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
             </div>          
           </div>
         </div>
@@ -394,6 +396,10 @@ export default class TileList extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+        name: 'mdx-component'
       }
     ])
   }
@@ -405,7 +411,7 @@ export default class TileList extends Shadow() {
       // according to this ticket, the location title aka. bezeichnung must be the location.name and location.name shall be empty [https://jira.migros.net/browse/MIDUWEB-855]
       if (!this.isNearbySearch) {
         tile.bezeichnung = tile.title = tile.location.name || tile.bezeichnung || tile.title
-        if (tile.bezeichnung)  tile.location.name = ''
+        if (tile.bezeichnung) tile.location.name = ''
       }
 
       // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
@@ -425,6 +431,6 @@ export default class TileList extends Shadow() {
   }
 
   get isNearbySearch () {
-    return this.hasAttribute("nearby-search")
+    return this.hasAttribute('nearby-search')
   }
 }

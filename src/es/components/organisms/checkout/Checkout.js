@@ -22,8 +22,8 @@ export default class Checkout extends Shadow() {
     }
 
     this.triggeredByListener = event => {
-      let trigger = event.detail.element;
-      let triggeredElement = this.root.querySelector(`input[type="checkbox"][triggered-by="${trigger.id}"]`);
+      const trigger = event.detail.element
+      const triggeredElement = this.root.querySelector(`input[type="checkbox"][triggered-by="${trigger.id}"]`)
 
       if (triggeredElement) {
         if (event.detail.element.checked && !triggeredElement.checked || !event.detail.element.checked && triggeredElement.checked) triggeredElement.click()
@@ -37,7 +37,7 @@ export default class Checkout extends Shadow() {
     this.root.addEventListener('triggered-by', this.triggeredByListener)
     document.body.addEventListener('checkout-configuration', this.checkoutConfigurationListener)
   }
-    
+
   disconnectedCallback () {
     this.root.removeEventListener('triggered-by', this.triggeredByListener)
     document.body.removeEventListener('checkout-configuration', this.checkoutConfigurationListener)

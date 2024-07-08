@@ -10,7 +10,7 @@ export default class FavoriteButton extends Shadow() {
       courseType: this.getAttribute('course-type'),
       courseId: this.getAttribute('course-id'),
       centerId: this.getAttribute('center-id'),
-      isValid: function() {return !!(this.courseType && this.courseId && this.centerId)}
+      isValid: function () { return !!(this.courseType && this.courseId && this.centerId) }
     }
     // the course attribute trumps the separate attributes
     if (this.hasAttribute('course')) [id.courseType, id.courseId, id.centerId] = this.getAttribute('course').split('_')
@@ -19,7 +19,7 @@ export default class FavoriteButton extends Shadow() {
       [id.courseType, id.courseId, id.centerId] = location.href.match(/--([\w]{1}_[\d]{3,6}_[\d]{3,6})/)?.[1].split('_') || []
       if (!id.isValid()) console.warn('Favorite button for wishlist has invalid values!', this)
     }
-    
+
     let isFavoured = false
 
     let timeout = null
@@ -123,9 +123,9 @@ export default class FavoriteButton extends Shadow() {
   renderHTML () {
     this.html = ''
     const div = document.createElement('div')
-    div.innerHTML = /* html */`<ks-a-button namespace="button-tertiary-" color="secondary"></ks-a-button>`
+    div.innerHTML = '<ks-a-button namespace="button-tertiary-" color="secondary"></ks-a-button>'
     this.button = div.children[0]
-    div.innerHTML = /* html */`<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>`
+    div.innerHTML = '<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>'
     this.icon = div.children[0]
     div.innerHTML = /* html */`<a-translation data-trans-key="${this.getAttribute('off-text') ?? 'Wishlist.Remember'}" part=text></a-translation>`
     this.text = div.children[0]

@@ -47,8 +47,13 @@ export default class DialogStatusButton extends Shadow() {
       const type = event.detail.type
       event.detail.fetch.then(courseDetail => {
         this.courseAppointmentStatus = courseDetail.courseAppointmentStatus
-        let btn = this.renderDialogActionButton(this.dataset.id, type, subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
-        btn += this.closeButton
+        let btn = ''
+        if (this.courseAppointmentStatus === 2) {
+          btn = `<div class='only-close-mobile'>${this.closeButton}</div`
+        } else {
+          btn = this.renderDialogActionButton(this.dataset.id, type, subscriptionMode[this.dataSubscription.subscriptionMode], this.courseAppointmentStatus, escapeForHtml(JSON.stringify(this.dataContent)), escapeForHtml(JSON.stringify(this.dataSubscription)))
+          btn += this.closeButton
+        }
         this.html = ''
         this.html = btn
       })
@@ -61,7 +66,14 @@ export default class DialogStatusButton extends Shadow() {
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentReversalListener = event => {
-    if (this.dataset.id === event.detail.id) this.renderOnlyCloseButton()
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(courseDetail => {
+        if (courseDetail.code === 500) {
+          return
+        }
+        this.renderOnlyCloseButton()
+      })
+    }
   }
 
   /**
@@ -70,7 +82,14 @@ export default class DialogStatusButton extends Shadow() {
    * @param {CustomEventInit} event
    */
   updateSubscriptionCourseAppointmentBookingListener = event => {
-    if (this.dataset.id === event.detail.id) this.renderOnlyCloseButton()
+    if (this.dataset.id === event.detail.id) {
+      event.detail.fetch.then(courseDetail => {
+        if (courseDetail.code === 500) {
+          return
+        }
+        this.renderOnlyCloseButton()
+      })
+    }
   }
 
   /**
@@ -113,7 +132,12 @@ export default class DialogStatusButton extends Shadow() {
         width: 100%;
       }
       @media only screen and (max-width: _max-width_) {
-        :host {}
+        :host {
+          .only-close-mobile {
+            width: 100%;
+            text-align: center;
+          }
+        }
       }
     `
     return this.fetchTemplate()
@@ -175,6 +199,9 @@ export default class DialogStatusButton extends Shadow() {
         `
       case (type === 'subscriptions'): {
         const url = this.createSubscriptionRenewLink(this.dataContent)
+        // Leave it as it is for the time being
+        // Will be exchanged at SAP OK
+        // const { subscriptionSearchUrl } = this.dataContent
         return /* html */ `
           <ks-a-button
             href="${url}" 
@@ -209,7 +236,7 @@ export default class DialogStatusButton extends Shadow() {
 
   renderOnlyCloseButton () {
     this.html = ''
-    this.html = this.closeButton
+    this.html = `<div class="only-close-mobile">${this.closeButton}</div>`
   }
 
   get closeButton () {

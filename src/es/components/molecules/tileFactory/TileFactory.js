@@ -99,20 +99,25 @@ export default class TileFactory extends Shadow() {
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
   async renderHTML (fetch) {
-    /*
-    // TODO: If needed do the loading animation
+    /* loading */
     this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/loading/Loading.js`,
-        name: 'a-loading'
+        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+        name: 'mdx-component'
       }
     ])
-    this.html = ''
-    this.html = '<a-loading></a-loading>'
-    */
+    this.html = /* html */`
+      <mdx-component class="mdx-loading">
+          <mdx-loading-bar></mdx-loading-bar>
+      </mdx-component>
+    `
+
     return fetch.then(data => {
       setTimeout(() => {
-        if (!data.isNextPage) this.html = ''
+        // remove loading component
+        this.root.querySelector('.mdx-loading')?.remove()
+
+        if (data.ppage === 1 || data.ppage === -1) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -193,7 +198,7 @@ export default class TileFactory extends Shadow() {
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     return `
       "title": "${course.bezeichnung}",
-      "iconTooltip": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+      "infotextshort": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "location": {
         "iconName": "Location",
         "name": "${course.location?.name
@@ -206,7 +211,7 @@ export default class TileFactory extends Shadow() {
       "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "icons": ${JSON.stringify(course.icons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "price": {
-        "from": "${course.price.pre}",
+        "pre": "${course.price.pre}",
         "amount": "${course.price.amount}",
         "per": "${course.price.per}"
       },
@@ -218,7 +223,7 @@ export default class TileFactory extends Shadow() {
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     return `
       "title": "${course.bezeichnung}",
-      "iconTooltip": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+      "infotextshort": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "icons": ${JSON.stringify(course.icons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''}
     `

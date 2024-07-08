@@ -1,3 +1,4 @@
 :host {
+    --sort-default-hover-color: #F5F5F5; 
     --sort-default-justify-content: flex-start;
 }

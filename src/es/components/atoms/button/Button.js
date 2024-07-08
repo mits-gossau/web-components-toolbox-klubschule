@@ -10,19 +10,35 @@ import Button from '../../web-components-toolbox/src/es/components/atoms/button/
  * @type {CustomElementConstructor}
  */
 export default class KsButton extends Button {
+  connectedCallback() {
+    super.connectedCallback()
+    // set the default label if exists
+    if (this.hasAttribute('default-label')) {
+      this.buttonSpan = this.root.querySelector('button > span')
+      this.buttonSpan.classList.remove('hide')
+      this.buttonSpan.textContent = this.getAttribute('default-label') || 'No added placeholder'
+    }
+    if (this.getAttribute('answer-event-name')) document.body.addEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback()
+    if (this.getAttribute('answer-event-name')) document.body.removeEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
+  }
+
   /**
    * fetches the template
    *
    * @return {Promise<void>}
    */
-  fetchTemplate () {
+  fetchTemplate() {
     if (!this.hasAttribute('color') && !this.hasAttribute('justify-content') && !this.hasAttribute('small') && !this.hasAttribute('big')) return super.fetchTemplate()
     const replaces = this.buttonTagName === 'a'
       ? [{
-          pattern: '([^-=]{1})button',
-          flags: 'g',
-          replacement: '$1a'
-        }]
+        pattern: '([^-=]{1})button',
+        flags: 'g',
+        replacement: '$1a'
+      }]
       : []
     switch (this.getAttribute('namespace')) {
       case 'button-primary-':
@@ -91,6 +107,14 @@ export default class KsButton extends Button {
         })
       default:
         return super.fetchTemplate()
+    }
+  }
+
+  answerEventListener = async event => {
+    let searchTerm = event.detail.searchTerm
+    if (searchTerm) {
+      this.buttonSpan.classList.remove('hide')
+      this.buttonSpan.textContent = searchTerm
     }
   }
 }

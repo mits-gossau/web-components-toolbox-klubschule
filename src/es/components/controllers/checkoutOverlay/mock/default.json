@@ -1,0 +1,39 @@
+{
+    "hinweis": "Hinweis",
+    "price": {
+        "amount": "216.00 CHF",
+        "price": 216,
+        "ispre": 0,
+        "isper": 0,
+        "pre": "",
+        "per": "",
+        "rate": false
+    },
+    "texte": [
+        {
+            "titel": "Spracheinstufungstest",
+            "text": "Für den Eintritt in diesen Kurs ist eine Einstufung oder ein Beratungsgespräch erforderlich.\nFalls dies nicht schon erfolgt ist, können Sie den Einstufungstest für folgende Sprachen bequem online absolvieren: Deutsch, Englisch, Französisch, Italienisch, Spanisch."        },
+        {
+            "titel": "Ausgebucht, Warteliste möglich",
+            "text": "Dieses Angebot ist zur Zeit ausgebucht. Wir kontaktieren Sie, sobald ein Platz frei wird oder ein Alternativangebot vorliegt."
+        }
+    ],    
+    "buttons": [
+        {
+            "text": "close",
+            "link": "",
+            "typ": "",
+            "event": "close",
+            "iconName": "",
+            "filters": null
+        },
+        {
+            "text": "book",
+            "link": "/kurs/--_0_/Configuration",
+            "typ": "",
+            "event": "",
+            "iconName": "",
+            "filters": null
+        }
+    ]
+} 

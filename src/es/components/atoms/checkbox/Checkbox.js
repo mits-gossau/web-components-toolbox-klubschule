@@ -31,6 +31,22 @@ export default class Checkbox extends Shadow() {
      * Handle checked on box
      */
     this.clickableElements.forEach(element => element.addEventListener('click', this.clickEventListener))
+
+    let checkedTrigger = this.root.querySelector('input[trigger]');
+
+    // check on page back if trigger was checked previously and re-trigger
+    if (checkedTrigger && checkedTrigger.checked) {
+      this.dispatchEvent(new CustomEvent('triggered-by',
+        {
+          detail: {
+            element: this.input
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        })
+      )
+    } 
   }
 
   disconnectedCallback () {
@@ -39,7 +55,7 @@ export default class Checkbox extends Shadow() {
 
   shouldRenderCSS () {
     return !this.root.querySelector(
-      `:host > style[_css], ${this.tagName} > style[_css]`
+      `${this.cssSelector} > style[_css]`
     )
   }
 
@@ -103,6 +119,9 @@ export default class Checkbox extends Shadow() {
         }
 
         :host input[type='checkbox'] {
+            position: absolute;
+            opacity: 0;
+            height: 0;
             width: 0;
             min-width: unset;
         }

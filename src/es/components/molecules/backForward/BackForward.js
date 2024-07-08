@@ -20,7 +20,7 @@ export default class BackForward extends Shadow() {
 
   shouldRenderCSS () {
     return !this.root.querySelector(
-      `:host > style[_css], ${this.tagName} > style[_css]`
+      `${this.cssSelector} > style[_css]`
     )
   }
 
@@ -41,7 +41,9 @@ export default class BackForward extends Shadow() {
           gap: 1rem;
         }
 
-        :host ks-a-button {
+        :host ks-a-button,
+        :host ks-a-button a[type="button"],
+        :host ks-a-button button {
           width: 100%;
         }
 

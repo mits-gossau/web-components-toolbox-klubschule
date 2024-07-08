@@ -17,6 +17,7 @@ self.Environment = {
       case tagName && typeof tagName.includes === 'function' && tagName.includes('KS-O-BODY-SECTION'):
       case constructor && typeof constructor.includes === 'function' && constructor.includes('Login'):
       case constructor && typeof constructor.includes === 'function' && constructor.includes('CarouselTwo') && (namespace === 'carousel-two-teaser-' || namespace === 'carousel-two-3-column-'):
+      case tagName && typeof tagName.includes === 'function' && tagName.includes('KS-M-STAGE'):
         return '1020px'
       default:
         return '767px'
@@ -59,7 +60,7 @@ self.Environment = {
       case 'int':
         return 'https://miducaexportapicustomerportalint.azurewebsites.net'
       case 'localhost':
-        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
+        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
       case 'dev':
         return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
       case 'devadmin':
@@ -80,6 +81,7 @@ self.Environment = {
           apiSubscriptions: `${this.getEnvUrl()}/api/CustomerPortal/subscriptions`,
           apiSubscriptionDetail: `${this.getEnvUrl()}/api/CustomerPortal/subscription`,
           apiSubscriptionPdf: `${this.getEnvUrl()}/api/CustomerPortal/subscriptionpdf`,
+          apiCourseListFilterSettings: `${this.getEnvUrl()}/api/CustomerPortal/courselistfiltersettings`,
           coursePDF: `${this.getEnvUrl()}/api/CustomerPortal/coursepdf`
         }
       }

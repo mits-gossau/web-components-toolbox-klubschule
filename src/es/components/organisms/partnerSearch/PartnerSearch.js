@@ -32,7 +32,6 @@ export default class PartnerSearch extends Shadow() {
       cancelable: true,
       composed: true
     }))).then(fetch => this.renderHTML(fetch))
-    
   }
 
   disconnectedCallback () {
@@ -99,8 +98,8 @@ export default class PartnerSearch extends Shadow() {
     this.renderLoading()
     if (fetch) {
       console.log('*********', fetch, this.hiddenMessages)
-      //fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
-      //const data = this.lastData = await fetch
+      // fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
+      // const data = this.lastData = await fetch
       this.html = ''
       this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
       this.html = this.hiddenMessages

@@ -96,6 +96,52 @@ export default class filterSelect extends Shadow() {
     return lastSelectedChild
   }
 
+  createFilterButton (filterItem, selectedFilter) {
+    return /* html */`
+      <m-double-button namespace="double-button-default-" width="100%">
+        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="dialog-open-first-level,dialog-open-${filterItem.id}" click-no-toggle-active>
+          <span part="label1">${selectedFilter}</span>
+          <span part="label2" dynamic></span>
+        </ks-a-button>
+        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="${filterItem.urlpara}" filter-value="${selectedFilter}">
+          <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+        </ks-a-button>
+      </m-double-button>
+    `
+  }
+
+  generateFilterButtons(filterData) {
+    const processFilterItem = (filterItem) => {
+      if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+        let selectedFilterItems = []
+  
+        if (filterItem.typ === 'multi' || filterItem.typ === 'value' || filterItem.typ === 'tree') {
+          const selectedChildren = filterItem.children.filter(child => child.selected)
+          if (selectedChildren.length > 0) {
+            selectedChildren.forEach(child => {
+              selectedFilterItems.push(`${child.label}`)
+            })
+          }
+        } 
+        
+        if (filterItem.typ === 'group') {
+          const lastSelectedChild = this.getLastSelectedChild(filterItem)
+          if (lastSelectedChild) selectedFilterItems.push(`${lastSelectedChild.label}`)
+        }
+
+        if (selectedFilterItems.length > 0) {
+          this.html = this.createFilterButton(filterItem, selectedFilterItems)
+        }
+      
+        filterItem.children.forEach(child => processFilterItem(child)) // recursive call
+      }
+    }
+  
+    filterData.forEach(filterItem => {
+      processFilterItem(filterItem)
+    })
+  }
+  
   renderHTML (fetch) {
     this.fetchModules([{
       path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
@@ -126,58 +172,24 @@ export default class filterSelect extends Shadow() {
       name: 'ks-m-auto-complete-list'
     }]).then(() => {
       Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
-        const filterData = response?.filters
-        
         this.html = ''
 
-        // loop through the filter data and generate the filter select
-        filterData.forEach((filterItem) => {
-          if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-            let childItems = ''
-            if (filterItem.typ === 'multi') {
-              const selectedChildren = filterItem.children.filter(child => child.selected)
-              if (selectedChildren.length > 0) {
-                selectedChildren.forEach(child => {
-                  childItems += `${child.label}, `
-                })
-              }
-            } else {
-              const lastSelectedChild = this.getLastSelectedChild(filterItem)
-              if (lastSelectedChild) childItems = `${lastSelectedChild.label}, `
-            }
-
-            const doubleButton = /* html */`
-              <m-double-button namespace="double-button-default-" width="100%">
-                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="dialog-open-first-level,dialog-open-${filterItem.id}" click-no-toggle-active>
-                  <span part="label1">${childItems.slice(0, -2)/* remove last comma and space */}</span>
-                  <span part="label2" dynamic></span>
-                </ks-a-button>
-                <ks-a-button filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="${filterItem.urlpara}" filter-value="${childItems.slice(0, -2)}">
-                  <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-                </ks-a-button>
-              </m-double-button>
-            `
-
-            if (childItems.length > 0) {
-              this.html = doubleButton
-            }
-          }
-        })
-
-        // render search button
-        if (this.hasAttribute('with-search') && response.searchText) {
+        // render search button at first
+        if (response.searchText && this.hasAttribute('with-filter-search-button')) {
           this.html = /* html */`
             <m-double-button namespace="double-button-default-" width="100%">
-              <ks-a-button namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>
+              <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>
                 <span part="label1">${response.searchText}</span>
                 <span part="label2" dynamic></span>
               </ks-a-button>
-              <ks-a-button search-filter namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="q" filter-value="${response.searchText}">
+              <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="q" filter-value="${response.searchText}">
                 <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
               </ks-a-button>
             </m-double-button>
           `
         }
+
+        this.generateFilterButtons(response?.filters)
       })
     })
   }
