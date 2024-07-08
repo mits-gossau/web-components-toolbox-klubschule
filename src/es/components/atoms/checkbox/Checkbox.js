@@ -2,8 +2,14 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class Checkbox extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    this.isLabelClickable = this.hasAttribute('clickable-label')
+
+    if (this.isLabelClickable) {
+      const currentLabel = this.querySelector('label')
+      if (currentLabel) currentLabel.setAttribute('clickable-label', '')
+    }
 
     this.clickEventListener = event => {
       event.preventDefault()
@@ -25,7 +31,7 @@ export default class Checkbox extends Shadow() {
     }
   }
 
-  connectedCallback () {
+  connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     /**
      * Handle checked on box
@@ -46,20 +52,20 @@ export default class Checkbox extends Shadow() {
           composed: true
         })
       )
-    } 
+    }
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     this.clickableElements.forEach(element => element.removeEventListener('click', this.clickEventListener))
   }
 
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(
       `${this.cssSelector} > style[_css]`
     )
   }
 
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */ `
         :host {
             display: flex;
@@ -117,6 +123,10 @@ export default class Checkbox extends Shadow() {
           line-height: 1.25em;
           font-weight: 400;
         }
+
+        :host label a:hover {
+          text-decoration: underline !important;
+        } 
 
         :host input[type='checkbox'] {
             position: absolute;
@@ -188,7 +198,7 @@ export default class Checkbox extends Shadow() {
   /**
    * fetches the template
    */
-  fetchTemplate () {
+  fetchTemplate() {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     switch (this.getAttribute('namespace')) {
       case 'checkbox-default-':
@@ -200,11 +210,11 @@ export default class Checkbox extends Shadow() {
     }
   }
 
-  get input () {
+  get input() {
     return this.root.querySelector('input[type="checkbox"]')
   }
 
-  get clickableElements () {
-    return this.root.querySelectorAll('.control > *:not(input[type="checkbox"])')
+  get clickableElements() {
+    return this.root.querySelectorAll('.control > *:not(input[type="checkbox"], label[clickable-label])')
   }
 }
