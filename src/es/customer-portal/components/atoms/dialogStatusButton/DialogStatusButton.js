@@ -199,6 +199,9 @@ export default class DialogStatusButton extends Shadow() {
         `
       case (type === 'subscriptions'): {
         const url = this.createSubscriptionRenewLink(this.dataContent)
+        // Leave it as it is for the time being
+        // Will be exchanged at SAP OK
+        // const { subscriptionSearchUrl } = this.dataContent
         return /* html */ `
           <ks-a-button
             href="${url}" 

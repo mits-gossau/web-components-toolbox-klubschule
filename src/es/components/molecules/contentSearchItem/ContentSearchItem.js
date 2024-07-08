@@ -72,8 +72,14 @@ export default class ContentSearchItem extends Shadow() {
         }
 
         @media only screen and (max-width: _max-width_) {
+          :host {
+            --aspect-ratio: 1;
+            --img-width: 3.5rem;
+          }
+
           :host a div {
-            width: 15.625rem;
+            max-width: 23rem;
+            flex: 1;
           }
           
           :host h3 {

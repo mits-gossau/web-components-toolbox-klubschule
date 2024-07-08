@@ -60,7 +60,7 @@ self.Environment = {
       case 'int':
         return 'https://miducaexportapicustomerportalint.azurewebsites.net'
       case 'localhost':
-        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
+        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
       case 'dev':
         return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
       case 'devadmin':

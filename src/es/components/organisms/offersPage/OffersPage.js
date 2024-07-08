@@ -98,9 +98,6 @@ export default class OffersPage extends Shadow() {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
       const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-      if (data.ppage >= 0 && data.total > data.psize * data.ppage) {
-        bodySection.shadowRoot.querySelector('#pagination').classList.remove('hidden')
-      }
 
       // Set Sort
       const sort = bodySection.shadowRoot.querySelector('#sort-options')
@@ -540,7 +537,7 @@ export default class OffersPage extends Shadow() {
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.getTranslation('CourseList.FilterAllPlaceholder')}
                   </ks-a-button>
                   <!-- buttons to filter -->
-                  <ks-m-filter-select ${this.hasAttribute('with-filter-search') ? 'with-filter-search' : ''}></ks-m-filter-select>
+                  <ks-m-filter-select ${this.hasAttribute('with-filter-search') && !this.hasAttribute('with-search-input') ? 'with-filter-search-button' : ''}></ks-m-filter-select>
                 </section>
               </o-grid>
               <ks-a-spacing type="s-flex"></ks-a-spacing>
@@ -549,7 +546,7 @@ export default class OffersPage extends Shadow() {
             `}
               <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
-              <ks-a-with-facet-pagination class="hidden" id="pagination">
+              <ks-a-with-facet-pagination id="pagination" pagination-event-name="request-with-facet" pagination-event-name="with-facet">
                 <ks-a-button namespace="button-primary-" color="secondary">
                     <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
