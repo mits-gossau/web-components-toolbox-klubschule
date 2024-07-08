@@ -112,14 +112,15 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('clat', event.detail.lat)
           this.updateURLParam('clong', event.detail.lng)
           this.updateURLParam('cname', encodeURIComponent(event.detail.description))
+          currentRequestObj.sorting = 2
         } else {
           if (currentRequestObj.clat) delete currentRequestObj.clat
           if (currentRequestObj.clong) delete currentRequestObj.clong
           this.deleteParamFromUrl('clat')
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
+          currentRequestObj.sorting = 1
         }
-        currentRequestObj.sorting = event.detail.id || 2
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
