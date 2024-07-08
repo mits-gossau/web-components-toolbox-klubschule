@@ -390,6 +390,7 @@ export default class OffersPage extends Shadow() {
               right: 0;
               --button-secondary-border-color: var(--m-gray-700);
               --button-secondary-background-color: var(--m-white);
+              --button-secondary-border-color-hover-custom: var(--m-gray-700);
               --button-secondary-background-color-hover: var(--m-white);
               --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
               --button-secondary-padding: 0.65rem 1.5rem;
@@ -402,6 +403,12 @@ export default class OffersPage extends Shadow() {
               }
             </style>
               <a-button namespace="button-secondary-" id="clear-input" request-event-name="reset-filter" filter-key="q">
+              <style>
+                :host>button,
+                :host>button:hover {
+                  border-left: none;
+                }
+              </style>
                 <a-icon-mdx icon-name="X" class="icon-right">
                 </a-icon-mdx>
               </a-button>
@@ -431,14 +438,13 @@ export default class OffersPage extends Shadow() {
                       answer-event-name="location-change"
                       autocomplete="off"
                     >
-                    ${this.getTranslation('CourseList.SearchInYourAreaPlaceholder')}
                     </a-input>
                     <div id="close">
                         <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                     </div>
                 </div>
                 <div class="container">
-                    <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
+                    <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" use-keyup-navigation auto-complete-selection="auto-complete-location-selection">
                         <ul>
                             <li id="user-location">
                                 <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
@@ -489,6 +495,7 @@ export default class OffersPage extends Shadow() {
           right: 0;
           --button-secondary-border-color: var(--m-gray-700);
           --button-secondary-background-color: var(--m-white);
+          --button-secondary-border-color-hover-custom: var(--m-gray-700);
           --button-secondary-background-color-hover: var(--m-white);
           --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
           --button-secondary-padding: 0.65rem 1.5rem;
@@ -501,6 +508,12 @@ export default class OffersPage extends Shadow() {
           }
         </style>
         <a-button namespace="button-secondary-" id="clear-input" request-event-name="reset-filter" filter-key="cname">
+        <style>
+        :host>button,
+        :host>button:hover {
+          border-left: none;
+        }
+      </style>
             <a-icon-mdx  icon-name="X" class="icon-right">
             </a-icon-mdx>
         </a-button>
