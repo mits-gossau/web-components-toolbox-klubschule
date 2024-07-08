@@ -1,6 +1,7 @@
 :root {
   --a-emotion-pictures-margin-top-first-child: auto;
   --color:#262626;
+  --icon-color: #3d3d3d;
   --scrollbar-gutter-desktop: stable;
   --scrollbar-gutter-mobile: auto;
   --any-content-spacing-mobile: var(--any-content-spacing);
