@@ -248,7 +248,6 @@ export default class WithFacet extends WebWorker() {
         "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
-        "onlycourse": true,
         "sorting": ${sorting === 2 ? 1 : 2}
         ${searchText ? `,"searchText": "${searchText}"` : ''}
         ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}

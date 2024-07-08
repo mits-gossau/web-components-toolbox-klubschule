@@ -123,28 +123,6 @@ export default class OffersPage extends Shadow() {
           </ks-m-sort>
         `
       }
-
-      // prevent anchor link for scrolling to call api again
-      document.addEventListener('DOMContentLoaded', function () {
-        document.addEventListener('click', function (event) {
-          // @ts-ignore
-          const anchor = event.target.closest('a')
-
-          if (anchor && anchor.getAttribute('href').startsWith('#')) {
-            const currentHash = window.location.hash
-            const targetHash = anchor.getAttribute('href')
-
-            // if the current hash is the same as the target hash, prevent the default action
-            if (currentHash === targetHash) {
-              event.preventDefault()
-              return false
-            }
-
-            return true
-          }
-        })
-      })
-
     })
   }
 
