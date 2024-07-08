@@ -178,10 +178,6 @@ export default class Abonnements extends Shadow() {
         name: 'ks-m-tile'
       },
       {
-        path: `${this.importMetaUrl}../../atoms/abonnementsPagination/AbonnementsPagination.js`,
-        name: 'ks-a-abonnements-pagination'
-      },
-      {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
         name: 'ks-a-button'
       }
