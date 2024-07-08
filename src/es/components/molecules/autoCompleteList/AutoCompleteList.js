@@ -110,11 +110,16 @@ export default class AutoCompleteList extends Shadow() {
           border-radius: var(--li-item-border-radius, 0.25em);
         }
 
-        :host ul li:hover,
-        :host ul li.active  {
+        :host ul li:hover  {
           cursor: pointer;
           background-color: var(--m-blue-100); 
         }
+        
+        :host ul li.active  {
+          cursor: pointer;
+          background-color: var(--m-blue-200); 
+        }
+
 
         :host ul li + li {
           margin-top: 0.25em;

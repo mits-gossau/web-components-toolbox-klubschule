@@ -402,11 +402,11 @@ export default class OffersPage extends Shadow() {
                 }
               }
             </style>
-              <a-button namespace="button-secondary-" id="clear-input" request-event-name="reset-filter" filter-key="q">
+              <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
               <style>
                 :host>button,
                 :host>button:hover {
-                  border-left: none;
+                  border-left: none !important;
                 }
               </style>
                 <a-icon-mdx icon-name="X" class="icon-right">
@@ -507,11 +507,11 @@ export default class OffersPage extends Shadow() {
             }
           }
         </style>
-        <a-button namespace="button-secondary-" id="clear-input" request-event-name="reset-filter" filter-key="cname">
+        <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="cname">
         <style>
         :host>button,
         :host>button:hover {
-          border-left: none;
+          border-left: none !important;
         }
       </style>
             <a-icon-mdx  icon-name="X" class="icon-right">
