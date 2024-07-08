@@ -320,12 +320,15 @@ export default class Event extends Shadow() {
         font-weight: 500;
       }
 
-      :host table + p {
-        margin-top: 1rem;
-        font-size: 0.875rem;
-        line-height: 1.125rem;
-        font-weight: 400;
-        margin-bottom: 0;
+      :host table + p,
+      :host table + ul {
+        color: var(--mdx-sys-color-neutral-default);
+        font: var(--mdx-sys-font-fix-body2);
+        margin: 1rem 0 0;
+      }
+
+      :host table + ul {
+        padding-left: 1rem;
       }
 
       :host .address div {

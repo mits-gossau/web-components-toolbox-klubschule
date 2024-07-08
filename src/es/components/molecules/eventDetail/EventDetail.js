@@ -198,6 +198,17 @@ export default class EventDetail extends Shadow() {
         margin-bottom: 0;
       }
 
+      :host table + p,
+      :host table + ul {
+        color: var(--mdx-sys-color-neutral-default);
+        font: var(--mdx-sys-font-fix-body2);
+        margin: 1rem 0 0;
+      }
+
+      :host table + ul {
+        padding-left: 1rem;
+      }
+
       :host .address div {
         display: flex;
         flex-direction: row;
