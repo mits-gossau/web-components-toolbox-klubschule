@@ -137,7 +137,6 @@ export default class OffersPage extends Shadow() {
             // if the current hash is the same as the target hash, prevent the default action
             if (currentHash === targetHash) {
               event.preventDefault()
-              console.log('Navigation prevented to avoid API call.')
               return false
             }
 
