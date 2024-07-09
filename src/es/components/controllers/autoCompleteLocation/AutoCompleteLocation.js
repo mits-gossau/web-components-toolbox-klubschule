@@ -226,6 +226,7 @@ export default class AutoCompleteLocation extends Shadow() {
   }
 
   clickOnLocateMe = (event) => {
+    console.log('clickOnLocateMe', event)
     const { lat, lng } = event.detail
 
     this.setCoordinationFilter(lat, lng)

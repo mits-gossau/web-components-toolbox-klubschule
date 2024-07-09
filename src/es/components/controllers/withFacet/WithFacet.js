@@ -88,7 +88,7 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
         if (filterKey === 'q') delete currentRequestObj.searchText
-        if (filterKey === 'cdist') {
+        if (filterKey === 'cname') {
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('clat')
           delete currentRequestObj.cname
@@ -361,7 +361,7 @@ export default class WithFacet extends WebWorker() {
 
   updateURLParam (key, value) {
     if (this.params) {
-      if (this.params.has(key) && key !== 'q') {
+      if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname') {
         const currentValues = this.params.get(key)?.split('-')
         if (!currentValues?.includes(value)) {
           currentValues?.push(value)
