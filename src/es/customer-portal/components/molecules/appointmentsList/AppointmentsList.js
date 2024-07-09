@@ -252,7 +252,7 @@ export default class AppointmentsList extends Shadow() {
       option.text = item.subscriptionDescription
       if (item.selected) {
         option.setAttribute('selected', 'selected')
-        hintDataValidFromDate = `<a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${this.formatSubscriptionValidFromDate(item.subscriptionValidFrom)}`
+        hintDataValidFromDate = `<a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${this.formatSubscriptionValidFromDate(item.subscriptionValidTo)}`
         hintDataSubscriptionBalance = item.subscriptionMode === 'WERTABO' ? `| <a-translation data-trans-key="CP.cpSubscriptionColumnBalance"></a-translation> ${item.subscriptionBalance}` : ''
       }
       select.appendChild(option)
