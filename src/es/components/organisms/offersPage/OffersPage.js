@@ -369,6 +369,7 @@ export default class OffersPage extends Shadow() {
                   --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
                   --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
                   --button-secondary-font-weight: 400;
+                  --button-secondary-icon-right-margin: 0 0 0 1.5rem;
 					    }
 
               @media only screen and (max-width: 767px) {
@@ -379,7 +380,7 @@ export default class OffersPage extends Shadow() {
                 }
 					}
           </style>
-          <ks-a-button id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
+          <ks-a-button ellipsis-text id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
                 default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
                   <a-icon-mdx icon-name="Search" class="icon-right">
                   </a-icon-mdx>
@@ -474,6 +475,7 @@ export default class OffersPage extends Shadow() {
                   --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
                   --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
                   --button-secondary-font-weight: 400;
+                  --button-secondary-icon-right-margin: 0 0 0 1.5rem;
 					    }
 
               @media only screen and (max-width: 767px) {
@@ -484,7 +486,7 @@ export default class OffersPage extends Shadow() {
                 }
 					}
 				</style>
-				<ks-a-button id="show-modal-location" namespace="button-secondary-" answer-event-name="location-change"
+				<ks-a-button id="show-modal-location" namespace="button-secondary-" ellipsis-text answer-event-name="location-change"
 					default-label="${this.getTranslation('CourseList.YourLocationPlaceholder')}">
 					<a-icon-mdx icon-name="Location" class="icon-right">
 					</a-icon-mdx>
