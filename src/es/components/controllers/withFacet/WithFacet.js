@@ -98,7 +98,7 @@ export default class WithFacet extends WebWorker() {
         this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = result[1]
+        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
         currentRequestObj.sorting = 1
         if (isTree) {
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
