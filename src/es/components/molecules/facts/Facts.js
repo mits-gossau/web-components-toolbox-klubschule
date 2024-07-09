@@ -27,9 +27,15 @@ export default class Facts extends Shadow() {
         }
 
         :host h2 {
-          font-size: 2.25rem;
-          line-height: 2.5rem;
-          font-weight: 500;
+          font-family: var(--mdx-sys-font-flex-headline2-font-family);
+          font-weight: var(--mdx-sys-font-flex-headline2-font-weight);
+          line-height: var(--mdx-sys-font-flex-headline2-line-height);
+          font-size: var(--mdx-sys-font-flex-headline2-font-size);
+          letter-spacing: var(--mdx-sys-font-flex-headline2-letter-spacing);
+          padding: var(--mdx-sys-font-flex-headline2-paragraph-spacing);
+          text-transform: var(--mdx-sys-font-flex-headline2-text-case);
+          text-decoration: var(--mdx-sys-font-flex-headline2-text-decoration);
+
           margin: 0;
         }
 
@@ -73,6 +79,7 @@ export default class Facts extends Shadow() {
           font-size: 1.5rem;
           line-height: 1.625rem;
           font-weight: 500;
+          text-align: center;
         }
 
         @media only screen and (max-width: _max-width_) {

@@ -177,21 +177,13 @@ export default class TileList extends Shadow() {
       }
 
       :host .o-tile-list__price {
-        font-family: var(--mdx-sys-font-fix-label3-font-family);
-        font-size: var(--mdx-sys-font-fix-label3-font-size);
-        font-weight: var(--mdx-sys-font-fix-label3-font-weight);
-        line-height: var(--mdx-sys-font-fix-label3-line-height);
-        letter-spacing: var(--mdx-sys-font-fix-label3-letter-spacing);
+        font: var(--mdx-sys-font-fix-label4);
         text-align: end;
         white-space: nowrap;
       }
       
       :host .o-tile-list__price strong {
-        font-family: var(--mdx-sys-font-flex-headline3-font-family);
-        font-size: var(--mdx-sys-font-flex-headline3-font-size);
-        font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
-        line-height: var(--mdx-sys-font-flex-headline3-line-height);
-        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);
+        font: var(--mdx-sys-font-fix-label1);
         white-space: initial;
       }
 

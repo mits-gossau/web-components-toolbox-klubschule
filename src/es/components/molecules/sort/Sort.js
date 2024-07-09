@@ -73,7 +73,7 @@ export default class Sort extends Shadow() {
     this.css = /* css */`
       :host .m-sort {
         position: relative;
-        display: flex;
+        display: inline-flex;
         justify-content: var(--justify-content);
       }
 

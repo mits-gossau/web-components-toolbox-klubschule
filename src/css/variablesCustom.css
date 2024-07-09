@@ -439,6 +439,7 @@
   --icon-mdx-ks-forms-svg-width: 1rem;
 
   /* google maps */
+  --map-height: 42rem;
   --map-height-mobile: 120vw;
 
   /* form */

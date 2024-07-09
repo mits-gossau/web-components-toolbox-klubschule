@@ -47,6 +47,7 @@ export default class SubscriptionsList extends Shadow() {
         display: flex;
         flex-direction: column;
         gap: 1em;
+        padding-bottom: 2em;
       }
       @media only screen and (max-width: _max-width_) {
         :host  {}
@@ -125,18 +126,24 @@ export default class SubscriptionsList extends Shadow() {
       ])
       Promise.all([fetchModules]).then((children) => {
         this.html = ''
-        const subscriptionList = this.renderSubscriptionsList(subscriptions, children[0][0])
+        const activeSubscriptionGridHeader = this.renderGridHeader('CP.cpActiveSubscription')
+        const activeSubscriptionList = this.renderSubscriptionsList(subscriptions.activeSubscriptions, children[0][0])
+        let expiredSubscriptionGridHeader = ''
+        let expiredSubscriptionList = null
+        if (subscriptions.expiredSubscriptions.length) {
+          expiredSubscriptionGridHeader = this.renderGridHeader('CP.cpExpiredSubscription')
+          expiredSubscriptionList = this.renderSubscriptionsList(subscriptions.expiredSubscriptions, children[0][0])
+        }
         this.html = /* html */ `
-          <o-grid namespace="grid-12er-">
-            <div col-lg="12" col-md="12" col-sm="12">
-              <ks-a-heading tag="h1" mode="false">
-                <a-translation data-trans-key="CP.cpActiveSubscription"></a-translation>
-              </ks-a-heading>
-            </div>    
-          </o-grid>
+          ${activeSubscriptionGridHeader}
           <div class="list-wrapper">
-            ${subscriptionList.list.join('')}
+            ${activeSubscriptionList.list.join('')}
           </div>
+          ${expiredSubscriptionGridHeader}
+          <div class="list-wrapper">
+            ${expiredSubscriptionList ? expiredSubscriptionList.list.join('') : ''}
+          </div> 
+         
         `
         return this.html
       })
@@ -146,14 +153,25 @@ export default class SubscriptionsList extends Shadow() {
     })
   }
 
+  renderGridHeader (transKey) {
+    return /* html */ `
+      <o-grid namespace="grid-12er-">
+        <div col-lg="12" col-md="12" col-sm="12">
+          <ks-a-heading tag="h1" mode="false">
+            <a-translation data-trans-key="${transKey}"></a-translation>
+          </ks-a-heading>
+        </div>
+      </o-grid>
+    `
+  }
+
   renderLoading () {
     this.html = '<mdx-component><mdx-spinner size="large"></mdx-spinner></mdx-component>'
   }
 
   renderSubscriptionsList (subscriptions, tileComponent) {
-    const { activeSubscriptions } = subscriptions
     const list = []
-    activeSubscriptions.forEach(subscription => {
+    subscriptions.forEach(subscription => {
       const tile = this.makeTileComponent(tileComponent, subscription)
       list.push(tile.outerHTML)
     })
