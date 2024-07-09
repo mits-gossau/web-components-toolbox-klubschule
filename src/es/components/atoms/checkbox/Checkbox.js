@@ -4,11 +4,10 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Checkbox extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    this.isLabelClickable = this.hasAttribute('clickable-label')
-
-    if (this.isLabelClickable) {
-      const currentLabel = this.querySelector('label')
-      if (currentLabel) currentLabel.setAttribute('clickable-label', '')
+    const currentLabel = this.querySelector('label')
+    if (currentLabel) {
+      const labelHasAClickableElem = currentLabel.querySelector('a')
+      if (labelHasAClickableElem) currentLabel.setAttribute('a-tag-in-label', '')
     }
 
     this.clickEventListener = event => {
@@ -215,6 +214,6 @@ export default class Checkbox extends Shadow() {
   }
 
   get clickableElements() {
-    return this.root.querySelectorAll('.control > *:not(input[type="checkbox"], label[clickable-label])')
+    return this.root.querySelectorAll('.control > *:not(input[type="checkbox"], label[a-tag-in-label])')
   }
 }
