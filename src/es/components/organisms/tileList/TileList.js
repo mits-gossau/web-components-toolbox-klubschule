@@ -127,7 +127,8 @@ export default class TileList extends Shadow() {
         font-size: var(--mdx-sys-font-flex-headline3-font-size);
         font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
         line-height: var(--mdx-sys-font-flex-headline3-line-height);
-        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);        
+        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);
+        cursor: pointer;
       }
 
       :host a-icon-mdx {
@@ -299,7 +300,7 @@ export default class TileList extends Shadow() {
     <div class="o-tile-list">
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
-            <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
+            <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}<div>text</div></span>
             ${data.infotextshort
               ? /* html */`
                 <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
@@ -373,9 +374,12 @@ export default class TileList extends Shadow() {
     this.toggle = this.root.querySelector('.o-tile-list__bottom-left')
     this.tilesContainer = this.root.querySelector('.o-tile-list__tiles')
     this.loadMore = this.root.querySelector('#request-more-locations')
+    this.tileTitle = this.root.querySelector('.o-tile-list__title')
 
     this.toggle.addEventListener('click', this.clickEventListener)
+    this.tileTitle.addEventListener('click', this.clickEventListener)
     this.loadMore.addEventListener('click', this.loadMoreClickEventListener)
+
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
