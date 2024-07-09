@@ -401,6 +401,9 @@ export default class WithFacet extends WebWorker() {
       this.params.delete('clong')
       this.params.delete('cname')
 
+      // write in url without history push state
+      
+
       WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
