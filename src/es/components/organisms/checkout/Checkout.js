@@ -65,7 +65,8 @@ export default class Checkout extends Shadow() {
       })
     })
 
-    const radioInputs = this.root.querySelectorAll('input[type=radio]')
+    const radioInputs = this.root.querySelectorAll('input[type=radio][id^=Annulationskostenversicherung]')
+
     Array.from(radioInputs).forEach(input => {
       input.addEventListener('change', (event) => {
         this.dispatchEvent(new CustomEvent('request-checkout-configuration', {
