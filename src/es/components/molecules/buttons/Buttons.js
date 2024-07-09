@@ -120,7 +120,7 @@ export default class Buttons extends Shadow() {
 
     const buttons = dataButtons?.reduce((acc, button) => {
       // keep existing url params
-      if (shouldKeepURLParams && button.link) {
+      if (shouldKeepURLParams && button.link && filteredURLParams) {
         if (button.link.includes('?')) {
           button.link = button.link + '&' + filteredURLParams
         } else {
