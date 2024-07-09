@@ -259,32 +259,27 @@ export default class AppointmentsList extends Shadow() {
     })
     const html = /* html */ `
       <style>
-        .select-label {
+        :host label {
           color: var(--mdx-comp-select-label-color-default);
           font: var(--mdx-comp-select-font-label);
         }
+        :host .hint {
+          padding-top:1em;
+        }
+        :host .hint span:first-child {
+          font-size:medium !important;
+        }
       </style>
       <div>
-        <div class="select-label">
-          <!-- trans value = zeige Termine mit dem Abo -->
-          <a-translation data-trans-key="CP.cpShowAppointmentsFromSubscription"></a-translation>
-        </div>
-        <ks-m-select>
-          <style>
-            :host .hint {
-              padding-top:1em;
-            }
-            :host .hint span:first-child {
-              font-size:medium !important;
-            }
-          </style>
-          <div>
-            ${select.outerHTML}
-          </div>
-          <div class="hint">
-            <span>${hintDataValidFromDate} ${hintDataSubscriptionBalance}</span>
-          </div>
-        </ks-m-select>
+          <ks-m-select mode="false">
+              <div class="wrap">
+                  <label for="${select.id}"><a-translation data-trans-key="CP.cpShowAppointmentsFromSubscription"></a-translation></label>
+                  ${select.outerHTML}
+                  <div class="hint">
+                    <span>${hintDataValidFromDate} ${hintDataSubscriptionBalance}</span>
+                  </div>
+              </div>
+          </ks-m-select>
       </div>
     `
     return html
