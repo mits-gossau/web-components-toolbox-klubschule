@@ -47,6 +47,7 @@ export default class SubscriptionsList extends Shadow() {
         display: flex;
         flex-direction: column;
         gap: 1em;
+        padding-bottom: 2em;
       }
       @media only screen and (max-width: _max-width_) {
         :host  {}
