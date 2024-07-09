@@ -3,7 +3,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 
 export default class BackForward extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)  
   }
 
   connectedCallback () {
@@ -54,6 +54,13 @@ export default class BackForward extends Shadow() {
   renderHTML () {
     this.html = /* html */`
       <div class="back-forward">
+        ${this.hasAttribute('close-label')
+          ? /* html */`
+            <ks-a-button big href="${this.getAttribute('back-link')}" namespace="button-tertiary-" color="secondary">
+              ${this.getAttribute('close-label')}
+            </ks-a-button>`
+          : ''
+        }
         ${this.hasAttribute('back-link')
           ? /* html */`<ks-a-button big href="${this.getAttribute('back-link')}" namespace="button-tertiary-" color="secondary">
               <a-icon-mdx icon-name="ChevronLeft" size="1em" class="icon-left"></a-icon-mdx>
