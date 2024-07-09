@@ -116,11 +116,12 @@ export default class Buttons extends Shadow() {
       ] // GA parameters
       const filteredURLKeys = urlParamsArray.filter(key => !ignoreURLKeys.includes(key))
       filteredURLParams = filteredURLKeys.map(key => `${key}=${urlParamsMap.get(key)}`).join('&')
+      console.log('filteredURLParams', filteredURLParams)
     }
 
     const buttons = dataButtons?.reduce((acc, button) => {
       // keep existing url params
-      if (shouldKeepURLParams && button.link && filteredURLParams) {
+      if (shouldKeepURLParams && button.link && filteredURLParams.length > 0) {
         if (button.link.includes('?')) {
           button.link = button.link + '&' + filteredURLParams
         } else {
