@@ -290,18 +290,26 @@ export default class WithFacet extends WebWorker() {
   }
 
   connectedCallback () {
-    this.addEventListener('request-with-facet', this.requestWithFacetListener)
-    this.addEventListener('reset-all-filters', this.requestWithFacetListener)
-    this.addEventListener('reset-filter', this.requestWithFacetListener)
-    this.addEventListener('request-locations', this.requestLocations)
+    this.getAttribute('expand-event-name') === 'request-with-facet' ? self.addEventListener('request-with-facet', this.requestWithFacetListener) : this.addEventListener('request-with-facet', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.addEventListener('reset-all-filters', this.requestWithFacetListener) : this.addEventListener('reset-all-filters', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
+    
     self.addEventListener('popstate', this.popstateListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener('request-with-facet', this.requestWithFacetListener)
-    this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
-    this.removeEventListener('reset-filter', this.requestWithFacetListener)
-    this.removeEventListener('request-locations', this.requestLocations)
+    this.getAttribute('expand-event-name') === 'request-with-facet' ? self.removeEventListener('request-with-facet', this.requestWithFacetListener) : this.removeEventListener('request-with-facet', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.removeEventListener('reset-all-filters', this.requestWithFacetListener) : this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
+    
+    this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
+
     self.removeEventListener('popstate', this.popstateListener)
   }
 

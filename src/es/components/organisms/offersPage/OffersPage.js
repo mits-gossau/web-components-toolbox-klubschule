@@ -162,6 +162,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
         ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
+        ${this.hasAttribute('expand-event-name') ? ` expand-event-name='${this.getAttribute('expand-event-name')}'` : ''}
       >
       ${this.eventDetailURL || this.hasAttribute('no-search-tab')
         ? this.tabContentOne
