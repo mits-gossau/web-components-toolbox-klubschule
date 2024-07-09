@@ -383,7 +383,7 @@ export default class WithFacet extends WebWorker() {
         this.params.set(key, value)
       }
 
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
@@ -401,25 +401,22 @@ export default class WithFacet extends WebWorker() {
       this.params.delete('clong')
       this.params.delete('cname')
 
-      // write in url without history push state
-      
-
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
   deleteParamFromUrl (filterKey) {
     if (this.params) {
       this.params.delete(filterKey)
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  static historyPushState (...args) {
+  static historyReplaceState (...args) {
     // Avoid multiple empty pushes, otherwise the navigation history becomes jammed
     if ((new URL(args[2])).search !== location.search) {
       // @ts-ignore
-      self.history.pushState(...args)
+      self.history.replaceState(...args)
     }
   }
 }
