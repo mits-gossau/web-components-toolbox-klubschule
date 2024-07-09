@@ -507,7 +507,7 @@ export default class OffersPage extends Shadow() {
             }
           }
         </style>
-        <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="cdist">
+        <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="cname">
         <style>
         :host>button,
         :host>button:hover {
