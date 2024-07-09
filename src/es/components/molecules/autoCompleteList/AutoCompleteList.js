@@ -297,10 +297,8 @@ export default class AutoCompleteList extends Shadow() {
       if (currentActiveLiItem) {
         this.ulListItems?.forEach((li) => li.classList.remove('active'))
         currentActiveLiItem.click()
-      } else {
-        if (this.ulListItems && this.ulListItems[0] && !this.ulListItems[0].hasAttribute('id')) {
-          this.ulListItems[0].click()
-        }
+      } else if (!currentActiveLiItem && this.ulListItems[0].getAttribute('id') !== 'user-location') {
+        this.ulListItems[0].click()
       }
     } else {
       const maxLength = this.ulListItems.length - 2
