@@ -392,7 +392,7 @@ export default class OffersPage extends Shadow() {
               --button-secondary-border-color-hover-custom: var(--m-gray-700);
               --button-secondary-background-color-hover: var(--m-white);
               --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
-              --button-secondary-padding: 0.65rem 1.5rem;
+              --button-secondary-padding: 0.625rem 1.5rem;
               }
     
               @media only screen and (max-width: 767px) {
@@ -498,12 +498,12 @@ export default class OffersPage extends Shadow() {
           --button-secondary-border-color-hover-custom: var(--m-gray-700);
           --button-secondary-background-color-hover: var(--m-white);
           --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
-          --button-secondary-padding: 0.65rem 1.5rem;
+          --button-secondary-padding: 0.625rem 1.5rem;
           }
 
           @media only screen and (max-width: 767px) {
             :host>a-button {
-            --button-secondary-padding: 0.3rem 0.9rem;
+            --button-secondary-padding: 0.275rem 0.9rem;
             }
           }
         </style>
