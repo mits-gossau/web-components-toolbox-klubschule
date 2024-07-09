@@ -36,6 +36,13 @@ export default class KsGoogleMaps extends GoogleMaps {
       :host(ks-a-google-maps) {
         margin: 0 !important;
       }
+
+      @media (max-width: _max-width_) {
+        :host #gm-btn-zoom-in,
+        :host #gm-btn-zoom-out {
+          display: none;
+        }
+      }
     `
   }
 
@@ -116,7 +123,16 @@ export default class KsGoogleMaps extends GoogleMaps {
 
           // Add a marker clusterer to manage the markers.
           this.loadMarkerClustererDependency().then(markerClusterer => {
-            new markerClusterer.MarkerClusterer({ markers, map, renderer: clusterRenderer })
+            return new markerClusterer.MarkerClusterer({
+              markers,
+              map,
+              renderer: clusterRenderer,
+              onClusterClick: (_, cluster, map) => {
+                /* zooming one step in instead of default behavior, so the user always has a smooth animation */
+                map.panTo(cluster.position)
+                map.setZoom(map.getZoom() + 1)
+              }
+            })
           })
 
           this.createControls(map, googleMap)
@@ -170,8 +186,8 @@ export default class KsGoogleMaps extends GoogleMaps {
         <h4>${location.name}</h4>
         <hr />
         <ks-m-contact-row
-          name="${location.name}"
-          street="${location.address}"
+          street="${location.street}"
+          place="${location.city}"
           icon-name="Location"
         >
         </ks-m-contact-row>
@@ -298,7 +314,7 @@ export default class KsGoogleMaps extends GoogleMaps {
       const markerClustererScript = document.createElement('script')
       markerClustererScript.setAttribute('type', 'text/javascript')
       markerClustererScript.setAttribute('async', '')
-      markerClustererScript.setAttribute('src', 'https://unpkg.com/@googlemaps/markerclusterer@2.5.3/dist/index.min.js')
+      markerClustererScript.setAttribute('src', `${this.importMetaUrl}/markerclusterer-2-5-3.min.js`)
       markerClustererScript.onload = () => {
         // @ts-ignore
         if ('google' in self) resolve(self.markerClusterer)

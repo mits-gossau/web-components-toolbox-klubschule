@@ -81,6 +81,7 @@ export default class WithFacet extends WebWorker() {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
+        delete currentRequestObj.searchText
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
@@ -100,11 +101,11 @@ export default class WithFacet extends WebWorker() {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
-        this.updateURLParam(filterKey, filterValue)
         const isTree = event?.detail?.target?.type === "tree"
+        this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = result[1]
+        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
         currentRequestObj.sorting = 1
         if (isTree) {
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
@@ -118,14 +119,17 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('clat', event.detail.lat)
           this.updateURLParam('clong', event.detail.lng)
           this.updateURLParam('cname', encodeURIComponent(event.detail.description))
+          currentRequestObj.sorting = 2
         } else {
           if (currentRequestObj.clat) delete currentRequestObj.clat
           if (currentRequestObj.clong) delete currentRequestObj.clong
           this.deleteParamFromUrl('clat')
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
+          currentRequestObj.ppage = -1
+          currentRequestObj.sorting = 3
+          if (currentRequestObj.searchText) currentRequestObj.sorting = 1
         }
-        currentRequestObj.sorting = event.detail.id || 2
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
@@ -251,7 +255,6 @@ export default class WithFacet extends WebWorker() {
         "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
-        "onlycourse": true,
         "sorting": ${sorting === 2 ? 1 : 2}
         ${searchText ? `,"searchText": "${searchText}"` : ''}
         ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}
@@ -314,7 +317,7 @@ export default class WithFacet extends WebWorker() {
         const isParentSelected = selectedParent?.urlpara === filterKey
         // @ts-ignore
         if (filterItem.selected && isIdOrUrlpara && !isTree) {
-          filterItem.selected = false // toggle filterItem if is is already selected
+          filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
         } else if (filterItem.selected && !isIdOrUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isIdOrUrlpara && isParentSelected) {
@@ -359,7 +362,7 @@ export default class WithFacet extends WebWorker() {
     return new URLSearchParams(self.location.search)
   }
 
-  updateURLParam (key, value) {
+  updateURLParam (key, value, isTree = false) {
     if (this.params) {
       if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname') {
         const currentValues = this.params.get(key)?.split('-')
@@ -375,11 +378,19 @@ export default class WithFacet extends WebWorker() {
             this.params.delete(key)
           }
         }
+      } else if (key && isTree) {
+        // for sector filters (isTree): check all params if key is set as value of another key
+        const keys = Array.from(this.params.keys())
+        for (const k of keys) {
+          const value = this.params.get(k)
+          if (value === key) this.params.delete(k)
+        }
+        this.params.set(key, value)
       } else {
         this.params.set(key, value)
       }
 
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
@@ -397,22 +408,22 @@ export default class WithFacet extends WebWorker() {
       this.params.delete('clong')
       this.params.delete('cname')
 
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
   deleteParamFromUrl (filterKey) {
     if (this.params) {
       this.params.delete(filterKey)
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  static historyPushState (...args) {
+  static historyReplaceState (...args) {
     // Avoid multiple empty pushes, otherwise the navigation history becomes jammed
     if ((new URL(args[2])).search !== location.search) {
       // @ts-ignore
-      self.history.pushState(...args)
+      self.history.replaceState(...args)
     }
   }
 }

@@ -120,7 +120,7 @@ export default class Buttons extends Shadow() {
 
     const buttons = dataButtons?.reduce((acc, button) => {
       // keep existing url params
-      if (shouldKeepURLParams && button.link) {
+      if (shouldKeepURLParams && button.link && filteredURLParams) {
         if (button.link.includes('?')) {
           button.link = button.link + '&' + filteredURLParams
         } else {
@@ -224,8 +224,8 @@ export default class Buttons extends Shadow() {
   }
 
   renderDialogContent(content) {
+    const dialog = this.root.querySelector("m-dialog")
     if (content.texte?.length) {
-      const dialog = this.root.querySelector("m-dialog")
       dialog.classList.remove("hidden")
 
       this.root.querySelector(".container.dialog-header #overlay-title").innerHTML = /* html */ `
@@ -266,6 +266,7 @@ export default class Buttons extends Shadow() {
         if (buttons.children?.length < 2) buttons.appendChild(wrapperDiv.querySelector('ks-a-button'))
       })
     } else {
+      dialog.removeAttribute("open")
       window.location.href = content.link
     }
   }
