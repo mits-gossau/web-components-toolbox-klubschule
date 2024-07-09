@@ -116,7 +116,6 @@ export default class Buttons extends Shadow() {
       ] // GA parameters
       const filteredURLKeys = urlParamsArray.filter(key => !ignoreURLKeys.includes(key))
       filteredURLParams = filteredURLKeys.map(key => `${key}=${urlParamsMap.get(key)}`).join('&')
-      console.log('filteredURLParams', filteredURLParams)
     }
 
     const buttons = dataButtons?.reduce((acc, button) => {
