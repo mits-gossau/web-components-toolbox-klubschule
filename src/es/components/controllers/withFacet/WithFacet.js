@@ -44,6 +44,9 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter
+    // hold the initial response filters from the very first response call to be able to reset filters for "tree" filters
+    let firstRequest = true
+    let initialResponseFilters = null
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
@@ -103,6 +106,12 @@ export default class WithFacet extends WebWorker() {
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
         const isTree = event?.detail?.target?.type === "tree"
+        if (isTree) {
+          // replace currentCompleteFilterObj.filter of "typ: tree" with initialResponseFilters.filter of "typ: tree" to avoid multi selection
+          const initialResponseFiltersTree = initialResponseFilters.filter(filterItem => filterItem.typ === 'tree')
+          currentCompleteFilterObj = currentCompleteFilterObj.filter(filterItem => filterItem.typ !== 'tree')
+          currentCompleteFilterObj = [...currentCompleteFilterObj, ...initialResponseFiltersTree]
+        } 
         this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
@@ -201,6 +210,12 @@ export default class WithFacet extends WebWorker() {
             }).then(json => {
               // update filters with api response
               currentRequestObj.filter = currentCompleteFilterObj = json.filters
+
+              // hold the json.filters from the very first response call
+              if (firstRequest) {
+                initialResponseFilters = json.filters
+                firstRequest = false
+              }
 
               return json
             }).finally(json => {
