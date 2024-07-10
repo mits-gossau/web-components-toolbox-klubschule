@@ -152,7 +152,7 @@ export default class AutoComplete extends Shadow() {
   homeSearchInput(searchText) {
     const searchUrl = this.getAttribute('search-url')
     // redirect to search page
-    if (searchText !== '') {
+    if (searchUrl && searchText !== '') {
       // create url object to check if searchUrl has query params
       const url = new URL(searchUrl)
       url.searchParams.set('q', searchText)
