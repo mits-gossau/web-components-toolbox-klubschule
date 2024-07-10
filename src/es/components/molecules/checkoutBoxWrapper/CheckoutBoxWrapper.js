@@ -174,6 +174,10 @@ export default class CheckoutBoxWrapper extends Shadow() {
         :host .full-width > span + div {
           margin-top: 0;
         }
+
+        :host(.ks-o-body-section__last-child) .full-width ks-a-checkbox {
+          width: 100%;
+        }
       }
     `
   }
