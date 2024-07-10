@@ -17,8 +17,10 @@ export default class PartnerSearch extends HTMLElement {
   constructor () {
     super()
 
-    let MandantId = this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 110
-    let PortalId = this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29
+    const initialRequest = this.getAttribute('initial-request')
+    const initialRequestJSON = JSON.parse(initialRequest || "{}")
+    let MandantId = initialRequestJSON.MandantId || 110
+    let PortalId = initialRequestJSON.PortalId || 29
     let alternativePortalIds = this.getAttribute("alternative-portal-ids-search")
     let parsedAlternativePortalIds = JSON.parse(alternativePortalIds || "") || []
     let sprachid = this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd'

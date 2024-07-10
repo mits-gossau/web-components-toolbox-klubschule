@@ -114,7 +114,6 @@ export default class PartnerSearch extends Shadow() {
     this.html = ''
     this.renderLoading()
     if (fetch) {
-      console.log('*********', fetch, this.hiddenMessages)
       // fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
       const data = this.lastData = await fetch
       this.html = ''
