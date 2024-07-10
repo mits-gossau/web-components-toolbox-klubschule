@@ -431,7 +431,7 @@ export default class WithFacet extends WebWorker() {
     // Avoid multiple empty pushes, otherwise the navigation history becomes jammed
     if ((new URL(args[2])).search !== location.search) {
       // @ts-ignore
-      self.history.replaceState(...args)
+      self.history.pushStateState(...args)
     }
   }
 }
