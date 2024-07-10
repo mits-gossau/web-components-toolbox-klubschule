@@ -152,7 +152,7 @@ export default class TileFactory extends Shadow() {
             return acc = acc + tile
           },
           '<section>'
-        ) + '</section>' : `<span class=no-search-results><a-translation data-trans-key="${this.getAttribute('no-search-results-text') ?? 'Search.NoResults'}"></a-translation></span>`
+        ) + '</section>' : `${this.hasAttribute('no-search-results-text') ? `<span class=no-search-results><a-translation data-trans-key="${this.getAttribute('no-search-results-text')}"></a-translation></span>` : ''}`
       }, 0)
     }).catch(error => {
       console.error(error)
