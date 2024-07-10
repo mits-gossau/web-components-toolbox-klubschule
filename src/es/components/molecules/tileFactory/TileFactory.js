@@ -15,6 +15,8 @@ export default class TileFactory extends Shadow() {
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
 
     this.hiddenMessages = this.hiddenSections
+
+    this.previousPpage = null
   }
 
   connectedCallback () {
@@ -113,11 +115,16 @@ export default class TileFactory extends Shadow() {
     `
 
     return fetch.then(data => {
+      
+      // How to keep the data.ppage from former fetch?
       setTimeout(() => {
+        console.log('Ppage:', data.ppage)
+        if (this.previousPpage !== data.ppage) {
+          console.log('Previous ppage:', this.previousPpage)
+        }
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
 
-        // ppage -1 together with pnext -1 means last page of search results after clicking last "more results" button
         if (data.ppage === 1 || data.ppage === -1) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
@@ -161,6 +168,7 @@ export default class TileFactory extends Shadow() {
             ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
           </ks-o-partner-search>
         `
+        this.previousPpage = data.ppage
       }, 0)
     }).catch(error => {
       console.error(error)
