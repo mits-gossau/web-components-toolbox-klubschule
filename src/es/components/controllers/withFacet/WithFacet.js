@@ -59,9 +59,9 @@ export default class WithFacet extends WebWorker() {
 
     // intial sorting when page is refreshed
     if (!currentRequestObj.sorting) {
-      currentRequestObj.sorting = 3
-      if (currentRequestObj.searchText) currentRequestObj.sorting = 1
-      if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 2
+      currentRequestObj.sorting = 3 // alphabetic
+      if (currentRequestObj.searchText) currentRequestObj.sorting = 1 // relevance
+      if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 2 // distance
     }
 
     this.requestWithFacetListener = async event => {
@@ -95,6 +95,7 @@ export default class WithFacet extends WebWorker() {
           delete currentRequestObj.cname
           delete currentRequestObj.clong
           delete currentRequestObj.clat
+          currentRequestObj.sorting = 1
         }
         this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
