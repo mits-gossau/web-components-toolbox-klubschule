@@ -116,7 +116,7 @@ export default class KsButton extends Button {
 
   answerEventListener = async event => {
     this.removeBtn = this.getRootNode().querySelector("a-button[id='clear']")
-    this.removeBtn.style.display = 'none'
+    if (this.removeBtn) this.removeBtn.style.display = 'none'
     let searchTerm = event.detail.searchTerm
     if (searchTerm && this.removeBtn) {
       this.buttonSpan.classList.remove('hide')
