@@ -198,6 +198,17 @@ export default class EventDetail extends Shadow() {
         margin-bottom: 0;
       }
 
+      :host table + p,
+      :host table + ul {
+        color: var(--mdx-sys-color-neutral-default);
+        font: var(--mdx-sys-font-fix-body2);
+        margin: 1rem 0 0;
+      }
+
+      :host table + ul {
+        padding-left: 1rem;
+      }
+
       :host .address div {
         display: flex;
         flex-direction: row;
@@ -290,7 +301,7 @@ export default class EventDetail extends Shadow() {
           </table>
           ${this.data.kurs_zusatzinfo ? /* html */ `<p>${this.data.kurs_zusatzinfo}</p>` : ''}          
         </div>
-        ${this.data.location_label && this.data.durchfuehrungaddresse?.beschreibung ? /* html */ `
+        ${this.data.location_label && (this.data.durchfuehrungaddresse?.beschreibung || this.data.durchfuehrungaddresse?.strasse || this.data.durchfuehrungaddresse?.ort) ? /* html */ `
           <div class="address">
             <h3>
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1em"></a-icon-mdx>

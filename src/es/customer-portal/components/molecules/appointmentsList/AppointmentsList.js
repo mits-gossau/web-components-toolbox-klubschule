@@ -3,6 +3,7 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 import { makeUniqueCourseId, escapeForHtml } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
+/* global self */
 
 /**
  * @export
@@ -121,6 +122,7 @@ export default class AppointmentsList extends Shadow() {
         display: flex;
         flex-direction: column;
         gap: 1em;
+        padding-bottom: 2em;
       }
       @media only screen and (max-width: _max-width_) {
         :host  {}
@@ -240,6 +242,8 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderFilterSubscriptions (subscriptionsData) {
+    let hintDataValidFromDate = ''
+    let hintDataSubscriptionBalance = ''
     const select = document.createElement('select')
     select.id = 'filters-subscriptions'
     subscriptionsData.forEach(item => {
@@ -247,26 +251,36 @@ export default class AppointmentsList extends Shadow() {
       const value = { subscriptionId: item.subscriptionId, subscriptionType: item.subscriptionType }
       option.value = JSON.stringify(value)
       option.text = item.subscriptionDescription
-      if (item.selected) option.setAttribute('selected', 'selected')
+      if (item.selected) {
+        option.setAttribute('selected', 'selected')
+        hintDataValidFromDate = `<a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${this.formatSubscriptionValidFromDate(item.subscriptionValidTo)}`
+        hintDataSubscriptionBalance = item.subscriptionMode === 'WERTABO' ? `| <a-translation data-trans-key="CP.cpSubscriptionColumnBalance"></a-translation> ${item.subscriptionBalance}` : ''
+      }
       select.appendChild(option)
     })
     const html = /* html */ `
       <style>
-        .select-label {
+        :host label {
           color: var(--mdx-comp-select-label-color-default);
           font: var(--mdx-comp-select-font-label);
         }
+        :host .hint {
+          padding-top:1em;
+        }
+        :host .hint span:first-child {
+          font-size:medium !important;
+        }
       </style>
       <div>
-        <div class="select-label">
-          <!-- trans value = zeige Termine mit dem Abo -->
-          <a-translation data-trans-key="CP.cpShowAppointmentsFromSubscription"></a-translation>
-        </div>
-        <ks-m-select>
-          <div>
-            ${select.outerHTML}
-          </div>
-        </ks-m-select>
+          <ks-m-select mode="false">
+              <div class="wrap">
+                  <label for="${select.id}"><a-translation data-trans-key="CP.cpShowAppointmentsFromSubscription"></a-translation></label>
+                  ${select.outerHTML}
+                  <div class="hint">
+                    <span>${hintDataValidFromDate} ${hintDataSubscriptionBalance}</span>
+                  </div>
+              </div>
+          </ks-m-select>
       </div>
     `
     return html
@@ -371,7 +385,6 @@ export default class AppointmentsList extends Shadow() {
   }
 
   updateCourseListFilterSettings (filterList, subscriptionId, subscriptionType) {
-    // const getSelectedDayCodes = filterList.dayCodes
     const dayCodes = filterList.dayCodes.filter(dayCode => dayCode.selected).map(dayCode => dayCode.dayCode)
     const locations = filterList.locations.filter(location => location.selected).map(location => location.locationId)
     const timeCodes = filterList.timeCodes.filter(timeCode => timeCode.selected).map(timeCode => timeCode.timeCode)
@@ -394,5 +407,13 @@ export default class AppointmentsList extends Shadow() {
         composed: true
       }
     ))
+  }
+
+  formatSubscriptionValidFromDate (dateString) {
+    const dateObject = new Date(dateString)
+    const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
+    // @ts-ignore
+    const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
+    return formatter.format(dateObject)
   }
 }

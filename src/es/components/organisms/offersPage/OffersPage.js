@@ -45,7 +45,6 @@ export default class OffersPage extends Shadow() {
         }
       })
     }
-
     this.isEasyPortal = !!this.hasAttribute('is-easy-portal')
   }
 
@@ -163,6 +162,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
         ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
+        ${this.hasAttribute('expand-event-name') ? ` expand-event-name='${this.getAttribute('expand-event-name')}'` : ''}
       >
       <ks-c-partner-search ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''} ${this.hasAttribute('endpoint-search-partner') ? `endpoint="${this.getAttribute('endpoint-search-partner')}"` : ''}${this.hasAttribute("alternative-portal-ids-search") ? ` alternative-portal-ids-search="${this.getAttribute("alternative-portal-ids-search")}"` : ''}>
         ${this.eventDetailURL || this.hasAttribute('no-search-tab')
@@ -325,7 +325,7 @@ export default class OffersPage extends Shadow() {
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
           ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
         >
-          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog">
+          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
             <dialog>
               <div class="container">
                 <a-input
@@ -353,19 +353,70 @@ export default class OffersPage extends Shadow() {
                 </ks-m-auto-complete-list>
               </div>
             </dialog>
-            <a-input
-              id="show-modal"
-              inputid="show-modal"
-              placeholder="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
-              icon-name="Search"
-              icon-size="1.25em"
-              search type="search"
-              answer-event-name="search-change"
-              readonly
-              pointer
-              autocomplete="off"
-            >
-            </a-input>
+            <style>
+                :host>ks-a-button {
+                  width: 100%;
+                  --button-secondary-background-color: var(--m-white);
+                  --button-secondary-background-color-hover: var(--m-white);
+                  --button-secondary-width: 100%;
+                  --button-secondary-border-color: var(--m-gray-700);
+                  --button-secondary-border-color-hover: var(--m-gray-700);
+                  --button-secondary-color: var(--m-gray-700);
+                  --button-secondary-color-hover: var(--m-gray-700);
+                  --button-secondary-cursor: text;
+                  --button-secondary-justify-content: space-between;
+                  --button-secondary-padding: 0.5rem 1.5rem;
+                  --button-secondary-font-size: 1.15rem;
+                  --button-secondary-height: 2.88rem;
+                  --svg-size: 1.5rem;
+                  --svg-size-mobile: 1.2rem;
+                  --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+                  --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
+                  --button-secondary-font-weight: 400;
+                  --button-secondary-icon-right-margin: 0 0 0 1.5rem;
+					    }
+
+              @media only screen and (max-width: 767px) {
+                :host>ks-a-button {
+                  --button-secondary-padding: 0.5rem 0.9rem;
+                  --button-secondary-font-size: 1rem;
+                  --button-secondary-height: 2.22rem;
+                }
+					}
+          </style>
+          <ks-a-button ellipsis-text id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
+                default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
+                  <a-icon-mdx icon-name="Search" class="icon-right">
+                  </a-icon-mdx>
+              </ks-a-button>
+              <style>
+              :host>a-button {
+              position: absolute;
+              right: 0;
+              --button-secondary-border-color: var(--m-gray-700);
+              --button-secondary-background-color: var(--m-white);
+              --button-secondary-border-color-hover-custom: var(--m-gray-700);
+              --button-secondary-background-color-hover: var(--m-white);
+              --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+              --button-secondary-padding: 0.625rem 1.5rem;
+              }
+    
+              @media only screen and (max-width: 767px) {
+                :host>a-button {
+                --button-secondary-padding: 0.3rem 0.9rem;
+                }
+              }
+            </style>
+              <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
+              <style>
+                :host>button,
+                :host>button:hover {
+                  border-left: none !important;
+                }
+              </style>
+                <a-icon-mdx icon-name="X" class="icon-right">
+                </a-icon-mdx>
+              </a-button>
           </m-dialog>
         </ks-c-auto-complete>
       </div>
@@ -392,14 +443,13 @@ export default class OffersPage extends Shadow() {
                       answer-event-name="location-change"
                       autocomplete="off"
                     >
-                    ${this.getTranslation('CourseList.SearchInYourAreaPlaceholder')}
                     </a-input>
                     <div id="close">
                         <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                     </div>
                 </div>
                 <div class="container">
-                    <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" auto-complete-selection="auto-complete-location-selection">
+                    <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" use-keyup-navigation auto-complete-selection="auto-complete-location-selection">
                         <ul>
                             <li id="user-location">
                                 <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
@@ -427,7 +477,9 @@ export default class OffersPage extends Shadow() {
                   --svg-size: 1.5rem;
                   --svg-size-mobile: 1.2rem;
                   --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+                  --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
                   --button-secondary-font-weight: 400;
+                  --button-secondary-icon-right-margin: 0 0 0 1.5rem;
 					    }
 
               @media only screen and (max-width: 767px) {
@@ -438,11 +490,39 @@ export default class OffersPage extends Shadow() {
                 }
 					}
 				</style>
-				<ks-a-button id="show-modal-location" namespace="button-secondary-" answer-event-name="location-change"
+				<ks-a-button id="show-modal-location" namespace="button-secondary-" ellipsis-text answer-event-name="location-change"
 					default-label="${this.getTranslation('CourseList.YourLocationPlaceholder')}">
 					<a-icon-mdx icon-name="Location" class="icon-right">
 					</a-icon-mdx>
 				</ks-a-button>
+        <style>
+          :host>a-button {
+          position: absolute;
+          right: 0;
+          --button-secondary-border-color: var(--m-gray-700);
+          --button-secondary-background-color: var(--m-white);
+          --button-secondary-border-color-hover-custom: var(--m-gray-700);
+          --button-secondary-background-color-hover: var(--m-white);
+          --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+          --button-secondary-padding: 0.625rem 1.5rem;
+          }
+
+          @media only screen and (max-width: 767px) {
+            :host>a-button {
+            --button-secondary-padding: 0.275rem 0.9rem;
+            }
+          }
+        </style>
+        <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="cname">
+        <style>
+        :host>button,
+        :host>button:hover {
+          border-left: none !important;
+        }
+      </style>
+            <a-icon-mdx  icon-name="X" class="icon-right">
+            </a-icon-mdx>
+        </a-button>
             </m-dialog>
         </ks-c-auto-complete-location>
       </div>
@@ -550,7 +630,11 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options"></section>
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
-              <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}>
+              <ks-m-tile-factory 
+                ${this.eventDetailURL ? 'is-event ' : ''}
+                ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
+                ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
+              >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
