@@ -118,14 +118,11 @@ export default class TileFactory extends Shadow() {
       
       // How to keep the data.ppage from former fetch?
       setTimeout(() => {
-        console.log('Ppage:', data.ppage)
-        if (this.previousPpage !== data.ppage) {
-          console.log('Previous ppage:', this.previousPpage)
-        }
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
 
-        if (data.ppage === 1 || data.ppage === -1) this.html = ''
+        // keep html if loading more data; this is not the case when ppage is -1 and the previous ppage was 1
+        if (data.ppage === 1 || data.ppage === -1 && this.previousPpage === 1) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
