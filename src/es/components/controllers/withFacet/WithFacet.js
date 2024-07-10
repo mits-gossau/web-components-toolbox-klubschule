@@ -85,11 +85,18 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
-        this.deleteParamFromUrl(filterKey)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
         if (filterKey === 'q') delete currentRequestObj.searchText
+        if (filterKey === 'cname') {
+          this.deleteParamFromUrl('clong')
+          this.deleteParamFromUrl('clat')
+          delete currentRequestObj.cname
+          delete currentRequestObj.clong
+          delete currentRequestObj.clat
+        }
+        this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
@@ -98,7 +105,7 @@ export default class WithFacet extends WebWorker() {
         this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = result[1]
+        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
         currentRequestObj.sorting = 1
         if (isTree) {
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
@@ -283,18 +290,26 @@ export default class WithFacet extends WebWorker() {
   }
 
   connectedCallback () {
-    this.addEventListener('request-with-facet', this.requestWithFacetListener)
-    this.addEventListener('reset-all-filters', this.requestWithFacetListener)
-    this.addEventListener('reset-filter', this.requestWithFacetListener)
-    this.addEventListener('request-locations', this.requestLocations)
+    this.getAttribute('expand-event-name') === 'request-with-facet' ? self.addEventListener('request-with-facet', this.requestWithFacetListener) : this.addEventListener('request-with-facet', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.addEventListener('reset-all-filters', this.requestWithFacetListener) : this.addEventListener('reset-all-filters', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
+    
     self.addEventListener('popstate', this.popstateListener)
   }
 
   disconnectedCallback () {
-    this.removeEventListener('request-with-facet', this.requestWithFacetListener)
-    this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
-    this.removeEventListener('reset-filter', this.requestWithFacetListener)
-    this.removeEventListener('request-locations', this.requestLocations)
+    this.getAttribute('expand-event-name') === 'request-with-facet' ? self.removeEventListener('request-with-facet', this.requestWithFacetListener) : this.removeEventListener('request-with-facet', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.removeEventListener('reset-all-filters', this.requestWithFacetListener) : this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
+    
+    this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
+
     self.removeEventListener('popstate', this.popstateListener)
   }
 
@@ -357,7 +372,7 @@ export default class WithFacet extends WebWorker() {
 
   updateURLParam (key, value, isTree = false) {
     if (this.params) {
-      if (this.params.has(key) && key !== 'q') {
+      if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname') {
         const currentValues = this.params.get(key)?.split('-')
         if (!currentValues?.includes(value)) {
           currentValues?.push(value)

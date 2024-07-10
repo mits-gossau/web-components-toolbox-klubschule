@@ -1,6 +1,7 @@
 :root {
   --a-emotion-pictures-margin-top-first-child: auto;
   --color:#262626;
+  --icon-color: #3d3d3d;
   --scrollbar-gutter-desktop: stable;
   --scrollbar-gutter-mobile: auto;
   --any-content-spacing-mobile: var(--any-content-spacing);
@@ -231,6 +232,7 @@
   --header-nav-right-height-custom: calc(100rem/18);
   --header-nav-right-margin-custom: 0 0 1rem 0;
   --header-nav-right-padding: 0;
+  --header-nav-grid-a-menu-icon-border-radius-custom: 1px;
   --header-nav-grid-a-menu-icon-height: 2px;
   --header-content-width: calc(min(100%, var(--body-max-width)) - 2.5rem);
   --header-content-width-mobile: calc(min(100%, var(--body-max-width)) - 1rem);
@@ -274,6 +276,9 @@
   --icon-color-blue: var(--mdx-sys-color-primary-default);
   --content-width: 80%;
   --body-no-scroll-overflow: visible;
+  --top-slide-in-close-height: 3rem; 
+  --left-slide-in-close-height: 3rem; 
+
 
   --search-input-tiles-search-input-border-color: var(--m-gray-700);
   --search-input-tiles-search-input-padding: 0.875em 1.5em;
