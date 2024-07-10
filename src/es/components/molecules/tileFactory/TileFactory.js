@@ -123,7 +123,7 @@ export default class TileFactory extends Shadow() {
         this.isNearbySearch = data.sort.sort === 2
         this.psize = data.psize
         this.pnext = data.pnext
-        this.html = data.courses.reduce(
+        this.html = data.courses.length > 0 ? data.courses.reduce(
           (acc, course) => {
             const tile = this.isEventSearch ? /* html */ `
               <ks-m-event
@@ -152,7 +152,7 @@ export default class TileFactory extends Shadow() {
             return acc = acc + tile
           },
           '<section>'
-        ) + '</section>'
+        ) + '</section>' : `<span class=no-search-results><a-translation data-trans-key="${this.getAttribute('no-search-results-text') ?? 'Search.NoResults'}"></a-translation></span>`
       }, 0)
     }).catch(error => {
       console.error(error)

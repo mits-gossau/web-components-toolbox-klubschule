@@ -624,7 +624,12 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options"></section>
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
-              <ks-m-tile-factory ${this.eventDetailURL ? 'is-event ' : ''}${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}></ks-m-tile-factory>
+              <ks-m-tile-factory 
+                ${this.eventDetailURL ? 'is-event ' : ''}
+                ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
+                ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
+                ${this.hasAttribute('no-search-results-text') ? `no-search-results-text="${this.getAttribute('no-search-results-text')}"` : ''}
+              ></ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               <ks-a-with-facet-pagination id="pagination" pagination-event-name="request-with-facet" pagination-event-name="with-facet">
                 <ks-a-button namespace="button-primary-" color="secondary">
