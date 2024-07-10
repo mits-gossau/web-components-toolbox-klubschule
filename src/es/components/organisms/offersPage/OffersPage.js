@@ -46,6 +46,33 @@ export default class OffersPage extends Shadow() {
       })
     }
     this.isEasyPortal = !!this.hasAttribute('is-easy-portal')
+
+    // easter egg, dancing cat
+    this.dancingCat = document.createElement('img')
+    this.dancingCat.id = 'dancing-cat'
+    this.dancingCat.src = '../../../../img/giphy.gif'
+    this.dancingCat.setAttribute('hidden', '')
+    this.dancingCat.setAttribute('style', 'position: absolute; left: calc(50% - 240px); top: calc(50% - 240px); z-index:10000;')
+    this.root.appendChild(this.dancingCat)
+    const konamiCode = [
+        'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+        'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+        'KeyB', 'KeyA'
+    ]
+    let konamiCodePosition = 0
+    this.dancingCat = this.root.getElementById('dancing-cat')
+    this.catEventListener = (event) => {  
+      if (event.code === konamiCode[konamiCodePosition]) {
+          konamiCodePosition++
+          if (konamiCodePosition === konamiCode.length) {
+              this.activateEasterEgg()
+              konamiCodePosition = 0
+          }
+      } else {
+          konamiCodePosition = 0
+      }
+    }
+
   }
 
   connectedCallback() {
@@ -69,11 +96,20 @@ export default class OffersPage extends Shadow() {
       Promise.all(showPromises).then(() => (this.hidden = false))
     })
     this.addEventListener('with-facet', this.withFacetListener)
+    this.addEventListener('keydown', this.catEventListener)
   }
 
   disconnectedCallback() {
     this.removeEventListener('with-facet', this.withFacetListener)
   }
+
+  activateEasterEgg() {
+    this.dancingCat.removeAttribute('hidden')
+    console.log('Easter Egg activated!')
+    setTimeout(() => {
+        this.dancingCat.setAttribute('hidden', '')
+    }, 5000); // display for 5 seconds
+}
 
   shouldRenderCSS() {
     return !this.root.querySelector(
