@@ -101,6 +101,7 @@ export default class OffersPage extends Shadow() {
 
   disconnectedCallback() {
     this.removeEventListener('with-facet', this.withFacetListener)
+    this.removeEventListener('keydown', this.catEventListener)
   }
 
   activateEasterEgg() {
