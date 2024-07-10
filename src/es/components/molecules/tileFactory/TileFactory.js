@@ -115,7 +115,8 @@ export default class TileFactory extends Shadow() {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
 
-        if (data.ppage === 1 || data.ppage === -1) this.html = ''
+        // ppage -1 together with pnext -1 means last page of search results after clicking last "more results" button
+        if (data.ppage === 1 || data.ppage === -1 && data.pnext !== -1) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
