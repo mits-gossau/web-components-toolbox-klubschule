@@ -77,7 +77,6 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
-        console.log('ppage', currentRequestObj)
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
@@ -152,7 +151,6 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
         currentRequestObj.ppage = 0
-        console.log('sorting', currentRequestObj)
       } else {
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
