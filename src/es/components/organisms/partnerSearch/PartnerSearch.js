@@ -19,7 +19,6 @@ export default class PartnerSearch extends Shadow() {
 
   connectedCallback(){
     this.hidden = true
-    const showPromises = []
     new Promise(resolve => {
       this.dispatchEvent(new CustomEvent('request-translations',
         {
@@ -159,6 +158,14 @@ export default class PartnerSearch extends Shadow() {
       }
     }
     return this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
+        name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/picture/Picture.js`,
+        name: 'a-picture'
+      },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
         name: 'a-translation'
