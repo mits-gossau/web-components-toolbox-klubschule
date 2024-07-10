@@ -13,6 +13,8 @@ export default class TileFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
+
+    this.hiddenMessages = this.hiddenSections
   }
 
   connectedCallback () {
@@ -119,6 +121,7 @@ export default class TileFactory extends Shadow() {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
 
+        // ppage -1 together with pnext -1 means last page of search results after clicking last "more results" button
         if (data.ppage === 1 || data.ppage === -1) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
@@ -127,7 +130,7 @@ export default class TileFactory extends Shadow() {
         this.isNearbySearch = data.sort.sort === 2
         this.psize = data.psize
         this.pnext = data.pnext
-        this.html = data.courses.length > 0 ? data.courses.reduce(
+        this.html = data.courses.reduce(
           (acc, course) => {
             const tile = this.isEventSearch ? /* html */ `
               <ks-m-event
@@ -164,7 +167,12 @@ export default class TileFactory extends Shadow() {
             return acc = acc + tile
           },
           '<section>'
-        ) + '</section>' : `${this.hasAttribute('no-search-results-text') ? `<span class=no-search-results><a-translation data-trans-key="${this.getAttribute('no-search-results-text')}"></a-translation></span>` : ''}`
+        ) + '</section>'
+        if (!data.courses.length && this.section) this.section.innerHTML = /* html */`
+          <ks-o-partner-search search-text="${data.searchText}">
+            ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+          </ks-o-partner-search>
+        `
       }, 0)
     }).catch(error => {
       console.error(error)
@@ -195,6 +203,10 @@ export default class TileFactory extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/loadTemplateTag/LoadTemplateTag.js`,
         name: 'm-load-template-tag'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
+        name: 'ks-o-partner-search'
       }
     ])
   }
@@ -270,5 +282,13 @@ export default class TileFactory extends Shadow() {
 
   get isEventSearch () {
     return this.hasAttribute('is-event')
+  }
+
+  get section () {
+    return this.root.querySelector('section')
+  }
+
+  get hiddenSections () {
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }

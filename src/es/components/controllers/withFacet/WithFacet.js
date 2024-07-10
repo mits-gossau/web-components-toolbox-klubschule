@@ -29,7 +29,7 @@ import { WebWorker } from '../../web-components-toolbox/src/es/components/protot
  * @type {CustomElementConstructor}
  */
 export default class WithFacet extends WebWorker() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({
       importMetaUrl: import.meta.url,
       mode: 'false',
@@ -44,6 +44,9 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter
+    // hold the initial response filters from the very first response call to be able to reset filters for "tree" filters
+    let firstRequest = true
+    let initialResponseFilters = null
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
@@ -82,20 +85,28 @@ export default class WithFacet extends WebWorker() {
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
+        currentRequestObj.sorting = 3
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
-        if (filterKey === 'q') delete currentRequestObj.searchText
+        if (filterKey === 'q') {
+          delete currentRequestObj.searchText
+          if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
+        }
         if (filterKey === 'cname') {
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('clat')
           delete currentRequestObj.cname
           delete currentRequestObj.clong
           delete currentRequestObj.clat
-          currentRequestObj.sorting = 1
+          if (currentRequestObj.searchText) {
+            currentRequestObj.sorting = 1
+          } else {
+            currentRequestObj.sorting = 3
+          }
         }
         this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
@@ -103,6 +114,12 @@ export default class WithFacet extends WebWorker() {
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
         const isTree = event?.detail?.target?.type === "tree"
+        if (isTree) {
+          // replace currentCompleteFilterObj.filter of "typ: tree" with initialResponseFilters.filter of "typ: tree" to avoid multi selection
+          const initialResponseFiltersTree = initialResponseFilters.filter(filterItem => filterItem.typ === 'tree')
+          currentCompleteFilterObj = currentCompleteFilterObj.filter(filterItem => filterItem.typ !== 'tree')
+          currentCompleteFilterObj = [...currentCompleteFilterObj, ...initialResponseFiltersTree]
+        }
         this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
@@ -143,13 +160,20 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
-        currentRequestObj.sorting = 1
+
+        if (event?.detail?.value !== '' && !currentRequestObj.clat) currentRequestObj.sorting = 1 // relevant
+
+        if (event?.detail?.value === '' && !currentRequestObj.clat) {
+          delete currentRequestObj.searchText
+          currentRequestObj.sorting = 3 // alphabetic
+        }
       } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
         // sorting
         currentRequestObj.sorting = event.detail.id || 3
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
+        currentRequestObj.ppage = 0
       } else {
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
@@ -200,6 +224,12 @@ export default class WithFacet extends WebWorker() {
             }).then(json => {
               // update filters with api response
               currentRequestObj.filter = currentCompleteFilterObj = json.filters
+
+              // hold the json.filters from the very first response call
+              if (firstRequest) {
+                initialResponseFilters = json.filters
+                firstRequest = false
+              }
 
               return json
             }).finally(json => {
@@ -290,7 +320,7 @@ export default class WithFacet extends WebWorker() {
     }
   }
 
-  connectedCallback () {
+  connectedCallback() {
     this.getAttribute('expand-event-name') === 'request-with-facet' ? self.addEventListener('request-with-facet', this.requestWithFacetListener) : this.addEventListener('request-with-facet', this.requestWithFacetListener)
 
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.addEventListener('reset-all-filters', this.requestWithFacetListener) : this.addEventListener('reset-all-filters', this.requestWithFacetListener)
@@ -298,24 +328,24 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
 
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
-    
+
     self.addEventListener('popstate', this.popstateListener)
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     this.getAttribute('expand-event-name') === 'request-with-facet' ? self.removeEventListener('request-with-facet', this.requestWithFacetListener) : this.removeEventListener('request-with-facet', this.requestWithFacetListener)
 
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.removeEventListener('reset-all-filters', this.requestWithFacetListener) : this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
 
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
-    
+
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
 
     self.removeEventListener('popstate', this.popstateListener)
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isTree = false) {
+  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isTree = false) {
     const treeShookFilters = []
     filters.forEach(filterItem => {
       const isMatchingKey = (filterItem.urlpara !== undefined) && (filterItem.urlpara === filterKey)
@@ -348,7 +378,7 @@ export default class WithFacet extends WebWorker() {
     return [filters, treeShookFilters]
   }
 
-  getLastSelectedFilterItem (filterItems) {
+  getLastSelectedFilterItem(filterItems) {
     filterItems.forEach(filterItem => {
       if (filterItem.children?.length) {
         filterItem.selected = false
@@ -361,17 +391,17 @@ export default class WithFacet extends WebWorker() {
     return filterItems
   }
 
-  static cleanRequest (requestObj) {
+  static cleanRequest(requestObj) {
     // Bad API needs filter for payload but responses with filters
     if (requestObj.filters) delete requestObj.filters
     return requestObj
   }
 
-  catchURLParams () {
+  catchURLParams() {
     return new URLSearchParams(self.location.search)
   }
 
-  updateURLParam (key, value, isTree = false) {
+  updateURLParam(key, value, isTree = false) {
     if (this.params) {
       if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname') {
         const currentValues = this.params.get(key)?.split('-')
@@ -399,11 +429,11 @@ export default class WithFacet extends WebWorker() {
         this.params.set(key, value)
       }
 
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  deleteAllFiltersFromUrl (filters) {
+  deleteAllFiltersFromUrl(filters) {
     if (this.params) {
       filters.forEach(filterItem => {
         if (filterItem.children && filterItem.children.length > 0) {
@@ -417,22 +447,22 @@ export default class WithFacet extends WebWorker() {
       this.params.delete('clong')
       this.params.delete('cname')
 
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  deleteParamFromUrl (filterKey) {
+  deleteParamFromUrl(filterKey) {
     if (this.params) {
       this.params.delete(filterKey)
-      WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  static historyPushState (...args) {
+  static historyReplaceState(...args) {
     // Avoid multiple empty pushes, otherwise the navigation history becomes jammed
     if ((new URL(args[2])).search !== location.search) {
       // @ts-ignore
-      self.history.pushState(...args)
+      self.history.replaceState(...args)
     }
   }
 }
