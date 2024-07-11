@@ -41,6 +41,11 @@ export default class BackForward extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
+      :host {
+        display: inline-block;
+        width: 100%;
+      }
+
       :host .back-forward {
         display: flex;
         align-items: center;
