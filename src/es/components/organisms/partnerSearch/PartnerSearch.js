@@ -148,7 +148,7 @@ export default class PartnerSearch extends Shadow() {
                 <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
                 <span>${item.text}</span>
                 <div>
-                  <ks-a-button namespace="button-secondary-" color="secondary" label="${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}" href="${item.link}"></ks-a-button>
+                  <ks-a-button namespace="button-secondary-" color="secondary" target="_blank" label="${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}" href="${item.link}"></ks-a-button>
                 </div>
               </div>
             `, '')}
