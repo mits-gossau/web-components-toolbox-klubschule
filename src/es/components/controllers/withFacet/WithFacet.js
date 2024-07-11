@@ -366,9 +366,24 @@ export default class WithFacet extends WebWorker() {
           selectedParent.selected = false // deselect filterItem if it is not selected
         }
       }
-      const treeShookFilterItem = structuredClone(filterItem)
+      let treeShookFilterItem = structuredClone(filterItem)
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
+      } else if (filterKey === 'center') {
+        if (filterItem.typ === 'group' && filterItem.urlpara === 'center') {
+          filterItem.children.forEach(region => {
+            region.children.forEach(center => {
+              if (center.id === filterValue) {
+                if (center.selected) {
+                  center.selected = false
+                } else {
+                  center.selected = true
+                }
+              }
+            })
+          })
+        }
+        treeShookFilterItem = structuredClone(filterItem)
       } else if (filterItem.children) {
         [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isTree)
       }
