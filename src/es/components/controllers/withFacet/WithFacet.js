@@ -63,9 +63,11 @@ export default class WithFacet extends WebWorker() {
     // intial sorting when page is refreshed
     if (!currentRequestObj.sorting) {
       currentRequestObj.sorting = 3 // alphabetic
-      if (currentRequestObj.searchText) currentRequestObj.sorting = 1 // relevance
       if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 2 // distance
     }
+
+    // If shared with active Sorting, keep param for other user
+    if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
 
     this.requestWithFacetListener = async event => {
       // mdx prevent double event
@@ -102,11 +104,8 @@ export default class WithFacet extends WebWorker() {
           delete currentRequestObj.cname
           delete currentRequestObj.clong
           delete currentRequestObj.clat
-          if (currentRequestObj.searchText) {
-            currentRequestObj.sorting = 1
-          } else {
-            currentRequestObj.sorting = 3
-          }
+          currentRequestObj.sorting = Number(this.params.get('sorting')) || 3
+          this.updateURLParam('sorting', currentRequestObj.sorting)
         }
         this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
@@ -124,7 +123,6 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
-        currentRequestObj.sorting = 1
         if (isTree) {
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
         }
@@ -138,6 +136,7 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('clong', event.detail.lng)
           this.updateURLParam('cname', encodeURIComponent(event.detail.description))
           currentRequestObj.sorting = 2
+          this.updateURLParam('sorting', 2)
         } else {
           if (currentRequestObj.clat) delete currentRequestObj.clat
           if (currentRequestObj.clong) delete currentRequestObj.clong
@@ -145,8 +144,8 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
           currentRequestObj.ppage = -1
-          currentRequestObj.sorting = 3
-          if (currentRequestObj.searchText) currentRequestObj.sorting = 1
+          currentRequestObj.sorting = this.params.get('sorting') || 3
+          this.updateURLParam('sorting', currentRequestObj.sorting)
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
@@ -161,15 +160,14 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
 
-        if (event?.detail?.value !== '' && !currentRequestObj.clat) currentRequestObj.sorting = 1 // relevant
-
         if (event?.detail?.value === '' && !currentRequestObj.clat) {
           delete currentRequestObj.searchText
           currentRequestObj.sorting = 3 // alphabetic
         }
-      } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
+      } else if (event?.detail?.key === 'sorting' && !!event.detail.id) {
         // sorting
         currentRequestObj.sorting = event.detail.id || 3
+        this.updateURLParam('sorting', currentRequestObj.sorting)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
@@ -418,7 +416,7 @@ export default class WithFacet extends WebWorker() {
 
   updateURLParam(key, value, isTree = false) {
     if (this.params) {
-      if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname') {
+      if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname' && key !== 'sorting') {
         const currentValues = this.params.get(key)?.split('-')
         if (!currentValues?.includes(value)) {
           currentValues?.push(value)
