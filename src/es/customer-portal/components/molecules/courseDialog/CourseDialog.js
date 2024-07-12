@@ -187,7 +187,7 @@ export default class CourseDialog extends Shadow() {
         </div>
         ${this.renderPriceInfoContent(data, detail)}
         <div class="details">
-          ${this.courseDetailsContent(detail)}
+          ${this.courseDetailsContent(detail, data)}
         </div>
         <div>
           <h3>Downloads</h3>
@@ -407,7 +407,7 @@ export default class CourseDialog extends Shadow() {
         </h2>
         </div>
         <div class="details">
-          ${this.courseDetailsContent(detail)}
+          ${this.courseDetailsContent(detail, data)}
         </div>
       </div>`
   }
@@ -662,11 +662,27 @@ export default class CourseDialog extends Shadow() {
    * @param detail - `detail`
    * @returns {string} Returning an HTML template string.
    */
-  courseDetailsContent (detail) {
+  courseDetailsContent (detail, subscriptionData = {}) {
+    let { subscriptionDescription, subscriptionBalance } = detail
+    if (this.dataset.listType === 'booked-appointments') {
+      subscriptionBalance = subscriptionData.subscriptionBalance
+      subscriptionDescription = subscriptionData.subscriptionDescription
+    }
+
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
     if (!state) return ''
     const validTo = this.formatCourseAppointmentDate(detail.subscriptionValidTo)
     const freeSeats = Number(state.status) ? state.status : ''
+
+    let renderBalance = ''
+    if (detail.subscriptionMode === 'WERTABO') {
+      renderBalance = /* html */ ` 
+          /
+          <!-- trans value = Aktuelles Guthaben -->
+          <a-translation data-trans-key="CP.cpBookingActualSubscriptionBalance"></a-translation> ${subscriptionBalance}
+      `
+    }
+
     return /* html */ `
       <div class="detail">
         <span>
@@ -709,12 +725,11 @@ export default class CourseDialog extends Shadow() {
           <!-- trans value = Abonnement -->
           <a-translation data-trans-key="CP.cpSubscriptionColumnDescription"></a-translation>
         </span>
-        <span>${detail.subscriptionDescription}</span>
+        <span>${subscriptionDescription}</span>
         <span>
           <!-- trans value = Gültig bis -->
-          <a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${validTo} / 
-          <!-- trans value = Aktuelles Guthaben -->
-          <a-translation data-trans-key="CP.cpBookingActualSubscriptionBalance"></a-translation> ${detail.subscriptionBalance}
+          <a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${validTo} 
+          ${renderBalance}
         </span>
       </div> 
     `

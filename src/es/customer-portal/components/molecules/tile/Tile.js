@@ -339,6 +339,7 @@ export default class AppointmentTile extends Tile {
             <div class="parent-footer">
               <div class="course-booking">
                 <m-course-dialog
+                  data-list-type="${this.dataset.listType}"
                   data-content="${escapeForHtml(JSON.stringify(content))}" 
                   data-id="${courseId}" 
                   data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"
