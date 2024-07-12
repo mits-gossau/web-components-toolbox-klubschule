@@ -15,6 +15,8 @@ export default class TileFactory extends Shadow() {
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
 
     this.hiddenMessages = this.hiddenSections
+
+    this.previousPpage = null
   }
 
   connectedCallback () {
@@ -121,8 +123,8 @@ export default class TileFactory extends Shadow() {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
 
-        // ppage -1 together with pnext -1 means last page of search results after clicking last "more results" button
-        if (data.ppage === 1 || data.ppage === -1) this.html = ''
+        // keep html if loading more data, but not when ppage is -1 and the previous ppage was 1
+        if (data.ppage === 1 || data.ppage === -1 && this.previousPpage === 1) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -145,7 +147,7 @@ export default class TileFactory extends Shadow() {
                 <m-load-template-tag mode="false">
                 <template>
                   <ks-o-tile-list data='{
-                    ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
+                    ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course).replace(/'/g, '’').replace(/"/g, '\"') : this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')},
                     "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
@@ -158,7 +160,7 @@ export default class TileFactory extends Shadow() {
                   <m-load-template-tag mode="false">
                   <template>
                   <ks-m-tile namespace="tile-default-" data='{
-                    ${this.fillGeneralTileInfo(course)}
+                    ${this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
                   </template>
                   </m-load-template-tag>
@@ -173,6 +175,7 @@ export default class TileFactory extends Shadow() {
             ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
           </ks-o-partner-search>
         `
+        this.previousPpage = data.ppage
       }, 0)
     }).catch(error => {
       console.error(error)
