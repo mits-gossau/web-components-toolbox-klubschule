@@ -19,8 +19,8 @@ export default class PartnerSearch extends HTMLElement {
 
     let MandantId = this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 110
     let PortalId = this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29
-    let alternativePortalIds = this.getAttribute("alternative-portal-ids-search")
-    let parsedAlternativePortalIds = JSON.parse(alternativePortalIds || "") || []
+    let alternativePortalIds = this.getAttribute("alternative-portal-ids-search") || ''
+    let parsedAlternativePortalIds = alternativePortalIds !== '' ? JSON.parse(alternativePortalIds) : []
     let sprachid = this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd'
     if (this.hasAttribute('initial-request')) {
       const initialRequest = JSON.parse(this.getAttribute('initial-request') || '{}')
