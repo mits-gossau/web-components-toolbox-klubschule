@@ -19,15 +19,36 @@ export default class KsButton extends Button {
       this.buttonSpan.textContent = this.getAttribute('default-label') || 'No added placeholder'
     }
     if (this.getAttribute('answer-event-name')) document.body.addEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
-    
+
     if (this.hasAttribute('ellipsis-text') && !this.buttonSpan.classList.contains('ellipsis-text')) {
       this.buttonSpan.classList.add('ellipsis-text')
+    }
+
+    this.formSubmitLoadingListener = (e) => {
+      const temp = document.createElement('div')
+      temp.innerHTML = '<mdx-component class="icon-right"><mdx-spinner size="small"></mdx-spinner></mdx-component>'
+      const spinner = temp.querySelector('mdx-component')
+      this.button.append(spinner)
+    }
+
+    if ((this.getAttribute('type') === 'submit') && this.hasAttribute('with-submit-loading')) {
+      this.fetchModules([
+        {
+          path: `${this.importMetaUrl}../../organisms/MdxComponent.js`,
+          name: 'mdx-component'
+        }
+      ])
+      this.closestForm = this.closest('form')
+      this.closestForm.addEventListener('submit', this.formSubmitLoadingListener)
     }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback()
     if (this.getAttribute('answer-event-name')) document.body.removeEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
+    if (this.closestForm) {
+      this.closestForm.removeEventListener('submit', this.formSubmitLoadingListener)
+    }
   }
 
   /**
