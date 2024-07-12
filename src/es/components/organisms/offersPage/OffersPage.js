@@ -164,33 +164,35 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
         ${this.hasAttribute('expand-event-name') ? ` expand-event-name='${this.getAttribute('expand-event-name')}'` : ''}
       >
-      ${this.eventDetailURL || this.hasAttribute('no-search-tab')
-        ? this.tabContentOne
-        : /* html */`
-          <ks-m-tab>
-            <ul class="tab-search-result">
-              <li>
-                <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
-                  <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
-                </ks-a-with-facet-counter>
-              </li>
-              <li>
-                <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
-                  <button tab-target="content2" id="total-stories-tab-heading"></button>
-                </ks-a-with-facet-counter>
-              </li>
-            </ul>
-            <div>
-              <div id="content1" tab-content-target>
-                ${this.tabContentOne}
+      <ks-c-partner-search ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''} ${this.hasAttribute('endpoint-search-partner') ? `endpoint="${this.getAttribute('endpoint-search-partner')}"` : ''}${this.hasAttribute("alternative-portal-ids-search") ? ` alternative-portal-ids-search="${this.getAttribute("alternative-portal-ids-search")}"` : ''}>
+        ${this.eventDetailURL || this.hasAttribute('no-search-tab')
+          ? this.tabContentOne
+          : /* html */`
+            <ks-m-tab>
+              <ul class="tab-search-result">
+                <li>
+                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
+                    <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
+                  </ks-a-with-facet-counter>
+                </li>
+                <li>
+                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
+                    <button tab-target="content2" id="total-stories-tab-heading"></button>
+                  </ks-a-with-facet-counter>
+                </li>
+              </ul>
+              <div>
+                <div id="content1" tab-content-target>
+                  ${this.tabContentOne}
+                </div>
+                <div id="content2" tab-content-target>
+                  ${this.tabContentTwo}
+                </div>
               </div>
-              <div id="content2" tab-content-target>
-                ${this.tabContentTwo}
-              </div>
-            </div>
-          </ks-m-tab>
-        `
-      }
+            </ks-m-tab>
+          `
+        }
+      </ks-c-partner-search>
     </ks-c-with-facet>`
 
     return this.fetchModules([
@@ -201,6 +203,10 @@ export default class OffersPage extends Shadow() {
       {
         path: `${this.importMetaUrl}../../controllers/withFacet/WithFacet.js`,
         name: 'ks-c-with-facet'
+      },
+      {
+        path: `${this.importMetaUrl}../../controllers/partnerSearch/PartnerSearch.js`,
+        name: 'ks-c-partner-search'
       },
       {
         path: `${this.importMetaUrl}../../controllers/eventDetail/EventDetail.js`,
@@ -546,7 +552,7 @@ export default class OffersPage extends Shadow() {
         </a-input>
       </ks-c-auto-complete>
     ` : ''
-
+    
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
@@ -628,8 +634,9 @@ export default class OffersPage extends Shadow() {
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
                 ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
-                ${this.hasAttribute('no-search-results-text') ? `no-search-results-text="${this.getAttribute('no-search-results-text')}"` : ''}
-              ></ks-m-tile-factory>
+              >
+                ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+              </ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               <ks-a-with-facet-pagination id="pagination" pagination-event-name="request-with-facet" pagination-event-name="with-facet">
                 <ks-a-button namespace="button-primary-" color="secondary">
@@ -694,5 +701,9 @@ export default class OffersPage extends Shadow() {
 
   get eventDetailURL() {
     return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
+  }
+
+  get hiddenSections () {
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }

@@ -13,6 +13,10 @@ export default class TileFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
+
+    this.hiddenMessages = this.hiddenSections
+
+    this.previousPpage = null
   }
 
   connectedCallback () {
@@ -64,6 +68,10 @@ export default class TileFactory extends Shadow() {
     :host > .error {
       color: var(--color-error);
     }
+    :host m-load-template-tag {
+      display: block;
+      min-height: 10em;
+    }
     @media only screen and (max-width: _max-width_) {
       :host > section {
         margin-left: -0.5rem;
@@ -110,13 +118,13 @@ export default class TileFactory extends Shadow() {
       </mdx-component>
     `
 
-    return fetch.then(data => {
+    fetch.then(data => {
       setTimeout(() => {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
 
-        // ppage -1 together with pnext -1 means last page of search results after clicking last "more results" button
-        if (data.ppage === 1 || data.ppage === -1 && data.pnext !== -1) this.html = ''
+        // keep html if loading more data, but not when ppage is -1 and the previous ppage was 1
+        if (data.ppage === 1 || data.ppage === -1 && this.previousPpage === 1) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -124,7 +132,7 @@ export default class TileFactory extends Shadow() {
         this.isNearbySearch = data.sort.sort === 2
         this.psize = data.psize
         this.pnext = data.pnext
-        this.html = data.courses.length > 0 ? data.courses.reduce(
+        this.html = data.courses.reduce(
           (acc, course) => {
             const tile = this.isEventSearch ? /* html */ `
               <ks-m-event
@@ -136,24 +144,38 @@ export default class TileFactory extends Shadow() {
             ` : (
               (course.locations?.length > 1 || this.isNearbySearch) && course.filter?.length
                 ? /* html */`
+                <m-load-template-tag mode="false">
+                <template>
                   <ks-o-tile-list data='{
-                    ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
+                    ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course).replace(/'/g, '’').replace(/"/g, '\"') : this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')},
                     "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}>
                   </ks-o-tile-list>
+                  </template>
+                  </m-load-template-tag>
                 `
                 : /* html */`
+                  <m-load-template-tag mode="false">
+                  <template>
                   <ks-m-tile namespace="tile-default-" data='{
-                    ${this.fillGeneralTileInfo(course)}
+                    ${this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
+                  </template>
+                  </m-load-template-tag>
                 `
             )
             return acc = acc + tile
           },
           '<section>'
-        ) + '</section>' : `${this.hasAttribute('no-search-results-text') ? `<span class=no-search-results><a-translation data-trans-key="${this.getAttribute('no-search-results-text')}"></a-translation></span>` : ''}`
+        ) + '</section>'
+        if (!data.courses.length && this.section) this.section.innerHTML = /* html */`
+          <ks-o-partner-search search-text="${data.searchText}">
+            ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+          </ks-o-partner-search>
+        `
+        this.previousPpage = data.ppage
       }, 0)
     }).catch(error => {
       console.error(error)
@@ -180,6 +202,14 @@ export default class TileFactory extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
         name: 'a-translation'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/loadTemplateTag/LoadTemplateTag.js`,
+        name: 'm-load-template-tag'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
+        name: 'ks-o-partner-search'
       }
     ])
   }
@@ -255,5 +285,13 @@ export default class TileFactory extends Shadow() {
 
   get isEventSearch () {
     return this.hasAttribute('is-event')
+  }
+
+  get section () {
+    return this.root.querySelector('section')
+  }
+
+  get hiddenSections () {
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }

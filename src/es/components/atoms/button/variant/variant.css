@@ -206,3 +206,8 @@
   border-radius: 50%;
   padding: 0.75rem;
 }
+
+/* set mdx spinner color to current color */
+:host {
+  --mdx-comp-loadingspinner-color-default: currentColor;
+}

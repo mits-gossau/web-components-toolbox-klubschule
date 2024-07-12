@@ -36,8 +36,39 @@
                                 width: 100%;
                                 background-color: var(--mdx-sys-color-neutral-on-default);
                             }
+
+                            :host .confirmation {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                            }
+
+                            :host .confirmation a-icon-mdx {
+                            color: var(--mdx-base-color-klubschule-green-600);
+                            }
+
+                            :host .confirmation p {
+                                color: var(--mdx-sys-color-neutral–default);
+                                font: var(--mdx-sys-font-flex-body2);
+                            }
+
+                            :host #response.success + section.main {
+                                display: none;
+                            }
                         </style>
                         <form>
+                            <div id="response">
+                                <ks-a-spacing type="s-flex"></ks-a-spacing>
+                                <div class="confirmation">
+                                    <div class="icon">
+                                        <a-icon-mdx icon-name="CheckCircle" size="2em"></a-icon-mdx>
+                                    </div>
+                                    <ks-a-spacing type="xs-flex"></ks-a-spacing>
+                                    <ks-a-heading tag="h2">Nachricht erfolgreich gesendet</ks-a-heading>
+                                    <ks-a-spacing type="s-flex"></ks-a-spacing>
+                                    <p>Vielen Dank für ihre Anfrage.</p>
+                                </div>                        
+                            </div>
                             <section id="main">
                                 <div>
                                     <ks-a-input mode="false">
