@@ -339,13 +339,15 @@ export default class Appointments extends HTMLElement {
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointmentReversal}`
     const tags = JSON.parse(event.detail.tags)
     const courseId = makeUniqueCourseId(tags[0])
+    const subscriptionId = tags[0].subscriptionId ? tags[0].subscriptionId : tags[1].subscriptionId
+    const subscriptionType = tags[0].subscriptionType ? tags[0].subscriptionType : tags[1].subscriptionType
     const data = {
       courseAppointmentDate: tags[0].courseAppointmentDate,
       courseAppointmentTimeFrom: tags[0].courseAppointmentTimeFrom,
       courseId: tags[0].courseId,
       courseType: tags[0].courseType,
-      subscriptionId: tags[1].subscriptionId,
-      subscriptionType: tags[1].subscriptionType,
+      subscriptionId,
+      subscriptionType,
       userId: this.dataset.userId,
       language: this.getLanguage()
     }
