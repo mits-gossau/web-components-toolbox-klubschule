@@ -81,18 +81,42 @@ export default class PartnerSearch extends Shadow() {
     this.css = /* css */`
       :host {
         --picture-teaser-img-height: 48px;
+        --h2-margin: 0 0 var(--mdx-sys-spacing-flex-large-m);
+        --h3-margin: 0 0 var(--mdx-sys-spacing-flex-large-xs);
+        --picture-teaser-display: block;
+        --picture-teaser-img-margin: 0;
+        --a-text-decoration: underline;
+        text-decoration-line: none;
       }
       :host .partner-result-wrapper {
         display: flex;
-        gap: 32px;
+        gap: var(--mdx-sys-spacing-fix-l);
       }
       :host .partner-result-item-wrapper {
-        flex-basis: calc((100% - 2 * 32px) / 3);
+        flex-basis: calc((100% - 2 * 2rem) / 3);
         background-color: var(--m-white);
         text-align: start;
-        --picture-teaser-display: block;
-        --picture-teaser-img-margin: 0;
-        padding: 20px;
+        padding: 1.25rem;
+        display: flex;
+        gap: var(--mdx-sys-spacing-fix-2xs);
+        flex-direction: column;
+      }
+      :host .partner-result-item-wrapper .button-wrapper {
+        margin: var(--mdx-sys-spacing-fix-2xs) 0 0;
+      }
+      :host .partner-result-item-wrapper span {
+        font: var(--mdx-sys-font-fix-body3);
+        margin-bottom: auto;
+      }
+      :host #partner-results {
+        --h2-margin: 0 0 var(--mdx-sys-spacing-flex-large-s);
+      }
+      :host section + section {
+        margin: var(--mdx-sys-spacing-flex-large-m) 0 0;
+      }
+      :host a-picture {
+        --picture-teaser-img-max-width: unset;
+        --picture-teaser-img-width: unset;
       }
     `
     return this.fetchTemplate()
@@ -147,7 +171,7 @@ export default class PartnerSearch extends Shadow() {
               <div class="partner-result-item-wrapper">
                 <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
                 <span>${item.text}</span>
-                <div>
+                <div class="button-wrapper">
                   <ks-a-button namespace="button-secondary-" color="secondary" target="_blank" label="${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}" href="${item.link}"></ks-a-button>
                 </div>
               </div>
