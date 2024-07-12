@@ -147,7 +147,7 @@ export default class TileFactory extends Shadow() {
                 <m-load-template-tag mode="false">
                 <template>
                   <ks-o-tile-list data='{
-                    ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
+                    ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course).replace(/'/g, '’').replace(/"/g, '\"') : this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')},
                     "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
@@ -160,7 +160,7 @@ export default class TileFactory extends Shadow() {
                   <m-load-template-tag mode="false">
                   <template>
                   <ks-m-tile namespace="tile-default-" data='{
-                    ${this.fillGeneralTileInfo(course)}
+                    ${this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
                   </template>
                   </m-load-template-tag>
