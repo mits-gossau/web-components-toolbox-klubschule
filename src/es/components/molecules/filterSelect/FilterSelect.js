@@ -98,6 +98,7 @@ export default class filterSelect extends Shadow() {
   }
 
   generateFilterButtons(filterData) {
+    const centerFilteItemIds = ["35", "36", "37"] // main center filter ids for de, fr, it
     const processFilterItem = (filterItem) => {
       if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
         let selectedFilterItems = []
@@ -110,6 +111,10 @@ export default class filterSelect extends Shadow() {
         }
 
         if (selectedFilterItems.length > 0) {
+          if (centerFilteItemIds.includes(filterItem.id)) {
+            filterItem.urlpara = 'center' // set urlpara to always 'center'
+            filterItem.id = '13' // set to main center filterItem.id
+          }
           this.html = this.createFilterButton(filterItem, selectedFilterItems)
         }
       

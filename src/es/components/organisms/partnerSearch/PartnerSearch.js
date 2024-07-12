@@ -19,10 +19,25 @@ export default class PartnerSearch extends Shadow() {
 
   connectedCallback(){
     this.hidden = true
-    const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-    Promise.all(showPromises).then(() => (this.hidden = false))
+    new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-translations',
+        {
+          detail: {
+            resolve
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
+      const showPromises = []
+      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+      Promise.all(showPromises).then(() => (this.hidden = false))
+    })
+
     document.body.addEventListener('partner-search', this.partnerSearchListener)
     new Promise(resolve => this.dispatchEvent(new CustomEvent('request-partner-search', {
       detail: {
@@ -119,7 +134,7 @@ export default class PartnerSearch extends Shadow() {
       this.html = ''
       this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
       this.html = this.hiddenMessages
-      const headline = this.hiddenMessages[1].querySelector("h2")
+      const headline = this.hiddenMessages[this.hiddenMessages.length - 1].querySelector("h2")
       let headlineText = headline.innerText
       headlineText = headlineText.replace("{0}", this.searchText)
       headline.innerHTML = headlineText
@@ -132,7 +147,9 @@ export default class PartnerSearch extends Shadow() {
               <div class="partner-result-item-wrapper">
                 <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
                 <span>${item.text}</span>
-                <ks-a-button icon namespace="button-secondary-" color="secondary" label="${item.count} ${data.total_label}"></ks-a-button>
+                <div>
+                  <ks-a-button namespace="button-secondary-" color="secondary" target="_blank" label="${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}" href="${item.link}"></ks-a-button>
+                </div>
               </div>
             `, '')}
           </div>
@@ -143,6 +160,14 @@ export default class PartnerSearch extends Shadow() {
       }
     }
     return this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
+        name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/picture/Picture.js`,
+        name: 'a-picture'
+      },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
         name: 'a-translation'

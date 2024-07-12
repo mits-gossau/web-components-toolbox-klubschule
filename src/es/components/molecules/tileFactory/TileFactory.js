@@ -68,6 +68,10 @@ export default class TileFactory extends Shadow() {
     :host > .error {
       color: var(--color-error);
     }
+    :host m-load-template-tag {
+      display: block;
+      min-height: 10em;
+    }
     @media only screen and (max-width: _max-width_) {
       :host > section {
         margin-left: -0.5rem;
@@ -114,9 +118,7 @@ export default class TileFactory extends Shadow() {
       </mdx-component>
     `
 
-    return fetch.then(data => {
-      
-      // How to keep the data.ppage from former fetch?
+    fetch.then(data => {
       setTimeout(() => {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
@@ -142,6 +144,8 @@ export default class TileFactory extends Shadow() {
             ` : (
               (course.locations?.length > 1 || this.isNearbySearch) && course.filter?.length
                 ? /* html */`
+                <m-load-template-tag mode="false">
+                <template>
                   <ks-o-tile-list data='{
                     ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
                     "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
@@ -149,11 +153,17 @@ export default class TileFactory extends Shadow() {
                     "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}>
                   </ks-o-tile-list>
+                  </template>
+                  </m-load-template-tag>
                 `
                 : /* html */`
+                  <m-load-template-tag mode="false">
+                  <template>
                   <ks-m-tile namespace="tile-default-" data='{
                     ${this.fillGeneralTileInfo(course)}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
+                  </template>
+                  </m-load-template-tag>
                 `
             )
             return acc = acc + tile
@@ -192,6 +202,10 @@ export default class TileFactory extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
         name: 'a-translation'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/loadTemplateTag/LoadTemplateTag.js`,
+        name: 'm-load-template-tag'
       },
       {
         path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
