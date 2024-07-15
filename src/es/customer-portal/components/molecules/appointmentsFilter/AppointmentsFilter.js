@@ -162,15 +162,9 @@ export default class AppointmentsFilter extends Shadow() {
     const startDate = this.formatDate(dateListClone.find((day) => day.selected && day.available === true).date)
     const endDate = this.formatDate(dateListClone.findLast((day) => day.selected && day.available === true).date)
     const defaultPickrValue = startDate === endDate ? [startDate] : [startDate, endDate]
-    let displayValue = ''
-    if (minRange === startDate) {
-      displayValue = '<a-translation data-trans-key="CP.cpFilterTitleStartDate"></a-translation>'
-    } else {
-      displayValue = `${this.getLang()}: ${startDate}`
-    }
+    const displayValue = `${this.getLang()}: ${startDate}`
     // MIDUWEB-1301
     const forcedEndDate = dateListClone[dateListClone.length - 1].date
-
     const configOptions = {
       minDate: minRange,
       maxDate: endRange,
