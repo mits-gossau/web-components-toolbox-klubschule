@@ -94,7 +94,7 @@ export default class BackForward extends Shadow() {
             <ks-a-button 
               class="back-forward__forward-btn"
               big 
-              ${this.hasAttribute('submit') ? 'type="submit" mode="false"' : ''} 
+              ${this.hasAttribute('submit') ? 'type="submit" with-submit-loading mode="false"' : ''} 
               ${this.hasAttribute('forward-link') ? `href="${this.getAttribute('forward-link')}"` : ''} 
               ${this.hasAttribute('forward-disabled') ? 'disabled' : ''}
               namespace="button-primary-" 
