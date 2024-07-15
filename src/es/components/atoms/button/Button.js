@@ -1,6 +1,6 @@
 // @ts-check
 import Button from '../../web-components-toolbox/src/es/components/atoms/button/Button.js'
-import { LOADING_FINISHED_EVENT } from '../../web-components-toolbox/src/es/components/molecules/simpleForm/SimpleForm.js'
+import { FINISH_LOADING_EVENT } from '../../web-components-toolbox/src/es/components/molecules/simpleForm/SimpleForm.js'
 
 /**
  * Creates an Button
@@ -49,8 +49,7 @@ export default class KsButton extends Button {
       /* when there is a simple form check the response event to clean up the spinner */
       this.closestSimpleForm = this.closest('m-simple-form-validation, m-simple-form')
       if (this.closestSimpleForm) {
-        console.log('found closest simple form')
-        this.closestSimpleForm.addEventListener(LOADING_FINISHED_EVENT, this.simpleFormResponseListener)
+        this.closestSimpleForm.addEventListener(FINISH_LOADING_EVENT, this.simpleFormResponseListener)
       }
     }
   }
