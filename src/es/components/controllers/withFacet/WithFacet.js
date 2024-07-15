@@ -364,29 +364,31 @@ export default class WithFacet extends WebWorker() {
           selectedParent.selected = false // deselect filterItem if it is not selected
         }
       }
+
       let treeShookFilterItem = structuredClone(filterItem)
+
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
-      } else if (filterItem.typ === 'group') { // center filter
+      } else if (filterItem.children && filterItem.typ !== 'group') {
+        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isTree)
+      }
+
+      // center filter
+      if (filterItem.typ === 'group' && filterItem.children?.length) {
         filterItem.children.forEach(region => {
           region.children.forEach(center => {
             if (center.id === filterValue) {
-              if (center.selected) {
-                center.selected = false
-              } else {
-                center.selected = true
-              }
+              center.selected = !center.selected
             }
           })
         })
-        
         treeShookFilterItem = structuredClone(filterItem)
-      } else if (filterItem.children) {
-        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isTree)
       }
+
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
     })
+  
     return [filters, treeShookFilters]
   }
 
