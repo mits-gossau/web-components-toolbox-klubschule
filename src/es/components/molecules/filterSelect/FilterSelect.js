@@ -98,12 +98,25 @@ export default class filterSelect extends Shadow() {
   }
 
   generateFilterButtons(filterData) {
-    let centerUrlpara = 'center'
-    const centerFilteItemIds = ["35", "36", "37"] // main center filter ids for de, fr, it
     const processFilterItem = (filterItem) => {
-      if (filterItem.typ === 'group') centerUrlpara = filterItem.urlpara // set urlpara of center / centre / centro
-      if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-        let selectedFilterItems = []
+      const isCenterFilter = filterItem.typ === 'group'
+      let selectedFilterItems = []
+
+      if (isCenterFilter && filterItem.visible) {
+        filterItem.children.forEach(region => {
+          region.children.forEach(center => {
+            if (center.selected) {
+              selectedFilterItems.push(`${center.label}`)
+            }
+          })
+        })
+
+        filterItem.id = '13' // set to main center filterItem.id
+
+        if (selectedFilterItems.length > 0) {
+          this.html = this.createFilterButton(filterItem, selectedFilterItems)
+        }
+      } else if (!isCenterFilter && filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
         const selectedChildren = filterItem.children.filter(child => child.selected)
 
         if (selectedChildren.length > 0) {
@@ -113,10 +126,6 @@ export default class filterSelect extends Shadow() {
         }
 
         if (selectedFilterItems.length > 0) {
-          if (centerFilteItemIds.includes(filterItem.id)) {
-            filterItem.urlpara = centerUrlpara // set urlpara of center / centre / centro
-            filterItem.id = '13' // set to main center filterItem.id
-          }
           this.html = this.createFilterButton(filterItem, selectedFilterItems)
         }
       
