@@ -344,24 +344,28 @@ export default class WithFacet extends WebWorker() {
 
   // always shake out the response filters to only include selected filters or selected in ancestry
   static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isTree = false) {
+    // @ts-ignore
+    const isParentSelected = selectedParent?.urlpara === filterKey
     const treeShookFilters = []
+
     filters.forEach(filterItem => {
-      const isMatchingKey = (filterItem.urlpara !== undefined) && (filterItem.urlpara === filterKey)
+      const isCenterFilter = filterItem.id === filterValue
+      const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
+      const isUrlpara = filterItem.urlpara === filterValue
+      
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
-        const isIdOrUrlpara = filterItem.id === filterValue || filterItem.urlpara === filterValue
-        // @ts-ignore
-        const isParentSelected = selectedParent?.urlpara === filterKey
-        // @ts-ignore
-        if (filterItem.selected && isIdOrUrlpara && !isTree) {
+      if (filterItem.selected && isUrlpara && !isTree && !isCenterFilter) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
-        } else if (filterItem.selected && !isIdOrUrlpara) {
+        } else if (filterItem.selected && !isUrlpara && !isCenterFilter) {
           filterItem.selected = true // keep filterItem selected if it is already selected
-        } else if (!filterItem.selected && isIdOrUrlpara && isParentSelected) {
+        } else if (!filterItem.selected && isUrlpara && isParentSelected && !isCenterFilter) {
           filterItem.selected = true // select filterItem if it is not selected
-        } else if (isParentSelected) {
+        } else if (isParentSelected && !isCenterFilter) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
+        } else if (isCenterFilter) {
+          filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
         }
       }
 
@@ -369,26 +373,14 @@ export default class WithFacet extends WebWorker() {
 
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
-      } else if (filterItem.children && filterItem.typ !== 'group') {
+      } else if (filterItem.children) {
         [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isTree)
-      }
-
-      // center filter
-      if (filterItem.typ === 'group' && filterItem.children?.length) {
-        filterItem.children.forEach(region => {
-          region.children.forEach(center => {
-            if (center.id === filterValue) {
-              center.selected = !center.selected
-            }
-          })
-        })
-        treeShookFilterItem = structuredClone(filterItem)
       }
 
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
     })
-  
+
     return [filters, treeShookFilters]
   }
 
