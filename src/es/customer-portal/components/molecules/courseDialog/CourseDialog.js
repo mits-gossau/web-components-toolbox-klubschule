@@ -49,27 +49,10 @@ export default class CourseDialog extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-detail') || 'update-subscription-course-appointment-detail', this.updateSubscriptionCourseAppointmentDetailListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.updateSubscriptionCourseAppointmentReversalListener)
-    this.removeEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
     document.body.removeEventListener(this.getAttribute('update-subscription-pdf') || 'update-subscription-pdf', this.updateSubscriptionListener)
+    document.body.removeEventListener(this.getAttribute(`dialog-close-${this.dataset.id}`) || `dialog-close-${this.dataset.id}`, this.dialogCloseListener)
     this.subscriptionsPdfLink?.removeEventListener('click', this.subscriptionPdfLinkListener)
     document.body.removeEventListener('update-subscription-detail', this.updateSubscriptionCourseAppointmentDetailListener)
-  }
-
-  dialogCloseListener () {
-    if (this.dataset.forceReload) {
-      const { subscriptionType, subscriptionId } = this.courseSubscription
-      this.dispatchEvent(new CustomEvent('force-reload-list',
-        {
-          detail: {
-            subscriptionType,
-            subscriptionId
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }
-      ))
-    }
   }
 
   /**
@@ -597,7 +580,7 @@ export default class CourseDialog extends Shadow() {
     ])
     Promise.all([fetchModules]).then((_) => {
       this.html = /* html */ `
-        <m-dialog backdrop-clicked="dialog-close-${courseId}" namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}" close-event-name="dialog-close-${courseId}">
+        <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}" close-event-name="dialog-close-${courseId}">
           <div class="container dialog-header">
             <div id="back"></div>
               <h3 id="title"></h3>

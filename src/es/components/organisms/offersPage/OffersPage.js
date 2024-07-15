@@ -580,31 +580,31 @@ export default class OffersPage extends Shadow() {
                 <dialog>
                   <!-- overlayer -->
                   <div class="container dialog-header" tabindex="0">
-                      <div id="back">
-                          &nbsp;
-                      </div>
-                      <h3>${this.getTranslation('Filter')}</h3>
-                      <div id="close">
-                          <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-                      </div>
+                    <a-button id="close-back">
+                      &nbsp;
+                    </a-button>
+                    <h3>${this.getTranslation('Filter')}</h3>
+                    <a-button request-event-name="backdrop-clicked" id="close">
+                      <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+                    </a-button>
                   </div>
                   <div class="container dialog-content">
-                      <p class="reset-link">
-                          <a-button namespace="button-transparent-" request-event-name="reset-all-filters">${this.getTranslation('Filter.ResetAllFilter')} <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
-                          </a-button>
-                      </p>
-                      <div class="sub-content">
-                          ${filterSearch}
-                          <ks-m-filter-categories
-                            namespace="filter-default-" 
-                            translation-key-close="${this.getTranslation('Filter.closeOverlayer')}" 
-                            translation-key-reset="${this.getTranslation('Filter.ResetFilter')}"
-                          ></ks-m-filter-categories>
-                      </div>
+                    <p class="reset-link">
+                        <a-button namespace="button-transparent-" request-event-name="reset-all-filters">${this.getTranslation('Filter.ResetAllFilter')} <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                        </a-button>
+                    </p>
+                    <div class="sub-content">
+                        ${filterSearch}
+                        <ks-m-filter-categories
+                          namespace="filter-default-" 
+                          translation-key-close="${this.getTranslation('Filter.closeOverlayer')}" 
+                          translation-key-reset="${this.getTranslation('Filter.ResetFilter')}"
+                        ></ks-m-filter-categories>
+                    </div>
                   </div>
                   <div class="container dialog-footer">
-                      <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
-                      <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events translation-key-cta="${this.getTranslation('CourseList.OffersPlaceholder')}">${this.getTranslation('CourseList.OffersPlaceholder')}</ks-a-number-of-offers-button>
+                    <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
+                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events></ks-a-number-of-offers-button>
                   </div>
                 </dialog>
               </m-dialog>

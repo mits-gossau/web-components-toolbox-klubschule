@@ -167,13 +167,13 @@ export default class Checkbox extends Shadow() {
             display: none;
         }
 
-        .wrap:not(:has(.has-error)) > .message {
-          display: none;
-        }
-
-        [dirty] .wrap:has(input:invalid) .message {
+        :host .wrap .message.has-error {
           display: flex;
           margin-top: var(--error-gap);
+        }
+        
+        :host .wrap .message {
+          display: none;
         }
 
         :host .message span,

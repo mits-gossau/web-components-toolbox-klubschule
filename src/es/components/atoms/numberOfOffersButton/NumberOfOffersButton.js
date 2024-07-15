@@ -20,6 +20,6 @@ export default class NumberOfOffersButton extends Button {
   }
 
   withFacetEventListener = async event => {
-    this.button.textContent = `${(await event.detail.fetch).total} ${this.getAttribute('translation-key-cta')}`
+    this.button.textContent = `${(await event.detail.fetch).total} ${(await event.detail.fetch).total_label}`
   }
 }

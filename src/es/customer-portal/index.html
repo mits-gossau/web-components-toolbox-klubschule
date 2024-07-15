@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de-CH">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,27 +13,29 @@
         <link href=../../../src/es/components/web-components-toolbox/src/css/variables.css rel="stylesheet"
             type="text/css">
         <link href="../../css/variablesCustomKlubschule.css" rel=stylesheet type="text/css">
+        <link href="../../css/variablesCustom.css" rel=stylesheet type="text/css">
         <script async rel=preload as="script" type="text/javascript"
             src="../../../src/es/helpers/Environment.js"></script>
         <script src="../../../wc-config.js"></script>
         <title>Customer Portal</title>
     </head>
+
     <body>
         <c-fetch-html>
             <c-fetch-css>
                 <c-fetch-modules>
-                    <c-translations translation-api-url="https://dev.klubschule.ch/umbraco/api/v1/Dictionaries/all/de/CP">
-                    <!-- <c-translations translation-api-url="./controllers/dummy.json"> -->
-                        <cp-c-appointments data-user-id="6a6a5d46-0790-459b-8b37-dd1c95dbec0e">
-                                <cp-c-subscriptions data-user-id="6a6a5d46-0790-459b-8b37-dd1c95dbec0e">
-                                    <p-general>
-                                        <o-body-style 
-                                            has-background=""
-                                            background-color="var(--mdx-sys-color-accent-6-subtle1)" 
-                                            tabindex="0"
+                    <c-translations
+                        translation-api-url="https://dev.klubschule.ch/umbraco/api/v1/Dictionaries/all/de/CP">
+                        <!-- 6a6a5d46-0790-459b-8b37-dd1c95dbec0e -->
+                        <cp-c-appointments data-user-id="fede401c-ffe7-421f-ab14-61639c43cb75">
+                            <cp-c-subscriptions data-user-id="fede401c-ffe7-421f-ab14-61639c43cb75">
+                                <p-general>
+                                    <o-body>
+                                        <cp-m-navigation namespace="navigation-default-"></cp-m-navigation>
+                                        <ks-o-body-section variant="default"
+                                            background-color="var(--mdx-sys-color-accent-6-subtle1)" tabindex="0"
                                             aria-label="Section"
-                                            >
-                                            <cp-m-navigation namespace="navigation-default-"></cp-m-navigation>
+                                            no-margin-y>
                                             <c-router routes="[
                                                 {
                                                     'name': 'p-appointments',
@@ -51,13 +54,15 @@
                                                 }
                                                 ]">
                                             </c-router>
-                                        </o-body-style>
-                                    </p-general>
-                                </cp-c-subscriptions>
+                                        </ks-o-body-section>
+                                    </o-body>
+                                </p-general>
+                            </cp-c-subscriptions>
                         </cp-c-appointments>
                     </c-translations>
                 </c-fetch-modules>
             </c-fetch-css>
         </c-fetch-html>
     </body>
+
 </html>

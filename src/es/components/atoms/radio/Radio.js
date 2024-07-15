@@ -123,14 +123,15 @@ export default class Radio extends Shadow() {
           pointer-events: none;
         }
 
-        :host(:not(:has(.has-error))) > .message {
-          display: none;
-        }
-
-        :host .message {
+        :host .message.has-error {
           display: flex;
           align-items: center;
         }
+
+        :host .message {
+          display: none;
+        }
+
         :host .message span,
         :host .message a-icon-mdx {
           color: var(--mdx-comp-error-message-color-default);

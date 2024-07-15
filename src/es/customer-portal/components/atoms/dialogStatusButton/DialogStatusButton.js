@@ -68,6 +68,8 @@ export default class DialogStatusButton extends Shadow() {
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
+        // SAP error
+        // Happens when a user is manually blocked
         if (courseDetail.code === 500) {
           return
         }
@@ -84,6 +86,8 @@ export default class DialogStatusButton extends Shadow() {
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
+        // SAP error
+        // Happens when a user is manually blocked
         if (courseDetail.code === 500) {
           return
         }

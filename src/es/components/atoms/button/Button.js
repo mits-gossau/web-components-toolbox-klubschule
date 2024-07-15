@@ -1,5 +1,6 @@
 // @ts-check
 import Button from '../../web-components-toolbox/src/es/components/atoms/button/Button.js'
+import { FINISH_LOADING_EVENT } from '../../web-components-toolbox/src/es/components/molecules/simpleForm/SimpleForm.js'
 
 /**
  * Creates an Button
@@ -31,6 +32,10 @@ export default class KsButton extends Button {
       this.button.append(spinner)
     }
 
+    this.simpleFormResponseListener = (e) => {
+      this.button.querySelector('mdx-component')?.remove()
+    }
+
     if ((this.getAttribute('type') === 'submit') && this.hasAttribute('with-submit-loading')) {
       this.fetchModules([
         {
@@ -39,7 +44,13 @@ export default class KsButton extends Button {
         }
       ])
       this.closestForm = this.closest('form')
-      this.closestForm.addEventListener('submit', this.formSubmitLoadingListener)
+      this.closestForm?.addEventListener('submit', this.formSubmitLoadingListener)
+
+      /* when there is a simple form check the response event to clean up the spinner */
+      this.closestSimpleForm = this.closest('m-simple-form-validation, m-simple-form')
+      if (this.closestSimpleForm) {
+        this.closestSimpleForm.addEventListener(FINISH_LOADING_EVENT, this.simpleFormResponseListener)
+      }
     }
   }
 
@@ -48,6 +59,9 @@ export default class KsButton extends Button {
     if (this.getAttribute('answer-event-name')) document.body.removeEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
     if (this.closestForm) {
       this.closestForm.removeEventListener('submit', this.formSubmitLoadingListener)
+    }
+    if (this.closestSimpleForm) {
+      this.button.removeEventListener(this.responseEventName, this.simpleFormResponseListener)
     }
   }
 
