@@ -285,14 +285,16 @@ export default class AppointmentsFilter extends Shadow() {
         namespace="dialog-left-slide-in-"
         close-event-name="${requestEventName}"
         show-event-name="${showDialogEventName}">
-          <div class="container dialog-header">
-              <div id="back">&nbsp;</div>
-              <h3>
-                <a-translation data-trans-key="${translationKeyTitle}"></a-translation>
-              </h3>
-              <div id="close">
-                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-              </div>
+          <div class="container dialog-header" tabindex="0">
+            <a-button id="close-back">
+              &nbsp;
+            </a-button>
+            <h3>
+              <a-translation data-trans-key="${translationKeyTitle}"></a-translation>
+            </h3>
+            <a-button request-event-name="backdrop-clicked" id="close">
+              <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+            </a-button>
           </div>
           <div class="container dialog-content">
             <p class="reset-link"></p>

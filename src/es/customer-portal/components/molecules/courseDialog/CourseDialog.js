@@ -532,26 +532,28 @@ export default class CourseDialog extends Shadow() {
     Promise.all([fetchModules]).then((_) => {
       this.html = /* html */ `
         <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${id}" close-event-name="dialog-close-${id}">
-          <div class="container dialog-header">
-            <div id="back"></div>
-              <h3 id="title"></h3>
-              <div id="close">
-                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+          <div class="container dialog-header" tabindex="0">
+            <a-button id="close-back">
+              &nbsp;
+            </a-button>
+            <h3 id="title"></h3>
+            <a-button request-event-name="backdrop-clicked" id="close">
+              <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+            </a-button>
+          </div>
+          <div class="container dialog-content">
+            <p class="reset-link"></p>
+             <div class="sub-content">
+              <h2>${data.subscriptionDescription}</h2>
+              <div id="view-content">
+                ${this.renderDialogContentSubscriptionDetail(data)}
               </div>
             </div>
-            <div class="container dialog-content">
-              <p class="reset-link"></p>
-              <div class="sub-content" >
-                <h2>${data.subscriptionDescription}</h2>
-                <div id="view-content">
-                  ${this.renderDialogContentSubscriptionDetail(data)}
-                </div>
-              </div>
-            </div>
-            <div class="container dialog-footer">
-              <a-dialog-status-button namespace="dialog-status-button-default-" data-id="${id}" data-content="${escapeForHtml(JSON.stringify(data))}" data-subscription="${escapeForHtml(JSON.stringify(data))}"></a-dialog-status-button>
-            </div>
-            <a-tile-status-button data-list-type="subscriptions" id="show-modal" data-id="${id}" data-content="${escapeForHtml(JSON.stringify(data))}" data-subscription="${escapeForHtml(JSON.stringify(data))}"></a-tile-status-button>  
+          </div>
+          <div class="container dialog-footer">
+            <a-dialog-status-button namespace="dialog-status-button-default-" data-id="${id}" data-content="${escapeForHtml(JSON.stringify(data))}" data-subscription="${escapeForHtml(JSON.stringify(data))}"></a-dialog-status-button>
+          </div>
+          <a-tile-status-button data-list-type="subscriptions" id="show-modal" data-id="${id}" data-content="${escapeForHtml(JSON.stringify(data))}" data-subscription="${escapeForHtml(JSON.stringify(data))}"></a-tile-status-button>  
         </m-dialog>
       `
     })
@@ -580,26 +582,28 @@ export default class CourseDialog extends Shadow() {
     Promise.all([fetchModules]).then((_) => {
       this.html = /* html */ `
         <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}" close-event-name="dialog-close-${courseId}">
-          <div class="container dialog-header">
-            <div id="back"></div>
-              <h3 id="title"></h3>
-              <div id="close">
-                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
+          <div class="container dialog-header" tabindex="0">
+            <a-button id="close-back">
+              &nbsp;
+            </a-button>
+            <h3 id="title"></h3>
+            <a-button request-event-name="backdrop-clicked" id="close">
+              <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+            </a-button>
+          </div>
+          <div class="container dialog-content">
+            <p class="reset-link"></p>
+            <div class="sub-content" >
+              <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>     
+              <div id="view-content">
+                ${this.renderDialogContentDetails(content)}
               </div>
             </div>
-            <div class="container dialog-content">
-              <p class="reset-link"></p>
-              <div class="sub-content" >
-                <h2>${content.courseTitle} (${content.courseType}_${content.courseId})</h2>     
-                <div id="view-content">
-                  ${this.renderDialogContentDetails(content)}
-                </div>
-              </div>
-            </div>
-            <div class="container dialog-footer">
-              <a-dialog-status-button namespace="dialog-status-button-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
-            </div>
-            <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-tile-status-button>  
+          </div>
+          <div class="container dialog-footer">
+            <a-dialog-status-button namespace="dialog-status-button-default-" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-dialog-status-button>
+          </div>
+          <a-tile-status-button id="show-modal" data-id="${courseId}" data-content="${escapeForHtml(JSON.stringify(content))}" data-subscription="${escapeForHtml(JSON.stringify(selectedSubscription))}"></a-tile-status-button>  
         </m-dialog>
         `
     })
