@@ -111,8 +111,6 @@ export default class filterSelect extends Shadow() {
           })
         })
 
-        filterItem.id = '13' // set to main center filterItem.id
-
         if (selectedFilterItems.length > 0) {
           this.html = this.createFilterButton(filterItem, selectedFilterItems)
         }
