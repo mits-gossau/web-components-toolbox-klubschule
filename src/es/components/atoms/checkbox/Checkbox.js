@@ -168,12 +168,12 @@ export default class Checkbox extends Shadow() {
         }
 
         :host .wrap .message.has-error {
-          display: none;
-        }
-
-        :host [dirty] .wrap .message {
           display: flex;
           margin-top: var(--error-gap);
+        }
+        
+        :host .wrap .message {
+          display: none;
         }
 
         :host .message span,
