@@ -98,7 +98,6 @@ export default class Buttons extends Shadow() {
    */
   renderHTML () {
     const url = new URL(window.location.origin)
-    const isKlubschule = url.hostname.includes('klubschule.ch')
     const dataButtons = JSON.parse(this.getAttribute('data-buttons')) || [{}]
     const optionalBigAttr = this.hasAttribute('big') ? 'big' : ''
     const optionalSmallAttr = this.hasAttribute('small') ? 'small' : ''
@@ -130,7 +129,7 @@ export default class Buttons extends Shadow() {
         }
       }
 
-      if (button.event?.includes('AdvisoryText') && isKlubschule) {
+      if (button.event?.includes('AdvisoryText')) {
         const dialogId = this.getAttribute("dialog-id") || 0
         const parentDiv = document.createElement("div")
 
