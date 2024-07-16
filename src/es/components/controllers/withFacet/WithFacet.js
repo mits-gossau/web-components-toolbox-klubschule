@@ -408,6 +408,7 @@ export default class WithFacet extends WebWorker() {
   }
 
   updateURLParam(key, value, isTree = false) {
+    console.log('updateURLParam', key, value, isTree)
     if (this.params) {
       if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname' && key !== 'sorting') {
         const currentValues = this.params.get(key)?.split('-')
@@ -419,7 +420,8 @@ export default class WithFacet extends WebWorker() {
           currentValues?.splice(currentValues.indexOf(value), 1)
           if (currentValues.length > 0) {
             this.params.set(key, currentValues.join('-'))
-          } else {
+          } else if (!isTree) { // keep it for tree filters
+            console.log('delete', key)
             this.params.delete(key)
           }
         }
