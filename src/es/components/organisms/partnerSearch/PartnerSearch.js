@@ -35,19 +35,29 @@ export default class PartnerSearch extends Shadow() {
       const showPromises = []
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-      Promise.all(showPromises).then(() => (this.hidden = false))
+      Promise.all(showPromises).then(() => {
+        this.hidden = false
+        if (this.searchText.length) {
+          new Promise(resolve => this.dispatchEvent(new CustomEvent('request-partner-search', {
+            detail: {
+              searchText: this.searchText,
+              resolve
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))).then(fetch => this.renderHTML(fetch))
+        } else {
+          this.renderHTML(Promise.resolve(() => ({
+            items: [],
+            success: false
+          })))
+        }
+      })
     })
 
     document.body.addEventListener('partner-search', this.partnerSearchListener)
-    new Promise(resolve => this.dispatchEvent(new CustomEvent('request-partner-search', {
-      detail: {
-        searchText: this.searchText,
-        resolve
-      },
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))).then(fetch => this.renderHTML(fetch))
+
   }
 
   disconnectedCallback () {
@@ -118,6 +128,14 @@ export default class PartnerSearch extends Shadow() {
         --picture-teaser-img-max-width: unset;
         --picture-teaser-img-width: unset;
       }
+      @media screen and (max-width: _max-width_) {
+        :host a-picture {
+          margin-right: auto;
+        }
+        :host .partner-result-wrapper {
+          flex-direction: column;
+        }
+      }
     `
     return this.fetchTemplate()
   }
@@ -169,21 +187,29 @@ export default class PartnerSearch extends Shadow() {
       if (data?.items?.length && data?.items?.find(({ count }) => count > 0)) {
         partnerResultsSection.insertAdjacentHTML('beforeend', /* html */ `
           <div class="partner-result-wrapper">
-            ${data.items.reduce((acc, item) => acc + item.count > 0 ? /* html */ `
-              <div class="partner-result-item-wrapper">
-                <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
-                <span>${item.text}</span>
-                <div class="button-wrapper">
-                  <ks-a-button namespace="button-secondary-" color="secondary" target="_blank" label="${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}" href="${item.link}"></ks-a-button>
+            ${data.items.reduce((acc, item) => {
+              if (item.count > 0) {
+              return acc + /* html */ `
+                <div class="partner-result-item-wrapper">
+                  <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
+                  <span>${item.text}</span>
+                  <div class="button-wrapper">
+                    <ks-a-button icon namespace="button-secondary-" color="secondary" target="_blank" href="${item.link}">
+                      <span>${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}</span>
+                      <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowUpRight" size="1em" class="icon-right"></a-icon-mdx>
+                    </ks-a-button>
+                  </div>
                 </div>
-              </div>
-            ` : '', '')}
+              `
+            }
+          }, '')}
           </div>
         `)
       } else {
         partnerResultsSection.setAttribute('hidden', '')
       }
     }
+
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
@@ -192,6 +218,10 @@ export default class PartnerSearch extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/picture/Picture.js`,
         name: 'a-picture'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
