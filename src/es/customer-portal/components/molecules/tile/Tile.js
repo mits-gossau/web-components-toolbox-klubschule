@@ -286,6 +286,11 @@ export default class AppointmentTile extends Tile {
   renderTile (content, selectedSubscription) {
     const tileState = getTileState(courseAppointmentStatusMapping[content.courseAppointmentStatus], content)
     const courseId = makeUniqueCourseId(content)
+    // This is typical SAP nonsense.
+    // With ‘subscriptioncourseappointments’, the subscription type is in the currently selected subscription.
+    // With ‘bookedsubscriptioncourseappointments’, the subscription type is stored in the respective course.
+    const subscriptionMode = content.subscriptionMode || selectedSubscription.subscriptionMode
+    const lessonPrice = (subscriptionMode === 'PAUSCHALABO') ? '' : content.lessonPrice
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
@@ -348,7 +353,7 @@ export default class AppointmentTile extends Tile {
               </div>
               <div class="course-price">
                 <span class="m-tile__title">
-                  ${content.lessonPrice}
+                 ${lessonPrice}
                 </span>
               </div>
             </div>
