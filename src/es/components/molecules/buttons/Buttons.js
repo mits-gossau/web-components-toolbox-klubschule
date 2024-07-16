@@ -97,6 +97,8 @@ export default class Buttons extends Shadow() {
    * @returns void
    */
   renderHTML () {
+    const url = new URL(window.location.origin)
+    const isKlubschule = url.hostname.includes('klubschule.ch')
     const dataButtons = JSON.parse(this.getAttribute('data-buttons')) || [{}]
     const optionalBigAttr = this.hasAttribute('big') ? 'big' : ''
     const optionalSmallAttr = this.hasAttribute('small') ? 'small' : ''
@@ -127,7 +129,8 @@ export default class Buttons extends Shadow() {
           button.link = button.link + '?' + filteredURLParams
         }
       }
-      if (button.event?.includes('AdvisoryText')) {
+
+      if (button.event?.includes('AdvisoryText') && isKlubschule) {
         const dialogId = this.getAttribute("dialog-id") || 0
         const parentDiv = document.createElement("div")
 
@@ -177,8 +180,10 @@ export default class Buttons extends Shadow() {
           </m-dialog>
         `
         parentDiv.appendChild(this.overLayButton)
-        return acc + parentDiv.innerHTML;
+
+        return acc + parentDiv.innerHTML
       }
+
       return acc + (
         button.event === 'bookmark' ? '' : /* html */`
         <ks-a-button 
