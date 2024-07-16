@@ -13,6 +13,10 @@ export default class TileFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
+
+    this.hiddenMessages = this.hiddenSections
+
+    this.previousPnext = null
   }
 
   connectedCallback () {
@@ -64,6 +68,10 @@ export default class TileFactory extends Shadow() {
     :host > .error {
       color: var(--color-error);
     }
+    :host m-load-template-tag {
+      display: block;
+      min-height: 10em;
+    }
     @media only screen and (max-width: _max-width_) {
       :host > section {
         margin-left: -0.5rem;
@@ -110,12 +118,12 @@ export default class TileFactory extends Shadow() {
       </mdx-component>
     `
 
-    return fetch.then(data => {
+    fetch.then(data => {
       setTimeout(() => {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
-
-        if (data.ppage === 1 || data.ppage === -1) this.html = ''
+        // keep html if loading more data, but not when ppage is -1 and the previous pnext was -1
+        if (data.ppage === 1 || (data.ppage === -1 && this.previousPnext === -1)) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -135,24 +143,38 @@ export default class TileFactory extends Shadow() {
             ` : (
               (course.locations?.length > 1 || this.isNearbySearch) && course.filter?.length
                 ? /* html */`
+                <m-load-template-tag mode="false">
+                <template>
                   <ks-o-tile-list data='{
-                    ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course) : this.fillGeneralTileInfo(course)},
+                    ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course).replace(/'/g, '’').replace(/"/g, '\"') : this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')},
                     "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
-                    "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+                    "locations": ${JSON.stringify(course.locations.sort((a, b) => a.localeCompare(b))).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}>
                   </ks-o-tile-list>
+                  </template>
+                  </m-load-template-tag>
                 `
                 : /* html */`
+                  <m-load-template-tag mode="false">
+                  <template>
                   <ks-m-tile namespace="tile-default-" data='{
-                    ${this.fillGeneralTileInfo(course)}
+                    ${this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
+                  </template>
+                  </m-load-template-tag>
                 `
             )
             return acc = acc + tile
           },
           '<section>'
         ) + '</section>'
+        if (!data.courses.length && this.section) this.section.innerHTML = /* html */`
+          <ks-o-partner-search search-text="${data.searchText}">
+            ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+          </ks-o-partner-search>
+        `
+        this.previousPnext = data.pnext
       }, 0)
     }).catch(error => {
       console.error(error)
@@ -179,6 +201,14 @@ export default class TileFactory extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
         name: 'a-translation'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/loadTemplateTag/LoadTemplateTag.js`,
+        name: 'm-load-template-tag'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
+        name: 'ks-o-partner-search'
       }
     ])
   }
@@ -254,5 +284,13 @@ export default class TileFactory extends Shadow() {
 
   get isEventSearch () {
     return this.hasAttribute('is-event')
+  }
+
+  get section () {
+    return this.root.querySelector('section')
+  }
+
+  get hiddenSections () {
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }

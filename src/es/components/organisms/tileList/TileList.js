@@ -313,7 +313,7 @@ export default class TileList extends Shadow() {
             <div class="o-tile-list__middle">
               ${data.location?.name
                 ? /* html */`
-                <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
+                <span class="o-tile-list__places">${data.location?.name.split(', ').sort((a, b) => a.localeCompare(b)).join(', ') || warnMandatory + 'location'}</span>
                 `
                 : ''
               }
@@ -409,6 +409,22 @@ export default class TileList extends Shadow() {
   }
 
   renderTile (tileData, add = false) {
+    if (tileData.courses.length) {
+      tileData.courses.sort((a, b) => {
+        const nameA = a.location.name.toUpperCase() // ignore upper and lowercase
+        const nameB = b.location.name.toUpperCase() // ignore upper and lowercase
+        if (nameA < nameB) {
+            return -1
+        }
+        if (nameA > nameB) {
+            return 1
+        }
+
+        // names must be equal
+        return 0
+      })
+    }
+
     this.ppage = tileData.ppage || this.ppage
     this.loadMore.style.display = tileData.ppage === -1 ? 'none' : 'flex'
     const tileString = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {

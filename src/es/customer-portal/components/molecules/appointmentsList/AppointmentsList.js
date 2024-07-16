@@ -16,11 +16,15 @@ export default class AppointmentsList extends Shadow() {
     this.select = null
     this.numberOfAppointments = 0
     this.currentOpenDialogFilterType = null
+    this.subscriptionHint = null
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.requestSubscriptionBalanceListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.requestSubscriptionBalanceListener)
+    document.body.addEventListener(this.getAttribute('update-subscription-balance') || 'update-subscription-balance', this.updateSubscriptionBalanceListener)
     document.body.addEventListener('update-subscriptions', this.subscriptionsListener)
     // get first subscription information for current user
     // then request the appointments with received 'subscriptionType' and 'subscriptionId'
@@ -37,6 +41,9 @@ export default class AppointmentsList extends Shadow() {
 
   disconnectedCallback () {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointments') || 'update-subscription-course-appointments', this.subscriptionCourseAppointmentsListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.requestSubscriptionBalanceListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-reversal') || 'update-subscription-course-appointment-reversal', this.requestSubscriptionBalanceListener)
+    document.body.removeEventListener(this.getAttribute('update-subscription-balance') || 'update-subscription-balance', this.updateSubscriptionBalanceListener)
     document.body.removeEventListener('update-subscriptions', this.subscriptionsListener)
     this.select?.removeEventListener('change', this.selectEventListener)
   }
@@ -82,6 +89,7 @@ export default class AppointmentsList extends Shadow() {
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
         this.select = this.root.querySelector('o-grid').root.querySelector('ks-m-select').root.querySelector('div').querySelector('select')
         this.select.addEventListener('change', this.selectEventListener)
+        this.subscriptionHint = this.root.querySelector('o-grid').root.querySelector('ks-m-select')
       }
       this.dispatchEvent(new CustomEvent('update-counter',
         {
@@ -110,6 +118,39 @@ export default class AppointmentsList extends Shadow() {
         composed: true
       }
     ))
+  }
+
+  /**
+   * request the current subscription balance
+   */
+  requestSubscriptionBalanceListener = () => {
+    if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
+      this.dispatchEvent(new CustomEvent('request-subscription-balance',
+        {
+          detail: {
+            subscriptionType: '',
+            subscriptionId: 0
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }
+      ))
+    }
+  }
+
+  /**
+   * Update the current selected subscription balance
+   * @param {CustomEventInit} event
+   */
+  updateSubscriptionBalanceListener = (event) => {
+    event.detail.fetch.then((appointments) => {
+      let { subscriptionValidTo, subscriptionMode, subscriptionBalance } = appointments.selectedSubscription
+      if (subscriptionMode === 'PAUSCHALABO') return
+      subscriptionValidTo = this.formatSubscriptionValidFromDate(subscriptionValidTo)
+      subscriptionBalance = subscriptionMode === 'WERTABO' ? `| ${subscriptionBalance}` : ''
+      this.subscriptionHint.querySelector('.hint > span').textContent = `${subscriptionValidTo} ${subscriptionBalance}`
+    })
   }
 
   shouldRenderCSS () {

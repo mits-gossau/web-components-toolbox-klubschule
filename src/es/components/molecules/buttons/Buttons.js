@@ -97,6 +97,8 @@ export default class Buttons extends Shadow() {
    * @returns void
    */
   renderHTML () {
+    const url = new URL(window.location.origin)
+    const isKlubschule = url.hostname.includes('klubschule.ch')
     const dataButtons = JSON.parse(this.getAttribute('data-buttons')) || [{}]
     const optionalBigAttr = this.hasAttribute('big') ? 'big' : ''
     const optionalSmallAttr = this.hasAttribute('small') ? 'small' : ''
@@ -108,10 +110,10 @@ export default class Buttons extends Shadow() {
       const urlParams = this.hasAttribute('keep-url-params') ? window.location.search : ''
       const urlParamsMap = new URLSearchParams(urlParams)
       const urlParamsArray = Array.from(urlParamsMap.keys())
-      // TODO: keys to ignore should be moved to .env file (see also WithFacet.js)
+      // TODO: keys to ignore should be moved to .env file
       const ignoreURLKeys = [
         'rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
-        // 'q', // ignore search query
+        'sorting', 'sort', // ignore sorting keys
         'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'
       ] // GA parameters
       const filteredURLKeys = urlParamsArray.filter(key => !ignoreURLKeys.includes(key))
@@ -120,14 +122,15 @@ export default class Buttons extends Shadow() {
 
     const buttons = dataButtons?.reduce((acc, button) => {
       // keep existing url params
-      if (shouldKeepURLParams && button.link) {
+      if (shouldKeepURLParams && button.link && filteredURLParams.length > 0) {
         if (button.link.includes('?')) {
           button.link = button.link + '&' + filteredURLParams
         } else {
           button.link = button.link + '?' + filteredURLParams
         }
       }
-      if (button.event?.includes('AdvisoryText')) {
+
+      if (button.event?.includes('AdvisoryText') && isKlubschule) {
         const dialogId = this.getAttribute("dialog-id") || 0
         const parentDiv = document.createElement("div")
 
@@ -177,8 +180,10 @@ export default class Buttons extends Shadow() {
           </m-dialog>
         `
         parentDiv.appendChild(this.overLayButton)
-        return acc + parentDiv.innerHTML;
+
+        return acc + parentDiv.innerHTML
       }
+
       return acc + (
         button.event === 'bookmark' ? '' : /* html */`
         <ks-a-button 

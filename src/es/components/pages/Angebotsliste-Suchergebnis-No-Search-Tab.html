@@ -1,4 +1,20 @@
+
+    <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
+    <style>
+      :host>button,
+      :host>button:hover {
+        border-left: none !important;
+      }
+    </style>
+      <a-icon-mdx icon-name="X" class="icon-right">
+      </a-icon-mdx>
+    </a-button>
+
+
 <ks-o-offers-page
+    expand-event-name="reset-filter"
+    with-location-input 
+    with-search-input=""
     endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
     initial-request='{"filter":[],"PortalId":29,"sprachid":"d","MandantId":111,"ppage":1,"psize":6}'
     endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"

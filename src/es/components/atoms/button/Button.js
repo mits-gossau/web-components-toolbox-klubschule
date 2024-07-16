@@ -1,5 +1,6 @@
 // @ts-check
 import Button from '../../web-components-toolbox/src/es/components/atoms/button/Button.js'
+import { FINISH_LOADING_EVENT } from '../../web-components-toolbox/src/es/components/molecules/simpleForm/SimpleForm.js'
 
 /**
  * Creates an Button
@@ -19,11 +20,49 @@ export default class KsButton extends Button {
       this.buttonSpan.textContent = this.getAttribute('default-label') || 'No added placeholder'
     }
     if (this.getAttribute('answer-event-name')) document.body.addEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
+
+    if (this.hasAttribute('ellipsis-text') && !this.buttonSpan.classList.contains('ellipsis-text')) {
+      this.buttonSpan.classList.add('ellipsis-text')
+    }
+
+    this.formSubmitLoadingListener = (e) => {
+      const temp = document.createElement('div')
+      temp.innerHTML = '<mdx-component class="icon-right"><mdx-spinner size="small"></mdx-spinner></mdx-component>'
+      const spinner = temp.querySelector('mdx-component')
+      this.button.append(spinner)
+    }
+
+    this.simpleFormResponseListener = (e) => {
+      this.button.querySelector('mdx-component')?.remove()
+    }
+
+    if ((this.getAttribute('type') === 'submit') && this.hasAttribute('with-submit-loading')) {
+      this.fetchModules([
+        {
+          path: `${this.importMetaUrl}../../organisms/MdxComponent.js`,
+          name: 'mdx-component'
+        }
+      ])
+      this.closestForm = this.closest('form')
+      this.closestForm?.addEventListener('submit', this.formSubmitLoadingListener)
+
+      /* when there is a simple form check the response event to clean up the spinner */
+      this.closestSimpleForm = this.closest('m-simple-form-validation, m-simple-form')
+      if (this.closestSimpleForm) {
+        this.closestSimpleForm.addEventListener(FINISH_LOADING_EVENT, this.simpleFormResponseListener)
+      }
+    }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback()
     if (this.getAttribute('answer-event-name')) document.body.removeEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
+    if (this.closestForm) {
+      this.closestForm.removeEventListener('submit', this.formSubmitLoadingListener)
+    }
+    if (this.closestSimpleForm) {
+      this.button.removeEventListener(this.responseEventName, this.simpleFormResponseListener)
+    }
   }
 
   /**
@@ -111,10 +150,15 @@ export default class KsButton extends Button {
   }
 
   answerEventListener = async event => {
+    this.removeBtn = this.getRootNode().querySelector("a-button[id='clear']")
+    if (this.removeBtn) this.removeBtn.style.display = 'none'
     let searchTerm = event.detail.searchTerm
-    if (searchTerm) {
+    if (searchTerm && this.removeBtn) {
       this.buttonSpan.classList.remove('hide')
+      this.removeBtn.style.display = 'inline'
       this.buttonSpan.textContent = searchTerm
+    } else if (this.removeBtn) {
+      this.buttonSpan.textContent = this.getAttribute('default-label')
     }
   }
 }

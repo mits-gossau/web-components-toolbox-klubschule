@@ -157,19 +157,14 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderDatePickerListFilter (dateList) {
     const dateListClone = structuredClone(dateList)
-    const minRange = this.formatDate(dateListClone[0].date)
-    const endRange = this.formatDate(dateListClone[dateListClone.length - 1].date)
-    const startDate = this.formatDate(dateListClone.find((day) => day.selected === true).date)
-    const endDate = this.formatDate(dateListClone.findLast((day) => day.selected === true).date)
+    const minRange = this.formatDate(dateListClone.find((day) => day.available === true).date)
+    const endRange = this.formatDate(dateListClone.findLast((day) => day.available === true).date)
+    const startDate = this.formatDate(dateListClone.find((day) => day.selected && day.available === true).date)
+    const endDate = this.formatDate(dateListClone.findLast((day) => day.selected && day.available === true).date)
     const defaultPickrValue = startDate === endDate ? [startDate] : [startDate, endDate]
-    // const pickerLabelValue = defaultPickrValue.join(' - ')
-    let displayValue = ''
-    if (minRange === startDate) {
-      displayValue = '<a-translation data-trans-key="CP.cpFilterTitleStartDate"></a-translation>'
-    } else {
-      displayValue = `${this.getLang()}: ${startDate}`
-    }
-
+    const displayValue = `${this.getLang()}: ${startDate}`
+    // MIDUWEB-1301
+    const forcedEndDate = dateListClone[dateListClone.length - 1].date
     const configOptions = {
       minDate: minRange,
       maxDate: endRange,
@@ -189,6 +184,7 @@ export default class AppointmentsFilter extends Shadow() {
           }
         </style>
         <a-flatpickr
+          force-end-date="${forcedEndDate}"
           namespace="flatpickr-ks-"
           options="${escapeForHtml(JSON.stringify(configOptions))}"
           request-event-name="request-appointments-filter">
@@ -283,14 +279,16 @@ export default class AppointmentsFilter extends Shadow() {
         namespace="dialog-left-slide-in-"
         close-event-name="${requestEventName}"
         show-event-name="${showDialogEventName}">
-          <div class="container dialog-header">
-              <div id="back">&nbsp;</div>
-              <h3>
-                <a-translation data-trans-key="${translationKeyTitle}"></a-translation>
-              </h3>
-              <div id="close">
-                <a-icon-mdx icon-name="Plus" size="2em"></a-icon-mdx>
-              </div>
+          <div class="container dialog-header" tabindex="0">
+            <a-button id="close-back">
+              &nbsp;
+            </a-button>
+            <h3>
+              <a-translation data-trans-key="${translationKeyTitle}"></a-translation>
+            </h3>
+            <a-button request-event-name="backdrop-clicked" id="close">
+              <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+            </a-button>
           </div>
           <div class="container dialog-content">
             <p class="reset-link"></p>

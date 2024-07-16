@@ -21,6 +21,7 @@ export default class Appointments extends HTMLElement {
     this.abortControllerSubscriptionCourseAppointmentBooking = null
     this.abortControllerSubscriptionCourseAppointmentReversalListener = null
     this.abortControllerBookedSubscriptionCourseAppointments = null
+    this.abortControllerUpdateSubcriptionBalance = null
     this.abortControllerCourseListFilterSettings = null
     this.lastFilters = null
     this.currentDialogFilterOpen = null
@@ -32,6 +33,7 @@ export default class Appointments extends HTMLElement {
     this.addEventListener('request-subscription-course-appointment-reversal', this.requestSubscriptionCourseAppointmentReversalListener)
     this.addEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.addEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
+    this.addEventListener('request-subscription-balance', this.requestSubcriptionBalanceListener)
     this.addEventListener('request-course-list-filter-settings', this.requestCourseListFilterSettingsListener)
     // due to the flatpickr dom connection timing issue use document.body in this case
     document.body.addEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
@@ -45,6 +47,7 @@ export default class Appointments extends HTMLElement {
     this.removeEventListener('request-subscription-course-appointment-booking', this.requestSubscriptionCourseAppointmentBookingListener)
     this.removeEventListener('request-booked-subscription-course-appointments', this.requestBookedSubscriptionCourseAppointmentsListener)
     this.removeEventListener('request-course-list-filter-settings', this.requestCourseListFilterSettingsListener)
+    this.removeEventListener('request-subscription-balance', this.requestSubcriptionBalanceListener)
     document.body.removeEventListener('request-appointments-filter', this.requestAppointmentsFilterListener)
     this.removeEventListener('reset-appointments-filter', this.resetFilterDayListener)
   }
@@ -339,13 +342,15 @@ export default class Appointments extends HTMLElement {
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointmentReversal}`
     const tags = JSON.parse(event.detail.tags)
     const courseId = makeUniqueCourseId(tags[0])
+    const subscriptionId = tags[0].subscriptionId ? tags[0].subscriptionId : tags[1].subscriptionId
+    const subscriptionType = tags[0].subscriptionType ? tags[0].subscriptionType : tags[1].subscriptionType
     const data = {
       courseAppointmentDate: tags[0].courseAppointmentDate,
       courseAppointmentTimeFrom: tags[0].courseAppointmentTimeFrom,
       courseId: tags[0].courseId,
       courseType: tags[0].courseType,
-      subscriptionId: tags[1].subscriptionId,
-      subscriptionType: tags[1].subscriptionType,
+      subscriptionId,
+      subscriptionType,
       userId: this.dataset.userId,
       language: this.getLanguage()
     }
@@ -399,6 +404,10 @@ export default class Appointments extends HTMLElement {
     }))
   }
 
+  /**
+   * Update filter settings only in SAP Campus
+   * @param {CustomEventInit} event
+   */
   requestCourseListFilterSettingsListener = async (event) => {
     this.abortControllerCourseListFilterSettings = new AbortController()
     const { userId } = this.dataset
@@ -415,6 +424,38 @@ export default class Appointments extends HTMLElement {
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiCourseListFilterSettings}`
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerCourseListFilterSettings)
     fetch(endpoint, fetchOptions)
+  }
+
+  /**
+   * Use this, to get only the latest subscription balance
+   * Used when make a subscription booking or subscription reversal
+   * @param {CustomEventInit} event
+   */
+  requestSubcriptionBalanceListener = async (event) => {
+    if (this.abortControllerUpdateSubcriptionBalance) this.abortControllerUpdateSubcriptionBalance.abort()
+    this.abortControllerUpdateSubcriptionBalance = new AbortController()
+    const { subscriptionType, subscriptionId } = event.detail
+    const { userId } = this.dataset
+    const data = {
+      userId,
+      subscriptionType,
+      subscriptionId,
+      language: this.getLanguage()
+    }
+    const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerUpdateSubcriptionBalance)
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointments}`
+    this.dispatchEvent(new CustomEvent('update-subscription-balance', {
+      detail: {
+        fetch: fetch(endpoint, fetchOptions).then(async response => {
+          if (response.status >= 200 && response.status <= 299) return await response.json()
+          throw new Error(response.statusText)
+        })
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
   }
 
   /**

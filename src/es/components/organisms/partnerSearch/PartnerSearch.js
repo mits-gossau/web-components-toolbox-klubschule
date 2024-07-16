@@ -3,29 +3,45 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 
 /**
  * Communicates with the src/es/components/controllers/partnerSearch/PartnerSearch.js controller
- *
+ * 
  * @export
  * @class PartnerSearch
  * @type {CustomElementConstructor}
  */
 export default class PartnerSearch extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.hiddenMessages = this.hiddenSections
+    this.searchText = this.getAttribute('search-text')
     this.partnerSearchListener = event => this.renderHTML(event.detail.fetch)
   }
 
-  connectedCallback () {
+  connectedCallback(){
     this.hidden = true
-    const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-    Promise.all(showPromises).then(() => (this.hidden = false))
+    new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-translations',
+        {
+          detail: {
+            resolve
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
+      const showPromises = []
+      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+      Promise.all(showPromises).then(() => (this.hidden = false))
+    })
+
     document.body.addEventListener('partner-search', this.partnerSearchListener)
     new Promise(resolve => this.dispatchEvent(new CustomEvent('request-partner-search', {
       detail: {
-        searchText: this.getAttribute('search-text'),
+        searchText: this.searchText,
         resolve
       },
       bubbles: true,
@@ -62,7 +78,47 @@ export default class PartnerSearch extends Shadow() {
    * @return {Promise<void>}
    */
   renderCSS () {
-    this.css = /* css */''
+    this.css = /* css */`
+      :host {
+        --picture-teaser-img-height: 48px;
+        --h2-margin: 0 0 var(--mdx-sys-spacing-flex-large-m);
+        --h3-margin: 0 0 var(--mdx-sys-spacing-flex-large-xs);
+        --picture-teaser-display: block;
+        --picture-teaser-img-margin: 0;
+        --a-text-decoration: underline;
+        text-decoration-line: none;
+      }
+      :host .partner-result-wrapper {
+        display: flex;
+        gap: var(--mdx-sys-spacing-fix-l);
+      }
+      :host .partner-result-item-wrapper {
+        flex-basis: calc((100% - 2 * 2rem) / 3);
+        background-color: var(--m-white);
+        text-align: start;
+        padding: 1.25rem;
+        display: flex;
+        gap: var(--mdx-sys-spacing-fix-2xs);
+        flex-direction: column;
+      }
+      :host .partner-result-item-wrapper .button-wrapper {
+        margin: var(--mdx-sys-spacing-fix-2xs) 0 0;
+      }
+      :host .partner-result-item-wrapper span {
+        font: var(--mdx-sys-font-fix-body3);
+        margin-bottom: auto;
+      }
+      :host #partner-results {
+        --h2-margin: 0 0 var(--mdx-sys-spacing-flex-large-s);
+      }
+      :host section + section {
+        margin: var(--mdx-sys-spacing-flex-large-m) 0 0;
+      }
+      :host a-picture {
+        --picture-teaser-img-max-width: unset;
+        --picture-teaser-img-width: unset;
+      }
+    `
     return this.fetchTemplate()
   }
 
@@ -70,7 +126,7 @@ export default class PartnerSearch extends Shadow() {
    * fetches the template
    * @return {Promise<void>}
    */
-  fetchTemplate () {
+  fetchTemplate() {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
@@ -90,29 +146,53 @@ export default class PartnerSearch extends Shadow() {
 
   /**
    * Render HTML
-   * @param {Promise<{}>} [fetch=undefined]
+   * @param {Promise<any>} [fetch=undefined]
    * @return {Promise<void>}
    */
-  async renderHTML (fetch) {
+  async renderHTML(fetch) {
     this.html = ''
     this.renderLoading()
     if (fetch) {
-      console.log('*********', fetch, this.hiddenMessages)
       // fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
-      // const data = this.lastData = await fetch
+      const data = this.lastData = await fetch
       this.html = ''
       this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
       this.html = this.hiddenMessages
-      // if (data?.partnerListEntries.length) {
-      //   this.html = /* html */`Duuuuude`
-      // } else {
-      //   /*
-      //   this.html = this.message
-      //   this.message.removeAttribute('hidden')
-      //   */
-      // }
+      const headline = this.hiddenMessages[this.hiddenMessages.length - 1].querySelector("h2")
+      let headlineText = headline.innerText
+      headlineText = headlineText.replace("{0}", this.searchText)
+      headline.innerHTML = headlineText
+
+      const partnerResultsSection = this.root.querySelector("#partner-results")
+
+      // @ts-ignore
+      if (data?.items?.length && data?.items?.find(({ count }) => count > 0)) {
+        partnerResultsSection.insertAdjacentHTML('beforeend', /* html */ `
+          <div class="partner-result-wrapper">
+            ${data.items.reduce((acc, item) => acc + item.count > 0 ? /* html */ `
+              <div class="partner-result-item-wrapper">
+                <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
+                <span>${item.text}</span>
+                <div class="button-wrapper">
+                  <ks-a-button namespace="button-secondary-" color="secondary" target="_blank" label="${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}" href="${item.link}"></ks-a-button>
+                </div>
+              </div>
+            ` : '', '')}
+          </div>
+        `)
+      } else {
+        partnerResultsSection.setAttribute('hidden', '')
+      }
     }
     return this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
+        name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/picture/Picture.js`,
+        name: 'a-picture'
+      },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
         name: 'a-translation'
@@ -137,6 +217,6 @@ export default class PartnerSearch extends Shadow() {
   }
 
   get hiddenSections () {
-    return Array.from(this.root.querySelectorAll('section[hidden]'))
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }

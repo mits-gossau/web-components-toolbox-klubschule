@@ -83,19 +83,6 @@ export default class filterSelect extends Shadow() {
     }
   }
 
-  getLastSelectedChild (filterItem) {
-    let lastSelectedChild = null
-    if (filterItem.selected && (!filterItem.children || filterItem.children.length === 0)) return filterItem
-    if (filterItem.children) {
-      for (const child of filterItem.children) {
-        const result = this.getLastSelectedChild(child)
-        if (result) lastSelectedChild = result
-      }
-    }
-
-    return lastSelectedChild
-  }
-
   createFilterButton (filterItem, selectedFilter) {
     return /* html */`
       <m-double-button namespace="double-button-default-" width="100%">
@@ -112,21 +99,28 @@ export default class filterSelect extends Shadow() {
 
   generateFilterButtons(filterData) {
     const processFilterItem = (filterItem) => {
-      if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-        let selectedFilterItems = []
-  
-        if (filterItem.typ === 'multi' || filterItem.typ === 'value' || filterItem.typ === 'tree') {
-          const selectedChildren = filterItem.children.filter(child => child.selected)
-          if (selectedChildren.length > 0) {
-            selectedChildren.forEach(child => {
-              selectedFilterItems.push(`${child.label}`)
-            })
-          }
-        } 
-        
-        if (filterItem.typ === 'group') {
-          const lastSelectedChild = this.getLastSelectedChild(filterItem)
-          if (lastSelectedChild) selectedFilterItems.push(`${lastSelectedChild.label}`)
+      const isCenterFilter = filterItem.typ === 'group'
+      let selectedFilterItems = []
+
+      if (isCenterFilter && filterItem.visible) {
+        filterItem.children.forEach(region => {
+          region.children.forEach(center => {
+            if (center.selected) {
+              selectedFilterItems.push(`${center.label}`)
+            }
+          })
+        })
+
+        if (selectedFilterItems.length > 0) {
+          this.html = this.createFilterButton(filterItem, selectedFilterItems)
+        }
+      } else if (!isCenterFilter && filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
+        const selectedChildren = filterItem.children.filter(child => child.selected)
+
+        if (selectedChildren.length > 0) {
+          selectedChildren.forEach(child => {
+            selectedFilterItems.push(`${child.label}`)
+          })
         }
 
         if (selectedFilterItems.length > 0) {

@@ -79,11 +79,16 @@ export default class FilterCategories extends Shadow() {
 
   generateCenterFilter (response, filterItem) {
     const centerNav = []
+    let centerUrlpara = 'center'
+    if (filterItem.typ === 'group') centerUrlpara = filterItem.urlpara
 
     filterItem.children.forEach(region => {
       const divRegion = document.createElement('div')
       divRegion.innerHTML = /* html */`<label class="headline">${region.label}</label>`
       centerNav.push(divRegion.children[0])
+
+      // sort region.children by label
+      region.children.sort((a, b) => a.label.localeCompare(b.label))
 
       region.children.forEach(center => {
         const count = center.count ? `(${center.count})` : ''
@@ -92,7 +97,7 @@ export default class FilterCategories extends Shadow() {
         const visible = center.visible ? 'visible' : ''
         const centerCheckbox = /* html */`
           <mdx-component mutation-callback-event-name="request-with-facet">
-            <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}" filter-id="${region.urlpara}-${center.id}"></mdx-checkbox>
+            <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}" filter-id="${centerUrlpara}-${center.id}"></mdx-checkbox>
           </mdx-component>
         `
         const div = document.createElement('div')
@@ -107,17 +112,19 @@ export default class FilterCategories extends Shadow() {
   }
 
   updateCenterFilter (centerFilters, filterItem) {
+    let centerUrlpara = 'center'
+    if (filterItem.typ === 'group') centerUrlpara = filterItem.urlpara
+
     filterItem.children.forEach(region => {
       region.children.forEach(center => {
         const count = center.count ? `(${center.count})` : ''
         const disabled = center.disabled ? 'disabled' : ''
         const checked = center.selected ? 'checked' : ''
         const visible = center.visible ? 'visible' : ''
-        const id = `[filter-id="${region.urlpara}-${center.id}"]`
+        const id = `[filter-id="${centerUrlpara}-${center.id}"]`
         let centerFilterCheckbox = null
 
         if (centerFilters.find(centerFilter => (centerFilterCheckbox = centerFilter.querySelector(id) || (centerFilter.matches(id) && centerFilter)))) {
-          // TODO: When ks-m-nav-level-item Update the numbers within the brackets (...)
           // @ts-ignore
           centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
           const attributes = { disabled, checked, visible }

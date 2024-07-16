@@ -29,7 +29,7 @@ import { WebWorker } from '../../web-components-toolbox/src/es/components/protot
  * @type {CustomElementConstructor}
  */
 export default class WithFacet extends WebWorker() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({
       importMetaUrl: import.meta.url,
       mode: 'false',
@@ -44,6 +44,9 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter
+    // hold the initial response filters from the very first response call to be able to reset filters for "tree" filters
+    let firstRequest = true
+    let initialResponseFilters = null
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
@@ -59,10 +62,12 @@ export default class WithFacet extends WebWorker() {
 
     // intial sorting when page is refreshed
     if (!currentRequestObj.sorting) {
-      currentRequestObj.sorting = 3
-      if (currentRequestObj.searchText) currentRequestObj.sorting = 1
-      if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 2
+      currentRequestObj.sorting = 3 // alphabetic
+      if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 2 // distance
     }
+
+    // If shared with active Sorting, keep param for other user
+    if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
 
     this.requestWithFacetListener = async event => {
       // mdx prevent double event
@@ -82,24 +87,42 @@ export default class WithFacet extends WebWorker() {
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
+        currentRequestObj.sorting = 3
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
-        this.deleteParamFromUrl(filterKey)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
-        if (filterKey === 'q') delete currentRequestObj.searchText
+        if (filterKey === 'q') {
+          delete currentRequestObj.searchText
+          if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
+        }
+        if (filterKey === 'cname') {
+          this.deleteParamFromUrl('clong')
+          this.deleteParamFromUrl('clat')
+          delete currentRequestObj.cname
+          delete currentRequestObj.clong
+          delete currentRequestObj.clat
+          currentRequestObj.sorting = Number(this.params.get('sorting')) || 3
+          this.updateURLParam('sorting', currentRequestObj.sorting)
+        }
+        this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
         const isTree = event?.detail?.target?.type === "tree"
+        if (isTree) {
+          // replace currentCompleteFilterObj.filter of "typ: tree" with initialResponseFilters.filter of "typ: tree" to avoid multi selection
+          const initialResponseFiltersTree = initialResponseFilters.filter(filterItem => filterItem.typ === 'tree')
+          currentCompleteFilterObj = currentCompleteFilterObj.filter(filterItem => filterItem.typ !== 'tree')
+          currentCompleteFilterObj = [...currentCompleteFilterObj, ...initialResponseFiltersTree]
+        }
         this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = result[1]
-        currentRequestObj.sorting = 1
+        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
         if (isTree) {
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
         }
@@ -113,6 +136,7 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('clong', event.detail.lng)
           this.updateURLParam('cname', encodeURIComponent(event.detail.description))
           currentRequestObj.sorting = 2
+          this.updateURLParam('sorting', 2)
         } else {
           if (currentRequestObj.clat) delete currentRequestObj.clat
           if (currentRequestObj.clong) delete currentRequestObj.clong
@@ -120,8 +144,8 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
           currentRequestObj.ppage = -1
-          currentRequestObj.sorting = 3
-          if (currentRequestObj.searchText) currentRequestObj.sorting = 1
+          currentRequestObj.sorting = this.params.get('sorting') || 3
+          this.updateURLParam('sorting', currentRequestObj.sorting)
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
@@ -135,13 +159,19 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
-        currentRequestObj.sorting = 1
-      } else if ((event?.detail?.key === 'sorting' && !!event.detail.id)) {
+
+        if (event?.detail?.value === '' && !currentRequestObj.clat) {
+          delete currentRequestObj.searchText
+          currentRequestObj.sorting = 3 // alphabetic
+        }
+      } else if (event?.detail?.key === 'sorting' && !!event.detail.id) {
         // sorting
         currentRequestObj.sorting = event.detail.id || 3
+        this.updateURLParam('sorting', currentRequestObj.sorting)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
+        currentRequestObj.ppage = 0
       } else {
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
@@ -192,6 +222,12 @@ export default class WithFacet extends WebWorker() {
             }).then(json => {
               // update filters with api response
               currentRequestObj.filter = currentCompleteFilterObj = json.filters
+
+              // hold the json.filters from the very first response call
+              if (firstRequest) {
+                initialResponseFilters = json.filters
+                firstRequest = false
+              }
 
               return json
             }).finally(json => {
@@ -282,57 +318,73 @@ export default class WithFacet extends WebWorker() {
     }
   }
 
-  connectedCallback () {
-    this.addEventListener('request-with-facet', this.requestWithFacetListener)
-    this.addEventListener('reset-all-filters', this.requestWithFacetListener)
-    this.addEventListener('reset-filter', this.requestWithFacetListener)
-    this.addEventListener('request-locations', this.requestLocations)
+  connectedCallback() {
+    this.getAttribute('expand-event-name') === 'request-with-facet' ? self.addEventListener('request-with-facet', this.requestWithFacetListener) : this.addEventListener('request-with-facet', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.addEventListener('reset-all-filters', this.requestWithFacetListener) : this.addEventListener('reset-all-filters', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
+
     self.addEventListener('popstate', this.popstateListener)
   }
 
-  disconnectedCallback () {
-    this.removeEventListener('request-with-facet', this.requestWithFacetListener)
-    this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
-    this.removeEventListener('reset-filter', this.requestWithFacetListener)
-    this.removeEventListener('request-locations', this.requestLocations)
+  disconnectedCallback() {
+    this.getAttribute('expand-event-name') === 'request-with-facet' ? self.removeEventListener('request-with-facet', this.requestWithFacetListener) : this.removeEventListener('request-with-facet', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.removeEventListener('reset-all-filters', this.requestWithFacetListener) : this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
+
+    this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
+
     self.removeEventListener('popstate', this.popstateListener)
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters (filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isTree = false) {
+  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isTree = false) {
+    // @ts-ignore
+    const isParentSelected = selectedParent?.urlpara === filterKey
     const treeShookFilters = []
+
     filters.forEach(filterItem => {
-      const isMatchingKey = (filterItem.urlpara !== undefined) && (filterItem.urlpara === filterKey)
+      const isCenterFilter = filterItem.id === filterValue
+      const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
+      const isUrlpara = filterItem.urlpara === filterValue
+      
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
-        const isIdOrUrlpara = filterItem.id === filterValue || filterItem.urlpara === filterValue
-        // @ts-ignore
-        const isParentSelected = selectedParent?.urlpara === filterKey
-        // @ts-ignore
-        if (filterItem.selected && isIdOrUrlpara && !isTree) {
+      if (filterItem.selected && isUrlpara && !isTree && !isCenterFilter) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
-        } else if (filterItem.selected && !isIdOrUrlpara) {
+        } else if (filterItem.selected && !isUrlpara && !isCenterFilter) {
           filterItem.selected = true // keep filterItem selected if it is already selected
-        } else if (!filterItem.selected && isIdOrUrlpara && isParentSelected) {
+        } else if (!filterItem.selected && isUrlpara && isParentSelected && !isCenterFilter) {
           filterItem.selected = true // select filterItem if it is not selected
-        } else if (isParentSelected) {
+        } else if (isParentSelected && !isCenterFilter) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
+        } else if (isCenterFilter) {
+          filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
         }
       }
-      const treeShookFilterItem = structuredClone(filterItem)
+
+      let treeShookFilterItem = structuredClone(filterItem)
+
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
         [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isTree)
       }
+
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
     })
+
     return [filters, treeShookFilters]
   }
 
-  getLastSelectedFilterItem (filterItems) {
+  getLastSelectedFilterItem(filterItems) {
     filterItems.forEach(filterItem => {
       if (filterItem.children?.length) {
         filterItem.selected = false
@@ -345,19 +397,19 @@ export default class WithFacet extends WebWorker() {
     return filterItems
   }
 
-  static cleanRequest (requestObj) {
+  static cleanRequest(requestObj) {
     // Bad API needs filter for payload but responses with filters
     if (requestObj.filters) delete requestObj.filters
     return requestObj
   }
 
-  catchURLParams () {
+  catchURLParams() {
     return new URLSearchParams(self.location.search)
   }
 
-  updateURLParam (key, value, isTree = false) {
+  updateURLParam(key, value, isTree = false) {
     if (this.params) {
-      if (this.params.has(key) && key !== 'q') {
+      if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname' && key !== 'sorting' && !isTree) {
         const currentValues = this.params.get(key)?.split('-')
         if (!currentValues?.includes(value)) {
           currentValues?.push(value)
@@ -367,7 +419,8 @@ export default class WithFacet extends WebWorker() {
           currentValues?.splice(currentValues.indexOf(value), 1)
           if (currentValues.length > 0) {
             this.params.set(key, currentValues.join('-'))
-          } else {
+          } else if (!isTree) { // keep it for tree filters
+            console.log('delete', key)
             this.params.delete(key)
           }
         }
@@ -379,15 +432,21 @@ export default class WithFacet extends WebWorker() {
           if (value === key) this.params.delete(k)
         }
         this.params.set(key, value)
+
+        // check if key already exists and replace it with new value
+        if (this.params.get(key)) {
+          this.params.delete(key)
+          this.params.set(key, value)
+        }
       } else {
         this.params.set(key, value)
       }
 
-      //WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  deleteAllFiltersFromUrl (filters) {
+  deleteAllFiltersFromUrl(filters) {
     if (this.params) {
       filters.forEach(filterItem => {
         if (filterItem.children && filterItem.children.length > 0) {
@@ -401,22 +460,22 @@ export default class WithFacet extends WebWorker() {
       this.params.delete('clong')
       this.params.delete('cname')
 
-      //WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  deleteParamFromUrl (filterKey) {
+  deleteParamFromUrl(filterKey) {
     if (this.params) {
       this.params.delete(filterKey)
-      //WithFacet.historyPushState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
+      WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
   }
 
-  static historyPushState (...args) {
+  static historyReplaceState(...args) {
     // Avoid multiple empty pushes, otherwise the navigation history becomes jammed
     if ((new URL(args[2])).search !== location.search) {
       // @ts-ignore
-      self.history.pushState(...args)
+      self.history.replaceState(...args)
     }
   }
 }

@@ -301,7 +301,7 @@ export default class EventDetail extends Shadow() {
           </table>
           ${this.data.kurs_zusatzinfo ? /* html */ `<p>${this.data.kurs_zusatzinfo}</p>` : ''}          
         </div>
-        ${this.data.location_label && this.data.durchfuehrungaddresse?.beschreibung ? /* html */ `
+        ${this.data.location_label && (this.data.durchfuehrungaddresse?.beschreibung || this.data.durchfuehrungaddresse?.strasse || this.data.durchfuehrungaddresse?.ort) ? /* html */ `
           <div class="address">
             <h3>
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1em"></a-icon-mdx>
