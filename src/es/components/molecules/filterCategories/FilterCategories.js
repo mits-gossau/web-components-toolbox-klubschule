@@ -87,6 +87,9 @@ export default class FilterCategories extends Shadow() {
       divRegion.innerHTML = /* html */`<label class="headline">${region.label}</label>`
       centerNav.push(divRegion.children[0])
 
+      // sort region.children by label
+      region.children.sort((a, b) => a.label.localeCompare(b.label))
+
       region.children.forEach(center => {
         const count = center.count ? `(${center.count})` : ''
         const disabled = center.disabled ? 'disabled' : ''
