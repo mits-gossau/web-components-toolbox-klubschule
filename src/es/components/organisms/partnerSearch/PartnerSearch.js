@@ -163,11 +163,13 @@ export default class PartnerSearch extends Shadow() {
       headlineText = headlineText.replace("{0}", this.searchText)
       headline.innerHTML = headlineText
 
+      const partnerResultsSection = this.root.querySelector("#partner-results")
+
       // @ts-ignore
-      if (data?.items.length) {
-        this.root.querySelector("#partner-results").insertAdjacentHTML('beforeend', /* html */ `
+      if (data?.items?.length && data?.items?.find(({ count }) => count > 0)) {
+        partnerResultsSection.insertAdjacentHTML('beforeend', /* html */ `
           <div class="partner-result-wrapper">
-            ${data.items.reduce((acc, item) => acc + /* html */ `
+            ${data.items.reduce((acc, item) => acc + item.count > 0 ? /* html */ `
               <div class="partner-result-item-wrapper">
                 <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
                 <span>${item.text}</span>
@@ -175,12 +177,11 @@ export default class PartnerSearch extends Shadow() {
                   <ks-a-button namespace="button-secondary-" color="secondary" target="_blank" label="${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}" href="${item.link}"></ks-a-button>
                 </div>
               </div>
-            `, '')}
+            ` : '', '')}
           </div>
         `)
       } else {
-        this.html = this.message
-        this.message.removeAttribute('hidden')
+        partnerResultsSection.setAttribute('hidden', '')
       }
     }
     return this.fetchModules([
