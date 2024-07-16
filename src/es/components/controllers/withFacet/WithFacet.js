@@ -409,7 +409,7 @@ export default class WithFacet extends WebWorker() {
 
   updateURLParam(key, value, isTree = false) {
     if (this.params) {
-      if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname' && key !== 'sorting') {
+      if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname' && key !== 'sorting' && !isTree) {
         const currentValues = this.params.get(key)?.split('-')
         if (!currentValues?.includes(value)) {
           currentValues?.push(value)
@@ -432,6 +432,12 @@ export default class WithFacet extends WebWorker() {
           if (value === key) this.params.delete(k)
         }
         this.params.set(key, value)
+
+        // check if key already exists and replace it with new value
+        if (this.params.get(key)) {
+          this.params.delete(key)
+          this.params.set(key, value)
+        }
       } else {
         this.params.set(key, value)
       }
