@@ -408,7 +408,6 @@ export default class WithFacet extends WebWorker() {
   }
 
   updateURLParam(key, value, isTree = false) {
-    console.log('updateURLParam', key, value, isTree)
     if (this.params) {
       if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname' && key !== 'sorting') {
         const currentValues = this.params.get(key)?.split('-')
