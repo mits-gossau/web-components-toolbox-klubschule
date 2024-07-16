@@ -120,7 +120,10 @@ export default class AppointmentsList extends Shadow() {
     ))
   }
 
-  requestSubscriptionBalanceListener = (event) => {
+  /**
+   * request the current subscription balance
+   */
+  requestSubscriptionBalanceListener = () => {
     if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
       this.dispatchEvent(new CustomEvent('request-subscription-balance',
         {
@@ -136,6 +139,10 @@ export default class AppointmentsList extends Shadow() {
     }
   }
 
+  /**
+   * Update the current selected subscription balance
+   * @param {CustomEventInit} event
+   */
   updateSubscriptionBalanceListener = (event) => {
     event.detail.fetch.then((appointments) => {
       let { subscriptionValidTo, subscriptionMode, subscriptionBalance } = appointments.selectedSubscription
