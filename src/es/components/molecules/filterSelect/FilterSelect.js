@@ -109,7 +109,6 @@ export default class filterSelect extends Shadow() {
       
       if (isSectorFilter) {
         treeIds = filterData.map(filter => this.findSelectedAndParents(filter)).find(item => item)
-        if (treeIds) console.log(treeIds.parents)
       }
 
       if (isCenterFilter && filterItem.visible) {
