@@ -508,7 +508,7 @@ export default class Event extends Shadow() {
           <div class="controls">
             <div class="controls-left">
               ${!ist_abokurs_offen ? /* html */ `
-              <ks-m-buttons dialog-id="${kurs_id}" data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
+              <ks-m-buttons dialog-id="${kurs_id}" status="${status}" data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
               ` : ''}
             </div>
             <div class="controls-right">
