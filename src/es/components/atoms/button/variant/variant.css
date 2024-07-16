@@ -98,6 +98,7 @@
   pointer-events: none;
   border-radius: var(--button-badge-border-radius, 2%);
   width: 100%;
+  font: var(--mdx-sys-font-fix-body2-font-size);
 }
 
 :host([big]) button {
