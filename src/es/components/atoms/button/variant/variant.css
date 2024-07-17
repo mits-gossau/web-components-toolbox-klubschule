@@ -161,6 +161,7 @@
     var(--mdx-comp-button-primary-small-padding-horizontal-default);
   --button-primary-font-weight: var(--mdx-comp-button-primary-small-font-default-font-weight);
   --button-primary-font-size: var(--mdx-comp-button-primary-small-font-default-font-size);
+  --button-primary-line-height: 1rem;
   --button-primary-icon-height: var(--mdx-comp-button-primary-small-sizing-icon-default);
   --button-primary-icon-width: var(--mdx-comp-button-primary-small-sizing-icon-default);
   --button-primary-icon-height-mobile: var(--mdx-comp-button-primary-small-sizing-icon-default); /* = same size as desktop */
@@ -173,6 +174,7 @@
   --button-secondary-padding: var(--button-primary-padding);
   --button-secondary-font-weight: var(--button-primary-font-weight);
   --button-secondary-font-size: var(--button-primary-font-size);
+  --button-secondary-line-height: 1rem;
   --button-secondary-icon-height: var(--button-primary-icon-height);
   --button-secondary-icon-width: var(--button-primary-icon-width);
   --button-secondary-icon-height-mobile: var(--button-primary-icon-height-mobile);
@@ -184,6 +186,7 @@
   --button-tertiary-padding: var(--button-primary-padding);
   --button-tertiary-font-weight: var(--button-primary-font-weight);
   --button-tertiary-font-size: var(--button-primary-font-size);
+  --button-tertiary-line-height: 1rem;
   --button-tertiary-icon-height: var(--button-primary-icon-height);
   --button-tertiary-icon-width: var(--button-primary-icon-width);
   --button-tertiary-icon-height-mobile: var(--button-primary-icon-height-mobile);
@@ -195,6 +198,7 @@
   --button-quaternary-padding: var(--button-primary-padding);
   --button-quaternary-font-weight: var(--button-primary-font-weight);
   --button-quaternary-font-size: var(--button-primary-font-size);
+  --button-quaternary-line-height: 1rem;
   --button-quaternary-icon-height: var(--button-primary-icon-height);
   --button-quaternary-icon-width: var(--button-primary-icon-width);
   --button-quaternary-icon-height-mobile: var(--button-primary-icon-height-mobile);
