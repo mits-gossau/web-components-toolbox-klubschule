@@ -551,7 +551,7 @@ export default class CourseDialog extends Shadow() {
           <div class="container dialog-content">
             <p class="reset-link"></p>
              <div class="sub-content">
-              <h2>${data.subscriptionDescription}</h2>
+              <h2>${data.subscriptionDescription} (${data.subscriptionType}_${data.subscriptionId})</h2>
               <div id="view-content">
                 ${this.renderDialogContentSubscriptionDetail(data)}
               </div>
