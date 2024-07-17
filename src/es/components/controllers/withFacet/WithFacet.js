@@ -104,7 +104,11 @@ export default class WithFacet extends WebWorker() {
           delete currentRequestObj.cname
           delete currentRequestObj.clong
           delete currentRequestObj.clat
-          currentRequestObj.sorting = Number(this.params.get('sorting')) || 3
+          if (!this.params.get('q') || this.params.get('q') === '') {
+            currentRequestObj.sorting = 3 // alphabetic
+          } else {
+            currentRequestObj.sorting = 1 // relevance
+          }
           this.updateURLParam('sorting', currentRequestObj.sorting)
         }
         this.deleteParamFromUrl(filterKey)
@@ -160,9 +164,15 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
 
+        currentRequestObj.sorting = 1 // relevance
+
         if (event?.detail?.value === '' && !currentRequestObj.clat) {
           delete currentRequestObj.searchText
           currentRequestObj.sorting = 3 // alphabetic
+        }
+
+        if (event?.detail?.value !== '' && currentRequestObj.clat) {
+          currentRequestObj.sorting = 2 // distance
         }
       } else if (event?.detail?.key === 'sorting' && !!event.detail.id) {
         // sorting
@@ -352,10 +362,10 @@ export default class WithFacet extends WebWorker() {
       const isCenterFilter = filterItem.id === filterValue
       const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
       const isUrlpara = filterItem.urlpara === filterValue
-      
+
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
-      if (filterItem.selected && isUrlpara && !isTree && !isCenterFilter) {
+        if (filterItem.selected && isUrlpara && !isTree && !isCenterFilter) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
         } else if (filterItem.selected && !isUrlpara && !isCenterFilter) {
           filterItem.selected = true // keep filterItem selected if it is already selected
