@@ -85,8 +85,9 @@ export default class filterSelect extends Shadow() {
 
   createFilterButton (filterItem, selectedFilter, treeIds = []) {
     let requestEventName = 'dialog-open-first-level'
-    // @ts-ignore
-    treeIds && treeIds.parents.length > 0 ? requestEventName += ','+treeIds.parents.map(id => `dialog-open-${id}`).join(',') : requestEventName += ','+`dialog-open-${filterItem.id}`
+    
+    treeIds && treeIds['parents']?.length > 0 ? requestEventName += ','+treeIds['parents']?.map(id => `dialog-open-${id}`).join(',') : requestEventName += ','+`dialog-open-${filterItem.id}`
+
     return /* html */`
       <m-double-button namespace="double-button-default-" width="100%">
         <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="${requestEventName}" click-no-toggle-active>
