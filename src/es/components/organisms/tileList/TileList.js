@@ -131,6 +131,10 @@ export default class TileList extends Shadow() {
         cursor: pointer;
       }
 
+      :host .o-tile-list__title:hover {
+        color: var(--mdx-sys-color-primary-default);
+      }
+
       :host a-icon-mdx {
         --icon-mdx-ks-color: var(--icon-color-blue);
       }
