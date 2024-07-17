@@ -13,6 +13,8 @@ export default class TileList extends Shadow() {
     this.ppage = 1
 
     this.clickEventListener = event => {
+      // ChevronDown/Up icon
+      this.icon = this.root.querySelector('ks-m-buttons')?.root?.querySelector('ks-a-button')?.root?.querySelector('a-icon-mdx[icon-name="ChevronDown"], a-icon-mdx[icon-name="ChevronUp"]')
       if (this.icon) {
         if (this.icon.getAttribute('icon-name') === 'ChevronDown') {
           this.icon.setAttribute('icon-name', 'ChevronUp')
@@ -374,7 +376,6 @@ export default class TileList extends Shadow() {
     /**
      * Toggle details
      */
-    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
     this.toggle = this.root.querySelector('.o-tile-list__bottom-left')
     this.tilesContainer = this.root.querySelector('.o-tile-list__tiles')
     this.loadMore = this.root.querySelector('#request-more-locations')
