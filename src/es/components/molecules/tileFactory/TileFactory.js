@@ -15,8 +15,6 @@ export default class TileFactory extends Shadow() {
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
 
     this.hiddenMessages = this.hiddenSections
-
-    this.previousPnext = null
   }
 
   connectedCallback () {
@@ -122,8 +120,7 @@ export default class TileFactory extends Shadow() {
       setTimeout(() => {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
-        // keep html if loading more data, but not when ppage is -1 and the previous pnext was -1
-        if (data.ppage === 1 || (data.ppage === -1 && this.previousPnext === -1)) this.html = ''
+        this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -174,7 +171,6 @@ export default class TileFactory extends Shadow() {
             ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
           </ks-o-partner-search>
         `
-        this.previousPnext = data.pnext
       }, 0)
     }).catch(error => {
       console.error(error)
