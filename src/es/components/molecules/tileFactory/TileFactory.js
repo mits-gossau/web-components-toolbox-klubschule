@@ -68,7 +68,7 @@ export default class TileFactory extends Shadow() {
     }
     :host m-load-template-tag {
       display: block;
-      min-height: 10em;
+      min-height: 8em;
     }
     @media only screen and (max-width: _max-width_) {
       :host > section {

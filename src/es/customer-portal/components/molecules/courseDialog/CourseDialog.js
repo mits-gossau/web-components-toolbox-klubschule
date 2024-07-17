@@ -19,6 +19,7 @@ export default class CourseDialog extends Shadow() {
     this.courseId = null
     this.courseSubscription = null
     this.subscriptionsPdfLink = null
+    this.renderPriceInfoInBookingView = false
   }
 
   connectedCallback () {
@@ -110,11 +111,13 @@ export default class CourseDialog extends Shadow() {
           }
         ))
         if (type === 'detail') {
+          this.renderPriceInfoInBookingView = false
           // trans value = Termindetails
           this.renderDialogTitle('CP.cpAppointmentDetails')
           this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
         }
         if (type === 'booking') {
+          this.renderPriceInfoInBookingView = true
           // trans value = Termin buchen
           this.renderDialogTitle('CP.cpBookAppointment')
           this.viewContent.innerHTML = this.renderDialogContentBookingConfirmation(this.courseData, this.courseDetail)
@@ -248,6 +251,7 @@ export default class CourseDialog extends Shadow() {
    */
   requestShowDialogBookingConfirmationListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
+      this.renderPriceInfoInBookingView = true
       // trans value = Termin buchen
       this.renderDialogTitle('CP.cpBookAppointment')
       this.viewContent.innerHTML = ''
@@ -280,6 +284,9 @@ export default class CourseDialog extends Shadow() {
         }
         .alert {
           color: var(--alert-color, #F4001B);
+        }
+        .additional-subcription-info {
+          padding-top: 0.75em;
         }
       </style>
       <div id="content">
@@ -544,7 +551,7 @@ export default class CourseDialog extends Shadow() {
           <div class="container dialog-content">
             <p class="reset-link"></p>
              <div class="sub-content">
-              <h2>${data.subscriptionDescription}</h2>
+              <h2>${data.subscriptionDescription} (${data.subscriptionType}_${data.subscriptionId})</h2>
               <div id="view-content">
                 ${this.renderDialogContentSubscriptionDetail(data)}
               </div>
@@ -687,6 +694,29 @@ export default class CourseDialog extends Shadow() {
       `
     }
 
+    let priceInfo = ''
+    let subscriptionBalanceAdditionalInfo = ''
+    if (detail.subscriptionMode === 'WERTABO' && this.renderPriceInfoInBookingView) {
+      priceInfo = /* html */ `
+        <div class="detail">
+          <span>
+            <!-- trans value = Preis -->
+            <a-translation data-trans-key="CP.cpAppointmentListColumnPrice"></a-translation>
+          </span>
+          <span>${detail.lessonPrice}</span>
+        </div>
+      `
+      subscriptionBalanceAdditionalInfo = /* html */ `
+        <span>
+          <!-- trans value = Der Preis für den Termin von -->
+          <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking1"></a-translation>
+          ${detail.lessonPrice}
+          <!-- trans value = wird Ihnen von diesem Abonnement abgezogen. -->
+          <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking2"></a-translation>
+        </span>
+      `
+    }
+
     return /* html */ `
       <div class="detail">
         <span>
@@ -714,6 +744,7 @@ export default class CourseDialog extends Shadow() {
         </span>
         <span>${detail.instructorDescription}</span>
       </div>
+      ${priceInfo}
       <div class="detail">
         <span>
           <!-- trans value = Status -->
@@ -735,6 +766,9 @@ export default class CourseDialog extends Shadow() {
           <a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${validTo} 
           ${renderBalance}
         </span>
+        <div class="additional-subcription-info">
+          ${subscriptionBalanceAdditionalInfo}
+        </div>
       </div> 
     `
   }
