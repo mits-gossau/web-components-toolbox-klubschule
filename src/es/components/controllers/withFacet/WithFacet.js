@@ -420,7 +420,6 @@ export default class WithFacet extends WebWorker() {
           if (currentValues.length > 0) {
             this.params.set(key, currentValues.join('-'))
           } else if (!isTree) { // keep it for tree filters
-            console.log('delete', key)
             this.params.delete(key)
           }
         }

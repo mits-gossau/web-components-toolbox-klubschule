@@ -97,7 +97,7 @@ export default class ContentFactory extends Shadow() {
         }
       ])
     ]).then(([data]) => {
-      if (!data.isNextPage) this.html = ''
+      this.html = ''
       if (!data) {
         this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Content.Error'}"></a-translation></span>`
         return
