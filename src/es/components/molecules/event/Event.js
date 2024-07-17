@@ -101,9 +101,11 @@ export default class Event extends Shadow() {
 
       :host .time {
         display: flex;
+        flex-wrap: wrap;
         flex-direction: row;
         align-items: center;
         margin-top: 0.75rem;
+        gap: 0.625rem;
       }
 
       :host .days {
@@ -118,7 +120,6 @@ export default class Event extends Shadow() {
         border-radius: 0.188rem;
         font-size: 0.875rem;
         line-height: 1.125rem;
-        margin-left: 0.625rem;
         height: 1.125rem;
       }
 
