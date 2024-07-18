@@ -121,7 +121,8 @@ export default class TileFactory extends Shadow() {
       setTimeout(() => {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
-        if (data.ppage === 1 || (data.ppage === -1 && this.lastResponsePPage === -1)) this.html = ''
+        console.log(data.ppage, this.lastResponsePPage)
+        if (data.ppage === 1 || (data.ppage === -1 && [-1, 1, 0].includes(this.lastResponsePPage))) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
