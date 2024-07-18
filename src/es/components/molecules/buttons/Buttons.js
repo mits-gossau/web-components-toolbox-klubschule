@@ -7,23 +7,23 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class Buttons extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
-  connectedCallback () {
+  connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback() { }
 
   /**
    * evaluates if a render is necessary
    *
    * @return {boolean}
    */
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
@@ -32,14 +32,14 @@ export default class Buttons extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML () {
+  shouldRenderHTML() {
     return !this.root.querySelector('.buttons-container')
   }
 
   /**
    * renders the css
    */
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */`
       :host .buttons-container {
         --border-color-secondary: var(--button-secondary-border-color, var(--color-secondary));
@@ -69,7 +69,7 @@ export default class Buttons extends Shadow() {
   /**
    * fetches the template
    */
-  fetchTemplate () {
+  fetchTemplate() {
     /** @type {import("../../web-components-toolbox/src/es/components/prototypes/Shadow.js").fetchCSSParams[]} */
     const styles = [
       {
@@ -96,8 +96,7 @@ export default class Buttons extends Shadow() {
    * Render HTML
    * @returns void
    */
-  renderHTML () {
-    const url = new URL(window.location.origin)
+  renderHTML() {
     const dataButtons = JSON.parse(this.getAttribute('data-buttons')) || [{}]
     const optionalBigAttr = this.hasAttribute('big') ? 'big' : ''
     const optionalSmallAttr = this.hasAttribute('small') ? 'small' : ''
@@ -130,54 +129,17 @@ export default class Buttons extends Shadow() {
       }
 
       if (button.event?.includes('AdvisoryText')) {
-        const dialogId = this.getAttribute("dialog-id") || 0
+        this.dialogId = this.getAttribute("dialog-id") || 0
         const parentDiv = document.createElement("div")
 
         this.overLayButton = document.createElement("ks-a-button")
         this.overLayButton.setAttribute("namespace", "button-primary-")
         this.overLayButton.setAttribute("color", "secondary")
-        this.overLayButton.setAttribute("request-event-name", `dialog-open-checkout-overlay-${dialogId}`)
+        this.overLayButton.setAttribute("request-event-name", `request-advisory-text-api`)
         this.overLayButton.setAttribute("click-no-toggle-active", "")
         this.overLayButton.innerHTML = button.text
 
-        this.addEventListener(`dialog-open-checkout-overlay-${dialogId}`, () => {
-          // for local testing add `https://dev.klubschule.ch${button.event}` to the checkoutOverlayAPI
-          new Promise(resolveCheckout => {
-            this.dispatchEvent(new CustomEvent('checkout-overlay-api', {
-              detail: {
-                resolveCheckout,
-                checkoutOverlayAPI: `${button.event}`
-              },
-              bubbles: true,
-              cancelable: true,
-              composed: true
-            }))
-          }).then((data) => {
-            this.renderDialogContent(data)
-          })
-        })
-
-        parentDiv.innerHTML = /* html */ `
-          <m-dialog namespace="dialog-left-slide-in-" class="hidden" mode="false" show-event-name="dialog-open-checkout-overlay-${dialogId}" close-event-name="backdrop-clicked-${dialogId}" id="checkout-overlay-${dialogId}">
-            <div class="container dialog-header" tabindex="0">
-              <div></div>
-              <h3 id="overlay-title"></h3>
-              <div id="close">
-                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-              </div>
-            </div>
-            <ks-a-spacing type="xs-flex" tabindex="0"></ks-a-spacing>
-            <div class="container dialog-content">
-              <div class="sub-content">
-              </div>
-            </div>
-            <div class="container dialog-footer">
-              <!-- In order to have the close funtionality we need to render the Close button intially, we only change the label! -->
-              <ks-a-button id="close" namespace="button-secondary-" color="secondary">
-              </ks-a-button>
-            </div>
-          </m-dialog>
-        `
+        this.addEventListener(`request-advisory-text-api`, () => this.openDialogOverlay(button))
         parentDiv.appendChild(this.overLayButton)
 
         return acc + parentDiv.innerHTML
@@ -227,51 +189,78 @@ export default class Buttons extends Shadow() {
     ])
   }
 
-  renderDialogContent(content) {
-    const dialog = this.root.querySelector("m-dialog")
-    if (content.texte?.length) {
-      dialog.classList.remove("hidden")
+  openDialogOverlay(button) {
+    // for local testing add `https://dev.klubschule.ch${button.event}` to the checkoutOverlayAPI
+    new Promise(resolveCheckout => {
+      this.dispatchEvent(new CustomEvent(`checkout-overlay-api`, {
+        detail: {
+          resolveCheckout,
+          checkoutOverlayAPI: `https://dev.klubschule.ch${button.event}`
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }).then((data) => {
+      if (data.texte?.length) {
+        const tempWrapper = document.createElement("div")
 
-      this.root.querySelector(".container.dialog-header #overlay-title").innerHTML = /* html */ `
-        ${content.titel}
-      `
-      this.root.querySelector(".container.dialog-content .sub-content").innerHTML = content.texte.reduce(
-        (acc, text, index) => acc + /* html */ `
-          ${index > 0 ? /* html */ `<ks-a-spacing type="l-flex" tabindex="0"></ks-a-spacing>` : ''}
-          <h3>${text.titel}</h3>
-          <p>${text.text}</p>
-        `, '')
-        
-      const buttons = this.root.querySelector(".container.dialog-footer")
-      
-      // In order to have the close funtionality we need to render the Close button intially, we only change the label!
-      content.buttons.forEach((button) => {
-        if (button.event === "close") {
-          const closeButtonLabel = buttons.querySelector('#close').shadowRoot.querySelector('button > #label')
-          closeButtonLabel.textContent = button.text
-          closeButtonLabel.classList.remove("hide")
-          return
-        }
-        
-        const wrapperDiv = document.createElement('div')
-        wrapperDiv.innerHTML = /* html */ `
-          <ks-a-button 
-            ${button.event === "close" ? 'id="close"' : ''}
-            ${button.iconName && !button.text ? 'icon' : ''} 
-            namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
-            color="secondary" 
-            ${button.link ? `href=${button.link}` : ''}
-          >
-            ${button.text ? '<span>' + button.text + '</span>' : ''}
-            ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
-            ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
-          </ks-a-button>
-        `
-        if (buttons.children?.length < 2) buttons.appendChild(wrapperDiv.querySelector('ks-a-button'))
-      })
-    } else {
-      dialog.removeAttribute("open")
-      window.location.href = content.link
-    }
+        // generate <m-dialog> - Markup
+        tempWrapper.innerHTML = /* html */ `
+                <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-checkout-overlay-${this.dialogId}" close-event-name="backdrop-clicked-${this.dialogId}" id="checkout-overlay-${this.dialogId}">
+                  <div class="container dialog-header" tabindex="0">
+                    <div></div>
+                    <h3 id="overlay-title">${data.titel}</h3>
+                    <div id="close">
+                      <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+                    </div>
+                  </div>
+                  <ks-a-spacing type="xs-flex" tabindex="0"></ks-a-spacing>
+                  <div class="container dialog-content">
+                    <div class="sub-content">
+                    ${data.texte.reduce(
+                      (acc, text, index) => acc + /* html */ `
+                        ${index > 0 ? /* html */ `<ks-a-spacing type="l-flex" tabindex="0"></ks-a-spacing>` : ''}
+                        <h3>${text.titel}</h3>
+                        <p>${text.text}</p>
+                      `, '')}
+                    </div>
+                  </div>
+                  <div class="container dialog-footer">
+                    ${data.buttons.reduce((acc, button) => acc + /* html */ `
+                      <ks-a-button 
+                        ${button.event === "close" ? 'id="close"' : ''}
+                        ${button.iconName && !button.text ? 'icon' : ''} 
+                        namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
+                        color="secondary" 
+                        ${button.link ? `href=${button.link}` : ''}
+                      >
+                        ${button.text ? '<span>' + button.text + '</span>' : ''}
+                        ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
+                        ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
+                      </ks-a-button>
+                    `, '')}
+                  </div>
+                </m-dialog>
+              `
+
+        // Only add m-dialog if not there already
+        if (!this.root.querySelector("m-dialog")) this.root.querySelector('.buttons-container')?.appendChild(tempWrapper.children[0])
+
+        // Trigger Open Dialog event
+        this.dispatchEvent(new CustomEvent(`dialog-open-checkout-overlay-${this.dialogId}`,
+          {
+            detail: {
+              command: 'show-modal'
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }
+        ))
+      } else {
+        window.location.href = data.link
+      }
+    })
   }
 }
