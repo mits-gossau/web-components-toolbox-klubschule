@@ -213,7 +213,7 @@ export default class Buttons extends Shadow() {
 
         // generate <m-dialog> - Markup
         tempWrapper.innerHTML = /* html */ `
-          <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay-${this.dialogId}" close-event-name="backdrop-clicked-${this.dialogId}">
+          <m-dialog namespace="dialog-left-slide-in-checkout-" show-event-name="dialog-open-checkout-overlay-${this.dialogId}" close-event-name="backdrop-clicked-${this.dialogId}">
             <div class="container dialog-header" tabindex="0">
               <div></div>
               <h3 id="overlay-title">${data.titel}</h3>
