@@ -51,6 +51,11 @@ export default class Buttons extends Shadow() {
         margin-right: -1rem; /* to compensate the gap */
       }
 
+      :host m-dialog {
+        --button-primary-width: 100%;
+        --button-secondary-width: 100%;
+      }
+
       .hidden {
         display: none;
       }
@@ -202,47 +207,48 @@ export default class Buttons extends Shadow() {
         composed: true
       }))
     }).then((data) => {
+      // If there is additional Information open Overlay, else redirect directly to checkout
       if (data.texte?.length) {
         const tempWrapper = document.createElement("div")
 
         // generate <m-dialog> - Markup
         tempWrapper.innerHTML = /* html */ `
-                <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-checkout-overlay-${this.dialogId}" close-event-name="backdrop-clicked-${this.dialogId}" id="checkout-overlay-${this.dialogId}">
-                  <div class="container dialog-header" tabindex="0">
-                    <div></div>
-                    <h3 id="overlay-title">${data.titel}</h3>
-                    <div id="close">
-                      <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                    </div>
-                  </div>
-                  <ks-a-spacing type="xs-flex" tabindex="0"></ks-a-spacing>
-                  <div class="container dialog-content">
-                    <div class="sub-content">
-                    ${data.texte.reduce(
-                      (acc, text, index) => acc + /* html */ `
-                        ${index > 0 ? /* html */ `<ks-a-spacing type="l-flex" tabindex="0"></ks-a-spacing>` : ''}
-                        <h3>${text.titel}</h3>
-                        <p>${text.text}</p>
-                      `, '')}
-                    </div>
-                  </div>
-                  <div class="container dialog-footer">
-                    ${data.buttons.reduce((acc, button) => acc + /* html */ `
-                      <ks-a-button 
-                        ${button.event === "close" ? 'id="close"' : ''}
-                        ${button.iconName && !button.text ? 'icon' : ''} 
-                        namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
-                        color="secondary" 
-                        ${button.link ? `href=${button.link}` : ''}
-                      >
-                        ${button.text ? '<span>' + button.text + '</span>' : ''}
-                        ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
-                        ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
-                      </ks-a-button>
-                    `, '')}
-                  </div>
-                </m-dialog>
-              `
+          <m-dialog namespace="dialog-left-slide-in-" mode="false" show-event-name="dialog-open-checkout-overlay-${this.dialogId}" close-event-name="backdrop-clicked-${this.dialogId}" id="checkout-overlay-${this.dialogId}">
+            <div class="container dialog-header" tabindex="0">
+              <div></div>
+              <h3 id="overlay-title">${data.titel}</h3>
+              <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+              </div>
+            </div>
+            <ks-a-spacing type="xs-flex" tabindex="0"></ks-a-spacing>
+            <div class="container dialog-content">
+              <div class="sub-content">
+              ${data.texte.reduce(
+                (acc, text, index) => acc + /* html */ `
+                  ${index > 0 ? /* html */ `<ks-a-spacing type="l-flex" tabindex="0"></ks-a-spacing>` : ''}
+                  <h3>${text.titel}</h3>
+                  <p>${text.text}</p>
+                `, '')}
+              </div>
+            </div>
+            <div class="container dialog-footer">
+              ${data.buttons.reduce((acc, button) => acc + /* html */ `
+                <ks-a-button 
+                  ${button.event === "close" ? 'id="close"' : ''}
+                  ${button.iconName && !button.text ? 'icon' : ''} 
+                  namespace="${button.typ && button.event != "close" ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
+                  color="secondary" 
+                  ${button.link ? `href=${button.link}` : ''}
+                >
+                  ${button.text ? '<span>' + button.text + '</span>' : ''}
+                  ${button.iconName && !button.text ? `<a-icon-mdx icon-name="${button.iconName}" size="1em"></a-icon-mdx>` : ''} 
+                  ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
+                </ks-a-button>
+              `, '')}
+            </div>
+          </m-dialog>
+        `
 
         // Only add m-dialog if not there already
         if (!this.root.querySelector("m-dialog")) this.root.querySelector('.buttons-container')?.appendChild(tempWrapper.children[0])
