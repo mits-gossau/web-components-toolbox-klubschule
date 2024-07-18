@@ -674,10 +674,11 @@ export default class CourseDialog extends Shadow() {
    * @returns {string} Returning an HTML template string.
    */
   courseDetailsContent (detail, subscriptionData = {}) {
-    let { subscriptionDescription, subscriptionBalance } = detail
+    let { subscriptionDescription, subscriptionBalance, subscriptionMode } = detail
     if (this.dataset.listType === 'booked-appointments') {
       subscriptionBalance = subscriptionData.subscriptionBalance
       subscriptionDescription = subscriptionData.subscriptionDescription
+      subscriptionMode = subscriptionData.subscriptionMode
     }
 
     const state = getTileState(courseAppointmentStatusMapping[detail.courseAppointmentStatus], detail)
@@ -686,17 +687,16 @@ export default class CourseDialog extends Shadow() {
     const freeSeats = Number(state.status) ? state.status : ''
 
     let renderBalance = ''
-    if (detail.subscriptionMode === 'WERTABO') {
+    if (subscriptionMode === 'WERTABO') {
       renderBalance = /* html */ ` 
           /
           <!-- trans value = Aktuelles Guthaben -->
           <a-translation data-trans-key="CP.cpBookingActualSubscriptionBalance"></a-translation> ${subscriptionBalance}
       `
     }
-
     let priceInfo = ''
     let subscriptionBalanceAdditionalInfo = ''
-    if (detail.subscriptionMode === 'WERTABO' && this.renderPriceInfoInBookingView) {
+    if (subscriptionMode === 'WERTABO' && this.renderPriceInfoInBookingView) {
       priceInfo = /* html */ `
         <div class="detail">
           <span>
