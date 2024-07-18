@@ -14,6 +14,7 @@ export default class TileFactory extends Shadow() {
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
 
+    this.lastResponsePPage= 0
     this.hiddenMessages = this.hiddenSections
   }
 
@@ -120,7 +121,7 @@ export default class TileFactory extends Shadow() {
       setTimeout(() => {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
-        this.html = ''
+        if (data.ppage === 1 || (data.ppage === -1 && this.lastResponsePPage === -1)) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -171,6 +172,7 @@ export default class TileFactory extends Shadow() {
             ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
           </ks-o-partner-search>
         `
+        this.lastResponsePPage = data.ppage
       }, 0)
     }).catch(error => {
       console.error(error)

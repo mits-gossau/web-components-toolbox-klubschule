@@ -70,6 +70,9 @@ export default class WithFacet extends WebWorker() {
     if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
 
     this.requestWithFacetListener = async event => {
+      // Reset PPage after filter Change / Reset
+      currentRequestObj.ppage = 0
+
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
       if (this.abortController) this.abortController.abort()
@@ -147,7 +150,6 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('clat')
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
-          currentRequestObj.ppage = -1
           currentRequestObj.sorting = this.params.get('sorting') || 3
           this.updateURLParam('sorting', currentRequestObj.sorting)
         }
@@ -181,7 +183,6 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
-        currentRequestObj.ppage = 0
       } else {
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
