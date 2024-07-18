@@ -57,7 +57,7 @@ export default class KsBodyStyle extends BodyStyle {
             /* had to reset display here because it was set to display inline-block !important in parent class */
             display: ${this.getAttribute('display') || 'block'} !important;
             position: relative;
-            margin-top: var(--mdx-sys-spacing-flex-l) !important;
+            margin-top: var(--mdx-sys-spacing-flex-m) !important;
             margin-bottom: var(--mdx-sys-spacing-flex-l) !important;
         }
         
@@ -69,7 +69,7 @@ export default class KsBodyStyle extends BodyStyle {
 
         :host([has-background]),
         :host([has-padding]) {
-            padding-top: var(--mdx-sys-spacing-flex-l);
+            padding-top: var(--mdx-sys-spacing-flex-m);
             padding-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
@@ -84,6 +84,10 @@ export default class KsBodyStyle extends BodyStyle {
 
         :host([margin-top-m]) {
             margin-top: var(--mdx-sys-spacing-flex-m) !important;
+        }
+
+        :host([margin-top-l]) {
+            margin-top: var(--mdx-sys-spacing-flex-l) !important;
         }
 
         :host([variant=default]) > * {
