@@ -183,26 +183,24 @@ export default class PartnerSearch extends Shadow() {
 
       const partnerResultsSection = this.root.querySelector("#partner-results")
 
-      // @ts-ignore
-      if (data?.items?.length && data?.items?.find(({ count }) => count > 0)) {
+      const filteredItems = data?.items?.filter(item  => item.count > 0)
+
+      if (filteredItems?.length) {
         partnerResultsSection.insertAdjacentHTML('beforeend', /* html */ `
           <div class="partner-result-wrapper">
-            ${data.items.reduce((acc, item) => {
-              if (item.count > 0) {
-              return acc + /* html */ `
-                <div class="partner-result-item-wrapper">
-                  <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
-                  <span>${item.text}</span>
-                  <div class="button-wrapper">
-                    <ks-a-button icon namespace="button-secondary-" color="secondary" target="_blank" href="${item.link}">
-                      <span>${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}</span>
-                      <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowUpRight" size="1em" class="icon-right"></a-icon-mdx>
-                    </ks-a-button>
+            ${filteredItems.reduce((acc, item) => 
+              acc + /* html */ `
+                  <div class="partner-result-item-wrapper">
+                    <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
+                    <span>${item.text}</span>
+                    <div class="button-wrapper">
+                      <ks-a-button icon namespace="button-secondary-" color="secondary" target="_blank" href="${item.link}">
+                        <span>${item.count} ${this.getTranslation('CourseList.OffersPlaceholder')}</span>
+                        <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowUpRight" size="1em" class="icon-right"></a-icon-mdx>
+                      </ks-a-button>
+                    </div>
                   </div>
-                </div>
-              `
-            }
-          }, '')}
+              `, '')}
           </div>
         `)
       } else {
