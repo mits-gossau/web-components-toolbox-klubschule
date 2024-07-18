@@ -9,14 +9,28 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Tile extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.tileData = Tile.parseAttribute(this.getAttribute('data'))
+
+    // caution: this searches for the first button with a link assuming this is the correct link for the whole tile,
+    // in case other buttons are displayed with a different link, this would need to be changed
+    this.tileLink = this.tileData?.buttons?.find(button => button.link)?.link
+
+    this.openLink = () => {
+      window.open(this.tileLink, '_self')
+    }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+
+    this.tileTitle.addEventListener('click', this.openLink)
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    this.tileTitle.removeEventListener('click', this.openLink)
+  }
 
   /**
    * evaluates if a render is necessary
@@ -87,8 +101,13 @@ export default class Tile extends Shadow() {
         font-size: var(--title-font-size);
         line-height: var(--title-line-height);
         font-weight: var(--title-font-weight);   
+        cursor: pointer;
       }
-      
+
+      :host .m-tile__title:hover {
+        color: var(--title-color-hover);
+      }
+
       :host .m-tile__body {
         display: flex;
         align-items: center;
@@ -103,7 +122,9 @@ export default class Tile extends Shadow() {
       }
 
       :host .m-tile__body a-icon-mdx {
-        padding-right: 0.5em
+        display: inline-flex;
+        padding-right: 0.5em;
+        color: inherit;
       }
       
       :host .m-tile__foot {
@@ -264,7 +285,7 @@ export default class Tile extends Shadow() {
    */
   renderHTML () {
     const warnMandatory = 'data attribute requires: '
-    const data = Tile.parseAttribute(this.getAttribute('data'))
+    const data = this.tileData
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
@@ -353,6 +374,10 @@ export default class Tile extends Shadow() {
 
   get title () {
     return this.root.querySelector('.m-tile')
+  }
+
+  get tileTitle () {
+    return this.root.querySelector('.m-tile__title')
   }
 
   get isNearbySearch () {

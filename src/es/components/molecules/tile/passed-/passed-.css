@@ -10,6 +10,7 @@
     --tile-passed-title-font-size: var(--mdx-sys-font-flex-headline3-font-size);
     --tile-passed-title-line-height: var(--mdx-sys-font-flex-headline3-line-height);
     --tile-passed-title-font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
+    --tile-passed-title-color-hover: var(--mdx-sys-color-primary-default);
     --tile-passed-price-font-family: var(--mdx-sys-font-font-fix-label4-font-family);
     --tile-passed-price-font-size: var(--mdx-sys-font-font-fix-label4-font-size);
     --tile-passed-price-line-height: var(--mdx-sys-font-font-fix-label4-line-height);
