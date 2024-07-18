@@ -116,7 +116,6 @@ export default class WithFacet extends WebWorker() {
         }
         this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
-        console.log('filterId', filterId)
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
