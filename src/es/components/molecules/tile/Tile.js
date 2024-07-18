@@ -25,11 +25,11 @@ export default class Tile extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
-    this.tileTitle.addEventListener('click', this.openLink)
+    this.tileTitle?.addEventListener('click', this.openLink)
   }
 
   disconnectedCallback () {
-    this.tileTitle.removeEventListener('click', this.openLink)
+    this.tileTitle?.removeEventListener('click', this.openLink)
   }
 
   /**
