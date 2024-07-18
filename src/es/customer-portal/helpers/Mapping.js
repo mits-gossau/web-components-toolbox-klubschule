@@ -26,7 +26,7 @@ export const courseAppointmentStatusMapping = {
       status: 'Keine Buchung möglich',
       info: 'Vorhandes Abo hat zu wenig Guthaben',
       statusTransKey: 'CP.cpAppointmentNote2',
-      infoTransKey: 'CP.cpSubscriptionInsufficientCredit'
+      infoTransKey: ''
     }
   },
   3: {
