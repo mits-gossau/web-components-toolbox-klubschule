@@ -204,7 +204,7 @@ export default class PartnerSearch extends Shadow() {
           </div>
         `)
       } else {
-        partnerResultsSection.setAttribute('hidden', '')
+        partnerResultsSection?.setAttribute('hidden', '')
       }
     }
 
