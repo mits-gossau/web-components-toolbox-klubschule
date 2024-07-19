@@ -53,6 +53,20 @@ export default class InfoList extends CheckoutBookedOffer {
         display: flex;
         gap: var(--mdx-sys-spacing-fix-m);
       }
+
+      :host .list-wrapper > div .flex {
+        gap: 0.625rem;
+      }
+
+      :host .list-wrapper > div > h3 {
+        margin-bottom: var(--mdx-sys-spacing-flex-s);
+      }
+
+      :host .list-wrapper > div .flex > span + span {
+        width: 7rem;
+        text-align: end;
+      }
+
       :host ul {
         width: 33%;
         list-style: none !important;
@@ -97,7 +111,7 @@ export default class InfoList extends CheckoutBookedOffer {
 
       @media only screen and (max-width: _max-width_) {
         :host .list-wrapper {
-          display: block;
+          flex-direction: column;
         }
         :host ul {
           width: 100%;
