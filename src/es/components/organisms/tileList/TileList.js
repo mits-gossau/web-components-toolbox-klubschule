@@ -319,7 +319,7 @@ export default class TileList extends Shadow() {
             <div class="o-tile-list__middle">
               ${data.location?.name
                 ? /* html */`
-                <span class="o-tile-list__places">${data.location?.name.split(', ').sort((a, b) => a.localeCompare(b)).join(', ') || warnMandatory + 'location'}</span>
+                <span class="o-tile-list__places">${data.location?.name.split(', ').join(', ') || warnMandatory + 'location'}</span>
                 `
                 : ''
               }
