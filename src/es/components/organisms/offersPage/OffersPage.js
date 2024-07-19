@@ -666,18 +666,23 @@ export default class OffersPage extends Shadow() {
                   `
         : ''
       }
-                <div>
-                  <div class="badge-icon-only">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
-                  </div>
-                  <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
-                </div>
-                <div>
-                  <div class="badge-icon-only">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
-                  </div>
-                  <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
-                </div>
+                ${
+                  this.hasAttribute('hide-abo-legend')
+                  ? ''
+                  : /* html */`
+                    <div>
+                      <div class="badge-icon-only">
+                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
+                      </div>
+                      <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
+                    </div>
+                    <div>
+                      <div class="badge-icon-only">
+                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
+                      </div>
+                      <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
+                    </div>`
+                }
                 <div>
                   <div class="badge-icon-only">
                     <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Percent" size="1em"></a-icon-mdx>

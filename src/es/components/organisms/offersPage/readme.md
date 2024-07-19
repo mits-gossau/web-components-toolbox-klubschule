@@ -22,3 +22,4 @@ You can find a simple example markup in the above linked example pages.
 - `with-location-input`: includes location search in page
 - `with-filter-search`: includes search in filter overlay
 - `with-auto-complete`: includes auto-complete in search fields
+- `hide-abo-legend`: hides icons about abonnements at the end of the offers page
