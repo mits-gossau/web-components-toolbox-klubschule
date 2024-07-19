@@ -79,6 +79,7 @@ export default class WithFacet extends WebWorker() {
       this.abortController = new AbortController()
 
       let filterId = null
+      let filterGroupName = null
       if (event?.detail?.ppage) {
         // ppage reuse last request
         currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
@@ -115,7 +116,7 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('sorting', currentRequestObj.sorting)
         }
         this.deleteParamFromUrl(filterKey)
-      } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
+      } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
@@ -126,6 +127,22 @@ export default class WithFacet extends WebWorker() {
           currentCompleteFilterObj = currentCompleteFilterObj.filter(filterItem => filterItem.typ !== 'tree')
           currentCompleteFilterObj = [...currentCompleteFilterObj, ...initialResponseFiltersTree]
         }
+
+        // GTM Tracking of Filters
+        // @ts-ignore
+        if (typeof window !== 'undefined' && window.dataLayer) {
+          try {
+            // @ts-ignore
+            window.dataLayer.push({
+              'event': 'filterSelection',              
+              'filterName': event.detail.target.label, //the name of the clicked filter.
+              'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
+            })
+          } catch (err) {
+            console.error('Failed to push event data:', err)
+          }
+        }
+
         this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
