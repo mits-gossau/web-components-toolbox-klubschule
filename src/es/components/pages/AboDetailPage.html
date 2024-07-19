@@ -30,7 +30,7 @@
     <ks-o-body-section content-width-var="100%" no-margin-y>
 
         <div class="margin-y-m align-center">
-            <ks-a-button namespace="button-primary-" color="secondary">
+            <ks-a-button href="#angebote" namespace="button-primary-" color="secondary">
                 <span>15 Veranstaltungen wählen</span>
                 <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-down">
             </ks-a-button>
@@ -171,7 +171,7 @@
 </o-grid>
 
 <!-- Angebotsliste -->
-<ks-o-body-section background="var(--mdx-sys-color-accent-6-subtle1)" variant="default" has-background>
+<ks-o-body-section id="angebote" background="var(--mdx-sys-color-accent-6-subtle1)" variant="default" has-background>
     <h2>Abo kaufen</h2>
     <ks-c-event-detail endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/">
         <ks-m-abo-tile initial-request="{ 'language': 'D', 'typ': '6A', 'id': 10375, 'center_id': 2658 }">

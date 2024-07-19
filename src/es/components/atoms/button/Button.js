@@ -1,4 +1,5 @@
 // @ts-check
+import { KsAnchor } from '../../../helpers/KsAnchor.js'
 import Button from '../../web-components-toolbox/src/es/components/atoms/button/Button.js'
 import { FINISH_LOADING_EVENT } from '../../web-components-toolbox/src/es/components/molecules/simpleForm/SimpleForm.js'
 
@@ -10,7 +11,9 @@ import { FINISH_LOADING_EVENT } from '../../web-components-toolbox/src/es/compon
  * @attribute {namespace} namespace
  * @type {CustomElementConstructor}
  */
-export default class KsButton extends Button {
+/*export default class KsButton extends Button {*/
+export default class KsButton extends KsAnchor(Button) {
+
   connectedCallback() {
     super.connectedCallback()
     // set the default label if exists
