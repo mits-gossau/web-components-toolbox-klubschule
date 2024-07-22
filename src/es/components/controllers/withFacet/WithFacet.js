@@ -100,6 +100,7 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = result[1]
         if (filterKey === 'q') {
           delete currentRequestObj.searchText
+          this.deleteParamFromUrl('q')
           if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
         }
         if (filterKey === 'cname') {
@@ -117,6 +118,7 @@ export default class WithFacet extends WebWorker() {
         }
         this.deleteParamFromUrl(filterKey)
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
+        // current filter click/touch
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
@@ -179,17 +181,19 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
         }
+        if (event?.detail?.value === '') {
+          delete currentRequestObj.searchText
+          this.deleteParamFromUrl('q')
+        }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
 
         currentRequestObj.sorting = 1 // relevance
-
         if (event?.detail?.value === '' && !currentRequestObj.clat) {
           delete currentRequestObj.searchText
           currentRequestObj.sorting = 3 // alphabetic
         }
-
         if (event?.detail?.value !== '' && currentRequestObj.clat) {
           currentRequestObj.sorting = 2 // distance
         }
