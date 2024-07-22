@@ -200,7 +200,7 @@ export default class Buttons extends Shadow() {
       this.dispatchEvent(new CustomEvent(`checkout-overlay-api`, {
         detail: {
           resolveCheckout,
-          checkoutOverlayAPI: `https://dev.klubschule.ch${button.event}`
+          checkoutOverlayAPI: `${button.event}`
         },
         bubbles: true,
         cancelable: true,
