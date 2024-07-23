@@ -434,6 +434,19 @@ export default class OffersPage extends Shadow() {
 
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
+        ${this.hasAttribute('with-location-input-label') ? /* html */`
+          <style>
+            :host .location-label { 
+              font-size: var(--mdx-sys-font-flex-body3-font-size);
+              font-weight: 500;
+              line-height: 1.125rem;
+              margin-bottom: 1rem;
+            }
+          </style>
+          <h4 class="location-label">
+            Angebote in Ihrer Nähe finden
+          </h4>
+          `: ``}
         <ks-c-auto-complete-location 
          ignore-search-input-icon-click
          reset-input-value-based-url="cname"
