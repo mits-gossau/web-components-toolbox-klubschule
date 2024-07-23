@@ -201,9 +201,10 @@ export default class AutoCompleteLocation extends Shadow() {
   }
 
   requestAutoCompleteListener = (event) => {
-    const token = event.detail.value
-    if (token === undefined || (token.length < 3 && token.length > 0)) return
-    if (token.length === 0) {
+    let token = event.detail.value
+    if (token === undefined) return
+    // i keep this solution here too since there is a constant change request of this logic
+    /*if (token.length === 0) {
       this.dispatchEvent(new CustomEvent('auto-complete-location', {
         detail: {
           fetch: null
@@ -222,6 +223,12 @@ export default class AutoCompleteLocation extends Shadow() {
           composed: true
         })
       )
+    }*/
+    if (token.length < 3) {
+      token = ""
+      const currentAutocompleteListElement = this.root.querySelector('m-dialog').root.querySelector('ks-m-auto-complete-list')
+      currentAutocompleteListElement.renderHTML()
+      return
     }
     if (this.hasAttribute('mock')) return this.dispatchMock()
 
