@@ -3,6 +3,28 @@
 <p><code><a href="https://www.figma.com/design/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?node-id=4773-287060&m=dev" target="_blank">figma</a></code>
 </p>
 <hr />
+<ks-c-gtm-event 
+  listen-to="on-page-load"
+  event-data='{
+    "event": "purchase",
+    "ecommerce": {
+        "currency": "CHF",
+        "value": 220.00,    
+        "transaction_id": "123456789",    
+        "tax":40.00,            
+        "items": [{ 
+            "item_name": "Badminton GU Fortgeschrittene 6 TN",                
+            "item_id": "E_12345678",                 
+            "price": 220.00,
+            "item_category": "Sport",
+            "item_category2": "Badminton",
+            "item_category3": "",
+            "quantity": 1,
+            "item_variant": "Zurich",
+            "currency": "CHF"
+        }]
+    }
+  }'>
 <ks-o-checkout-layout mode="false">
 
     <section id="top">
@@ -38,3 +60,4 @@
     </section>
 
 </ks-o-checkout-layout>
+</ks-c-gtm-event>
