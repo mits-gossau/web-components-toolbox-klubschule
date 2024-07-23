@@ -39,12 +39,34 @@ export default class AutoCompleteLocation extends Shadow() {
       ...options
     }, ...args)
     this.RESOLVE_MSG = 'LOADED'
+    this.resetInputValueBasedUrl = this.getAttribute('reset-input-value-based-url')
+    this.ignoreSearchInputIconClick = this.hasAttribute('ignore-search-input-icon-click')
+
+    this.noScrollEventListener = event => {
+      // if opens the dialog
+      if (event.detail?.hasNoScroll) {
+        // refill the search value based on current url
+        const params = new URLSearchParams(self.location.search)
+        const neededParamValue = decodeURIComponent(params.get(`${this.resetInputValueBasedUrl}`) || '')
+        const currentInput = this.root.querySelector('m-dialog').root.querySelector('a-input').root.querySelector('input')
+        if (currentInput) currentInput.value = neededParamValue
+        // clear autocompleteList UL list when dialog opens
+        const currentAutocompleteListElement = this.root.querySelector('m-dialog').root.querySelector('ks-m-auto-complete-list')
+        currentAutocompleteListElement.renderHTML()
+      }
+    }
+    // disable click on location icon in input field
+    if (this.ignoreSearchInputIconClick) {
+      const currentInputButton = this.root.querySelector('m-dialog').root.querySelector('a-input').root.querySelector('button')
+      currentInputButton.style.pointerEvents = 'none'
+    }
   }
 
   async connectedCallback() {
     this.addEventListener('request-auto-complete-location', this.requestAutoCompleteListener)
     this.addEventListener('auto-complete-location-selection', this.clickOnPredictionListener)
     this.addEventListener('client-location-coords', this.clickOnLocateMe)
+    if (this.resetInputValueBasedUrl) this.addEventListener(this.getAttribute('no-scroll') || 'no-scroll', this.noScrollEventListener)
     await this.loadDependency()
   }
 
@@ -52,6 +74,7 @@ export default class AutoCompleteLocation extends Shadow() {
     this.removeEventListener('request-auto-complete-location', this.requestAutoCompleteListener)
     this.removeEventListener('auto-complete-location-selection', this.clickOnPredictionListener)
     this.removeEventListener('client-location-coords', this.clickOnLocateMe)
+    if (this.resetInputValueBasedUrl) this.removeEventListener(this.getAttribute('no-scroll') || 'no-scroll', this.noScrollEventListener)
   }
 
   loadDependency() {
