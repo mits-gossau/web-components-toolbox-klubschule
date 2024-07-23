@@ -444,7 +444,7 @@ export default class OffersPage extends Shadow() {
             }
           </style>
           <h4 class="location-label">
-            Angebote in Ihrer Nähe finden
+            ${this.getTranslation('Search.FindOffersByYou')}
           </h4>
           `: ``}
         <ks-c-auto-complete-location 
