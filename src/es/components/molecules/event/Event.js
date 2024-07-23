@@ -375,6 +375,11 @@ export default class Event extends Shadow() {
         font-weight: 400;
       }
 
+      :host .event-loading-bar {
+        display: block;
+        padding: 1rem 0;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host .event {
           padding: 1rem 0.5rem;
@@ -585,10 +590,14 @@ export default class Event extends Shadow() {
         {
           path: `${this.importMetaUrl}../../molecules/eventDetail/EventDetail.js`,
           name: 'ks-m-event-detail'
+        },
+        {
+          path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+          name: 'mdx-component'
         }
       ])
       this.details.classList.add('loading')
-      this.details.innerHTML = '<a-loading></a-loading>'
+      this.details.innerHTML = '<mdx-component class="event-loading-bar"><mdx-loading-bar></mdx-loading-bar></mdx-component>'
       if (this.hasAttribute('mock')) {
         this.details.innerHTML = /* html */`
           <ks-m-event-detail
