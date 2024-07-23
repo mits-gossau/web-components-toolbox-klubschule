@@ -154,6 +154,11 @@ export default class CheckoutBoxWrapper extends Shadow() {
         text-align: end;
       }
 
+      :host .spacing-top:has(a),
+      :host a.spacing-top {
+        width: fit-content;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host > div,
         :host ks-m-info-list > * {
