@@ -85,7 +85,7 @@ export default class filterSelect extends Shadow() {
 
   createFilterButton (filterItem, selectedFilter, treeIds = []) {
     let requestEventName = 'dialog-open-first-level'
-    
+
     treeIds && treeIds['parents']?.length > 0 ? requestEventName += ','+treeIds['parents']?.map(id => `dialog-open-${id}`).join(',') : requestEventName += ','+`dialog-open-${filterItem.id}`
 
     return /* html */`
@@ -106,10 +106,15 @@ export default class filterSelect extends Shadow() {
     const processFilterItem = (filterItem) => {
       const isCenterFilter = filterItem.typ === 'group'
       const isSectorFilter = filterItem.typ === 'tree'
+      
       let selectedFilterItems = []
       
       if (isSectorFilter) {
-        treeIds = filterData.map(filter => this.findSelectedAndParents(filter)).find(item => item)
+        filterData.map(filter => {
+          if (filter.typ === 'tree') {
+            treeIds = this.findSelectedAndParents(filter)
+          }
+        }).find(item => item)
       }
 
       if (isCenterFilter && filterItem.visible) {
@@ -134,7 +139,7 @@ export default class filterSelect extends Shadow() {
         }
 
         if (selectedFilterItems.length > 0) {
-          this.html = this.createFilterButton(filterItem, selectedFilterItems, treeIds)
+          this.html = this.createFilterButton(filterItem, selectedFilterItems, treeIds && treeIds['parents']?.includes(filterItem.id) ? treeIds : [])
         }
       
         filterItem.children.forEach(child => processFilterItem(child)) // recursive call
