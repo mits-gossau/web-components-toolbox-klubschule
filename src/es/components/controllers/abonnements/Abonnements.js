@@ -24,7 +24,6 @@ export default class Abonnements extends Shadow() {
     const endpoint = this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'
 
     this.requestAbonnementsListener = (event) => {
-      console.log('request-abo-list', event)
       event.detail.resolve(fetch(`${event.detail.abonnementsAPI}`, {
         method: 'GET'
       }).then(response => {
