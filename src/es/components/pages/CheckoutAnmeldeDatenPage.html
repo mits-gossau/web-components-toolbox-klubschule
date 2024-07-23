@@ -1,3 +1,21 @@
+<ks-c-gtm-event 
+  listen-to="on-page-load"
+  event-data='{
+    "event": "begin_checkout",
+    "ecommerce": { 
+         "items": [{
+           "item_name": "Badminton GU Fortgeschrittene 6 TN",        
+            "item_id": "E_12345678",        
+            "price": 220.00,
+            "item_category": "Sport",
+            "item_category2": "Badminton",
+            "item_category3": "",
+            "quantity": 1,
+            "item_variant": "Zurich",
+            "currency": "CHF"
+          }]
+       }
+  }'>
 <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css endpoint="/api/test" method="POST"
   schema="{
     'teilnehmerdaten': {
@@ -536,3 +554,4 @@
     </ks-o-checkout>
   </form>
 </m-simple-form-validation>
+</ks-c-gtm-event>

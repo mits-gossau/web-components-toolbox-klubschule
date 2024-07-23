@@ -5,6 +5,29 @@
 </p>
 <hr />
 
+
+
+<ks-c-gtm-event 
+  listen-to="on-page-load"
+  event-data='{
+    "event": "add_payment_info",
+    "ecommerce": {
+        "currency": "CHF",
+        "value": 220.00,  
+        "payment_type":"Kreditkarte", 
+        "items": [{
+            "item_name": "Badminton GU Fortgeschrittene 6 TN",        
+            "item_id": "E_12345678",        
+            "price": 220.00,
+            "item_category": "Sport",
+            "item_category2": "Badminton",
+            "item_category3": "",
+            "quantity": 1,
+            "item_variant": "Zurich",
+            "currency": "CHF"
+        }]
+    }
+}'>
 <m-simple-form-validation namespace="simple-form-miduweb-" no-validation-error-css
     load-form-styles>
     <form action="https://dev.klubschule.ch/sprachen/deutschkurse/deutsch-anfaenger-innen/kurs/allemand-debutants-13-caf-2575--E_1709101_2668_1210/completed" method="POST">
@@ -310,7 +333,7 @@
                                 Ihnen
                                 dringend, umgehend Ihren Arzt/Ihre Ärztin aufzusuchen und die Klubschule Migros sowie
                                 Ihre
-                                Lehrperson über Ihren Gesundheitszustand zu informieren. 
+                                Lehrperson über Ihren Gesundheitszustand zu informieren.
                             </span>
                             <!-- Optional Zusatzinfo Fitnesskurs -->
 
@@ -371,3 +394,4 @@
         </ks-o-checkout-layout>
     </form>
 </m-simple-form-validation>
+</ks-c-gtm-event>
