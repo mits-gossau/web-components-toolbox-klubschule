@@ -22,8 +22,10 @@ export default class Abonnements extends Shadow() {
           composed: true
         }))
       }).then(data => {
-        this.renderContent(data)
-        this.receiveData(data)
+        if (data) {
+          this.renderContent(data)
+          this.receiveData(data)
+        }
       })
     }
   }
@@ -182,7 +184,6 @@ export default class Abonnements extends Shadow() {
         name: 'ks-a-button'
       }
     ]).then(() => {
-
       this.total.innerHTML = data.total_label
       this.tiles = this.tiles || []
       data.courses.forEach((course) => {
