@@ -64,7 +64,7 @@ export default class CheckoutLayout extends Shadow() {
         padding: 0;
       }
       :host ul.advantages-list a-icon-mdx {
-        flex-shrink: 0;
+        display: block;
         color: var(--mdx-sys-color-success-default);
       }
 
