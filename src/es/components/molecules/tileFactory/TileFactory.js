@@ -225,12 +225,15 @@ export default class TileFactory extends Shadow() {
             : ''}",
         "badge": "${course.location.badge ? course.location.badge : ''}"
       },
+      "kurs_typ": "${course.kurs_typ}",
+      "kurs_id": "${course.kurs_id}",
       "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "icons": ${JSON.stringify(course.icons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "price": {
         "pre": "${course.price.pre}",
         "amount": "${course.price.amount}",
-        "per": "${course.price.per}"
+        "per": "${course.price.per}",
+        "price": ${course.price.price}
       },
       "parentkey": "${course.parentkey}"
     `
