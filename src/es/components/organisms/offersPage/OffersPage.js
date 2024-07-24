@@ -329,6 +329,7 @@ export default class OffersPage extends Shadow() {
       <div col-lg="6" col-md="6" col-sm="12">
         <ks-c-auto-complete
           no-forwarding
+          reset-input-value-based-url="q"
           ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
           ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
@@ -389,7 +390,7 @@ export default class OffersPage extends Shadow() {
                 :host>ks-a-button {
                   --button-secondary-padding: 0.5rem 0.9rem;
                   --button-secondary-font-size: 1rem;
-                  --button-secondary-height: 2.22rem;
+                  --button-secondary-height: 2.5rem;
                 }
 					}
           </style>
@@ -412,7 +413,7 @@ export default class OffersPage extends Shadow() {
     
               @media only screen and (max-width: 767px) {
                 :host>a-button {
-                --button-secondary-padding: 0.3rem 0.9rem;
+                --button-secondary-padding: 0.433rem 0.9rem;
                 }
               }
             </style>
@@ -433,7 +434,23 @@ export default class OffersPage extends Shadow() {
 
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
-        <ks-c-auto-complete-location ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
+        ${this.hasAttribute('with-location-input-label') ? /* html */`
+          <style>
+            :host .location-label { 
+              font-size: var(--mdx-sys-font-flex-body3-font-size);
+              font-weight: 500;
+              line-height: 1.125rem;
+              margin-bottom: 1rem;
+            }
+          </style>
+          <h4 class="location-label">
+            ${this.getTranslation('Search.FindOffersByYou')}
+          </h4>
+          `: ``}
+        <ks-c-auto-complete-location 
+         ignore-search-input-icon-click
+         reset-input-value-based-url="cname"
+         ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
             <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
               <dialog>
                 <div class="container">
@@ -453,6 +470,11 @@ export default class OffersPage extends Shadow() {
                       autocomplete="off"
                     >
                     </a-input>
+                    <style>
+                      :host { 
+                        --icon-color-hover: var(--search-input-color);
+                      }
+                    </style>
                     <div id="close">
                         <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                     </div>
@@ -495,7 +517,7 @@ export default class OffersPage extends Shadow() {
                 :host>ks-a-button {
                   --button-secondary-padding: 0.5rem 0.9rem;
                   --button-secondary-font-size: 1rem;
-                  --button-secondary-height: 2.22rem;
+                  --button-secondary-height: 2.5rem;
                 }
 					}
 				</style>
@@ -518,7 +540,7 @@ export default class OffersPage extends Shadow() {
 
           @media only screen and (max-width: 767px) {
             :host>a-button {
-            --button-secondary-padding: 0.275rem 0.9rem;
+            --button-secondary-padding: 0.433rem 0.9rem;
             }
           }
         </style>
@@ -666,10 +688,9 @@ export default class OffersPage extends Shadow() {
                   `
         : ''
       }
-                ${
-                  this.hasAttribute('hide-abo-legend')
-                  ? ''
-                  : /* html */`
+                ${this.hasAttribute('hide-abo-legend')
+        ? ''
+        : /* html */`
                     <div>
                       <div class="badge-icon-only">
                         <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
@@ -682,7 +703,7 @@ export default class OffersPage extends Shadow() {
                       </div>
                       <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
                     </div>`
-                }
+      }
                 <div>
                   <div class="badge-icon-only">
                     <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Percent" size="1em"></a-icon-mdx>
@@ -725,6 +746,7 @@ export default class OffersPage extends Shadow() {
     return /* html */ `
     <div col-lg="6" col-md="6" col-sm="12" class="main-search-wrapper">
     <ks-c-auto-complete
+      reset-input-value-based-url="q"
       no-forwarding
       ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
       ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
@@ -786,7 +808,7 @@ export default class OffersPage extends Shadow() {
             :host>ks-a-button {
               --button-secondary-padding: 0.5rem 0.9rem;
               --button-secondary-font-size: 1rem;
-              --button-secondary-height: 2.22rem;
+              --button-secondary-height: 2.5rem;
             }
       }
       </style>
@@ -809,7 +831,7 @@ export default class OffersPage extends Shadow() {
 
           @media only screen and (max-width: 767px) {
             :host>a-button {
-            --button-secondary-padding: 0.3rem 0.9rem;
+            --button-secondary-padding: 0.433rem 0.9rem;
             }
           }
         </style>
