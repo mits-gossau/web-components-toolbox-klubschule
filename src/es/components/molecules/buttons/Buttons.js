@@ -102,7 +102,9 @@ export default class Buttons extends Shadow() {
    * @returns void
    */
   renderHTML() {
-    const dataButtons = JSON.parse(this.getAttribute('data-buttons')) || [{}]
+    this.data = JSON.parse(this.getAttribute('course-data')) || {}
+    // @ts-ignore
+    const dataButtons = this.data?.buttons?.length ? this.data.buttons : JSON.parse(this.getAttribute('data-buttons')) || [{}]
     const optionalBigAttr = this.hasAttribute('big') ? 'big' : ''
     const optionalSmallAttr = this.hasAttribute('small') ? 'small' : ''
 
@@ -150,8 +152,7 @@ export default class Buttons extends Shadow() {
         return acc + parentDiv.innerHTML
       }
 
-      return acc + (
-        button.event === 'bookmark' ? '' : /* html */`
+      const content = button.event === 'bookmark' ? '' : /* html */`
         <ks-a-button 
           ${button.iconName && !button.text ? 'icon' : ''} 
           namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
@@ -165,6 +166,46 @@ export default class Buttons extends Shadow() {
           ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
         </ks-a-button>
       `
+
+      // To be done: Set item_category
+      //   {
+      //     "event": "select_item",
+      //     "ecommerce": {    
+      //       "items": [{ 
+      //         "item_name": "${this.data.bezeichnung}",                
+      //         "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
+      //         "price": ${this.data.price.price},
+      //         "item_category": "Sprachen",
+      //         "item_category2": "Kurs",
+      //         "item_category3": "Spanisch", 
+      //         "item_category4": "", 
+      //         "quantity": 1,
+      //         "item_variant": "${this.data.locations?.length ? this.data.locations[0] : "Online"}",
+      //       }]
+      //     }
+      //   }
+      // }
+
+      return acc + (
+        this.hasAttribute('is-tile') ?  /* html */ `
+          <ks-c-gtm-event 
+            listen-to="click"
+            event-data='{
+              "event": "select_item",
+              "ecommerce": {    
+                "items": [{ 
+                  "item_name": "${this.data.bezeichnung}",                
+                  "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
+                  "price": ${this.data.price.price},
+                  "quantity": 1
+                }]
+              }
+            }
+          }'
+        >
+            ${content}
+          </ks-c-gtm-event>
+        ` : content
       )
     }, '')
 
@@ -188,6 +229,10 @@ export default class Buttons extends Shadow() {
         name: 'ks-a-spacing'
       },
       {
+        path: `${this.importMetaUrl}../../controllers/gtmEvent/GtmEvent.js`,
+        name: 'ks-c-gtm-event'
+      },
+      {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
       }
@@ -195,6 +240,32 @@ export default class Buttons extends Shadow() {
   }
 
   openDialogOverlay(button) {
+    // GTM Tracking of Click Register now
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(
+          {
+            'event': 'add_to_cart',
+            'ecommerce': {    
+              'items': [{ 
+                // @ts-ignore
+                'item_name': `${this.data.bezeichnung}`,                
+                // @ts-ignore
+                'item_id': `_${this.data.kurs_id}`, 
+                // @ts-ignore
+                'price': `${this.data.price.price}`,
+                'quantity': 1,
+                'currency': 'CHF'
+              }]
+            }
+          }
+        )
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
     // for local testing add `https://dev.klubschule.ch${button.event}` to the checkoutOverlayAPI
     new Promise(resolveCheckout => {
       this.dispatchEvent(new CustomEvent(`checkout-overlay-api`, {
@@ -209,6 +280,23 @@ export default class Buttons extends Shadow() {
     }).then((data) => {
       // If there is additional Information open Overlay, else redirect directly to checkout
       if (data.texte?.length) {
+
+        // GTM Tracking of Checkout Overlay
+        // @ts-ignore
+        if (typeof window !== 'undefined' && window.dataLayer) {
+          try {
+            // @ts-ignore
+            window.dataLayer.push(
+              {
+                'event': 'virtual_pageview',
+                'pageview': '/hinweis-overlay',
+              }
+            )
+          } catch (err) {
+            console.error('Failed to push event data:', err)
+          }
+        }
+
         const tempWrapper = document.createElement("div")
 
         // generate <m-dialog> - Markup
