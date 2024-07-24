@@ -203,27 +203,6 @@ export default class AutoCompleteLocation extends Shadow() {
   requestAutoCompleteListener = (event) => {
     let token = event.detail.value
     if (token === undefined) return
-    // i keep this solution here too since there is a constant change request of this logic
-    /*if (token.length === 0) {
-      this.dispatchEvent(new CustomEvent('auto-complete-location', {
-        detail: {
-          fetch: null
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
-      this.dispatchEvent(new CustomEvent('request-with-facet',
-        {
-          detail: {
-            key: 'location-search'
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        })
-      )
-    }*/
     if (token.length < 3) {
       token = ""
       const currentAutocompleteListElement = this.root.querySelector('m-dialog').root.querySelector('ks-m-auto-complete-list')
