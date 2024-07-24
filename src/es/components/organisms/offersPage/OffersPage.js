@@ -444,7 +444,7 @@ export default class OffersPage extends Shadow() {
             }
           </style>
           <h4 class="location-label">
-            ${this.getTranslation('Search.FindOffersByYou')}
+            ${this.getTranslation('CourseList.FindOffersNearbyPlaceholder')}
           </h4>
           `: ``}
         <ks-c-auto-complete-location 
