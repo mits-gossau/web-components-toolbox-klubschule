@@ -206,8 +206,6 @@ export default class PartnerSearch extends Shadow() {
       } else {
         partnerResultsSection?.setAttribute('hidden', '')
       }
-    } else {
-      this.html = `${this.getTranslation('CourseList.NoResultsPlaceholder')}`
     }
 
     return this.fetchModules([
