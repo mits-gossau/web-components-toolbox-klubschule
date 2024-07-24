@@ -514,7 +514,7 @@ export default class Event extends Shadow() {
           <div class="controls">
             <div class="controls-left">
               ${!ist_abokurs_offen ? /* html */ `
-              <ks-m-buttons dialog-id="${kurs_id}" status="${status}" data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
+              <ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'></ks-m-buttons>
               ` : ''}
             </div>
             <div class="controls-right">
@@ -619,6 +619,30 @@ export default class Event extends Shadow() {
         cancelable: true,
         composed: true
       }))).then((data) => {
+        // GTM Tracking of Click on More Details
+        // @ts-ignore
+        if (typeof window !== 'undefined' && window.dataLayer) {
+            try {
+              // @ts-ignore
+              window.dataLayer.push(
+                {
+                  'event': 'view_item',
+                  'ecommerce': {    
+                    'items': [{ 
+                      'item_name': `${data.bezeichnung}`,                
+                      'item_id': `${data.kurs_typ}_${data.kurs_id}`, 
+                      'price': data.preis_total,
+                      'quantity': 1,
+                      'currency': 'CHF',       
+                    }]
+                  }
+                }
+              )
+            } catch (err) {
+              console.error('Failed to push event data:', err)
+            }
+        }
+
         this.details.classList.remove('loading')
 
         // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019

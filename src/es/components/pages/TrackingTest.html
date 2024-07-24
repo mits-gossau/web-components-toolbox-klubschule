@@ -1,0 +1,85 @@
+<!-- <ks-c-google-tag-manager gtm-id="GTM-PNK6BD2V" position="body"></ks-c-google-tag-manager> -->
+<ks-c-tag-manager id="GTM-PNK6BD2V" test-mode="true"></ks-c-tag-manager>
+
+<h1>Tracking Test Page</h1>
+
+<ks-c-gtm-event 
+  listen-to="on-page-load"
+  event-data='{
+    "event": "begin_checkout",
+    "ecommerce": { 
+         "items": [{
+           "item_name": "Badminton GU Fortgeschrittene 6 TN",        
+            "item_id": "E_12345678",        
+           "price": 220.00,
+           "item_category": "Sport",
+           "item_category2": "Badminton",
+           "item_category3": "",
+           "quantity": 1,
+           "item_variant": "Zurich",
+           "currency": "CHF"
+          }]
+       }
+  }'>
+    <a-button namespace="button-primary-">Register started</a-button>
+</ks-c-gtm-event>
+
+<ks-c-gtm-event 
+  listen-to="click"
+  event-data='{
+    "event": "register",
+    "action": "completed",
+    "step": "2"
+  }'>
+    <a-button namespace="button-primary-">Register completed</a-button>
+</ks-c-gtm-event>
+
+<ks-c-gtm-event 
+  listen-to="on-page-load"
+  event-data='{
+    "event": "view_product_page",
+    "ecommerce": {
+      "item_list_id": "product",
+      "item_list_name": "Product",
+      "items": [
+        {
+            "item_id": "SKU_12345",
+            "item_name": "Stan and Friends Tee",
+            "affiliation": "Google Merchandise Store",
+            "coupon": "SUMMER_FUN",
+            "discount": 2.22,
+            "index": 0,
+            "item_brand": "Google",
+            "item_category": "Apparel",
+            "item_category2": "Adult",
+            "item_category3": "Shirts",
+            "item_category4": "Crew",
+            "item_category5": "Short sleeve",
+            "item_list_id": "related_products",
+            "item_list_name": "Related Products",
+            "item_variant": "green",
+            "location_id": "ChIJIQBpAG2ahYAR_6128GcTUEo",
+            "price": 9.99,
+            "quantity": 1
+        }
+      ]
+    }
+  }'>
+</ks-c-gtm-event>
+
+<!-- <ks-c-gtm-event
+  listen-to="change"
+  event-data='{
+    "event": "custom",
+    "action": "changed"
+  }'
+>
+  <select class="ice-cream" name="ice-cream">
+    <option value="">Select One …</option>
+    <option value="chocolate">Chocolate</option>
+    <option value="sardine">Sardine</option>
+    <option value="vanilla">Vanilla</option>
+  </select>
+
+  <input type="text" name="lorem" value="Ipsum" placeholder="Add some text" />
+</ks-c-gtm-event> -->
