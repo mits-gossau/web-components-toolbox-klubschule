@@ -94,7 +94,7 @@ export default class Radio extends Shadow() {
         }       
 
         :host input[type='radio']:checked ~ .box::before {
-            display: block;
+          display: block;
         }
 
         :host .box::before {
@@ -143,6 +143,11 @@ export default class Radio extends Shadow() {
         :host .message a-icon-mdx {
           --button-primary-icon-right-margin: 0;
           margin-right: var(--mdx-comp-error-message-gap-icon-text-default);
+        }
+        @media only screen and (max-width: _max-width_) {
+          :host .wrap img {
+            margin-left: 0;
+          }
         }
     `
   }
