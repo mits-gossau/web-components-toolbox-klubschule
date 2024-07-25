@@ -63,7 +63,7 @@ export default class KsButton extends Button {
       this.closestForm.removeEventListener('submit', this.formSubmitLoadingListener)
     }
     if (this.closestSimpleForm) {
-      this.button.removeEventListener(this.responseEventName, this.simpleFormResponseListener)
+      this.closestSimpleForm.removeEventListener(FINISH_LOADING_EVENT, this.simpleFormResponseListener)
     }
   }
 
