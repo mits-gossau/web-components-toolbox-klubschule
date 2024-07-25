@@ -18,6 +18,7 @@ export default class KsButton extends Button {
       this.buttonSpan = this.root.querySelector('button > span')
       this.buttonSpan.classList.remove('hide')
       this.buttonSpan.textContent = this.getAttribute('default-label') || 'No added placeholder'
+      this.setAttribute('title',`${this.getAttribute('default-label')}`)
     }
     if (this.getAttribute('answer-event-name')) document.body.addEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
 
@@ -157,8 +158,10 @@ export default class KsButton extends Button {
       this.buttonSpan.classList.remove('hide')
       this.removeBtn.style.display = 'inline'
       this.buttonSpan.textContent = searchTerm
+      this.setAttribute('title',`${searchTerm}`)
     } else if (this.removeBtn) {
       this.buttonSpan.textContent = this.getAttribute('default-label')
+      this.setAttribute('title',`${this.getAttribute('default-label')}`)
     }
   }
 }
