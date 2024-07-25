@@ -194,7 +194,7 @@ export default class Buttons extends Shadow() {
               "event": "select_item",
               "ecommerce": {    
                 "items": [{ 
-                  "item_name": "${this.data.bezeichnung}",                
+                  "item_name": "${this.data.title}",                
                   "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
                   "price": ${this.data.price.price},
                   "quantity": 1
