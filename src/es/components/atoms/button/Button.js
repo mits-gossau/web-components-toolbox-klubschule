@@ -11,8 +11,11 @@ import { FINISH_LOADING_EVENT } from '../../web-components-toolbox/src/es/compon
  * @type {CustomElementConstructor}
  */
 export default class KsButton extends Button {
+  constructor (options = {}, ...args) {
+    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+  }
+
   connectedCallback() {
-    super.connectedCallback()
     // set the default label if exists
     if (this.hasAttribute('default-label')) {
       this.buttonSpan = this.root.querySelector('button > span')
@@ -39,7 +42,7 @@ export default class KsButton extends Button {
     if ((this.getAttribute('type') === 'submit') && this.hasAttribute('with-submit-loading')) {
       this.fetchModules([
         {
-          path: `${this.importMetaUrl}css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+          path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
           name: 'mdx-component'
         }
       ])
@@ -55,7 +58,6 @@ export default class KsButton extends Button {
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback()
     if (this.getAttribute('answer-event-name')) document.body.removeEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
     if (this.closestForm) {
       this.closestForm.removeEventListener('submit', this.formSubmitLoadingListener)
