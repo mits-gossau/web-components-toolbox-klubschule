@@ -39,7 +39,7 @@ export default class KsButton extends Button {
     if ((this.getAttribute('type') === 'submit') && this.hasAttribute('with-submit-loading')) {
       this.fetchModules([
         {
-          path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+          path: `${this.importMetaUrl}../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
           name: 'mdx-component'
         }
       ])
