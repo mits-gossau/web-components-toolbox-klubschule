@@ -194,14 +194,13 @@ export default class Buttons extends Shadow() {
               "event": "select_item",
               "ecommerce": {    
                 "items": [{ 
-                  "item_name": "${this.data.title}",                
+                  "item_name": "${this.data.title || this.data.bezeichnung}",                
                   "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
                   "price": ${this.data.price.price},
                   "quantity": 1
                 }]
               }
-            }
-          }'
+            }'
         >
             ${content}
           </ks-c-gtm-event>
