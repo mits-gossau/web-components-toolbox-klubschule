@@ -11,11 +11,8 @@ import { FINISH_LOADING_EVENT } from '../../web-components-toolbox/src/es/compon
  * @type {CustomElementConstructor}
  */
 export default class KsButton extends Button {
-  constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
-  }
-
   connectedCallback() {
+    super.connectedCallback()
     // set the default label if exists
     if (this.hasAttribute('default-label')) {
       this.buttonSpan = this.root.querySelector('button > span')
@@ -58,12 +55,13 @@ export default class KsButton extends Button {
   }
 
   disconnectedCallback() {
+    super.disconnectedCallback()
     if (this.getAttribute('answer-event-name')) document.body.removeEventListener(this.getAttribute('answer-event-name'), this.answerEventListener)
     if (this.closestForm) {
       this.closestForm.removeEventListener('submit', this.formSubmitLoadingListener)
     }
     if (this.closestSimpleForm) {
-      this.closestSimpleForm.removeEventListener(FINISH_LOADING_EVENT, this.simpleFormResponseListener)
+      this.button.removeEventListener(this.responseEventName, this.simpleFormResponseListener)
     }
   }
 
