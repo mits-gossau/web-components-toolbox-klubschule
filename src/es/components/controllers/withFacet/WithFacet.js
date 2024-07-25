@@ -373,7 +373,7 @@ export default class WithFacet extends WebWorker() {
     const treeShookFilters = []
 
     filters.forEach(filterItem => {
-      const isCenterFilter = filterItem.id === filterValue && filterItem.urlpara === filterKey
+      const isCenterFilter = filterItem.id === filterValue && filterKey === 'center'
       const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
       const isUrlpara = filterItem.urlpara === filterValue
 
