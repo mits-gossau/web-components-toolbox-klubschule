@@ -246,6 +246,8 @@
   --multi-level-navigation-default-desktop-main-wrapper-position: absolute;
   --multi-level-navigation-default-desktop-main-wrapper-position-left: 49%;
   --multi-level-navigation-default-desktop-main-wrapper-position-right: 49%;
+  --nav-level-item-default-hover-background-color: var(--mdx-base-color-klubschule-blue-100);
+  --nav-level-item-default-hover-color: var(--a-color);
   --label-letter-spacing: 0;
   --menu-color-custom: white;
   --login-width: var(--header-default-content-width);
