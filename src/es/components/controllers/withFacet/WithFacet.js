@@ -39,6 +39,7 @@ export default class WithFacet extends WebWorker() {
     let timeoutId = null
     const coordinatesToTerm = new Map()
     // the initial request object received through the attribute, never changes and is always included
+    // TODO: Refactoring: The initial request holds preselected filters through url (e.g. ?tag=mo), which can be deselected through user interaction. The initial request should be a snapshot of the current state of the filters, not the preselected state.
     const initialRequestObj = JSON.parse(this.getAttribute('initial-request'))
     // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
     let currentRequestObj = structuredClone(initialRequestObj)
@@ -211,7 +212,7 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = result[1]
       }
 
-      if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
+      if (!currentRequestObj.filter.length && event?.type !== 'reset-all-filters' && event?.type !== 'reset-filter') currentRequestObj.filter = structuredClone(initialRequestObj.filter)
 
       const LanguageEnum = {
         d: 'de',
