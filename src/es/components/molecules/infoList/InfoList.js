@@ -63,7 +63,6 @@ export default class InfoList extends CheckoutBookedOffer {
       }
 
       :host .list-wrapper > div .flex > span + span {
-        width: 7rem;
         text-align: end;
       }
 

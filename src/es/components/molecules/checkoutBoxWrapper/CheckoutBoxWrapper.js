@@ -86,7 +86,12 @@ export default class CheckoutBoxWrapper extends Shadow() {
         display: flex;
         justify-content: space-between;
         margin: 10px 0;
-      }      
+        margin-bottom: 1.5rem;
+      }
+
+      :host .flex#agbBox {
+        margin-bottom: 1.5rem;
+      }
       
       :host div:not(.flex) span {
         display: block;
@@ -105,6 +110,8 @@ export default class CheckoutBoxWrapper extends Shadow() {
         margin: var(--mdx-sys-spacing-flex-large-2xs) 0;
         gap: 10px;
         justify-content: flex-start;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
       }
 
       :host .info-wrapper span {
