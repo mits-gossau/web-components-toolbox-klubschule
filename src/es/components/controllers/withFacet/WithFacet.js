@@ -100,7 +100,6 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = result[1]
         if (filterKey === 'q') {
           delete currentRequestObj.searchText
-          this.deleteParamFromUrl('q')
           if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
         }
         if (filterKey === 'cname') {
@@ -396,7 +395,6 @@ export default class WithFacet extends WebWorker() {
       let treeShookFilterItem = structuredClone(filterItem)
 
       if (reset && isMatchingKey) {
-        console.log('reset', filterItem)
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
         [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isTree)

@@ -158,7 +158,7 @@ export default class FilterCategories extends Shadow() {
       </mdx-component>
     `
     const navLevelItem = /* html */`
-      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}" label="${this.firstTreeItem?.label || parentItem.label}">
+      <ks-m-nav-level-item mode="false" ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}" label="${this.firstTreeItem?.label || parentItem.label}">
         <div class="wrap">
           <span class="text">${child.label} ${numberOfOffers}</span>
         </div>
@@ -186,7 +186,14 @@ export default class FilterCategories extends Shadow() {
     let filterItem = null
     if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
       // @ts-ignore
-      filterItem.setAttribute('label', `${child.label} ${numberOfOffers}`)
+      if (filterItem && filterItem !== null) {
+        // @ts-ignore
+        const text = filterItem.querySelector('.text')
+        // @ts-ignore
+        filterItem.setAttribute('label', `${child.label} ${numberOfOffers}`)
+        // @ts-ignore
+        if (text) filterItem.querySelector('.text').textContent = `${child.label} ${numberOfOffers}`
+      }
       const attributes = { disabled, checked, visible }
       Object.entries(attributes).forEach(([key, value]) => {
         if (value) {
