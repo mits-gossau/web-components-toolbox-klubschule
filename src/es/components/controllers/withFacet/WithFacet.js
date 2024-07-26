@@ -396,6 +396,7 @@ export default class WithFacet extends WebWorker() {
       let treeShookFilterItem = structuredClone(filterItem)
 
       if (reset && isMatchingKey) {
+        console.log('reset', filterItem)
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
         [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isTree)
