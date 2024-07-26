@@ -121,7 +121,7 @@ export default class filterSelect extends Shadow() {
         filterItem.children.forEach(region => {
           region.children.forEach(center => {
             if (center.selected) {
-              selectedFilterItems.push(`${center.label}`)
+              selectedFilterItems.push(`${center.label.replace(/'/g, '’').replace(/"/g, '\"')}`)
             }
           })
         })
@@ -134,7 +134,7 @@ export default class filterSelect extends Shadow() {
 
         if (selectedChildren.length > 0) {
           selectedChildren.forEach(child => {
-            selectedFilterItems.push(`${child.label}`)
+            selectedFilterItems.push(`${child.label.replace(/'/g, '’').replace(/"/g, '\"')}`)
           })
         }
 
