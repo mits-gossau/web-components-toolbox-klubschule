@@ -154,13 +154,13 @@ export default class FilterCategories extends Shadow() {
 
     const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
-        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label='${child.label} ${numberOfOffers}' filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
+        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label='${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}' filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
       </mdx-component>
     `
     const navLevelItem = /* html */`
-      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}" label="${this.firstTreeItem?.label || parentItem.label}">
+      <ks-m-nav-level-item mode="false" ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || parentItem.label.replace(/'/g, '’').replace(/"/g, '\"')}">
         <div class="wrap">
-          <span class="text">${child.label} ${numberOfOffers}</span>
+          <span class="text">${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}</span>
         </div>
       </ks-m-nav-level-item>
     `
@@ -186,7 +186,14 @@ export default class FilterCategories extends Shadow() {
     let filterItem = null
     if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
       // @ts-ignore
-      filterItem.setAttribute('label', `${child.label} ${numberOfOffers}`)
+      if (filterItem && filterItem !== null) {
+        // @ts-ignore
+        const text = filterItem.querySelector('.text')
+        // @ts-ignore
+        filterItem.setAttribute('label', `${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}`)
+        // @ts-ignore
+        if (text) filterItem.querySelector('.text').textContent = `${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}`
+      }
       const attributes = { disabled, checked, visible }
       Object.entries(attributes).forEach(([key, value]) => {
         if (value) {
@@ -261,9 +268,9 @@ export default class FilterCategories extends Shadow() {
     const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
     const navLevelItem = document.createElement('div')
-    let selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ') || ''
+    let selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label.replace(/'/g, '’').replace(/"/g, '\"')).join(', ') || ''
     // @ts-ignore
-    if (level === 0 && filterItem.typ === 'tree') selectedFilters = this.getSelectedFilters(filterItem)[0]?.label || ""
+    if (level === 0 && filterItem.typ === 'tree') selectedFilters = this.getSelectedFilters(filterItem)[0]?.label.replace(/'/g, '’').replace(/"/g, '\"') || ""
     if (this.firstTreeItem) {
       selectedFilters = ''
     }
@@ -277,9 +284,9 @@ export default class FilterCategories extends Shadow() {
     this.total = response.total
 
     navLevelItem.innerHTML = /* html */`
-      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}" label="${this.firstTreeItem?.label || filterItem.label}">
+      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')}">
         <div class="wrap">
-          <span class="text">${filterItem.label} ${numberOfOffers}</span>
+          <span class="text">${filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}</span>
           <span class="additional">${selectedFilters}</span>
         </div>
         <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
@@ -292,7 +299,7 @@ export default class FilterCategories extends Shadow() {
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
           </a-button>
-          <h3>${filterItem.label}</h3>
+          <h3>${filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')}</h3>
           <a-button request-event-name="backdrop-clicked" id="close">
             <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
           </a-button>

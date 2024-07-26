@@ -14,7 +14,7 @@ export default class TileFactory extends Shadow() {
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
 
-    this.lastResponsePnext = 0
+    this.lastResponsePpage = 0
     this.hiddenMessages = this.hiddenSections
   }
 
@@ -121,7 +121,7 @@ export default class TileFactory extends Shadow() {
       setTimeout(() => {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
-        if (data.ppage === 1 || (data.ppage === -1 && [-1, 1, 0].includes(this.lastResponsePnext)) || data.total <= data.psize) this.html = ''
+        if (data.ppage === 1 || (data.ppage === -1 && [-1, 1, 0].includes(this.lastResponsePpage)) || (data.courses.length < data.psize && [-1, 1, 0].includes(this.lastResponsePpage))) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -172,7 +172,7 @@ export default class TileFactory extends Shadow() {
             ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
           </ks-o-partner-search>
         `
-        this.lastResponsePnext = data.pnext
+        this.lastResponsePpage = data.ppage
       }, 0)
     }).catch(error => {
       console.error(error)
@@ -225,12 +225,15 @@ export default class TileFactory extends Shadow() {
             : ''}",
         "badge": "${course.location.badge ? course.location.badge : ''}"
       },
+      "kurs_typ": "${course.kurs_typ}",
+      "kurs_id": "${course.kurs_id}",
       "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "icons": ${JSON.stringify(course.icons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "price": {
         "pre": "${course.price.pre}",
         "amount": "${course.price.amount}",
-        "per": "${course.price.per}"
+        "per": "${course.price.per}",
+        "price": ${course.price.price}
       },
       "parentkey": "${course.parentkey}"
     `
