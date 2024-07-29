@@ -331,8 +331,7 @@ export default class WithFacet extends WebWorker() {
               if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
 
               // Read location name from URL
-              let cname = this.params.get('cname')
-
+              const cname = this.params.get('cname')
               if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
 
               this.dispatchEvent(new CustomEvent('location-change', {
