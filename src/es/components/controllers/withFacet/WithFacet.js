@@ -55,21 +55,11 @@ export default class WithFacet extends WebWorker() {
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
     this.abortController = null
-    // this.hasAttribute('save-location-session')
-    this.saveLocationDataInLocalStorage = true
-    // this.hasAttribute('save-location-window')
-    this.saveLocationDataInSessionStorage = false
+    this.saveLocationDataInLocalStorage =  this.hasAttribute('save-location-local-storage')
+    this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
 
-    this.fillStorageData = storageType => {
+    this.fillStorage = storageType => {
       const isLocalStorageType = storageType === 'local'
-      if (isLocalStorageType ? localStorage.getItem('locationData') : sessionStorage.getItem('locationData')) {
-        // @ts-ignore
-        const currentLocationData = isLocalStorageType ? JSON.parse(localStorage.getItem('locationData')) : JSON.parse(sessionStorage.getItem('locationData'))
-        currentRequestObj.clat = currentLocationData.clat
-        currentRequestObj.clong = currentLocationData.clong
-        currentRequestObj.cname = currentLocationData.cnameCoded
-
-      }
       // fill storage based on url
       if (this.params.has('clat') && this.params.has('clong') && this.params.get('cname')) {
         let locationData = {
@@ -80,13 +70,46 @@ export default class WithFacet extends WebWorker() {
         }
         // @ts-ignore
         isLocalStorageType ? localStorage.setItem("locationData", JSON.stringify(locationData)) : sessionStorage.setItem("locationData", JSON.stringify(locationData))
+      } else if (isLocalStorageType ? localStorage.getItem('locationData') : sessionStorage.getItem('locationData')) this.updateUrlBasedStorage(isLocalStorageType ? 'local' : 'session')
+
+    }
+
+    this.updateStorageBasedEvent = (storageType, event) => {
+      const isLocalStorageType = storageType === 'local'
+      let locationData = {
+        clat: event.detail.lat,
+        clong: event.detail.lng,
+        cnameDecoded: event.detail.description,
+        cnameCoded: encodeURIComponent(event.detail.description)
       }
+      // @ts-ignore
+      isLocalStorageType ? localStorage.setItem("locationData", JSON.stringify(locationData)) : sessionStorage.setItem("locationData", JSON.stringify(locationData))
+    }
+
+    this.updateUrlBasedStorage = storageType => {
+      const isLocalStorageType = storageType === 'local'
+      // @ts-ignore
+      const dataFromStorage = isLocalStorageType ? JSON.parse(localStorage.getItem('locationData')) : JSON.parse(sessionStorage.getItem('locationData'))
+      currentRequestObj.clat = dataFromStorage.clat
+      currentRequestObj.clong = dataFromStorage.clong
+      currentRequestObj.cname = dataFromStorage.cnameCoded
+      this.updateURLParam('clat', dataFromStorage.clat)
+      this.updateURLParam('clong', dataFromStorage.clong)
+      this.updateURLParam('cname', dataFromStorage.cnameCoded)
+    }
+
+    this.getLocationDataFromStorage = (storageType, dataName) => {
+       const isLocalStorageType = storageType === 'local'
+       // @ts-ignore
+       const currentLocationData = isLocalStorageType ? JSON.parse(localStorage.getItem('locationData')) : JSON.parse(sessionStorage.getItem('locationData'))
+       let currentData = (currentLocationData && currentLocationData[dataName]) ? currentLocationData[dataName] : ''
+       return currentData
     }
     // @ts-ignore
-    if (this.saveLocationDataInLocalStorage) this.fillStorageData('local')
+    if (this.saveLocationDataInLocalStorage) this.fillStorage('local')
 
     // @ts-ignore
-    if (this.saveLocationDataInSessionStorage) this.fillStorageData('session')
+    if (this.saveLocationDataInSessionStorage) this.fillStorage('session')
 
     if (this.params.has('q')) currentRequestObj.searchText = this.params.get('q')
     if (this.params.has('clat')) currentRequestObj.clat = this.params.get('clat')
@@ -118,10 +141,6 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
-        console.log("currentRequestObj 1", currentCompleteFilterObj)
-        console.log("currentRequestObj 1", currentRequestObj)
-
-
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
@@ -200,48 +219,14 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('clat', event.detail.lat)
           this.updateURLParam('clong', event.detail.lng)
           this.updateURLParam('cname', encodeURIComponent(event.detail.description))
-          if (this.saveLocationDataInLocalStorage) {
-            let locationData = {
-              clat: event.detail.lat,
-              clong: event.detail.lng,
-              cnameDecoded: event.detail.description,
-              cnameCoded: encodeURIComponent(event.detail.description)
-            }
-            // @ts-ignore
-            localStorage.setItem("locationData", JSON.stringify(locationData))
-          }
-          if (this.saveLocationDataInSessionStorage) {
-            let locationData = {
-              clat: event.detail.lat,
-              clong: event.detail.lng,
-              cnameDecoded: event.detail.description,
-              cnameCoded: encodeURIComponent(event.detail.description)
-            }
-            // @ts-ignore
-            sessionStorage.setItem("locationData", JSON.stringify(locationData))
-          }
+          if (this.saveLocationDataInLocalStorage) this.updateStorageBasedEvent('local', event)
+          if (this.saveLocationDataInSessionStorage) this.updateStorageBasedEvent('session', event)
           currentRequestObj.sorting = 2
           this.updateURLParam('sorting', 2)
         } else {
           // How to test this part?
-          if (this.saveLocationDataInLocalStorage && localStorage.getItem('locationData')) {
-            // @ts-ignore
-            const locationDataFromStorage = JSON.parse(localStorage.getItem('locationData'))
-            currentRequestObj.clat = locationDataFromStorage.clat
-            currentRequestObj.clong = locationDataFromStorage.clong
-            this.updateURLParam('clat', locationDataFromStorage.clat)
-            this.updateURLParam('clong', locationDataFromStorage.clong)
-            this.updateURLParam('cname', locationDataFromStorage.cnameCoded)
-          }
-          if (this.saveLocationDataInSessionStorage && sessionStorage.getItem('locationData')) {
-            // @ts-ignore
-            const locationDataFromStorage = JSON.parse(sessionStorage.getItem('locationData'))
-            currentRequestObj.clat = locationDataFromStorage.clat
-            currentRequestObj.clong = locationDataFromStorage.clong
-            this.updateURLParam('clat', locationDataFromStorage.clat)
-            this.updateURLParam('clong', locationDataFromStorage.clong)
-            this.updateURLParam('cname', locationDataFromStorage.cnameCoded)
-          }
+          if (this.saveLocationDataInLocalStorage && localStorage.getItem('locationData')) this.updateUrlBasedStorage('local')
+          else if (this.saveLocationDataInSessionStorage && sessionStorage.getItem('locationData')) this.updateUrlBasedStorage('session')
           else {
             if (currentRequestObj.clat) delete currentRequestObj.clat
             if (currentRequestObj.clong) delete currentRequestObj.clong
@@ -293,10 +278,6 @@ export default class WithFacet extends WebWorker() {
       }
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
-
-      console.log("currentRequestObj 2", currentRequestObj)
-
-
       const LanguageEnum = {
         d: 'de',
         f: 'fr',
@@ -343,11 +324,6 @@ export default class WithFacet extends WebWorker() {
                 initialResponseFilters = json.filters
                 firstRequest = false
               }
-
-              if (true) {
-                console.log("json", json)
-              }
-
               return json
             }).finally(json => {
               // update inputs
@@ -365,21 +341,8 @@ export default class WithFacet extends WebWorker() {
               // Read location name from URL
               let cname = this.params.get('cname')
 
-              if (this.saveLocationDataInLocalStorage) {
-                // @ts-ignore
-                const currentLocationData = JSON.parse(localStorage.getItem('locationData'))
-                if (currentLocationData && currentLocationData.cnameDecoded) {
-                  cname = currentLocationData.cnameDecoded
-                }
-              }
-
-              if (this.saveLocationDataInSessionStorage) {
-                // @ts-ignore
-                const currentLocationData = JSON.parse(sessionStorage.getItem('locationData'))
-                if (currentLocationData && currentLocationData.cnameDecoded) {
-                  cname = currentLocationData.cnameDecoded
-                }
-              }
+              if (this.saveLocationDataInLocalStorage) cname = this.getLocationDataFromStorage('local', 'cnameDecoded')
+              if (this.saveLocationDataInSessionStorage) cname = this.getLocationDataFromStorage('session', 'cnameDecoded')
 
               if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
 
