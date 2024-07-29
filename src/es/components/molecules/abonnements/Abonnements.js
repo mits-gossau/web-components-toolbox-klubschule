@@ -98,7 +98,7 @@ export default class Abonnements extends Shadow() {
         color: var(--mdx-base-color-grey-950);
       }
       :host m-dialog {
-        --dialog-left-slide-in-max-width-custom: min(100%, 1020px);
+        --dialog-left-slide-in-max-width-custom: min(100%, 1270px);
       }
       :host m-dialog + a-button {
         --button-transparent-padding: 0;
