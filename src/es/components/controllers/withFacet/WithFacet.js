@@ -55,6 +55,54 @@ export default class WithFacet extends WebWorker() {
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
     this.abortController = null
+    this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
+    this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
+
+    this.fillStorage = storageType => {
+      const isLocalStorageType = storageType === 'local'
+      // update storage based on url
+      if (this.params.has('clat') && this.params.has('clong') && this.params.get('cname')) {
+        let locationData = {
+          clat: this.params.get('clat'),
+          clong: this.params.get('clong'),
+          cnameDecoded: decodeURIComponent(this.params.get('cname') || ''),
+          cnameCoded: this.params.get('cname')
+        }
+        // @ts-ignore
+        isLocalStorageType ? localStorage.setItem("locationData", JSON.stringify(locationData)) : sessionStorage.setItem("locationData", JSON.stringify(locationData))
+      } // update url based storage 
+      else if (isLocalStorageType ? localStorage.getItem('locationData') : sessionStorage.getItem('locationData')) this.updateUrlBasedStorage(isLocalStorageType ? 'local' : 'session')
+    }
+
+    this.updateStorageBasedEvent = (storageType, event) => {
+      const isLocalStorageType = storageType === 'local'
+      let locationData = {
+        clat: event.detail.lat,
+        clong: event.detail.lng,
+        cnameDecoded: event.detail.description,
+        cnameCoded: encodeURIComponent(event.detail.description)
+      }
+      // @ts-ignore
+      isLocalStorageType ? localStorage.setItem("locationData", JSON.stringify(locationData)) : sessionStorage.setItem("locationData", JSON.stringify(locationData))
+    }
+
+    this.updateUrlBasedStorage = storageType => {
+      const isLocalStorageType = storageType === 'local'
+      // @ts-ignore
+      const dataFromStorage = isLocalStorageType ? JSON.parse(localStorage.getItem('locationData')) : JSON.parse(sessionStorage.getItem('locationData'))
+      currentRequestObj.clat = dataFromStorage.clat
+      currentRequestObj.clong = dataFromStorage.clong
+      currentRequestObj.cname = dataFromStorage.cnameCoded
+      this.updateURLParam('clat', dataFromStorage.clat)
+      this.updateURLParam('clong', dataFromStorage.clong)
+      this.updateURLParam('cname', dataFromStorage.cnameCoded)
+    }
+
+    // @ts-ignore
+    if (this.saveLocationDataInLocalStorage) this.fillStorage('local')
+
+    // @ts-ignore
+    if (this.saveLocationDataInSessionStorage) this.fillStorage('session')
 
     if (this.params.has('q')) currentRequestObj.searchText = this.params.get('q')
     if (this.params.has('clat')) currentRequestObj.clat = this.params.get('clat')
@@ -92,6 +140,7 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
         currentRequestObj.sorting = 3
+        if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
@@ -114,6 +163,8 @@ export default class WithFacet extends WebWorker() {
           } else {
             currentRequestObj.sorting = 1 // relevance
           }
+          if (this.saveLocationDataInLocalStorage) localStorage.removeItem('locationData')
+          if (this.saveLocationDataInSessionStorage) sessionStorage.removeItem('locationData')
           this.updateURLParam('sorting', currentRequestObj.sorting)
         }
         this.deleteParamFromUrl(filterKey)
@@ -136,7 +187,7 @@ export default class WithFacet extends WebWorker() {
           try {
             // @ts-ignore
             window.dataLayer.push({
-              'event': 'filterSelection',              
+              'event': 'filterSelection',
               'filterName': event.detail.target.label, //the name of the clicked filter.
               'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
             })
@@ -161,16 +212,22 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('clat', event.detail.lat)
           this.updateURLParam('clong', event.detail.lng)
           this.updateURLParam('cname', encodeURIComponent(event.detail.description))
+          if (this.saveLocationDataInLocalStorage) this.updateStorageBasedEvent('local', event)
+          if (this.saveLocationDataInSessionStorage) this.updateStorageBasedEvent('session', event)
           currentRequestObj.sorting = 2
           this.updateURLParam('sorting', 2)
         } else {
-          if (currentRequestObj.clat) delete currentRequestObj.clat
-          if (currentRequestObj.clong) delete currentRequestObj.clong
-          this.deleteParamFromUrl('clat')
-          this.deleteParamFromUrl('clong')
-          this.deleteParamFromUrl('cname')
-          currentRequestObj.sorting = this.params.get('sorting') || 3
-          this.updateURLParam('sorting', currentRequestObj.sorting)
+          if (this.saveLocationDataInLocalStorage && localStorage.getItem('locationData')) this.updateUrlBasedStorage('local')
+          else if (this.saveLocationDataInSessionStorage && sessionStorage.getItem('locationData')) this.updateUrlBasedStorage('session')
+          else {
+            if (currentRequestObj.clat) delete currentRequestObj.clat
+            if (currentRequestObj.clong) delete currentRequestObj.clong
+            this.deleteParamFromUrl('clat')
+            this.deleteParamFromUrl('clong')
+            this.deleteParamFromUrl('cname')
+            currentRequestObj.sorting = this.params.get('sorting') || 3
+            this.updateURLParam('sorting', currentRequestObj.sorting)
+          }
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
@@ -213,7 +270,6 @@ export default class WithFacet extends WebWorker() {
       }
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
-
       const LanguageEnum = {
         d: 'de',
         f: 'fr',
@@ -260,7 +316,6 @@ export default class WithFacet extends WebWorker() {
                 initialResponseFilters = json.filters
                 firstRequest = false
               }
-
               return json
             }).finally(json => {
               // update inputs
@@ -479,9 +534,11 @@ export default class WithFacet extends WebWorker() {
       })
 
       this.params.delete('q')
-      this.params.delete('clat')
-      this.params.delete('clong')
-      this.params.delete('cname')
+      if (!this.saveLocationDataInLocalStorage && !this.saveLocationDataInSessionStorage) {
+        this.params.delete('clat')
+        this.params.delete('clong')
+        this.params.delete('cname')
+      }
 
       WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
