@@ -44,6 +44,12 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter
+
+    // base request nullFilter
+    let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
+    // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
+    if (initialFilter.length < 1) initialFilter = this.getNullFilter()
+
     // hold the initial response filters from the very first response call to be able to reset filters for "tree" filters
     let firstRequest = true
     let initialResponseFilters = null
@@ -91,6 +97,7 @@ export default class WithFacet extends WebWorker() {
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
+        currentRequestObj.filter = initialFilter
         currentRequestObj.sorting = 3
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
@@ -127,6 +134,10 @@ export default class WithFacet extends WebWorker() {
           const initialResponseFiltersTree = initialResponseFilters.filter(filterItem => filterItem.typ === 'tree')
           currentCompleteFilterObj = currentCompleteFilterObj.filter(filterItem => filterItem.typ !== 'tree')
           currentCompleteFilterObj = [...currentCompleteFilterObj, ...initialResponseFiltersTree]
+
+          this.updateURLParam(currentCompleteFilterObj.find((filter) => Number(filter.id) === 7)?.urlpara, filterValue, isTree)
+        } else {
+          this.updateURLParam(filterKey, filterValue, isTree)
         }
 
         // GTM Tracking of Filters
@@ -143,8 +154,6 @@ export default class WithFacet extends WebWorker() {
             console.error('Failed to push event data:', err)
           }
         }
-
-        this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
@@ -211,7 +220,7 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = result[1]
       }
 
-      if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
+      if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
       const LanguageEnum = {
         d: 'de',
@@ -499,5 +508,50 @@ export default class WithFacet extends WebWorker() {
       // @ts-ignore
       self.history.replaceState(...args)
     }
+  }
+
+  /** 
+   * Recursive function to get only the "initial"-filters, which are not editable by the user
+   * Needs to be done, since Backend is writing filterqueries into the initial request, when the page is refreshed/ shared
+   * For more Informations: https://jira.migros.net/browse/MIDUWEB-1452
+   * @returns Array with Filter Objects, which are non editable by the user
+  */ 
+  getInitialBaseFilters(filters) {
+    return filters.filter(
+      (filter) => {
+        if (filter.children?.length) {
+          return this.getInitialBaseFilters(filter.children).length > 0
+        } else {
+          return filter.selected && !filter.disabled
+        }
+      }
+    )
+  }
+
+  /**
+   * Returns a null Filter Object, which is used for a plain search on /search/ level
+   * @return a "null" Filter Object
+   */
+  getNullFilter() {
+    return [
+      {
+        "PartitionKey": null,
+        "RowKey": null,
+        "label": null,
+        "id": "",
+        "typ": null,
+        "level": "",
+        "count": 0,
+        "color": "",
+        "urlpara": "",
+        "selected": false,
+        "disabled": false,
+        "visible": false,
+        "sort": 0,
+        "hideCount": false,
+        "children": null,
+        "HasChilds": false
+      }
+    ]
   }
 }
