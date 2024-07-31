@@ -306,7 +306,7 @@ export default class WithFacet extends WebWorker() {
 
       if (currentRequestObj.filter?.length) subLevelFilter = [...event.detail.filter, ...currentRequestObj.filter]
 
-      const sorting = currentRequestObj.sorting || initialRequestObj.sorting
+      const sorting = Number(this.params.get('sorting')) || currentRequestObj.sorting || initialRequestObj.sorting
       const searchText = currentRequestObj.searchText || initialRequestObj.searchText
 
       let body = `{
