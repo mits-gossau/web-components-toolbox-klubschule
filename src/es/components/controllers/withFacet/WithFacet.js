@@ -135,9 +135,9 @@ export default class WithFacet extends WebWorker() {
           currentCompleteFilterObj = currentCompleteFilterObj.filter(filterItem => filterItem.typ !== 'tree')
           currentCompleteFilterObj = [...currentCompleteFilterObj, ...initialResponseFiltersTree]
 
-          this.updateURLParam(currentCompleteFilterObj.find((filter) => Number(filter.id) === 7)?.urlpara, filterValue, isTree)
+          this.updateURLParam(currentCompleteFilterObj.find((filter) => Number(filter.id) === 7)?.urlpara, filterValue, true)
         } else {
-          this.updateURLParam(filterKey, filterValue, isTree)
+          this.updateURLParam(filterKey, filterValue, false)
         }
 
         // GTM Tracking of Filters
@@ -156,7 +156,7 @@ export default class WithFacet extends WebWorker() {
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
+        currentRequestObj.filter = [...result[1], ...initialFilter]
         if (isTree) {
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
         }
@@ -522,7 +522,7 @@ export default class WithFacet extends WebWorker() {
         if (filter.children?.length) {
           return this.getInitialBaseFilters(filter.children).length > 0
         } else {
-          return filter.selected && !filter.disabled
+          return filter.selected && filter.disabled
         }
       }
     )
