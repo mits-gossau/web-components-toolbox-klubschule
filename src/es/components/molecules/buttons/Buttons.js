@@ -254,7 +254,7 @@ export default class Buttons extends Shadow() {
                 // @ts-ignore
                 'item_id': `${this.data.kurs_typ}_${this.data.kurs_id}`, 
                 // @ts-ignore
-                'price': `${this.data.price.price}`,
+                'price': this.data.price.price,
                 'quantity': 1,
                 'currency': 'CHF'
               }]
