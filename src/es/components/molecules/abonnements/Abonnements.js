@@ -188,7 +188,7 @@ export default class Abonnements extends Shadow() {
       this.total.innerHTML = data.total_label
       this.tiles = this.tiles || []
       data.courses.forEach((course) => {
-        this.tiles.push(course.locations?.length ? /* html */ `<ks-o-tile-list data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-o-tile-list>` : /* html */ `<ks-m-tile no-url-params namespace="tile-default-" data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-m-tile>`)
+        this.tiles.push(course.locations?.length ? /* html */ `<ks-o-tile-list no-url-params data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-o-tile-list>` : /* html */ `<ks-m-tile no-url-params namespace="tile-default-" data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-m-tile>`)
       })
 
       this.content.innerHTML = /* html */ `
