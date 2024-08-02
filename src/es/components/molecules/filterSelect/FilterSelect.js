@@ -83,7 +83,7 @@ export default class filterSelect extends Shadow() {
     }
   }
 
-  createFilterButton (filterItem, selectedFilter, treeIds = []) {
+  createFilterButton (filterItem, selectedFilter, treeIds = [], filterGroupUrlPara = null) {
     let requestEventName = 'dialog-open-first-level'
 
     treeIds && treeIds['parents']?.length > 0 ? requestEventName += ','+treeIds['parents']?.map(id => `dialog-open-${id}`).join(',') : requestEventName += ','+`dialog-open-${filterItem.id}`
@@ -94,7 +94,7 @@ export default class filterSelect extends Shadow() {
           <span part="label1">${selectedFilter}</span>
           <span part="label2" dynamic></span>
         </ks-a-button>
-        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="${filterItem.urlpara}" filter-value="${selectedFilter}">
+        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="${filterGroupUrlPara || filterItem.urlpara}" filter-value="${selectedFilter}">
           <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
         </ks-a-button>
       </m-double-button>
@@ -103,6 +103,7 @@ export default class filterSelect extends Shadow() {
 
   generateFilterButtons(filterData) {
     let treeIds = null
+    let treeUrlPara = null
     const processFilterItem = (filterItem) => {
       const isCenterFilter = filterItem.typ === 'group'
       const isSectorFilter = filterItem.typ === 'tree'
@@ -113,6 +114,7 @@ export default class filterSelect extends Shadow() {
         filterData.map(filter => {
           if (filter.typ === 'tree') {
             treeIds = this.findSelectedAndParents(filter)
+            treeUrlPara = this.findSelectedAndParents(filter, [], true)
           }
         }).find(item => item)
       }
@@ -139,7 +141,7 @@ export default class filterSelect extends Shadow() {
         }
 
         if (selectedFilterItems.length > 0) {
-          this.html = this.createFilterButton(filterItem, selectedFilterItems, treeIds && treeIds['parents']?.includes(filterItem.id) ? treeIds : [])
+          this.html = this.createFilterButton(filterItem, selectedFilterItems, treeIds && treeIds['parents']?.includes(filterItem.id) ? treeIds : [], treeIds && treeUrlPara && treeUrlPara['parents'][0])
         }
       
         filterItem.children.forEach(child => processFilterItem(child)) // recursive call
@@ -151,13 +153,13 @@ export default class filterSelect extends Shadow() {
     })
   }
 
-  findSelectedAndParents(obj, parents = []) {
+  findSelectedAndParents(obj, parents = [], returnUrlPara = false) {
     if (obj.selected) {
-      return { selected: true, parents: parents.map(parent => parent.id) }
+      return { selected: true, parents: parents.map(parent => returnUrlPara ? parent.urlpara : parent.id) }
     }
     if (obj.children && Array.isArray(obj.children)) {
       for (const child of obj.children) {
-        const result = this.findSelectedAndParents(child, [...parents, obj])
+        const result = this.findSelectedAndParents(child, [...parents, obj], returnUrlPara)
         if (result && result.selected) {
           return result
         }
