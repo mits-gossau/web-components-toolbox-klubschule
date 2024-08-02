@@ -294,7 +294,8 @@ export default class Tile extends Shadow() {
       <div class="m-tile__wrap">
         <div class="m-tile__overlay"></div>
         <div class="m-tile__head">
-          <ks-c-gtm-event 
+          <ks-c-gtm-event
+            mode="false" 
             listen-to="click"
             event-data='{
               "event": "select_item",
@@ -309,7 +310,7 @@ export default class Tile extends Shadow() {
             }'
           >
             <span class="m-tile__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
-          </span>
+          </ks-c-gtm-event>
           ${data.infotextshort
             ? /* html */`
               <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>

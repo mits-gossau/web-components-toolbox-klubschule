@@ -306,7 +306,24 @@ export default class TileList extends Shadow() {
     <div class="o-tile-list">
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
-            <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
+
+            <ks-c-gtm-event
+              mode="false" 
+              listen-to="click"
+              event-data='{
+                "event": "select_item",
+                "ecommerce": {    
+                  "items": [{ 
+                    "item_name": "${data.title || data.bezeichnung || 'No Title'}",                
+                    "item_id": "${data.kurs_typ}_${data.kurs_id}",
+                    "price": ${data.price?.price || data.preis_total || 0},
+                    "quantity": 1
+                  }]
+                }
+              }'
+            >
+              <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
+            </ks-c-gtm-event>
             ${data.infotextshort
               ? /* html */`
                 <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
