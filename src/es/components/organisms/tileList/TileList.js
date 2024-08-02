@@ -80,7 +80,6 @@ export default class TileList extends Shadow() {
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
       Promise.all(showPromises).then(() => (this.hidden = false))
     })
-    console.log("here", this.root)
   }
 
   /**
