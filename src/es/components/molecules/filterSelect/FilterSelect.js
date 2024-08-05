@@ -114,7 +114,7 @@ export default class filterSelect extends Shadow() {
         filterData.map(filter => {
           if (filter.typ === 'tree') {
             treeIds = this.findSelectedAndParents(filter)
-            treeUrlPara = this.findSelectedAndParents(filter, [], true)
+            treeUrlPara = this.findSelectedAndParents(filter, [], !filter.level && filter.urlpara)
           }
         }).find(item => item)
       }
@@ -141,7 +141,7 @@ export default class filterSelect extends Shadow() {
         }
 
         if (selectedFilterItems.length > 0) {
-          this.html = this.createFilterButton(filterItem, selectedFilterItems, treeIds && treeIds['parents']?.includes(filterItem.id) ? treeIds : [], treeIds && treeUrlPara && treeUrlPara['parents'][0])
+          this.html = this.createFilterButton(filterItem, selectedFilterItems, treeIds && treeIds['parents']?.includes(filterItem.id) ? treeIds : [], filterItem.level?.length && treeIds && treeUrlPara && treeUrlPara['parents'][0])
         }
       
         filterItem.children.forEach(child => processFilterItem(child)) // recursive call
@@ -153,13 +153,13 @@ export default class filterSelect extends Shadow() {
     })
   }
 
-  findSelectedAndParents(obj, parents = [], returnUrlPara = false) {
+  findSelectedAndParents(obj, parents = [], parentValue) {
     if (obj.selected) {
-      return { selected: true, parents: parents.map(parent => returnUrlPara ? parent.urlpara : parent.id) }
+      return { selected: true, parents: parents.map(parent => parentValue ? parentValue : parent.id) }
     }
     if (obj.children && Array.isArray(obj.children)) {
       for (const child of obj.children) {
-        const result = this.findSelectedAndParents(child, [...parents, obj], returnUrlPara)
+        const result = this.findSelectedAndParents(child, [...parents, obj], parentValue)
         if (result && result.selected) {
           return result
         }
