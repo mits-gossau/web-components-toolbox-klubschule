@@ -52,17 +52,17 @@ export default class EventDetail extends Shadow() {
       const showPromises = []
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-      Promise.all(showPromises).then(() => (this.hidden = false))
+      Promise.all(showPromises).then(() => {
+        this.linkMore = this.root.querySelector('.link-more')
+        this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
+  
+        if (this.linkMore) {
+          this.linkMore.addEventListener('click', this.clickEventListener)
+        }
+        this.hidden = false
+      })
     })
-
-
-      this.linkMore = this.root.querySelector('.link-more')
-      this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
-
-      if (this.linkMore) {
-        this.linkMore.addEventListener('click', this.clickEventListener)
-      }
-    }
+  }
 
   disconnectedCallback() {
       if(this.linkMore) {
