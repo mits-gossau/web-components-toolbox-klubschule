@@ -107,7 +107,7 @@ export default class TileFactory extends Shadow() {
     /* loading */
     this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../organisms/MdxComponent.js`,
+        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
         name: 'mdx-component'
       }
     ])

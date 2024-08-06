@@ -226,7 +226,7 @@ export default class PartnerSearch extends Shadow() {
         name: 'a-translation'
       },
       {
-        path: `${this.importMetaUrl}../../organisms/MdxComponent.js`,
+        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
         name: 'mdx-component'
       }
     ])

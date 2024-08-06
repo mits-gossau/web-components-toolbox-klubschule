@@ -177,7 +177,7 @@ export default class WishList extends Shadow() {
         name: 'ks-o-offers-page'
       },
       {
-        path: `${this.importMetaUrl}../../organisms/MdxComponent.js`,
+        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
         name: 'mdx-component'
       }
     ])
