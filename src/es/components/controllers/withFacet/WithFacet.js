@@ -519,11 +519,13 @@ export default class WithFacet extends WebWorker() {
   getInitialBaseFilters(filters) {
     return filters.filter(
       (filter) => {
+        if (filter.selected && filter.disabled) {
+          return true
+        }
         if (filter.children?.length) {
           return this.getInitialBaseFilters(filter.children).length > 0
-        } else {
-          return filter.selected && filter.disabled
         }
+        return false
       }
     )
   }
