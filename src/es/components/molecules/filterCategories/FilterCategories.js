@@ -151,6 +151,8 @@ export default class FilterCategories extends Shadow() {
     const isMultipleChoice = parentItem.typ === 'multi'
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
+    // TODO: note: Same function at 3 places! Numbers were not working reliably, thus they are now turned off until mvp 2
+    numberOfOffers = ''
 
     const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
@@ -182,6 +184,8 @@ export default class FilterCategories extends Shadow() {
     const visible = child.visible ? 'visible' : ''
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
+    // TODO: note: Same function at 3 places! Numbers were not working reliably, thus they are now turned off until mvp 2
+    numberOfOffers = ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
     let filterItem = null
     if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
@@ -281,6 +285,8 @@ export default class FilterCategories extends Shadow() {
     
     let numberOfOffers = filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'
     if (filterItem.hideCount || level === 0) numberOfOffers = ''
+    // TODO: note: Same function at 3 places! Numbers were not working reliably, thus they are now turned off until mvp 2
+    numberOfOffers = ''
     this.total = response.total
 
     navLevelItem.innerHTML = /* html */`
