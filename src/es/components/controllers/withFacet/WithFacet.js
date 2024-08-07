@@ -50,6 +50,9 @@ export default class WithFacet extends WebWorker() {
     // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
     if (initialFilter.length < 1) initialFilter = this.getNullFilter()
 
+    // hold the initial response filters from the very first response call to be able to reset filters for "tree" filters
+    let firstRequest = true
+    let initialResponseFilters = null
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
@@ -127,6 +130,11 @@ export default class WithFacet extends WebWorker() {
         const [filterKey, filterValue] = filterId.split('-')
         const isTree = event?.detail?.target?.type === "tree"
         if (isTree) {
+          // replace currentCompleteFilterObj.filter of "typ: tree" with initialResponseFilters.filter of "typ: tree" to avoid multi selection
+          const initialResponseFiltersTree = initialResponseFilters.filter(filterItem => filterItem.typ === 'tree')
+          currentCompleteFilterObj = currentCompleteFilterObj.filter(filterItem => filterItem.typ !== 'tree')
+          currentCompleteFilterObj = [...currentCompleteFilterObj, ...initialResponseFiltersTree]
+
           this.updateURLParam(currentCompleteFilterObj.find((filter) => Number(filter.id) === 7)?.urlpara, filterValue, true)
         } else {
           this.updateURLParam(filterKey, filterValue, false)
@@ -254,6 +262,13 @@ export default class WithFacet extends WebWorker() {
             }).then(json => {
               // update filters with api response
               currentRequestObj.filter = currentCompleteFilterObj = json.filters
+
+              // hold the json.filters from the very first response call
+              if (firstRequest) {
+                initialResponseFilters = json.filters
+                firstRequest = false
+              }
+
               return json
             }).finally(json => {
               // update inputs
@@ -397,7 +412,7 @@ export default class WithFacet extends WebWorker() {
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
     })
-    // returns [0] unmutated filters
+
     return [filters, treeShookFilters]
   }
 
