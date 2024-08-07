@@ -366,7 +366,8 @@ export default class WithFacet extends WebWorker() {
     const treeShookFilters = []
 
     filters.forEach(filterItem => {
-      const isCenterFilter = filterItem.id === filterValue && filterKey === 'center'
+      // TODO: Is there a better way to check if it is a center filter? For expl.: (filterItem.urlpara === filterKey)?
+      const isCenterFilter = filterItem.id === filterValue && ['center', 'centre', 'centro'].includes(filterKey.toLowerCase())
       const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
       const isUrlpara = filterItem.urlpara === filterValue
 
