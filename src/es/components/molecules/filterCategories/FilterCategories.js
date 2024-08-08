@@ -151,9 +151,6 @@ export default class FilterCategories extends Shadow() {
     const isMultipleChoice = parentItem.typ === 'multi'
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
-    // TODO: note: Same function at 3 places! Numbers were not working reliably, thus they are now turned off until mvp 2
-    numberOfOffers = ''
-
     const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
         <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label='${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}' filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
@@ -184,8 +181,6 @@ export default class FilterCategories extends Shadow() {
     const visible = child.visible ? 'visible' : ''
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
-    // TODO: note: Same function at 3 places! Numbers were not working reliably, thus they are now turned off until mvp 2
-    numberOfOffers = ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
     let filterItem = null
     if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
@@ -266,8 +261,6 @@ export default class FilterCategories extends Shadow() {
   }
 
   generateNavLevelItem (response, parentItem, filterItem, mainNav, level) {
-    if (level === 0 && filterItem.typ === 'tree') this.firstTreeItem = filterItem
-    if (level === 0 && filterItem.typ !== 'tree') this.firstTreeItem = null
     const filterIdPrefix = 'filter-'
     const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
     const div = document.createElement('div')
@@ -285,8 +278,6 @@ export default class FilterCategories extends Shadow() {
     
     let numberOfOffers = filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'
     if (filterItem.hideCount || level === 0) numberOfOffers = ''
-    // TODO: note: Same function at 3 places! Numbers were not working reliably, thus they are now turned off until mvp 2
-    numberOfOffers = ''
     this.total = response.total
 
     navLevelItem.innerHTML = /* html */`
@@ -336,6 +327,8 @@ export default class FilterCategories extends Shadow() {
 
   generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
     level++
+    if (level === 0 && filterItem.typ === 'tree') this.firstTreeItem = filterItem
+    if (level === 0 && filterItem.typ !== 'tree') this.firstTreeItem = null
     if (filterItem.typ === 'tree') this.getSelectedFilters(filterItem, 'tree')
     if (!filterItem.visible) return
     if (parentItem === null) parentItem = filterItem
@@ -347,6 +340,7 @@ export default class FilterCategories extends Shadow() {
       generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
       // update additional text with selected filter(s) only for the first level 
       if (level === 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
+      if (level !== 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.text').textContent = `${filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')} ${filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'}`
     } else {
       this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, parentItem, filterItem, mainNav, level)))
     }
