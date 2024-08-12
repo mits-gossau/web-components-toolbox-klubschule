@@ -99,10 +99,11 @@ export default class AboTile extends Shadow() {
     this.html = /* html */ `
       <ks-m-event-detail
         data='${JSON.stringify(aboDetail).replace(/'/g, '’')}'
+        endpoint='${this.getAttribute('endpoint')}'
       >
       </ks-m-event-detail>
       <div>
-        <ks-m-buttons data-buttons='${JSON.stringify(aboDetail.buttons).replace(/'/g, '’')}'></ks-m-buttons>
+        <ks-m-buttons course-data='${JSON.stringify(aboDetail).replace(/'/g, '’')}' is-abo></ks-m-buttons>
       <div>
     `
     return this.fetchModules([

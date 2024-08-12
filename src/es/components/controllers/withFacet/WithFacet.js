@@ -44,9 +44,12 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter
-    // hold the initial response filters from the very first response call to be able to reset filters for "tree" filters
-    let firstRequest = true
-    let initialResponseFilters = null
+
+    // base request nullFilter
+    let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
+    // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
+    if (initialFilter.length < 1) initialFilter = this.getNullFilter()
+
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
@@ -70,12 +73,16 @@ export default class WithFacet extends WebWorker() {
     if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
 
     this.requestWithFacetListener = async event => {
+      // Reset PPage after filter Change / Reset
+      currentRequestObj.ppage = 0
+
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
 
       let filterId = null
+      let filterGroupName = null
       if (event?.detail?.ppage) {
         // ppage reuse last request
         currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
@@ -87,13 +94,14 @@ export default class WithFacet extends WebWorker() {
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
+        currentRequestObj.filter = initialFilter
         currentRequestObj.sorting = 3
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = result[1]
+        currentRequestObj.filter = [...result[1], ...initialFilter]
         if (filterKey === 'q') {
           delete currentRequestObj.searchText
           if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
@@ -104,27 +112,47 @@ export default class WithFacet extends WebWorker() {
           delete currentRequestObj.cname
           delete currentRequestObj.clong
           delete currentRequestObj.clat
-          currentRequestObj.sorting = Number(this.params.get('sorting')) || 3
+          if (!this.params.get('q') || this.params.get('q') === '') {
+            currentRequestObj.sorting = 3 // alphabetic
+          } else {
+            currentRequestObj.sorting = 1 // relevance
+          }
           this.updateURLParam('sorting', currentRequestObj.sorting)
         }
         this.deleteParamFromUrl(filterKey)
-      } else if (event?.detail?.wrapper?.filterItem && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
+      } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
+        // current filter click/touch
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
         const [filterKey, filterValue] = filterId.split('-')
+        // tree === angebotsbereich (offers filter)
         const isTree = event?.detail?.target?.type === "tree"
         if (isTree) {
-          // replace currentCompleteFilterObj.filter of "typ: tree" with initialResponseFilters.filter of "typ: tree" to avoid multi selection
-          const initialResponseFiltersTree = initialResponseFilters.filter(filterItem => filterItem.typ === 'tree')
-          currentCompleteFilterObj = currentCompleteFilterObj.filter(filterItem => filterItem.typ !== 'tree')
-          currentCompleteFilterObj = [...currentCompleteFilterObj, ...initialResponseFiltersTree]
+          this.updateURLParam(currentCompleteFilterObj.find((filter) => Number(filter.id) === 7)?.urlpara, filterValue, true)
+        } else {
+          this.updateURLParam(filterKey, filterValue, false)
         }
-        this.updateURLParam(filterKey, filterValue, isTree)
-        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
+
+        // GTM Tracking of Filters
+        // @ts-ignore
+        if (typeof window !== 'undefined' && window.dataLayer) {
+          try {
+            // @ts-ignore
+            window.dataLayer.push({
+              'event': 'filterSelection',              
+              'filterName': event.detail.target.label, //the name of the clicked filter.
+              'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
+            })
+          } catch (err) {
+            console.error('Failed to push event data:', err)
+          }
+        }
+
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
+        currentRequestObj.filter = [...result[1], ...initialFilter]
         if (isTree) {
-          currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
+          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         }
       } else if (event?.detail?.key === 'location-search') {
         // location search
@@ -143,7 +171,6 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('clat')
           this.deleteParamFromUrl('clong')
           this.deleteParamFromUrl('cname')
-          currentRequestObj.ppage = -1
           currentRequestObj.sorting = this.params.get('sorting') || 3
           this.updateURLParam('sorting', currentRequestObj.sorting)
         }
@@ -156,13 +183,21 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
         }
+        if (event?.detail?.value === '') {
+          delete currentRequestObj.searchText
+          this.deleteParamFromUrl('q')
+        }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
 
+        currentRequestObj.sorting = 1 // relevance
         if (event?.detail?.value === '' && !currentRequestObj.clat) {
           delete currentRequestObj.searchText
           currentRequestObj.sorting = 3 // alphabetic
+        }
+        if (event?.detail?.value !== '' && currentRequestObj.clat) {
+          currentRequestObj.sorting = 2 // distance
         }
       } else if (event?.detail?.key === 'sorting' && !!event.detail.id) {
         // sorting
@@ -171,7 +206,6 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
-        currentRequestObj.ppage = 0
       } else {
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
@@ -180,7 +214,7 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = result[1]
       }
 
-      if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
+      if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
       const LanguageEnum = {
         d: 'de',
@@ -222,13 +256,6 @@ export default class WithFacet extends WebWorker() {
             }).then(json => {
               // update filters with api response
               currentRequestObj.filter = currentCompleteFilterObj = json.filters
-
-              // hold the json.filters from the very first response call
-              if (firstRequest) {
-                initialResponseFilters = json.filters
-                firstRequest = false
-              }
-
               return json
             }).finally(json => {
               // update inputs
@@ -275,7 +302,7 @@ export default class WithFacet extends WebWorker() {
 
       if (currentRequestObj.filter?.length) subLevelFilter = [...event.detail.filter, ...currentRequestObj.filter]
 
-      const sorting = currentRequestObj.sorting || initialRequestObj.sorting
+      const sorting = Number(this.params.get('sorting')) || currentRequestObj.sorting || initialRequestObj.sorting
       const searchText = currentRequestObj.searchText || initialRequestObj.searchText
 
       let body = `{
@@ -284,7 +311,7 @@ export default class WithFacet extends WebWorker() {
         "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
-        "sorting": ${sorting === 2 ? 1 : 2}
+        "sorting": 2
         ${searchText ? `,"searchText": "${searchText}"` : ''}
         ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}
         ${currentRequestObj.clong ? `,"clong": "${currentRequestObj.clong}"` : ''}
@@ -320,53 +347,49 @@ export default class WithFacet extends WebWorker() {
 
   connectedCallback() {
     this.getAttribute('expand-event-name') === 'request-with-facet' ? self.addEventListener('request-with-facet', this.requestWithFacetListener) : this.addEventListener('request-with-facet', this.requestWithFacetListener)
-
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.addEventListener('reset-all-filters', this.requestWithFacetListener) : this.addEventListener('reset-all-filters', this.requestWithFacetListener)
-
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
-
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
-
     self.addEventListener('popstate', this.popstateListener)
   }
 
   disconnectedCallback() {
     this.getAttribute('expand-event-name') === 'request-with-facet' ? self.removeEventListener('request-with-facet', this.requestWithFacetListener) : this.removeEventListener('request-with-facet', this.requestWithFacetListener)
-
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.removeEventListener('reset-all-filters', this.requestWithFacetListener) : this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
-
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
-
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
-
     self.removeEventListener('popstate', this.popstateListener)
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isTree = false) {
+  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null) {
     // @ts-ignore
     const isParentSelected = selectedParent?.urlpara === filterKey
     const treeShookFilters = []
 
     filters.forEach(filterItem => {
-      const isCenterFilter = filterItem.id === filterValue
+      // TODO: Is there a better way to check if it is a center filter? For expl.: (filterItem.urlpara === filterKey)?
+      const isCenterFilter = filterItem.id === filterValue && ['center', 'centre', 'centro'].includes(filterKey.toLowerCase())
       const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
       const isUrlpara = filterItem.urlpara === filterValue
-      
+      const isSectorFilter = Number(filterItem.id) === 7 && filterItem.typ === "tree"
+
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
-      if (filterItem.selected && isUrlpara && !isTree && !isCenterFilter) {
+        if (isCenterFilter) {
+          filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
+        } else if (isSectorFilter) { // sector filter ("bereichsangebot")
+          filterItem.selected = isParentSelected
+        } else if (filterItem.selected && isUrlpara) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
-        } else if (filterItem.selected && !isUrlpara && !isCenterFilter) {
+        } else if (filterItem.selected && !isUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
-        } else if (!filterItem.selected && isUrlpara && isParentSelected && !isCenterFilter) {
+        } else if (!filterItem.selected && isUrlpara && isParentSelected) {
           filterItem.selected = true // select filterItem if it is not selected
-        } else if (isParentSelected && !isCenterFilter) {
+        } else if (isParentSelected) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
-        } else if (isCenterFilter) {
-          filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
-        }
+        } 
       }
 
       let treeShookFilterItem = structuredClone(filterItem)
@@ -374,17 +397,17 @@ export default class WithFacet extends WebWorker() {
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
-        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isTree)
+        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem)
       }
 
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
     })
-
+    // returns [0] unmutated filters
     return [filters, treeShookFilters]
   }
 
-  getLastSelectedFilterItem(filterItems) {
+  static getLastSelectedFilterItem(filterItems) {
     filterItems.forEach(filterItem => {
       if (filterItem.children?.length) {
         filterItem.selected = false
@@ -409,7 +432,7 @@ export default class WithFacet extends WebWorker() {
 
   updateURLParam(key, value, isTree = false) {
     if (this.params) {
-      if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname' && key !== 'sorting') {
+      if (this.params.has(key) && key !== 'q' && key !== 'clat' && key !== 'clong' && key !== 'cname' && key !== 'sorting' && !isTree) {
         const currentValues = this.params.get(key)?.split('-')
         if (!currentValues?.includes(value)) {
           currentValues?.push(value)
@@ -419,7 +442,7 @@ export default class WithFacet extends WebWorker() {
           currentValues?.splice(currentValues.indexOf(value), 1)
           if (currentValues.length > 0) {
             this.params.set(key, currentValues.join('-'))
-          } else {
+          } else if (!isTree) { // keep it for tree filters
             this.params.delete(key)
           }
         }
@@ -431,6 +454,12 @@ export default class WithFacet extends WebWorker() {
           if (value === key) this.params.delete(k)
         }
         this.params.set(key, value)
+
+        // check if key already exists and replace it with new value
+        if (this.params.get(key)) {
+          this.params.delete(key)
+          this.params.set(key, value)
+        }
       } else {
         this.params.set(key, value)
       }
@@ -470,5 +499,52 @@ export default class WithFacet extends WebWorker() {
       // @ts-ignore
       self.history.replaceState(...args)
     }
+  }
+
+  /** 
+   * Recursive function to get only the "initial"-filters, which are not editable by the user
+   * Needs to be done, since Backend is writing filterqueries into the initial request, when the page is refreshed/ shared
+   * For more Informations: https://jira.migros.net/browse/MIDUWEB-1452
+   * @returns Array with Filter Objects, which are non editable by the user
+  */ 
+  getInitialBaseFilters(filters) {
+    return filters.filter(
+      (filter) => {
+        if (filter.selected && filter.disabled) {
+          return true
+        }
+        if (filter.children?.length) {
+          return this.getInitialBaseFilters(filter.children).length > 0
+        }
+        return false
+      }
+    )
+  }
+
+  /**
+   * Returns a null Filter Object, which is used for a plain search on /search/ level
+   * @return a "null" Filter Object
+   */
+  getNullFilter() {
+    return [
+      {
+        "PartitionKey": null,
+        "RowKey": null,
+        "label": null,
+        "id": "",
+        "typ": null,
+        "level": "",
+        "count": 0,
+        "color": "",
+        "urlpara": "",
+        "selected": false,
+        "disabled": false,
+        "visible": false,
+        "sort": 0,
+        "hideCount": false,
+        "children": null,
+        "HasChilds": false
+      }
+    ]
   }
 }

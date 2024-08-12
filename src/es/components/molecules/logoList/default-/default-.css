@@ -6,3 +6,13 @@
     text-align: center;
     --h-text-align: center;
 }
+
+:host a-picture {
+    --img-height: 48px;
+}
+
+@media screen and (max-width: _max-width_) {
+    :host a-picture {
+      --img-height: 30px;
+    }
+}

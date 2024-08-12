@@ -22,7 +22,6 @@ export default class CheckoutInsurance extends Shadow() {
     this.css = /* css */ `
         :host {
           display: block;
-          padding-bottom: var(--mdx-sys-spacing-flex-large-l);
         }
 
         :host h2 {
@@ -39,8 +38,7 @@ export default class CheckoutInsurance extends Shadow() {
         }
 
         :host ul {
-          margin: 0;
-          padding: 0 0 var(--mdx-sys-spacing-flex-large-xs) 1.25rem;
+          margin: 0 0 var(--mdx-sys-spacing-flex-large-xs) 1.25rem;
           color: var(--mdx-sys-color-neutral-bold4);
           font: var(--mdx-sys-font-flex-desktop-body-small);
         }

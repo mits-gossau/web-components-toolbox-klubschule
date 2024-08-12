@@ -59,6 +59,10 @@ export default class CheckoutBoxWrapper extends Shadow() {
         font: var(--mdx-sys-font-flex-large-headline3);
       }
 
+      :host .total span + div {
+        text-align: end;
+      }
+
       :host .total div > span + span {
         color: var(--mdx-sys-color-neutral-bold1);
         font:  var(--mdx-sys-font-fix-body3);
@@ -82,7 +86,12 @@ export default class CheckoutBoxWrapper extends Shadow() {
         display: flex;
         justify-content: space-between;
         margin: 10px 0;
-      }      
+        margin-bottom: 1.5rem;
+      }
+
+      :host .flex#agbBox {
+        margin-bottom: 1.5rem;
+      }
       
       :host div:not(.flex) span {
         display: block;
@@ -94,12 +103,15 @@ export default class CheckoutBoxWrapper extends Shadow() {
 
       :host .icon-text-wrapper {
         gap: var(--mdx-sys-spacing-fix-xs);
+        justify-content: start;
       }
 
       :host .info-wrapper {
         margin: var(--mdx-sys-spacing-flex-large-2xs) 0;
         gap: 10px;
         justify-content: flex-start;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
       }
 
       :host .info-wrapper span {
@@ -107,7 +119,7 @@ export default class CheckoutBoxWrapper extends Shadow() {
       }
 
       :host ks-a-heading[tag="h3"] {
-        --h3-margin: var(--mdx-sys-spacing-flex-large-s) 0;
+        --h3-margin: var(--mdx-sys-spacing-flex-s) 0;
         --h3-font-family: var(--mdx-sys-font-fix-label0-font-family);
         --h3-font-weight: var(--mdx-sys-font-fix-label0-font-weight);
         --h3-line-height: var(--mdx-sys-font-fix-label0-line-height);
@@ -149,8 +161,13 @@ export default class CheckoutBoxWrapper extends Shadow() {
         text-align: end;
       }
 
+      :host .spacing-top:has(a),
+      :host a.spacing-top {
+        width: fit-content;
+      }
+
       @media only screen and (max-width: _max-width_) {
-        :host > *,
+        :host > div,
         :host ks-m-info-list > * {
           padding: var(--mdx-sys-spacing-fix-m) var(--mdx-sys-spacing-fix-2xs);
         }
@@ -177,6 +194,10 @@ export default class CheckoutBoxWrapper extends Shadow() {
 
         :host(.ks-o-body-section__last-child) .full-width ks-a-checkbox {
           width: 100%;
+        }
+
+        :host .submit-wrapper {
+          margin-top: var(--mdx-sys-spacing-fix-m);
         }
       }
     `

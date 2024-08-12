@@ -14,16 +14,41 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
  * }
  */
 export default class Login extends Shadow() {
-  constructor (options = {}, ...args) {
+  constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    this.mdxLoginComponent = this.root.querySelector('mdx-login')
+
+    this.selfClickListener = event => {
+      const mdxLoginFlyout = this.mdxLoginComponent.root.querySelector('mdx-login-flyout')
+      const mdxLoginFlyoutIsOpen = mdxLoginFlyout.hasAttribute('open')
+      if (mdxLoginFlyoutIsOpen) mdxLoginFlyout.removeAttribute('open')
+    }
+
+    this.mdxLoginComponentClickListener = event => {
+      this.dispatchEvent(new CustomEvent(this.getAttribute('close-other-flyout') || 'close-other-flyout', { bubbles: true, cancelable: true, composed: true }))
+    }
   }
 
-  connectedCallback () {
+  connectedCallback() {
     this.hidden = true
     const showPromises = []
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
     if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
     Promise.all(showPromises).then(() => (this.hidden = false))
+
+    if (this.mdxLoginComponent) {
+      self.addEventListener('click', this.selfClickListener)
+      self.addEventListener('close-other-flyout', this.selfClickListener)
+      this.mdxLoginComponent.addEventListener('click', this.mdxLoginComponentClickListener)
+    }
+  }
+
+  disconnectedCallback() {
+    if (this.mdxLoginComponent) {
+      self.removeEventListener('click', this.selfClickListener)
+      self.removeEventListener('close-other-flyout', this.selfClickListener)
+      this.mdxLoginComponent.removeEventListener('click', this.mdxLoginComponentClickListener)
+    }
   }
 
   /**
@@ -31,7 +56,7 @@ export default class Login extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderCSS () {
+  shouldRenderCSS() {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
@@ -40,7 +65,7 @@ export default class Login extends Shadow() {
    *
    * @return {boolean}
    */
-  shouldRenderHTML () {
+  shouldRenderHTML() {
     return !this.root.querySelector('mdx-login')
   }
 
@@ -49,7 +74,7 @@ export default class Login extends Shadow() {
    *
    * @return {Promise<void>}
    */
-  renderCSS () {
+  renderCSS() {
     this.css = /* css */`
       :host {
         display: flex;
@@ -100,7 +125,7 @@ export default class Login extends Shadow() {
           z-index: 9999;
       }
       :host > section > m-dialog {
-        margin-left:  calc(var(--content-spacing, 1em) * -1.5);
+        margin-left: calc(var(--content-spacing, 1em) * -1.5);
       }
       @media only screen and (max-width: _max-width_) {
         :host,
@@ -118,6 +143,9 @@ export default class Login extends Shadow() {
         :host > section > div div[open] {
           top: 0 !important;
         }
+        :host > section > m-dialog {
+          margin-left: -1rem;
+        }
       }
     `
     return this.fetchTemplate()
@@ -128,7 +156,7 @@ export default class Login extends Shadow() {
   *
   * @return {Promise<void>}
   */
-  fetchTemplate () {
+  fetchTemplate() {
     switch (this.getAttribute('namespace')) {
       case 'login-default-':
         return this.fetchCSS([{
@@ -144,7 +172,7 @@ export default class Login extends Shadow() {
    *
    * @return {Promise<void>}
    */
-  renderHTML () {
+  renderHTML() {
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/atoms/login/Login.js`,

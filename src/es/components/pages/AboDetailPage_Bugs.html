@@ -1,0 +1,181 @@
+<!-- Figma Link: Do not copy -->
+<code><a href="https://www.figma.com/file/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?type=design&node-id=3111%3A289674&mode=design&t=QNrJHQav4gyyeVVi-1" target="_blank">figma</a></code>
+
+<!-- 2-spaltige Bühne mit maximaler Ausprägung -->
+<o-grid namespace="grid-2columns-content-stage-" first-container-vertical first-column-with="66%" background-color="var(--mdx-sys-color-accent-4-default)" image-src="https://mits-gossau.github.io/web-components-toolbox-klubschule/src/img/content-stage/a59843713cfd9aefb7e8d172513e4bea.png" width="100%">
+    <div class="stage-content">
+        <p class="topline">
+            <a href="" alt="">
+                <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx> <span>Link</span>
+            </a>
+            <!-- Merken-Button für Mobile -->
+            <ks-m-favorite-button course="D_90478_2667"></ks-m-favorite-button>
+        </p>
+        <h1>Abo Groupfitness- und<br />Entspannungskurse<br/>(Zeitabo 12 Mon.) Spezialpreis</h1>
+        <p class="intro">Entdecken sie unsere Kursvielfalt.</p>
+        <address>
+            <a-icon-mdx icon-name="Location" size="1.25em" tabindex="0"></a-icon-mdx> Hofwiesenstrasse 350, 8050 Zürich <span class="label">Blended</span>
+        </address>
+    </div>
+    <aside>
+        <div class="aside-image">
+            <!-- Merken-Button für Desktop -->
+            <ks-m-favorite-button course="D_90478_2667"></ks-m-favorite-button>
+        </div>
+    </aside>
+</o-grid>
+
+<!-- 2-spaltiger Content -->
+<o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" switch-aside-order-mobile>
+    <ks-o-body-section content-width-var="100%" no-margin-y>
+
+        <div class="margin-y-m align-center">
+            <ks-a-button namespace="button-primary-" color="secondary">
+                <span>15 Veranstaltungen wählen</span>
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-down">
+            </ks-a-button>
+        </div>
+
+        <!-- Expand -->
+        <mdx-component>
+            <mdx-expand
+                line-clamp="5"
+                label-closed="Mehr anzeigen"
+                label-open="Weniger anzeigen"
+                expanded="false"
+            >
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. </p>
+            </mdx-expand>
+        </mdx-component>
+        <!-- /Expand -->
+
+        <!-- CMS Akkordeon Container -->
+        <div class="margin-y-m">
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>
+                            Accordion 1
+                        </h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <div>
+                            <p>
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.
+                            </p>
+                        </div>
+                    </div>
+                </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>Accordion 2</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <div>
+                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                                voluptua.</p>
+                        </div>
+                    </div>
+                </details>
+            </m-details>
+            <m-details namespace="details-default-icon-right-">
+                <details>
+                    <summary>
+                        <h4>Accordion 3</h4>
+                    </summary>
+                    <div>
+                        <style>
+                            :host details summary~* {
+                                --details-default-color-secondary: var(--color-hover);
+                            }
+                        </style>
+                        <div>
+                            <ks-a-button namespace="button-primary-" href="/de/" color="secondary"
+                                target="_self">
+                                <a-icon-mdx icon-name="ArrangeAndroid" size="1em" class="icon-left"
+                                    tabindex="0"> </a-icon-mdx>
+                                <span id="label">btn</span>
+                            </ks-a-button>
+                        </div>
+                    </div>
+                </details>
+            </m-details>
+        </div>
+        <!-- /CMS Akkordeon Container -->
+    </ks-o-body-section>
+    <aside>
+        <ks-o-body-section content-width-var="100%" no-margin-y>
+
+            <div class="margin-y-m">
+                <ks-a-heading >
+                    <h3>
+                        Kontakt
+                    </h3>
+                </ks-a-heading>
+        
+                <!-- CMS Contact Component -->
+                <ks-m-contact-row name="Klubschule Migros Baden" street="Nordhaus 3 / G&#xFC;terstrasse" place="5400 Baden"
+                    icon-name="Home" href="https://www.google.com/maps" target="_blank">
+                </ks-m-contact-row>
+                <ks-m-contact-row name="+49 0160 49858582" icon-name="Phone" href="tel:+49016049858582">
+                </ks-m-contact-row>
+                <ks-m-contact-row name="E-Mail senden" icon-name="ArrowUpRight" href="mailto:" target="_blank">
+                </ks-m-contact-row>
+                <!-- /CMS Contact Component -->
+            </div>
+    
+            <div class="margin-y-m">
+                <h3>
+                    <span>PDF Download</span>
+                </h3>
+                <ks-m-link-list namespace="link-list-download-">
+                    <ul>
+                        <li>
+                        <a href="#">
+                            <span>Download 1</span>
+                            <div>
+                                <span>PDF</span>
+                                <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0"></a-icon-mdx>
+                            </div>
+                        </a>                
+                        </li>
+                        <li>
+                        <a href="#">
+                            <span>Download 2</span>
+                            <div>
+                                <span>PDF</span>
+                                <a-icon-mdx namespace="icon-link-list-" icon-name="Download" size="1.5em" rotate="0"></a-icon-mdx>
+                            </div>
+                        </a>                
+                        </li>
+                    </ul>
+                </ks-m-link-list>
+            </div>
+        </ks-o-body-section>
+    </aside>
+</o-grid>
+
+<!-- Angebotsliste -->
+<ks-o-body-section background="var(--mdx-sys-color-accent-6-subtle1)" variant="default" has-background>
+    <h2>Abo kaufen</h2>
+    <ks-c-event-detail endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/">
+        <ks-m-abo-tile initial-request='{"language": "d", "typ": "6A", "id": 10401, "center_id": 2687 }'>
+        </ks-m-abo-tile>
+    </ks-c-event-detail>
+</ks-o-body-section>
+<!-- /Angebotsliste -->

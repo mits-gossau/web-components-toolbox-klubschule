@@ -13,10 +13,7 @@ export default class TileFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
-
     this.hiddenMessages = this.hiddenSections
-
-    this.previousPpage = null
   }
 
   connectedCallback () {
@@ -70,7 +67,7 @@ export default class TileFactory extends Shadow() {
     }
     :host m-load-template-tag {
       display: block;
-      min-height: 10em;
+      min-height: 8em;
     }
     @media only screen and (max-width: _max-width_) {
       :host > section {
@@ -122,9 +119,7 @@ export default class TileFactory extends Shadow() {
       setTimeout(() => {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
-
-        // keep html if loading more data, but not when ppage is -1 and the previous ppage was 1
-        if (data.ppage === 1 || data.ppage === -1 && this.previousPpage === 1) this.html = ''
+        if (data.ppage === 1 || data.pskip === data.psize) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -175,7 +170,7 @@ export default class TileFactory extends Shadow() {
             ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
           </ks-o-partner-search>
         `
-        this.previousPpage = data.ppage
+        this.lastFilterSelection = data.filter
       }, 0)
     }).catch(error => {
       console.error(error)
@@ -228,12 +223,15 @@ export default class TileFactory extends Shadow() {
             : ''}",
         "badge": "${course.location.badge ? course.location.badge : ''}"
       },
+      "kurs_typ": "${course.kurs_typ}",
+      "kurs_id": "${course.kurs_id}",
       "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "icons": ${JSON.stringify(course.icons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "price": {
         "pre": "${course.price.pre}",
         "amount": "${course.price.amount}",
-        "per": "${course.price.per}"
+        "per": "${course.price.per}",
+        "price": ${course.price.price}
       },
       "parentkey": "${course.parentkey}"
     `

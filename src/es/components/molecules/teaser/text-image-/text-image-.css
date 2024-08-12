@@ -39,7 +39,7 @@ a-picture {
 
 :host(ks-m-teaser) p {
     font-family: var(--mdx-sys-font-flex-body2-font-family);
-    font-size: var(--mdx-sys-font-flex-body2-font-size);
+    font-size: var(--mdx-sys-font-flex-body3-font-size);
     font-weight: var(--mdx-sys-font-flex-body2-font-weight);
     line-height: var(--mdx-sys-font-flex-body2-line-height);
     letter-spacing: var(--mdx-sys-font-flex-body2-letter-spacing);

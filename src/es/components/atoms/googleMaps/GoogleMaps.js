@@ -63,6 +63,10 @@ export default class KsGoogleMaps extends GoogleMaps {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
       }
     ]).then(() => {
       let element = null
@@ -198,7 +202,7 @@ export default class KsGoogleMaps extends GoogleMaps {
         >
         </ks-m-contact-row>
         <ks-a-button namespace="button-primary-" color="secondary" href="${location.href}" style="width: 100%">
-          Zum Center
+          <a-translation data-trans-key="Center.Map.GotoCenter"></a-translation>
           <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right" icon-size="16x16"></a-icon-mdx>
         </ks-a-button>
       </div>`,

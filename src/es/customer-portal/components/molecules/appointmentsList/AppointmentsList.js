@@ -136,7 +136,10 @@ export default class AppointmentsList extends Shadow() {
     ))
   }
 
-  requestSubscriptionBalanceListener = (event) => {
+  /**
+   * request the current subscription balance
+   */
+  requestSubscriptionBalanceListener = () => {
     if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
       this.dispatchEvent(new CustomEvent('request-subscription-balance',
         {
@@ -152,13 +155,17 @@ export default class AppointmentsList extends Shadow() {
     }
   }
 
+  /**
+   * Update the current selected subscription balance
+   * @param {CustomEventInit} event
+   */
   updateSubscriptionBalanceListener = (event) => {
     event.detail.fetch.then((appointments) => {
       let { subscriptionValidTo, subscriptionMode, subscriptionBalance } = appointments.selectedSubscription
       if (subscriptionMode === 'PAUSCHALABO') return
-      subscriptionValidTo = this.formatSubscriptionValidFromDate(subscriptionValidTo)
-      subscriptionBalance = subscriptionMode === 'WERTABO' ? `| ${subscriptionBalance}` : ''
-      this.subscriptionHint.querySelector('.hint > span').textContent = `${subscriptionValidTo} ${subscriptionBalance}`
+      subscriptionValidTo = `<a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${this.formatSubscriptionValidFromDate(subscriptionValidTo)}`
+      subscriptionBalance = subscriptionMode === 'WERTABO' ? `| <a-translation data-trans-key="CP.cpSubscriptionColumnBalance"></a-translation> ${subscriptionBalance}` : ''
+      this.subscriptionHint.querySelector('.hint').innerHTML = `<span>${subscriptionValidTo} ${subscriptionBalance}</span>`
     })
   }
 

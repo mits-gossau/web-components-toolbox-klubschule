@@ -17,7 +17,7 @@ export default class OffersPage extends Shadow() {
         this.data = data
         this.searchTerm = data.searchText
         const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-        bodySection.shadowRoot.querySelector('#pagination').style.display = data.ppage === -1 ? 'none' : 'block'
+        bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
         // Set Sort
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
@@ -134,6 +134,11 @@ export default class OffersPage extends Shadow() {
         display: contents !important;
         --any-content-spacing: 0;
       }
+      :host .main-search-wrapper {
+        width: var(--body-section-default-width);
+        margin: 0 auto;
+        padding: 3.375em 0 2rem 0;
+      }
       :host ks-o-body-section {
         padding: 3.375em 0 5em;
       }
@@ -142,6 +147,9 @@ export default class OffersPage extends Shadow() {
       }
       :host ks-m-sort {
         --sort-right-item-min-width: 10rem;
+     }
+     :host ks-a-with-facet-pagination {
+      display: none;
      }
       @media only screen and (max-width: _max-width_) {
         :host ks-o-body-section {
@@ -160,14 +168,18 @@ export default class OffersPage extends Shadow() {
     this.html = /* html */`<ks-c-with-facet
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
-        ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''}
+        ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''}
         ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
         ${this.hasAttribute('expand-event-name') ? ` expand-event-name='${this.getAttribute('expand-event-name')}'` : ''}
       >
-      <ks-c-partner-search ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request')}'` : ''} ${this.hasAttribute('endpoint-search-partner') ? `endpoint="${this.getAttribute('endpoint-search-partner')}"` : ''}${this.hasAttribute("alternative-portal-ids-search") ? ` alternative-portal-ids-search="${this.getAttribute("alternative-portal-ids-search")}"` : ''}>
+      <ks-c-partner-search ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''} ${this.hasAttribute('endpoint-search-partner') ? `endpoint="${this.getAttribute('endpoint-search-partner')}"` : ''}${this.hasAttribute("alternative-portal-ids-search") ? ` alternative-portal-ids-search="${this.getAttribute("alternative-portal-ids-search")}"` : ''}>
+        ${this.hasAttribute('with-main-search-input')
+        ? this.mainSearchInput
+        : /* html */``
+      } 
         ${this.eventDetailURL || this.hasAttribute('no-search-tab')
-          ? this.tabContentOne
-          : /* html */`
+        ? this.tabContentOne
+        : /* html */`
             <ks-m-tab>
               <ul class="tab-search-result">
                 <li>
@@ -191,7 +203,7 @@ export default class OffersPage extends Shadow() {
               </div>
             </ks-m-tab>
           `
-        }
+      }
       </ks-c-partner-search>
     </ks-c-with-facet>`
 
@@ -320,6 +332,7 @@ export default class OffersPage extends Shadow() {
       <div col-lg="6" col-md="6" col-sm="12">
         <ks-c-auto-complete
           no-forwarding
+          reset-input-value-based-url="q"
           ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
           ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
@@ -380,7 +393,7 @@ export default class OffersPage extends Shadow() {
                 :host>ks-a-button {
                   --button-secondary-padding: 0.5rem 0.9rem;
                   --button-secondary-font-size: 1rem;
-                  --button-secondary-height: 2.22rem;
+                  --button-secondary-height: 2.5rem;
                 }
 					}
           </style>
@@ -403,7 +416,7 @@ export default class OffersPage extends Shadow() {
     
               @media only screen and (max-width: 767px) {
                 :host>a-button {
-                --button-secondary-padding: 0.3rem 0.9rem;
+                --button-secondary-padding: 0.433rem 0.9rem;
                 }
               }
             </style>
@@ -424,7 +437,23 @@ export default class OffersPage extends Shadow() {
 
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
-        <ks-c-auto-complete-location ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
+        ${this.hasAttribute('with-location-input-label') ? /* html */`
+          <style>
+            :host .location-label { 
+              font-size: var(--mdx-sys-font-flex-body3-font-size);
+              font-weight: 500;
+              line-height: 1.125rem;
+              margin-bottom: 1rem;
+            }
+          </style>
+          <h4 class="location-label">
+            ${this.getTranslation('CourseList.FindOffersNearbyPlaceholder')}
+          </h4>
+          `: ``}
+        <ks-c-auto-complete-location 
+         ignore-search-input-icon-click
+         reset-input-value-based-url="cname"
+         ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
             <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
               <dialog>
                 <div class="container">
@@ -444,6 +473,11 @@ export default class OffersPage extends Shadow() {
                       autocomplete="off"
                     >
                     </a-input>
+                    <style>
+                      :host { 
+                        --icon-color-hover: var(--search-input-color);
+                      }
+                    </style>
                     <div id="close">
                         <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                     </div>
@@ -486,7 +520,7 @@ export default class OffersPage extends Shadow() {
                 :host>ks-a-button {
                   --button-secondary-padding: 0.5rem 0.9rem;
                   --button-secondary-font-size: 1rem;
-                  --button-secondary-height: 2.22rem;
+                  --button-secondary-height: 2.5rem;
                 }
 					}
 				</style>
@@ -509,7 +543,7 @@ export default class OffersPage extends Shadow() {
 
           @media only screen and (max-width: 767px) {
             :host>a-button {
-            --button-secondary-padding: 0.275rem 0.9rem;
+            --button-secondary-padding: 0.433rem 0.9rem;
             }
           }
         </style>
@@ -552,7 +586,7 @@ export default class OffersPage extends Shadow() {
         </a-input>
       </ks-c-auto-complete>
     ` : ''
-    
+
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
@@ -657,18 +691,22 @@ export default class OffersPage extends Shadow() {
                   `
         : ''
       }
-                <div>
-                  <div class="badge-icon-only">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
-                  </div>
-                  <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
-                </div>
-                <div>
-                  <div class="badge-icon-only">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
-                  </div>
-                  <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
-                </div>
+                ${this.hasAttribute('hide-abo-legend')
+        ? ''
+        : /* html */`
+                    <div>
+                      <div class="badge-icon-only">
+                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
+                      </div>
+                      <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
+                    </div>
+                    <div>
+                      <div class="badge-icon-only">
+                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
+                      </div>
+                      <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
+                    </div>`
+      }
                 <div>
                   <div class="badge-icon-only">
                     <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Percent" size="1em"></a-icon-mdx>
@@ -703,7 +741,116 @@ export default class OffersPage extends Shadow() {
     return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
   }
 
-  get hiddenSections () {
+  get hiddenSections() {
     return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
+  }
+
+  get mainSearchInput() {
+    return /* html */ `
+    <div col-lg="6" col-md="6" col-sm="12" class="main-search-wrapper">
+    <ks-c-auto-complete
+      reset-input-value-based-url="q"
+      no-forwarding
+      ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+      ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
+      ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
+      ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
+    >
+      <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+        <dialog>
+          <div class="container">
+            <a-input
+              inputid="offers-page-input-search"
+              autofocus
+              placeholder="${this.getTranslation('Search.InputPlaceholder')}"
+              icon-name="Search" 
+              icon-size="1.5em"
+              submit-search="request-auto-complete"
+              submit-search="request-with-facet"
+              any-key-listener
+              type="search"
+              answer-event-name="search-change"
+              delete-listener
+              search
+              autocomplete="off"
+            >
+            </a-input>
+            <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+            </div>
+          </div>
+          <div class="container">
+            <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+            </ks-m-auto-complete-list>
+          </div>
+        </dialog>
+        <style>
+            :host>ks-a-button {
+              width: 100%;
+              --button-secondary-background-color: var(--m-white);
+              --button-secondary-background-color-hover: var(--m-white);
+              --button-secondary-width: 100%;
+              --button-secondary-border-color: var(--m-gray-700);
+              --button-secondary-border-color-hover: var(--m-gray-700);
+              --button-secondary-color: var(--m-gray-700);
+              --button-secondary-color-hover: var(--m-gray-700);
+              --button-secondary-cursor: text;
+              --button-secondary-justify-content: space-between;
+              --button-secondary-padding: 0.5rem 1.5rem;
+              --button-secondary-font-size: 1.15rem;
+              --button-secondary-height: 2.88rem;
+              --svg-size: 1.5rem;
+              --svg-size-mobile: 1.2rem;
+              --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+              --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
+              --button-secondary-font-weight: 400;
+              --button-secondary-icon-right-margin: 0 0 0 1.5rem;
+          }
+
+          @media only screen and (max-width: 767px) {
+            :host>ks-a-button {
+              --button-secondary-padding: 0.5rem 0.9rem;
+              --button-secondary-font-size: 1rem;
+              --button-secondary-height: 2.5rem;
+            }
+      }
+      </style>
+      <ks-a-button ellipsis-text id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
+            default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
+              <a-icon-mdx icon-name="Search" class="icon-right">
+              </a-icon-mdx>
+          </ks-a-button>
+          <style>
+          :host>a-button {
+          position: absolute;
+          right: 0;
+          --button-secondary-border-color: var(--m-gray-700);
+          --button-secondary-background-color: var(--m-white);
+          --button-secondary-border-color-hover-custom: var(--m-gray-700);
+          --button-secondary-background-color-hover: var(--m-white);
+          --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+          --button-secondary-padding: 0.625rem 1.5rem;
+          }
+
+          @media only screen and (max-width: 767px) {
+            :host>a-button {
+            --button-secondary-padding: 0.433rem 0.9rem;
+            }
+          }
+        </style>
+          <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
+          <style>
+            :host>button,
+            :host>button:hover {
+              border-left: none !important;
+            }
+          </style>
+            <a-icon-mdx icon-name="X" class="icon-right">
+            </a-icon-mdx>
+          </a-button>
+      </m-dialog>
+    </ks-c-auto-complete>
+  </div>
+  `
   }
 }

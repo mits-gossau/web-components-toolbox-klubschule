@@ -426,6 +426,11 @@ export default class Appointments extends HTMLElement {
     fetch(endpoint, fetchOptions)
   }
 
+  /**
+   * Use this, to get only the latest subscription balance
+   * Used when make a subscription booking or subscription reversal
+   * @param {CustomEventInit} event
+   */
   requestSubcriptionBalanceListener = async (event) => {
     if (this.abortControllerUpdateSubcriptionBalance) this.abortControllerUpdateSubcriptionBalance.abort()
     this.abortControllerUpdateSubcriptionBalance = new AbortController()

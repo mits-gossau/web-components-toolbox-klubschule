@@ -101,9 +101,11 @@ export default class Event extends Shadow() {
 
       :host .time {
         display: flex;
+        flex-wrap: wrap;
         flex-direction: row;
         align-items: center;
         margin-top: 0.75rem;
+        gap: 0.625rem;
       }
 
       :host .days {
@@ -118,7 +120,6 @@ export default class Event extends Shadow() {
         border-radius: 0.188rem;
         font-size: 0.875rem;
         line-height: 1.125rem;
-        margin-left: 0.625rem;
         height: 1.125rem;
       }
 
@@ -374,6 +375,11 @@ export default class Event extends Shadow() {
         font-weight: 400;
       }
 
+      :host .event-loading-bar {
+        display: block;
+        padding: 1rem 0;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host .event {
           padding: 1rem 0.5rem;
@@ -508,7 +514,7 @@ export default class Event extends Shadow() {
           <div class="controls">
             <div class="controls-left">
               ${!ist_abokurs_offen ? /* html */ `
-              <ks-m-buttons dialog-id="${kurs_id}" data-buttons='${JSON.stringify(buttons).replace(/'/g, '’')}'></ks-m-buttons>
+              <ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'></ks-m-buttons>
               ` : ''}
             </div>
             <div class="controls-right">
@@ -584,10 +590,14 @@ export default class Event extends Shadow() {
         {
           path: `${this.importMetaUrl}../../molecules/eventDetail/EventDetail.js`,
           name: 'ks-m-event-detail'
+        },
+        {
+          path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+          name: 'mdx-component'
         }
       ])
       this.details.classList.add('loading')
-      this.details.innerHTML = '<a-loading></a-loading>'
+      this.details.innerHTML = '<mdx-component class="event-loading-bar"><mdx-loading-bar></mdx-loading-bar></mdx-component>'
       if (this.hasAttribute('mock')) {
         this.details.innerHTML = /* html */`
           <ks-m-event-detail
@@ -609,6 +619,30 @@ export default class Event extends Shadow() {
         cancelable: true,
         composed: true
       }))).then((data) => {
+        // GTM Tracking of Click on More Details
+        // @ts-ignore
+        if (typeof window !== 'undefined' && window.dataLayer) {
+            try {
+              // @ts-ignore
+              window.dataLayer.push(
+                {
+                  'event': 'view_item',
+                  'ecommerce': {    
+                    'items': [{ 
+                      'item_name': `${data.bezeichnung}`,                
+                      'item_id': `${data.kurs_typ}_${data.kurs_id}`, 
+                      'price': data.preis_total,
+                      'quantity': 1,
+                      'currency': 'CHF',       
+                    }]
+                  }
+                }
+              )
+            } catch (err) {
+              console.error('Failed to push event data:', err)
+            }
+        }
+
         this.details.classList.remove('loading')
 
         // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019

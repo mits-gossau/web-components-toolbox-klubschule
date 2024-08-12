@@ -51,4 +51,6 @@
   --font-family: "DIN 2014", Helvetica, Arial, sans-serif;
 
   /* brand exceptions for footer are handled via brand attribute and custom styling */
+  --nav-level-item-default-hover-background-color: var(--mdx-base-color-ibaw-turquoise-100);
+
 }

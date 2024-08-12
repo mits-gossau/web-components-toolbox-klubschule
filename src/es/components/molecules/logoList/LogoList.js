@@ -20,19 +20,25 @@ export default class LogoList extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
-        :host ul {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            list-style: none;
-            padding: 0;
-            align-items: center;
-        }
+      :host ul {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8em;
+          list-style: none;
+          padding: 0;
+          align-items: center;
+      }
 
-        :host([centered]) ul {
-            text-align: center;
-            justify-content: center;
+      :host([centered]) ul {
+        text-align: center;
+        justify-content: center;
+      }
+
+      @media screen and (max-width: _max-width_) {
+        :host ul {
+          gap: 1.5em;
         }
+      }
     `
     return this.fetchTemplate()
   }

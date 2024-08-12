@@ -64,7 +64,7 @@ export default class CheckoutLayout extends Shadow() {
         padding: 0;
       }
       :host ul.advantages-list a-icon-mdx {
-        flex-shrink: 0;
+        display: block;
         color: var(--mdx-sys-color-success-default);
       }
 
@@ -116,6 +116,8 @@ export default class CheckoutLayout extends Shadow() {
       @media screen and (max-width: _max-width_) {
         .checkout-layout__aside {
           border-top: 1px solid var(--mdx-sys-color-brand-neutral-300);
+          /* Override global spacing */
+          padding-bottom: 0 !important;
         }
       }
     `

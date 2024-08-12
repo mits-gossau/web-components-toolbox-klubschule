@@ -16,6 +16,7 @@
     --tile-default-title-font-size: var(--mdx-sys-font-flex-headline3-font-size);
     --tile-default-title-line-height: var(--mdx-sys-font-flex-headline3-line-height);
     --tile-default-title-font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
+    --tile-default-title-color-hover: var(--mdx-sys-color-primary-default);
     --tile-default-price-font: var(--mdx-sys-font-fix-label4);
     --tile-default-price-strong-font: var(--mdx-sys-font-fix-label1);
 }

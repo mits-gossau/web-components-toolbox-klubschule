@@ -38,9 +38,21 @@ export default class AutoComplete extends Shadow() {
       ...options
     }, ...args)
 
+    this.resetInputValueBasedUrl = this.getAttribute('reset-input-value-based-url')
     this.abortController = null
     const apiUrl = `${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}`
     const apiUrlObj = new URL(apiUrl, apiUrl.charAt(0) === '/' ? location.origin : apiUrl.charAt(0) === '.' ? this.importMetaUrl : undefined)
+
+    this.noScrollEventListener = event => {
+      // if opens the dialog
+      if (event.detail?.hasNoScroll) {
+        // refill the search value based on current url
+        const params = new URLSearchParams(self.location.search)
+        const neededParamValue = params.get(`${this.resetInputValueBasedUrl}`) || ''
+        const currentInput = this.root.querySelector('m-dialog').root.querySelector('a-input').root.querySelector('input')
+        if (currentInput) currentInput.value = neededParamValue
+      }
+    }
 
     this.requestAutoCompleteListener = event => {
       // reset home page input search
@@ -122,12 +134,14 @@ export default class AutoComplete extends Shadow() {
     // disabled dispatches (forwards) the input submit event to with facet controller
     this.addEventListener('request-auto-complete', this.hasAttribute('disabled') ? this.requestWithFacet : this.requestAutoCompleteListener)
     this.addEventListener('auto-complete-selection', this.clickOnPredictionListener)
+    if (this.resetInputValueBasedUrl) this.addEventListener(this.getAttribute('no-scroll') || 'no-scroll', this.noScrollEventListener)
   }
 
   disconnectedCallback() {
     // disabled dispatches (forwards) the input submit event to with facet controller
     this.removeEventListener('request-auto-complete', this.hasAttribute('disabled') ? this.requestWithFacet : this.requestAutoCompleteListener)
     this.removeEventListener('auto-complete-selection', this.clickOnPredictionListener)
+    if (this.resetInputValueBasedUrl) this.removeEventListener(this.getAttribute('no-scroll') || 'no-scroll', this.noScrollEventListener)
   }
 
   shouldRenderCSS() {

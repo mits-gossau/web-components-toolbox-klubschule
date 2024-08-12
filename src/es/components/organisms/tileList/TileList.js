@@ -13,6 +13,8 @@ export default class TileList extends Shadow() {
     this.ppage = 1
 
     this.clickEventListener = event => {
+      // ChevronDown/Up icon
+      this.icon = this.root.querySelector('ks-m-buttons')?.root?.querySelector('ks-a-button')?.root?.querySelector('a-icon-mdx[icon-name="ChevronDown"], a-icon-mdx[icon-name="ChevronUp"]')
       if (this.icon) {
         if (this.icon.getAttribute('icon-name') === 'ChevronDown') {
           this.icon.setAttribute('icon-name', 'ChevronUp')
@@ -127,7 +129,12 @@ export default class TileList extends Shadow() {
         font-size: var(--mdx-sys-font-flex-headline3-font-size);
         font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
         line-height: var(--mdx-sys-font-flex-headline3-line-height);
-        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);        
+        letter-spacing: var(--mdx-sys-font-flex-headline3-letter-spacing);
+        cursor: pointer;
+      }
+
+      :host .o-tile-list__title:hover {
+        color: var(--mdx-sys-color-primary-default);
       }
 
       :host a-icon-mdx {
@@ -299,7 +306,24 @@ export default class TileList extends Shadow() {
     <div class="o-tile-list">
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
-            <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
+
+            <ks-c-gtm-event
+              mode="false" 
+              listen-to="click"
+              event-data='{
+                "event": "select_item",
+                "ecommerce": {    
+                  "items": [{ 
+                    "item_name": "${data.title || data.bezeichnung || 'No Title'}",                
+                    "item_id": "${data.kurs_typ}_${data.kurs_id}",
+                    "price": ${data.price?.price || data.preis_total || 0},
+                    "quantity": 1
+                  }]
+                }
+              }'
+            >
+              <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
+            </ks-c-gtm-event>
             ${data.infotextshort
               ? /* html */`
                 <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
@@ -312,7 +336,7 @@ export default class TileList extends Shadow() {
             <div class="o-tile-list__middle">
               ${data.location?.name
                 ? /* html */`
-                <span class="o-tile-list__places">${data.location?.name || warnMandatory + 'location'}</span>
+                <span class="o-tile-list__places">${data.location?.name.split(', ').join(', ') || warnMandatory + 'location'}</span>
                 `
                 : ''
               }
@@ -348,7 +372,7 @@ export default class TileList extends Shadow() {
         </div>
         <div class="o-tile-list__details">
           <div class="o-tile-list__tiles">
-            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile namespace="tile-default-" inside-tile-list data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`, '') : ''}
+            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile ${this.hasAttribute('no-url-params')? 'no-url-params' : '' } namespace="tile-default-" inside-tile-list data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`, '') : ''}
           </div>
           <div
             id="request-more-locations"
@@ -369,13 +393,15 @@ export default class TileList extends Shadow() {
     /**
      * Toggle details
      */
-    this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
     this.toggle = this.root.querySelector('.o-tile-list__bottom-left')
     this.tilesContainer = this.root.querySelector('.o-tile-list__tiles')
     this.loadMore = this.root.querySelector('#request-more-locations')
+    this.tileTitle = this.root.querySelector('.o-tile-list__title')
 
     this.toggle.addEventListener('click', this.clickEventListener)
+    this.tileTitle.addEventListener('click', this.clickEventListener)
     this.loadMore.addEventListener('click', this.loadMoreClickEventListener)
+
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
@@ -405,6 +431,22 @@ export default class TileList extends Shadow() {
   }
 
   renderTile (tileData, add = false) {
+    if (tileData.courses.length) {
+      tileData.courses.sort((a, b) => {
+        const nameA = a.location.name.toUpperCase() // ignore upper and lowercase
+        const nameB = b.location.name.toUpperCase() // ignore upper and lowercase
+        if (nameA < nameB) {
+            return -1
+        }
+        if (nameA > nameB) {
+            return 1
+        }
+
+        // names must be equal
+        return 0
+      })
+    }
+
     this.ppage = tileData.ppage || this.ppage
     this.loadMore.style.display = tileData.ppage === -1 ? 'none' : 'flex'
     const tileString = Object.assign(this.data, { tiles: tileData.courses }).tiles.reduce((acc, tile) => {
@@ -415,7 +457,7 @@ export default class TileList extends Shadow() {
       }
 
       // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
-      return acc + /* html */`<ks-m-tile namespace="tile-default-" inside-tile-list data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`
+      return acc + /* html */`<ks-m-tile ${this.hasAttribute('no-url-params')? 'no-url-params' : '' } namespace="tile-default-" inside-tile-list data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`
     }, '')
     if (add) {
       const div = document.createElement('div')

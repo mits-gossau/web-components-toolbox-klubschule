@@ -31,7 +31,7 @@ export default class WithFacetCounter extends Shadow() {
       this.initialContent.textContent = `${total} ${label}`
     } else {
       this.html = ''
-      this.html = /* HTML */ `<ks-a-heading tag="h2" no-margin-bottom>${total} ${label}</ks-a-heading>`
+      this.html = /* HTML */ `<ks-a-heading tag="h2">${total} ${label}</ks-a-heading>`
     }
 
     return this.fetchModules([

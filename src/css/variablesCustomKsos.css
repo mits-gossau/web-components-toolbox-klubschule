@@ -74,4 +74,7 @@
   --footer-default-legal-background-color-custom: var(--mdx-sys-color-accent-6-default);
 
   --fact-background-color-custum: var(--mdx-sys-color-accent-6-default);
+  
+  --nav-level-item-default-hover-background-color: var(--mdx-base-color-pro-terracotta-100);
+
 }
