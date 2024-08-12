@@ -44,6 +44,12 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter
+
+    // base request nullFilter
+    let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
+    // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
+    if (initialFilter.length < 1) initialFilter = this.getNullFilter()
+
     // hold the initial response filters from the very first response call to be able to reset filters for "tree" filters
     let firstRequest = true
     let initialResponseFilters = null
@@ -139,6 +145,7 @@ export default class WithFacet extends WebWorker() {
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
+        currentRequestObj.filter = initialFilter
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
       } else if (event?.type === 'reset-filter') {
@@ -146,10 +153,9 @@ export default class WithFacet extends WebWorker() {
         const filterKey = event.detail.this.getAttribute('filter-key')
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = result[1]
+        currentRequestObj.filter = [...result[1], ...initialFilter]
         if (filterKey === 'q') {
           delete currentRequestObj.searchText
-          this.deleteParamFromUrl('q')
           if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
         }
         if (filterKey === 'cname') {
@@ -179,6 +185,10 @@ export default class WithFacet extends WebWorker() {
           const initialResponseFiltersTree = initialResponseFilters.filter(filterItem => filterItem.typ === 'tree')
           currentCompleteFilterObj = currentCompleteFilterObj.filter(filterItem => filterItem.typ !== 'tree')
           currentCompleteFilterObj = [...currentCompleteFilterObj, ...initialResponseFiltersTree]
+
+          this.updateURLParam(currentCompleteFilterObj.find((filter) => Number(filter.id) === 7)?.urlpara, filterValue, true)
+        } else {
+          this.updateURLParam(filterKey, filterValue, false)
         }
 
         // GTM Tracking of Filters
@@ -195,11 +205,9 @@ export default class WithFacet extends WebWorker() {
             console.error('Failed to push event data:', err)
           }
         }
-
-        this.updateURLParam(filterKey, filterValue, isTree)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, isTree)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
+        currentRequestObj.filter = [...result[1], ...initialFilter]
         if (isTree) {
           currentRequestObj.filter = this.getLastSelectedFilterItem(currentRequestObj.filter)
         }
@@ -269,7 +277,8 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.filter = result[1]
       }
 
-      if (!currentRequestObj.filter.length) currentRequestObj.filter = structuredClone(initialRequestObj.filter)
+      if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
+
       const LanguageEnum = {
         d: 'de',
         f: 'fr',
@@ -362,7 +371,7 @@ export default class WithFacet extends WebWorker() {
 
       if (currentRequestObj.filter?.length) subLevelFilter = [...event.detail.filter, ...currentRequestObj.filter]
 
-      const sorting = currentRequestObj.sorting || initialRequestObj.sorting
+      const sorting = Number(this.params.get('sorting')) || currentRequestObj.sorting || initialRequestObj.sorting
       const searchText = currentRequestObj.searchText || initialRequestObj.searchText
 
       let body = `{
@@ -371,7 +380,7 @@ export default class WithFacet extends WebWorker() {
         "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
-        "sorting": ${sorting === 2 ? 1 : 2}
+        "sorting": 2
         ${searchText ? `,"searchText": "${searchText}"` : ''}
         ${currentRequestObj.clat ? `,"clat": "${currentRequestObj.clat}"` : ''}
         ${currentRequestObj.clong ? `,"clong": "${currentRequestObj.clong}"` : ''}
@@ -428,7 +437,8 @@ export default class WithFacet extends WebWorker() {
     const treeShookFilters = []
 
     filters.forEach(filterItem => {
-      const isCenterFilter = filterItem.id === filterValue && filterItem.urlpara === filterKey
+      // TODO: Is there a better way to check if it is a center filter? For expl.: (filterItem.urlpara === filterKey)?
+      const isCenterFilter = filterItem.id === filterValue && ['center', 'centre', 'centro'].includes(filterKey.toLowerCase())
       const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
       const isUrlpara = filterItem.urlpara === filterValue
 
@@ -557,5 +567,52 @@ export default class WithFacet extends WebWorker() {
       // @ts-ignore
       self.history.replaceState(...args)
     }
+  }
+
+  /** 
+   * Recursive function to get only the "initial"-filters, which are not editable by the user
+   * Needs to be done, since Backend is writing filterqueries into the initial request, when the page is refreshed/ shared
+   * For more Informations: https://jira.migros.net/browse/MIDUWEB-1452
+   * @returns Array with Filter Objects, which are non editable by the user
+  */ 
+  getInitialBaseFilters(filters) {
+    return filters.filter(
+      (filter) => {
+        if (filter.selected && filter.disabled) {
+          return true
+        }
+        if (filter.children?.length) {
+          return this.getInitialBaseFilters(filter.children).length > 0
+        }
+        return false
+      }
+    )
+  }
+
+  /**
+   * Returns a null Filter Object, which is used for a plain search on /search/ level
+   * @return a "null" Filter Object
+   */
+  getNullFilter() {
+    return [
+      {
+        "PartitionKey": null,
+        "RowKey": null,
+        "label": null,
+        "id": "",
+        "typ": null,
+        "level": "",
+        "count": 0,
+        "color": "",
+        "urlpara": "",
+        "selected": false,
+        "disabled": false,
+        "visible": false,
+        "sort": 0,
+        "hideCount": false,
+        "children": null,
+        "HasChilds": false
+      }
+    ]
   }
 }

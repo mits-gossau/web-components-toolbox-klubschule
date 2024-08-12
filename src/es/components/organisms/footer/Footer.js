@@ -103,6 +103,9 @@ export default class KsFooter extends Footer {
                 color: var(--social-body-color);
                 font: var(--social-body-typography);
             }
+            :host footer>div:first-child>div.invert>o-wrapper+div>ul {
+                flex-wrap: wrap;
+            }
             :host > footer>div:first-child>.footer-links ul {
                 display: flex;
                 flex-direction: row;

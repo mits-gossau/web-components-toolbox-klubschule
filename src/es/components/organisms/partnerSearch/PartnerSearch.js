@@ -179,7 +179,7 @@ export default class PartnerSearch extends Shadow() {
       const headline = this.hiddenMessages[this.hiddenMessages.length - 1].querySelector("h2")
       let headlineText = headline.innerText
       headlineText = headlineText.replace("{0}", this.searchText)
-      headline.innerHTML = headlineText
+      headline.textContent = headlineText
 
       const partnerResultsSection = this.root.querySelector("#partner-results")
 

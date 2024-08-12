@@ -17,7 +17,7 @@ export default class OffersPage extends Shadow() {
         this.data = data
         this.searchTerm = data.searchText
         const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-        bodySection.shadowRoot.querySelector('#pagination').style.display = data.ppage === -1 ? 'none' : 'block'
+        bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
         // Set Sort
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
@@ -147,6 +147,9 @@ export default class OffersPage extends Shadow() {
       }
       :host ks-m-sort {
         --sort-right-item-min-width: 10rem;
+     }
+     :host ks-a-with-facet-pagination {
+      display: none;
      }
       @media only screen and (max-width: _max-width_) {
         :host ks-o-body-section {

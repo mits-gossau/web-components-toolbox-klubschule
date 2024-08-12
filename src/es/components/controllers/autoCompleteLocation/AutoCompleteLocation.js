@@ -57,8 +57,10 @@ export default class AutoCompleteLocation extends Shadow() {
     }
     // disable click on location icon in input field
     if (this.ignoreSearchInputIconClick) {
-      const currentInputButton = this.root.querySelector('m-dialog').root.querySelector('a-input').root.querySelector('button')
-      currentInputButton.style.pointerEvents = 'none'
+      setTimeout(() => {
+        const currentInputButton = this.root.querySelector('m-dialog')?.root?.querySelector('a-input')?.root?.querySelector('button')
+        if (currentInputButton) currentInputButton.style.pointerEvents = 'none'
+      }, 2000)
     }
   }
 
