@@ -372,7 +372,7 @@ export default class WithFacet extends WebWorker() {
       const isCenterFilter = filterItem.id === filterValue && ['center', 'centre', 'centro'].includes(filterKey.toLowerCase())
       const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
       const isUrlpara = filterItem.urlpara === filterValue
-      const isSectorFilter = Number(filterItem.id) === 7
+      const isSectorFilter = Number(filterItem.id) === 7 && filterItem.typ === "tree"
 
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
