@@ -183,16 +183,6 @@ export default class FilterCategories extends Shadow() {
     if (child.hideCount) numberOfOffers = ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
     let filterItem = null
-
-
-    const isParentSelected = parentItem.selected
-    if (isParentSelected) {
-      filterItem = parentItem
-      filterItem.selected = true
-      console.log(filterItem)
-    }
-
-
     if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
       // @ts-ignore
       if (filterItem && filterItem !== null) {
