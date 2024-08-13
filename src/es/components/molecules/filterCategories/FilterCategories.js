@@ -157,7 +157,7 @@ export default class FilterCategories extends Shadow() {
       </mdx-component>
     `
     const navLevelItem = /* html */`
-      <ks-m-nav-level-item mode="false" ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || parentItem.label.replace(/'/g, '’').replace(/"/g, '\"')}">
+      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || parentItem.label.replace(/'/g, '’').replace(/"/g, '\"')}">
         <div class="wrap">
           <span class="text">${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}</span>
         </div>
@@ -341,6 +341,7 @@ export default class FilterCategories extends Shadow() {
       // update additional text with selected filter(s) only for the first level 
       if (level === 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
       if (level !== 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.text').textContent = `${filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')} ${filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'}`
+      generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').setAttribute('namespace', filterItem.selected ? 'nav-level-item-active-' : 'nav-level-item-default-')
     } else {
       this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, parentItem, filterItem, mainNav, level)))
     }
