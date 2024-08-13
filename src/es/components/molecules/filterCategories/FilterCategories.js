@@ -183,6 +183,16 @@ export default class FilterCategories extends Shadow() {
     if (child.hideCount) numberOfOffers = ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
     let filterItem = null
+
+
+    const isParentSelected = parentItem.selected
+    if (isParentSelected) {
+      filterItem = parentItem
+      filterItem.selected = true
+      console.log(filterItem)
+    }
+
+
     if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
       // @ts-ignore
       if (filterItem && filterItem !== null) {
@@ -281,7 +291,7 @@ export default class FilterCategories extends Shadow() {
     this.total = response.total
 
     navLevelItem.innerHTML = /* html */`
-      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')}">
+      <ks-m-nav-level-item ${checked} ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')}">
         <div class="wrap">
           <span class="text">${filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}</span>
           <span class="additional">${selectedFilters}</span>
