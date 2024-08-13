@@ -148,7 +148,7 @@ export default class WithFacet extends WebWorker() {
           }
         }
 
-        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter]
         if (isTree) {
@@ -362,7 +362,7 @@ export default class WithFacet extends WebWorker() {
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null) {
+  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false) {
     // @ts-ignore
     const isParentSelected = selectedParent?.urlpara === filterKey
     const treeShookFilters = []
@@ -372,14 +372,18 @@ export default class WithFacet extends WebWorker() {
       const isCenterFilter = filterItem.id === filterValue && ['center', 'centre', 'centro'].includes(filterKey.toLowerCase())
       const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
       const isUrlpara = filterItem.urlpara === filterValue
-      const isSectorFilter = Number(filterItem.id) === 7 && filterItem.typ === "tree"
+      if (zeroLevel) isSectorFilter = Number(filterItem.id) === 7 && filterItem.typ === "tree"
 
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
         if (isCenterFilter) {
           filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
-        } else if (isSectorFilter) { // sector filter ("bereichsangebot")
-          filterItem.selected = isParentSelected
+        } else if (isSectorFilter && isTree) { // sector filter ("bereichsangebot")
+          if (!filterItem.selected && isUrlpara) {
+            filterItem.selected = true
+          } else if (filterItem.selected && !isUrlpara) {
+            filterItem.selected = false 
+          }
         } else if (filterItem.selected && isUrlpara) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
         } else if (filterItem.selected && !isUrlpara) {
@@ -397,7 +401,7 @@ export default class WithFacet extends WebWorker() {
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
-        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem)
+        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isSectorFilter, isTree)
       }
 
       // only the first level allows selected falls when including selected children
