@@ -247,4 +247,8 @@
     --mdx-sys-spacing-flex-2xlarge-l: var(--mdx-sys-spacing-flex-xlarge-l);
     --mdx-sys-spacing-flex-2xlarge-xl: var(--mdx-sys-spacing-flex-xlarge-xl);
     --mdx-sys-spacing-flex-2xlarge-2xl: var(--mdx-sys-spacing-flex-xlarge-2xl);
+
+    /* checkbox */
+    --mdx-comp-checkbox-checked-background-color-default: var(--mdx-comp-checkbox-checked-background-color-hover);
+    --mdx-comp-checkbox-checked-label-color-default: var(--mdx-comp-button-tertiary-medium-color-hover);
 }

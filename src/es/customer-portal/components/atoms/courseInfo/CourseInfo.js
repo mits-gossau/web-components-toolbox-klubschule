@@ -29,30 +29,42 @@ export default class CourseInfo extends Shadow() {
     document.body.removeEventListener(this.getAttribute('update-subscription-course-appointment-booking') || 'update-subscription-course-appointment-booking', this.updateSubscriptionCourseAppointmentBookingListener)
   }
 
+  /**
+   * Event listener for the 'update-subscription-course-appointment-booking' event
+   * @param {CustomEvent} event - The event object
+  */
   updateSubscriptionCourseAppointmentBookingListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
-        if (courseDetail.code === 500) {
-          return
-        }
-        this.html = ''
-        const tileState = getTileState(courseAppointmentStatusMapping[courseDetail.courseAppointmentStatus], courseDetail)
-        this.renderHTML(tileState)
+        this.updateTileState(courseDetail)
       })
     }
   }
 
+  /**
+   * Event listener for the 'update-subscription-course-appointment-reversal' event
+   * @param {CustomEvent} event - The event object
+   */
   updateSubscriptionCourseAppointmentReversalListener = event => {
     if (this.dataset.id === event.detail.id) {
       event.detail.fetch.then(courseDetail => {
-        if (courseDetail.code === 500) {
-          return
-        }
-        this.html = ''
-        const tileState = getTileState(courseAppointmentStatusMapping[courseDetail.courseAppointmentStatus], courseDetail)
-        this.renderHTML(tileState)
+        this.updateTileState(courseDetail)
       })
     }
+  }
+
+  /**
+   * Updates the tile state based on the given course detail
+   * @param {Object} courseDetail - The course detail object
+   * @return {void}
+   */
+  updateTileState (courseDetail) {
+    if (courseDetail.code === 500) {
+      return
+    }
+    this.html = ''
+    const tileState = getTileState(courseAppointmentStatusMapping[courseDetail.courseAppointmentStatus], courseDetail)
+    this.renderHTML(tileState)
   }
 
   shouldRenderCSS () {

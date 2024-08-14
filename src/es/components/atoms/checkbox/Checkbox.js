@@ -170,6 +170,7 @@ export default class Checkbox extends Shadow() {
         :host .wrap .message.has-error {
           display: flex;
           margin-top: var(--error-gap);
+          align-items: center;
         }
         
         :host .wrap .message {
