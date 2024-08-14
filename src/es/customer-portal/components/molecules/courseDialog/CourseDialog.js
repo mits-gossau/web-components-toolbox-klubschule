@@ -257,6 +257,8 @@ export default class CourseDialog extends Shadow() {
   requestShowDialogBookingConfirmationListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
       this.renderPriceInfoInBookingView = true
+      this.contentViewType = 'booking'
+      debugger
       // trans value = Termin buchen
       this.renderDialogTitle('CP.cpBookAppointment')
       this.viewContent.innerHTML = ''
@@ -371,6 +373,8 @@ export default class CourseDialog extends Shadow() {
    */
   requestShowDialogReversalConfirmationListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
+      debugger
+      this.contentViewType = 'reversal'
       this.renderDialogTitle('Termin stornieren')
       this.viewContent.innerHTML = ''
       this.viewContent.innerHTML = this.renderDialogContentReversalConfirmation(this.courseData, this.courseDetail)
