@@ -2,6 +2,9 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class NavLevelItem extends Shadow() {
+  static get observedAttributes () {
+    return ['namespace']
+  }
   constructor (options = {}, ...args) {
     super({ keepCloneOutsideShadowRoot: true, importMetaUrl: import.meta.url, ...options }, ...args)
 
@@ -35,6 +38,13 @@ export default class NavLevelItem extends Shadow() {
 
   disconnectedCallback () {
     this.removeEventListener('click', this.clickListener)
+  }
+
+  attributeChangedCallback (name, oldValue, newValue) {
+    if (oldValue === null || oldValue === newValue) return
+    Array.from(this.root.querySelectorAll(`${this.cssSelector} > style[_css]`)).forEach(style => style.remove())
+    this.namespace = this.getAttribute('namespace') || ''
+    this.renderCSS()
   }
 
   shouldRenderCSS () {

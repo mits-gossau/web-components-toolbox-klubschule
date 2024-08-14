@@ -199,7 +199,7 @@ export default class WithFacet extends WebWorker() {
           }
         }
 
-        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter]
         if (isTree) {
@@ -395,11 +395,6 @@ export default class WithFacet extends WebWorker() {
         throw new Error(response.statusText)
       }))
     }
-
-    this.popstateListener = event => {
-      this.params = this.catchURLParams()
-      this.requestWithFacetListener()
-    }
   }
 
   connectedCallback() {
@@ -407,7 +402,6 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.addEventListener('reset-all-filters', this.requestWithFacetListener) : this.addEventListener('reset-all-filters', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
-    self.addEventListener('popstate', this.popstateListener)
   }
 
   disconnectedCallback() {
@@ -415,11 +409,10 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.removeEventListener('reset-all-filters', this.requestWithFacetListener) : this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
-    self.removeEventListener('popstate', this.popstateListener)
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null) {
+  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false) {
     // @ts-ignore
     const isParentSelected = selectedParent?.urlpara === filterKey
     const treeShookFilters = []
@@ -429,14 +422,18 @@ export default class WithFacet extends WebWorker() {
       const isCenterFilter = filterItem.id === filterValue && ['center', 'centre', 'centro'].includes(filterKey.toLowerCase())
       const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
       const isUrlpara = filterItem.urlpara === filterValue
-      const isSectorFilter = Number(filterItem.id) === 7 && filterItem.typ === "tree"
+      if (zeroLevel) isSectorFilter = Number(filterItem.id) === 7 && filterItem.typ === "tree"
 
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
         if (isCenterFilter) {
           filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
-        } else if (isSectorFilter) { // sector filter ("bereichsangebot")
-          filterItem.selected = isParentSelected
+        } else if (isSectorFilter && isTree) { // sector filter ("bereichsangebot")
+          if (!filterItem.selected && isUrlpara) {
+            filterItem.selected = true
+          } else if (filterItem.selected && !isUrlpara) {
+            filterItem.selected = false 
+          }
         } else if (filterItem.selected && isUrlpara) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
         } else if (filterItem.selected && !isUrlpara) {
@@ -454,7 +451,7 @@ export default class WithFacet extends WebWorker() {
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children) {
-        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem)
+        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isSectorFilter, isTree)
       }
 
       // only the first level allows selected falls when including selected children
