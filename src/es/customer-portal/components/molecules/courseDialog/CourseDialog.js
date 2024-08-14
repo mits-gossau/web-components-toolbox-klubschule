@@ -101,7 +101,6 @@ export default class CourseDialog extends Shadow() {
       this.viewContent.innerHTML = ''
       const { type } = event.detail
       event.detail.fetch.then(courseDetail => {
-        debugger
         this.courseDetail = courseDetail
         // open dialog
         this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
@@ -258,7 +257,6 @@ export default class CourseDialog extends Shadow() {
     if (this.dataset.id === event.detail.tags[0]) {
       this.renderPriceInfoInBookingView = true
       this.contentViewType = 'booking'
-      debugger
       // trans value = Termin buchen
       this.renderDialogTitle('CP.cpBookAppointment')
       this.viewContent.innerHTML = ''
@@ -373,7 +371,6 @@ export default class CourseDialog extends Shadow() {
    */
   requestShowDialogReversalConfirmationListener = event => {
     if (this.dataset.id === event.detail.tags[0]) {
-      debugger
       this.contentViewType = 'reversal'
       this.renderDialogTitle('Termin stornieren')
       this.viewContent.innerHTML = ''
@@ -708,7 +705,6 @@ export default class CourseDialog extends Shadow() {
     }
     let priceInfo = ''
     let subscriptionBalanceAdditionalInfo = ''
-    debugger
     if (subscriptionMode === 'WERTABO' && this.renderPriceInfoInBookingView) {
       priceInfo = /* html */ `
         <div class="detail">
@@ -994,7 +990,7 @@ export default class CourseDialog extends Shadow() {
   /**
    * Show/Hide loading spinner
    * @param {string} display css display property
-  */
+   */
   subscriptionPdfLinkLoading = (display = 'none') => {
     this.mdxComponent.style.display = display
   }
