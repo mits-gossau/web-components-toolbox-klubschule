@@ -100,7 +100,7 @@ export default class AutoComplete extends Shadow() {
     }
 
     this.requestWithFacet = event => {
-      if (event.detail.type === 'enter' || event.detail.type === 'search-click') {
+      if (event.detail.type === 'enter' || event.detail.type === 'search-click' || event.detail.type === 'key') {
         return this.clickOnPredictionListener({ detail: { description: event.detail.value } })
       }
     }
