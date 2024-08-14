@@ -206,7 +206,7 @@ export default class filterSelect extends Shadow() {
           this.html = /* html */`
             <m-double-button namespace="double-button-default-" width="100%">
               <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>
-                <span part="label1">${this.getTranslation('Filter.SearchInputPlaceholder')} ${response.searchText}</span>
+                <span part="label1">${this.getTranslation('FilterButton.SearchInputLabel')} ${response.searchText}</span>
                 <span part="label2" dynamic></span>
               </ks-a-button>
               <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="q" filter-value="${response.searchText}">
