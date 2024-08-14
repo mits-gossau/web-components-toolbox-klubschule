@@ -20,6 +20,7 @@ export default class CourseDialog extends Shadow() {
     this.courseSubscription = null
     this.subscriptionsPdfLink = null
     this.renderPriceInfoInBookingView = false
+    this.contentViewType = ''
   }
 
   connectedCallback () {
@@ -60,7 +61,7 @@ export default class CourseDialog extends Shadow() {
    * @param {any} event
    */
   subscriptionPdfLinkListener = (event) => {
-    this.subscriptionPdfLinkLoading('inline')
+    this.subscriptionPdfLinkLoading('inline') // loading
     event.preventDefault()
     this.dispatchEvent(new CustomEvent('request-subscription-pdf',
       {
@@ -100,6 +101,7 @@ export default class CourseDialog extends Shadow() {
       this.viewContent.innerHTML = ''
       const { type } = event.detail
       event.detail.fetch.then(courseDetail => {
+        debugger
         this.courseDetail = courseDetail
         // open dialog
         this.dispatchEvent(new CustomEvent(`dialog-open-${this.dataset.id}`,
@@ -118,11 +120,14 @@ export default class CourseDialog extends Shadow() {
         }
         if (type === 'booking') {
           this.renderPriceInfoInBookingView = true
+          this.contentViewType = 'booking'
           // trans value = Termin buchen
           this.renderDialogTitle('CP.cpBookAppointment')
           this.viewContent.innerHTML = this.renderDialogContentBookingConfirmation(this.courseData, this.courseDetail)
         }
         if (type === 'reversal') {
+          this.renderPriceInfoInBookingView = false
+          this.contentViewType = 'reversal'
           // trans value = Termin stornieren
           this.renderDialogTitle('CP.cpCancelAppointment')
           this.viewContent.innerHTML = this.renderDialogContentReversalConfirmation(this.courseData, this.courseDetail)
@@ -404,6 +409,9 @@ export default class CourseDialog extends Shadow() {
         }
         .alert {
           color: var(--alert-color, #F4001B);
+        }
+        .additional-subcription-info {
+          padding-top: 0.75em;
         }
       </style>
       <div id="content">
@@ -696,6 +704,7 @@ export default class CourseDialog extends Shadow() {
     }
     let priceInfo = ''
     let subscriptionBalanceAdditionalInfo = ''
+    debugger
     if (subscriptionMode === 'WERTABO' && this.renderPriceInfoInBookingView) {
       priceInfo = /* html */ `
         <div class="detail">
@@ -706,15 +715,29 @@ export default class CourseDialog extends Shadow() {
           <span>${detail.lessonPrice}</span>
         </div>
       `
-      subscriptionBalanceAdditionalInfo = /* html */ `
-        <span>
-          <!-- trans value = Der Preis für den Termin von -->
-          <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking1"></a-translation>
-          ${detail.lessonPrice}
-          <!-- trans value = wird Ihnen von diesem Abonnement abgezogen. -->
-          <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking2"></a-translation>
-        </span>
-      `
+    }
+    if (subscriptionMode === 'WERTABO') {
+      if (this.contentViewType === 'booking') {
+        //
+        subscriptionBalanceAdditionalInfo = /* html */ `
+          <span>
+            <!-- trans value = Der Preis für den Termin von -->
+            <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking1"></a-translation>
+            ${detail.lessonPrice}
+            <!-- trans value = wird Ihnen von diesem Abonnement abgezogen. -->
+            <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking2"></a-translation>
+          </span>
+        `
+      }
+      if (this.contentViewType === 'reversal') {
+        //
+        subscriptionBalanceAdditionalInfo = /* html */ `
+          <span>
+            <!-- trans value = Der Terminpreis wird auf folgendes Abonnement rückvergütet: -->
+            <a-translation data-trans-key="CP.cpInfoSubscriptionInCanceling2"></a-translation>
+          </span>
+        `
+      }
     }
 
     return /* html */ `
