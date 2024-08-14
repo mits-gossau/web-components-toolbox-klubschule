@@ -87,7 +87,7 @@ export default class OffersPage extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML() {
-    return !this.root.querySelector('ks-c-with-facet') || !this.ksMTab
+    return !this.root.querySelector('ks-c-with-facet') && !this.ksMTab
   }
 
   /**
