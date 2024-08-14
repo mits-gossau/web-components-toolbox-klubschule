@@ -205,7 +205,7 @@ export default class filterSelect extends Shadow() {
         if (response.searchText && this.hasAttribute('with-filter-search-button')) {
           this.html = /* html */`
             <m-double-button namespace="double-button-default-" width="100%">
-              <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="show-search-dialog" click-no-toggle-active>
+              <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="dialog-open-first-level" click-no-toggle-active>
                 <span part="label1">${this.getTranslation('FilterButton.SearchInputLabel')} ${response.searchText}</span>
                 <span part="label2" dynamic></span>
               </ks-a-button>
