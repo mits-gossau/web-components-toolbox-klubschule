@@ -766,7 +766,6 @@ export default class OffersPage extends Shadow() {
               icon-name="Search" 
               icon-size="1.5em"
               submit-search="request-auto-complete"
-              submit-search="request-with-facet"
               type="search"
               answer-event-name="search-change"
               delete-listener
