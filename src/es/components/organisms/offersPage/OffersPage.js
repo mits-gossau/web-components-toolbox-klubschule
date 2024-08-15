@@ -87,7 +87,7 @@ export default class OffersPage extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML() {
-    return !this.root.querySelector('ks-c-with-facet') || !this.ksMTab
+    return !this.root.querySelector('ks-c-with-facet') && !this.ksMTab
   }
 
   /**
@@ -768,8 +768,6 @@ export default class OffersPage extends Shadow() {
               icon-name="Search" 
               icon-size="1.5em"
               submit-search="request-auto-complete"
-              submit-search="request-with-facet"
-              any-key-listener
               type="search"
               answer-event-name="search-change"
               delete-listener
