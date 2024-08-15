@@ -87,9 +87,11 @@ export default class AppointmentsList extends Shadow() {
   subscriptionCourseAppointmentsListener = (event) => {
     this.renderHTML(event.detail.fetch).then(() => {
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
-        this.select = this.root.querySelector('o-grid').root.querySelector('ks-m-select').root.querySelector('div').querySelector('select')
-        this.select.addEventListener('change', this.selectEventListener)
-        this.subscriptionHint = this.root.querySelector('o-grid').root.querySelector('ks-m-select')
+        this.select = this.root.querySelector('o-grid')?.root.querySelector('ks-m-select')?.root.querySelector('div')?.querySelector('select')
+        if (this.select) {
+          this.select.addEventListener('change', this.selectEventListener)
+        }
+        this.subscriptionHint = this.root.querySelector('o-grid')?.root.querySelector('ks-m-select')
       }
       this.dispatchEvent(new CustomEvent('update-counter',
         {
