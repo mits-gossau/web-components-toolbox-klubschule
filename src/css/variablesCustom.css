@@ -328,7 +328,7 @@
   /* paragraph */
   --p-font-family: var(--ul-li-font-family);
   --p-font-size: var(--ul-li-font-size);
-  --p-line-height: var(--ul-li-line-height:);
+  --p-line-height: var(--ul-li-line-height);
   --p-font-weight: var(--ul-li-font-weight);
   --p-margin: 0 auto var(--mdx-sys-spacing-flex-s);
   --p-form-margin: 0 auto var(--mdx-sys-spacing-flex-small-s);

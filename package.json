@@ -7,12 +7,14 @@
     "fix": "standard --fix",
     "serve": "live-server --port=3000 --host=localhost --no-css-inject",
     "test": "live-server --port=2400 --host=localhost --no-browser --ignorePattern=.* & npx playwright test --config=e2e/ && killall node",
-    "update": "git submodule update --init --recursive --remote --force"
+    "update": "git submodule update --init --recursive --remote --force",
+    "build-css": "lightningcss --minify --bundle --targets '>= 0.25%' src/css/variablesCustomKlubschule.css -o src/css/variablesCustomKlubschule.min.css & lightningcss --minify --bundle --targets '>= 0.25%' src/css/variablesCustomIbaw.css -o src/css/variablesCustomIbaw.min.css & lightningcss --minify --bundle --targets '>= 0.25%' src/css/variablesCustomKsos.css -o src/css/variablesCustomKsos.min.css"
   },
   "author": "weedshaker@gmail.com, edx.mgb@gmail.com",
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "*",
+    "lightningcss-cli": "^1.26.0",
     "live-server": "*",
     "standard": "*"
   },
