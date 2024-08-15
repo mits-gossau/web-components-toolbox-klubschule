@@ -113,6 +113,7 @@ export default class CourseDialog extends Shadow() {
         ))
         if (type === 'detail') {
           this.renderPriceInfoInBookingView = false
+          this.contentViewType = ''
           // trans value = Termindetails
           this.renderDialogTitle('CP.cpAppointmentDetails')
           this.viewContent.innerHTML = this.renderDialogContentDetails(this.courseData, this.courseDetail)
@@ -171,7 +172,7 @@ export default class CourseDialog extends Shadow() {
           display: flex;
           flex-direction: column;
         }
-        .detail > span:first-child {
+        .detail > span:first-child, .abonnement{
           font-weight: 500;
           line-height: 110%;
         }
@@ -186,6 +187,9 @@ export default class CourseDialog extends Shadow() {
         }
         .downloads {
           margin-bottom: 1.5em;
+        }
+        .additional-subcription-info {
+          padding-bottom: 0.75em;
         }
       </style>
       <div id="content">
@@ -283,7 +287,7 @@ export default class CourseDialog extends Shadow() {
           display: flex;
           flex-direction: column;
         }
-        .detail > span:first-child {
+        .detail > span:first-child, .abonnement {
           font-weight: 500;
           line-height: 110%;
         }
@@ -291,7 +295,7 @@ export default class CourseDialog extends Shadow() {
           color: var(--alert-color, #F4001B);
         }
         .additional-subcription-info {
-          padding-top: 0.75em;
+          padding-bottom: 0.75em;
         }
       </style>
       <div id="content">
@@ -397,7 +401,7 @@ export default class CourseDialog extends Shadow() {
           display: flex;
           flex-direction: column;
         }
-        .detail > span:first-child {
+        .detail > span:first-child, .abonnement {
           font-weight: 500;
           line-height: 110%;
         }
@@ -412,7 +416,7 @@ export default class CourseDialog extends Shadow() {
           color: var(--alert-color, #F4001B);
         }
         .additional-subcription-info {
-          padding-top: 0.75em;
+          padding-bottom: 0.75em;
         }
       </style>
       <div id="content">
@@ -720,22 +724,26 @@ export default class CourseDialog extends Shadow() {
       if (this.contentViewType === 'booking') {
         //
         subscriptionBalanceAdditionalInfo = /* html */ `
-          <span>
-            <!-- trans value = Der Preis für den Termin von -->
-            <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking1"></a-translation>
-            ${detail.lessonPrice}
-            <!-- trans value = wird Ihnen von diesem Abonnement abgezogen. -->
-            <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking2"></a-translation>
-          </span>
+          <div class="additional-subcription-info">
+            <span>
+              <!-- trans value = Der Preis für den Termin von -->
+              <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking1"></a-translation>
+              ${detail.lessonPrice}
+              <!-- trans value = wird Ihnen von diesem Abonnement abgezogen. -->
+              <a-translation data-trans-key="CP.cpInfoBookingValueSubscriptionInBooking2"></a-translation>
+            </span>
+          </div>
         `
       }
       if (this.contentViewType === 'reversal') {
         //
         subscriptionBalanceAdditionalInfo = /* html */ `
-          <span>
-            <!-- trans value = Der Terminpreis wird auf folgendes Abonnement rückvergütet: -->
-            <a-translation data-trans-key="CP.cpInfoSubscriptionInCanceling2"></a-translation>
-          </span>
+          <div class="additional-subcription-info">
+            <span>
+              <!-- trans value = Der Terminpreis wird auf folgendes Abonnement rückvergütet: -->
+              <a-translation data-trans-key="CP.cpInfoSubscriptionInCanceling2"></a-translation>
+            </span>
+          </div>
         `
       }
     }
@@ -779,7 +787,8 @@ export default class CourseDialog extends Shadow() {
         </div>
       </div>
       <div class="detail">
-        <span>
+        ${subscriptionBalanceAdditionalInfo}
+        <span class="abonnement">
           <!-- trans value = Abonnement -->
           <a-translation data-trans-key="CP.cpSubscriptionColumnDescription"></a-translation>
         </span>
@@ -789,9 +798,6 @@ export default class CourseDialog extends Shadow() {
           <a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${validTo} 
           ${renderBalance}
         </span>
-        <div class="additional-subcription-info">
-          ${subscriptionBalanceAdditionalInfo}
-        </div>
       </div> 
     `
   }
