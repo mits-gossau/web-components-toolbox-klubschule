@@ -122,7 +122,7 @@ export default class Buttons extends Shadow() {
         'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'utm_source_platform', 'utm_creative_format', 'utm_marketing_tactic', 'xpmld', 'xpcld'
       ] // GA parameters
       const filteredURLKeys = urlParamsArray.filter(key => !ignoreURLKeys.includes(key))
-      filteredURLParams = filteredURLKeys.map(key => `${key}=${urlParamsMap.get(key)}`).join('&')
+      filteredURLParams = filteredURLKeys.map(key => `${key}=${urlParamsMap.get(key)}`).join('&').split(" ").join("+")
     }
 
     const buttons = dataButtons?.reduce((acc, button) => {

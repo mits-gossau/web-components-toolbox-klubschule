@@ -157,7 +157,17 @@ export default class FilterCategories extends Shadow() {
       </mdx-component>
     `
     const navLevelItem = /* html */`
-      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}" request-event-name="request-with-facet" filter-id="${parentItem.urlpara}-${child.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || parentItem.label.replace(/'/g, '’').replace(/"/g, '\"')}">
+      <ks-m-nav-level-item 
+        ${disabled}
+        ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''}
+        namespace="${checked ? 'nav-level-item-active-' : 'nav-level-item-default-'}"
+        request-event-name="request-with-facet"
+        filter-id="${parentItem.urlpara}-${child.urlpara}"
+        label="${
+          this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"')
+          || parentItem.label.replace(/'/g, '’').replace(/"/g, '\"')
+        }"
+      >
         <div class="wrap">
           <span class="text">${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}</span>
         </div>
@@ -187,11 +197,11 @@ export default class FilterCategories extends Shadow() {
       // @ts-ignore
       if (filterItem && filterItem !== null) {
         // @ts-ignore
-        const text = filterItem.querySelector('.text')
+        const text = filterItem.shadowRoot.querySelector('.text') || filterItem.querySelector('.text')
         // @ts-ignore
         filterItem.setAttribute('label', `${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}`)
         // @ts-ignore
-        if (text) filterItem.querySelector('.text').textContent = `${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}`
+        if (text) text.textContent = `${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}`
       }
       const attributes = { disabled, checked, visible }
       Object.entries(attributes).forEach(([key, value]) => {
@@ -268,7 +278,7 @@ export default class FilterCategories extends Shadow() {
     let selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label.replace(/'/g, '’').replace(/"/g, '\"')).join(', ') || ''
     // @ts-ignore
     if (level === 0 && filterItem.typ === 'tree') selectedFilters = this.getSelectedFilters(filterItem)[0]?.label.replace(/'/g, '’').replace(/"/g, '\"') || ""
-    if (this.firstTreeItem) {
+    if (this.firstTreeItem && level !== 0) {
       selectedFilters = ''
     }
     
@@ -336,15 +346,28 @@ export default class FilterCategories extends Shadow() {
 
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
-      // update total button
-      generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
+      if (generatedNavLevelItem.navLevelItem.root.querySelector('dialog')) generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
       // update additional text with selected filter(s) only for the first level 
       if (level === 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
-      if (level !== 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.text').textContent = `${filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')} ${filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'}`
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').setAttribute('namespace', filterItem.selected ? 'nav-level-item-active-' : 'nav-level-item-default-')
     } else {
       this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, parentItem, filterItem, mainNav, level)))
     }
+
+    // Update Count / disabled Status of nav level items after filtering
+    if (level !== 0) {
+      // update total button / Avoid bug with uBlock not finding the dialog
+      generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.text').textContent = `${filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')} ${filterItem.count && filterItem.count !== 0 ? `(${filterItem.count})` : '(0)'}`
+      if (filterItem.disabled) {
+        generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').setAttribute('disabled', '')
+      } else {
+        generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').removeAttribute('disabled')
+      }
+    } else if (level === 0) {
+      // update additional text with selected filter(s) only for the first level 
+      generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
+    }
+    
     if (!Array.from(mainNav.childNodes).includes(generatedNavLevelItem.navLevelItem)) mainNav.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
       if (filterItem.id === '13') { // center filters
