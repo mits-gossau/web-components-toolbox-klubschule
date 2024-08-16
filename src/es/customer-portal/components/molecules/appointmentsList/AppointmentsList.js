@@ -359,12 +359,11 @@ export default class AppointmentsList extends Shadow() {
    * Render Day Heading
    * Example: Heute: Mittwoch, 08. Mai
    * @param {string} headingText Heading Text
-   * @param {{ constructorClass: new () => any; }} headingComponent Heading Component
    * @param {string} headingType Heading Type - H1, H2, etc.
    * @returns {HTMLElement} Heading Element
    */
   renderDayHeading (headingText, headingComponent, headingType = 'h2') {
-    const heading = new headingComponent.constructorClass() // eslint-disable-line
+    const heading = new headingComponent.constructorClass({ namespace: 'heading-default-'}) // eslint-disable-line
     heading.setAttribute('tag', headingType)
     heading.innerHTML = headingText
     return heading
