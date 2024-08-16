@@ -47,6 +47,20 @@
   --button-quaternary-color: var(--color-${this.getAttribute('color')}, var(--color-quaternary));
 }
 
+:host([namespace=button-search-]) {
+  --button-search-background-color-active: transparent;
+  --button-search-background-color-disabled: transparent;
+  --button-search-background-color-hover: transparent;
+  --button-search-border-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-search-border-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-hover));
+  --button-search-border-color-active: var(--button-search-border-color-hover);
+  --button-search-border-color: var(--border-color-${this.getAttribute('color')}, var(--color-${this.getAttribute('color')}, var(--color-secondary)));
+  --button-search-color-active: var(--color-${this.getAttribute('color')}-active, var(--color-secondary-active));
+  --button-search-color-disabled: var(--color-${this.getAttribute('color')}-disabled, var(--color-disabled));
+  --button-search-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-secondary-hover));
+  --button-search-color: var(--color-${this.getAttribute('color')}, var(--color-secondary));
+}
+
 :host([namespace=button-primary-][justify-content]) {
   --button-primary-justify-content: ${this.getAttribute('justify-content')};
 }
@@ -58,6 +72,9 @@
 }
 :host([namespace=button-quaternary-][justify-content]) {
   --button-quaternary-justify-content: ${this.getAttribute('justify-content')};
+}
+:host([namespace=button-search-][justify-content]) {
+  --button-search-justify-content: ${this.getAttribute('justify-content')};
 }
 
 /*
@@ -73,7 +90,8 @@
 :host([namespace=button-primary-][icon]) button,
 :host([namespace=button-secondary-][icon]) button,
 :host([namespace=button-tertiary-][icon]) button,
-:host([namespace=button-quaternary-][icon]) button {
+:host([namespace=button-quaternary-][icon]) button,
+:host([namespace=button-search-][icon]) button {
   --button-primary-icon-left-margin: 0;
   --button-primary-icon-right-margin: 0;
   --button-secondary-icon-left-margin: 0;
@@ -82,6 +100,8 @@
   --button-tertiary-icon-right-margin: 0;
   --button-quaternary-icon-left-margin: 0;
   --button-quaternary-icon-right-margin: 0;
+  --button-search-icon-left-margin: 0;
+  --button-search-icon-right-margin: 0;
   --button-padding-mobile: var(--button-padding-mobile-custom, 0.75rem);
   --button-padding: var(--mdx-comp-button-primary-medium-padding-vertical-default, 0.75rem);
   padding: var(--button-padding);
@@ -93,7 +113,8 @@
 :host([namespace=button-primary-][badge]) button,
 :host([namespace=button-secondary-][badge]) button,
 :host([namespace=button-tertiary-][badge]) button,
-:host([namespace=button-quaternary-][badge]) button {
+:host([namespace=button-quaternary-][badge]) button,
+:host([namespace=button-search-][badge]) button {
   padding: var(--button-badge-padding, 0.5em);
   pointer-events: none;
   border-radius: var(--button-badge-border-radius, 2%);
@@ -150,6 +171,17 @@
   --button-quaternary-icon-width-mobile: var(--button-primary-icon-width-mobile);
   --button-quaternary-icon-right-margin: var(--button-primary-icon-right-margin);  
   --button-quaternary-icon-left-margin: var(--button-primary-icon-left-margin);
+
+  --button-search-height: var(--button-primary-height);
+  --button-search-padding: var(--button-primary-padding);
+  --button-search-font-weight: var(--button-primary-font-weight);
+  --button-search-font-size: var(--button-primary-font-size);
+  --button-search-icon-height: var(--button-primary-icon-height);
+  --button-search-icon-width: var(--button-primary-icon-width);
+  --button-search-icon-height-mobile: var(--button-primary-icon-height-mobile);
+  --button-search-icon-width-mobile: var(--button-primary-icon-width-mobile);
+  --button-search-icon-right-margin: var(--button-primary-icon-right-margin);
+  --button-search-icon-left-margin: var(--button-primary-icon-left-margin);
 }
 
 :host([small]) button {
@@ -204,7 +236,19 @@
   --button-quaternary-icon-height-mobile: var(--button-primary-icon-height-mobile);
   --button-quaternary-icon-width-mobile: var(--button-primary-icon-width-mobile);
   --button-quaternary-icon-right-margin: var(--button-primary-icon-right-margin);
-  --button-quaternary-icon-left-margin: var(--button-primary-icon-left-margin);    
+  --button-quaternary-icon-left-margin: var(--button-primary-icon-left-margin);
+
+  --button-search-height: var(--button-primary-height);
+  --button-search-padding: var(--button-primary-padding);
+  --button-search-font-weight: var(--button-primary-font-weight);
+  --button-search-font-size: var(--button-primary-font-size);
+  --button-search-line-height: 1rem;
+  --button-search-icon-height: var(--button-primary-icon-height);
+  --button-search-icon-width: var(--button-primary-icon-width);
+  --button-search-icon-height-mobile: var(--button-primary-icon-height-mobile);
+  --button-search-icon-width-mobile: var(--button-primary-icon-width-mobile);
+  --button-search-icon-right-margin: var(--button-primary-icon-right-margin);
+  --button-search-icon-left-margin: var(--button-primary-icon-left-margin);
 }
 
 :host([round]) button {
