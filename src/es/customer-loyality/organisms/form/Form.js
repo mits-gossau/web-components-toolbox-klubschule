@@ -23,23 +23,11 @@ export default class Form extends Shadow() {
       if (this.errorMessage) {
         this.errorMessage.remove()
       }
-      const formData = new FormData(this.form)
-      const params = new URLSearchParams(window.location.search)
+      const formData = this.formData
 
-      const optionPrice = formData.get('optionPrice')
-      const optionLessons = formData.get('optionLessons')
-      const preferredOption = formData.get('preferredOption')
-
-      if (optionLessons === 'on' && optionPrice === 'on' && !preferredOption) {
-        const el = document.createElement('div')
-        el.id = 'submit-error-message'
-        el.innerHTML = /* html */ `
-          <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
-            <div slot="description">
-              <p><a-translation key="CustomerLoyality.PreferredOptionValidation"><a-translation></p>
-            </div>
-          </ks-m-system-notification>`
-        this.form.appendChild(el)
+      if (formData.optionPriceValue && formData.optionLessonsValue && !formData.preferredVariant) {
+        this.translate('CustomerLoyality.PreferredOptionValidation')
+          .then((message) => this.renderErrorMessage(message))
       }
 
       this.form.dispatchEvent(
@@ -47,16 +35,7 @@ export default class Form extends Shadow() {
           bubbles: true,
           cancelable: true,
           composed: true,
-          detail: {
-            kursId: this.voting.course.id,
-            teilnehmerId: params.get('teilnehmerId'),
-            optionPriceAvailable: this.voting.optionPrice.available,
-            optionPriceValue: optionPrice === 'on',
-            optionLessonsAvailable: this.voting.optionLessons.available,
-            optionLessonsValue: optionLessons === 'on',
-            comment: formData.get('comment'),
-            preferredVariant: preferredOption
-          }
+          detail: this.formData
         })
       )
     }
@@ -98,31 +77,20 @@ export default class Form extends Shadow() {
           `
         })
         .catch((error) => {
-          const el = document.createElement('div')
-          el.id = 'submit-error-message'
-          el.innerHTML = /* html */ `
-          <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
-            <div slot="description">
-              <p>${error?.message ?? 'Something went wrong...'}</p>
-            </div>
-          </ks-m-system-notification>`
-          this.form.appendChild(el)
+          this.renderErrorMessage(error?.message ?? 'Something went wrong...')
         })
     }
 
     this.changeListener = (evt) => {
-      const formData = new FormData(this.form)
-      const optionPrice = formData.get('optionPrice')
-      const optionLessons = formData.get('optionLessons')
-      const preferredOption = formData.get('preferredOption')
+      const formData = this.formData
       const box = this.root.querySelector('.preferred-option-box')
-      if (optionLessons === 'on' && optionPrice === 'on') {
+      if (formData.optionPriceValue && formData.optionLessonsValue) {
         box.classList.add('expanded')
       } else {
         box.classList.remove('expanded')
       }
 
-      if (preferredOption && this.errorMessage) {
+      if (formData.preferredVariant && this.errorMessage) {
         this.errorMessage.remove()
       }
     }
@@ -333,6 +301,18 @@ export default class Form extends Shadow() {
       </div>`
   }
 
+  renderErrorMessage (message) {
+    const el = document.createElement('div')
+    el.id = 'submit-error-message'
+    el.innerHTML = /* html */ `
+      <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
+        <div slot="description">
+          <p>${message}</p>
+        </div>
+      </ks-m-system-notification>`
+    this.form.appendChild(el)
+  }
+
   renderCSS () {
     this.css = /* css */ `
       :host {}
@@ -391,6 +371,26 @@ export default class Form extends Shadow() {
         }
       }
     `
+  }
+
+  get formData () {
+    const formData = new FormData(this.form)
+    const params = new URLSearchParams(window.location.search)
+
+    const optionPrice = formData.get('optionPrice')
+    const optionLessons = formData.get('optionLessons')
+    const preferredOption = formData.get('preferredOption')
+
+    return {
+      kursId: this.voting.course.id,
+      teilnehmerId: params.get('teilnehmerId'),
+      optionPriceAvailable: this.voting.optionPrice.available,
+      optionPriceValue: optionPrice === 'on',
+      optionLessonsAvailable: this.voting.optionLessons.available,
+      optionLessonsValue: optionLessons === 'on',
+      comment: formData.get('comment'),
+      preferredVariant: preferredOption
+    }
   }
 
   get form () {
