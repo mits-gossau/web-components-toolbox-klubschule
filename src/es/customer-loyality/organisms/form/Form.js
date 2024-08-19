@@ -25,6 +25,23 @@ export default class Form extends Shadow() {
       }
       const formData = new FormData(this.form)
       const params = new URLSearchParams(window.location.search)
+
+      const optionPrice = formData.get('optionPrice')
+      const optionLessons = formData.get('optionLessons')
+      const preferredOption = formData.get('preferredOption')
+
+      if (optionLessons === 'on' && optionPrice === 'on' && !preferredOption) {
+        const el = document.createElement('div')
+        el.id = 'submit-error-message'
+        el.innerHTML = /* html */ `
+          <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle">
+            <div slot="description">
+              <p><a-translation key="CustomerLoyality.PreferredOptionValidation"><a-translation></p>
+            </div>
+          </ks-m-system-notification>`
+        this.form.appendChild(el)
+      }
+
       this.form.dispatchEvent(
         new CustomEvent('submit-voting', {
           bubbles: true,
@@ -34,11 +51,11 @@ export default class Form extends Shadow() {
             kursId: this.voting.course.id,
             teilnehmerId: params.get('teilnehmerId'),
             optionPriceAvailable: this.voting.optionPrice.available,
-            optionPriceValue: formData.get('optionPrice') === 'on',
+            optionPriceValue: optionPrice === 'on',
             optionLessonsAvailable: this.voting.optionLessons.available,
-            optionLessonsValue: formData.get('optionLessons') === 'on',
+            optionLessonsValue: optionLessons === 'on',
             comment: formData.get('comment'),
-            preferredVariant: formData.get('preferredOption')
+            preferredVariant: preferredOption
           }
         })
       )
@@ -97,11 +114,16 @@ export default class Form extends Shadow() {
       const formData = new FormData(this.form)
       const optionPrice = formData.get('optionPrice')
       const optionLessons = formData.get('optionLessons')
+      const preferredOption = formData.get('preferredOption')
       const box = this.root.querySelector('.preferred-option-box')
       if (optionLessons === 'on' && optionPrice === 'on') {
         box.classList.add('expanded')
       } else {
         box.classList.remove('expanded')
+      }
+
+      if (preferredOption && this.errorMessage) {
+        this.errorMessage.remove()
       }
     }
   }
