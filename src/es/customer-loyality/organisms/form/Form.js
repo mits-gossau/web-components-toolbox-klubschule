@@ -38,7 +38,7 @@ export default class Form extends Shadow() {
             optionLessonsAvailable: this.voting.optionLessons.available,
             optionLessonsValue: formData.get('optionLessons') === 'on',
             comment: formData.get('comment'),
-            preferredVariant: '' // TODO: get preferred variant from form?
+            preferredVariant: formData.get('preferredOption')
           }
         })
       )
@@ -92,6 +92,18 @@ export default class Form extends Shadow() {
           this.form.appendChild(el)
         })
     }
+
+    this.changeListener = (evt) => {
+      const formData = new FormData(this.form)
+      const optionPrice = formData.get('optionPrice')
+      const optionLessons = formData.get('optionLessons')
+      const box = this.root.querySelector('.preferred-option-box')
+      if (optionLessons === 'on' && optionPrice === 'on') {
+        box.classList.add('expanded')
+      } else {
+        box.classList.remove('expanded')
+      }
+    }
   }
 
   connectedCallback () {
@@ -108,6 +120,7 @@ export default class Form extends Shadow() {
   disconnectedCallback () {
     this.form.removeEventListener('submit', this.submitListener)
     this.button.removeEventListener('click', this.submitListener)
+    this.form.removeEventListener('change', this.changeListener)
     document.body.removeEventListener(
       'submit-voting-response',
       this.submitResponseListener
@@ -146,6 +159,7 @@ export default class Form extends Shadow() {
                 ${this.renderOptionPrice(voting.optionPrice)}
                 ${this.renderOptionLessons(voting.optionLessons)}
               </div>
+              ${this.renderPreferredVariant(voting)}
               <fieldset>
                 <label><a-translation key="CustomerLoyality.Comment"></a-translation></label>
                 <textarea name="comment" placeholder="${translation}"></textarea>
@@ -155,6 +169,7 @@ export default class Form extends Shadow() {
           </m-form>
         </ks-o-body-section>`
       this.form.addEventListener('submit', this.submitListener)
+      this.form.addEventListener('change', this.changeListener)
       this.button.addEventListener('click', this.submitListener)
     })
   }
@@ -237,6 +252,41 @@ export default class Form extends Shadow() {
       </m-option>`
   }
 
+  renderPreferredVariant (voting) {
+    const shouldVotePreferredVariant = voting.optionLessons.available && voting.optionPrice.available
+    if (!shouldVotePreferredVariant) {
+      return ''
+    }
+
+    return /* html */ `
+      <div class="preferred-option-box">
+        <div class="preferred-option-box-inner">
+          <ks-a-heading tag="h3">
+            <a-translation key="CustomerLoyality.PreferredOptionTitle"></a-translation>
+          </ks-a-heading>
+          <p><a-translation key="CustomerLoyality.PreferredOptionText"></a-translation></p>
+          <ks-a-radio mode="false">
+            <div class="wrap">
+                <label for="preferredOptionPrice"><strong><a-translation key="CustomerLoyality.OptionPrice.Title"></a-translation></strong></label>
+                <input id="preferredOptionPrice" name="preferredOption" type="radio" value="price">
+                <div class="box"></div>
+            </div>
+            <div class="wrap">
+                <label for="preferredOptionLessons"><strong><a-translation key="CustomerLoyality.OptionLessons.Title"></a-translation></strong></label>
+                <input id="preferredOptionLessons" name="preferredOption" type="radio" value="lessons">
+                <div class="box"></div>
+            </div>
+            <div class="wrap">
+              <label for="preferredOptionNone"><strong><a-translation key="CustomerLoyality.PreferredOptionNone"></a-translation></strong></label>
+              <input id="preferredOptionNone" name="preferredOption" type="radio" value="none">
+                <div class="box"></div>
+            </div>
+          </ks-a-radio>
+        </div>
+      </div>
+    `
+  }
+
   renderVotedOptions (voting) {
     return /* html */ `
       <div class="already-voted-item">
@@ -279,6 +329,33 @@ export default class Form extends Shadow() {
         --p-margin: 0 0 0 .5em;
       }
 
+      .preferred-option-box {
+        --h2-margin: 0;
+        
+        display: grid;
+        grid-template-rows: 0fr;
+        overflow: hidden;
+        transition: grid-template-rows 1s;
+      }
+
+      .preferred-option-box-inner {
+        padding: 0 1.25rem;
+        border: 1px solid transparent;
+        min-height: 0;
+        overflow: hidden;
+        transition: all 1s;
+      }
+
+      .preferred-option-box.expanded {
+        grid-template-rows: 1fr;
+      }
+
+      .preferred-option-box.expanded .preferred-option-box-inner {
+        padding: 1.25rem 1.25rem;
+        border-color: #ccc;
+        background: #fff;
+      }
+
       #submit-error-message {
         padding: 0;
         margin-top: var(--content-spacing)
@@ -316,6 +393,10 @@ export default class Form extends Shadow() {
         {
           path: `${this.importMetaUrl}../../../components/atoms/checkbox/Checkbox.js`,
           name: 'ks-a-checkbox'
+        },
+        {
+          path: `${this.importMetaUrl}../../../components/atoms/radio/Radio.js`,
+          name: 'ks-a-radio'
         },
         {
           path: `${this.importMetaUrl}../../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
