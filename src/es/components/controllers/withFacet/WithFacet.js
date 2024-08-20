@@ -101,7 +101,7 @@ export default class WithFacet extends WebWorker() {
         const filterKey = event.detail.this.getAttribute('filter-key')
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find((resultFilterItem => resultFilterItem.id === filter.id)))]
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (filterKey === 'q') {
           delete currentRequestObj.searchText
           if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
