@@ -242,7 +242,7 @@ export default class AppointmentsList extends Shadow() {
       return Promise.all([fetchModules]).then((children) => {
         this.html = ''
         const subscriptionSelect = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
-        const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
+        const dayList = this.renderDayList(appointments, children[0][0])
         this.numberOfAppointments = dayList.counter
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
@@ -332,9 +332,8 @@ export default class AppointmentsList extends Shadow() {
   /**
    * @param {any} appointments
    * @param {any} tileComponent
-   * @param {any} heading
    */
-  renderDayList (appointments, tileComponent, heading) {
+  renderDayList (appointments, tileComponent) {
     const { selectedSubscription, dayList } = this.getDayListData(appointments)
     const list = []
     let counter = 0
