@@ -115,14 +115,29 @@ export default class Buttons extends Shadow() {
       const urlParams = this.hasAttribute('keep-url-params') ? window.location.search : ''
       const urlParamsMap = new URLSearchParams(urlParams)
       const urlParamsArray = Array.from(urlParamsMap.keys())
+      
       // TODO: keys to ignore should be moved to .env file
       const ignoreURLKeys = [
         'rootFolder', 'css', 'login', 'logo', 'nav', 'footer', 'content', // existing fe dev keys
         'sorting', 'sort', // ignore sorting keys
         'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'utm_source_platform', 'utm_creative_format', 'utm_marketing_tactic', 'xpmld', 'xpcld'
       ] // GA parameters
+
       const filteredURLKeys = urlParamsArray.filter(key => !ignoreURLKeys.includes(key))
       filteredURLParams = filteredURLKeys.map(key => `${key}=${urlParamsMap.get(key)}`).join('&').split(" ").join("+")
+
+      // for button link: center check of filtered params and replace value with current this.data.centerid 
+      const centerFilterKey = ['center', 'centre', 'centro'].find(key => urlParamsArray.includes(key))
+      const centerFilterValue = centerFilterKey ? urlParamsMap.get(centerFilterKey) : ''
+      if (centerFilterKey && centerFilterValue?.includes(this.data.centerid)) {
+        const centerFilterIndex = filteredURLParams.indexOf(centerFilterKey)
+        if (centerFilterIndex > -1) {
+          const centerFilterValueIndex = filteredURLParams.indexOf(centerFilterValue)
+          if (centerFilterValueIndex > -1) {
+            filteredURLParams = filteredURLParams.replace(centerFilterValue, this.data.centerid)
+          }
+        }
+      }
     }
 
     const buttons = dataButtons?.reduce((acc, button) => {

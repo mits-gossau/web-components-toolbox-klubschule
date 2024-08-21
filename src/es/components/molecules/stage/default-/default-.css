@@ -114,6 +114,10 @@
         max-height: var(--stage-default-max-height);
     }
 
+    :host([brand=ksos]) a-picture {
+        max-height: var(--stage-default-max-height);
+    }
+
     :host a-picture {
         inset: 0 0 auto;
     }

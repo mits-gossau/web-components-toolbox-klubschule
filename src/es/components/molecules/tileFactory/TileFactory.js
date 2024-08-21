@@ -223,6 +223,7 @@ export default class TileFactory extends Shadow() {
             : ''}",
         "badge": "${course.location.badge ? course.location.badge : ''}"
       },
+      "centerid": "${course.centerid}",
       "kurs_typ": "${course.kurs_typ}",
       "kurs_id": "${course.kurs_id}",
       "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
