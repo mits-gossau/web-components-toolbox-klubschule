@@ -342,7 +342,7 @@ export default class AppointmentsList extends Shadow() {
       const appointmentType = day.subscriptionCourseAppointments ? 'subscriptionCourseAppointments' : 'bookedSubscriptionCourseAppointments'
       counter += day[appointmentType].length
       const dayWrapper = document.createElement('div')
-      dayWrapper.appendChild(this.renderDayHeading(day.weekday, heading))
+      dayWrapper.insertAdjacentHTML('beforeend', this.renderDayHeading(day.weekday, heading))
       day[appointmentType].forEach(appointment => {
         const tile = this.makeTileComponent(tileComponent, appointment, selectedSubscription)
         dayWrapper.appendChild(tile)
@@ -359,14 +359,10 @@ export default class AppointmentsList extends Shadow() {
    * Render Day Heading
    * Example: Heute: Mittwoch, 08. Mai
    * @param {string} headingText Heading Text
-   * @param {string} headingType Heading Type - H1, H2, etc.
-   * @returns {HTMLElement} Heading Element
+   * @returns {string} Heading Element
    */
-  renderDayHeading (headingText, headingComponent, headingType = 'h2') {
-    const heading = new headingComponent.constructorClass({ namespace: 'heading-default-'}) // eslint-disable-line
-    heading.setAttribute('tag', headingType)
-    heading.innerHTML = headingText
-    return heading
+  renderDayHeading (headingText) {
+    return /* html */ `<ks-a-heading tag="h2">${headingText}</ks-a-heading>`
   }
 
   /**
