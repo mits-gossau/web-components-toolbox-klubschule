@@ -137,7 +137,6 @@ export default class TileFactory extends Shadow() {
                 }'
               ></ks-m-event>
             ` : (
-              //(course.locations?.length > 1 || this.isNearbySearch) && course.filter?.length
               ((course.locations?.length > 1 || course.buttons[0].link === null &&  course.buttons[0].iconName === 'ChevronDown' &&  course.buttons[0].typ === 'quaternary') || this.isNearbySearch) && course.filter?.length
                 ? /* html */`
                 <m-load-template-tag mode="false">
