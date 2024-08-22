@@ -242,7 +242,7 @@ export default class AppointmentsList extends Shadow() {
       return Promise.all([fetchModules]).then((children) => {
         this.html = ''
         const subscriptionSelect = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
-        const dayList = this.renderDayList(appointments, children[0][0], children[0][1])
+        const dayList = this.renderDayList(appointments, children[0][0])
         this.numberOfAppointments = dayList.counter
         this.html = /* html */ `
           <o-grid namespace="grid-12er-">
@@ -332,9 +332,8 @@ export default class AppointmentsList extends Shadow() {
   /**
    * @param {any} appointments
    * @param {any} tileComponent
-   * @param {any} heading
    */
-  renderDayList (appointments, tileComponent, heading) {
+  renderDayList (appointments, tileComponent) {
     const { selectedSubscription, dayList } = this.getDayListData(appointments)
     const list = []
     let counter = 0
@@ -342,7 +341,7 @@ export default class AppointmentsList extends Shadow() {
       const appointmentType = day.subscriptionCourseAppointments ? 'subscriptionCourseAppointments' : 'bookedSubscriptionCourseAppointments'
       counter += day[appointmentType].length
       const dayWrapper = document.createElement('div')
-      dayWrapper.appendChild(this.renderDayHeading(day.weekday, heading))
+      dayWrapper.insertAdjacentHTML('beforeend', `<ks-a-heading tag="h2">${day.weekday}</ks-a-heading>`)
       day[appointmentType].forEach(appointment => {
         const tile = this.makeTileComponent(tileComponent, appointment, selectedSubscription)
         dayWrapper.appendChild(tile)
@@ -353,20 +352,6 @@ export default class AppointmentsList extends Shadow() {
       counter,
       list
     }
-  }
-
-  /**
-   * Render Day Heading
-   * Example: Heute: Mittwoch, 08. Mai
-   * @param {string} headingText Heading Text
-   * @param {string} headingType Heading Type - H1, H2, etc.
-   * @returns {HTMLElement} Heading Element
-   */
-  renderDayHeading (headingText, headingComponent, headingType = 'h2') {
-    const heading = new headingComponent.constructorClass({ namespace: 'heading-default-'}) // eslint-disable-line
-    heading.setAttribute('tag', headingType)
-    heading.innerHTML = headingText
-    return heading
   }
 
   /**
