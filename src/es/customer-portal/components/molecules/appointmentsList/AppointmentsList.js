@@ -111,6 +111,7 @@ export default class AppointmentsList extends Shadow() {
 
   selectEventListener = (event) => {
     const data = AppointmentsList.parseAttribute(event.target.value)
+    debugger
     this.isGridRendered = false
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
       {
@@ -200,17 +201,18 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderHTML (fetch) {
+    debugger
     if (this.isGridRendered) {
       this.root.querySelector('.list-wrapper').innerHTML = this.renderLoading()
     } else {
       this.html = this.renderLoading()
     }
     return fetch.then(appointments => {
-      this.currentOpenDialogFilterType = appointments.currentDialogFilterOpen
       // update filters only for subscription list
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
         this.updateCourseListFilterSettings(appointments.filters, appointments.selectedSubscription.subscriptionId, appointments.selectedSubscription.subscriptionType)
       }
+      this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,
@@ -250,12 +252,14 @@ export default class AppointmentsList extends Shadow() {
         const dayList = this.renderDayList(appointments, children[0][0])
         this.numberOfAppointments = dayList.counter
         if (this.isGridRendered) {
+          debugger
           const mAppointments = this.oGrid.root.querySelector('m-appointments-filter')
           mAppointments.setAttribute('data-counter', this.numberOfAppointments)
           mAppointments.setAttribute('data-filter', JSON.stringify(appointments.filters))
-          mAppointments.setAttribute('data-filter-type', this.currentOpenDialogFilterType)
           this.root.querySelector('.list-wrapper').innerHTML = dayList.list.join('')
+          console.log('update', mAppointments)
         } else {
+          debugger
           this.gridRendered = true
           this.html = ''
           this.html = /* html */ `
@@ -277,7 +281,7 @@ export default class AppointmentsList extends Shadow() {
                 ${subscriptionSelect}
               </div>
               <div col-lg="12" col-md="12" col-sm="12">
-                <m-appointments-filter data-filter-type="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
+                <m-appointments-filter data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
               </div>
               `
               : ''}         
