@@ -10,14 +10,25 @@ import { escapeForHtml } from '../../../helpers/Shared.js'
  * @type {CustomElementConstructor}
  */
 export default class AppointmentsFilter extends Shadow() {
+  static get observedAttributes () {
+    return ['data-counter', 'data-filter']
+  }
+
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.renderedHTML = false
+    this.gridRendered = false
   }
 
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
+  }
+
+  attributeChangedCallback (name, oldValue, newValue) {
+    if (oldValue !== newValue && (name === 'data-filter' || name === 'data-counter')) {
+      this.renderHTML()
+    }
   }
 
   shouldRenderCSS () {
@@ -104,36 +115,59 @@ export default class AppointmentsFilter extends Shadow() {
     ]).then(async () => {
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations, datePickerDayList } = filter
-      this.html = /* html */ `
-      <div>
-        <o-grid namespace="grid-12er-">
-          <style>
-            :host ks-a-button {
-              width: 100%;
-            }
-          </style>
-            <div col-lg="3" col-md="3" col-sm="12">${this.renderDayFilter(dayCodes)}</div>
-            <div col-lg="3" col-md="3" col-sm="12">${this.renderTimeFilter(timeCodes)}</div>
-            <div col-lg="3" col-md="3" col-sm="12">${this.renderLocationFilter(locations)}</div>
-            <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList)}</div>
-          </o-grid>
-        </div>
-      `
+      debugger
+      if (this.isGridRendered) {
+        // const dFDiv = this.root.querySelector('o-grid').root.querySelector('.day-filter')
+        // // dFDiv.innerHTML = this.renderDayFilter(dayCodes, false)
+        // const dC = dayCodes.some(dayCode => dayCode.selected)
+        // if (dC) {
+        //   dFDiv.innerHTML =/* html */ `${this.renderFilterDoubleButton('dialog-open-day', dayCodes, 'dayCodeDescription', 'dayCodes')}`
+        // } else {
+        //   dFDiv.innerHTML = /* html */ `${this.renderFilterInitialButton('dialog-open-day', 'CP.cpFilterTitleDay')}`
+        // }
+      } else {
+        debugger
+        console.log('render')
+        this.html = /* html */ `
+        <div>
+          <o-grid namespace="grid-12er-">
+            <style>
+              :host ks-a-button {
+                width: 100%;
+              }
+            </style>
+              <div col-lg="3" col-md="3" col-sm="12" class="day-filter">${this.renderDayFilter(dayCodes, true)}</div>
+              <div col-lg="3" col-md="3" col-sm="12">${this.renderTimeFilter(timeCodes, true)}</div>
+              <div col-lg="3" col-md="3" col-sm="12">${this.renderLocationFilter(locations, true)}</div>
+              <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList, true)}</div>
+            </o-grid>
+          </div>
+        `
+        this.gridRendered = true
+      }
     })
   }
 
-  renderDayFilter (dayCodes) {
+  renderDayFilter (dayCodes, renderDialog) {
     const openDialogEventName = 'dialog-open-day'
-    return /* html */`
-      ${this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day')}
-      ${dayCodes.some(dayCode => dayCode.selected)
-        ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
-        : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
-      }
-    `
+    debugger
+    let re = renderDialog ? this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day') : ''
+    re += dayCodes.some(dayCode => dayCode.selected)
+      ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
+      : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
+
+    return re
+
+    // return /* html */`
+    //   ${renderDialog ? this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day') : null}
+    //   ${dayCodes.some(dayCode => dayCode.selected)
+    //     ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
+    //     : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
+    //   }
+    // `
   }
 
-  renderTimeFilter (timeCodes) {
+  renderTimeFilter (timeCodes, renderDialog) {
     const openDialogEventName = 'dialog-open-time'
     return /* html */ `
       ${this.renderDialog('dialog-open-time', timeCodes, 'timeCode', 'timeCodeDescription', 'CP.cpFilterTitleTime', 'time')}
@@ -144,7 +178,7 @@ export default class AppointmentsFilter extends Shadow() {
     `
   }
 
-  renderLocationFilter (locations) {
+  renderLocationFilter (locations, renderDialog) {
     const openDialogEventName = 'dialog-open-location'
     return /* html */ `
       ${this.renderDialog('dialog-open-location', locations, 'locationId', 'locationDescription', 'CP.cpFilterTitleLocation', 'location')}
@@ -155,7 +189,7 @@ export default class AppointmentsFilter extends Shadow() {
     `
   }
 
-  renderDatePickerListFilter (dateList) {
+  renderDatePickerListFilter (dateList, renderDialog) {
     const dateListClone = structuredClone(dateList)
     const minRange = this.formatDate(dateListClone.find((day) => day.available === true).date)
     const endRange = this.formatDate(dateListClone.findLast((day) => day.available === true).date)
@@ -270,14 +304,15 @@ export default class AppointmentsFilter extends Shadow() {
    * @returns {string} Dialog Window HTML
    */
   renderDialog (showDialogEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle, type) {
+    debugger
     const requestEventName = 'request-appointments-filter'
     // DEV WIP
     // const keepOpen = this.dataset.filterOpen === type ? 'open' : ''
     // close-event-name="backdrop-clicked" && ${keepOpen}
+    // close-event-name="${requestEventName}"
     return /* html */ `
       <m-dialog
         namespace="dialog-left-slide-in-"
-        close-event-name="${requestEventName}"
         show-event-name="${showDialogEventName}">
           <div class="container dialog-header" tabindex="0">
             <a-button id="close-back">
@@ -360,5 +395,17 @@ export default class AppointmentsFilter extends Shadow() {
       default:
         return 'Ab'
     }
+  }
+
+  get oGrid () {
+    return this.root.querySelector('o-grid')
+  }
+
+  get isGridRendered () {
+    return !!this.oGrid && this.gridRendered
+  }
+
+  set isGridRendered (isRendered) {
+    this.gridRendered = isRendered
   }
 }
