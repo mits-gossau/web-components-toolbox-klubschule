@@ -115,10 +115,13 @@ export default class AppointmentsFilter extends Shadow() {
     ]).then(async () => {
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations, datePickerDayList } = filter
-      debugger
-      if (this.isGridRendered) {
-        // const dFDiv = this.root.querySelector('o-grid').root.querySelector('.day-filter')
-        // // dFDiv.innerHTML = this.renderDayFilter(dayCodes, false)
+      if (this.gridRendered) {
+        const dFDiv = this.oGrid.root.querySelector('.day-filter')
+        const doubleBtn = dFDiv.querySelector('m-double-button')
+        const updatedBtn = this.renderDayFilter(dayCodes, false)
+        debugger
+
+        // doubleBtn.html = updatedBtn
         // const dC = dayCodes.some(dayCode => dayCode.selected)
         // if (dC) {
         //   dFDiv.innerHTML =/* html */ `${this.renderFilterDoubleButton('dialog-open-day', dayCodes, 'dayCodeDescription', 'dayCodes')}`
@@ -126,7 +129,6 @@ export default class AppointmentsFilter extends Shadow() {
         //   dFDiv.innerHTML = /* html */ `${this.renderFilterInitialButton('dialog-open-day', 'CP.cpFilterTitleDay')}`
         // }
       } else {
-        debugger
         console.log('render')
         this.html = /* html */ `
         <div>
@@ -150,14 +152,13 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderDayFilter (dayCodes, renderDialog) {
     const openDialogEventName = 'dialog-open-day'
-    debugger
-    let re = renderDialog ? this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day') : ''
+    let re = renderDialog
+      ? this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day')
+      : ''
     re += dayCodes.some(dayCode => dayCode.selected)
       ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
       : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
-
-    return re
-
+    return re.trimStart()
     // return /* html */`
     //   ${renderDialog ? this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day') : null}
     //   ${dayCodes.some(dayCode => dayCode.selected)
