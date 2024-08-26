@@ -403,9 +403,11 @@ export default class WithFacet extends WebWorker() {
 
       // only the first level allows selected falls when including selected children
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) {
-        treeShookFilterItem.skipCountUpdate = true
+        if (treeShookFilterItem.urlpara === filterKey) {
+          treeShookFilterItem.skipCountUpdate = true
+          console.log('treeShookFilters', filterKey, filterValue, treeShookFilters, treeShookFilterItem)
+        }
         treeShookFilters.push(treeShookFilterItem)
-        console.log('treeShookFilters', treeShookFilters, treeShookFilterItem)
       }
     })
     // returns [0] unmutated filters
