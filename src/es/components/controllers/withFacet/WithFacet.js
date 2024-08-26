@@ -383,6 +383,18 @@ export default class WithFacet extends WebWorker() {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isUrlpara && isParentSelected) {
           filterItem.selected = true // select filterItem if it is not selected
+
+
+          // find parent of filterItem and set skipCountUpdate
+          // @ts-ignore
+          const parent = filters.find(filter => filter.children?.find(child => child.id === filterValue))
+          if (parent) {
+            // @ts-ignore
+            parent.skipCountUpdate = true
+          }
+          console.log('updateFilters', filters, filterKey, filterValue, parent)
+
+
         } else if (isParentSelected) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
