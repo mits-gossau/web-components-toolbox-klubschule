@@ -149,8 +149,10 @@ export default class WithFacet extends WebWorker() {
         }
 
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
+        console.log('updateFilters', result)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        console.log('currentRequestObj.filter', currentRequestObj.filter)
         if (isTree) {
           currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         }
@@ -383,21 +385,11 @@ export default class WithFacet extends WebWorker() {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isUrlpara && isParentSelected) {
           filterItem.selected = true // select filterItem if it is not selected
-
-
-          // find parent of filterItem and set skipCountUpdate
-          // @ts-ignore
-          const parent = filters.find(filter => filter.children?.find(child => child.id === filterValue))
-          if (parent) {
-            // @ts-ignore
-            parent.skipCountUpdate = true
-          }
-          console.log('updateFilters', filters, filterKey, filterValue, parent)
-
-
         } else if (isParentSelected) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
+          // @ts-ignore
+          selectedParent.skipCountUpdate = true
         } 
       }
 
@@ -410,23 +402,30 @@ export default class WithFacet extends WebWorker() {
       }
 
       // only the first level allows selected falls when including selected children
-      if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
+      if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) {
+        treeShookFilterItem.skipCountUpdate = true
+        treeShookFilters.push(treeShookFilterItem)
+        console.log('treeShookFilters', treeShookFilters, treeShookFilterItem)
+      }
     })
     // returns [0] unmutated filters
     return [filters, treeShookFilters]
   }
 
-  static getLastSelectedFilterItem(filterItems) {
-    filterItems.forEach(filterItem => {
-      if (filterItem.children?.length) {
-        filterItem.selected = false
-        this.getLastSelectedFilterItem(filterItem.children)
-      } else {
-        return filterItem.selected = true
+  static getParent(obj, parents = [], parentValue) {
+    if (obj.selected) {
+      return { selected: true, parents: parents.map(parent => parentValue ? parentValue : parent.id) }
+    }
+    if (obj.children && Array.isArray(obj.children)) {
+      for (const child of obj.children) {
+        const result = WithFacet.getParent(child, [...parents, obj], parentValue)
+        if (result && result.selected) {
+          return result
+        }
       }
-    })
+    }
 
-    return filterItems
+    return null
   }
 
   static cleanRequest(requestObj) {
