@@ -151,6 +151,9 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        if (isTree) {
+          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        }
       } else if (event?.detail?.key === 'location-search') {
         // location search
         // keep the last search location inside currentRequestObj and store it in url params
@@ -411,7 +414,7 @@ export default class WithFacet extends WebWorker() {
     return [filters, treeShookFilters]
   }
 
-  static getParent(obj, parents = [], parentValue) {
+  static getLastSelectedFilterItem(obj, parents = [], parentValue) {
     if (obj.selected) {
       return { selected: true, parents: parents.map(parent => parentValue ? parentValue : parent.id) }
     }
