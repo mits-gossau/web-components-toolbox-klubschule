@@ -149,13 +149,8 @@ export default class WithFacet extends WebWorker() {
         }
 
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
-        console.log('updateFilters', result)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        console.log('currentRequestObj.filter', currentRequestObj.filter)
-        if (isTree) {
-          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        }
       } else if (event?.detail?.key === 'location-search') {
         // location search
         // keep the last search location inside currentRequestObj and store it in url params
@@ -373,7 +368,8 @@ export default class WithFacet extends WebWorker() {
       if (!zeroLevel || isMatchingKey) {
         if (isCenterFilter) {
           filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
-        } else if (isSectorFilter && isTree) { // sector filter ("bereichsangebot")
+        } else if (isSectorFilter && isTree) { // sector filter ("Angebotsbereich")
+          filterItem.skipCountUpdate = true
           if (!filterItem.selected && isUrlpara) {
             filterItem.selected = true
           } else if (filterItem.selected && !isUrlpara) {
@@ -391,6 +387,8 @@ export default class WithFacet extends WebWorker() {
           // @ts-ignore
           selectedParent.skipCountUpdate = true
         } 
+      } else if (zeroLevel && isTree) {
+        filterItem.skipCountUpdate = true
       }
 
       let treeShookFilterItem = structuredClone(filterItem)
@@ -405,7 +403,6 @@ export default class WithFacet extends WebWorker() {
       if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) {
         if (treeShookFilterItem.urlpara === filterKey) {
           treeShookFilterItem.skipCountUpdate = true
-          console.log('treeShookFilters', filterKey, filterValue, treeShookFilters, treeShookFilterItem)
         }
         treeShookFilters.push(treeShookFilterItem)
       }
