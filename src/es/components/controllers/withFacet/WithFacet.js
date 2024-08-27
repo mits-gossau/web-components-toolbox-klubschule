@@ -414,20 +414,17 @@ export default class WithFacet extends WebWorker() {
     return [filters, treeShookFilters]
   }
 
-  static getLastSelectedFilterItem(obj, parents = [], parentValue) {
-    if (obj.selected) {
-      return { selected: true, parents: parents.map(parent => parentValue ? parentValue : parent.id) }
-    }
-    if (obj.children && Array.isArray(obj.children)) {
-      for (const child of obj.children) {
-        const result = WithFacet.getParent(child, [...parents, obj], parentValue)
-        if (result && result.selected) {
-          return result
-        }
+  static getLastSelectedFilterItem(filterItems) {
+    filterItems.forEach(filterItem => {
+      if (filterItem.children?.length) {
+        filterItem.selected = false
+        this.getLastSelectedFilterItem(filterItem.children)
+      } else {
+        return filterItem.selected = true
       }
-    }
+    })
 
-    return null
+    return filterItems
   }
 
   static cleanRequest(requestObj) {
