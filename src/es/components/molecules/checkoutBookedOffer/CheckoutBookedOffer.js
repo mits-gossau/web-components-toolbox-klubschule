@@ -147,6 +147,16 @@ export default class CheckoutBookedOffer extends Shadow() {
         color: var(--mdx-sys-color-neutral-bold1);
         font: var(--mdx-sys-font-fix-body3);
       }
+
+      @media only screen and (max-width: _max-width_) {
+        .checkout-booked-offer {
+          max-width: none;
+        }
+
+        .checkout-booked-offer__total + .checkout-booked-offer__total-price {
+          margin-left: 2rem;
+        }
+      }
     `
   }
 
