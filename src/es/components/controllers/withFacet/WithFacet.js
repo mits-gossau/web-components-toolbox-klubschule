@@ -428,7 +428,8 @@ export default class WithFacet extends WebWorker() {
       if (!zeroLevel || isMatchingKey) {
         if (isCenterFilter) {
           filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
-        } else if (isSectorFilter && isTree) { // sector filter ("bereichsangebot")
+        } else if (isSectorFilter && isTree) { // sector filter ("Angebotsbereich")
+          filterItem.skipCountUpdate = true
           if (!filterItem.selected && isUrlpara) {
             filterItem.selected = true
           } else if (filterItem.selected && !isUrlpara) {
@@ -443,7 +444,11 @@ export default class WithFacet extends WebWorker() {
         } else if (isParentSelected) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
+          // @ts-ignore
+          selectedParent.skipCountUpdate = true
         } 
+      } else if (zeroLevel && isTree) {
+        filterItem.skipCountUpdate = true
       }
 
       let treeShookFilterItem = structuredClone(filterItem)
@@ -455,7 +460,12 @@ export default class WithFacet extends WebWorker() {
       }
 
       // only the first level allows selected falls when including selected children
-      if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) treeShookFilters.push(treeShookFilterItem)
+      if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) {
+        if (treeShookFilterItem.urlpara === filterKey) {
+          treeShookFilterItem.skipCountUpdate = true
+        }
+        treeShookFilters.push(treeShookFilterItem)
+      }
     })
     // returns [0] unmutated filters
     return [filters, treeShookFilters]
