@@ -24,20 +24,19 @@ export default class Form extends Shadow() {
         this.errorMessage.remove()
       }
       const formData = this.formData
-
-      if (formData.optionPriceValue && formData.optionLessonsValue && !formData.preferredVariant) {
+      if (formData.optionPriceValue && formData.optionLessonsValue && formData.preferredVariant === 'none') {
         this.translate('CustomerLoyality.PreferredOptionValidation')
           .then((message) => this.renderErrorMessage(message))
+      } else {
+        this.form.dispatchEvent(
+          new CustomEvent('submit-voting', {
+            bubbles: true,
+            cancelable: true,
+            composed: true,
+            detail: this.formData
+          })
+        )
       }
-
-      this.form.dispatchEvent(
-        new CustomEvent('submit-voting', {
-          bubbles: true,
-          cancelable: true,
-          composed: true,
-          detail: this.formData
-        })
-      )
     }
 
     this.submitResponseListener = (event) => {
@@ -379,7 +378,17 @@ export default class Form extends Shadow() {
 
     const optionPrice = formData.get('optionPrice')
     const optionLessons = formData.get('optionLessons')
-    const preferredOption = formData.get('preferredOption')
+    let preferredOption = formData.get('preferredOption')
+
+    if (!preferredOption) {
+      if (optionPrice === 'on' && optionLessons !== 'on') {
+        preferredOption = 'price'
+      } else if (optionPrice !== 'on' && optionLessons === 'on') {
+        preferredOption = 'lessons'
+      } else {
+        preferredOption = 'none'
+      }
+    }
 
     return {
       kursId: this.voting.course.id,
