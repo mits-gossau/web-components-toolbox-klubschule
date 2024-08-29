@@ -270,6 +270,9 @@ export default class KsBodyStyle extends BodyStyle {
             :host([variant=narrow]) > * {
                 width: calc(100% - 2rem);
             }
+            :host > ks-m-figure {
+                width: calc(100% - 1rem) !important;
+            }
             :host([variant=full]) > * {
                 width: 100%;
             }
