@@ -14,65 +14,61 @@
         <h3 tabindex="0" style="margin:var(--h3-margin, 0 auto var(--h-margin-bottom, 1.143em));">
             An welchen Tagen findet Ihre Veranstaltung statt?
         </h3>
-        <!-- <o-grid namespace="grid-12er-" mode="false"> -->
-            <!-- <div col-lg="12" col-md="12" col-sm="12"> -->
-                <fieldset style="border:0; padding:0; margin:0;">
-                    <label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94" class="umbraco-forms-label" style="color:var(--mdx-comp–inputfield-label-color-default); font:var(--mdx-comp-inputfield-font-label);">
-                        Datum/Zeit <span class="umbraco-forms-indicator">*</span>
-                    </label>
-                    <div>
-                        <div id="date-multiple-35b3bc19-a808-4b42-ae8a-c4d6b1711c94">
-                            <div class="js-date-container">
-                                <div class="row">
-                                    <o-grid namespace="grid-x-" mode="false">
-                                        <div col-lg="5" col-md="15" col-sm="13" order-lg="1" order-md="1" order-sm="1">
-                                            <ks-a-input mode="false">
-                                                <div class="wrap">
-                                                    <label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_date">
-                                                        Datum *
-                                                    </label>
-                                                    <input live-input-validation="true" name="datumZeit_date" id="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_date" type="date" required="" data-m-v-rules="{&quot;required&quot;:{&quot;error-message&quot;:&quot;Bitte füllen Sie das Feld \&quot;Datum/Zeit\&quot; aus.&quot;}}"><div class="custom-error-text"></div><div class="custom-error-text"></div><div class="custom-error-text"></div>
-                                                </div>
-                                            </ks-a-input>
+        <fieldset style="border:0; padding:0; margin:0;">
+            <label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94" class="umbraco-forms-label" style="color:var(--mdx-comp–inputfield-label-color-default); font:var(--mdx-comp-inputfield-font-label);">
+                Datum/Zeit <span class="umbraco-forms-indicator">*</span>
+            </label>
+            <div>
+                <div id="date-multiple-35b3bc19-a808-4b42-ae8a-c4d6b1711c94">
+                    <div class="js-date-container">
+                        <div class="row">
+                            <o-grid namespace="grid-x-" mode="false">
+                                <div col-lg="5" col-md="15" col-sm="13" order-lg="1" order-md="1" order-sm="1">
+                                    <ks-a-input mode="false">
+                                        <div class="wrap">
+                                            <label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_date">
+                                                Datum *
+                                            </label>
+                                            <input live-input-validation="true" name="datumZeit_date" id="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_date" type="date" required="" data-m-v-rules="{&quot;required&quot;:{&quot;error-message&quot;:&quot;Bitte füllen Sie das Feld \&quot;Datum/Zeit\&quot; aus.&quot;}}"><div class="custom-error-text"></div><div class="custom-error-text"></div><div class="custom-error-text"></div>
                                         </div>
-                                        <div col-lg="1" col-md="1" col-sm="3" order-lg="4" order-md="2" order-sm="2" vertical-align-bottom>
-                                            <div>
-                                                <ks-a-button namespace="button-secondary-" type="button" class="js-date-delete">
-                                                    <style>:host {--button-secondary-padding: var(--mdx-comp-button-secondary-medium-padding-vertical-default);}</style>
-                                                    <a-icon-mdx icon-name="Trash" size="1em"></a-icon-mdx>
-                                                </ks-a-button>
-                                            </div>
-                                        </div>
-                                        <div col-lg="5" col-md="8" col-sm="8" order-lg="2" order-md="3" order-sm="3">
-                                            <ks-a-input mode="false">
-                                                <div class="wrap">
-                                                    <label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_from">
-                                                        Von *
-                                                    </label>
-                                                    <input live-input-validation="true" name="datumZeit_time_from" id="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_from" type="time" required="" data-m-v-rules="{&quot;required&quot;:{&quot;error-message&quot;:&quot;Bitte füllen Sie das Feld \&quot;Datum/Zeit\&quot; aus.&quot;}}"><div class="custom-error-text"></div><div class="custom-error-text"></div><div class="custom-error-text"></div>
-                                                </div>
-                                            </ks-a-input>
-                                        </div>
-                                        <div col-lg="5" col-md="8" col-sm="8" order-lg="3" order-md="4" order-sm="4">
-                                            <ks-a-input mode="false">
-                                                <div class="wrap">
-                                                    <label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_to">
-                                                        Bis *
-                                                    </label>
-                                                    <input live-input-validation="true" name="datumZeit_time_to" id="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_to" type="time" required="" data-m-v-rules="{&quot;required&quot;:{&quot;error-message&quot;:&quot;Bitte füllen Sie das Feld \&quot;Datum/Zeit\&quot; aus.&quot;}}"><div class="custom-error-text"></div><div class="custom-error-text"></div><div class="custom-error-text"></div>
-                                                </div>
-                                            </ks-a-input>
-                                        </div>
-                                    </o-grid>
+                                    </ks-a-input>
                                 </div>
-                            </div>
-                            <br /><br />
-                            <ks-a-button namespace="button-secondary-" type="button" class="js-date-add">+ Weiteres Datum hinzufügen</ks-a-button>
+                                <div col-lg="1" col-md="1" col-sm="3" order-lg="4" order-md="2" order-sm="2" vertical-align-bottom>
+                                    <div>
+                                        <ks-a-button namespace="button-secondary-" type="button" class="js-date-delete">
+                                            <style>:host {--button-secondary-padding: var(--mdx-comp-button-secondary-medium-padding-vertical-default);}</style>
+                                            <a-icon-mdx icon-name="Trash" size="1em"></a-icon-mdx>
+                                        </ks-a-button>
+                                    </div>
+                                </div>
+                                <div col-lg="5" col-md="8" col-sm="8" order-lg="2" order-md="3" order-sm="3">
+                                    <ks-a-input mode="false">
+                                        <div class="wrap">
+                                            <label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_from">
+                                                Von *
+                                            </label>
+                                            <input live-input-validation="true" name="datumZeit_time_from" id="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_from" type="time" required="" data-m-v-rules="{&quot;required&quot;:{&quot;error-message&quot;:&quot;Bitte füllen Sie das Feld \&quot;Datum/Zeit\&quot; aus.&quot;}}"><div class="custom-error-text"></div><div class="custom-error-text"></div><div class="custom-error-text"></div>
+                                        </div>
+                                    </ks-a-input>
+                                </div>
+                                <div col-lg="5" col-md="8" col-sm="8" order-lg="3" order-md="4" order-sm="4">
+                                    <ks-a-input mode="false">
+                                        <div class="wrap">
+                                            <label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_to">
+                                                Bis *
+                                            </label>
+                                            <input live-input-validation="true" name="datumZeit_time_to" id="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_to" type="time" required="" data-m-v-rules="{&quot;required&quot;:{&quot;error-message&quot;:&quot;Bitte füllen Sie das Feld \&quot;Datum/Zeit\&quot; aus.&quot;}}"><div class="custom-error-text"></div><div class="custom-error-text"></div><div class="custom-error-text"></div>
+                                        </div>
+                                    </ks-a-input>
+                                </div>
+                            </o-grid>
                         </div>
                     </div>
-                </fieldset>
-            <!-- </div> -->
-        <!-- </o-grid> -->
+                    <br /><br />
+                    <ks-a-button namespace="button-secondary-" type="button" class="js-date-add">+ Weiteres Datum hinzufügen</ks-a-button>
+                </div>
+            </div>
+        </fieldset>
     </div>
     <div class="container dialog-footer">
         <ks-a-button id="close" big namespace="button-tertiary-" color="secondary" no-pointer-events>Schliessen</ks-a-button>
