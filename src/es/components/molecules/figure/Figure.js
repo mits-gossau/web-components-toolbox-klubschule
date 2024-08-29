@@ -70,7 +70,8 @@ export default class KsFigure extends Shadow(HTMLElement) {
         --divider-color: var(--mdx-sys-color-accent-1-default);
         --divider-width: var(--mdx-sys-sizing-fix-3xl);
         --divider-height: var(--mdx-sys-sizing-fix-2xs);
-        --copy-typography: var(--mdx-sys-font-fix-body1);
+        --copy-typography: var(--mdx-sys-font-flex-large-custom1);
+        --copy-typography-mobile: var(--mdx-sys-font-flex-small-custom1);
         --copy-spacing: var(--mdx-sys-spacing-fix-2xs);
 
         width: 100%;
@@ -93,11 +94,13 @@ export default class KsFigure extends Shadow(HTMLElement) {
         width: var(--divider-width);
         height: var(--divider-height);
         background-color: var(--divider-color);
-        margin: 0 0 var(--copy-spacing);
+        margin: 0 0 var(--wrapper-inner-spacing);
       }
       :host figcaption {
         font: var(--copy-typography);
         margin: var(--wrapper-inner-spacing) 0 0;
+        /* TODO Check if mdx token "--mdx-sys-font-flex-large-custom1" was updated */
+        line-height: 1.375rem;
       }
       :host([open]) figcaption {
         color: white;
@@ -122,7 +125,8 @@ export default class KsFigure extends Shadow(HTMLElement) {
           display: block;
         }
         :host figcaption {
-          margin: var(--any-content-spacing-mobile, var(--content-spacing-mobile, var(--content-spacing, unset))) auto;
+          font: var(--copy-typography-mobile);
+          margin: var(--content-spacing-mobile, var(--content-spacing, unset)) var(--any-content-spacing-mobile, var(--content-spacing-mobile, var(--content-spacing, unset)));
           width: var(--any-content-width-mobile, var(--content-width-mobile, calc(100% - var(--content-spacing-mobile, var(--content-spacing)) * 2)));
         }
         :host figcaption::before {
