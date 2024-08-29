@@ -145,6 +145,22 @@ export default class KsButton extends Button {
           // make template ${code} accessible aka. set the variables in the literal string
           fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
         })
+      case 'button-search-':
+        return this.fetchCSS([{
+          // @ts-ignore
+          path: `${this.importMetaUrl}./search-/search-.css`,
+          namespace: false,
+          replaces
+        },
+        {
+          // @ts-ignore
+          path: `${this.importMetaUrl}../../../../../../atoms/button/variant/variant.css`,
+          namespace: false,
+          replaces
+        }]).then(fetchCSSParams => {
+          // make template ${code} accessible aka. set the variables in the literal string
+          fetchCSSParams[1].styleNode.textContent = eval('`' + fetchCSSParams[1].style + '`')// eslint-disable-line no-eval
+        })
       default:
         return super.fetchTemplate()
     }

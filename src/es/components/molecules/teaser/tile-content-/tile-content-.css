@@ -57,7 +57,10 @@
   --teaser-tile-content-transition: color .3s ease-out , background-color .3s ease-out !important;
   --picture-teaser-transition: transform .5s ease-out;
   
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   background: var(--mdx-sys-color-neutral-on-default);
   border-style: solid;
   border-color: var(--mdx-sys-color-neutral-bold1);
@@ -80,8 +83,6 @@
 :host figcaption,
 :host article > div {
   padding: 1.5rem;
-  height: 14.875rem;
-  overflow: hidden;
 }
 
 :host figure figcaption > strong:first-child,
