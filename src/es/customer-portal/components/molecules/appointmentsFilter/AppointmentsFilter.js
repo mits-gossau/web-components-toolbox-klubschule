@@ -18,11 +18,6 @@ export default class AppointmentsFilter extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.renderedHTML = false
     this.gridRendered = false
-    // this.timeFilterRendered = false
-    // this.locationFilterRendered = false
-    // this.dayFilterDialog = ''
-    // this.dayFilterRendered = false
-    // this.dayFilterBtnState = ''
   }
 
   connectedCallback () {
@@ -118,63 +113,75 @@ export default class AppointmentsFilter extends Shadow() {
         name: 'a-flatpickr'
       }
     ]).then(async () => {
-      console.log('f')
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations, datePickerDayList } = filter
       if (this.isGridRendered) {
-        const updatedDayCodes = dayCodes.reduce((acc, dayCode) => (dayCode.selected ? acc ? `${acc}, ${dayCode.dayCodeDescription}` : dayCode.dayCodeDescription : acc), '')
-        const doubleButtonChildNodes = this.oGrid.root.querySelector('.day-filter').querySelector('m-double-button')?.root.querySelector('ks-a-button').root.querySelector('button').childNodes
-
-        // empty filter
+        if (this.oGrid.root.querySelector('.day-filter')) {
+          this.updateFilterOnlyRendering(dayCodes, 'dayCodeDescription', '.day-filter', 'dialog-open-day', 'CP.cpFilterTitleDay', 'dayCodeDescription', 'dayCodes')
+        }
         debugger
-        if (updatedDayCodes === '') {
-          // test
-          const parent = this.oGrid.root.querySelector('.day-filter')
-          const dFDiv = this.oGrid.root.querySelector('.day-filter').querySelector('ks-a-button, m-double-button')
-
-          if (dFDiv.tagName === 'M-DOUBLE-BUTTON') {
-            //
-            const single = this.renderFilterInitialButton('dialog-open-day', 'CP.cpFilterTitleDay')
-            const fragment = document.createElement('div')
-            fragment.innerHTML = single
-            const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
-            debugger
-            nxParent.replaceChild(fragment, dFDiv)
-            return
-          }
-
-          if (dFDiv.tagName === 'KS-A-BUTTON') {
-            //
-            debugger
-          }
-
+        if (this.oGrid.root.querySelector('.day-filter')) {
+          const counter = this.oGrid.root.querySelector('.day-filter').querySelector('m-dialog').root.querySelector('ks-a-number-of-offers-button').root.querySelector('button').innerText
+          const newNumber = this.dataset.counter
+          const replacedStr = counter.replace(counter.match(/\d+/)[0], newNumber)
           debugger
+          this.oGrid.root.querySelector('.day-filter').querySelector('m-dialog').root.querySelector('ks-a-number-of-offers-button').root.querySelector('button').textContent = replacedStr
         }
+        // const updatedDayCodes = dayCodes.reduce((acc, dayCode) => (dayCode.selected ? acc ? `${acc}, ${dayCode.dayCodeDescription}` : dayCode.dayCodeDescription : acc), '')
+        // const doubleButtonChildNodes = this.oGrid.root.querySelector('.day-filter').querySelector('m-double-button')?.root.querySelector('ks-a-button').root.querySelector('button').childNodes
 
-        if (updatedDayCodes !== '' && !doubleButtonChildNodes) {
-          debugger
-          const parent = this.oGrid.root.querySelector('.day-filter')
-          const dFDiv = this.oGrid.root.querySelector('.day-filter').querySelector('ks-a-button')
-          if (dFDiv) {
-            const double = this.renderFilterDoubleButton('dialog-open-day', dayCodes, 'dayCodeDescription', 'dayCodes')
-            const fragment = document.createElement('div')
-            fragment.innerHTML = double
-            const nodeToReplace = dFDiv
-            parent.replaceChild(fragment, nodeToReplace)
-          }
-        }
+        // // empty filter
+        // debugger
+        // if (updatedDayCodes === '') {
+        //   const parent = this.oGrid.root.querySelector('.day-filter')
+        //   const dFDiv = this.oGrid.root.querySelector('.day-filter').querySelector('ks-a-button, m-double-button')
 
-        if (updatedDayCodes !== '' && doubleButtonChildNodes) {
-          debugger
-          for (const childNode of doubleButtonChildNodes) {
-            if (childNode.nodeName === 'SPAN' && childNode.textContent !== '') {
-              console.log(updatedDayCodes, childNode.textContent)
-              childNode.textContent = updatedDayCodes
-            }
-          }
-        }
+        //   if (dFDiv.tagName === 'M-DOUBLE-BUTTON') {
+        //     //
+        //     const single = this.renderFilterInitialButton('dialog-open-day', 'CP.cpFilterTitleDay')
+        //     const fragment = document.createElement('div')
+        //     fragment.innerHTML = single
+        //     const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
+        //     debugger
+        //     nxParent.replaceChild(fragment, dFDiv)
+        //     return
+        //   }
+
+        //   if (dFDiv.tagName === 'KS-A-BUTTON') {
+        //     //
+        //     debugger
+        //     if (dFDiv.parentElement.parentElement.parentElement) {
+        //       dFDiv.parentElement.parentElement.parentElement.innerHTML = this.renderDayFilter(dayCodes)
+        //     }
+        //     return
+        //   }
+
+        //   debugger
+        // }
+
+        // if (updatedDayCodes !== '' && !doubleButtonChildNodes) {
+        //   debugger
+        //   const parent = this.oGrid.root.querySelector('.day-filter')
+        //   const dFDiv = this.oGrid.root.querySelector('.day-filter').querySelector('ks-a-button')
+        //   if (dFDiv) {
+        //     const double = this.renderFilterDoubleButton('dialog-open-day', dayCodes, 'dayCodeDescription', 'dayCodes')
+        //     const fragment = document.createElement('div')
+        //     fragment.innerHTML = double
+        //     const nodeToReplace = dFDiv
+        //     parent.replaceChild(fragment, nodeToReplace)
+        //   }
+        // }
+
+        // if (updatedDayCodes !== '' && doubleButtonChildNodes) {
+        //   debugger
+        //   for (const childNode of doubleButtonChildNodes) {
+        //     if (childNode.nodeName === 'SPAN' && childNode.textContent !== '') {
+        //       console.log(updatedDayCodes, childNode.textContent)
+        //       childNode.textContent = updatedDayCodes
+        //     }
+        //   }
+        // }
       } else {
-        console.log('render')
         this.html = /* html */ `
         <div>
           <o-grid namespace="grid-12er-">
@@ -183,10 +190,10 @@ export default class AppointmentsFilter extends Shadow() {
                 width: 100%;
               }
             </style>
-              <div col-lg="3" col-md="3" col-sm="12">${this.renderTimeFilter(timeCodes, true)}</div>
-              <div col-lg="3" col-md="3" col-sm="12">${this.renderLocationFilter(locations, true)}</div>
-              <div col-lg="3" col-md="3" col-sm="12" class="day-filter">${this.renderDayFilter(dayCodes, true)}</div>
-              <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList, true)}</div>
+              <div col-lg="3" col-md="3" col-sm="12">${this.renderTimeFilter(timeCodes)}</div>
+              <div col-lg="3" col-md="3" col-sm="12">${this.renderLocationFilter(locations)}</div>
+              <div col-lg="3" col-md="3" col-sm="12" class="day-filter">${this.renderDayFilter(dayCodes)}</div>
+              <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList)}</div>
             </o-grid>
           </div>
         `
@@ -195,42 +202,82 @@ export default class AppointmentsFilter extends Shadow() {
     })
   }
 
-  renderDayFilter (dayCodes, renderDialog) {
-    const openDialogEventName = 'dialog-open-day'
-    let re = renderDialog
-      ? this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day')
-      : ''
-    // re += this.renderDayFilterButtons(dayCodes, openDialogEventName)
-    re += /* html */`
-       ${dayCodes.some(dayCode => dayCode.selected)
-          ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
-          : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
+  updateFilterOnlyRendering (filterList, filterStringDisplayValue, cssClassName, dialogOpenName, initialBtnTransKey, filterCodeDescriptionKey, filterCodeKey) {
+    const updatedFilterCodes = filterList.reduce((acc, filterItem) => (filterItem.selected ? acc ? `${acc}, ${filterItem[filterStringDisplayValue]}` : filterItem[filterStringDisplayValue] : acc), '')
+    const doubleButtonChildNodes = this.oGrid.root.querySelector(cssClassName).querySelector('m-double-button')?.root.querySelector('ks-a-button').root.querySelector('button').childNodes
+    const parent = this.oGrid.root.querySelector(cssClassName)
+
+    // empty filter
+    if (updatedFilterCodes === '') {
+      // test
+      const dFDiv = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button, m-double-button')
+      debugger
+
+      if (dFDiv.tagName === 'M-DOUBLE-BUTTON') {
+        //
+        const single = this.renderFilterInitialButton(dialogOpenName, initialBtnTransKey)
+        const fragment = document.createElement('div')
+        fragment.innerHTML = single
+        const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
+        debugger
+        nxParent.replaceChild(fragment, dFDiv)
+        /// ///////// -> return
+      }
+
+      if (dFDiv.tagName === 'KS-A-BUTTON') {
+        //
+        debugger
+        if (dFDiv.parentElement.parentElement.parentElement) {
+          dFDiv.parentElement.parentElement.parentElement.innerHTML = this.renderDayFilter(filterList)
         }
-     `
-    // re += dayCodes.some(dayCode => dayCode.selected)
-    //   ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
-    //   : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
-    // return re.trimStart()
-    return re
-    // return /* html */`
-    //   ${renderDialog ? this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day') : null}
-    //   ${dayCodes.some(dayCode => dayCode.selected)
-    //     ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
-    //     : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
-    //   }
-    // `
+      }
+    }
+
+    if (updatedFilterCodes !== '' && !doubleButtonChildNodes) {
+      debugger
+      // const parent = this.oGrid.root.querySelector(cssClassName)
+      const dFDiv = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button')
+      if (dFDiv) {
+        const double = this.renderFilterDoubleButton(dialogOpenName, filterList, filterCodeDescriptionKey, filterCodeKey)
+        const fragment = document.createElement('div')
+        fragment.innerHTML = double
+        const nodeToReplace = dFDiv
+        parent.replaceChild(fragment, nodeToReplace)
+      }
+    }
+
+    if (updatedFilterCodes !== '' && doubleButtonChildNodes) {
+      for (const childNode of doubleButtonChildNodes) {
+        debugger
+        // if (doubleButtonChildNodes[doubleButtonChildNodes.length - 1].textContent !== '') {
+        //   console.log(doubleButtonChildNodes[doubleButtonChildNodes.length - 1].textContent)
+        // }
+        if (childNode.nodeName === 'SPAN') {
+          if (childNode.hasAttribute('dynamic')) {
+            const count = updatedFilterCodes.split(', ').length - 2
+            console.log('counter', count, updatedFilterCodes.split(', ').length)
+            const counter = count <= 0 ? '' : `+${count}`
+            childNode.textContent = counter
+          } else if (childNode.textContent !== '') {
+            childNode.textContent = updatedFilterCodes
+          }
+        }
+      }
+    }
   }
 
-  // renderDayFilterButtons (dayCodes, openDialogEventName) {
-  //   return /* html */`
-  //      ${dayCodes.some(dayCode => dayCode.selected)
-  //        ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
-  //        : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
-  //      }
-  //    `
-  // }
+  renderDayFilter (dayCodes) {
+    const openDialogEventName = 'dialog-open-day'
+    return /* html */`
+      ${this.renderDialog(openDialogEventName, dayCodes, 'dayCode', 'dayCodeDescription', 'CP.cpFilterTitleDay', 'day')}
+      ${dayCodes.some(dayCode => dayCode.selected)
+        ? /* html */ `${this.renderFilterDoubleButton(openDialogEventName, dayCodes, 'dayCodeDescription', 'dayCodes')}`
+        : /* html */ `${this.renderFilterInitialButton(openDialogEventName, 'CP.cpFilterTitleDay')}`
+      }
+    `
+  }
 
-  renderTimeFilter (timeCodes, renderDialog) {
+  renderTimeFilter (timeCodes) {
     const openDialogEventName = 'dialog-open-time'
     return /* html */ `
       ${this.renderDialog('dialog-open-time', timeCodes, 'timeCode', 'timeCodeDescription', 'CP.cpFilterTitleTime', 'time')}
@@ -241,7 +288,7 @@ export default class AppointmentsFilter extends Shadow() {
     `
   }
 
-  renderLocationFilter (locations, renderDialog) {
+  renderLocationFilter (locations) {
     const openDialogEventName = 'dialog-open-location'
     return /* html */ `
       ${this.renderDialog('dialog-open-location', locations, 'locationId', 'locationDescription', 'CP.cpFilterTitleLocation', 'location')}
@@ -252,7 +299,7 @@ export default class AppointmentsFilter extends Shadow() {
     `
   }
 
-  renderDatePickerListFilter (dateList, renderDialog) {
+  renderDatePickerListFilter (dateList) {
     const dateListClone = structuredClone(dateList)
     const minRange = this.formatDate(dateListClone.find((day) => day.available === true).date)
     const endRange = this.formatDate(dateListClone.findLast((day) => day.available === true).date)
