@@ -115,72 +115,25 @@ export default class AppointmentsFilter extends Shadow() {
     ]).then(async () => {
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations, datePickerDayList } = filter
-      if (this.isGridRendered) {
+
+      if (this.gridRendered) {
+        // handle day filter
         if (this.oGrid.root.querySelector('.day-filter')) {
+          debugger
           this.updateFilterOnlyRendering(dayCodes, 'dayCodeDescription', '.day-filter', 'dialog-open-day', 'CP.cpFilterTitleDay', 'dayCodeDescription', 'dayCodes')
+          this.updateDialogCounterOnlyRendering('.day-filter')
+        }
+
+        debugger
+        if (this.oGrid.root.querySelector('.location-filter')) {
+          this.updateFilterOnlyRendering(locations, 'locationDescription', '.location-filter', 'dialog-open-location', 'CP.cpFilterTitleLocation', 'locationDescription', 'locationId')
+          this.updateDialogCounterOnlyRendering('.location-filter')
         }
         debugger
-        if (this.oGrid.root.querySelector('.day-filter')) {
-          const counter = this.oGrid.root.querySelector('.day-filter').querySelector('m-dialog').root.querySelector('ks-a-number-of-offers-button').root.querySelector('button').innerText
-          const newNumber = this.dataset.counter
-          const replacedStr = counter.replace(counter.match(/\d+/)[0], newNumber)
-          debugger
-          this.oGrid.root.querySelector('.day-filter').querySelector('m-dialog').root.querySelector('ks-a-number-of-offers-button').root.querySelector('button').textContent = replacedStr
+        if (this.oGrid.root.querySelector('.time-filter')) {
+          this.updateFilterOnlyRendering(timeCodes, 'timeCodeDescription', '.time-filter', 'dialog-open-time', 'CP.cpFilterTitleTime', 'timeCodeDescription', 'timeCodes')
+          this.updateDialogCounterOnlyRendering('.time-filter')
         }
-        // const updatedDayCodes = dayCodes.reduce((acc, dayCode) => (dayCode.selected ? acc ? `${acc}, ${dayCode.dayCodeDescription}` : dayCode.dayCodeDescription : acc), '')
-        // const doubleButtonChildNodes = this.oGrid.root.querySelector('.day-filter').querySelector('m-double-button')?.root.querySelector('ks-a-button').root.querySelector('button').childNodes
-
-        // // empty filter
-        // debugger
-        // if (updatedDayCodes === '') {
-        //   const parent = this.oGrid.root.querySelector('.day-filter')
-        //   const dFDiv = this.oGrid.root.querySelector('.day-filter').querySelector('ks-a-button, m-double-button')
-
-        //   if (dFDiv.tagName === 'M-DOUBLE-BUTTON') {
-        //     //
-        //     const single = this.renderFilterInitialButton('dialog-open-day', 'CP.cpFilterTitleDay')
-        //     const fragment = document.createElement('div')
-        //     fragment.innerHTML = single
-        //     const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
-        //     debugger
-        //     nxParent.replaceChild(fragment, dFDiv)
-        //     return
-        //   }
-
-        //   if (dFDiv.tagName === 'KS-A-BUTTON') {
-        //     //
-        //     debugger
-        //     if (dFDiv.parentElement.parentElement.parentElement) {
-        //       dFDiv.parentElement.parentElement.parentElement.innerHTML = this.renderDayFilter(dayCodes)
-        //     }
-        //     return
-        //   }
-
-        //   debugger
-        // }
-
-        // if (updatedDayCodes !== '' && !doubleButtonChildNodes) {
-        //   debugger
-        //   const parent = this.oGrid.root.querySelector('.day-filter')
-        //   const dFDiv = this.oGrid.root.querySelector('.day-filter').querySelector('ks-a-button')
-        //   if (dFDiv) {
-        //     const double = this.renderFilterDoubleButton('dialog-open-day', dayCodes, 'dayCodeDescription', 'dayCodes')
-        //     const fragment = document.createElement('div')
-        //     fragment.innerHTML = double
-        //     const nodeToReplace = dFDiv
-        //     parent.replaceChild(fragment, nodeToReplace)
-        //   }
-        // }
-
-        // if (updatedDayCodes !== '' && doubleButtonChildNodes) {
-        //   debugger
-        //   for (const childNode of doubleButtonChildNodes) {
-        //     if (childNode.nodeName === 'SPAN' && childNode.textContent !== '') {
-        //       console.log(updatedDayCodes, childNode.textContent)
-        //       childNode.textContent = updatedDayCodes
-        //     }
-        //   }
-        // }
       } else {
         this.html = /* html */ `
         <div>
@@ -190,9 +143,9 @@ export default class AppointmentsFilter extends Shadow() {
                 width: 100%;
               }
             </style>
-              <div col-lg="3" col-md="3" col-sm="12">${this.renderTimeFilter(timeCodes)}</div>
-              <div col-lg="3" col-md="3" col-sm="12">${this.renderLocationFilter(locations)}</div>
               <div col-lg="3" col-md="3" col-sm="12" class="day-filter">${this.renderDayFilter(dayCodes)}</div>
+              <div col-lg="3" col-md="3" col-sm="12" class="time-filter">${this.renderTimeFilter(timeCodes)}</div>
+              <div col-lg="3" col-md="3" col-sm="12" class="location-filter">${this.renderLocationFilter(locations)}</div>
               <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList)}</div>
             </o-grid>
           </div>
@@ -263,6 +216,16 @@ export default class AppointmentsFilter extends Shadow() {
           }
         }
       }
+    }
+  }
+
+  updateDialogCounterOnlyRendering (cssClass) {
+    const counterButton = this.oGrid.root.querySelector(cssClass)?.querySelector('m-dialog')?.root?.querySelector('ks-a-number-of-offers-button')?.root?.querySelector('button')
+    if (counterButton) {
+      const counter = counterButton.querySelector('span')
+      const updatedCounterValue = this.dataset.counter
+      const newCounterValue = counter.textContent.replace(counter.textContent.match(/\d+/)[0], updatedCounterValue)
+      counter.textContent = newCounterValue
     }
   }
 
