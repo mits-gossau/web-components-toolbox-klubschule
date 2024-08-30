@@ -206,11 +206,12 @@ export default class AppointmentsList extends Shadow() {
       this.html = this.renderLoading()
     }
     return fetch.then(appointments => {
+      debugger
+      this.currentOpenDialogFilterType = appointments.currentDialogFilterOpen
       // update filters only for subscription list
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
         this.updateCourseListFilterSettings(appointments.filters, appointments.selectedSubscription.subscriptionId, appointments.selectedSubscription.subscriptionType)
       }
-      this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,
@@ -253,6 +254,7 @@ export default class AppointmentsList extends Shadow() {
           const mAppointments = this.oGrid.root.querySelector('m-appointments-filter')
           mAppointments.setAttribute('data-counter', this.numberOfAppointments)
           mAppointments.setAttribute('data-filter', JSON.stringify(appointments.filters))
+          mAppointments.setAttribute('data-filter-type', this.currentOpenDialogFilterType)
           this.root.querySelector('.list-wrapper').innerHTML = dayList.list.join('')
         } else {
           this.gridRendered = true
@@ -276,7 +278,7 @@ export default class AppointmentsList extends Shadow() {
                 ${subscriptionSelect}
               </div>
               <div col-lg="12" col-md="12" col-sm="12">
-                <m-appointments-filter data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
+                <m-appointments-filter data-filter-type="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
               </div>
               `
               : ''}         

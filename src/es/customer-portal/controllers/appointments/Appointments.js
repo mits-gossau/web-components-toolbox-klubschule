@@ -229,7 +229,7 @@ export default class Appointments extends HTMLElement {
       }
 
       // @ts-ignore
-      subscriptionCourseAppointmentsFiltered.currentDialogFilterOpen = this.currentDialogFilterOpen
+      appointmentsClone.currentDialogFilterOpen = this.currentDialogFilterOpen
 
       // filter out empty values
       appointmentsClone.selectedSubscription.dayList = appointmentsClone.selectedSubscription.dayList.filter(list => list)
@@ -252,9 +252,9 @@ export default class Appointments extends HTMLElement {
    * @param {CustomEventInit} event
    */
   resetFilterDayListener = event => {
-    const type = event.detail.tags[0]
-    this.lastFilters[type].forEach(filter => (filter.selected = false))
-    this.currentDialogFilterOpen = null
+    const resetType = event.detail.tags[0]
+    this.lastFilters[resetType].forEach(filter => (filter.selected = false))
+    this.currentDialogFilterOpen = resetType
     this.requestAppointmentsFilterListener(event, true, false)
   }
 
