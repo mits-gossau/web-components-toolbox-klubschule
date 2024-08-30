@@ -206,7 +206,6 @@ export default class AppointmentsList extends Shadow() {
       this.html = this.renderLoading()
     }
     return fetch.then(appointments => {
-      debugger
       this.currentOpenDialogFilterType = appointments.currentDialogFilterOpen
       // update filters only for subscription list
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
