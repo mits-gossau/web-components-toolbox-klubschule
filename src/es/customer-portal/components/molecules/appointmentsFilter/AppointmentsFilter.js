@@ -258,7 +258,6 @@ export default class AppointmentsFilter extends Shadow() {
 
   renderLocationFilter (locations) {
     const openDialogEventName = 'dialog-open-location'
-    debugger
     return /* html */ `
       ${this.renderDialog('dialog-open-location', locations, 'locationId', 'locationDescription', 'CP.cpFilterTitleLocation', 'location')}
       ${locations.some(location => location.selected)
@@ -319,7 +318,6 @@ export default class AppointmentsFilter extends Shadow() {
    * @returns {string} HTML string
    */
   renderFilterDoubleButton (dialogOpenEventName, filterStringCollection, filterStringDisplayValue, closeEventTag) {
-    debugger
     return /* html */ `<m-double-button id="show-modal" namespace="double-button-default-" width="100%">
         <ks-a-button
           filter
@@ -383,10 +381,6 @@ export default class AppointmentsFilter extends Shadow() {
    */
   renderDialog (showDialogEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle, type) {
     const requestEventName = 'request-appointments-filter'
-    // DEV WIP
-    // const keepOpen = this.dataset.filterOpen === type ? 'open' : ''
-    // close-event-name="backdrop-clicked" && ${keepOpen}
-    // close-event-name="${requestEventName}"
     return /* html */ `
       <m-dialog
         namespace="dialog-left-slide-in-"
