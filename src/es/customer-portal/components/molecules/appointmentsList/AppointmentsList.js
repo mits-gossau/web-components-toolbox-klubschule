@@ -254,7 +254,6 @@ export default class AppointmentsList extends Shadow() {
           mAppointments.setAttribute('data-counter', this.numberOfAppointments)
           mAppointments.setAttribute('data-filter', JSON.stringify(appointments.filters))
           this.root.querySelector('.list-wrapper').innerHTML = dayList.list.join('')
-          console.log('update', mAppointments)
         } else {
           this.gridRendered = true
           this.html = ''
