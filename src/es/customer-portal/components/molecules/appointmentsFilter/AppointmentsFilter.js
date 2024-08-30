@@ -155,13 +155,13 @@ export default class AppointmentsFilter extends Shadow() {
   }
 
   updateFilterOnlyRendering (filterList, filterStringDisplayValue, cssClassName, dialogOpenName, initialBtnTransKey, filterCodeKey) {
-    debugger
     const updatedFilterCodes = filterList.reduce((acc, filterItem) => (filterItem.selected ? acc ? `${acc}, ${filterItem[filterStringDisplayValue]}` : filterItem[filterStringDisplayValue] : acc), '')
     const doubleButtonChildNodes = this.oGrid.root.querySelector(cssClassName).querySelector('m-double-button')?.root.querySelector('ks-a-button').root.querySelector('button').childNodes
     const parent = this.oGrid.root.querySelector(cssClassName)
 
-    // empty filter
-    if (updatedFilterCodes === '') {
+    debugger
+    // empty filter and no double btn selected
+    if (updatedFilterCodes === '' && doubleButtonChildNodes) {
       // test
       const dFDiv = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button, m-double-button')
 
