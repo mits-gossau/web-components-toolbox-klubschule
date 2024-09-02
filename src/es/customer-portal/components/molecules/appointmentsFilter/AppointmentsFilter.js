@@ -160,19 +160,15 @@ export default class AppointmentsFilter extends Shadow() {
     const parent = this.oGrid.root.querySelector(cssClassName)
 
     debugger
-    // empty filter and no double btn selected
     if (updatedFilterCodes === '' && doubleButtonChildNodes) {
-      // test
       const dFDiv = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button, m-double-button')
 
       if (dFDiv.tagName === 'M-DOUBLE-BUTTON') {
-        //
         const single = this.renderFilterInitialButton(dialogOpenName, initialBtnTransKey)
         const fragment = document.createElement('div')
         fragment.innerHTML = single
         const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
         nxParent.replaceChild(fragment, dFDiv)
-        // return
       }
 
       if (dFDiv.tagName === 'KS-A-BUTTON') {
@@ -194,7 +190,6 @@ export default class AppointmentsFilter extends Shadow() {
     }
 
     if (updatedFilterCodes !== '' && !doubleButtonChildNodes) {
-      // const parent = this.oGrid.root.querySelector(cssClassName)
       const dFDiv = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button')
       if (dFDiv) {
         const double = this.renderFilterDoubleButton(dialogOpenName, filterList, filterStringDisplayValue, filterCodeKey)
@@ -207,9 +202,6 @@ export default class AppointmentsFilter extends Shadow() {
 
     if (updatedFilterCodes !== '' && doubleButtonChildNodes) {
       for (const childNode of doubleButtonChildNodes) {
-        // if (doubleButtonChildNodes[doubleButtonChildNodes.length - 1].textContent !== '') {
-        //   console.log(doubleButtonChildNodes[doubleButtonChildNodes.length - 1].textContent)
-        // }
         if (childNode.nodeName === 'SPAN') {
           if (childNode.hasAttribute('dynamic')) {
             const count = updatedFilterCodes.split(', ').length - 2
