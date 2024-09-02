@@ -192,11 +192,13 @@ export default class Abonnements extends Shadow() {
       })
 
       this.content.innerHTML = /* html */ `
-        ${this.tiles.reduce((acc, tile) => acc + tile, '')}   
-        <ks-a-button namespace="button-primary-" color="secondary" request-event-name="load-more">
-          <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
-          <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-        </ks-a-button>
+        ${this.tiles.reduce((acc, tile) => acc + tile, '')}
+        ${!data || data.ppage === -1 ? '' : /* html */ `
+          <ks-a-button namespace="button-primary-" color="secondary" request-event-name="load-more">
+            <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+          </ks-a-button>`
+        }
       `
     })
 

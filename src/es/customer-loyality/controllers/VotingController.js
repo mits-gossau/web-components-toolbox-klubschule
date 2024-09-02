@@ -59,7 +59,7 @@ export default class VotingController extends Shadow() {
               if (response.status >= 200 && response.status <= 299) {
                 return result
               }
-              throw new Error(result?.message ?? response.statusText)
+              throw new Error(result?.title ?? response.statusText)
             })
           },
           bubbles: true,

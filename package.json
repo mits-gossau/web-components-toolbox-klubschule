@@ -7,7 +7,9 @@
     "fix": "standard --fix",
     "serve": "live-server --port=3000 --host=localhost --no-css-inject",
     "test": "live-server --port=2400 --host=localhost --no-browser --ignorePattern=.* & npx playwright test --config=e2e/ && killall node",
-    "update": "git submodule update --init --recursive --remote --force",
+    "test-template-preview": "live-server --port=2400 --host=localhost --no-browser --ignorePattern=.* & npx playwright test --config=src/es/components/pages/generator/ && killall node",
+    "download-template-preview": "uriDefault=https://www.klubschule.ch/ path=src/es/components/pages/generator/ testUri='./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=./src/css/variablesCustomKlubschule.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html&content=./src/es/components/pages/generator/' node src/es/components/web-components-toolbox/generator/download-template-preview.js",
+    "update": "git submodule update --init --recursive --force",
     "build-css": "lightningcss --minify --bundle --targets '>= 0.25%' src/css/variablesCustomKlubschule.css -o src/css/variablesCustomKlubschule.min.css & lightningcss --minify --bundle --targets '>= 0.25%' src/css/variablesCustomIbaw.css -o src/css/variablesCustomIbaw.min.css & lightningcss --minify --bundle --targets '>= 0.25%' src/css/variablesCustomKsos.css -o src/css/variablesCustomKsos.min.css"
   },
   "author": "weedshaker@gmail.com, edx.mgb@gmail.com",

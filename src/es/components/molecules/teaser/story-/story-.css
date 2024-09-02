@@ -16,7 +16,7 @@
   --teaser-story-transition: color .3s ease-out , background-color .3s ease-out !important;
   
   --teaser-story-pretitle-font-family: var(--mdx-sys-font-fix-title4-font-family);
-  --teaser-story-pretitle-font-size:var(--mdx-sys-font-fix-title4-font-size);
+  --teaser-story-pretitle-font-size:var(--mdx-sys-font-fix-body2);
   --teaser-story-pretitle-font-weight:var(--mdx-sys-font-fix-title4-font-weight);
   --teaser-story-pretitle-line-height:var(--mdx-sys-font-fix-title4-line-height);
 
@@ -62,14 +62,10 @@
 
 :host([brand=ibaw]) figure figcaption > strong:first-child,
 :host([brand=ibaw]) article > div > strong:first-child {
-  clip-path: polygon(0% 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%, 0% 0%);
-
   display: flex;
   align-items: center;
-  height: 1.5rem;
   width: fit-content;
   padding-right: calc(var(--mdx-sys-spacing-fix-2xs) + 8px);
-  padding-left: var(--mdx-sys-spacing-fix-2xs);
-  color: #fff;
-  background: var(--color-${this.getAttribute('color')}, #00A2AD);
+  background: transparent;
+  color: var(--mdx-base-color-ibaw-turquoise-600);
 }

@@ -180,6 +180,8 @@
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/StandortUebersicht.html">StandortUebersicht</a></li>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/Merkliste.html">Merkliste</a></li>
         </ul>
+        <h3>Generator Pages</h3>
+        <generator-download-template-preview template-uri="./src/es/components/pages/generator/" href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}"></generator-download-template-preview>
         <h3>Forms</h3>
         <ul>
           <li><a href="./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?${pageQuery}&content=./src/es/components/pages/MDXinsideFormTest.html">MDXinsideFormTest</a></li>
@@ -237,6 +239,13 @@
     }
     renderPages(defaultTheme)
     
+    // load web component
+    Promise.all([
+      import('./src/es/components/web-components-toolbox/generator/templates/component/downloadTemplatePreview/DownloadTemplatePreview.js').then(module => ['generator-download-template-preview', module.default])
+    ]).then(elements => elements.forEach(element => {
+      // don't define already existing customElements
+      if (element && !customElements.get(element[0])) customElements.define(...element)
+    }))
 </script>
   </body>
 
