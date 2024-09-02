@@ -1,74 +1,79 @@
-<ks-m-stage namespace="stage-default-" brand="ks">
+<m-load-template-tag style="display: block;min-height: 1500px;">
+    <template>
+		<ks-m-stage namespace="stage-default-" brand="ks">
 
-			<a-picture namespace="" alt="Individuelle Sprachkurse" picture-load="" defaultSource="https://www.klubschule.ch/media/il3hv1oi/sprachen-so-vielfaeltig-wie-du.png?cc=0.12083333333333333,0.08121052007999204,0.004166666666666667,0.4224294534474732&amp;width=2500&amp;height=1071&amp;format=webp&amp;quality=80&amp;mode=crop&amp;v=1daefbd4ac590d0" aspect-ratio="0.42857143" sources-keep-query-aspect-ratio="" style="--img-object-position: 72.7046% 16.4437%"></a-picture>
-			<ks-a-heading tag="h1" display-2><h1>So vielf&#xE4;ltig wie Du</h1></ks-a-heading>
-			<ks-c-auto-complete disabled
-								endpoint-auto-complete="https://www.klubschule.ch/Umbraco/Api/Autocomplete/search?portal=29&mandant=111&lang=d"
-								reset-input-value-based-url="q"
-								search-url="https://www.klubschule.ch/suche/">
+				<a-picture namespace="" alt="Individuelle Sprachkurse" picture-load="" defaultSource="https://www.klubschule.ch/media/il3hv1oi/sprachen-so-vielfaeltig-wie-du.png?cc=0.12083333333333333,0.08121052007999204,0.004166666666666667,0.4224294534474732&amp;width=2500&amp;height=1071&amp;format=webp&amp;quality=80&amp;mode=crop&amp;v=1daefbd4ac590d0" aspect-ratio="0.42857143" sources-keep-query-aspect-ratio="" style="--img-object-position: 72.7046% 16.4437%"></a-picture>
+				<ks-a-heading tag="h1" display-2><h1>So vielf&#xE4;ltig wie Du</h1></ks-a-heading>
+				<ks-c-auto-complete disabled
+									endpoint-auto-complete="https://www.klubschule.ch/Umbraco/Api/Autocomplete/search?portal=29&mandant=111&lang=d"
+									reset-input-value-based-url="q"
+									search-url="https://www.klubschule.ch/suche/">
 
-				<m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
-					<div class="container">
-						<a-input inputid="home-page-input-search"
-								 autofocus
-								 placeholder="Veranstaltung suchen..."
-								 icon-name="Search"
-								 icon-size="1.25em"
-								 submit-search="request-auto-complete"
-								 type="search"
-								 answer-event-name="search-change"
-								 delete-listener
-								 search
-								 autocomplete="off">
-						</a-input>
-						<div id="close">
-							<a-icon-mdx icon-name="Plus" size="2em" color="#3d3d3d"></a-icon-mdx>
+					<m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+						<div class="container">
+							<a-input inputid="home-page-input-search"
+									autofocus
+									placeholder="Veranstaltung suchen..."
+									icon-name="Search"
+									icon-size="1.25em"
+									submit-search="request-auto-complete"
+									type="search"
+									answer-event-name="search-change"
+									delete-listener
+									search
+									autocomplete="off">
+							</a-input>
+							<div id="close">
+								<a-icon-mdx icon-name="Plus" size="2em" color="#3d3d3d"></a-icon-mdx>
+							</div>
 						</div>
-					</div>
-					<div class="container">
-						<ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
-						</ks-m-auto-complete-list>
-					</div>
+						<div class="container">
+							<ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+							</ks-m-auto-complete-list>
+						</div>
 
-					<style>
-						:host > ks-a-button {
-							width: 100%;
-							--button-secondary-background-color: var(--m-white);
-							--button-secondary-background-color-hover: var(--m-white);
-							--button-secondary-width: 100%;
-							--button-secondary-border-color: var(--m-gray-700);
-							--button-secondary-border-color-hover: var(--m-gray-700);
-							--button-secondary-color: var(--m-gray-700);
-							--button-secondary-color-hover:  var(--m-gray-700);
-							--button-secondary-cursor: text;
-							--button-secondary-justify-content: space-between;
-							--button-secondary-padding: 0.5rem 1.5rem;
-							--button-secondary-font-size: 1.15rem;
-							--button-secondary-height: 2.88rem;
-							--svg-size: 1.5rem;
-							--svg-size-mobile: 1.2rem;
-							--button-secondary-icon-color: var(--mdx-sys-color-primary-default);
-							--button-secondary-font-weight: 400;
-						}
-						@media only screen and (max-width: 767px) {
+						<style>
 							:host > ks-a-button {
-							--button-secondary-padding: 0.5rem 0.9rem;
-							--button-secondary-font-size: 1rem;
-							--button-secondary-height: 2.22rem;
+								width: 100%;
+								--button-secondary-background-color: var(--m-white);
+								--button-secondary-background-color-hover: var(--m-white);
+								--button-secondary-width: 100%;
+								--button-secondary-border-color: var(--m-gray-700);
+								--button-secondary-border-color-hover: var(--m-gray-700);
+								--button-secondary-color: var(--m-gray-700);
+								--button-secondary-color-hover:  var(--m-gray-700);
+								--button-secondary-cursor: text;
+								--button-secondary-justify-content: space-between;
+								--button-secondary-padding: 0.5rem 1.5rem;
+								--button-secondary-font-size: 1.15rem;
+								--button-secondary-height: 2.88rem;
+								--svg-size: 1.5rem;
+								--svg-size-mobile: 1.2rem;
+								--button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+								--button-secondary-font-weight: 400;
 							}
-						}
-					</style>
-					<ks-a-button id="show-modal" namespace="button-secondary-" answer-event-name="search-change" default-label="Veranstaltung suchen...">
-						<a-icon-mdx icon-name="Search" class="icon-right">
-						</a-icon-mdx>
-					</ks-a-button>
+							@media only screen and (max-width: 767px) {
+								:host > ks-a-button {
+								--button-secondary-padding: 0.5rem 0.9rem;
+								--button-secondary-font-size: 1rem;
+								--button-secondary-height: 2.22rem;
+								}
+							}
+						</style>
+						<ks-a-button id="show-modal" namespace="button-secondary-" answer-event-name="search-change" default-label="Veranstaltung suchen...">
+							<a-icon-mdx icon-name="Search" class="icon-right">
+							</a-icon-mdx>
+						</ks-a-button>
 
-				</m-dialog>
+					</m-dialog>
 
-			</ks-c-auto-complete>
+				</ks-c-auto-complete>
 
-	</ks-m-stage>
-
+		</ks-m-stage>
+	</template>
+</m-load-template-tag>
+<m-load-template-tag style="display: block;min-height: 1500px;">
+    <template>
 		<!-- Sparteneinstieg mobile start -->
 		<ks-o-body-section no-margin-y variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)" display="none" display-mobile="block">
 			<ks-a-heading tag="h2" style-as="h1">Finden Sie Ihr n&#xE4;chstes Abenteuer</ks-a-heading>
@@ -114,8 +119,11 @@
 			</div>
 		</ks-o-body-section>
 		<!-- Sparteneinstieg mobile end -->
+	</template>
+</m-load-template-tag>
 
-
+<m-load-template-tag style="display: block;min-height: 1500px;">
+    <template>
 		<ks-o-body-section variant="default">
 
 
@@ -576,7 +584,9 @@ Mehr erfahren				</ks-a-button>
 	</div>
 		<div class="spacer"></div>
 
-	</ks-o-body-section>
+		</ks-o-body-section>
+	</template>
+</m-load-template-tag>
 
 
 

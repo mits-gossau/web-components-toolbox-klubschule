@@ -122,9 +122,17 @@
   const loadListener = event => {
     /** @type {ImportEl[]} */
     const imports = []
+    
     // finding all not defined web component nodes in the dom and forwarding their tagNames to the load function
     // @ts-ignore
-    Array.from(document.querySelectorAll(`${src.searchParams.get('querySelector') || ''}:not(:defined)`)).reduce((nodes, currentNode) => {
+    Array.from(document.querySelectorAll('template')).reduce((acc, template) => {
+      const div = document.createElement('div')
+      div.appendChild(template.content.cloneNode(true))
+      const notDefinedNodes = Array.from(div.querySelectorAll(`${src.searchParams.get('querySelector') || ''}:not(:defined)`))
+      div.remove()
+      return acc.concat(notDefinedNodes)
+    // @ts-ignore
+    }, Array.from(document.querySelectorAll(`${src.searchParams.get('querySelector') || ''}:not(:defined)`))).reduce((nodes, currentNode) => {
       // @ts-ignore
       const index = nodes.findIndex(node => node.tagName === currentNode.tagName)
       if (index !== -1) {
