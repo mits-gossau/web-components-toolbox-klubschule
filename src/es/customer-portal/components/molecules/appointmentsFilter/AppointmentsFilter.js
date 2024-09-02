@@ -115,7 +115,6 @@ export default class AppointmentsFilter extends Shadow() {
     ]).then(async () => {
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations, datePickerDayList } = filter
-      console.log(this.dataset)
       if (this.gridRendered) {
         // handle day filter
         if (this.oGrid.root.querySelector('.day-filter')) {
@@ -129,7 +128,7 @@ export default class AppointmentsFilter extends Shadow() {
         }
         // handle time filter
         if (this.oGrid.root.querySelector('.time-filter')) {
-          this.updateFilterOnlyRendering(timeCodes, 'timeCodeDescription', '.time-filter', 'dialog-open-time', 'CP.cpFilterTitleTime', 'timeCodes', 'time', 'CP.cpFilterTitleTime', 'time')
+          this.updateFilterOnlyRendering(timeCodes, 'timeCodeDescription', '.time-filter', 'dialog-open-time', 'CP.cpFilterTitleTime', 'timeCodes', 'timeCode', 'CP.cpFilterTitleTime', 'time')
           this.updateDialogCounterOnlyRendering('.time-filter')
         }
       } else {
@@ -155,28 +154,28 @@ export default class AppointmentsFilter extends Shadow() {
 
   updateFilterOnlyRendering (filterList, filterStringDisplayValue, cssClassName, dialogOpenName, initialBtnTransKey, filterCodeKey, dialogCheckboxValueKey, dialogTitleTransKey, dialogFilterType) {
     const updatedFilterCodes = filterList.reduce((acc, filterItem) => (filterItem.selected ? acc ? `${acc}, ${filterItem[filterStringDisplayValue]}` : filterItem[filterStringDisplayValue] : acc), '')
-    debugger
     const doubleButtonChildNodes = this.oGrid.root.querySelector(cssClassName).querySelector('m-double-button')?.root.querySelector('ks-a-button').root.querySelector('button').childNodes
     const parent = this.oGrid.root.querySelector(cssClassName)
+
     if (updatedFilterCodes === '' && doubleButtonChildNodes) {
       const currentDisplayedBtn = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button, m-double-button')
 
       if (currentDisplayedBtn.tagName === 'M-DOUBLE-BUTTON') {
         const single = this.renderFilterInitialButton(dialogOpenName, initialBtnTransKey)
         const fragment = document.createElement('div')
+        debugger
         fragment.innerHTML = single
         const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
         // @ts-ignore
         const fragmentChild = [...fragment.childNodes].find(child => child.tagName === 'KS-A-BUTTON')
+        console.log(fragmentChild, currentDisplayedBtn)
         nxParent.replaceChild(fragmentChild, currentDisplayedBtn)
-        debugger
         const newDialogHTML = this.renderDialog(dialogOpenName, filterList, dialogCheckboxValueKey, filterStringDisplayValue, dialogTitleTransKey, dialogFilterType)
         const fragmentDialog = document.createElement('div')
         fragmentDialog.innerHTML = newDialogHTML
         const oldDialog = nxParent.querySelector('m-dialog') || parent.querySelector('m-dialog')
         // @ts-ignore
         const newDialogNode = [...fragmentDialog.childNodes].find(child => child.tagName === 'M-DIALOG')
-        debugger
         const parentReal = nxParent.parentNode.tagName === 'DIV' ? nxParent.parentNode : parent
         parentReal.replaceChild(newDialogNode, oldDialog)
       }
@@ -185,12 +184,15 @@ export default class AppointmentsFilter extends Shadow() {
         if (currentDisplayedBtn.parentElement.parentElement.parentElement) {
           if (this.dataset.filterType === 'day' || this.dataset.filterType === 'dayCodes') {
             currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderDayFilter(filterList)
+            return
           }
           if (this.dataset.filterType === 'location' || this.dataset.filterType === 'locations') {
             currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderLocationFilter(filterList)
+            return
           }
           if (this.dataset.filterType === 'time' || this.dataset.filterType === 'timeCodes') {
             currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderTimeFilter(filterList)
+            return
           }
           // return
         }
@@ -205,7 +207,9 @@ export default class AppointmentsFilter extends Shadow() {
         fragment.innerHTML = double
         const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
         const nodeToReplace = currentDisplayedBtn
-        nxParent.replaceChild(fragment, nodeToReplace)
+        // @ts-ignore
+        const fragmentChild = [...fragment.childNodes].find(child => child.tagName === 'M-DOUBLE-BUTTON')
+        nxParent.replaceChild(fragmentChild, nodeToReplace)
       }
     }
 
@@ -217,6 +221,7 @@ export default class AppointmentsFilter extends Shadow() {
             console.log('counter', count, updatedFilterCodes.split(', ').length)
             const counter = count <= 0 ? '' : `+${count}`
             childNode.textContent = counter
+            return
           } else if (childNode.textContent !== '') {
             childNode.textContent = updatedFilterCodes
           }
@@ -225,6 +230,12 @@ export default class AppointmentsFilter extends Shadow() {
     }
   }
 
+  /**
+   * Updates the counter value displayed in a dialog element
+   * @param {string} cssClass - The `cssClass` parameter in the `updateDialogCounterOnlyRendering` function is a
+   * CSS class selector that is used to target a specific element in the DOM. It is used to locate the
+   * element that contains the counter button that needs to be updated.
+   */
   updateDialogCounterOnlyRendering (cssClass) {
     const counterButton = this.oGrid.root.querySelector(cssClass)?.querySelector('m-dialog')?.root?.querySelector('ks-a-number-of-offers-button')?.root?.querySelector('button')
     if (counterButton) {
@@ -381,7 +392,6 @@ export default class AppointmentsFilter extends Shadow() {
    * @returns {string} Dialog Window HTML
    */
   renderDialog (showDialogEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle, type) {
-    debugger
     const requestEventName = 'request-appointments-filter'
     return /* html */ `
       <m-dialog
