@@ -117,19 +117,19 @@ export default class AppointmentsFilter extends Shadow() {
       const { dayCodes, timeCodes, locations, datePickerDayList } = filter
       console.log(this.dataset)
       if (this.gridRendered) {
-        debugger
         // handle day filter
         if (this.oGrid.root.querySelector('.day-filter')) {
-          this.updateFilterOnlyRendering(dayCodes, 'dayCodeDescription', '.day-filter', 'dialog-open-day', 'CP.cpFilterTitleDay', 'dayCodes')
+          this.updateFilterOnlyRendering(dayCodes, 'dayCodeDescription', '.day-filter', 'dialog-open-day', 'CP.cpFilterTitleDay', 'dayCodes', 'dayCode', 'CP.cpFilterTitleDay', 'day')
           this.updateDialogCounterOnlyRendering('.day-filter')
         }
-
+        // handle location filter
         if (this.oGrid.root.querySelector('.location-filter')) {
-          this.updateFilterOnlyRendering(locations, 'locationDescription', '.location-filter', 'dialog-open-location', 'CP.cpFilterTitleLocation', 'location')
+          this.updateFilterOnlyRendering(locations, 'locationDescription', '.location-filter', 'dialog-open-location', 'CP.cpFilterTitleLocation', 'locations', 'locationId', 'CP.cpFilterTitleLocation', 'location')
           this.updateDialogCounterOnlyRendering('.location-filter')
         }
+        // handle time filter
         if (this.oGrid.root.querySelector('.time-filter')) {
-          this.updateFilterOnlyRendering(timeCodes, 'timeCodeDescription', '.time-filter', 'dialog-open-time', 'CP.cpFilterTitleTime', 'timeCodes')
+          this.updateFilterOnlyRendering(timeCodes, 'timeCodeDescription', '.time-filter', 'dialog-open-time', 'CP.cpFilterTitleTime', 'timeCodes', 'time', 'CP.cpFilterTitleTime', 'time')
           this.updateDialogCounterOnlyRendering('.time-filter')
         }
       } else {
@@ -148,55 +148,64 @@ export default class AppointmentsFilter extends Shadow() {
             </o-grid>
           </div>
         `
-        debugger
         this.isGridRendered = true
       }
     })
   }
 
-  updateFilterOnlyRendering (filterList, filterStringDisplayValue, cssClassName, dialogOpenName, initialBtnTransKey, filterCodeKey) {
+  updateFilterOnlyRendering (filterList, filterStringDisplayValue, cssClassName, dialogOpenName, initialBtnTransKey, filterCodeKey, dialogCheckboxValueKey, dialogTitleTransKey, dialogFilterType) {
     const updatedFilterCodes = filterList.reduce((acc, filterItem) => (filterItem.selected ? acc ? `${acc}, ${filterItem[filterStringDisplayValue]}` : filterItem[filterStringDisplayValue] : acc), '')
+    debugger
     const doubleButtonChildNodes = this.oGrid.root.querySelector(cssClassName).querySelector('m-double-button')?.root.querySelector('ks-a-button').root.querySelector('button').childNodes
     const parent = this.oGrid.root.querySelector(cssClassName)
-
-    debugger
     if (updatedFilterCodes === '' && doubleButtonChildNodes) {
-      const dFDiv = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button, m-double-button')
+      const currentDisplayedBtn = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button, m-double-button')
 
-      if (dFDiv.tagName === 'M-DOUBLE-BUTTON') {
+      if (currentDisplayedBtn.tagName === 'M-DOUBLE-BUTTON') {
         const single = this.renderFilterInitialButton(dialogOpenName, initialBtnTransKey)
         const fragment = document.createElement('div')
         fragment.innerHTML = single
         const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
-        nxParent.replaceChild(fragment, dFDiv)
+        // @ts-ignore
+        const fragmentChild = [...fragment.childNodes].find(child => child.tagName === 'KS-A-BUTTON')
+        nxParent.replaceChild(fragmentChild, currentDisplayedBtn)
+        debugger
+        const newDialogHTML = this.renderDialog(dialogOpenName, filterList, dialogCheckboxValueKey, filterStringDisplayValue, dialogTitleTransKey, dialogFilterType)
+        const fragmentDialog = document.createElement('div')
+        fragmentDialog.innerHTML = newDialogHTML
+        const oldDialog = nxParent.querySelector('m-dialog') || parent.querySelector('m-dialog')
+        // @ts-ignore
+        const newDialogNode = [...fragmentDialog.childNodes].find(child => child.tagName === 'M-DIALOG')
+        debugger
+        const parentReal = nxParent.parentNode.tagName === 'DIV' ? nxParent.parentNode : parent
+        parentReal.replaceChild(newDialogNode, oldDialog)
       }
 
-      if (dFDiv.tagName === 'KS-A-BUTTON') {
-        //
-        if (dFDiv.parentElement.parentElement.parentElement) {
-          debugger
+      if (currentDisplayedBtn.tagName === 'KS-A-BUTTON') {
+        if (currentDisplayedBtn.parentElement.parentElement.parentElement) {
           if (this.dataset.filterType === 'day' || this.dataset.filterType === 'dayCodes') {
-            dFDiv.parentElement.parentElement.parentElement.innerHTML = this.renderDayFilter(filterList)
+            currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderDayFilter(filterList)
           }
           if (this.dataset.filterType === 'location' || this.dataset.filterType === 'locations') {
-            dFDiv.parentElement.parentElement.parentElement.innerHTML = this.renderLocationFilter(filterList)
+            currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderLocationFilter(filterList)
           }
           if (this.dataset.filterType === 'time' || this.dataset.filterType === 'timeCodes') {
-            dFDiv.parentElement.parentElement.parentElement.innerHTML = this.renderTimeFilter(filterList)
+            currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderTimeFilter(filterList)
           }
-          return
+          // return
         }
       }
     }
 
     if (updatedFilterCodes !== '' && !doubleButtonChildNodes) {
-      const dFDiv = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button')
-      if (dFDiv) {
+      const currentDisplayedBtn = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button')
+      if (currentDisplayedBtn) {
         const double = this.renderFilterDoubleButton(dialogOpenName, filterList, filterStringDisplayValue, filterCodeKey)
         const fragment = document.createElement('div')
         fragment.innerHTML = double
-        const nodeToReplace = dFDiv
-        parent.replaceChild(fragment, nodeToReplace)
+        const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
+        const nodeToReplace = currentDisplayedBtn
+        nxParent.replaceChild(fragment, nodeToReplace)
       }
     }
 
@@ -372,6 +381,7 @@ export default class AppointmentsFilter extends Shadow() {
    * @returns {string} Dialog Window HTML
    */
   renderDialog (showDialogEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle, type) {
+    debugger
     const requestEventName = 'request-appointments-filter'
     return /* html */ `
       <m-dialog
