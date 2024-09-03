@@ -152,6 +152,9 @@ export default class Input extends Shadow() {
 
         /* mdx variable not (yet) existing for ks */
         min-height: 3.25rem;
+
+        /* for constant height of type=date and type=time */
+        height: 3.25rem; /* 52px */
       }
 
       :host input::placeholder,
