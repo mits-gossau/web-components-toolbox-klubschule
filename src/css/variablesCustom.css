@@ -473,6 +473,9 @@
   --flatpickr-ks-padding: var(--mdx-comp-inputfield-padding-vertical-default) var(--mdx-comp-inputfield-padding-horizontal-default);
   --flatpickr-ks-border: var(--mdx-comp-inputfield-borderWidth-default) solid var(--mdx-comp-inputfield-border-color-default);
   --flatpickr-ks-border-color-active: var(--mdx-comp-inputfield-border-color-focus);
+
+  /* grid x */
+  --grid-x-padding-bottom: var(--mdx-sys-spacing-flex-large-s);
 }
 
 @media screen and (min-width: 1441px) {
