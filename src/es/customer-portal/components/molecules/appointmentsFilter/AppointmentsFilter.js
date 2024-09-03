@@ -161,22 +161,20 @@ export default class AppointmentsFilter extends Shadow() {
       const currentDisplayedBtn = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button, m-double-button')
 
       if (currentDisplayedBtn.tagName === 'M-DOUBLE-BUTTON') {
-        const single = this.renderFilterInitialButton(dialogOpenName, initialBtnTransKey)
+        const singleBtn = this.renderFilterInitialButton(dialogOpenName, initialBtnTransKey)
         const fragment = document.createElement('div')
-        debugger
-        fragment.innerHTML = single
-        const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
+        fragment.innerHTML = singleBtn
+        const updatedParent = parent.querySelector('div') ? parent.querySelector('div') : parent
         // @ts-ignore
         const fragmentChild = [...fragment.childNodes].find(child => child.tagName === 'KS-A-BUTTON')
-        console.log(fragmentChild, currentDisplayedBtn)
-        nxParent.replaceChild(fragmentChild, currentDisplayedBtn)
+        updatedParent.replaceChild(fragmentChild, currentDisplayedBtn)
         const newDialogHTML = this.renderDialog(dialogOpenName, filterList, dialogCheckboxValueKey, filterStringDisplayValue, dialogTitleTransKey, dialogFilterType)
         const fragmentDialog = document.createElement('div')
         fragmentDialog.innerHTML = newDialogHTML
-        const oldDialog = nxParent.querySelector('m-dialog') || parent.querySelector('m-dialog')
+        const oldDialog = updatedParent.querySelector('m-dialog') || parent.querySelector('m-dialog')
         // @ts-ignore
         const newDialogNode = [...fragmentDialog.childNodes].find(child => child.tagName === 'M-DIALOG')
-        const parentReal = nxParent.parentNode.tagName === 'DIV' ? nxParent.parentNode : parent
+        const parentReal = updatedParent.parentNode.tagName === 'DIV' ? updatedParent.parentNode : parent
         parentReal.replaceChild(newDialogNode, oldDialog)
       }
 
@@ -194,7 +192,6 @@ export default class AppointmentsFilter extends Shadow() {
             currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderTimeFilter(filterList)
             return
           }
-          // return
         }
       }
     }
@@ -205,11 +202,11 @@ export default class AppointmentsFilter extends Shadow() {
         const double = this.renderFilterDoubleButton(dialogOpenName, filterList, filterStringDisplayValue, filterCodeKey)
         const fragment = document.createElement('div')
         fragment.innerHTML = double
-        const nxParent = parent.querySelector('div') ? parent.querySelector('div') : parent
+        const updatedParent = parent.querySelector('div') ? parent.querySelector('div') : parent
         const nodeToReplace = currentDisplayedBtn
         // @ts-ignore
         const fragmentChild = [...fragment.childNodes].find(child => child.tagName === 'M-DOUBLE-BUTTON')
-        nxParent.replaceChild(fragmentChild, nodeToReplace)
+        updatedParent.replaceChild(fragmentChild, nodeToReplace)
       }
     }
 
@@ -218,12 +215,12 @@ export default class AppointmentsFilter extends Shadow() {
         if (childNode.nodeName === 'SPAN') {
           if (childNode.hasAttribute('dynamic')) {
             const count = updatedFilterCodes.split(', ').length - 2
-            console.log('counter', count, updatedFilterCodes.split(', ').length)
             const counter = count <= 0 ? '' : `+${count}`
             childNode.textContent = counter
             return
           } else if (childNode.textContent !== '') {
             childNode.textContent = updatedFilterCodes
+            return
           }
         }
       }
