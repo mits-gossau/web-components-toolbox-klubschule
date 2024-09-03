@@ -160,6 +160,7 @@ export default class AppointmentsFilter extends Shadow() {
     if (updatedFilterCodes === '' && doubleButtonChildNodes) {
       const currentDisplayedBtn = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button, m-double-button')
 
+      // double btn set
       if (currentDisplayedBtn.tagName === 'M-DOUBLE-BUTTON') {
         const singleBtn = this.renderFilterInitialButton(dialogOpenName, initialBtnTransKey)
         const fragment = document.createElement('div')
@@ -167,7 +168,12 @@ export default class AppointmentsFilter extends Shadow() {
         const updatedParent = parent.querySelector('div') ? parent.querySelector('div') : parent
         // @ts-ignore
         const fragmentChild = [...fragment.childNodes].find(child => child.tagName === 'KS-A-BUTTON')
+        // @ts-ignore
+        const fragmentChildStyleTag = [...fragment.childNodes].find(child => child.tagName === 'STYLE')
+        updatedParent.appendChild(fragmentChildStyleTag)
         updatedParent.replaceChild(fragmentChild, currentDisplayedBtn)
+        console.log(parent.childNodes, updatedParent.childNodes)
+        // update dialog
         const newDialogHTML = this.renderDialog(dialogOpenName, filterList, dialogCheckboxValueKey, filterStringDisplayValue, dialogTitleTransKey, dialogFilterType)
         const fragmentDialog = document.createElement('div')
         fragmentDialog.innerHTML = newDialogHTML
@@ -178,6 +184,7 @@ export default class AppointmentsFilter extends Shadow() {
         parentReal.replaceChild(newDialogNode, oldDialog)
       }
 
+      // default button set
       if (currentDisplayedBtn.tagName === 'KS-A-BUTTON') {
         if (currentDisplayedBtn.parentElement.parentElement.parentElement) {
           if (this.dataset.filterType === 'day' || this.dataset.filterType === 'dayCodes') {
@@ -211,16 +218,15 @@ export default class AppointmentsFilter extends Shadow() {
     }
 
     if (updatedFilterCodes !== '' && doubleButtonChildNodes) {
+      if (this.dataset.filterType !== dialogFilterType) return
       for (const childNode of doubleButtonChildNodes) {
         if (childNode.nodeName === 'SPAN') {
           if (childNode.hasAttribute('dynamic')) {
             const count = updatedFilterCodes.split(', ').length - 2
             const counter = count <= 0 ? '' : `+${count}`
             childNode.textContent = counter
-            return
           } else if (childNode.textContent !== '') {
             childNode.textContent = updatedFilterCodes
-            return
           }
         }
       }
