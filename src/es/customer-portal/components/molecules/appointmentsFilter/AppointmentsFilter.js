@@ -133,19 +133,19 @@ export default class AppointmentsFilter extends Shadow() {
         }
       } else {
         this.html = /* html */ `
-        <div>
-          <o-grid namespace="grid-12er-">
-            <style>
-              :host ks-a-button {
-                width: 100%;
-              }
-            </style>
-              <div col-lg="3" col-md="3" col-sm="12" class="day-filter">${this.renderDayFilter(dayCodes)}</div>
-              <div col-lg="3" col-md="3" col-sm="12" class="time-filter">${this.renderTimeFilter(timeCodes)}</div>
-              <div col-lg="3" col-md="3" col-sm="12" class="location-filter">${this.renderLocationFilter(locations)}</div>
-              <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList)}</div>
-            </o-grid>
-          </div>
+          <div>
+            <o-grid namespace="grid-12er-">
+              <style>
+                :host ks-a-button {
+                  width: 100%;
+                }
+              </style>
+                <div col-lg="3" col-md="3" col-sm="12" class="day-filter">${this.renderDayFilter(dayCodes)}</div>
+                <div col-lg="3" col-md="3" col-sm="12" class="time-filter">${this.renderTimeFilter(timeCodes)}</div>
+                <div col-lg="3" col-md="3" col-sm="12" class="location-filter">${this.renderLocationFilter(locations)}</div>
+                <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList)}</div>
+              </o-grid>
+            </div>
         `
         this.isGridRendered = true
       }
