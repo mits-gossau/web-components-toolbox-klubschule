@@ -10,14 +10,25 @@ import { escapeForHtml } from '../../../helpers/Shared.js'
  * @type {CustomElementConstructor}
  */
 export default class AppointmentsFilter extends Shadow() {
+  static get observedAttributes () {
+    return ['data-counter', 'data-filter']
+  }
+
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.renderedHTML = false
+    this.gridRendered = false
   }
 
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
+  }
+
+  attributeChangedCallback (name, oldValue, newValue) {
+    if (oldValue !== newValue && (name === 'data-filter' || name === 'data-counter')) {
+      this.renderHTML()
+    }
   }
 
   shouldRenderCSS () {
@@ -104,22 +115,137 @@ export default class AppointmentsFilter extends Shadow() {
     ]).then(async () => {
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations, datePickerDayList } = filter
-      this.html = /* html */ `
-      <div>
-        <o-grid namespace="grid-12er-">
-          <style>
-            :host ks-a-button {
-              width: 100%;
-            }
-          </style>
-            <div col-lg="3" col-md="3" col-sm="12">${this.renderDayFilter(dayCodes)}</div>
-            <div col-lg="3" col-md="3" col-sm="12">${this.renderTimeFilter(timeCodes)}</div>
-            <div col-lg="3" col-md="3" col-sm="12">${this.renderLocationFilter(locations)}</div>
-            <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList)}</div>
-          </o-grid>
-        </div>
-      `
+      if (this.gridRendered) {
+        // handle day filter
+        if (this.oGrid.root.querySelector('.day-filter')) {
+          this.updateFilterOnlyRendering(dayCodes, 'dayCodeDescription', '.day-filter', 'dialog-open-day', 'CP.cpFilterTitleDay', 'dayCodes', 'dayCode', 'CP.cpFilterTitleDay', 'day')
+          this.updateDialogCounterOnlyRendering('.day-filter')
+        }
+        // handle location filter
+        if (this.oGrid.root.querySelector('.location-filter')) {
+          this.updateFilterOnlyRendering(locations, 'locationDescription', '.location-filter', 'dialog-open-location', 'CP.cpFilterTitleLocation', 'locations', 'locationId', 'CP.cpFilterTitleLocation', 'location')
+          this.updateDialogCounterOnlyRendering('.location-filter')
+        }
+        // handle time filter
+        if (this.oGrid.root.querySelector('.time-filter')) {
+          this.updateFilterOnlyRendering(timeCodes, 'timeCodeDescription', '.time-filter', 'dialog-open-time', 'CP.cpFilterTitleTime', 'timeCodes', 'timeCode', 'CP.cpFilterTitleTime', 'time')
+          this.updateDialogCounterOnlyRendering('.time-filter')
+        }
+      } else {
+        this.html = /* html */ `
+          <div>
+            <o-grid namespace="grid-12er-">
+              <style>
+                :host ks-a-button {
+                  width: 100%;
+                }
+              </style>
+                <div col-lg="3" col-md="3" col-sm="12" class="day-filter">${this.renderDayFilter(dayCodes)}</div>
+                <div col-lg="3" col-md="3" col-sm="12" class="time-filter">${this.renderTimeFilter(timeCodes)}</div>
+                <div col-lg="3" col-md="3" col-sm="12" class="location-filter">${this.renderLocationFilter(locations)}</div>
+                <div col-lg="3" col-md="3" col-sm="12">${this.renderDatePickerListFilter(datePickerDayList)}</div>
+              </o-grid>
+            </div>
+        `
+        this.isGridRendered = true
+      }
     })
+  }
+
+  updateFilterOnlyRendering (filterList, filterStringDisplayValue, cssClassName, dialogOpenName, initialBtnTransKey, filterCodeKey, dialogCheckboxValueKey, dialogTitleTransKey, dialogFilterType) {
+    const updatedFilterCodes = filterList.reduce((acc, filterItem) => (filterItem.selected ? acc ? `${acc}, ${filterItem[filterStringDisplayValue]}` : filterItem[filterStringDisplayValue] : acc), '')
+    const doubleButtonChildNodes = this.oGrid.root.querySelector(cssClassName).querySelector('m-double-button')?.root.querySelector('ks-a-button').root.querySelector('button').childNodes
+    const parent = this.oGrid.root.querySelector(cssClassName)
+
+    if (updatedFilterCodes === '' && doubleButtonChildNodes) {
+      const currentDisplayedBtn = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button, m-double-button')
+
+      // double btn set
+      if (currentDisplayedBtn.tagName === 'M-DOUBLE-BUTTON') {
+        const singleBtn = this.renderFilterInitialButton(dialogOpenName, initialBtnTransKey)
+        const fragment = document.createElement('div')
+        fragment.innerHTML = singleBtn
+        const updatedParent = parent.querySelector('div') ? parent.querySelector('div') : parent
+        // @ts-ignore
+        const fragmentChild = [...fragment.childNodes].find(child => child.tagName === 'KS-A-BUTTON')
+        // @ts-ignore
+        const fragmentChildStyleTag = [...fragment.childNodes].find(child => child.tagName === 'STYLE')
+        updatedParent.appendChild(fragmentChildStyleTag)
+        updatedParent.replaceChild(fragmentChild, currentDisplayedBtn)
+        // update dialog
+        const newDialogHTML = this.renderDialog(dialogOpenName, filterList, dialogCheckboxValueKey, filterStringDisplayValue, dialogTitleTransKey, dialogFilterType)
+        const fragmentDialog = document.createElement('div')
+        fragmentDialog.innerHTML = newDialogHTML
+        const oldDialog = updatedParent.querySelector('m-dialog') || parent.querySelector('m-dialog')
+        // @ts-ignore
+        const newDialogNode = [...fragmentDialog.childNodes].find(child => child.tagName === 'M-DIALOG')
+        const parentReal = updatedParent.parentNode.tagName === 'DIV' ? updatedParent.parentNode : parent
+        parentReal.replaceChild(newDialogNode, oldDialog)
+      }
+
+      // default button set
+      if (currentDisplayedBtn.tagName === 'KS-A-BUTTON') {
+        if (currentDisplayedBtn.parentElement.parentElement.parentElement) {
+          if (this.dataset.filterType === 'day' || this.dataset.filterType === 'dayCodes') {
+            currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderDayFilter(filterList)
+            return
+          }
+          if (this.dataset.filterType === 'location' || this.dataset.filterType === 'locations') {
+            currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderLocationFilter(filterList)
+            return
+          }
+          if (this.dataset.filterType === 'time' || this.dataset.filterType === 'timeCodes') {
+            currentDisplayedBtn.parentElement.parentElement.parentElement.innerHTML = this.renderTimeFilter(filterList)
+            return
+          }
+        }
+      }
+    }
+
+    if (updatedFilterCodes !== '' && !doubleButtonChildNodes) {
+      const currentDisplayedBtn = this.oGrid.root.querySelector(cssClassName).querySelector('ks-a-button')
+      if (currentDisplayedBtn) {
+        const double = this.renderFilterDoubleButton(dialogOpenName, filterList, filterStringDisplayValue, filterCodeKey)
+        const fragment = document.createElement('div')
+        fragment.innerHTML = double
+        const updatedParent = parent.querySelector('div') ? parent.querySelector('div') : parent
+        const nodeToReplace = currentDisplayedBtn
+        // @ts-ignore
+        const fragmentChild = [...fragment.childNodes].find(child => child.tagName === 'M-DOUBLE-BUTTON')
+        updatedParent.replaceChild(fragmentChild, nodeToReplace)
+      }
+    }
+
+    if (updatedFilterCodes !== '' && doubleButtonChildNodes) {
+      if (this.dataset.filterType !== dialogFilterType) return
+      for (const childNode of doubleButtonChildNodes) {
+        if (childNode.nodeName === 'SPAN') {
+          if (childNode.hasAttribute('dynamic')) {
+            const count = updatedFilterCodes.split(', ').length - 2
+            const counter = count <= 0 ? '' : `+${count}`
+            childNode.textContent = counter
+          } else if (childNode.textContent !== '') {
+            childNode.textContent = updatedFilterCodes
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Updates the counter value displayed in a dialog element
+   * @param {string} cssClass - The `cssClass` parameter in the `updateDialogCounterOnlyRendering` function is a
+   * CSS class selector that is used to target a specific element in the DOM. It is used to locate the
+   * element that contains the counter button that needs to be updated.
+   */
+  updateDialogCounterOnlyRendering (cssClass) {
+    const counterButton = this.oGrid.root.querySelector(cssClass)?.querySelector('m-dialog')?.root?.querySelector('ks-a-number-of-offers-button')?.root?.querySelector('button')
+    if (counterButton) {
+      const counter = counterButton.querySelector('span')
+      const updatedCounterValue = this.dataset.counter
+      const newCounterValue = counter.textContent.replace(counter.textContent.match(/\d+/)[0], updatedCounterValue)
+      counter.textContent = newCounterValue
+    }
   }
 
   renderDayFilter (dayCodes) {
@@ -206,8 +332,7 @@ export default class AppointmentsFilter extends Shadow() {
    * @returns {string} HTML string
    */
   renderFilterDoubleButton (dialogOpenEventName, filterStringCollection, filterStringDisplayValue, closeEventTag) {
-    return /* html */ `
-      <m-double-button id="show-modal" namespace="double-button-default-" width="100%">
+    return /* html */ `<m-double-button id="show-modal" namespace="double-button-default-" width="100%">
         <ks-a-button
           filter
           namespace="button-primary-"
@@ -229,8 +354,7 @@ export default class AppointmentsFilter extends Shadow() {
             tag="${closeEventTag}">
               <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
           </ks-a-button>
-        </m-double-button>
-    `
+        </m-double-button>`
   }
 
   /**
@@ -271,13 +395,9 @@ export default class AppointmentsFilter extends Shadow() {
    */
   renderDialog (showDialogEventName, checkboxDataCollection, ckeckboxValueKey, checkboxLabelKey, translationKeyTitle, type) {
     const requestEventName = 'request-appointments-filter'
-    // DEV WIP
-    // const keepOpen = this.dataset.filterOpen === type ? 'open' : ''
-    // close-event-name="backdrop-clicked" && ${keepOpen}
     return /* html */ `
       <m-dialog
         namespace="dialog-left-slide-in-"
-        close-event-name="${requestEventName}"
         show-event-name="${showDialogEventName}">
           <div class="container dialog-header" tabindex="0">
             <a-button id="close-back">
@@ -360,5 +480,17 @@ export default class AppointmentsFilter extends Shadow() {
       default:
         return 'Ab'
     }
+  }
+
+  get oGrid () {
+    return this.root.querySelector('o-grid')
+  }
+
+  get isGridRendered () {
+    return !!this.oGrid && this.gridRendered
+  }
+
+  set isGridRendered (isRendered) {
+    this.gridRendered = isRendered
   }
 }
