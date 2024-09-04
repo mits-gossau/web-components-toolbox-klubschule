@@ -375,10 +375,11 @@ export default class OffersPage extends Shadow() {
             >
               <a-icon-mdx icon-name="Search" class="icon-right"></a-icon-mdx>
             </ks-a-button>
-            <style>
+            <style protected>
               :host>a-button {
                 position: absolute;
                 right: 0;
+                height: var(--button-search-height);
                 --button-secondary-border-color: var(--m-gray-700);
                 --button-secondary-background-color: var(--m-white);
                 --button-secondary-border-color-hover-custom: var(--m-gray-700);
@@ -394,10 +395,11 @@ export default class OffersPage extends Shadow() {
               }
             </style>
             <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
-              <style>
+              <style protected>
                 :host>button,
                 :host>button:hover {
                   border-left: none !important;
+                  height: var(--button-search-height);
                 }
               </style>
               <a-icon-mdx icon-name="X" class="icon-right">
@@ -411,7 +413,7 @@ export default class OffersPage extends Shadow() {
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
         ${this.hasAttribute('with-location-input-label') ? /* html */`
-          <style>
+          <style protected>
             :host .location-label { 
               font-size: var(--mdx-sys-font-flex-body3-font-size);
               font-weight: 500;
@@ -447,7 +449,7 @@ export default class OffersPage extends Shadow() {
                   autocomplete="off"
                 >
                 </a-input>
-                <style>
+                <style protected>
                   :host { 
                     --icon-color-hover: var(--search-input-color);
                   }
@@ -477,10 +479,11 @@ export default class OffersPage extends Shadow() {
               <a-icon-mdx icon-name="Location" class="icon-right"></a-icon-mdx>
             </ks-a-button>
         
-            <style>
+            <style protected>
               :host>a-button {
                 position: absolute;
                 right: 0;
+                height: var(--button-search-height);
                 --button-secondary-border-color: var(--m-gray-700);
                 --button-secondary-background-color: var(--m-white);
                 --button-secondary-border-color-hover-custom: var(--m-gray-700);
@@ -496,10 +499,11 @@ export default class OffersPage extends Shadow() {
               }
             </style>
             <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="cname">
-              <style>
+              <style protected>
                 :host>button,
                 :host>button:hover {
                   border-left: none !important;
+                  height: var(--button-search-height);
                 }
               </style>
               <a-icon-mdx  icon-name="X" class="icon-right"></a-icon-mdx>
@@ -543,7 +547,7 @@ export default class OffersPage extends Shadow() {
         ? ''
         : /* html */`
               <o-grid namespace="grid-12er-">
-                <style>
+                <style protected>
                   :host .input-section {
                     align-items: flex-end;
                   }
@@ -593,7 +597,7 @@ export default class OffersPage extends Shadow() {
               <ks-a-spacing type="s-flex"></ks-a-spacing>
               <o-grid namespace="grid-432-auto-colums-auto-rows-">
                 <section>
-                  <style>
+                  <style protected>
                     :host {
                       /* filter buttons have the exception of being fully rounded on all brands, that's why I am setting border-radius here */
                       --button-primary-border-radius: 999px;
@@ -741,10 +745,11 @@ export default class OffersPage extends Shadow() {
           </a-icon-mdx>
         </ks-a-button>
 
-        <style>
+        <style protected>
           :host>a-button {
             position: absolute;
             right: 0;
+            height: var(--button-search-height);
             --button-secondary-border-color: var(--m-gray-700);
             --button-secondary-background-color: var(--m-white);
             --button-secondary-border-color-hover-custom: var(--m-gray-700);
@@ -760,10 +765,11 @@ export default class OffersPage extends Shadow() {
           }
         </style>
         <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
-          <style>
+          <style protected>
             :host>button,
             :host>button:hover {
               border-left: none !important;
+              height: var(--button-search-height);
             }
           </style>
           <a-icon-mdx icon-name="X" class="icon-right">
