@@ -113,7 +113,6 @@ export default class AppointmentsFilter extends Shadow() {
         name: 'a-flatpickr'
       }
     ]).then(async () => {
-      console.log('test me')
       const filter = JSON.parse(this.dataset.filter)
       const { dayCodes, timeCodes, locations, datePickerDayList } = filter
       if (this.gridRendered) {
