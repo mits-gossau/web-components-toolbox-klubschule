@@ -17,6 +17,7 @@ export default class AppointmentsList extends Shadow() {
     this.numberOfAppointments = 0
     this.currentOpenDialogFilterType = null
     this.subscriptionHint = null
+    this.gridRendered = false
   }
 
   connectedCallback () {
@@ -67,7 +68,8 @@ export default class AppointmentsList extends Shadow() {
             <span>
               <a-translation data-trans-key="CP.cpAppointmentsListingFailed"></a-translation>
             </span>
-          </div>`
+          </div>
+          `
         return
       }
       this.dispatchEvent(new CustomEvent(this.dataset.requestSubscription || 'request-appointments',
@@ -109,6 +111,7 @@ export default class AppointmentsList extends Shadow() {
 
   selectEventListener = (event) => {
     const data = AppointmentsList.parseAttribute(event.target.value)
+    this.isGridRendered = false
     this.dispatchEvent(new CustomEvent('request-subscription-course-appointments',
       {
         detail: {
@@ -197,14 +200,17 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderHTML (fetch) {
-    this.html = ''
-    this.renderLoading()
+    if (this.isGridRendered) {
+      this.root.querySelector('.list-wrapper').innerHTML = this.renderLoading()
+    } else {
+      this.html = this.renderLoading()
+    }
     return fetch.then(appointments => {
+      this.currentOpenDialogFilterType = appointments.currentDialogFilterOpen
       // update filters only for subscription list
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
         this.updateCourseListFilterSettings(appointments.filters, appointments.selectedSubscription.subscriptionId, appointments.selectedSubscription.subscriptionType)
       }
-      this.currentOpenDialogFilterType = fetch.currentDialogFilterOpen
       const fetchModules = this.fetchModules([
         {
           path: `${this.importMetaUrl}'../../../tile/Tile.js`,
@@ -240,39 +246,48 @@ export default class AppointmentsList extends Shadow() {
         }
       ])
       return Promise.all([fetchModules]).then((children) => {
-        this.html = ''
         const subscriptionSelect = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
         const dayList = this.renderDayList(appointments, children[0][0])
         this.numberOfAppointments = dayList.counter
-        this.html = /* html */ `
-          <o-grid namespace="grid-12er-">
-            <div col-lg="12" col-md="12" col-sm="12">
-              <ks-a-heading tag="h1">
-                <ks-a-counter
-                  namespace="counter-default-"
-                  data-list-type="${this.dataset.listType}" 
-                  data-heading-type="h1" 
-                  data-booked-subscriptions-text="CP.cpMenuBookedAppointments" 
-                  data-appointments-text="CP.cpAppointmentListCoursesFound"
-                ></ks-a-counter>
-              </ks-a-heading>
+        if (this.isGridRendered) {
+          const mAppointments = this.oGrid.root.querySelector('m-appointments-filter')
+          mAppointments.setAttribute('data-counter', this.numberOfAppointments)
+          mAppointments.setAttribute('data-filter', JSON.stringify(appointments.filters))
+          mAppointments.setAttribute('data-filter-type', this.currentOpenDialogFilterType)
+          this.root.querySelector('.list-wrapper').innerHTML = dayList.list.join('')
+        } else {
+          this.gridRendered = true
+          this.html = ''
+          this.html = /* html */ `
+            <o-grid namespace="grid-12er-">
+              <div col-lg="12" col-md="12" col-sm="12">
+                <ks-a-heading tag="h1">
+                  <ks-a-counter
+                    namespace="counter-default-"
+                    data-list-type="${this.dataset.listType}" 
+                    data-heading-type="h1" 
+                    data-booked-subscriptions-text="CP.cpMenuBookedAppointments" 
+                    data-appointments-text="CP.cpAppointmentListCoursesFound"
+                  ></ks-a-counter>
+                </ks-a-heading>
+              </div>
+              ${(!this.dataset.showFilters || this.dataset.showFilters === 'true')
+              ? /* html */ `
+              <div col-lg="6" col-md="6" col-sm="12">
+                ${subscriptionSelect}
+              </div>
+              <div col-lg="12" col-md="12" col-sm="12">
+                <m-appointments-filter data-filter-type="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
+              </div>
+              `
+              : ''}         
+            </o-grid>
+            <div class="list-wrapper">
+              ${dayList.list.join('')}
             </div>
-            ${(!this.dataset.showFilters || this.dataset.showFilters === 'true')
-            ? /* html */ `
-            <div col-lg="6" col-md="6" col-sm="12">
-              ${subscriptionSelect}
-            </div>
-            <div col-lg="12" col-md="12" col-sm="12">
-              <m-appointments-filter data-filter-open="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
-            </div>
-            `
-            : ''}         
-          </o-grid>
-          <div class="list-wrapper">
-            ${dayList.list.join('')}
-          </div>
-        `
-        return this.html
+          `
+          return this.html
+        }
       })
     }).catch(e => {
       // TODO: Handle error
@@ -281,7 +296,7 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderLoading () {
-    this.html = '<mdx-component><mdx-spinner size="large"></mdx-spinner></mdx-component>'
+    return '<mdx-component><mdx-spinner size="large"></mdx-spinner></mdx-component>'
   }
 
   renderFilterSubscriptions (subscriptionsData) {
@@ -442,5 +457,17 @@ export default class AppointmentsList extends Shadow() {
     // @ts-ignore
     const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
     return formatter.format(dateObject)
+  }
+
+  get oGrid () {
+    return this.root.querySelector('o-grid')
+  }
+
+  get isGridRendered () {
+    return !!this.oGrid && this.gridRendered
+  }
+
+  set isGridRendered (isRendered) {
+    this.gridRendered = isRendered
   }
 }
