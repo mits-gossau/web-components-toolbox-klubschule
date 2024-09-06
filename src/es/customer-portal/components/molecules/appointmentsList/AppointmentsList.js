@@ -243,6 +243,10 @@ export default class AppointmentsList extends Shadow() {
         {
           path: `${this.importMetaUrl}../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
           name: 'mdx-component'
+        },
+        {
+          path: `${this.importMetaUrl}'../../../../../../components/molecules/systemNotification/SystemNotification.js`,
+          name: 'ks-m-system-notification'
         }
       ])
       return Promise.all([fetchModules]).then((children) => {
@@ -276,6 +280,7 @@ export default class AppointmentsList extends Shadow() {
               <div col-lg="6" col-md="6" col-sm="12">
                 ${subscriptionSelect}
               </div>
+              ${this.renderSubscriptionNotifications(appointments)}
               <div col-lg="12" col-md="12" col-sm="12">
                 <m-appointments-filter data-filter-type="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
               </div>
@@ -293,6 +298,62 @@ export default class AppointmentsList extends Shadow() {
       // TODO: Handle error
       console.error(e)
     })
+  }
+
+  renderSubscriptionNotifications (allSubscriptions) {
+    const { subscriptions } = allSubscriptions.filters
+    const selectedSubscription = subscriptions.find(element => element.selected === true)
+    const amountBefore = 2335
+    const daysBefore = 14334
+    let amountNotification = ''
+    let dateNotification = ''
+
+    // balance notification
+    // ----------------------------
+    const subscriptionBalance = Number(parseFloat(selectedSubscription.subscriptionBalance.replace('CHF', '').trim()).toFixed(2))
+    if (subscriptionBalance < amountBefore) {
+      console.log('no cash')
+      amountNotification = /* html */`
+        <div>
+          <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+            <div slot="description">
+              <p>Dieses Angebot ist zur Zeit ausgebucht. Wir werden Sie auf die Warteliste</p>
+            </div>
+          </ks-m-system-notification>
+        </div>
+      `
+    }
+
+    // date notification
+    // ----------------------------
+    // current date
+    const today = new Date()
+
+    // end date
+    const endDate = new Date(selectedSubscription.subscriptionValidTo)
+
+    // calculate the date 14 days from today
+    const datePlus14Days = new Date(today.getTime() + daysBefore * 24 * 60 * 60 * 1000)
+
+    if (datePlus14Days >= endDate) {
+      console.log('AFTER !!! The date 14 days from today is after the end date.')
+      dateNotification = /* html */ `
+        <div>
+          <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+            <div slot="description">
+              <p>Dieses Angebot ist zur Zeit ausgebucht. Wir werden Sie auf die Warteliste</p>
+            </div>
+          </ks-m-system-notification>
+        </div>
+      `
+    }
+
+    return /* html */ `
+      <div col-lg="12" col-md="12" col-sm="12">
+        ${amountNotification}
+        ${dateNotification}
+      </div>
+    `
   }
 
   renderLoading () {
