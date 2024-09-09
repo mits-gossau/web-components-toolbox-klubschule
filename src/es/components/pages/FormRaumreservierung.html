@@ -21,7 +21,7 @@
             <div>
                 <div id="date-multiple-35b3bc19-a808-4b42-ae8a-c4d6b1711c94">
                     <div class="js-date-container">
-                        <o-grid namespace="grid-x-" mode="false" padding-bottom="1.5rem">
+                        <o-grid namespace="grid-x-" mode="false">
                             <div col-lg="5" col-md="15" col-sm="13" order-lg="1" order-md="1" order-sm="1">
                                 <ks-a-input mode="false">
                                     <div class="wrap">
@@ -108,6 +108,114 @@
                 </div>
             </div>
         </fieldset>
+        <hr />
+        <o-grid id="checkout-bewilliger-grid" namespace="grid-12er-">
+            <div col-lg="12" col-md="12" col-sm="12">
+                <ks-m-select mode="false"><div class="wrap"><label for="c099df04-1fa6-4b15-aba9-ad6c927ce371">Center</label> <select error-message-reference-point-changed="true" no-error-text-p="" error-text-tag-name="span" name="center" id="select-c099df04-1fa6-4b15-aba9-ad6c927ce371"><option value=""></option><option value="2658" data-id="8476" selected="">Aarau</option><option value="2660" data-id="8477">Baden</option><option value="2663" data-id="8478">Basel</option><option value="2664" data-id="8507">Bellinzona</option><option value="2661" data-id="8473">Bern</option><option value="2662" data-id="8496">Brig</option><option value="1012" data-id="8479">Buchs</option><option value="1013" data-id="8480">Chur</option><option value="2052" data-id="8497">Davos-Klosters</option><option value="1014" data-id="8481">Frauenfeld</option><option value="2667" data-id="8500">Fribourg</option><option value="2668" data-id="8503">Genève</option><option value="2699" data-id="8482">Glarus</option><option value="2665" data-id="8501">La Chaux-de-Fonds</option><option value="2671" data-id="8504">Lausanne</option><option value="2672" data-id="8508">Lugano</option><option value="2674" data-id="8489">Luzern</option><option value="2698" data-id="8498">Lyss</option><option value="2675" data-id="8506">Martigny</option><option value="1017" data-id="8486">Musikzentrum</option><option value="2676" data-id="8662">Neuchâtel</option><option value="2677" data-id="8505">Nyon</option><option value="2679" data-id="8474">Olten</option><option value="2687" data-id="8499">Online</option><option value="2680" data-id="8483">Rapperswil</option><option value="1018" data-id="8484">Schaffhausen</option><option value="1016" data-id="8485">St. Gallen</option><option value="2681" data-id="8490">Sursee</option><option value="2682" data-id="8495">Tanzwerk101</option><option value="2683" data-id="8475">Thun</option><option value="2697" data-id="8502">Val-de-Ruz</option><option value="1019" data-id="8487">Wetzikon</option><option value="1020" data-id="8488">Winterthur</option><option value="2684" data-id="8491">Zug</option><option value="2673" data-id="8493">Zürich Limmatplatz</option><option value="2678" data-id="8494">Zürich Oerlikon</option><option value="2659" data-id="8492">Zürich-Altstetten</option></select><div class="message"><a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" rotate="0" class="icon-left" new-error-message-reference-point="true" tabindex="0"></a-icon-mdx></div></div>
+                    <style _css="" protected="true">
+                    KS-M-SELECT .wrap {
+                    display: flex;
+                    flex-direction: column;
+                    }
+            
+                    .wrap:has(.has-error) .hint {
+                    display: none;
+                    }
+
+                    KS-M-SELECT label {
+                    display: flex;
+                    flex-direction: column;
+                    color: var(--mdx-comp-select-label-color-default);
+                    font: var(--mdx-comp-select-font-label);
+                    }
+
+                    KS-M-SELECT select {
+                    padding: var(--mdx-comp-select-padding-vertical-default) var(--mdx-comp-select-padding-horizontal-default);
+                    background-color: var(--mdx-comp-select-background-color-default);
+                    border: var(--mdx-comp-select-border-width-default) solid var(--mdx-comp-select-border-color-default);
+                    border-radius: var(--mdx-comp-select-border-radius-default);
+                    box-shadow: var(--mdx-comp-select-box-shadow-default);
+                    color: var(--mdx-comp-select-placeholder-color-default);
+                    font: var(--mdx-comp-select-font-default);
+                    margin-top: var(--mdx-comp-select-gap-label-select);
+                    width: 100%;
+                    }
+
+                    KS-M-SELECT select[disabled] {
+                    background-color: var(--mdx-comp-select-background-color-disabled);
+                    border-color: var(--mdx-comp-select-border-color-disabled);
+                    box-shadow: var(--mdx-comp-select-box-shadow-disabled);
+                    pointer-events: none;
+                    opacity: 0.5;
+                    }
+
+                    KS-M-SELECT .message span,
+                    KS-M-SELECT .message a-icon-mdx {
+                    color: var(--mdx-comp-error-message-color-default);
+                    display: flex;
+                    align-items: center;
+                    }
+
+                    KS-M-SELECT .message span {
+                    margin-left: var(--mdx-comp-error-message-gap-icon-text-default);
+                    font: var(--mdx-comp-error-message-font-default);
+                    }
+
+                    KS-M-SELECT .wrap .hint {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    }
+
+                    KS-M-SELECT .hint span:first-child {
+                    color: var(--mdx-comp-select-hint-color-default);
+                    font: var(--mdx-comp-select-font-supporting);
+                    }
+
+                    KS-M-SELECT select[readonly] {     
+                    cursor:no-drop;     
+                    user-select: none;     
+                    pointer-events: none;     
+                    opacity: 0.7; 
+                    } 
+                    
+                    KS-M-SELECT select[readonly] option:not([selected]) {
+                    display:none; 
+                    }
+
+                    .wrap:not(:has(.has-error)) > .message {
+                    display: none;
+                    }
+                    
+                    [dirty] .wrap > select:invalid ~ .message {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    }
+                    </style>
+                </ks-m-select>
+                <br /> <!-- for constant spacing between form elements -->
+                <div id="center-8476" data-field-of="c099df04-1fa6-4b15-aba9-ad6c927ce371" style="display: block;">
+                    <p><strong>Ausstattung</strong></p>
+                    <ul>
+                        <li><a href="/" title="Klubschule">Flipchart</a></li>
+                        <li>Beamer</li>
+                        <li><strong>Gipfeli</strong></li>
+                        <li>und vieles mehr.</li>
+                    </ul>
+                    <p><strong>Catering</strong></p>
+                    <ul>
+                        <li>Nichts zu essen</li>
+                    </ul>
+                </div>
+                <style>
+                    :host {
+                        --grid-12er-p-font-size: 16px;
+                        --grid-12er-ul-li-font-size: 16px;
+                    }
+                </style>
+            </div>
+        </o-grid>
     </div>
     <div class="container dialog-footer">
         <ks-a-button id="close" big namespace="button-tertiary-" color="secondary" no-pointer-events>Schliessen</ks-a-button>
