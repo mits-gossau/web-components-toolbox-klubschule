@@ -446,9 +446,8 @@ export default class EventDetail extends Shadow() {
               </div>
             `, '') : ''}
             ${this.data.abo_typen_link_label && this.data.abo_typen_link ? /* html */ `
-              <ks-c-abonnements>
+              <ks-c-abonnements endpoint='${this.getAttribute('endpoint')}'>
                 <ks-m-abonnements 
-                  endpoint='${this.getAttribute('endpoint')}'
                   abo-id="${this.data.kurs_id}" 
                   abonnements-api="${this.data.abo_typen_link}" 
                   link-label="${this.data.abo_typen_link_label}" 
