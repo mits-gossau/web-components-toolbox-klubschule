@@ -736,12 +736,10 @@ export default class CourseDialog extends Shadow() {
         `
       }
       if (this.contentViewType === 'reversal') {
-        //
         subscriptionBalanceAdditionalInfo = /* html */ `
-          <div class="additional-subcription-info">
-            <span>
-              <!-- trans value = Der Terminpreis wird auf folgendes Abonnement rückvergütet: -->
-              <a-translation data-trans-key="CP.cpInfoSubscriptionInCanceling2"></a-translation>
+        <div class="additional-subcription-info">
+          <span>
+              ${this.subscriptionReversalAdditionInfoText(self.Environment.language, detail.lessonPrice)}
             </span>
           </div>
         `
@@ -999,6 +997,22 @@ export default class CourseDialog extends Shadow() {
    */
   subscriptionPdfLinkLoading = (display = 'none') => {
     this.mdxComponent.style.display = display
+  }
+
+  /**
+   * Takes a language and a price as input, extracts the current language from the input, and returns a specific text based on the language provided
+   * @param {string} lang represents the language code
+   * @param {string} price represents the cost or price of a lesson or appointment that is being refunded
+   * @returns {string} Text string based on the language provided
+   */
+  subscriptionReversalAdditionInfoText (lang, price) {
+    const currentLanguage = lang.split('-')[0]
+    const text = {
+      de: `Der Preis für den Termin von ${price} wird auf das folgende Abonnement rückvergütet:`,
+      it: `Il prezzo della lezione del ${price} sarà rimborsato al seguente abbonamento:`,
+      fr: `Le prix pour la leçon du ${price} va être remboursé sur l’abonnement suivant:`
+    }
+    return text[currentLanguage]
   }
 
   get dialog () {
