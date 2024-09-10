@@ -721,8 +721,8 @@ export default class OffersPage extends Shadow() {
               type="search"
               answer-event-name="search-change"
               delete-listener
+              any-key-listener
               search
-              autocomplete="off"
             >
             </a-input>
             <div id="close">
