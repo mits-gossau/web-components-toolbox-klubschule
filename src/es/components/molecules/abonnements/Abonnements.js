@@ -12,7 +12,6 @@ export default class Abonnements extends Shadow() {
     this.ppage = 0
     this.overlayAlreadyOpenend = false
     this.requestAbonnements = (event, isOpenDialogCall) => {
-      console.log(isOpenDialogCall, this.overlayAlreadyOpenend)
       if (!isOpenDialogCall || !this.overlayAlreadyOpenend) {
         new Promise(resolve => {
           this.dispatchEvent(new CustomEvent('request-abo-list', {
@@ -29,7 +28,6 @@ export default class Abonnements extends Shadow() {
             this.renderContent(data)
             this.receiveData(data)
             if (isOpenDialogCall) this.overlayAlreadyOpenend = true
-            console.log(isOpenDialogCall, this.overlayAlreadyOpenend)
           }
         })
       }
