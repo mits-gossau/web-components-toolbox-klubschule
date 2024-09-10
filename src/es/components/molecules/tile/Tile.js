@@ -195,11 +195,11 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__icon-box a-icon-mdx {
-          color: var(--icon-box-color);
+        color: var(--icon-box-color);
       }
 
       :host .m-tile__passed-message {
-        font-size: 1.5em;
+        font: var(--passed-message-font);
       }
 
       @media only screen and (max-width: 1024px) {
@@ -328,7 +328,7 @@ export default class Tile extends Shadow() {
             `
             : ''
           }
-          ${data.location?.badge && ((this.isNearbySearch && this.isInsideTileList) || !this.isInsideTileList)
+          ${data.location?.badge && !data.passed && ((this.isNearbySearch && this.isInsideTileList) || !this.isInsideTileList)
             ? /* html */`
               <ks-a-button badge namespace="button-secondary-" color="tertiary">
                 <span>${data.location.badge}</span>
@@ -339,20 +339,20 @@ export default class Tile extends Shadow() {
         </div>
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
-            ${this.hasAttribute('is-wish-list') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
-            <ks-m-buttons course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>
+            ${this.hasAttribute('is-wish-list') && !data.passed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
+            ${!data.passed ? /* html */ `<ks-m-buttons course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>` : ''}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
               ${data.icons.reduce((acc, icon) => acc + /* html */`
                 <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
                   <div class="m-tile__icon-box">
-                      <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>  
+                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="${icon.iconName || icon.name}" size="1em"></a-icon-mdx>  
                   </div>
                 </ks-m-tooltip>
               `, '')}           
             </div>
-            <span class="m-tile__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>
+            ${!data.passed ? /* html */ `<span class="m-tile__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>` : ''}
           </div>
         </div>      
       </div>
@@ -360,10 +360,12 @@ export default class Tile extends Shadow() {
         <span class="m-tile__passed-message">${data.passed?.title || warnMandatory + 'passed.title'}</span>
         <div class="m-tile__foot-left">
           ${this.hasAttribute('is-wish-list') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
-          <ks-a-button namespace="button-secondary-" color="secondary">
-            <span>${data.passed?.button.text || warnMandatory + 'passed.button.text'}</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.passed?.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
-          </ks-a-button>
+          ${data.passed?.button?.text || data.passed?.button?.iconName ? /* html */ `
+            <ks-a-button namespace="button-secondary-" color="secondary">
+              <span>${data.passed.button.text || warnMandatory + 'passed.button.text'}</span> : ''}
+              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.passed.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
+            </ks-a-button>
+          ` : ''}
         </div>
       </div>
     </div>
