@@ -942,11 +942,12 @@ export default class CourseDialog extends Shadow() {
     const day = dateTime.getDate() < 10 ? '0' + dateTime.getDate().toString() : dateTime.getDate().toString()
     const hours = dateTime.getHours() < 10 ? '0' + dateTime.getHours().toString() : dateTime.getHours().toString()
     const minutes = dateTime.getMinutes() < 10 ? '0' + dateTime.getMinutes().toString() : dateTime.getMinutes().toString()
-    return year + month + day + 'T' + hours + minutes + '00'
+    return year + month + day + 'T' + hours + minutes + '00Z'
   }
 
   /**
    * Create .ics file
+   * Note: Add 'Europe/Zurich' as fixed value (Windows TZ Issue)
    * @param {*} course
    * @returns {string}
    */
@@ -974,8 +975,8 @@ export default class CourseDialog extends Shadow() {
       'SEQUENCE:0\n' +
       'STATUS:CONFIRMED\n' +
       'TRANSP:TRANSPARENT\n' +
-      'DTSTART;TZID=' + timezone + ':' + this.convertToICSDate(courseFromDateTime) + '\n' +
-      'DTEND;TZID=' + timezone + ':' + this.convertToICSDate(courseToDateTime) + '\n' +
+      'DTSTART;TZID=' + 'Europe/Zurich' + ':' + this.convertToICSDate(courseFromDateTime) + '\n' +
+      'DTEND;TZID=' + 'Europe/Zurich' + ':' + this.convertToICSDate(courseToDateTime) + '\n' +
       'LOCATION:' + courseLocation + '\n' +
       'DESCRIPTION:' + description + '\n' +
       'END:VEVENT\n' +
