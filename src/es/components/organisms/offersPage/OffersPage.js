@@ -723,6 +723,7 @@ export default class OffersPage extends Shadow() {
               delete-listener
               any-key-listener
               search
+              autocomplete="off"
             >
             </a-input>
             <div id="close">
