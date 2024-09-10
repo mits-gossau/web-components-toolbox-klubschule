@@ -947,6 +947,7 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * Create .ics file
+   * Note: Add 'Europe/Zurich' as fixed value (Windows TZ Issue)
    * @param {*} course
    * @returns {string}
    */
