@@ -96,16 +96,17 @@ export default class AutoComplete extends Shadow() {
         composed: true
       }))
       // trigger search when enter or icon click
-      if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { description: event.detail.value } })
+      if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { description: event.detail.value, type: event.detail.type } })
     }
 
     this.requestWithFacet = event => {
       if (event.detail.type === 'enter' || event.detail.type === 'search-click' || event.detail.type === 'key' || event.detail.type === 'delete') {
-        return this.clickOnPredictionListener({ detail: { description: event.detail.value } })
+        return this.clickOnPredictionListener({ detail: { description: event.detail.value, type: event.detail.type }})
       }
     }
 
     this.clickOnPredictionListener = event => {
+      this.dataLayerPush(event.detail)
       // home search input
       if (!this.hasAttribute('no-forwarding')) this.homeSearchInput(event.detail.description)
       // close dialog
@@ -258,5 +259,22 @@ export default class AutoComplete extends Shadow() {
       cancelable: true,
       composed: true
     }))
+  }
+
+  dataLayerPush(item) {
+    console.log('dataLayerPush', item)
+    // GTM Tracking of autocomplete
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        window.dataLayer.push({
+          'event': 'autocomplete_click',
+          'suchtext': item.type === 'enter' || item.type === 'search-click' ? item.description : '',
+          'typ': item.type === 'content' ? 'Content' : 'Begriff',
+          'auswahl': item.type !== 'enter' && item.type !== 'search-click' ? item.description : ''
+        })
+      } catch (error) {
+        console.error('Failed to push in data layer', error)
+      }
+    }
   }
 }
