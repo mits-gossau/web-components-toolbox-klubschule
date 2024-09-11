@@ -1001,7 +1001,8 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   * Takes a language and a price as input, extracts the current language from the input, and returns a specific text based on the language provided
+   * Takes a language and a price as input, extracts the current language from the input,
+   * and returns a specific text based on the language provided
    * @param {string} lang represents the language code
    * @param {string} price represents the cost or price of a lesson or appointment that is being refunded
    * @returns {string} Text string based on the language provided
