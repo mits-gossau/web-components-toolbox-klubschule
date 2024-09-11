@@ -24,7 +24,7 @@ export default class Form extends Shadow() {
         this.errorMessage.remove()
       }
       const formData = this.formData
-      if (formData.optionPriceValue && formData.optionLessonsValue && formData.preferredVariant === 'none') {
+      if (formData.optionPriceValue && formData.optionLessonsValue && !formData.preferredVariant) {
         this.translate('CustomerLoyality.PreferredOptionValidation')
           .then((message) => this.renderErrorMessage(message))
       } else {
@@ -385,8 +385,6 @@ export default class Form extends Shadow() {
         preferredOption = 'price'
       } else if (optionPrice !== 'on' && optionLessons === 'on') {
         preferredOption = 'lessons'
-      } else {
-        preferredOption = 'none'
       }
     }
 
