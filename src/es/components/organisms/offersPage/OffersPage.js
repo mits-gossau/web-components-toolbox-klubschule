@@ -166,6 +166,8 @@ export default class OffersPage extends Shadow() {
    */
   renderHTML() {
     this.html = /* html */`<ks-c-with-facet
+        ${this.hasAttribute('save-location-local-storage') ? 'save-location-local-storage' : ''}
+        ${this.hasAttribute('save-location-session-storage') ? 'save-location-session-storage' : ''}
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''}
@@ -365,70 +367,44 @@ export default class OffersPage extends Shadow() {
                 </ks-m-auto-complete-list>
               </div>
             </dialog>
-            <style>
-                :host>ks-a-button {
-                  width: 100%;
-                  --button-secondary-background-color: var(--m-white);
-                  --button-secondary-background-color-hover: var(--m-white);
-                  --button-secondary-width: 100%;
-                  --button-secondary-border-color: var(--m-gray-700);
-                  --button-secondary-border-color-hover: var(--m-gray-700);
-                  --button-secondary-color: var(--m-gray-700);
-                  --button-secondary-color-hover: var(--m-gray-700);
-                  --button-secondary-cursor: text;
-                  --button-secondary-justify-content: space-between;
-                  --button-secondary-padding: 0.5rem 1.5rem;
-                  --button-secondary-font-size: 1.15rem;
-                  --button-secondary-height: 2.88rem;
-                  --svg-size: 1.5rem;
-                  --svg-size-mobile: 1.2rem;
-                  --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
-                  --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
-                  --button-secondary-font-weight: 400;
-                  --button-secondary-icon-right-margin: 0 0 0 1.5rem;
-					    }
-
-              @media only screen and (max-width: 767px) {
-                :host>ks-a-button {
-                  --button-secondary-padding: 0.5rem 0.9rem;
-                  --button-secondary-font-size: 1rem;
-                  --button-secondary-height: 2.5rem;
-                }
-					}
-          </style>
-          <ks-a-button ellipsis-text id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
-                default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
-                  <a-icon-mdx icon-name="Search" class="icon-right">
-                  </a-icon-mdx>
-              </ks-a-button>
-              <style>
+            <ks-a-button 
+              ellipsis-text id="show-modal" 
+              namespace="button-search-" 
+              answer-event-name="search-change"
+              default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
+            >
+              <a-icon-mdx icon-name="Search" class="icon-right"></a-icon-mdx>
+            </ks-a-button>
+            <style protected>
               :host>a-button {
-              position: absolute;
-              right: 0;
-              --button-secondary-border-color: var(--m-gray-700);
-              --button-secondary-background-color: var(--m-white);
-              --button-secondary-border-color-hover-custom: var(--m-gray-700);
-              --button-secondary-background-color-hover: var(--m-white);
-              --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
-              --button-secondary-padding: 0.625rem 1.5rem;
+                position: absolute;
+                right: 0;
+                height: var(--button-search-height);
+                --button-secondary-border-color: var(--m-gray-700);
+                --button-secondary-background-color: var(--m-white);
+                --button-secondary-border-color-hover-custom: var(--m-gray-700);
+                --button-secondary-background-color-hover: var(--m-white);
+                --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+                --button-secondary-padding: 0.625rem 1.5rem;
               }
     
               @media only screen and (max-width: 767px) {
                 :host>a-button {
-                --button-secondary-padding: 0.433rem 0.9rem;
+                  --button-secondary-padding: 0.433rem 0.9rem;
                 }
               }
             </style>
-              <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
-              <style>
+            <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
+              <style protected>
                 :host>button,
                 :host>button:hover {
                   border-left: none !important;
+                  height: var(--button-search-height);
                 }
               </style>
-                <a-icon-mdx icon-name="X" class="icon-right">
-                </a-icon-mdx>
-              </a-button>
+              <a-icon-mdx icon-name="X" class="icon-right">
+              </a-icon-mdx>
+            </a-button>
           </m-dialog>
         </ks-c-auto-complete>
       </div>
@@ -437,7 +413,7 @@ export default class OffersPage extends Shadow() {
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
         ${this.hasAttribute('with-location-input-label') ? /* html */`
-          <style>
+          <style protected>
             :host .location-label { 
               font-size: var(--mdx-sys-font-flex-body3-font-size);
               font-weight: 500;
@@ -448,115 +424,91 @@ export default class OffersPage extends Shadow() {
           <h4 class="location-label">
             ${this.getTranslation('CourseList.FindOffersNearbyPlaceholder')}
           </h4>
-          `: ``}
+        `: ``}
         <ks-c-auto-complete-location 
          ignore-search-input-icon-click
          reset-input-value-based-url="cname"
-         ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
-            <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
-              <dialog>
-                <div class="container">
-                    <a-input 
-                      id="offers-page-location-search-input"
-                      inputid="offers-page-location-search" 
-                      placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}" 
-                      icon-name="Location" 
-                      icon-size="1.5em" 
-                      search
-                      autofocus 
-                      submit-search="request-auto-complete-location" 
-                      any-key-listener="200" 
-                      type="search"
-                      delete-listener
-                      answer-event-name="location-change"
-                      autocomplete="off"
-                    >
-                    </a-input>
-                    <style>
-                      :host { 
-                        --icon-color-hover: var(--search-input-color);
-                      }
-                    </style>
-                    <div id="close">
-                        <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                    </div>
+         ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}
+        >
+          <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+            <dialog>
+              <div class="container">
+                <a-input 
+                  id="offers-page-location-search-input"
+                  inputid="offers-page-location-search" 
+                  placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}" 
+                  icon-name="Location" 
+                  icon-size="1.5em" 
+                  search
+                  autofocus 
+                  submit-search="request-auto-complete-location" 
+                  any-key-listener="200" 
+                  type="search"
+                  delete-listener
+                  answer-event-name="location-change"
+                  autocomplete="off"
+                >
+                </a-input>
+                <style protected>
+                  :host { 
+                    --icon-color-hover: var(--search-input-color);
+                  }
+                </style>
+                <div id="close">
+                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                 </div>
-                <div class="container">
-                    <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" use-keyup-navigation auto-complete-selection="auto-complete-location-selection">
-                        <ul>
-                            <li id="user-location">
-                                <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
-                                <span>${this.getTranslation('Search.CurrentLocation')}</span>
-                            </li>
-                        </ul>
-                    </ks-m-auto-complete-list>
-                </div>
-              </dialog>
-              <style>
-                :host>ks-a-button {
-                  width: 100%;
-                  --button-secondary-background-color: var(--m-white);
-                  --button-secondary-background-color-hover: var(--m-white);
-                  --button-secondary-width: 100%;
-                  --button-secondary-border-color: var(--m-gray-700);
-                  --button-secondary-border-color-hover: var(--m-gray-700);
-                  --button-secondary-color: var(--m-gray-700);
-                  --button-secondary-color-hover: var(--m-gray-700);
-                  --button-secondary-cursor: text;
-                  --button-secondary-justify-content: space-between;
-                  --button-secondary-padding: 0.5rem 1.5rem;
-                  --button-secondary-font-size: 1.15rem;
-                  --button-secondary-height: 2.88rem;
-                  --svg-size: 1.5rem;
-                  --svg-size-mobile: 1.2rem;
-                  --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
-                  --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
-                  --button-secondary-font-weight: 400;
-                  --button-secondary-icon-right-margin: 0 0 0 1.5rem;
-					    }
+              </div>
+              <div class="container">
+                <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" use-keyup-navigation auto-complete-selection="auto-complete-location-selection">
+                  <ul>
+                    <li id="user-location">
+                      <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
+                      <span>${this.getTranslation('Search.CurrentLocation')}</span>
+                    </li>
+                  </ul>
+                </ks-m-auto-complete-list>
+              </div>
+            </dialog>
+            <ks-a-button 
+              id="show-modal-location" 
+              namespace="button-search-" 
+              ellipsis-text 
+              answer-event-name="location-change"
+              default-label="${this.getTranslation('CourseList.YourLocationPlaceholder')}"
+            >
+              <a-icon-mdx icon-name="Location" class="icon-right"></a-icon-mdx>
+            </ks-a-button>
+        
+            <style protected>
+              :host>a-button {
+                position: absolute;
+                right: 0;
+                height: var(--button-search-height);
+                --button-secondary-border-color: var(--m-gray-700);
+                --button-secondary-background-color: var(--m-white);
+                --button-secondary-border-color-hover-custom: var(--m-gray-700);
+                --button-secondary-background-color-hover: var(--m-white);
+                --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+                --button-secondary-padding: 0.625rem 1.5rem;
+              }
 
               @media only screen and (max-width: 767px) {
-                :host>ks-a-button {
-                  --button-secondary-padding: 0.5rem 0.9rem;
-                  --button-secondary-font-size: 1rem;
-                  --button-secondary-height: 2.5rem;
+                :host>a-button {
+                  --button-secondary-padding: 0.433rem 0.9rem;
                 }
-					}
-				</style>
-				<ks-a-button id="show-modal-location" namespace="button-secondary-" ellipsis-text answer-event-name="location-change"
-					default-label="${this.getTranslation('CourseList.YourLocationPlaceholder')}">
-					<a-icon-mdx icon-name="Location" class="icon-right">
-					</a-icon-mdx>
-				</ks-a-button>
-        <style>
-          :host>a-button {
-          position: absolute;
-          right: 0;
-          --button-secondary-border-color: var(--m-gray-700);
-          --button-secondary-background-color: var(--m-white);
-          --button-secondary-border-color-hover-custom: var(--m-gray-700);
-          --button-secondary-background-color-hover: var(--m-white);
-          --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
-          --button-secondary-padding: 0.625rem 1.5rem;
-          }
-
-          @media only screen and (max-width: 767px) {
-            :host>a-button {
-            --button-secondary-padding: 0.433rem 0.9rem;
-            }
-          }
-        </style>
-        <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="cname">
-        <style>
-        :host>button,
-        :host>button:hover {
-          border-left: none !important;
-        }
-      </style>
-            <a-icon-mdx  icon-name="X" class="icon-right">
-            </a-icon-mdx>
-        </a-button>
-            </m-dialog>
+              }
+            </style>
+            <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="cname">
+              <style protected>
+                :host>button,
+                :host>button:hover {
+                  border-left: none !important;
+                  height: var(--button-search-height);
+                }
+              </style>
+              <a-icon-mdx  icon-name="X" class="icon-right"></a-icon-mdx>
+            </a-button>
+          </m-dialog>
         </ks-c-auto-complete-location>
       </div>
     ` : ''
@@ -595,7 +547,7 @@ export default class OffersPage extends Shadow() {
         ? ''
         : /* html */`
               <o-grid namespace="grid-12er-">
-                <style>
+                <style protected>
                   :host .input-section {
                     align-items: flex-end;
                   }
@@ -645,7 +597,7 @@ export default class OffersPage extends Shadow() {
               <ks-a-spacing type="s-flex"></ks-a-spacing>
               <o-grid namespace="grid-432-auto-colums-auto-rows-">
                 <section>
-                  <style>
+                  <style protected>
                     :host {
                       /* filter buttons have the exception of being fully rounded on all brands, that's why I am setting border-radius here */
                       --button-primary-border-radius: 999px;
@@ -769,6 +721,7 @@ export default class OffersPage extends Shadow() {
               type="search"
               answer-event-name="search-change"
               delete-listener
+              any-key-listener
               search
               autocomplete="off"
             >
@@ -782,70 +735,47 @@ export default class OffersPage extends Shadow() {
             </ks-m-auto-complete-list>
           </div>
         </dialog>
-        <style>
-            :host>ks-a-button {
-              width: 100%;
-              --button-secondary-background-color: var(--m-white);
-              --button-secondary-background-color-hover: var(--m-white);
-              --button-secondary-width: 100%;
-              --button-secondary-border-color: var(--m-gray-700);
-              --button-secondary-border-color-hover: var(--m-gray-700);
-              --button-secondary-color: var(--m-gray-700);
-              --button-secondary-color-hover: var(--m-gray-700);
-              --button-secondary-cursor: text;
-              --button-secondary-justify-content: space-between;
-              --button-secondary-padding: 0.5rem 1.5rem;
-              --button-secondary-font-size: 1.15rem;
-              --button-secondary-height: 2.88rem;
-              --svg-size: 1.5rem;
-              --svg-size-mobile: 1.2rem;
-              --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
-              --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
-              --button-secondary-font-weight: 400;
-              --button-secondary-icon-right-margin: 0 0 0 1.5rem;
-          }
+        <ks-a-button 
+          ellipsis-text 
+          id="show-modal" 
+          namespace="button-search-" 
+          answer-event-name="search-change"
+          default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
+        >
+          <a-icon-mdx icon-name="Search" class="icon-right">
+          </a-icon-mdx>
+        </ks-a-button>
 
-          @media only screen and (max-width: 767px) {
-            :host>ks-a-button {
-              --button-secondary-padding: 0.5rem 0.9rem;
-              --button-secondary-font-size: 1rem;
-              --button-secondary-height: 2.5rem;
-            }
-      }
-      </style>
-      <ks-a-button ellipsis-text id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
-            default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
-              <a-icon-mdx icon-name="Search" class="icon-right">
-              </a-icon-mdx>
-          </ks-a-button>
-          <style>
+        <style protected>
           :host>a-button {
-          position: absolute;
-          right: 0;
-          --button-secondary-border-color: var(--m-gray-700);
-          --button-secondary-background-color: var(--m-white);
-          --button-secondary-border-color-hover-custom: var(--m-gray-700);
-          --button-secondary-background-color-hover: var(--m-white);
-          --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
-          --button-secondary-padding: 0.625rem 1.5rem;
+            position: absolute;
+            right: 0;
+            height: var(--button-search-height);
+            --button-secondary-border-color: var(--m-gray-700);
+            --button-secondary-background-color: var(--m-white);
+            --button-secondary-border-color-hover-custom: var(--m-gray-700);
+            --button-secondary-background-color-hover: var(--m-white);
+            --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+            --button-secondary-padding: 0.625rem 1.5rem;
           }
 
           @media only screen and (max-width: 767px) {
             :host>a-button {
-            --button-secondary-padding: 0.433rem 0.9rem;
+              --button-secondary-padding: 0.433rem 0.9rem;
             }
           }
         </style>
-          <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
-          <style>
+        <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
+          <style protected>
             :host>button,
             :host>button:hover {
               border-left: none !important;
+              height: var(--button-search-height);
             }
           </style>
-            <a-icon-mdx icon-name="X" class="icon-right">
-            </a-icon-mdx>
-          </a-button>
+          <a-icon-mdx icon-name="X" class="icon-right">
+          </a-icon-mdx>
+        </a-button>
       </m-dialog>
     </ks-c-auto-complete>
   </div>

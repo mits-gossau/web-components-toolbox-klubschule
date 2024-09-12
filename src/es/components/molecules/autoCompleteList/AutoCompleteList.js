@@ -247,6 +247,7 @@ export default class AutoCompleteList extends Shadow() {
       }
     ]).then(children => {
       if (fetch) {
+        if (this.useKeyUpNavigation) this.activeListItemIndex = -2
         fetch.then(
           (/**
             * @type {{total: number,success: boolean, searchText: string, items: import("../../controllers/autoComplete/AutoComplete.js").Item[], cms: []}}
