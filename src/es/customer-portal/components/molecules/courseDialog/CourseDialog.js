@@ -736,12 +736,10 @@ export default class CourseDialog extends Shadow() {
         `
       }
       if (this.contentViewType === 'reversal') {
-        //
         subscriptionBalanceAdditionalInfo = /* html */ `
-          <div class="additional-subcription-info">
-            <span>
-              <!-- trans value = Der Terminpreis wird auf folgendes Abonnement rückvergütet: -->
-              <a-translation data-trans-key="CP.cpInfoSubscriptionInCanceling2"></a-translation>
+        <div class="additional-subcription-info">
+          <span>
+              ${this.subscriptionReversalAdditionInfoText(self.Environment.language, detail.lessonPrice)}
             </span>
           </div>
         `
@@ -944,11 +942,12 @@ export default class CourseDialog extends Shadow() {
     const day = dateTime.getDate() < 10 ? '0' + dateTime.getDate().toString() : dateTime.getDate().toString()
     const hours = dateTime.getHours() < 10 ? '0' + dateTime.getHours().toString() : dateTime.getHours().toString()
     const minutes = dateTime.getMinutes() < 10 ? '0' + dateTime.getMinutes().toString() : dateTime.getMinutes().toString()
-    return year + month + day + 'T' + hours + minutes + '00'
+    return year + month + day + 'T' + hours + minutes + '00Z'
   }
 
   /**
    * Create .ics file
+   * Note: Add 'Europe/Zurich' as fixed value (Windows TZ Issue)
    * @param {*} course
    * @returns {string}
    */
@@ -976,8 +975,8 @@ export default class CourseDialog extends Shadow() {
       'SEQUENCE:0\n' +
       'STATUS:CONFIRMED\n' +
       'TRANSP:TRANSPARENT\n' +
-      'DTSTART;TZID=' + timezone + ':' + this.convertToICSDate(courseFromDateTime) + '\n' +
-      'DTEND;TZID=' + timezone + ':' + this.convertToICSDate(courseToDateTime) + '\n' +
+      'DTSTART;TZID=' + 'Europe/Zurich' + ':' + this.convertToICSDate(courseFromDateTime) + '\n' +
+      'DTEND;TZID=' + 'Europe/Zurich' + ':' + this.convertToICSDate(courseToDateTime) + '\n' +
       'LOCATION:' + courseLocation + '\n' +
       'DESCRIPTION:' + description + '\n' +
       'END:VEVENT\n' +
@@ -999,6 +998,23 @@ export default class CourseDialog extends Shadow() {
    */
   subscriptionPdfLinkLoading = (display = 'none') => {
     this.mdxComponent.style.display = display
+  }
+
+  /**
+   * Takes a language and a price as input, extracts the current language from the input,
+   * and returns a specific text based on the language provided
+   * @param {string} lang represents the language code
+   * @param {string} price represents the cost or price of a lesson or appointment that is being refunded
+   * @returns {string} Text string based on the language provided
+   */
+  subscriptionReversalAdditionInfoText (lang, price) {
+    const currentLanguage = lang.split('-')[0]
+    const text = {
+      de: `Der Preis für den Termin von ${price} wird auf das folgende Abonnement rückvergütet:`,
+      it: `Il prezzo della lezione del ${price} sarà rimborsato al seguente abbonamento:`,
+      fr: `Le prix pour la leçon du ${price} va être remboursé sur l’abonnement suivant:`
+    }
+    return text[currentLanguage]
   }
 
   get dialog () {
