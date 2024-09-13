@@ -68,6 +68,8 @@
   width: fit-content;
   padding-left: var(--mdx-sys-spacing-fix-2xs);
   padding-right: calc(var(--mdx-sys-spacing-fix-2xs) + 8px);
+  padding-top: 3px;
+  padding-bottom: 3px;
   color: var(--mdx-base-color-grey-0);
   background: var(--color-${this.getAttribute('color')}, #00A2AD);
 }
