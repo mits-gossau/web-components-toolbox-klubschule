@@ -17,6 +17,10 @@ export default class Form extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.preferredOptionNone = 'NONE'
+    this.preferredOptionLessons = 'LESSONS'
+    this.preferredOptionPrice = 'PRICE'
+
     this.voting = this.dataset.voting ? JSON.parse(this.dataset.voting) : null
     this.submitListener = (evt) => {
       evt.preventDefault()
@@ -257,17 +261,17 @@ export default class Form extends Shadow() {
           <ks-a-radio mode="false">
             <div class="wrap">
                 <label for="preferredOptionPrice"><strong><a-translation key="CustomerLoyality.OptionPrice.Title"></a-translation></strong></label>
-                <input id="preferredOptionPrice" name="preferredOption" type="radio" value="price">
+                <input id="preferredOptionPrice" name="preferredOption" type="radio" value="${this.preferredOptionPrice}">
                 <div class="box"></div>
             </div>
             <div class="wrap">
                 <label for="preferredOptionLessons"><strong><a-translation key="CustomerLoyality.OptionLessons.Title"></a-translation></strong></label>
-                <input id="preferredOptionLessons" name="preferredOption" type="radio" value="lessons">
+                <input id="preferredOptionLessons" name="preferredOption" type="radio" value="${this.preferredOptionLessons}">
                 <div class="box"></div>
             </div>
             <div class="wrap">
               <label for="preferredOptionNone"><strong><a-translation key="CustomerLoyality.PreferredOptionNone"></a-translation></strong></label>
-              <input id="preferredOptionNone" name="preferredOption" type="radio" value="none">
+              <input id="preferredOptionNone" name="preferredOption" type="radio" value="${this.preferredOptionNone}">
                 <div class="box"></div>
             </div>
           </ks-a-radio>
@@ -382,9 +386,9 @@ export default class Form extends Shadow() {
 
     if (!preferredOption) {
       if (optionPrice === 'on' && optionLessons !== 'on') {
-        preferredOption = 'price'
+        preferredOption = this.preferredOptionPrice
       } else if (optionPrice !== 'on' && optionLessons === 'on') {
-        preferredOption = 'lessons'
+        preferredOption = this.preferredOptionLessons
       }
     }
 
