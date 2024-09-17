@@ -203,8 +203,11 @@ export default class AutoCompleteList extends Shadow() {
         }
 
         :host .content .list a {
+          display: flex;
+          align-items: center;
+          padding: var(--li-item-padding, 0.4em 0.25em);
+          border-radius: var(--li-item-border-radius, 0.25em);
           /* remove all css definitions from before */
-          display: block;
           padding: 0;
           margin: 0;
           text-decoration: none;
@@ -289,15 +292,15 @@ export default class AutoCompleteList extends Shadow() {
               <div class="heading">Weitere Inhalte</div>
               <ul class="list">
                 ${contentItems.map(contentItem => `
-                  <a href="${contentItem.link}">
-                    <li>
+                  <li>
+                    <a href="${contentItem.link}">
                       ${contentItem.image ? `<a-picture src="${contentItem.image}" alt="${contentItem.title}"></a-picture>` : ''}
                       <div>
                         <div class="title">${contentItem.title}</div>
                         ${contentItem.text ? `<div class="text">${contentItem.text}</div>` : ''}
                       </div>
-                    </li>
-                  </a>
+                    </a>
+                  </li>
                 `).join('')}
               </ul>
               <a href="#">Link Text <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></a>
