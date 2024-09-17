@@ -36,7 +36,7 @@ export default class GTMEvent extends Shadow() {
         this.addEventListener('click', this.sendEvent)
         break
       case 'change':
-        this.shadowRoot.querySelectorAll('*').forEach(child => {
+        this.root.querySelectorAll('*').forEach(child => {
           child.addEventListener('change', this.sendEvent)
         })
         break
@@ -67,7 +67,7 @@ export default class GTMEvent extends Shadow() {
         this.removeEventListener('click', this.sendEvent)
         break
       case 'change':
-        this.shadowRoot.querySelectorAll('*').forEach(child => {
+        this.root.querySelectorAll('*').forEach(child => {
           child.removeEventListener('change', this.sendEvent)
           child.removeEventListener('click', this.sendEvent)
         })
