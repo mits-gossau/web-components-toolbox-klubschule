@@ -25,7 +25,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 
 export default class GTMEvent extends Shadow() {
   constructor(options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
     this.sendEvent = this.sendEvent.bind(this)
   }
 
