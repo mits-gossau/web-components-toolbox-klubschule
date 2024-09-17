@@ -183,7 +183,7 @@ export default class AutoCompleteList extends Shadow() {
           margin-top: 0.25em;
         }
 
-        :host a {
+        :host .content ul + a {
           display: flex;
           align-items: center;
           text-decoration: none;
@@ -193,13 +193,23 @@ export default class AutoCompleteList extends Shadow() {
           color: var(--mdx-sys-color-primary-default); ;
         }
 
-        :host a a-icon-mdx {
+        :host .content ul + a a-icon-mdx {
           margin-left: 0.25em;
           color: var(--mdx-sys-color-primary-default); ;
         }
 
         :host .list + a {
           margin-top: 1em;
+        }
+
+        :host .content .list a {
+          /* remove all css definitions from before */
+          display: block;
+          padding: 0;
+          margin: 0;
+          text-decoration: none;
+          color: var(--color);
+          font-weight: 400;
         }
 
         @media only screen and (max-width: _max-width_) {
@@ -249,10 +259,12 @@ export default class AutoCompleteList extends Shadow() {
       if (fetch) {
         fetch.then(
           (/**
-            * @type {{total: number,success: boolean, searchText: string, items: import("../../controllers/autoComplete/AutoComplete.js").Item[], cms: []}}
+            * @type {{total: number,success: boolean, searchText: string, contentItems: import("../../controllers/autoComplete/AutoComplete.js").ContentItem[], items: import("../../controllers/autoComplete/AutoComplete.js").Item[], cms: []}}
             */
-            { total, success, searchText, items, cms }
+            { total, success, searchText, contentItems, items, cms }
           ) => {
+            console.log({ total, success, searchText, contentItems, items, cms })
+            // render list items
             const listItems = items.map(item => {
               const listElement = document.createElement('li')
               listElement.innerHTML = `
@@ -268,6 +280,29 @@ export default class AutoCompleteList extends Shadow() {
               return listElement
             })
             this.list.replaceChildren(...listItems)
+
+            // render content items
+            if (this.content) this.content.remove() // delete existing content items
+            const contentItemsElement = document.createElement('div')
+            contentItemsElement.classList.add('content')
+            contentItemsElement.innerHTML = `
+              <div class="heading">Weitere Inhalte</div>
+              <ul class="list">
+                ${contentItems.map(contentItem => `
+                  <a href="${contentItem.link}">
+                    <li>
+                      ${contentItem.image ? `<a-picture src="${contentItem.image}" alt="${contentItem.title}"></a-picture>` : ''}
+                      <div>
+                        <div class="title">${contentItem.title}</div>
+                        ${contentItem.text ? `<div class="text">${contentItem.text}</div>` : ''}
+                      </div>
+                    </li>
+                  </a>
+                `).join('')}
+              </ul>
+              <a href="#">Link Text <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></a>
+            `
+            this.list.after(contentItemsElement)
           })
       } else {
         if (this.hasAttribute('auto-complete-location')) {
@@ -288,6 +323,10 @@ export default class AutoCompleteList extends Shadow() {
 
   get list() {
     return this.root.querySelector('ul')
+  }
+
+  get content() {
+    return this.root.querySelector('.content')
   }
 
   navigateOnListElement = (event) => {

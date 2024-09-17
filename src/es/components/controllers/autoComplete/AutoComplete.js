@@ -1,6 +1,15 @@
 // @ts-check
 
 /** @typedef {{
+  title: string,
+  text: string | null,
+  term: string | null,
+  typ: number,
+  link: string,
+  image: string | null
+}} ContentItem */
+
+/** @typedef {{
   term: string,
   text: string,
   typ: 1|2 // TYP 1 ist Kurs, TYP 2 ist Sparte
@@ -11,6 +20,7 @@
   total: number,
   success: boolean,
   searchText: string,
+  contentItems: ContentItem[],
   items: Item[],
   cms: []
 }} fetchAutoCompleteEventDetail */
@@ -199,6 +209,88 @@ export default class AutoComplete extends Shadow() {
           total: 10,
           success: true,
           searchText: 'englisch',
+          "contentItems": [
+            {
+                "title": "Cambridge English",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-pruefungsvorbereitung/cambridge-english/",
+                "image": null
+            },
+            {
+                "title": "<strong>Englisch</strong> Schwerpunkte",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-schwerpunkte/",
+                "image": null
+            },
+            {
+                "title": "<strong>Englisch</strong> Konversation",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-schwerpunkte/englisch-konversation/",
+                "image": null
+            },
+            {
+                "title": "<strong>Englisch</strong> Prüfungsvorbereitung",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-pruefungsvorbereitung/",
+                "image": null
+            },
+            {
+                "title": "telc <strong>Englisch</strong>",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-einstufungstests-und-pruefungen/telc-englisch/",
+                "image": null
+            },
+            {
+                "title": "<strong>Englisch</strong> Niveau A2",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-niveau-a2/",
+                "image": null
+            },
+            {
+                "title": "<strong>Englisch</strong> Niveau B1",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-niveau-b1/",
+                "image": null
+            },
+            {
+                "title": "<strong>Englisch</strong> Niveau B2",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-niveau-b2/",
+                "image": null
+            },
+            {
+                "title": "<strong>Englisch</strong> Niveau C1/C2",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-niveau-c1-c2/",
+                "image": null
+            },
+            {
+                "title": "<strong>Englisch</strong> Fast Track",
+                "text": null,
+                "term": null,
+                "typ": -1,
+                "link": "/sprachen/englischkurse/englisch-schwerpunkte/englisch-fast-track/",
+                "image": null
+            }
+          ],
           items: [
             {
               term: 'englisch',
