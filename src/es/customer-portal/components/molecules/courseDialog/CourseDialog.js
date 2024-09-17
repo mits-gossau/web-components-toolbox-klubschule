@@ -1012,7 +1012,7 @@ export default class CourseDialog extends Shadow() {
     const text = {
       de: `Der Preis für den Termin von ${price} wird auf das folgende Abonnement rückvergütet:`,
       it: `Il prezzo della lezione del ${price} sarà rimborsato al seguente abbonamento:`,
-      fr: `Le prix pour la leçon du ${price} va être remboursé sur l’abonnement suivant:`
+      fr: `Le prix pour la leçon du ${price} va être remboursé sur l'abonnement suivant:`
     }
     return text[currentLanguage]
   }
