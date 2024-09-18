@@ -167,7 +167,7 @@ export default class Buttons extends Shadow() {
         return acc + parentDiv.innerHTML
       }
 
-      const content = button.event === 'bookmark' ? '' : /* html */`
+      const content = button.event === 'bookmark' && this.hasAttribute("is-wish-list") ? '' :  /* html */`
         <ks-a-button 
           ${button.iconName && !button.text ? 'icon' : ''} 
           namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 

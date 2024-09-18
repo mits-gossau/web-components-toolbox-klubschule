@@ -16,7 +16,7 @@ export default class OffersPage extends Shadow() {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
-        const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+        const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
         // Set Sort
@@ -96,7 +96,7 @@ export default class OffersPage extends Shadow() {
   withFacetListener(event) {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
-      const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+      const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
 
       // Set Sort
       const sort = bodySection.shadowRoot.querySelector('#sort-options')
@@ -177,18 +177,18 @@ export default class OffersPage extends Shadow() {
         ? this.mainSearchInput
         : /* html */``
       } 
-        ${this.eventDetailURL || this.hasAttribute('no-search-tab')
+        ${this.eventDetailURL || this.hasAttribute('no-search-tab') || this.isWishList
         ? this.tabContentOne
         : /* html */`
             <ks-m-tab>
               <ul class="tab-search-result">
                 <li>
-                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
+                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}" ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}>
                     <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
                   </ks-a-with-facet-counter>
                 </li>
                 <li>
-                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
+                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''} total="contentItems.length">
                     <button tab-target="content2" id="total-stories-tab-heading"></button>
                   </ks-a-with-facet-counter>
                 </li>
@@ -603,7 +603,7 @@ export default class OffersPage extends Shadow() {
                 <section class="input-section">
                   ${this.hasAttribute('no-search-tab')
           ? /* html */`<div col-lg="12" col-md="12" col-sm="12">
-                        <ks-a-with-facet-counter></ks-a-with-facet-counter>
+                        <ks-a-with-facet-counter ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-a-with-facet-counter>
                       </div>`
           : ''}
                   ${this.eventDetailURL ? '' : searchInput}
@@ -633,12 +633,13 @@ export default class OffersPage extends Shadow() {
                           namespace="filter-default-" 
                           translation-key-close="${this.getTranslation('Filter.closeOverlayer')}" 
                           translation-key-reset="${this.getTranslation('Filter.ResetFilter')}"
+                          ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                         ></ks-m-filter-categories>
                     </div>
                   </div>
                   <div class="container dialog-footer">
                     <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
-                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events></ks-a-number-of-offers-button>
+                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}                    ></ks-a-number-of-offers-button>
                   </div>
                 </dialog>
               </m-dialog>
@@ -657,7 +658,7 @@ export default class OffersPage extends Shadow() {
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.getTranslation('CourseList.FilterAllPlaceholder')}
                   </ks-a-button>
                   <!-- buttons to filter -->
-                  <ks-m-filter-select ${this.hasAttribute('with-filter-search') && !this.hasAttribute('with-search-input') ? 'with-filter-search-button' : ''}></ks-m-filter-select>
+                  <ks-m-filter-select ${this.hasAttribute('with-filter-search') && !this.hasAttribute('with-search-input') ? 'with-filter-search-button' : ''}${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-m-filter-select>
                 </section>
               </o-grid>
               <ks-a-spacing type="s-flex"></ks-a-spacing>
@@ -666,20 +667,26 @@ export default class OffersPage extends Shadow() {
             `}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
-                ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
+                ${this.isWishList ? ' is-wish-list' : ''}
+                ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
-              <ks-a-with-facet-pagination id="pagination" pagination-event-name="request-with-facet" pagination-event-name="with-facet">
+              <ks-a-with-facet-pagination 
+                id="pagination"
+                pagination-event-name="request-with-facet"
+                pagination-event-name="with-facet"
+                ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
+              >
                 <ks-a-button namespace="button-primary-" color="secondary">
                     <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                 </ks-a-button>
               </ks-a-with-facet-pagination>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
-              ${this.hasAttribute('is-wish-list') ? '' : /* html */ `
+              ${this.isWishList ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
                   ${this.isEasyPortal
           ? /* html */`
@@ -726,7 +733,7 @@ export default class OffersPage extends Shadow() {
         <o-grid namespace="grid-12er-">
           <section>
             <div col-lg="12" col-md="12" col-sm="12">
-              <ks-m-content-factory></ks-m-content-factory>
+              <ks-m-content-factory ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-m-content-factory>
             </div>
           </section>
         </o-grid>
@@ -740,6 +747,10 @@ export default class OffersPage extends Shadow() {
 
   get eventDetailURL() {
     return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
+  }
+
+  get isWishList() {
+    return this.hasAttribute('is-wish-list')
   }
 
   get hiddenSections() {

@@ -340,7 +340,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             ${this.hasAttribute('is-wish-list') && !data.passed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
-            ${!data.passed ? /* html */ `<ks-m-buttons course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>` : ''}
+            ${!data.passed && this.hasAttribute('is-wish-list') ? /* html */ `<ks-m-buttons course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>` : ''}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
@@ -362,7 +362,7 @@ export default class Tile extends Shadow() {
           ${this.hasAttribute('is-wish-list') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
           ${data.passed?.button?.text || data.passed?.button?.iconName ? /* html */ `
             <ks-a-button namespace="button-secondary-" color="secondary">
-              <span>${data.passed.button.text || warnMandatory + 'passed.button.text'}</span> : ''}
+              <span>${data.passed.button.text || warnMandatory + 'passed.button.text'}</span>
               <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.passed.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
             </ks-a-button>
           ` : ''}

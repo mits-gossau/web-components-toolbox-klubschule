@@ -73,6 +73,11 @@ export default class KsBodyStyle extends BodyStyle {
             padding-bottom: var(--mdx-sys-spacing-flex-l);
         }
 
+        :host([no-padding-y]) {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
         :host([no-margin-y]) {
             margin-top: 0 !important;
             margin-bottom: 0 !important;
@@ -253,6 +258,12 @@ export default class KsBodyStyle extends BodyStyle {
         /* nested lists */
         :host ul > li > ul {
             margin-bottom: 0;
+        }
+
+        :host::part(delete-btn-wrapper) {
+            display: flex;
+            justify-content: flex-end;
+            padding-bottom: 1em;
         }
 
         @media screen and (max-width: _max-width_) {
