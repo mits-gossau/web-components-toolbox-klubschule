@@ -942,7 +942,7 @@ export default class CourseDialog extends Shadow() {
     const day = dateTime.getDate() < 10 ? '0' + dateTime.getDate().toString() : dateTime.getDate().toString()
     const hours = dateTime.getHours() < 10 ? '0' + dateTime.getHours().toString() : dateTime.getHours().toString()
     const minutes = dateTime.getMinutes() < 10 ? '0' + dateTime.getMinutes().toString() : dateTime.getMinutes().toString()
-    return year + month + day + 'T' + hours + minutes + '00Z'
+    return year + month + day + 'T' + hours + minutes + '00'
   }
 
   /**
@@ -953,7 +953,6 @@ export default class CourseDialog extends Shadow() {
    */
   createDownloadICSFile (course) {
     const { courseType, courseId, courseTitle, courseLocation, courseAppointmentDate, courseAppointmentTimeFrom, courseAppointmentTimeTo, roomDescription } = course
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const courseFromDate = courseAppointmentTimeFrom.split(':').map(Number)
     const courseFromDateTime = new Date(courseAppointmentDate).setHours(courseFromDate[0], courseFromDate[1])
     const courseToDate = courseAppointmentTimeTo.split(':').map(Number)
@@ -967,7 +966,23 @@ export default class CourseDialog extends Shadow() {
       'METHOD:PUBLISH\n' +
       'CALSCALE:GREGORIAN\n' +
       'BEGIN:VTIMEZONE\n' +
-      'TZID:' + timezone + '\n' +
+      'TZID:Europe/Zurich' + '\n' +
+      'TZURL:https://www.tzurl.org/zoneinfo-outlook/Europe/Zurich' + '\n' +
+      'X-LIC-LOCATION:Europe/Zurich' + '\n' +
+      'BEGIN:DAYLIGHT' + '\n' +
+      'TZNAME:CEST' + '\n' +
+      'TZOFFSETFROM:+0100' + '\n' +
+      'TZOFFSETTO:+0200' + '\n' +
+      'DTSTART:19700329T020000' + '\n' +
+      'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU' + '\n' +
+      'END:DAYLIGHT' + '\n' +
+      'BEGIN:STANDARD' + '\n' +
+      'TZNAME:CET' + '\n' +
+      'TZOFFSETFROM:+0200' + '\n' +
+      'TZOFFSETTO:+0100' + '\n' +
+      'DTSTART:19701025T030000' + '\n' +
+      'RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU' + '\n' +
+      'END:STANDARD\n' +
       'END:VTIMEZONE\n' +
       'BEGIN:VEVENT\n' +
       'SUMMARY:' + summary + '\n' +
@@ -1001,7 +1016,8 @@ export default class CourseDialog extends Shadow() {
   }
 
   /**
-   * Takes a language and a price as input, extracts the current language from the input, and returns a specific text based on the language provided
+   * Takes a language and a price as input, extracts the current language from the input,
+   * and returns a specific text based on the language provided
    * @param {string} lang represents the language code
    * @param {string} price represents the cost or price of a lesson or appointment that is being refunded
    * @returns {string} Text string based on the language provided
@@ -1011,7 +1027,7 @@ export default class CourseDialog extends Shadow() {
     const text = {
       de: `Der Preis für den Termin von ${price} wird auf das folgende Abonnement rückvergütet:`,
       it: `Il prezzo della lezione del ${price} sarà rimborsato al seguente abbonamento:`,
-      fr: `Le prix pour la leçon du ${price} va être remboursé sur l’abonnement suivant:`
+      fr: `Le prix pour la leçon du ${price} va être remboursé sur l'abonnement suivant:`
     }
     return text[currentLanguage]
   }
