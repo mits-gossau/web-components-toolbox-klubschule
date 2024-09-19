@@ -118,7 +118,12 @@ export default class AutoCompleteList extends Shadow() {
           list-style: none;
           padding: 0;
           margin: 0;
+          flex: 1;
+        }
+
+        :host div:only-child ul {
           width: 100%;
+          flex-basis: 100%;
         }
 
         :host ul li {
@@ -159,6 +164,10 @@ export default class AutoCompleteList extends Shadow() {
         :host .content {
           display: flex;
           flex-direction: column;
+          flex: 1;
+        }
+
+        :host div ul + :host div .content {
           width: 50%;
         }
 
