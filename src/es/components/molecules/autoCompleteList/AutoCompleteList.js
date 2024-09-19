@@ -222,7 +222,7 @@ export default class AutoCompleteList extends Shadow() {
 
         :host .content .list a {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           padding: var(--li-item-padding, 0.4em 0.25em);
           border-radius: var(--li-item-border-radius, 0.25em);
           /* remove all css definitions from before */
@@ -231,6 +231,9 @@ export default class AutoCompleteList extends Shadow() {
           text-decoration: none;
           color: var(--color);
           font-weight: 400;
+          gap: var(--mdx-sys-spacing-flex-s, 1em);
+          width: 100%;
+          justify-content: space-between;
         }
 
         :host .responsive-picture {
@@ -322,11 +325,11 @@ export default class AutoCompleteList extends Shadow() {
                   ${contentItems.map(contentItem => `
                     <li>
                       <a href="${prefix + contentItem.link}">
-                        ${contentItem.image?.src ? `<a-picture class="responsive-picture" defaultSource="${prefix + contentItem.image.src}" alt="${contentItem.image.alt}" namespace="picture-cover-" aspect-ratio="1"></a-picture>` : ''}
                         <div>
                           <div class="title">${contentItem.title}</div>
                           ${contentItem.text ? `<div class="text">${contentItem.text}</div>` : ''}
                         </div>
+                        ${contentItem.image?.src ? `<a-picture class="responsive-picture" defaultSource="${prefix + contentItem.image.src}" alt="${contentItem.image.alt}" namespace="picture-cover-" aspect-ratio="1"></a-picture>` : ''}
                       </a>
                     </li>
                   `).join('')}
