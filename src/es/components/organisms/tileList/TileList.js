@@ -383,7 +383,11 @@ export default class TileList extends Shadow() {
               namespace="button-secondary-" 
               color="secondary" 
             >
-              <span>${this.getTranslation('CourseList.MoreLocationsPlaceholder')}</span>
+              <span>
+                ${data.sort == 1 ? `${this.getTranslation('CourseList.MoreLocationsPlaceholder')}` : ''}
+                ${data.sort == 2 ? `${this.getTranslation('CourseList.MoreOffersPlaceholder')}` : ''}
+                ${data.sort == 3 ? `${this.getTranslation('CourseList.MoreLocationsPlaceholder')}` : ''}
+              </span>
               <a-icon-mdx icon-name="ArrowDownRight" size="1em"></a-icon-mdx>
             </ks-a-button>
           </div>
