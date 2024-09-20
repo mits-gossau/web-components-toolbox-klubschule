@@ -239,78 +239,77 @@ export default class KsFooter extends Footer {
         }
       ])
     ]).then(([iconMdx, button]) => {
-      console.log('smoooth');
-        this.html = /* html */`
-          <ks-a-button id=to-the-top-button namespace="button-primary-" icon=true color=secondary>
-            <a-icon-mdx icon-name=ArrowUp size="1rem"></a-icon-mdx>
-          </ks-a-button>
-        `
-        this.root.querySelector('#to-the-top-button')?.addEventListener('click', () => window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: 'smooth'
-        }))
-        
-        // Overwrite ordering by super footer.js
-        const copyrightTag = this.root.querySelector('.copyright')
-        copyrightTag && copyrightTag.classList.remove('copyright')
-      })
-    }
-    
-    /**
-    * should actually be done with the template for o-wrapper namespace="footer-default-" but this has already been done within the razor template, this fix should work without any razor adjustments
-    *
-    * @param {HTMLElement[] & any} wrappers
-    * @returns {HTMLElement[]}
-    */
-    injectCssIntoWrappers (wrappers) {
-      wrappers.forEach(wrapper => wrapper.setCss(/* css */`
-      ${this.injectCssIntoWrapperAndDetails()}
-      :host m-details {
-        --details-default-icon-right-border-bottom-last: var(--footer-default-border-width) solid;
-        --details-default-icon-right-border-color-last: var(--footer-default-border-color);
-      }
-      :host .footer-links-row ul {
-        margin-bottom: 0;
-      }
-      :host .footer-links-row ul.bull li::before {
-        background-color: transparent;
-        border: 0;
-      }
-      :host .footer-links-row h4 {
-        color: var(--footer-default-social-headline-color);
-        font: var(--footer-default-content-accordion-typography);
-        margin-bottom: var(--footer-default-legal-links);
-      }
-      `, undefined, false))
-      
-      return wrappers
-    }
-    
-    injectCssIntoWrapperAndDetails () {
-      return /* css */ `
-      ${super.injectCssIntoWrapperAndDetails()}
-      
-      :host {
-        --details-default-icon-right-font-weight-strong: normal;
-        --details-default-icon-right-icon-width-mobile: var(--details-default-icon-right-icon-width-mobile-custom, var(--footer-default-content-spacing));
-      }
-      :host .footer-links-row li:not(:last-child) {
-        margin-bottom: var(--footer-default-list-item-spacing);
-      }
-      :host .footer-links-row li > a {
-        display: inline-block;
-        align-items: center;
-        gap: 0.125em;
-        flex-wrap: nowrap;
-        margin-bottom: 0;
-      }
-      :host .footer-links-row li > a > a-icon-mdx {
-        --icon-mdx-svg-display: block;
-        display: inline-block;
-        margin-bottom: -0.2em;
-      }
+      this.html = /* html */`
+        <ks-a-button id=to-the-top-button namespace="button-primary-" icon=true color=secondary>
+          <a-icon-mdx icon-name=ArrowUp size="1rem"></a-icon-mdx>
+        </ks-a-button>
       `
-    }
+      this.root.querySelector('#to-the-top-button')?.addEventListener('click', () => window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      }))
+      
+      // Overwrite ordering by super footer.js
+      const copyrightTag = this.root.querySelector('.copyright')
+      copyrightTag && copyrightTag.classList.remove('copyright')
+    })
   }
+    
+  /**
+  * should actually be done with the template for o-wrapper namespace="footer-default-" but this has already been done within the razor template, this fix should work without any razor adjustments
+  *
+  * @param {HTMLElement[] & any} wrappers
+  * @returns {HTMLElement[]}
+  */
+  injectCssIntoWrappers (wrappers) {
+    wrappers.forEach(wrapper => wrapper.setCss(/* css */`
+    ${this.injectCssIntoWrapperAndDetails()}
+    :host m-details {
+      --details-default-icon-right-border-bottom-last: var(--footer-default-border-width) solid;
+      --details-default-icon-right-border-color-last: var(--footer-default-border-color);
+    }
+    :host .footer-links-row ul {
+      margin-bottom: 0;
+    }
+    :host .footer-links-row ul.bull li::before {
+      background-color: transparent;
+      border: 0;
+    }
+    :host .footer-links-row h4 {
+      color: var(--footer-default-social-headline-color);
+      font: var(--footer-default-content-accordion-typography);
+      margin-bottom: var(--footer-default-legal-links);
+    }
+    `, undefined, false))
+    
+    return wrappers
+  }
+  
+  injectCssIntoWrapperAndDetails () {
+    return /* css */ `
+    ${super.injectCssIntoWrapperAndDetails()}
+    
+    :host {
+      --details-default-icon-right-font-weight-strong: normal;
+      --details-default-icon-right-icon-width-mobile: var(--details-default-icon-right-icon-width-mobile-custom, var(--footer-default-content-spacing));
+    }
+    :host .footer-links-row li:not(:last-child) {
+      margin-bottom: var(--footer-default-list-item-spacing);
+    }
+    :host .footer-links-row li > a {
+      display: inline-block;
+      align-items: center;
+      gap: 0.125em;
+      flex-wrap: nowrap;
+      margin-bottom: 0;
+    }
+    :host .footer-links-row li > a > a-icon-mdx {
+      --icon-mdx-svg-display: block;
+      display: inline-block;
+      margin-bottom: -0.2em;
+    }
+    `
+  }
+}
   
