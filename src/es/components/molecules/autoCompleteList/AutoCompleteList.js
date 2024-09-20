@@ -14,8 +14,26 @@ export default class AutoCompleteList extends Shadow() {
     if (this.locateMe) {
       this.locateMe.addEventListener('click', this.clickOnLocateMe)
     }
-    if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
+
+    this.hidden = true
+    new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-translations',
+        {
+          detail: {
+            resolve
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
+      const showPromises = []
+      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+      Promise.all(showPromises).then(() => (this.hidden = false))
+    })
 
     document.body.addEventListener(this.getAttribute('auto-complete') || 'auto-complete', this.autoCompleteListener)
 
@@ -100,7 +118,12 @@ export default class AutoCompleteList extends Shadow() {
           list-style: none;
           padding: 0;
           margin: 0;
+          flex: 1;
+        }
+
+        :host div:only-child ul {
           width: 100%;
+          flex-basis: 100%;
         }
 
         :host ul li {
@@ -141,6 +164,10 @@ export default class AutoCompleteList extends Shadow() {
         :host .content {
           display: flex;
           flex-direction: column;
+          flex: 1;
+        }
+
+        :host div ul + :host div .content {
           width: 50%;
         }
 
@@ -183,7 +210,7 @@ export default class AutoCompleteList extends Shadow() {
           margin-top: 0.25em;
         }
 
-        :host a {
+        :host .content ul + a {
           display: flex;
           align-items: center;
           text-decoration: none;
@@ -193,13 +220,33 @@ export default class AutoCompleteList extends Shadow() {
           color: var(--mdx-sys-color-primary-default); ;
         }
 
-        :host a a-icon-mdx {
+        :host .content ul + a a-icon-mdx {
           margin-left: 0.25em;
           color: var(--mdx-sys-color-primary-default); ;
         }
 
         :host .list + a {
           margin-top: 1em;
+        }
+
+        :host .content .list a {
+          display: flex;
+          align-items: flex-start;
+          padding: var(--li-item-padding, 0.4em 0.25em);
+          border-radius: var(--li-item-border-radius, 0.25em);
+          /* remove all css definitions from before */
+          padding: 0;
+          margin: 0;
+          text-decoration: none;
+          color: var(--color);
+          font-weight: 400;
+          gap: var(--mdx-sys-spacing-flex-s, 1em);
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        :host .responsive-picture {
+          width: 56px;
         }
 
         @media only screen and (max-width: _max-width_) {
@@ -214,6 +261,10 @@ export default class AutoCompleteList extends Shadow() {
 
           :host ul + .content {
             margin-top: 3em;
+          }
+
+          :host .responsive-picture {
+            width: 64px;
           }
         }
     `
@@ -250,10 +301,12 @@ export default class AutoCompleteList extends Shadow() {
         if (this.useKeyUpNavigation) this.activeListItemIndex = -2
         fetch.then(
           (/**
-            * @type {{total: number,success: boolean, searchText: string, items: import("../../controllers/autoComplete/AutoComplete.js").Item[], cms: []}}
+            * @type {{total: number,success: boolean, searchText: string, contentItems: import("../../controllers/autoComplete/AutoComplete.js").ContentItem[], items: import("../../controllers/autoComplete/AutoComplete.js").Item[], sprachid: string, cms: []}}
             */
-            { total, success, searchText, items, cms }
+            { total, success, searchText, contentItems, items, sprachid, cms }
           ) => {
+            console.log(total, success, searchText, contentItems, items, sprachid, cms)
+            // render list items
             const listItems = items.map(item => {
               const listElement = document.createElement('li')
               listElement.innerHTML = `
@@ -269,6 +322,36 @@ export default class AutoCompleteList extends Shadow() {
               return listElement
             })
             this.list.replaceChildren(...listItems)
+
+            // render content items
+            if (this.hasAttribute('with-auto-complete-content')) {
+              if (this.content) this.content.remove() // delete existing content items
+              if (contentItems === null || !contentItems.length) return
+              let searchBaseUrl = "/suche/"
+              if (sprachid === "f") searchBaseUrl = "/fr/recherche/"
+              if (sprachid === "i") searchBaseUrl = "/it/ricerca/"
+              const prefix = location.hostname === 'localhost' ? 'https://dev.klubschule.ch' : ''
+              const contentItemsElement = document.createElement('div')
+              contentItemsElement.classList.add('content')
+              contentItemsElement.innerHTML = `
+                <div class="heading">${this.getTranslation('Search.Autocomplete.MoreContent')}</div>
+                <ul class="list">
+                  ${contentItems.map(contentItem => `
+                    <li>
+                      <a href="${prefix + contentItem.link}">
+                        <div>
+                          <div class="title">${contentItem.title}</div>
+                          ${contentItem.text ? `<div class="text">${contentItem.text}</div>` : ''}
+                        </div>
+                        ${contentItem.image?.src ? `<a-picture class="responsive-picture" defaultSource="${prefix + contentItem.image.src}" alt="${contentItem.image.alt}" namespace="picture-cover-" aspect-ratio="1"></a-picture>` : ''}
+                      </a>
+                    </li>
+                  `).join('')}
+                </ul>
+                <a href="${searchBaseUrl}">${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></a>
+              `
+              this.list.after(contentItemsElement)
+            }
           })
       } else {
         if (this.hasAttribute('auto-complete-location')) {
@@ -289,6 +372,10 @@ export default class AutoCompleteList extends Shadow() {
 
   get list() {
     return this.root.querySelector('ul')
+  }
+
+  get content() {
+    return this.root.querySelector('.content')
   }
 
   navigateOnListElement = (event) => {
