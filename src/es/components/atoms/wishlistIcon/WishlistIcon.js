@@ -70,7 +70,7 @@ export default class WishtlistIcon extends Shadow() {
           mobile-size="1.3rem"
           color="#3d3d3d"
           rotate="0"
-          ${this.data?.watchlistEntriesAngebot.length || this.data?.watchlistEntriesVeranstaltung.length ? ` custom-notification="
+          ${this.data?.watchlistEntriesAngebot?.length || this.data?.watchlistEntriesVeranstaltung?.length ? ` custom-notification="
             {
               'height':'.4rem',
               'width':'.4rem',
