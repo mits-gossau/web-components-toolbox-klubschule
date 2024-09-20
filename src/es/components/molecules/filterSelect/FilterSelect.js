@@ -11,7 +11,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @class filterSelect
 * @type {CustomElementConstructor}
 */
-export default class filterSelect extends Shadow() {
+export default class FilterSelect extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
@@ -21,7 +21,7 @@ export default class filterSelect extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
 
-    this.eventListenerNode = this.hasAttribute('with-facet-target') ? this.findByQuerySelector(this, "ks-o-offers-page") : document.body
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? FilterSelect.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
       {

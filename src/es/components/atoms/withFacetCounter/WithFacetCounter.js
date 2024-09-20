@@ -12,7 +12,7 @@ export default class WithFacetCounter extends Shadow() {
   }
 
   connectedCallback () {
-    this.eventListenerNode = this.hasAttribute('with-facet-target') ? this.findByQuerySelector(this, "ks-o-offers-page") : document.body
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? WithFacetCounter.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
 
     this.eventListenerNode.addEventListener('with-facet', this.receiveData)
     this.initialContent = this.root.children[0]

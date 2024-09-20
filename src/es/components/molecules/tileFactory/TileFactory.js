@@ -20,7 +20,7 @@ export default class TileFactory extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderModules()) this.renderModules()
 
-    this.eventListenerNode = this.hasAttribute('with-facet-target') ? this.findByQuerySelector(this, "ks-o-offers-page") : document.body
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? TileFactory.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventNameListener)
 
     this.dispatchEvent(new CustomEvent('request-with-facet',
