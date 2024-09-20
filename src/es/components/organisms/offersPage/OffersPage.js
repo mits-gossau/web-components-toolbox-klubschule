@@ -752,6 +752,7 @@ export default class OffersPage extends Shadow() {
       reset-input-value-based-url="q"
       no-forwarding
       ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+      ${this.hasAttribute('with-auto-complete-content') ? `with-auto-complete-content` : ''}
       ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
       ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
       ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
@@ -779,7 +780,10 @@ export default class OffersPage extends Shadow() {
             </div>
           </div>
           <div class="container">
-            <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+            <ks-m-auto-complete-list 
+              auto-complete-selection="auto-complete-selection"
+              ${this.hasAttribute('with-auto-complete-content') ? `with-auto-complete-content` : ''} 
+            >
             </ks-m-auto-complete-list>
           </div>
         </dialog>
