@@ -736,12 +736,10 @@ export default class CourseDialog extends Shadow() {
         `
       }
       if (this.contentViewType === 'reversal') {
-        //
         subscriptionBalanceAdditionalInfo = /* html */ `
-          <div class="additional-subcription-info">
-            <span>
-              <!-- trans value = Der Terminpreis wird auf folgendes Abonnement rückvergütet: -->
-              <a-translation data-trans-key="CP.cpInfoSubscriptionInCanceling2"></a-translation>
+        <div class="additional-subcription-info">
+          <span>
+              ${this.subscriptionReversalAdditionInfoText(self.Environment.language, detail.lessonPrice)}
             </span>
           </div>
         `
@@ -949,12 +947,12 @@ export default class CourseDialog extends Shadow() {
 
   /**
    * Create .ics file
+   * Note: Add 'Europe/Zurich' as fixed value (Windows TZ Issue)
    * @param {*} course
    * @returns {string}
    */
   createDownloadICSFile (course) {
     const { courseType, courseId, courseTitle, courseLocation, courseAppointmentDate, courseAppointmentTimeFrom, courseAppointmentTimeTo, roomDescription } = course
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     const courseFromDate = courseAppointmentTimeFrom.split(':').map(Number)
     const courseFromDateTime = new Date(courseAppointmentDate).setHours(courseFromDate[0], courseFromDate[1])
     const courseToDate = courseAppointmentTimeTo.split(':').map(Number)
@@ -968,7 +966,23 @@ export default class CourseDialog extends Shadow() {
       'METHOD:PUBLISH\n' +
       'CALSCALE:GREGORIAN\n' +
       'BEGIN:VTIMEZONE\n' +
-      'TZID:' + timezone + '\n' +
+      'TZID:Europe/Zurich' + '\n' +
+      'TZURL:https://www.tzurl.org/zoneinfo-outlook/Europe/Zurich' + '\n' +
+      'X-LIC-LOCATION:Europe/Zurich' + '\n' +
+      'BEGIN:DAYLIGHT' + '\n' +
+      'TZNAME:CEST' + '\n' +
+      'TZOFFSETFROM:+0100' + '\n' +
+      'TZOFFSETTO:+0200' + '\n' +
+      'DTSTART:19700329T020000' + '\n' +
+      'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU' + '\n' +
+      'END:DAYLIGHT' + '\n' +
+      'BEGIN:STANDARD' + '\n' +
+      'TZNAME:CET' + '\n' +
+      'TZOFFSETFROM:+0200' + '\n' +
+      'TZOFFSETTO:+0100' + '\n' +
+      'DTSTART:19701025T030000' + '\n' +
+      'RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU' + '\n' +
+      'END:STANDARD\n' +
       'END:VTIMEZONE\n' +
       'BEGIN:VEVENT\n' +
       'SUMMARY:' + summary + '\n' +
@@ -976,8 +990,8 @@ export default class CourseDialog extends Shadow() {
       'SEQUENCE:0\n' +
       'STATUS:CONFIRMED\n' +
       'TRANSP:TRANSPARENT\n' +
-      'DTSTART;TZID=' + timezone + ':' + this.convertToICSDate(courseFromDateTime) + '\n' +
-      'DTEND;TZID=' + timezone + ':' + this.convertToICSDate(courseToDateTime) + '\n' +
+      'DTSTART;TZID=' + 'Europe/Zurich' + ':' + this.convertToICSDate(courseFromDateTime) + '\n' +
+      'DTEND;TZID=' + 'Europe/Zurich' + ':' + this.convertToICSDate(courseToDateTime) + '\n' +
       'LOCATION:' + courseLocation + '\n' +
       'DESCRIPTION:' + description + '\n' +
       'END:VEVENT\n' +
@@ -999,6 +1013,23 @@ export default class CourseDialog extends Shadow() {
    */
   subscriptionPdfLinkLoading = (display = 'none') => {
     this.mdxComponent.style.display = display
+  }
+
+  /**
+   * Takes a language and a price as input, extracts the current language from the input,
+   * and returns a specific text based on the language provided
+   * @param {string} lang represents the language code
+   * @param {string} price represents the cost or price of a lesson or appointment that is being refunded
+   * @returns {string} Text string based on the language provided
+   */
+  subscriptionReversalAdditionInfoText (lang, price) {
+    const currentLanguage = lang.split('-')[0]
+    const text = {
+      de: `Der Preis für den Termin von ${price} wird auf das folgende Abonnement rückvergütet:`,
+      it: `Il prezzo della lezione del ${price} sarà rimborsato al seguente abbonamento:`,
+      fr: `Le prix pour la leçon du ${price} va être remboursé sur l'abonnement suivant:`
+    }
+    return text[currentLanguage]
   }
 
   get dialog () {

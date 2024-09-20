@@ -10,23 +10,27 @@ export default class Abonnements extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
     this.ppage = 0
-    this.requestAbonnements = (event) => {
-      new Promise(resolve => {
-        this.dispatchEvent(new CustomEvent('request-abo-list', {
-          detail: {
-            resolve,
-            abonnementsAPI: `${this.abonnementsURL}&ppage=${this.ppage}`
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }))
-      }).then(data => {
-        if (data) {
-          this.renderContent(data)
-          this.receiveData(data)
-        }
-      })
+    this.overlayAlreadyOpenend = false
+    this.requestAbonnements = (event, isOpenDialogCall) => {
+      if (!isOpenDialogCall || !this.overlayAlreadyOpenend) {
+        new Promise(resolve => {
+          this.dispatchEvent(new CustomEvent('request-abo-list', {
+            detail: {
+              resolve,
+              abonnementsAPI: `${this.abonnementsURL}&ppage=${this.ppage}`
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+        }).then(data => {
+          if (data) {
+            this.renderContent(data)
+            this.receiveData(data)
+            if (isOpenDialogCall) this.overlayAlreadyOpenend = true
+          }
+        })
+      }
     }
   }
 
@@ -51,14 +55,13 @@ export default class Abonnements extends Shadow() {
       Promise.all(showPromises).then(() => (this.hidden = false))
     })
 
-    this.addEventListener(`open-abonnements-dialog-${this.aboId}`, this.requestAbonnements)
+    this.addEventListener(`open-abonnements-dialog-${this.aboId}`, (event) => this.requestAbonnements(event, true))
     this.addEventListener("load-more", this.requestAbonnements)
   }
 
   disconnectedCallback() {
-    this.removeEventListener(`open-abonnements-dialog-${this.aboId}`, this.requestAbonnements)
+    this.removeEventListener(`open-abonnements-dialog-${this.aboId}`, (event) => this.requestAbonnements(event, true))
     this.removeEventListener("load-more", this.requestAbonnements)
-
   }
 
   /**
@@ -186,9 +189,9 @@ export default class Abonnements extends Shadow() {
       }
     ]).then(() => {
       this.total.innerHTML = data.total_label
-      this.tiles = this.tiles || []
+      this.tiles = data.ppage !== 1 && data.pskip !== data.psize ? this.tiles : []
       data.courses.forEach((course) => {
-        this.tiles.push(course.locations?.length ? /* html */ `<ks-o-tile-list no-url-params data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-o-tile-list>` : /* html */ `<ks-m-tile no-url-params namespace="tile-default-" data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-m-tile>`)
+        this.tiles.push(course.locations?.length > 1 ? /* html */ `<ks-o-tile-list no-url-params data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-o-tile-list>` : /* html */ `<ks-m-tile no-url-params namespace="tile-default-" data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-m-tile>`)
       })
 
       this.content.innerHTML = /* html */ `
