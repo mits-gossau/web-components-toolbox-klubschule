@@ -769,6 +769,7 @@ export default class OffersPage extends Shadow() {
               type="search"
               answer-event-name="search-change"
               delete-listener
+              ${this.hasAttribute('with-auto-complete') ? 'any-key-listener' : ''}
               search
               autocomplete="off"
             >
