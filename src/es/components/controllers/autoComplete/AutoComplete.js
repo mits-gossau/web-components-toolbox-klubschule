@@ -25,6 +25,7 @@
   searchText: string,
   contentItems: ContentItem[],
   items: Item[],
+  sprachid: string,
   cms: []
 }} fetchAutoCompleteEventDetail */
 
@@ -352,6 +353,7 @@ export default class AutoComplete extends Shadow() {
               typ: 2
             }
           ],
+          sprachid: "d",
           cms: []
         })
       },

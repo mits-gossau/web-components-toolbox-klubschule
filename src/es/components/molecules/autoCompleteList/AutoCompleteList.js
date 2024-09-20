@@ -300,10 +300,11 @@ export default class AutoCompleteList extends Shadow() {
       if (fetch) {
         fetch.then(
           (/**
-            * @type {{total: number,success: boolean, searchText: string, contentItems: import("../../controllers/autoComplete/AutoComplete.js").ContentItem[], items: import("../../controllers/autoComplete/AutoComplete.js").Item[], cms: []}}
+            * @type {{total: number,success: boolean, searchText: string, contentItems: import("../../controllers/autoComplete/AutoComplete.js").ContentItem[], items: import("../../controllers/autoComplete/AutoComplete.js").Item[], sprachid: string, cms: []}}
             */
-            { total, success, searchText, contentItems, items, cms }
+            { total, success, searchText, contentItems, items, sprachid, cms }
           ) => {
+            console.log(total, success, searchText, contentItems, items, sprachid, cms)
             // render list items
             const listItems = items.map(item => {
               const listElement = document.createElement('li')
@@ -325,6 +326,9 @@ export default class AutoCompleteList extends Shadow() {
             if (this.hasAttribute('with-auto-complete-content')) {
               if (this.content) this.content.remove() // delete existing content items
               if (contentItems === null || !contentItems.length) return
+              let searchBaseUrl = "/suche/"
+              if (sprachid === "f") searchBaseUrl = "/fr/recherche/"
+              if (sprachid === "i") searchBaseUrl = "/it/ricerca/"
               const prefix = location.hostname === 'localhost' ? 'https://dev.klubschule.ch' : ''
               const contentItemsElement = document.createElement('div')
               contentItemsElement.classList.add('content')
@@ -343,7 +347,7 @@ export default class AutoCompleteList extends Shadow() {
                     </li>
                   `).join('')}
                 </ul>
-                <a href="#">${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></a>
+                <a href="${searchBaseUrl}">${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></a>
               `
               this.list.after(contentItemsElement)
             }
