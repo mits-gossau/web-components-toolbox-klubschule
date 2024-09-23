@@ -165,18 +165,22 @@
       if (src.searchParams.get('wc-config-load') !== 'false') {
         if (src.searchParams.get('debug') !== 'false') console.info(wcConfigLoad, imports)
         document.body.setAttribute(wcConfigLoad, 'true')
-        if (dispatchWcConfigLoadEvent) document.body.dispatchEvent(new CustomEvent(wcConfigLoad,
+        if (dispatchWcConfigLoadEvent) { 
+document.body.dispatchEvent(new CustomEvent(wcConfigLoad,
           {
             detail: { imports },
             bubbles: true,
             cancelable: true,
             composed: true
           }
-        ))
+        )) 
+}
       }
     })
   }
-  document.body.setAttribute(src.searchParams.get('loadCustomElementsEventName') || 'load-custom-elements', 'true')
+  self.addEventListener('load', () => {
+    document.body.setAttribute(src.searchParams.get('loadCustomElementsEventName') || 'load-custom-elements', 'true')
+  }, { once: true })
   // @ts-ignore
   self.addEventListener(src.searchParams.get('loadCustomElementsEventName') || 'load-custom-elements', event => loadListener(event, event.detail.nodes, false))
   if (src.searchParams.get('triggerImmediately') === 'true') {
@@ -287,4 +291,3 @@
   ] // directories
   // ↑↑↑ adjustable ↑↑↑
 )
- 
