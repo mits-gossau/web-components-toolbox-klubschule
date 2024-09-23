@@ -34,11 +34,12 @@ export default class TileList extends Shadow() {
                   <mdx-loading-bar></mdx-loading-bar>
               </mdx-component>
           `
-
+          console.log(this.data)
           return new Promise(resolve => this.dispatchEvent(new CustomEvent('request-locations', {
             detail: {
               resolve,
-              filter: this.data.filter
+              filter: this.data.filter,
+              isAboList: this.hasAttribute("is-abo-list")
             },
             bubbles: true,
             cancelable: true,

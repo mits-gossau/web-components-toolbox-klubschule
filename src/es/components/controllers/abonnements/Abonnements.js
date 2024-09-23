@@ -21,7 +21,7 @@ export default class Abonnements extends Shadow() {
     this.isMocked = this.hasAttribute('mock')
     this.response = {}
     this.responseData = {}
-    const endpoint = this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'
+    const endpoint = this.getAttribute('endpoint') || 'https://int.klubschule.ch/Umbraco/Api/CourseApi/Search'
 
     this.requestAbonnementsListener = (event) => {
       event.detail.resolve(fetch(`${event.detail.abonnementsAPI}`, {
@@ -76,11 +76,11 @@ export default class Abonnements extends Shadow() {
 
   connectedCallback () {
     this.addEventListener('request-abo-list', this.requestAbonnementsListener)
-    this.addEventListener('request-locations', this.requestLocations)
+    // this.addEventListener('request-locations', this.requestLocations)
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-abo-list', this.requestAbonnementsListener)
-    this.removeEventListener('request-locations', this.requestLocations)
+    // this.removeEventListener('request-locations', this.requestLocations)
   }
 }

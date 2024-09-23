@@ -356,11 +356,11 @@ export default class WithFacet extends WebWorker() {
 
       // merge both user Filter with sublevel filter
       let subLevelFilter = event.detail.filter
+      const isAboList = event.detail.isAboList
 
-      if (currentRequestObj.filter?.length) subLevelFilter = [...event.detail.filter, ...currentRequestObj.filter]
+      if (currentRequestObj.filter?.length && !isAboList) subLevelFilter = [...event.detail.filter, ...currentRequestObj.filter]
 
-      const sorting = Number(this.params.get('sorting')) || currentRequestObj.sorting || initialRequestObj.sorting
-      const searchText = currentRequestObj.searchText || initialRequestObj.searchText
+      const searchText = isAboList ? null : currentRequestObj.searchText || initialRequestObj.searchText
 
       let body = `{
         "filter": ${JSON.stringify(subLevelFilter)},
