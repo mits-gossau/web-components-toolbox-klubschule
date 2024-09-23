@@ -602,7 +602,7 @@ export default class CourseDialog extends Shadow() {
     Promise.all([fetchModules]).then((_) => {
       this.html = /* html */ `
         <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-${courseId}" close-event-name="dialog-close-${courseId}">
-          <div class="container dialog-header" tabindex="0">
+          <div class="container dialog-header" tabindex="0" style="padding:var(--padding);">
             <a-button id="close-back">
               &nbsp;
             </a-button>
