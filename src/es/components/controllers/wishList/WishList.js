@@ -98,11 +98,11 @@ export default class WishList extends HTMLElement {
       }))
     }
 
-    this.removeAllFromWishListListener = event => {
+    this.removeAllFromWishListListener = (_event, tabIndex) => {
       if (!this.guid) return
       this.dispatchEvent(new CustomEvent('wish-list', {
         detail: {
-          fetch: fetch(`${endpoint}/Clear?inclCourseDetail=false&watchlistGuid=${this.guid}`, {
+          fetch: fetch(`${endpoint}/ClearTab?tab=${tabIndex}&watchlistGuid=${this.guid}`, {
             method: 'GET'
           }).then(response => {
             if (response.status >= 200 && response.status <= 299) return response.json()
@@ -124,14 +124,16 @@ export default class WishList extends HTMLElement {
     this.addEventListener('request-wish-list', this.requestWishListListener)
     this.addEventListener('add-to-wish-list', this.addToWishListListener)
     this.addEventListener('remove-from-wish-list', this.removeFromWishListListener)
-    this.addEventListener('remove-all-from-wish-list', this.removeAllFromWishListListener)
+    this.addEventListener('remove-all-from-wish-list-1', (event) => this.removeAllFromWishListListener(event, 1))
+    this.addEventListener('remove-all-from-wish-list-2', (event) => this.removeAllFromWishListListener(event, 2))
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-wish-list', this.requestWishListListener)
     this.removeEventListener('add-to-wish-list', this.addToWishListListener)
     this.removeEventListener('remove-from-wish-list', this.removeFromWishListListener)
-    this.removeEventListener('remove-all-from-wish-list', this.removeAllFromWishListListener)
+    this.removeEventListener('remove-all-from-wish-list-1', (event) => this.removeAllFromWishListListener(event, 1))
+    this.removeEventListener('remove-all-from-wish-list-2', (event) => this.removeAllFromWishListListener(event, 2))
   }
 
   set guid (value) {

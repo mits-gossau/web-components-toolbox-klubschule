@@ -234,7 +234,7 @@ export default class WishList extends Shadow() {
     return entryList?.length ? /* html */ `
         <ks-o-body-section variant="default" no-padding-y no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
           <div part="delete-btn-wrapper">
-              <ks-a-button namespace="button-secondary-" color="tertiary" request-event-name="remove-all-from-wish-list">
+              <ks-a-button namespace="button-secondary-" color="tertiary" request-event-name="remove-all-from-wish-list-${isEvent ? "2" : "1"}">
                 <a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>
                 <a-translation data-trans-key="${this.getAttribute('delete-all-text') ?? 'Wishlist.DeleteAll'}"></a-translation>
               </ks-a-button>
