@@ -76,6 +76,7 @@ export default class AutoCompleteList extends Shadow() {
   }
 
   clickOnListElement = (item) => {
+    this.dataLayerPush(item)
     this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', {
       /** @type {import("../../controllers/autoCompleteLocation/AutoCompleteLocation.js").LocationSelectionItem} */
       detail: {
@@ -422,6 +423,25 @@ export default class AutoCompleteList extends Shadow() {
             }
             break;
         }
+      }
+    }
+  }
+
+  dataLayerPush(item) {
+    console.log('dataLayerPush', item)
+    // GTM Tracking of autocomplete
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push({
+          'event': 'autocomplete_click',
+          'suchtext': item.type === 'enter' || item.type === 'search-click' ? item.description : '',
+          'typ': item.type === 'content' ? 'Content' : 'Begriff',
+          'auswahl': item.type !== 'enter' && item.type !== 'search-click' ? item.description : ''
+        })
+      } catch (error) {
+        console.error('Failed to push in data layer', error)
       }
     }
   }
