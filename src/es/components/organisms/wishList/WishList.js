@@ -12,7 +12,8 @@ export default class WishList extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.message = this.root.querySelector('#message')
+    this.messageEvents = this.root.querySelector('#message-events')
+    this.messageOffers = this.root.querySelector('#message-offers')
     this.wishListListener = event => this.renderHTML(event.detail.fetch)
   }
 
@@ -72,6 +73,9 @@ export default class WishList extends Shadow() {
    */
   renderCSS() {
     this.css = /* css */`
+      :host {
+        width: 100% !important;
+      }
       :host > .error {
         color: var(--color-error);
       }
@@ -109,7 +113,7 @@ export default class WishList extends Shadow() {
 
   /**
    * Render HTML
-   * @param {Promise<{watchlistEntries: {aktiv: boolean, course: any, mandantId: number, centerId: number, kursTyp: number, kursId: number, sprache: string, code: number, message: string}[]}>} [fetch=undefined]
+   * @param {Promise<any>} [fetch=undefined]
    * @return {Promise<void>}
    */
   async renderHTML(fetch) {
@@ -122,205 +126,34 @@ export default class WishList extends Shadow() {
       })
       const data = this.lastData = await fetch
       this.html = ''
-      if (data?.watchlistEntries.length) {
-        // assemble withfacet filter
-        const filter = {
-          color: '',
-          disabled: false,
-          hasChilds: false,
-          hideCount: false,
-          id: '29',
-          label: '',
-          level: '',
-          selected: false,
-          typ: ''
-        }
+      console.log(data)
+      this.baseRequest = {
+        MandantId: this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 111,
+        PortalId: this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29,
+        sprachid: this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd',
+      }
 
-        const baseRequest = {
-          MandantId: this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 111,
-          PortalId: this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29,
-          sprachid: this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd',
-        }
-
-        const initialRequestOffers = {
-          ...baseRequest,
-          filter: [{
-            children: [],
-            ...filter
-          }]
-        }
-        // id assembly: courseType_courseId_centerid
-        // @ts-ignore
-        initialRequestOffers.filter[0].children = data.watchlistEntriesAngebot.map(entry => ({ ...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true, disabled: true }))
-        const passedWatchListOffers = this.mockDataForWatchListEntries.watchlistEntriesAngebot.filter(({ aktiv }) => !aktiv)
-
-        const initialRequestEvents = {
-          ...baseRequest,
-          filter: [{
-            children: [],
-            ...filter
-          }]
-        }
-
-        // id assembly: courseType_courseId_centerid
-        // @ts-ignore
-        initialRequestEvents.filter[0].children = this.mockDataForWatchListEntries.watchlistEntriesVeranstaltung.map(entry => ({ ...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true, disabled: true }))
-        const passedWatchListEvents = this.mockDataForWatchListEntries.watchlistEntriesVeranstaltung.filter(({ aktiv }) => !aktiv)
-
-        this.html = /* html */`
+      this.html = /* html */`
           <ks-m-tab>
             <ul class="tab-search-result">
               <li>
-                <button tab-target="content1" id="total-event-offers-tab-heading">${this.getTranslation('Search.TabEvent')}</button>
+                <button tab-target="content1" id="total-event-offers-tab-heading">${this.getTranslation('Wishlist.Events.Tab')}</button>
               </li>
               <li>
-                <button class="active" tab-target="content2" id="total-course-offers-tab-heading">${this.getTranslation('Search.TabCourse')}</button>
+                <button class="active" tab-target="content2" id="total-course-offers-tab-heading">${this.getTranslation('Wishlist.Offers.Tab')}</button>
               </li>
             </ul>
             <div>
               <div id="content1" tab-content-target>
-                <ks-o-body-section variant="default" no-padding-y no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
-                  <div part="delete-btn-wrapper">
-                      <ks-a-button namespace="button-secondary-" color="tertiary" request-event-name="remove-all-from-wish-list">
-                        <a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>
-                        <a-translation data-trans-key="${this.getAttribute('delete-all-text') ?? 'Wishlist.DeleteAll'}"></a-translation>
-                      </ks-a-button>
-                  </div>
-                </ks-o-body-section>
-                <ks-o-offers-page
-                  headless
-                  is-wish-list
-                  endpoint="${this.getAttribute('endpoint')}"
-                  initial-request='${JSON.stringify(initialRequestEvents)}'
-                  event-detail-url="${this.getAttribute('event-detail-url')}"
-                  with-facet-target
-                ></ks-o-offers-page>
-                ${passedWatchListEvents.length ? /* html */ `
-                  <ks-c-event-detail endpoint="${this.getAttribute("event-detail-url")}">
-                    <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="passed-offers-section" tabindex="0" aria-label="Section">  
-                      <h2>${this.getTranslation('WishList.TitleEvent.Expired')}</h2>
-                      ${passedWatchListEvents.map(
-                        ({ course }) => /* html */ `
-                          <ks-m-event 
-                            data='{
-                              "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
-                              "sprachid": "${course?.sprache_id || "d"}"
-                            }'
-                            is-wish-list
-                            tabindex="0"
-                          >
-                          </ks-m-event>
-                        `
-                      )}
-                    <ks-a-spacing type="2xl-fix"></ks-a-spacing>
-                    <ks-m-badge-legend namespace="badge-legend-default-">
-                      ${this.isEasyPortal ? /* html */`
-                          <div>
-                            <div class="badge-icon-only">
-                              <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Key" size="1em"></a-icon-mdx>
-                            </div>
-                            <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
-                          </div> 
-                      ` : ''}
-                      ${this.hasAttribute('hide-abo-legend') ? '' : /* html */`
-                        <div>
-                          <div class="badge-icon-only">
-                            <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
-                          </div>
-                          <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
-                        </div>
-                        <div>
-                          <div class="badge-icon-only">
-                            <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
-                          </div>
-                          <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
-                        </div>
-                      `}
-                      <div>
-                        <div class="badge-icon-only">
-                          <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Percent" size="1em"></a-icon-mdx>
-                        </div>
-                        <span>${this.getTranslation('Badge.Legend.PercentPlaceholder')}</span>
-                      </div>
-                    </ks-m-badge-legend>
-                  </ks-o-body-section>
-                </ks-c-event-detail>
-              ` : ''}
+                ${this.renderList(data.watchlistEntriesVeranstaltung, true)}
               </div>
 
               <div id="content2" tab-content-target>
-                <ks-o-body-section no-margin-y variant="default" has-background no-padding-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
-                  <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
-                    <div part="delete-btn-wrapper">
-                      <ks-a-button namespace="button-secondary-" color="tertiary" request-event-name="remove-all-from-wish-list">
-                        <a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>
-                        <a-translation data-trans-key="${this.getAttribute('delete-all-text') ?? 'Wishlist.DeleteAll'}"></a-translation>
-                      </ks-a-button>
-                    </div>
-                  </ks-o-body-section>
-                  <ks-o-offers-page
-                    headless
-                    is-wish-list
-                    no-search-tab
-                    endpoint="${this.getAttribute('endpoint')}"
-                    initial-request='${JSON.stringify(initialRequestOffers)}'
-                  ></ks-o-offers-page>
-                  ${passedWatchListOffers.length ? /* html */ `
-                    <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="passed-offers-section" tabindex="0" aria-label="Section">  
-                      <h2>${this.getTranslation('WishList.TitleOffer.Expired')}</h2>
-                      ${passedWatchListOffers.map(
-                        ({ course }) => /* html */ `
-                          <ks-m-tile 
-                            namespace="tile-passed-"
-                            data='${JSON.stringify(course)}'
-                            is-wish-list
-                            tabindex="0"
-                          >
-                          </ks-m-tile>
-                        `
-                      )}
-                    <ks-a-spacing type="2xl-fix"></ks-a-spacing>
-                    <ks-m-badge-legend namespace="badge-legend-default-">
-                      ${this.isEasyPortal ? /* html */`
-                          <div>
-                            <div class="badge-icon-only">
-                              <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Key" size="1em"></a-icon-mdx>
-                            </div>
-                            <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
-                          </div> 
-                        ` : ''}
-                      ${this.hasAttribute('hide-abo-legend') ? '' : /* html */`
-                        <div>
-                          <div class="badge-icon-only">
-                            <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
-                          </div>
-                          <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
-                        </div>
-                        <div>
-                          <div class="badge-icon-only">
-                            <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
-                          </div>
-                          <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
-                        </div>
-                      `}
-                      <div>
-                        <div class="badge-icon-only">
-                          <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Percent" size="1em"></a-icon-mdx>
-                        </div>
-                        <span>${this.getTranslation('Badge.Legend.PercentPlaceholder')}</span>
-                      </div>
-                    </ks-m-badge-legend>
-                  </ks-o-body-section>
-                </ks-o-body-section>
-                ` : ''}
+                ${this.renderList(data.watchlistEntriesAngebot, false)}
               </div>
             </div>
           </ks-m-tab>
         `
-      } else {
-        this.html = this.message
-        this.message.removeAttribute('hidden')
-      }
     }
     return this.fetchModules([
       {
@@ -330,6 +163,14 @@ export default class WishList extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/tile/Tile.js`,
         name: 'ks-m-tile'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/badgeLegend/BadgeLegend.js`,
+        name: 'ks-m-badge-legend'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/tab/Tab.js`,
+        name: 'ks-m-tab'
       },
       {
         path: `${this.importMetaUrl}../../molecules/event/Event.js`,
@@ -358,6 +199,138 @@ export default class WishList extends Shadow() {
     ])
   }
 
+  renderMessage(message) {
+    message.removeAttribute('hidden')
+    return message
+  }
+
+  renderList(entryList, isEvent) {
+    // assemble withfacet filter
+    const filter = {
+      color: '',
+      disabled: false,
+      hasChilds: false,
+      hideCount: false,
+      id: '29',
+      label: '',
+      level: '',
+      selected: false,
+      typ: ''
+    }
+
+    const initialRequestEntries = {
+      ...this.baseRequest,
+      filter: [{
+        children: [],
+        ...filter
+      }]
+    }
+
+    const activeWatchListEntries = entryList.filter(({ aktiv }) => aktiv)
+    const passedWatchListEntries = entryList.filter(({ aktiv }) => !aktiv)
+    // id assembly: courseType_courseId_centerid
+    initialRequestEntries.filter[0].children = activeWatchListEntries.map(entry => ({ ...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true, disabled: true }))
+
+    return entryList?.length ? /* html */ `
+        <ks-o-body-section variant="default" no-padding-y no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
+          <div part="delete-btn-wrapper">
+              <ks-a-button namespace="button-secondary-" color="tertiary" request-event-name="remove-all-from-wish-list">
+                <a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>
+                <a-translation data-trans-key="${this.getAttribute('delete-all-text') ?? 'Wishlist.DeleteAll'}"></a-translation>
+              </ks-a-button>
+          </div>
+        </ks-o-body-section>
+        ${activeWatchListEntries?.length ? /* html */ `
+          <ks-o-offers-page
+            headless
+            is-wish-list
+            endpoint="${this.getAttribute('endpoint')}"
+            initial-request='${JSON.stringify(initialRequestEntries)}'
+            with-facet-target
+            ${isEvent ? ` event-detail-url="${this.getAttribute('event-detail-url')}` : ''}
+            ${isEvent ? "" : " no-search-tab"}
+          ></ks-o-offers-page>
+        ` : ''}
+        ${passedWatchListEntries?.length ? /* html */ `
+          <ks-c-event-detail endpoint="${this.getAttribute("event-detail-url")}">
+            <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="passed-offers-section" tabindex="0" aria-label="Section">  
+              <div class="passed-tile-wrapper">  
+                <h2>${isEvent ? this.getTranslation('WishList.Events.Title') : this.getTranslation('WishList.Offers.Title')}</h2>
+                ${passedWatchListEntries.map(
+                  ({ course }) => /* html */ `
+                    <div>
+                      ${isEvent ? /* html */ `
+                        <ks-m-event 
+                          data='{
+                            "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
+                            "sprachid": "${course?.sprache_id || "d"}"
+                          }'
+                          is-wish-list
+                          is-passed
+                          tabindex="0"
+                          passed-message="${this.getTranslation("Wishlist.Events.Copy")}"
+                        >
+                        </ks-m-event>
+                      ` : /* html */ `
+                        <ks-m-tile 
+                          namespace="tile-passed-"
+                          data='${JSON.stringify(course)}'
+                          is-wish-list
+                          is-passed
+                          tabindex="0"
+                          passed-message="${this.getTranslation("Wishlist.Offers.Copy")}"
+                        >
+                        </ks-m-tile>
+                      `}
+                    </div>
+                  `
+                )}
+              </div>
+            ${this.renderLegend()}
+          </ks-o-body-section>
+        </ks-c-event-detail>
+        ` : ''}
+      ` : this.renderMessage(isEvent ? this.messageEvents : this.messageOffers)
+  }
+
+  renderLegend() {
+    return /* html */ `
+      <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+      <div class="passed-tile-wrapper">
+        <ks-m-badge-legend namespace="badge-legend-default-">
+          ${this.isEasyPortal ? /* html */`
+              <div>
+                <div class="badge-icon-only">
+                  <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Key" size="1em"></a-icon-mdx>
+                </div>
+                <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
+              </div> 
+            ` : ''}
+          ${this.hasAttribute('hide-abo-legend') ? '' : /* html */`
+            <div>
+              <div class="badge-icon-only">
+                <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
+              </div>
+              <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
+            </div>
+            <div>
+              <div class="badge-icon-only">
+                <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
+              </div>
+              <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
+            </div>
+          `}
+          <div>
+            <div class="badge-icon-only">
+              <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Percent" size="1em"></a-icon-mdx>
+            </div>
+            <span>${this.getTranslation('Badge.Legend.PercentPlaceholder')}</span>
+          </div>
+        </ks-m-badge-legend>
+      </div>
+    `
+  }
+
   renderLoading() {
     this.html = /* html */`
       <mdx-component>
@@ -377,7 +350,6 @@ export default class WishList extends Shadow() {
   get isEasyPortal() {
     return !!this.hasAttribute('is-easy-portal')
   }
-
 
   get mockDataForWatchListEntries() {
     return {
@@ -472,13 +444,13 @@ export default class WishList extends Shadow() {
             kurs_typ: "D",
             kurs_id: "90486",
             buttons: [
-              { 
+              {
                 text: "6 Veranstaltung(en)",
                 link: "/kurs/deutschanfangerinnen--D_90486_2671_324",
                 typ: "secondary",
                 event: null,
                 iconName: "ArrowRight",
-                filters: null 
+                filters: null
               }
             ],
             icons: [],

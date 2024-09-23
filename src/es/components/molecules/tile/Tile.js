@@ -156,7 +156,6 @@ export default class Tile extends Shadow() {
           flex-direction: row;
           align-items: flex-end;
           flex-wrap: wrap;
-          width: calc(50% - 0.5em);
           justify-content: end;
       }
       
@@ -225,10 +224,19 @@ export default class Tile extends Shadow() {
         }
 
         :host .m-tile__foot-right {
-            margin-left: auto;
             flex-direction: column;
             align-items: flex-end;
             gap: 0.5rem;
+        }
+
+        :host .m-tile__foot-passed .m-tile__foot-left {
+          justify-content: space-between;
+        }
+
+        :host .m-tile__foot-passed {
+          flex-direction: column;
+          align-items: unset;
+          gap: 1rem;
         }
 
         :host .m-tile__icon-box + .m-tile__icon-box {
@@ -328,7 +336,7 @@ export default class Tile extends Shadow() {
             `
             : ''
           }
-          ${data.location?.badge && !data.passed && ((this.isNearbySearch && this.isInsideTileList) || !this.isInsideTileList)
+          ${data.location?.badge && !this.isPassed && ((this.isNearbySearch && this.isInsideTileList) || !this.isInsideTileList)
             ? /* html */`
               <ks-a-button badge namespace="button-secondary-" color="tertiary">
                 <span>${data.location.badge}</span>
@@ -339,8 +347,8 @@ export default class Tile extends Shadow() {
         </div>
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
-            ${this.hasAttribute('is-wish-list') && !data.passed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
-            ${!data.passed && this.hasAttribute('is-wish-list') ? /* html */ `<ks-m-buttons course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>` : ''}
+            ${this.hasAttribute('is-wish-list') && !this.isPassed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
+            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
@@ -352,20 +360,14 @@ export default class Tile extends Shadow() {
                 </ks-m-tooltip>
               `, '')}           
             </div>
-            ${!data.passed ? /* html */ `<span class="m-tile__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>` : ''}
+            ${!this.isPassed ? /* html */ `<span class="m-tile__price">${data.price?.pre ? data.price?.pre + ' ' : ''}<strong>${data.price?.amount || ''}</strong>${data.price?.per ? ' / ' + data.price?.per : ''}</span>` : ''}
           </div>
         </div>      
       </div>
       <div class="m-tile__foot-passed">
-        <span class="m-tile__passed-message">${data.passed?.title || warnMandatory + 'passed.title'}</span>
+        <span class="m-tile__passed-message">${this.getAttribute("passed-message")}</span>
         <div class="m-tile__foot-left">
           ${this.hasAttribute('is-wish-list') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey}"></a-icon-mdx>` : ''}
-          ${data.passed?.button?.text || data.passed?.button?.iconName ? /* html */ `
-            <ks-a-button namespace="button-secondary-" color="secondary">
-              <span>${data.passed.button.text || warnMandatory + 'passed.button.text'}</span>
-              <a-icon-mdx namespace="icon-mdx-ks-" icon-name="${data.passed.button.iconName || 'ArrowRight'}" size="1em" class="icon-right">
-            </ks-a-button>
-          ` : ''}
         </div>
       </div>
     </div>
@@ -404,5 +406,9 @@ export default class Tile extends Shadow() {
 
   get isInsideTileList () {
     return this.hasAttribute('inside-tile-list')
+  }
+
+  get isPassed () {
+    return this.hasAttribute('is-passed')
   }
 }

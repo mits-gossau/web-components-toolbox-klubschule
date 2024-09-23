@@ -282,7 +282,8 @@ export default class KsBodyStyle extends BodyStyle {
                 width: calc(100% - 2rem);
             }
             :host > ks-m-figure {
-                width: calc(100% - 1rem) !important;
+                margin-right: -0.5rem;
+                margin-left: -0.5rem;
             }
             :host([variant=full]) > * {
                 width: 100%;
@@ -299,6 +300,12 @@ export default class KsBodyStyle extends BodyStyle {
                 margin-left: 0 !important;
                 margin-right: 0 !important;
             }
+
+            :host .passed-tile-wrapper > * {
+                margin-left: -0.5rem;
+                margin-right: -0.5rem;
+            }
+        }
     `
   }
 
