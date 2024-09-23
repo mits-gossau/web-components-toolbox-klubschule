@@ -709,7 +709,7 @@ export default class CourseDialog extends Shadow() {
     }
     let priceInfo = ''
     let subscriptionBalanceAdditionalInfo = ''
-    if (subscriptionMode === 'WERTABO' && this.renderPriceInfoInBookingView) {
+    if (subscriptionMode === 'WERTABO') {
       priceInfo = /* html */ `
         <div class="detail">
           <span>
