@@ -126,7 +126,7 @@ export default class WishList extends Shadow() {
       })
       const data = this.lastData = await fetch
       this.html = ''
-      console.log(data)
+
       this.baseRequest = {
         MandantId: this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 111,
         PortalId: this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29,
@@ -200,8 +200,13 @@ export default class WishList extends Shadow() {
   }
 
   renderMessage(message) {
-    message.removeAttribute('hidden')
-    return message
+    return /* html */ `
+      <ks-o-body-section variant="default" background-color="var(--mdx-sys-color-accent-6-subtle1)" no-margin-y no-padding-y>
+        <section id="${message.id}">
+          ${message.innerHTML}
+        </section>
+      </ks-o-body-section>
+    `
   }
 
   renderList(entryList, isEvent) {
