@@ -365,7 +365,7 @@ export default class AutoComplete extends Shadow() {
   }
 
   dataLayerPush(item) {
-    console.log('dataLayerPush', item)
+    console.log('AutoComplete.js', item)
     // GTM Tracking of autocomplete
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {

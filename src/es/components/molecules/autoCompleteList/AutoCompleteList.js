@@ -89,6 +89,19 @@ export default class AutoCompleteList extends Shadow() {
     }))
   }
 
+  clickOnListElementContent = (item) => {
+    item.type = 'content'
+    item.description = item.title
+    const tempElement = document.createElement("div")
+    tempElement.innerHTML = item.title
+    if (tempElement.querySelector('strong')) {
+      // @ts-ignore
+      item.searchText = tempElement.querySelector('strong').textContent
+    }
+    console.log('clickOnListElementContent', item)
+    this.dataLayerPush(item)
+  }
+
   shouldRenderCSS() {
     return !this.root.querySelector(
       `${this.cssSelector} > style[_css]`
@@ -334,23 +347,31 @@ export default class AutoCompleteList extends Shadow() {
               const prefix = location.hostname === 'localhost' ? 'https://dev.klubschule.ch' : ''
               const contentItemsElement = document.createElement('div')
               contentItemsElement.classList.add('content')
-              contentItemsElement.innerHTML = `
-                <div class="heading">${this.getTranslation('Search.Autocomplete.MoreContent')}</div>
-                <ul class="list">
-                  ${contentItems.map(contentItem => `
-                    <li>
-                      <a href="${prefix + contentItem.link}">
-                        <div>
-                          <div class="title">${contentItem.title}</div>
-                          ${contentItem.text ? `<div class="text">${contentItem.text}</div>` : ''}
-                        </div>
-                        ${contentItem.image?.src ? `<a-picture class="responsive-picture" defaultSource="${prefix + contentItem.image.src}" alt="${contentItem.image.alt}" namespace="picture-cover-" aspect-ratio="1"></a-picture>` : ''}
-                      </a>
-                    </li>
-                  `).join('')}
-                </ul>
-                <a href="${searchBaseUrl}">${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></a>
-              `
+              const contentUnsortedList = document.createElement('ul')
+              contentUnsortedList.classList.add('list')
+              const contentHeadline = document.createElement('div')
+              contentHeadline.classList.add('heading')
+              contentHeadline.textContent = this.getTranslation('Search.Autocomplete.MoreContent')
+              contentItemsElement.appendChild(contentHeadline)
+              contentItems.forEach(contentItem => {
+                const listItem = document.createElement('li')
+                listItem.innerHTML = /* html */`
+                  <a href="#">
+                    <div>
+                      <div class="title">${contentItem.title}</div>
+                      ${contentItem.text ? `<div class="text">${contentItem.text}</div>` : ''}
+                    </div>
+                    ${contentItem.image?.src ? `<a-picture class="responsive-picture" defaultSource="${prefix + contentItem.image.src}" alt="${contentItem.image.alt}" namespace="picture-cover-" aspect-ratio="1"></a-picture>` : ''}
+                  </a>
+                `
+                listItem.addEventListener('click', () => this.clickOnListElementContent(contentItem))
+                contentUnsortedList.appendChild(listItem)
+              })
+              contentItemsElement.appendChild(contentUnsortedList)
+              const showAllResults = document.createElement('a')
+              showAllResults.href = searchBaseUrl
+              showAllResults.innerHTML = `${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>`
+              contentItemsElement.appendChild(showAllResults)
               this.list.after(contentItemsElement)
             }
           })
@@ -428,7 +449,6 @@ export default class AutoCompleteList extends Shadow() {
   }
 
   dataLayerPush(item) {
-    console.log('dataLayerPush', item)
     // GTM Tracking of autocomplete
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {
@@ -436,7 +456,7 @@ export default class AutoCompleteList extends Shadow() {
         // @ts-ignore
         window.dataLayer.push({
           'event': 'autocomplete_click',
-          'suchtext': item.type === 'enter' || item.type === 'search-click' ? item.description : '',
+          'suchtext': item.searchText || (item.type === 'enter' || item.type === 'search-click' ? item.description : ''),
           'typ': item.type === 'content' ? 'Content' : 'Begriff',
           'auswahl': item.type !== 'enter' && item.type !== 'search-click' ? item.description : ''
         })
