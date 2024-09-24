@@ -253,7 +253,7 @@ export default class AppointmentsList extends Shadow() {
         const subscriptionSelect = appointments.filters ? this.renderFilterSubscriptions(appointments.filters.subscriptions) : ''
         const dayList = this.renderDayList(appointments, children[0][0])
         this.numberOfAppointments = dayList.counter
-        if (this.isGridRendered) {
+        if (this.isGridRendered && !this.dataset.showFilters) {
           const mAppointments = this.oGrid.root.querySelector('m-appointments-filter')
           mAppointments.setAttribute('data-counter', this.numberOfAppointments)
           mAppointments.setAttribute('data-filter', JSON.stringify(appointments.filters))

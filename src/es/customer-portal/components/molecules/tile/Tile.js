@@ -369,41 +369,41 @@ export default class AppointmentTile extends Tile {
     const from = this.formatSubscriptionAppointmentDate(subscription.subscriptionValidFrom)
     const to = this.formatSubscriptionAppointmentDate(subscription.subscriptionValidTo)
     return /* html */ `
-    <m-load-template-tag mode="false">
-      <template>
-        <div id="tile-wrapper" class="m-tile ${tileState.css.border}" data-course-id=${courseId}>
-              <div class="parent-body">
-                <div class="subscription-info">
-                  <div>
-                    <span class="m-tile__title title">
-                      <a-course-title
-                        data-content="${escapeForHtml(JSON.stringify(subscription))}" 
-                        data-id="${courseId}" 
-                        data-list-type="subscriptions"
-                        data-subscription="${escapeForHtml(JSON.stringify(subscription))}"
-                        namespace="course-title-default-">
-                      </a-course-title>
-                    </span>
+      <m-load-template-tag mode="false">
+        <template>
+          <div id="tile-wrapper" class="m-tile ${tileState.css.border}" data-course-id=${courseId}>
+                <div class="parent-body">
+                  <div class="subscription-info">
+                    <div>
+                      <span class="m-tile__title title">
+                        <a-course-title
+                          data-content="${escapeForHtml(JSON.stringify(subscription))}" 
+                          data-id="${courseId}" 
+                          data-list-type="subscriptions"
+                          data-subscription="${escapeForHtml(JSON.stringify(subscription))}"
+                          namespace="course-title-default-">
+                        </a-course-title>
+                      </span>
+                    </div>
+                    <div>
+                      <span class="m-tile__title date"><a-translation data-trans-key='CP.cpSubscriptionColumnValidity'/></a-translation> ${from} - ${to} </span>
+                    </div> 
                   </div>
-                  <div>
-                    <span class="m-tile__title date"><a-translation data-trans-key='CP.cpSubscriptionColumnValidity'/></a-translation> ${from} - ${to} </span>
-                  </div> 
+                </div>
+                <div class="parent-footer">
+                  <div class="course-booking">
+                    <m-course-dialog
+                      data-content="${escapeForHtml(JSON.stringify(subscription))}" 
+                      data-id="${courseId}" 
+                      data-list-type="subscriptions"
+                      data-subscription="${escapeForHtml(JSON.stringify(subscription))}"
+                      namespace="course-dialog-default-">
+                    </m-course-dialog>
+                  </div>
                 </div>
               </div>
-              <div class="parent-footer">
-                <div class="course-booking">
-                  <m-course-dialog
-                    data-content="${escapeForHtml(JSON.stringify(subscription))}" 
-                    data-id="${courseId}" 
-                    data-list-type="subscriptions"
-                    data-subscription="${escapeForHtml(JSON.stringify(subscription))}"
-                    namespace="course-dialog-default-">
-                  </m-course-dialog>
-                </div>
-              </div>
-            </div>
-          </template>
-        </m-load-template-tag> 
+            </template>
+          </m-load-template-tag>
     `
   }
 
@@ -439,11 +439,7 @@ export default class AppointmentTile extends Tile {
   }
 
   get currentTile () {
-    return this.root.querySelector('m-load-template-tag').root.querySelector('div')
-  }
-
-  get templateTag () {
-    return this.root.querySelector('m-load-template-tag')
+    return this.root.querySelector('div')
   }
 
   get currentCourseDialog () {

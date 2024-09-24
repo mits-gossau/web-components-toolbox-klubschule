@@ -62,10 +62,14 @@
 
 :host([brand=ibaw]) figure figcaption > strong:first-child,
 :host([brand=ibaw]) article > div > strong:first-child {
+  clip-path: polygon(0% 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%, 0% 0%);
   display: flex;
   align-items: center;
   width: fit-content;
+  padding-left: var(--mdx-sys-spacing-fix-2xs);
   padding-right: calc(var(--mdx-sys-spacing-fix-2xs) + 8px);
-  background: transparent;
-  color: var(--mdx-base-color-ibaw-turquoise-600);
+  padding-top: 3px; /* no mdx token for this */
+  padding-bottom: 3px; /* no mdx token for this */
+  color: var(--mdx-base-color-grey-0);
+  background: var(--color-${this.getAttribute('color')}, #00A2AD);
 }
