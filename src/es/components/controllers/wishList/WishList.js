@@ -98,6 +98,8 @@ export default class WishList extends HTMLElement {
       }))
     }
 
+    this.removeAllFromWishListListenerOne = event => this.removeAllFromWishListListener(event, 1)
+    this.removeAllFromWishListListenerTwo = event => this.removeAllFromWishListListener(event, 2)
     this.removeAllFromWishListListener = (_event, tabIndex) => {
       if (!this.guid) return
       this.dispatchEvent(new CustomEvent('wish-list', {
@@ -124,16 +126,16 @@ export default class WishList extends HTMLElement {
     this.addEventListener('request-wish-list', this.requestWishListListener)
     this.addEventListener('add-to-wish-list', this.addToWishListListener)
     this.addEventListener('remove-from-wish-list', this.removeFromWishListListener)
-    this.addEventListener('remove-all-from-wish-list-1', (event) => this.removeAllFromWishListListener(event, 1))
-    this.addEventListener('remove-all-from-wish-list-2', (event) => this.removeAllFromWishListListener(event, 2))
+    this.addEventListener('remove-all-from-wish-list-1', this.removeAllFromWishListListenerOne)
+    this.addEventListener('remove-all-from-wish-list-2', this.removeAllFromWishListListenerTwo)
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-wish-list', this.requestWishListListener)
     this.removeEventListener('add-to-wish-list', this.addToWishListListener)
     this.removeEventListener('remove-from-wish-list', this.removeFromWishListListener)
-    this.removeEventListener('remove-all-from-wish-list-1', (event) => this.removeAllFromWishListListener(event, 1))
-    this.removeEventListener('remove-all-from-wish-list-2', (event) => this.removeAllFromWishListListener(event, 2))
+    this.removeEventListener('remove-all-from-wish-list-1', this.removeAllFromWishListListenerOne)
+    this.removeEventListener('remove-all-from-wish-list-2', this.removeAllFromWishListListenerTwo)
   }
 
   set guid (value) {
