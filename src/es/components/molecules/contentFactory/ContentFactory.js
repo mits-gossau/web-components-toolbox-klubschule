@@ -12,6 +12,7 @@ export default class ContentFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
+    this.hiddenMessages = this.hiddenSections
   }
 
   connectedCallback () {
@@ -94,6 +95,10 @@ export default class ContentFactory extends Shadow() {
         {
           path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
           name: 'a-translation'
+        },
+        {
+          path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
+          name: 'ks-o-partner-search'
         }
       ])
     ]).then(([data]) => {
@@ -129,6 +134,11 @@ export default class ContentFactory extends Shadow() {
         `),
       '<section>'
       ) + '</section>'
+      if (!data.contentItems.length && this.section) this.section.innerHTML = /* html */`
+      <ks-o-partner-search search-text="${data.searchText}" tab="2">
+        ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+      </ks-o-partner-search>
+      `
     }).catch(error => {
       console.error(error)
       this.html = ''
@@ -151,5 +161,13 @@ export default class ContentFactory extends Shadow() {
 : ''
       }
     }`
+  }
+
+  get section () {
+    return this.root.querySelector('section')
+  }
+
+  get hiddenSections () {
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }
