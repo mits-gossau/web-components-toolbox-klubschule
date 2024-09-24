@@ -449,7 +449,7 @@ export default class EventDetail extends Shadow() {
               <ks-c-abonnements>
                 <ks-m-abonnements 
                   abo-id="${this.data.kurs_id}" 
-                  abonnements-api="https://int.klubschule.ch/${this.data.abo_typen_link}" 
+                  abonnements-api="${this.data.abo_typen_link}" 
                   link-label="${this.data.abo_typen_link_label}" 
                   button-close-label="${this.closeButton || `${this.getTranslation('Common.Close')}`}"
                 >
