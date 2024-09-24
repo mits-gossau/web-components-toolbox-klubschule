@@ -126,7 +126,6 @@ export default class AutoComplete extends Shadow() {
     }
 
     this.clickOnPredictionListener = event => {
-      this.dataLayerPush(event.detail)
       // home search input
       if (!this.hasAttribute('no-forwarding')) this.homeSearchInput(event.detail.description)
       // close dialog
@@ -362,24 +361,5 @@ export default class AutoComplete extends Shadow() {
       cancelable: true,
       composed: true
     }))
-  }
-
-  dataLayerPush(item) {
-    console.log('AutoComplete.js', item)
-    // GTM Tracking of autocomplete
-    // @ts-ignore
-    if (typeof window !== 'undefined' && window.dataLayer) {
-      try {
-        // @ts-ignore
-        window.dataLayer.push({
-          'event': 'autocomplete_click',
-          'suchtext': item.type === 'enter' || item.type === 'search-click' ? item.description : '',
-          'typ': item.type === 'content' ? 'Content' : 'Begriff',
-          'auswahl': item.type !== 'enter' && item.type !== 'search-click' ? item.description : ''
-        })
-      } catch (error) {
-        console.error('Failed to push in data layer', error)
-      }
-    }
   }
 }

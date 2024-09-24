@@ -90,15 +90,13 @@ export default class AutoCompleteList extends Shadow() {
   }
 
   clickOnListElementContent = (item) => {
+    // clean up item.title from html tags
+    const temp = document.createElement('div')
+    temp.innerHTML = item.title
+    item.title = temp.textContent || temp.innerText || ''
+
     item.type = 'content'
     item.description = item.title
-    const tempElement = document.createElement("div")
-    tempElement.innerHTML = item.title
-    if (tempElement.querySelector('strong')) {
-      // @ts-ignore
-      item.searchText = tempElement.querySelector('strong').textContent
-    }
-    console.log('clickOnListElementContent', item)
     this.dataLayerPush(item)
   }
 
@@ -319,9 +317,10 @@ export default class AutoCompleteList extends Shadow() {
             */
             { total, success, searchText, contentItems, items, sprachid, cms }
           ) => {
-            console.log(total, success, searchText, contentItems, items, sprachid, cms)
             // render list items
             const listItems = items.map(item => {
+              // @ts-ignore
+              item.searchText = searchText
               const listElement = document.createElement('li')
               listElement.innerHTML = `
                 <a-icon-mdx icon-name="${item.typ === 1
@@ -356,7 +355,7 @@ export default class AutoCompleteList extends Shadow() {
               contentItems.forEach(contentItem => {
                 const listItem = document.createElement('li')
                 listItem.innerHTML = /* html */`
-                  <a href="#">
+                  <a href="${prefix + contentItem.link}">
                     <div>
                       <div class="title">${contentItem.title}</div>
                       ${contentItem.text ? `<div class="text">${contentItem.text}</div>` : ''}
@@ -364,6 +363,8 @@ export default class AutoCompleteList extends Shadow() {
                     ${contentItem.image?.src ? `<a-picture class="responsive-picture" defaultSource="${prefix + contentItem.image.src}" alt="${contentItem.image.alt}" namespace="picture-cover-" aspect-ratio="1"></a-picture>` : ''}
                   </a>
                 `
+                // @ts-ignore
+                contentItem.searchText = searchText
                 listItem.addEventListener('click', () => this.clickOnListElementContent(contentItem))
                 contentUnsortedList.appendChild(listItem)
               })
@@ -455,10 +456,10 @@ export default class AutoCompleteList extends Shadow() {
       try {
         // @ts-ignore
         window.dataLayer.push({
+          'auswahl': item.term || (item.type !== 'enter' && item.type !== 'search-click' ? item.description : ''),
           'event': 'autocomplete_click',
           'suchtext': item.searchText || (item.type === 'enter' || item.type === 'search-click' ? item.description : ''),
-          'typ': item.type === 'content' ? 'Content' : 'Begriff',
-          'auswahl': item.type !== 'enter' && item.type !== 'search-click' ? item.description : ''
+          'typ': item.type === 'content' ? 'Content' : 'Begriff'
         })
       } catch (error) {
         console.error('Failed to push in data layer', error)
