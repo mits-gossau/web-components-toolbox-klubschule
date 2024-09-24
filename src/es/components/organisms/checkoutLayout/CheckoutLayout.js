@@ -36,7 +36,7 @@ export default class CheckoutLayout extends Shadow() {
     this.css = /* css */`
       :host {
         width: 100%${this.hasAttribute("css-only") ? "" : "  !important"};
-        margin: 0${this.hasAttribute("css-only") ? "" : "  !important"};;
+        margin: 0${this.hasAttribute("css-only") ? "" : "  !important"};
       }
 
       :host mdx-login-button {

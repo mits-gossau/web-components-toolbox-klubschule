@@ -298,8 +298,7 @@ export default class KsBodyStyle extends Mutation(BodyStyle) {
           width: calc(100% - 2rem);
         }
         :host > ks-m-figure {
-            margin-right: -0.5rem;
-            margin-left: -0.5rem;
+          width: calc(100% - 1rem) !important;
         }
         :host([variant=full]) > * {
           width: 100%;

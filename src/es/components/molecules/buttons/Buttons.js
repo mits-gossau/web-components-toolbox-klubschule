@@ -206,7 +206,7 @@ export default class Buttons extends Shadow() {
       //     }
       //   }
       // }
-      if (button.event === "alternative") return acc + ''
+
       return acc + (
         (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
           <ks-c-gtm-event 
