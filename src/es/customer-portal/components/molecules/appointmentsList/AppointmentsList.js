@@ -304,7 +304,7 @@ export default class AppointmentsList extends Shadow() {
     const { subscriptions } = allSubscriptions.filters
     const selectedSubscription = subscriptions.find(element => element.selected === true)
     const amountBefore = 2335
-    const daysBefore = 14334
+    const daysBefore = 14 // 14 Days
     let amountNotification = ''
     let dateNotification = ''
 
@@ -314,10 +314,10 @@ export default class AppointmentsList extends Shadow() {
     if (subscriptionBalance < amountBefore) {
       console.log('no cash')
       amountNotification = /* html */`
-        <div>
+        <div style="padding-bottom:1rem;">
           <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
             <div slot="description">
-              <p>Dieses Angebot ist zur Zeit ausgebucht. Wir werden Sie auf die Warteliste</p>
+              <p>Amount Notification</p>
             </div>
           </ks-m-system-notification>
         </div>
@@ -341,7 +341,7 @@ export default class AppointmentsList extends Shadow() {
         <div>
           <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
             <div slot="description">
-              <p>Dieses Angebot ist zur Zeit ausgebucht. Wir werden Sie auf die Warteliste</p>
+              <p>Date Notification</p>
             </div>
           </ks-m-system-notification>
         </div>
