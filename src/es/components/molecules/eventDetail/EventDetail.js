@@ -302,7 +302,7 @@ export default class EventDetail extends Shadow() {
   */
   renderHTML() {
     if (!this.data) console.error('Data json attribute is missing or corrupted!', this)
-    const url = new URL(this.data.abo_typen_link || '');
+    const url = new URL(this.data.abo_typen_link || location.href);
     let aboTypenLinkParams;
     if (this.data.abo_typen_link && url?.search) {
       aboTypenLinkParams = new URLSearchParams(url.search);
