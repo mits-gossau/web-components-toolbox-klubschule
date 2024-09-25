@@ -191,7 +191,7 @@ export default class Abonnements extends Shadow() {
       this.total.innerHTML = data.total_label
       this.tiles = data.ppage !== 1 && data.pskip !== data.psize ? this.tiles : []
       data.courses.forEach((course) => {
-        this.tiles.push(course.locations?.length > 1 ? /* html */ `<ks-o-tile-list no-url-params data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-o-tile-list>` : /* html */ `<ks-m-tile no-url-params namespace="tile-default-" data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-m-tile>`)
+        this.tiles.push(course.locations?.length > 1 || course.buttons[0].link === null &&  course.buttons[0].iconName === 'ChevronDown' &&  course.buttons[0].typ === 'quaternary' ? /* html */ `<ks-o-tile-list is-abo-list no-url-params data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-o-tile-list>` : /* html */ `<ks-m-tile no-url-params namespace="tile-default-" data='${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')}'></ks-m-tile>`)
       })
 
       this.content.innerHTML = /* html */ `

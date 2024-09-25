@@ -595,7 +595,7 @@ export default class Event extends Shadow() {
           
         </div>
         <ks-c-checkout-overlay>
-          ${this.isWishList && !this.isPassed ? /* html */ `
+          ${this.isWishList && this.isPassed ? '' : /* html */ `
             <div class="controls">
               <div class="controls-left">
                 ${this.isWishList && !this.isPassed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${parentkey}"></a-icon-mdx>` : ''}
@@ -615,7 +615,7 @@ export default class Event extends Shadow() {
                 <span class="price">${price?.pre ? price?.pre + ' ' : ''}<strong>${price?.amount || ''}</strong>${price?.per ? ' / ' + price?.per : ''}</span>
               </div>
             </div>
-          ` : ''}
+          `}
           ${this.isWishList && this.isPassed ? /* html */ `
             <div class="controls controls-passed">
               <span class="controls-passed__message">${this.getAttribute("passed-message")}</span>
