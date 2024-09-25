@@ -302,9 +302,10 @@ export default class EventDetail extends Shadow() {
   */
   renderHTML() {
     if (!this.data) console.error('Data json attribute is missing or corrupted!', this)
-    const url = new URL(this.data.abo_typen_link || '');
+    let url;
     let aboTypenLinkParams;
-    if (this.data.abo_typen_link && url?.search) {
+    if (this.data.abo_typen_link) {
+      url = new URL(this.data.abo_typen_link || location.href)
       aboTypenLinkParams = new URLSearchParams(url.search);
     }
 
@@ -453,11 +454,13 @@ export default class EventDetail extends Shadow() {
             `, '') : ''}
             ${this.data.abo_typen_link_label && this.data.abo_typen_link ? /* html */ `
               <ks-c-abonnements endpoint='${this.getAttribute('endpoint')}'>
-                <ks-c-with-facet
+                ${this.hasAttribute("is-abo") ? /* html */`
+                  <ks-c-with-facet
                     endpoint="${this.getAttribute('endpoint')}"
                     no-search-tab
                     initial-request='{"filter":[],"PortalId":${aboTypenLinkParams?.get("portal_id") || 29},"sprachid":"${aboTypenLinkParams?.get("lang") || "d"}","MandantId":${aboTypenLinkParams?.get("mandant_id") || 111},"ppage":1,"psize":12}'
-                >
+                  >
+                ` : ''}
                   <ks-m-abonnements 
                     abo-id="${this.data.kurs_id}" 
                     abonnements-api="${this.data.abo_typen_link}" 
@@ -465,7 +468,7 @@ export default class EventDetail extends Shadow() {
                     button-close-label="${this.closeButton || `${this.getTranslation('Common.Close')}`}"
                   >
                   </ks-m-abonnements>
-                </ks-c-with-facet>
+                  ${this.hasAttribute("is-abo") ? /* html */`</ks-c-with-facet>` : ''}
               </ks-c-abonnements>
             ` : ''}
           </div>
