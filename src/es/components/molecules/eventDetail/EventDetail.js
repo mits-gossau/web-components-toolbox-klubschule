@@ -302,11 +302,9 @@ export default class EventDetail extends Shadow() {
   */
   renderHTML() {
     if (!this.data) console.error('Data json attribute is missing or corrupted!', this)
-    let url;
     let aboTypenLinkParams;
-    if (this.data.abo_typen_link) {
-      url = new URL(this.data.abo_typen_link || location.href)
-      aboTypenLinkParams = new URLSearchParams(url.search);
+    if (this.data.abo_typen_link && this.data.abo_typen_link.split("?")[1]) {
+      aboTypenLinkParams = new URLSearchParams(this.data.abo_typen_link.split("?")[1]);
     }
 
     this.html = /* HTML */ `
@@ -454,7 +452,7 @@ export default class EventDetail extends Shadow() {
             `, '') : ''}
             ${this.data.abo_typen_link_label && this.data.abo_typen_link ? /* html */ `
               <ks-c-abonnements endpoint='${this.getAttribute('endpoint')}'>
-                ${this.hasAttribute("is-abo") ? /* html */`
+                ${this.hasAttribute("is-abo") && this.data.abo_typen_link.split("?")[1] ? /* html */`
                   <ks-c-with-facet
                     endpoint="${this.getAttribute('endpoint')}"
                     no-search-tab
@@ -483,6 +481,10 @@ export default class EventDetail extends Shadow() {
       {
         path: `${this.importMetaUrl}../../controllers/abonnements/Abonnements.js`,
         name: 'ks-c-abonnements'
+      },
+      {
+        path: `${this.importMetaUrl}../../controllers/withFacet/WithFacet.js`,
+        name: 'ks-c-with-facet'
       },
       {
         path: `${this.importMetaUrl}../../molecules/abonnements/Abonnements.js`,
