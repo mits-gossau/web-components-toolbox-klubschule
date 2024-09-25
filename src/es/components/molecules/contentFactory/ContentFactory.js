@@ -12,11 +12,14 @@ export default class ContentFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
+    this.hiddenMessages = this.hiddenSections
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    document.body.addEventListener('with-facet', this.withFacetEventNameListener)
+
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? ContentFactory.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
+    this.eventListenerNode.addEventListener('with-facet', this.withFacetEventNameListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
       {
         bubbles: true,
@@ -27,7 +30,7 @@ export default class ContentFactory extends Shadow() {
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('with-facet', this.withFacetEventNameListener)
+    this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventNameListener)
   }
 
   shouldRenderCSS () {
@@ -94,6 +97,10 @@ export default class ContentFactory extends Shadow() {
         {
           path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
           name: 'a-translation'
+        },
+        {
+          path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
+          name: 'ks-o-partner-search'
         }
       ])
     ]).then(([data]) => {
@@ -129,6 +136,11 @@ export default class ContentFactory extends Shadow() {
         `),
       '<section>'
       ) + '</section>'
+      if (!data.contentItems.length && this.section) this.section.innerHTML = /* html */`
+      <ks-o-partner-search search-text="${data.searchText}" tab="2">
+        ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+      </ks-o-partner-search>
+      `
     }).catch(error => {
       console.error(error)
       this.html = ''
@@ -151,5 +163,13 @@ export default class ContentFactory extends Shadow() {
 : ''
       }
     }`
+  }
+
+  get section () {
+    return this.root.querySelector('section')
+  }
+
+  get hiddenSections () {
+    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }

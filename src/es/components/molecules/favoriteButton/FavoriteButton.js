@@ -108,6 +108,10 @@ export default class FavoriteButton extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       @media only screen and (max-width: _max-width_) {
+        :host {
+          --button-secondary-icon-left-margin: 0;
+          --button-tertiary-icon-left-margin: 0;
+        }
         :host > ks-a-button::part(text){
           display: none;
         }
@@ -123,14 +127,19 @@ export default class FavoriteButton extends Shadow() {
   renderHTML () {
     this.html = ''
     const div = document.createElement('div')
-    div.innerHTML = '<ks-a-button namespace="button-tertiary-" color="secondary"></ks-a-button>'
+    div.innerHTML = `<ks-a-button namespace="${this.hasAttribute("button-typ") ? this.getAttribute("button-typ") : "button-tertiary-"}" color="secondary"></ks-a-button>`
     this.button = div.children[0]
     div.innerHTML = '<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>'
     this.icon = div.children[0]
     div.innerHTML = /* html */`<a-translation data-trans-key="${this.getAttribute('off-text') ?? 'Wishlist.Remember'}" part=text></a-translation>`
     this.text = div.children[0]
-    this.button.appendChild(this.icon)
-    this.button.appendChild(this.text)
+    if (this.button.shadowRoot) {
+      this.button.shadowRoot.appendChild(this.icon)
+      this.button.shadowRoot.appendChild(this.text)
+    } else {
+      this.button.appendChild(this.icon)
+      this.button.appendChild(this.text)
+    }
     this.html = this.button
     return this.fetchModules([
       {

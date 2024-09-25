@@ -88,6 +88,11 @@ export default class KsBodyStyle extends Mutation(BodyStyle) {
       padding-top: var(--mdx-sys-spacing-flex-m);
       padding-bottom: var(--mdx-sys-spacing-flex-l);
     }
+
+    :host([no-padding-y]) {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
     
     :host([no-margin-y]) {
       margin-top: 0 !important;
@@ -270,7 +275,13 @@ export default class KsBodyStyle extends Mutation(BodyStyle) {
     :host ul > li > ul {
       margin-bottom: 0;
     }
-    
+
+    :host::part(delete-btn-wrapper) {
+        display: flex;
+        justify-content: flex-end;
+        padding-bottom: 1em;
+    }
+
     @media screen and (max-width: _max-width_) {
       
       ${(this.hasAttribute('display-mobile'))
@@ -304,24 +315,29 @@ export default class KsBodyStyle extends Mutation(BodyStyle) {
           margin-left: 0 !important;
           margin-right: 0 !important;
         }
-        `
-      }
-      
-      addClassToLastChild () {
-        const children = this.root.children
-        let lastChild = null
-        
-        Array.from(children).forEach(child => {
-          if (child.tagName !== 'STYLE' && child.tagName !== 'SCRIPT') {
-            child.classList.remove('ks-o-body-section__last-child')
-            lastChild = child
-          }
-        })
-        
-        if (lastChild) {
-          // @ts-ignore
-          lastChild.classList.add('ks-o-body-section__last-child')
+
+        :host .passed-tile-wrapper > * {
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
         }
       }
+    `
+  }
+
+  addClassToLastChild () {
+    const children = this.root.children
+    let lastChild = null
+
+    Array.from(children).forEach(child => {
+      if (child.tagName !== 'STYLE' && child.tagName !== 'SCRIPT') {
+        child.classList.remove('ks-o-body-section__last-child')
+        lastChild = child
+      }
+    })
+
+    if (lastChild) {
+      // @ts-ignore
+      lastChild.classList.add('ks-o-body-section__last-child')
     }
-    
+  }
+}
