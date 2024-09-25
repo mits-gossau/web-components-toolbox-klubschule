@@ -35,11 +35,11 @@ export default class Event extends Shadow() {
     this.icon = this.root.querySelector('a-icon-mdx[icon-name="ChevronDown"]')
     this.toggle = this.root.querySelector('.expand')
 
-    this.toggle.addEventListener('click', this.clickEventListener)
+    if (this.toggle) this.toggle.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
-    this.toggle.removeEventListener('click', this.clickEventListener)
+    if (this.toggle) this.toggle.removeEventListener('click', this.clickEventListener)
   }
 
   /**
@@ -76,6 +76,25 @@ export default class Event extends Shadow() {
         border: 0.063rem solid var(--mdx-base-color-grey-700);
         padding: 1.5rem;
         color: var(--mdx-base-color-grey-975);
+      }
+
+      :host .event.passed {
+        background-color: var(--m-gray-100);
+        padding: 1.5rem 1.5rem 0;
+      }
+
+      :host .event.passed .head,
+      :host .event.passed .details {
+        opacity: 0.5;
+      }
+
+      :host .event.wishlist .dates {
+        display: flex;
+        flex-direction: column;
+      }
+
+      :host .event.wishlist .dates ks-a-link {
+        margin-top: auto;
       }
 
       :host .head {
@@ -177,6 +196,7 @@ export default class Event extends Shadow() {
         margin-top: 0;
       }
 
+      :host .link-more,
       :host .link-more span {
         font-size: 1.125rem;
         line-height: 1.25rem;
@@ -198,6 +218,7 @@ export default class Event extends Shadow() {
         display: flex;
         flex-direction: row;
         align-items: center;
+        gap: 1rem;
       }
 
       :host .controls-left a-icon-mdx {
@@ -380,9 +401,40 @@ export default class Event extends Shadow() {
         padding: 1rem 0;
       }
 
+      :host .controls-passed__message {
+        font: var(--mdx-sys-font-flex-large-headline3);
+      }
+
+      :host .controls-passed__button-wrapper {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      :host .controls-passed {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 1.5rem;
+        border-top: 1px solid var(--m-gray-300);
+        background-color: var(--m-white);
+        margin-left: -1.5rem;
+        margin-right: -1.5em;
+        opacity: 1;
+        width: auto;
+      }
+      :host .controls-passed__left {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
       @media only screen and (max-width: _max-width_) {
         :host .event {
           padding: 1rem 0.5rem;
+        }
+
+        :host .event.passed {
+          padding: 1rem 0.5rem 0;
         }
 
         :host .head {
@@ -396,6 +448,7 @@ export default class Event extends Shadow() {
 
         :host .controls {
           margin-top: 1rem;
+          flex-direction: column-reverse;
         }
 
         :host .date {
@@ -408,6 +461,10 @@ export default class Event extends Shadow() {
           align-items: flex-start;
           margin-top: 0.75rem;
         }
+        
+        :host .wishlist .time {
+          margin-bottom: 0.75rem;
+        }
   
         :host .days {
           font-size: 1.25rem;
@@ -419,14 +476,33 @@ export default class Event extends Shadow() {
           margin-left: 0;
         }
 
-        :host .controls {
-          flex-direction: column-reverse;
+        :host .controls-passed {
+          flex-direction: column;
+          padding: var(--mdx-sys-spacing-fix-s) var(--mdx-sys-spacing-fix-2xs);
+          margin-left: -0.5rem;
+          margin-right: -0.5rem;
+          gap: 1rem;
+        }
+
+        :host .controls-passed__left {
+          width: 100%;
+          gap: 0;
+          justify-content: space-between;
+        }
+        
+        :host .controls-passed__message {
+          font: var(--mdx-sys-font-flex-large-headline3);
+          width: 100%;
         }
 
         :host .controls-left {
           justify-content: flex-end;
           margin-top: 2rem;
           width: 100%;
+        }
+
+        :host .wishlist .controls-left ks-m-buttons {
+          margin-left: auto;
         }
 
         :host .controls-right {
@@ -453,82 +529,106 @@ export default class Event extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
+    const warnMandatory = 'data attribute requires: '
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     const {
+      bezeichnung,
       datum_label,
+      detail_label_less,
+      detail_label_more,
       days,
-      zusatztitel,
-      status,
-      status_label,
+      icons,
+      ist_abokurs_offen,
+      kurs_id,
       lektionen_label,
       location,
-      detail_label_more,
-      detail_label_less,
       buttons,
-      icons,
-      kurs_id,
+      parentkey,
       price,
-      ist_abokurs_offen
+      status,
+      status_label,
+      zusatztitel
     } = this.data.course
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
 
     this.html = /* HTML */`
-      <div class="event">
+      <div class="event${this.isWishList ? " wishlist" : ""}${this.isWishList && this.isPassed ? " passed" : ""}">
         <div class="head">
           <div class="dates">
-            <span class="date">${datum_label}</span>
+            <span class="date">${this.isWishList ? bezeichnung : datum_label}</span>
             <div class="time">
               <span class="days">${days.join(', ')}</span>
               ${zusatztitel ? /* html */ `<div class="badge">${zusatztitel}</div>` : ''}
             </div>
+            ${this.isWishList && !this.isPassed ? /* html */ `
+              <ks-a-link href="/test" icon-right="ArrowRight" class="link-more">
+                <span>Zur Angebotsseite</span>
+              </ks-a-link>
+            ` : ''}
           </div>
           <ul class="meta">
-            ${status && status > 0 ? /* html */`<li>
+            ${status && status > 0 && !(this.isWishList && this.isPassed) ? /* html */`<li>
               <div>
                 <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(this.data.course)}" size="1.5em"></a-icon-mdx>
               </div>
               <span>${status_label}</span>
             </li>` : ''}
-            ${lektionen_label ? /* html */ `<li>
+            ${lektionen_label && !(this.isWishList && this.isPassed) ? /* html */ `<li>
               <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/event-list.svg" size="1.5em"></a-icon-mdx>
               <span>${lektionen_label}</span>
             </li>` : ''}
-            ${location?.name ? /* html */ `<li>
+            ${location?.name && !(this.isWishList && this.isPassed) ? /* html */ `<li>
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
               <span>${location.name}</span>
             </li>` : ''}
-            <li>
+            ${!(this.isWishList && this.isPassed) ? /* html */ `<li>
               <button class="link-more expand">
                 <span class="more show">${this, detail_label_more}</span>
                 <span class="less">${this, detail_label_less}</span>
                 <a-icon-mdx namespace="icon-mdx-ks-event-link-" icon-name="ChevronDown" size="1em"></a-icon-mdx>
               </button>
-            </li>
+            </li>` : ''}
           </ul>      
         </div>
         <div class="details">
           
         </div>
         <ks-c-checkout-overlay>
-          <div class="controls">
-            <div class="controls-left">
-              ${!ist_abokurs_offen ? /* html */ `
-              <ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'></ks-m-buttons>
-              ` : ''}
-            </div>
-            <div class="controls-right">
-              <div class="icons">
-                ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
-                  <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
-                    <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}">
-                    </ks-m-badge>
-                  </ks-m-tooltip>
-                `, '') : ''}
+          ${this.isWishList && !this.isPassed ? /* html */ `
+            <div class="controls">
+              <div class="controls-left">
+                ${this.isWishList && !this.isPassed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${parentkey}"></a-icon-mdx>` : ''}
+                ${!ist_abokurs_offen && !this.isPassed? /* html */ `
+                  <ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'${this.isWishList ? " is-wish-list" : ""}></ks-m-buttons>
+                ` : ''}
               </div>
-              <span class="price">${price?.pre ? price?.pre + ' ' : ''}<strong>${price?.amount || ''}</strong>${price?.per ? ' / ' + price?.per : ''}</span>
+              <div class="controls-right">
+                <div class="icons">
+                  ${icons?.length ? icons.reduce((acc, icon) => acc + /* html */ `
+                    <ks-m-tooltip mode="false" namespace="tooltip-right-" text="${icon.text?.replaceAll('"', "'")}">
+                      <ks-m-badge type="primary" icon-name="${icon.iconName || icon.name}">
+                      </ks-m-badge>
+                    </ks-m-tooltip>
+                  `, '') : ''}
+                </div>
+                <span class="price">${price?.pre ? price?.pre + ' ' : ''}<strong>${price?.amount || ''}</strong>${price?.per ? ' / ' + price?.per : ''}</span>
+              </div>
             </div>
-          </div>
+          ` : ''}
+          ${this.isWishList && this.isPassed ? /* html */ `
+            <div class="controls controls-passed">
+              <span class="controls-passed__message">${this.getAttribute("passed-message")}</span>
+              <div class="controls-passed__left">
+                ${this.isWishList ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${parentkey}"></a-icon-mdx>` : ''}
+                ${buttons[0].text ? /* html */ `
+                  <ks-a-button namespace="button-secondary-" color="secondary">
+                    <span>${buttons[0].text || warnMandatory + 'passed.button.text'}</span>
+                  </ks-a-button>
+                ` : ''}
+              </div>
+            </div>
+          ` : ''}
         </ks-c-checkout-overlay>
       </div>
     `
@@ -537,6 +637,10 @@ export default class Event extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/link/Link.js`,
+        name: 'a-link'
       },
       {
         path: `${this.importMetaUrl}../../controllers/checkoutOverlay/CheckoutOverlay.js`,
@@ -549,6 +653,10 @@ export default class Event extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/badge/Badge.js`,
         name: 'ks-m-badge'
+      },
+      {
+        path: `${this.importMetaUrl}../../atoms/Link/Link.js`,
+        name: 'ks-a-link'
       },
       {
         path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
@@ -659,8 +767,16 @@ export default class Event extends Shadow() {
     return this.root.querySelector('.details')
   }
 
+  get isWishList () {
+    return this.hasAttribute("is-wish-list")
+  }
+
   get data () {
     return JSON.parse(this.getAttribute('data'))
+  }
+
+  get isPassed () {
+    return this.hasAttribute('is-passed')
   }
 
   get mockData () {
