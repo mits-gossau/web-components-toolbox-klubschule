@@ -305,7 +305,7 @@ export default class EventDetail extends Shadow() {
     let url;
     let aboTypenLinkParams;
     if (this.data.abo_typen_link) {
-      url = new URL(this.data.abo_typen_link || '')
+      url = new URL(this.data.abo_typen_link || location.href)
       aboTypenLinkParams = new URLSearchParams(url.search);
     }
 
