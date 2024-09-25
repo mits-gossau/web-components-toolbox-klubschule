@@ -141,7 +141,7 @@ export default class WishList extends HTMLElement {
     this.addEventListener('add-to-wish-list', this.addToWishListListener)
     this.addEventListener('remove-from-wish-list', this.removeFromWishListListener)
     this.addEventListener('remove-all-from-wish-list-offers', this.removeAllFromWishListListenerOffers)
-    this.addEventListener('remove-all-from-wish-list-event', this.removeAllFromWishListListenerEvents)
+    this.addEventListener('remove-all-from-wish-list-events', this.removeAllFromWishListListenerEvents)
   }
 
   disconnectedCallback () {
