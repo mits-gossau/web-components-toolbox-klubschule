@@ -200,6 +200,7 @@ export default class WishList extends Shadow() {
   }
 
   renderMessage(message) {
+    if (!message) return console.error("Missing Markup for empty wishlist")
     return /* html */ `
       <ks-o-body-section variant="default" background-color="var(--mdx-sys-color-accent-6-subtle1)" no-margin-y no-padding-y>
         <section id="${message.id}">
@@ -252,12 +253,12 @@ export default class WishList extends Shadow() {
             endpoint="${this.getAttribute('endpoint')}"
             initial-request='${JSON.stringify(initialRequestEntries)}'
             with-facet-target
-            ${isEvent ? ` event-detail-url="${this.getAttribute('event-detail-url')}` : ''}
+            ${isEvent ? ` event-detail-url="${this.eventDetailURL}"` : ''}
             ${isEvent ? "" : " no-search-tab"}
           ></ks-o-offers-page>
         ` : ''}
         ${passedWatchListEntries?.length ? /* html */ `
-          <ks-c-event-detail endpoint="${this.getAttribute("event-detail-url")}">
+          <ks-c-event-detail endpoint="${this.eventDetailURL}">
             <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="passed-offers-section" tabindex="0" aria-label="Section">  
               <div class="passed-tile-wrapper">  
                 <h2>${isEvent ? this.getTranslation('WishList.Events.Title') : this.getTranslation('WishList.Offers.Title')}</h2>
@@ -355,4 +356,9 @@ export default class WishList extends Shadow() {
   get isEasyPortal() {
     return !!this.hasAttribute('is-easy-portal')
   }
+
+  get eventDetailURL() {
+    return this.getAttribute('event-detail-url') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/'
+  }
+
 }
