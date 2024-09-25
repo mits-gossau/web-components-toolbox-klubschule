@@ -685,7 +685,11 @@ export default class OffersPage extends Shadow() {
         <o-grid namespace="grid-12er-">
           <section>
             <div col-lg="12" col-md="12" col-sm="12">
-              <ks-m-content-factory ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-m-content-factory>
+              <ks-m-content-factory
+                ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
+              >
+                ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+              </ks-m-content-factory>
             </div>
           </section>
         </o-grid>

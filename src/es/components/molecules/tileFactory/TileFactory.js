@@ -170,7 +170,7 @@ export default class TileFactory extends Shadow() {
           '<section>'
         ) + '</section>'
         if (!data.courses.length && this.section) this.section.innerHTML = /* html */`
-          <ks-o-partner-search search-text="${data.searchText}">
+          <ks-o-partner-search search-text="${data.searchText}" tab="1">
             ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
           </ks-o-partner-search>
         `
