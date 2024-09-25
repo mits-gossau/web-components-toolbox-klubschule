@@ -76,6 +76,7 @@ export default class AutoCompleteList extends Shadow() {
   }
 
   clickOnListElement = (item) => {
+    this.dataLayerPush(item)
     this.dispatchEvent(new CustomEvent(this.getAttribute('auto-complete-selection') || 'auto-complete-location-selection', {
       /** @type {import("../../controllers/autoCompleteLocation/AutoCompleteLocation.js").LocationSelectionItem} */
       detail: {
@@ -86,6 +87,17 @@ export default class AutoCompleteList extends Shadow() {
       cancelable: true,
       composed: true
     }))
+  }
+
+  clickOnListElementContent = (item) => {
+    // clean up item.title from html tags
+    const temp = document.createElement('div')
+    temp.innerHTML = item.title
+    item.title = temp.textContent || temp.innerText || ''
+
+    item.type = 'content'
+    item.description = item.title
+    this.dataLayerPush(item)
   }
 
   shouldRenderCSS() {
@@ -305,9 +317,10 @@ export default class AutoCompleteList extends Shadow() {
             */
             { total, success, searchText, contentItems, items, sprachid, cms }
           ) => {
-            console.log(total, success, searchText, contentItems, items, sprachid, cms)
             // render list items
             const listItems = items.map(item => {
+              // @ts-ignore
+              item.searchText = searchText
               const listElement = document.createElement('li')
               listElement.innerHTML = `
                 <a-icon-mdx icon-name="${item.typ === 1
@@ -333,23 +346,33 @@ export default class AutoCompleteList extends Shadow() {
               const prefix = location.hostname === 'localhost' ? 'https://dev.klubschule.ch' : ''
               const contentItemsElement = document.createElement('div')
               contentItemsElement.classList.add('content')
-              contentItemsElement.innerHTML = `
-                <div class="heading">${this.getTranslation('Search.Autocomplete.MoreContent')}</div>
-                <ul class="list">
-                  ${contentItems.map(contentItem => `
-                    <li>
-                      <a href="${prefix + contentItem.link}">
-                        <div>
-                          <div class="title">${contentItem.title}</div>
-                          ${contentItem.text ? `<div class="text">${contentItem.text}</div>` : ''}
-                        </div>
-                        ${contentItem.image?.src ? `<a-picture class="responsive-picture" defaultSource="${prefix + contentItem.image.src}" alt="${contentItem.image.alt}" namespace="picture-cover-" aspect-ratio="1"></a-picture>` : ''}
-                      </a>
-                    </li>
-                  `).join('')}
-                </ul>
-                <a href="${searchBaseUrl}">${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></a>
-              `
+              const contentUnsortedList = document.createElement('ul')
+              contentUnsortedList.classList.add('list')
+              const contentHeadline = document.createElement('div')
+              contentHeadline.classList.add('heading')
+              contentHeadline.textContent = this.getTranslation('Search.Autocomplete.MoreContent')
+              contentItemsElement.appendChild(contentHeadline)
+              contentItems.forEach(contentItem => {
+                const listItem = document.createElement('li')
+                listItem.innerHTML = /* html */`
+                  <a href="${prefix + contentItem.link}">
+                    <div>
+                      <div class="title">${contentItem.title}</div>
+                      ${contentItem.text ? `<div class="text">${contentItem.text}</div>` : ''}
+                    </div>
+                    ${contentItem.image?.src ? `<a-picture class="responsive-picture" defaultSource="${prefix + contentItem.image.src}" alt="${contentItem.image.alt}" namespace="picture-cover-" aspect-ratio="1"></a-picture>` : ''}
+                  </a>
+                `
+                // @ts-ignore
+                contentItem.searchText = searchText
+                listItem.addEventListener('click', () => this.clickOnListElementContent(contentItem))
+                contentUnsortedList.appendChild(listItem)
+              })
+              contentItemsElement.appendChild(contentUnsortedList)
+              const showAllResults = document.createElement('a')
+              showAllResults.href = searchBaseUrl
+              showAllResults.innerHTML = `${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>`
+              contentItemsElement.appendChild(showAllResults)
               this.list.after(contentItemsElement)
             }
           })
@@ -422,6 +445,24 @@ export default class AutoCompleteList extends Shadow() {
             }
             break;
         }
+      }
+    }
+  }
+
+  dataLayerPush(item) {
+    // GTM Tracking of autocomplete
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push({
+          'auswahl': item.term || (item.type !== 'enter' && item.type !== 'search-click' ? item.description : ''),
+          'event': 'autocomplete_click',
+          'suchtext': item.searchText || (item.type === 'enter' || item.type === 'search-click' ? item.description : ''),
+          'typ': item.type === 'content' ? 'Content' : 'Begriff'
+        })
+      } catch (error) {
+        console.error('Failed to push in data layer', error)
       }
     }
   }

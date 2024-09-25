@@ -19,7 +19,10 @@ export default class TileFactory extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderModules()) this.renderModules()
-    document.body.addEventListener('with-facet', this.withFacetEventNameListener)
+
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? TileFactory.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
+    this.eventListenerNode.addEventListener('with-facet', this.withFacetEventNameListener)
+
     this.dispatchEvent(new CustomEvent('request-with-facet',
       {
         bubbles: true,
@@ -30,7 +33,7 @@ export default class TileFactory extends Shadow() {
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('with-facet', this.withFacetEventNameListener)
+    this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventNameListener)
   }
 
   shouldRenderCSS () {
@@ -131,6 +134,7 @@ export default class TileFactory extends Shadow() {
           (acc, course) => {
             const tile = this.isEventSearch ? /* html */ `
               <ks-m-event
+                ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
                 data='{
                   "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
                   "sprachid": "${data.sprachid}"
@@ -166,7 +170,7 @@ export default class TileFactory extends Shadow() {
           '<section>'
         ) + '</section>'
         if (!data.courses.length && this.section) this.section.innerHTML = /* html */`
-          <ks-o-partner-search search-text="${data.searchText}">
+          <ks-o-partner-search search-text="${data.searchText}" tab="1">
             ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
           </ks-o-partner-search>
         `

@@ -116,12 +116,12 @@ export default class AutoComplete extends Shadow() {
         composed: true
       }))
       // trigger search when enter or icon click
-      if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { description: event.detail.value } })
+      if (event.detail.type === 'enter' || event.detail.type === 'search-click') this.clickOnPredictionListener({ detail: { description: event.detail.value, type: event.detail.type } })
     }
 
     this.requestWithFacet = event => {
       if (event.detail.type === 'enter' || event.detail.type === 'search-click' || event.detail.type === 'key' || event.detail.type === 'delete') {
-        return this.clickOnPredictionListener({ detail: { description: event.detail.value } })
+        return this.clickOnPredictionListener({ detail: { description: event.detail.value, type: event.detail.type }})
       }
     }
 

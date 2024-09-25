@@ -6,21 +6,43 @@
 <code><a href="https://github.com/mits-gossau/web-components-toolbox-klubschule/blob/master/src/es/components/molecules/favoriteButton/readme.md" target="_blank">Button</a></code>
 
 <!-- Stage -->
-<ks-m-checkout-color-stage
-  no-margin-y
-  title="Merkliste"
-  text="Ihre gemerkten Angebote werden nur auf diesem Device gespeichert."
->
+<ks-m-checkout-color-stage no-margin-y title="Merkliste"
+  text="Ihre gemerkten Angebote werden nur auf diesem Device gespeichert.">
 </ks-m-checkout-color-stage>
 <!-- /Stage -->
 
+<ks-o-body-section variant="default">
+  <ks-o-checkout-layout css-only>
+    <section id="main">
+      <p class="wishlist-copy">Um Angebote über diverse Geräte in der Merkliste zu speichern, melden Sie sich bitte mit Ihrem Migros-Login an.</p>
+      <mdx-login-button class="margin-bottom-m" size="md"></mdx-login-button>
+      <ks-a-heading tag="h3">Ihre Vorteile mit einem Migros Konto</ks-a-heading>
+      <ul class="advantages-list margin-bottom-l">
+        <li><a-icon-mdx icon-name="Check"></a-icon-mdx>Schnellere Anmeldung durch Adressübernahme aus Ihrem Migros Konto</li>
+        <li><a-icon-mdx icon-name="Check"></a-icon-mdx>Nutzung der Merkliste über diverse Geräte hinweg.</li>
+        <li><a-icon-mdx icon-name="Check"></a-icon-mdx>Verwaltung Ihrer Abonnement-Termine</li>
+      </ul>
+    </section>
+  </ks-o-checkout-layout>
+</ks-o-body-section>
+
 <!-- Content -->
-<ks-o-body-section no-margin-y variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
   <!-- the ks-c-wish-list controller has to be placed on the basepage -->
-  <ks-c-wish-list endpoint="https://dev.klubschule.ch/Umbraco/api/watchlistAPI" guid="efd98564-f728-483b-86ac-a4af24ffcdc9">
-    <ks-o-wish-list endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search" mandant-id="111" portal-id="29" sprach-id="d">
-      <section id=message hidden>
-        <h2>Ihre Merkliste ist leer.</h2>
+  <!-- <ks-c-wish-list endpoint="https://int.klubschule.ch/Umbraco/api/watchlistAPI"
+    guid="067e7a88-cd02-474d-8d43-379932608a49"> -->
+    <ks-o-wish-list endpoint="https://int.klubschule.ch/Umbraco/Api/CourseApi/Search" event-detail-url="https://int.klubschule.ch/Umbraco/Api/CourseApi/detail/" mandant-id="111" portal-id="29"
+      sprach-id="d">
+      <section id="message-events" hidden>
+        <h2>Events Headline.</h2>
+        <p>Fügen Sie Angebote und Veranstaltungen über die jeweiligen Angebotsseiten hinzu.</p>
+        <ul>
+          <li><a href=# target=_blank>Sprachen</a></li>
+          <li><a href=# target=_blank>Kreativität</a></li>
+          <li><a href=# target=_blank>Gesundheit</a></li>
+        </ul>
+      </section>
+      <section id="message-offers" hidden>
+        <h2>Offers Headline</h2>
         <p>Fügen Sie Angebote und Veranstaltungen über die jeweiligen Angebotsseiten hinzu.</p>
         <ul>
           <li><a href=# target=_blank>Sprachen</a></li>
@@ -29,6 +51,5 @@
         </ul>
       </section>
     </ks-o-wish-list>
-  </ks-c-wish-list>
-</ks-o-body-section>
+  <!-- </ks-c-wish-list> -->
 <!-- /Content -->

@@ -22,6 +22,19 @@ export default class WishList extends HTMLElement {
 
     let timeout = null
     let abortController = null
+
+    this.checkForExistingWishlist = () => {
+      fetch(`${endpoint}/Check${this.guid ? `?watchlistGuid=${this.guid}` : ''}`, {
+        method: 'GET',
+      }).then(response => {
+        if (response.status >= 200 && response.status <= 299) return response.json()
+        throw new Error(response.statusText)
+      }).then(json => {
+        if (json.code !== successCode) this.guid = ''
+        if (json.watchlistGuid) this.guid = json.watchlistGuid
+      })
+    }
+    
     this.requestWishListListener = event => {
       clearTimeout(timeout)
       timeout = setTimeout(() => {
@@ -98,11 +111,13 @@ export default class WishList extends HTMLElement {
       }))
     }
 
-    this.removeAllFromWishListListener = event => {
+    this.removeAllFromWishListListenerOffers = event => this.removeAllFromWishListListener(event, 1)
+    this.removeAllFromWishListListenerEvents = event => this.removeAllFromWishListListener(event, 2)
+    this.removeAllFromWishListListener = (_event, tabIndex) => {
       if (!this.guid) return
       this.dispatchEvent(new CustomEvent('wish-list', {
         detail: {
-          fetch: fetch(`${endpoint}/Clear?inclCourseDetail=false&watchlistGuid=${this.guid}`, {
+          fetch: fetch(`${endpoint}/ClearTab?tab=${tabIndex}&watchlistGuid=${this.guid}`, {
             method: 'GET'
           }).then(response => {
             if (response.status >= 200 && response.status <= 299) return response.json()
@@ -121,17 +136,20 @@ export default class WishList extends HTMLElement {
   }
 
   connectedCallback () {
+    this.checkForExistingWishlist()
     this.addEventListener('request-wish-list', this.requestWishListListener)
     this.addEventListener('add-to-wish-list', this.addToWishListListener)
     this.addEventListener('remove-from-wish-list', this.removeFromWishListListener)
-    this.addEventListener('remove-all-from-wish-list', this.removeAllFromWishListListener)
+    this.addEventListener('remove-all-from-wish-list-offers', this.removeAllFromWishListListenerOffers)
+    this.addEventListener('remove-all-from-wish-list-event', this.removeAllFromWishListListenerEvents)
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-wish-list', this.requestWishListListener)
     this.removeEventListener('add-to-wish-list', this.addToWishListListener)
     this.removeEventListener('remove-from-wish-list', this.removeFromWishListListener)
-    this.removeEventListener('remove-all-from-wish-list', this.removeAllFromWishListListener)
+    this.removeEventListener('remove-all-from-wish-list-offers', this.removeAllFromWishListListenerOffers)
+    this.removeEventListener('remove-all-from-wish-list-events', this.removeAllFromWishListListenerEvents)
   }
 
   set guid (value) {
