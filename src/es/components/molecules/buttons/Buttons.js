@@ -66,6 +66,11 @@ export default class Buttons extends Shadow() {
           --button-secondary-width: 100%;
           text-align: center;
         }
+
+        :host .buttons-container {
+          justify-content: space-between;
+          width: 100%
+        }
       }
     `
     return this.fetchTemplate()
@@ -166,8 +171,9 @@ export default class Buttons extends Shadow() {
 
         return acc + parentDiv.innerHTML
       }
-
-      const content = button.event === 'bookmark' ? '' : /* html */`
+      const isBookMarkButton = button.event === 'bookmark'
+      const bookMarkButton = isBookMarkButton ? /* html */ `<ks-m-favorite-button course="${this.data.kurs_typ}_${this.data.kurs_id}_${this.data.centerid}" button-typ="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}"></ks-m-favorite-button>` : ''
+      const content = button.event === 'bookmark' ? bookMarkButton :  /* html */`
         <ks-a-button 
           ${button.iconName && !button.text ? 'icon' : ''} 
           namespace="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" 
@@ -202,7 +208,7 @@ export default class Buttons extends Shadow() {
       // }
 
       return acc + (
-        this.hasAttribute('is-tile') || this.hasAttribute('is-abo')?  /* html */ `
+        (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
           <ks-c-gtm-event 
             listen-to="click"
             event-data='{
@@ -241,6 +247,14 @@ export default class Buttons extends Shadow() {
       {
         path: `${this.importMetaUrl}../../atoms/spacing/Spacing.js`,
         name: 'ks-a-spacing'
+      },
+      {
+        path: `${this.importMetaUrl}../../molecules/favoriteButton/FavoriteButton.js`,
+        name: 'ks-m-favorite-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
+        name: 'a-translation'
       },
       {
         path: `${this.importMetaUrl}../../controllers/gtmEvent/GtmEvent.js`,

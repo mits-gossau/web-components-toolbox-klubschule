@@ -11,12 +11,15 @@ import Button from '../../web-components-toolbox/src/es/components/atoms/button/
 export default class NumberOfOffersButton extends Button {
   connectedCallback () {
     super.connectedCallback()
-    document.body.addEventListener('with-facet', this.withFacetEventListener)
+    // @ts-ignore
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? NumberOfOffersButton.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
+
+    this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
   }
 
   disconnectedCallback () {
     super.disconnectedCallback()
-    document.body.removeEventListener('with-facet', this.withFacetEventListener)
+    this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
   }
 
   withFacetEventListener = async event => {

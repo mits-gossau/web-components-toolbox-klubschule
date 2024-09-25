@@ -31,7 +31,8 @@ export default class PartnerSearch extends HTMLElement {
 
     this.abortControllerLocations = null
     this.requestPartnerSearchListener = event => {
-      if (this.abortControllerLocations) this.abortControllerLocations.abort()
+      /* https://jira.migros.net/browse/MIDUWEB-1590: Remove abort temporary */
+      //if (this.abortControllerLocations) this.abortControllerLocations.abort()
       this.abortControllerLocations = new AbortController()
       // assemble withfacet filter
       const filter = {

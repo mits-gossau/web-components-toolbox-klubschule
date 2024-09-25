@@ -12,12 +12,14 @@ export default class WithFacetCounter extends Shadow() {
   }
 
   connectedCallback () {
-    document.body.addEventListener('with-facet', this.receiveData)
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? WithFacetCounter.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
+
+    this.eventListenerNode.addEventListener('with-facet', this.receiveData)
     this.initialContent = this.root.children[0]
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('with-facet', this.receiveData)
+    this.eventListenerNode.removeEventListener('with-facet', this.receiveData)
   }
 
   /**

@@ -1,8 +1,7 @@
 <h1 id="tile">Abonnements</h1>
 <section style="background-color: var(--mdx-sys-color-accent-6-subtle1); padding: 1em; will-change: auto;">
-    <ks-c-abonnements>
+    <ks-c-abonnements endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search">
         <ks-m-abonnements 
-            endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
             abonnements-api='https://dev.klubschule.ch/Umbraco/Api/CourseApi/Abonnement?lang=d&id=10401&typ=6A&center_id=2658&mandant_id=111&portal_id=29' 
             abo-id="10375" 
             link-label="${this.data.abo_typen_link_label}" 

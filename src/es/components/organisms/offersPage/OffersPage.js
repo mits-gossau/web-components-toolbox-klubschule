@@ -16,7 +16,7 @@ export default class OffersPage extends Shadow() {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
-        const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+        const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
         // Set Sort
@@ -96,7 +96,7 @@ export default class OffersPage extends Shadow() {
   withFacetListener(event) {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
-      const bodySection = this.eventDetailURL || !this.ksMTab ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+      const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
 
       // Set Sort
       const sort = bodySection.shadowRoot.querySelector('#sort-options')
@@ -166,6 +166,8 @@ export default class OffersPage extends Shadow() {
    */
   renderHTML() {
     this.html = /* html */`<ks-c-with-facet
+        ${this.hasAttribute('save-location-local-storage') ? 'save-location-local-storage' : ''}
+        ${this.hasAttribute('save-location-session-storage') ? 'save-location-session-storage' : ''}
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''}
@@ -177,18 +179,18 @@ export default class OffersPage extends Shadow() {
         ? this.mainSearchInput
         : /* html */``
       } 
-        ${this.eventDetailURL || this.hasAttribute('no-search-tab')
+        ${this.eventDetailURL || this.hasAttribute('no-search-tab') || this.isWishList
         ? this.tabContentOne
         : /* html */`
             <ks-m-tab>
               <ul class="tab-search-result">
                 <li>
-                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}">
+                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}" ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}>
                     <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
                   </ks-a-with-facet-counter>
                 </li>
                 <li>
-                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" total="contentItems.length">
+                  <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''} total="contentItems.length">
                     <button tab-target="content2" id="total-stories-tab-heading"></button>
                   </ks-a-with-facet-counter>
                 </li>
@@ -365,70 +367,44 @@ export default class OffersPage extends Shadow() {
                 </ks-m-auto-complete-list>
               </div>
             </dialog>
-            <style>
-                :host>ks-a-button {
-                  width: 100%;
-                  --button-secondary-background-color: var(--m-white);
-                  --button-secondary-background-color-hover: var(--m-white);
-                  --button-secondary-width: 100%;
-                  --button-secondary-border-color: var(--m-gray-700);
-                  --button-secondary-border-color-hover: var(--m-gray-700);
-                  --button-secondary-color: var(--m-gray-700);
-                  --button-secondary-color-hover: var(--m-gray-700);
-                  --button-secondary-cursor: text;
-                  --button-secondary-justify-content: space-between;
-                  --button-secondary-padding: 0.5rem 1.5rem;
-                  --button-secondary-font-size: 1.15rem;
-                  --button-secondary-height: 2.88rem;
-                  --svg-size: 1.5rem;
-                  --svg-size-mobile: 1.2rem;
-                  --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
-                  --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
-                  --button-secondary-font-weight: 400;
-                  --button-secondary-icon-right-margin: 0 0 0 1.5rem;
-					    }
-
-              @media only screen and (max-width: 767px) {
-                :host>ks-a-button {
-                  --button-secondary-padding: 0.5rem 0.9rem;
-                  --button-secondary-font-size: 1rem;
-                  --button-secondary-height: 2.5rem;
-                }
-					}
-          </style>
-          <ks-a-button ellipsis-text id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
-                default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
-                  <a-icon-mdx icon-name="Search" class="icon-right">
-                  </a-icon-mdx>
-              </ks-a-button>
-              <style>
+            <ks-a-button 
+              ellipsis-text id="show-modal" 
+              namespace="button-search-" 
+              answer-event-name="search-change"
+              default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
+            >
+              <a-icon-mdx icon-name="Search" class="icon-right"></a-icon-mdx>
+            </ks-a-button>
+            <style protected>
               :host>a-button {
-              position: absolute;
-              right: 0;
-              --button-secondary-border-color: var(--m-gray-700);
-              --button-secondary-background-color: var(--m-white);
-              --button-secondary-border-color-hover-custom: var(--m-gray-700);
-              --button-secondary-background-color-hover: var(--m-white);
-              --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
-              --button-secondary-padding: 0.625rem 1.5rem;
+                position: absolute;
+                right: 0;
+                height: var(--button-search-height);
+                --button-secondary-border-color: var(--m-gray-700);
+                --button-secondary-background-color: var(--m-white);
+                --button-secondary-border-color-hover-custom: var(--m-gray-700);
+                --button-secondary-background-color-hover: var(--m-white);
+                --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+                --button-secondary-padding: 0.625rem 1.5rem;
               }
     
               @media only screen and (max-width: 767px) {
                 :host>a-button {
-                --button-secondary-padding: 0.433rem 0.9rem;
+                  --button-secondary-padding: 0.433rem 0.9rem;
                 }
               }
             </style>
-              <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
-              <style>
+            <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
+              <style protected>
                 :host>button,
                 :host>button:hover {
                   border-left: none !important;
+                  height: var(--button-search-height);
                 }
               </style>
-                <a-icon-mdx icon-name="X" class="icon-right">
-                </a-icon-mdx>
-              </a-button>
+              <a-icon-mdx icon-name="X" class="icon-right">
+              </a-icon-mdx>
+            </a-button>
           </m-dialog>
         </ks-c-auto-complete>
       </div>
@@ -437,7 +413,7 @@ export default class OffersPage extends Shadow() {
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
       <div col-lg="6" col-md="6" col-sm="12">
         ${this.hasAttribute('with-location-input-label') ? /* html */`
-          <style>
+          <style protected>
             :host .location-label { 
               font-size: var(--mdx-sys-font-flex-body3-font-size);
               font-weight: 500;
@@ -448,115 +424,91 @@ export default class OffersPage extends Shadow() {
           <h4 class="location-label">
             ${this.getTranslation('CourseList.FindOffersNearbyPlaceholder')}
           </h4>
-          `: ``}
+        `: ``}
         <ks-c-auto-complete-location 
          ignore-search-input-icon-click
          reset-input-value-based-url="cname"
-         ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}>
-            <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
-              <dialog>
-                <div class="container">
-                    <a-input 
-                      id="offers-page-location-search-input"
-                      inputid="offers-page-location-search" 
-                      placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}" 
-                      icon-name="Location" 
-                      icon-size="1.5em" 
-                      search
-                      autofocus 
-                      submit-search="request-auto-complete-location" 
-                      any-key-listener="200" 
-                      type="search"
-                      delete-listener
-                      answer-event-name="location-change"
-                      autocomplete="off"
-                    >
-                    </a-input>
-                    <style>
-                      :host { 
-                        --icon-color-hover: var(--search-input-color);
-                      }
-                    </style>
-                    <div id="close">
-                        <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
-                    </div>
+         ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}
+        >
+          <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+            <dialog>
+              <div class="container">
+                <a-input 
+                  id="offers-page-location-search-input"
+                  inputid="offers-page-location-search" 
+                  placeholder="${this.getTranslation('CourseList.YourLocationPlaceholder')}" 
+                  icon-name="Location" 
+                  icon-size="1.5em" 
+                  search
+                  autofocus 
+                  submit-search="request-auto-complete-location" 
+                  any-key-listener="200" 
+                  type="search"
+                  delete-listener
+                  answer-event-name="location-change"
+                  autocomplete="off"
+                >
+                </a-input>
+                <style protected>
+                  :host { 
+                    --icon-color-hover: var(--search-input-color);
+                  }
+                </style>
+                <div id="close">
+                    <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
                 </div>
-                <div class="container">
-                    <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" use-keyup-navigation auto-complete-selection="auto-complete-location-selection">
-                        <ul>
-                            <li id="user-location">
-                                <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
-                                <span>${this.getTranslation('Search.CurrentLocation')}</span>
-                            </li>
-                        </ul>
-                    </ks-m-auto-complete-list>
-                </div>
-              </dialog>
-              <style>
-                :host>ks-a-button {
-                  width: 100%;
-                  --button-secondary-background-color: var(--m-white);
-                  --button-secondary-background-color-hover: var(--m-white);
-                  --button-secondary-width: 100%;
-                  --button-secondary-border-color: var(--m-gray-700);
-                  --button-secondary-border-color-hover: var(--m-gray-700);
-                  --button-secondary-color: var(--m-gray-700);
-                  --button-secondary-color-hover: var(--m-gray-700);
-                  --button-secondary-cursor: text;
-                  --button-secondary-justify-content: space-between;
-                  --button-secondary-padding: 0.5rem 1.5rem;
-                  --button-secondary-font-size: 1.15rem;
-                  --button-secondary-height: 2.88rem;
-                  --svg-size: 1.5rem;
-                  --svg-size-mobile: 1.2rem;
-                  --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
-                  --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
-                  --button-secondary-font-weight: 400;
-                  --button-secondary-icon-right-margin: 0 0 0 1.5rem;
-					    }
+              </div>
+              <div class="container">
+                <ks-m-auto-complete-list auto-complete-location auto-complete="auto-complete-location" use-keyup-navigation auto-complete-selection="auto-complete-location-selection">
+                  <ul>
+                    <li id="user-location">
+                      <a-icon-mdx namespace="icon-mdx-ks-" icon-url="../../../../../../../img/icons/icon-locali.svg" size="1.2em" hover-on-parent-element></a-icon-mdx>
+                      <span>${this.getTranslation('Search.CurrentLocation')}</span>
+                    </li>
+                  </ul>
+                </ks-m-auto-complete-list>
+              </div>
+            </dialog>
+            <ks-a-button 
+              id="show-modal-location" 
+              namespace="button-search-" 
+              ellipsis-text 
+              answer-event-name="location-change"
+              default-label="${this.getTranslation('CourseList.YourLocationPlaceholder')}"
+            >
+              <a-icon-mdx icon-name="Location" class="icon-right"></a-icon-mdx>
+            </ks-a-button>
+        
+            <style protected>
+              :host>a-button {
+                position: absolute;
+                right: 0;
+                height: var(--button-search-height);
+                --button-secondary-border-color: var(--m-gray-700);
+                --button-secondary-background-color: var(--m-white);
+                --button-secondary-border-color-hover-custom: var(--m-gray-700);
+                --button-secondary-background-color-hover: var(--m-white);
+                --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+                --button-secondary-padding: 0.625rem 1.5rem;
+              }
 
               @media only screen and (max-width: 767px) {
-                :host>ks-a-button {
-                  --button-secondary-padding: 0.5rem 0.9rem;
-                  --button-secondary-font-size: 1rem;
-                  --button-secondary-height: 2.5rem;
+                :host>a-button {
+                  --button-secondary-padding: 0.433rem 0.9rem;
                 }
-					}
-				</style>
-				<ks-a-button id="show-modal-location" namespace="button-secondary-" ellipsis-text answer-event-name="location-change"
-					default-label="${this.getTranslation('CourseList.YourLocationPlaceholder')}">
-					<a-icon-mdx icon-name="Location" class="icon-right">
-					</a-icon-mdx>
-				</ks-a-button>
-        <style>
-          :host>a-button {
-          position: absolute;
-          right: 0;
-          --button-secondary-border-color: var(--m-gray-700);
-          --button-secondary-background-color: var(--m-white);
-          --button-secondary-border-color-hover-custom: var(--m-gray-700);
-          --button-secondary-background-color-hover: var(--m-white);
-          --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
-          --button-secondary-padding: 0.625rem 1.5rem;
-          }
-
-          @media only screen and (max-width: 767px) {
-            :host>a-button {
-            --button-secondary-padding: 0.433rem 0.9rem;
-            }
-          }
-        </style>
-        <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="cname">
-        <style>
-        :host>button,
-        :host>button:hover {
-          border-left: none !important;
-        }
-      </style>
-            <a-icon-mdx  icon-name="X" class="icon-right">
-            </a-icon-mdx>
-        </a-button>
-            </m-dialog>
+              }
+            </style>
+            <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="cname">
+              <style protected>
+                :host>button,
+                :host>button:hover {
+                  border-left: none !important;
+                  height: var(--button-search-height);
+                }
+              </style>
+              <a-icon-mdx  icon-name="X" class="icon-right"></a-icon-mdx>
+            </a-button>
+          </m-dialog>
         </ks-c-auto-complete-location>
       </div>
     ` : ''
@@ -595,7 +547,7 @@ export default class OffersPage extends Shadow() {
         ? ''
         : /* html */`
               <o-grid namespace="grid-12er-">
-                <style>
+                <style protected>
                   :host .input-section {
                     align-items: flex-end;
                   }
@@ -603,7 +555,7 @@ export default class OffersPage extends Shadow() {
                 <section class="input-section">
                   ${this.hasAttribute('no-search-tab')
           ? /* html */`<div col-lg="12" col-md="12" col-sm="12">
-                        <ks-a-with-facet-counter></ks-a-with-facet-counter>
+                        <ks-a-with-facet-counter ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-a-with-facet-counter>
                       </div>`
           : ''}
                   ${this.eventDetailURL ? '' : searchInput}
@@ -633,19 +585,20 @@ export default class OffersPage extends Shadow() {
                           namespace="filter-default-" 
                           translation-key-close="${this.getTranslation('Filter.closeOverlayer')}" 
                           translation-key-reset="${this.getTranslation('Filter.ResetFilter')}"
+                          ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                         ></ks-m-filter-categories>
                     </div>
                   </div>
                   <div class="container dialog-footer">
                     <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
-                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events></ks-a-number-of-offers-button>
+                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}                    ></ks-a-number-of-offers-button>
                   </div>
                 </dialog>
               </m-dialog>
               <ks-a-spacing type="s-flex"></ks-a-spacing>
               <o-grid namespace="grid-432-auto-colums-auto-rows-">
                 <section>
-                  <style>
+                  <style protected>
                     :host {
                       /* filter buttons have the exception of being fully rounded on all brands, that's why I am setting border-radius here */
                       --button-primary-border-radius: 999px;
@@ -657,7 +610,7 @@ export default class OffersPage extends Shadow() {
                       <a-icon-mdx icon-name="FilterKlubschule" size="1em" class="icon-left"></a-icon-mdx>${this.getTranslation('CourseList.FilterAllPlaceholder')}
                   </ks-a-button>
                   <!-- buttons to filter -->
-                  <ks-m-filter-select ${this.hasAttribute('with-filter-search') && !this.hasAttribute('with-search-input') ? 'with-filter-search-button' : ''}></ks-m-filter-select>
+                  <ks-m-filter-select ${this.hasAttribute('with-filter-search') && !this.hasAttribute('with-search-input') ? 'with-filter-search-button' : ''}${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-m-filter-select>
                 </section>
               </o-grid>
               <ks-a-spacing type="s-flex"></ks-a-spacing>
@@ -666,54 +619,61 @@ export default class OffersPage extends Shadow() {
             `}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
-                ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
+                ${this.isWishList ? ' is-wish-list' : ''}
+                ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
-              <ks-a-with-facet-pagination id="pagination" pagination-event-name="request-with-facet" pagination-event-name="with-facet">
+              <ks-a-with-facet-pagination 
+                id="pagination"
+                pagination-event-name="request-with-facet"
+                pagination-event-name="with-facet"
+                ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
+              >
                 <ks-a-button namespace="button-primary-" color="secondary">
                     <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                 </ks-a-button>
               </ks-a-with-facet-pagination>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
-              <ks-m-badge-legend namespace="badge-legend-default-">
-                ${this.isEasyPortal
-        ? /* html */`
+              ${this.isWishList ? '' : /* html */ `
+                <ks-m-badge-legend namespace="badge-legend-default-">
+                  ${this.isEasyPortal
+          ? /* html */`
+                    <div>
+                      <div class="badge-icon-only">
+                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Key" size="1em"></a-icon-mdx>
+                      </div>
+                      <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
+                    </div> 
+                    `
+          : ''
+        }
+                  ${this.hasAttribute('hide-abo-legend')
+          ? ''
+          : /* html */`
+                      <div>
+                        <div class="badge-icon-only">
+                          <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
+                        </div>
+                        <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
+                      </div>
+                      <div>
+                        <div class="badge-icon-only">
+                          <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
+                        </div>
+                        <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
+                      </div>`
+        }
                   <div>
                     <div class="badge-icon-only">
-                      <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Key" size="1em"></a-icon-mdx>
+                      <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Percent" size="1em"></a-icon-mdx>
                     </div>
-                    <span>${this.getTranslation('Badge.Legend.KeyPlaceholder')}</span>
-                  </div> 
-                  `
-        : ''
-      }
-                ${this.hasAttribute('hide-abo-legend')
-        ? ''
-        : /* html */`
-                    <div>
-                      <div class="badge-icon-only">
-                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Abo" size="1em"></a-icon-mdx>
-                      </div>
-                      <span>${this.getTranslation('Badge.Legend.AboPlaceholder')}</span>
-                    </div>
-                    <div>
-                      <div class="badge-icon-only">
-                        <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="AboPlus" size="1em"></a-icon-mdx>
-                      </div>
-                      <span>${this.getTranslation('Badge.Legend.AboPlusPlaceholder')}</span>         
-                    </div>`
-      }
-                <div>
-                  <div class="badge-icon-only">
-                    <a-icon-mdx namespace="icon-mdx-ks-badge-" icon-name="Percent" size="1em"></a-icon-mdx>
+                    <span>${this.getTranslation('Badge.Legend.PercentPlaceholder')}</span>
                   </div>
-                  <span>${this.getTranslation('Badge.Legend.PercentPlaceholder')}</span>
-                </div>
-              </ks-m-badge-legend>
+                </ks-m-badge-legend>`}
           </ks-o-body-section>
         ${this.eventDetailURL ? /* html */'</ks-c-event-detail>' : ''}
     `
@@ -725,7 +685,11 @@ export default class OffersPage extends Shadow() {
         <o-grid namespace="grid-12er-">
           <section>
             <div col-lg="12" col-md="12" col-sm="12">
-              <ks-m-content-factory></ks-m-content-factory>
+              <ks-m-content-factory
+                ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
+              >
+                ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+              </ks-m-content-factory>
             </div>
           </section>
         </o-grid>
@@ -741,6 +705,10 @@ export default class OffersPage extends Shadow() {
     return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
   }
 
+  get isWishList() {
+    return this.hasAttribute('is-wish-list')
+  }
+
   get hiddenSections() {
     return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
@@ -752,6 +720,7 @@ export default class OffersPage extends Shadow() {
       reset-input-value-based-url="q"
       no-forwarding
       ${this.hasAttribute('endpoint-auto-complete') ? `endpoint-auto-complete="${this.getAttribute('endpoint-auto-complete')}"` : ''}
+      ${this.hasAttribute('with-auto-complete-content') ? `with-auto-complete-content` : ''}
       ${this.hasAttribute('search-url') ? `search-url="${this.getAttribute('search-url')}"` : ''}
       ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
       ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
@@ -769,6 +738,7 @@ export default class OffersPage extends Shadow() {
               type="search"
               answer-event-name="search-change"
               delete-listener
+              ${this.hasAttribute('with-auto-complete') ? 'any-key-listener' : ''}
               search
               autocomplete="off"
             >
@@ -778,74 +748,54 @@ export default class OffersPage extends Shadow() {
             </div>
           </div>
           <div class="container">
-            <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+            <ks-m-auto-complete-list 
+              auto-complete-selection="auto-complete-selection"
+              ${this.hasAttribute('with-auto-complete-content') ? `with-auto-complete-content` : ''} 
+            >
             </ks-m-auto-complete-list>
           </div>
         </dialog>
-        <style>
-            :host>ks-a-button {
-              width: 100%;
-              --button-secondary-background-color: var(--m-white);
-              --button-secondary-background-color-hover: var(--m-white);
-              --button-secondary-width: 100%;
-              --button-secondary-border-color: var(--m-gray-700);
-              --button-secondary-border-color-hover: var(--m-gray-700);
-              --button-secondary-color: var(--m-gray-700);
-              --button-secondary-color-hover: var(--m-gray-700);
-              --button-secondary-cursor: text;
-              --button-secondary-justify-content: space-between;
-              --button-secondary-padding: 0.5rem 1.5rem;
-              --button-secondary-font-size: 1.15rem;
-              --button-secondary-height: 2.88rem;
-              --svg-size: 1.5rem;
-              --svg-size-mobile: 1.2rem;
-              --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
-              --button-secondary-icon-color-hover: var(--mdx-sys-color-primary-default);
-              --button-secondary-font-weight: 400;
-              --button-secondary-icon-right-margin: 0 0 0 1.5rem;
-          }
+        <ks-a-button 
+          ellipsis-text 
+          id="show-modal" 
+          namespace="button-search-" 
+          answer-event-name="search-change"
+          default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}"
+        >
+          <a-icon-mdx icon-name="Search" class="icon-right">
+          </a-icon-mdx>
+        </ks-a-button>
 
-          @media only screen and (max-width: 767px) {
-            :host>ks-a-button {
-              --button-secondary-padding: 0.5rem 0.9rem;
-              --button-secondary-font-size: 1rem;
-              --button-secondary-height: 2.5rem;
-            }
-      }
-      </style>
-      <ks-a-button ellipsis-text id="show-modal" namespace="button-secondary-" answer-event-name="search-change"
-            default-label="${this.getTranslation('CourseList.YourOfferPlaceholder')}">
-              <a-icon-mdx icon-name="Search" class="icon-right">
-              </a-icon-mdx>
-          </ks-a-button>
-          <style>
+        <style protected>
           :host>a-button {
-          position: absolute;
-          right: 0;
-          --button-secondary-border-color: var(--m-gray-700);
-          --button-secondary-background-color: var(--m-white);
-          --button-secondary-border-color-hover-custom: var(--m-gray-700);
-          --button-secondary-background-color-hover: var(--m-white);
-          --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
-          --button-secondary-padding: 0.625rem 1.5rem;
+            position: absolute;
+            right: 0;
+            height: var(--button-search-height);
+            --button-secondary-border-color: var(--m-gray-700);
+            --button-secondary-background-color: var(--m-white);
+            --button-secondary-border-color-hover-custom: var(--m-gray-700);
+            --button-secondary-background-color-hover: var(--m-white);
+            --button-secondary-border-radius: 0 var(--mdx-comp-button-secondary-medium-border-radius-default)  var(--mdx-comp-button-secondary-medium-border-radius-default) 0;
+            --button-secondary-padding: 0.625rem 1.5rem;
           }
 
           @media only screen and (max-width: 767px) {
             :host>a-button {
-            --button-secondary-padding: 0.433rem 0.9rem;
+              --button-secondary-padding: 0.433rem 0.9rem;
             }
           }
         </style>
-          <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
-          <style>
+        <a-button namespace="button-secondary-" id="clear" request-event-name="reset-filter" filter-key="q">
+          <style protected>
             :host>button,
             :host>button:hover {
               border-left: none !important;
+              height: var(--button-search-height);
             }
           </style>
-            <a-icon-mdx icon-name="X" class="icon-right">
-            </a-icon-mdx>
-          </a-button>
+          <a-icon-mdx icon-name="X" class="icon-right">
+          </a-icon-mdx>
+        </a-button>
       </m-dialog>
     </ks-c-auto-complete>
   </div>

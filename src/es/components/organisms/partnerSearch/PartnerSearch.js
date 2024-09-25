@@ -14,6 +14,7 @@ export default class PartnerSearch extends Shadow() {
 
     this.hiddenMessages = this.hiddenSections
     this.searchText = this.getAttribute('search-text')
+    this.tab = this.getAttribute('tab')
     this.partnerSearchListener = event => this.renderHTML(event.detail.fetch)
   }
 
@@ -173,8 +174,14 @@ export default class PartnerSearch extends Shadow() {
     if (fetch) {
       // fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
       const data = this.lastData = await fetch
-      this.html = ''
-      this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
+      this.html = ''      
+      if(this.tab == 1) {
+        this.hiddenMessages[0].removeAttribute('hidden')
+      } else if (this.tab == 2) {
+        this.hiddenMessages[1].removeAttribute('hidden')
+      } else {
+        this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
+      }
       this.html = this.hiddenMessages
       const headline = this.hiddenMessages[this.hiddenMessages.length - 1].querySelector("h2")
       let headlineText = headline.innerText

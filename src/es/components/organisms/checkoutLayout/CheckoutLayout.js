@@ -26,7 +26,7 @@ export default class CheckoutLayout extends Shadow() {
   }
 
   shouldRenderHTML () {
-    return !this.root.querySelector('.checkout-layout')
+    return !this.hasAttribute("css-only") && !this.root.querySelector('.checkout-layout')
   }
 
   /**
@@ -35,12 +35,18 @@ export default class CheckoutLayout extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        width: 100% !important;
-        margin: 0 !important;
+        width: 100%${this.hasAttribute("css-only") ? "" : "  !important"};
+        margin: 0${this.hasAttribute("css-only") ? "" : "  !important"};
       }
 
       :host mdx-login-button {
         display: inline-block;
+      }
+
+      :host p.wishlist-copy {
+        width: 66%;
+        font: var(--mdx-sys-font-flex-large-body2);
+        margin-left: 0;
       }
 
       /* spacing utilities */
@@ -118,6 +124,10 @@ export default class CheckoutLayout extends Shadow() {
           border-top: 1px solid var(--mdx-sys-color-brand-neutral-300);
           /* Override global spacing */
           padding-bottom: 0 !important;
+        }
+
+        :host p.wishlist-copy {
+          width: 100%;
         }
       }
     `

@@ -26,12 +26,14 @@ export default class WithFacetPagination extends Shadow() {
   }
 
   connectedCallback () {
-    document.body.addEventListener('with-facet', this.receiveData)
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? WithFacetPagination.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
+
+    this.eventListenerNode.addEventListener('with-facet', this.receiveData)
     this.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('with-facet', this.receiveData)
+    this.eventListenerNode.removeEventListener('with-facet', this.receiveData)
     this.removeEventListener('click', this.clickEventListener)
   }
 

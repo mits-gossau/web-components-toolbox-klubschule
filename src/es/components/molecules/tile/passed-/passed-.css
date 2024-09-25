@@ -19,6 +19,7 @@
     --tile-passed-price-strong-font-size: var(--mdx-sys-font-flex-headline3-font-size);
     --tile-passed-price-strong-line-height: var(--mdx-sys-font-flex-headline3-line-height);
     --tile-passed-price-strong-font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
+    --tile-passed-passed-message-font: var(--mdx-sys-font-flex-large-headline3);
 }
 
 @media screen and (max-width: _max-width_) {
