@@ -16,7 +16,9 @@ export default class ContentFactory extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    document.body.addEventListener('with-facet', this.withFacetEventNameListener)
+
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? ContentFactory.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
+    this.eventListenerNode.addEventListener('with-facet', this.withFacetEventNameListener)
     this.dispatchEvent(new CustomEvent('request-with-facet',
       {
         bubbles: true,
@@ -27,7 +29,7 @@ export default class ContentFactory extends Shadow() {
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('with-facet', this.withFacetEventNameListener)
+    this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventNameListener)
   }
 
   shouldRenderCSS () {
