@@ -98,6 +98,7 @@ export default class AboTile extends Shadow() {
     this.html = ''
     this.html = /* html */ `
       <ks-m-event-detail
+        is-abo
         data='${JSON.stringify(aboDetail).replace(/'/g, '’')}'
         endpoint='${this.getAttribute('endpoint')}'
       >
