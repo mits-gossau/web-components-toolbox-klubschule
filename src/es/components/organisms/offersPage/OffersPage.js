@@ -17,7 +17,7 @@ export default class OffersPage extends Shadow() {
         this.data = data
         this.searchTerm = data.searchText
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-        bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
+        if (!this.isWishList) bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
         // Set Sort
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
