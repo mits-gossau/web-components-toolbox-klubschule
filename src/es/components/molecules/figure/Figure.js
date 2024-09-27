@@ -127,6 +127,9 @@ export default class KsFigure extends Shadow(HTMLElement) {
           margin: var(--mdx-sys-spacing-fix-s) 0 0;
           width: var(--any-content-width-mobile, var(--content-width-mobile, calc(100% - var(--content-spacing-mobile, var(--content-spacing)) * 2)));
         }
+        :host figcaption.carousel {
+          margin-left: var(--mdx-sys-spacing-fix-s);
+        }
         :host figcaption::before {
           width: calc(var(--divider-width) - var(--divider-height));
         }
