@@ -565,8 +565,8 @@ export default class Event extends Shadow() {
               ${zusatztitel ? /* html */ `<div class="badge">${zusatztitel}</div>` : ''}
             </div>
             ${this.isWishList && !this.isPassed && offerButton ? /* html */ `
-              <ks-a-link href="${offerButton.link}" icon-right="ArrowRight" class="link-more">
-                <span>${offerButton.text}</span>
+              <ks-a-link mode="false" href="${offerButton.link}" icon-right="ArrowRight" class="link-more">
+                ${offerButton.text}
               </ks-a-link>
             ` : ''}
           </div>
