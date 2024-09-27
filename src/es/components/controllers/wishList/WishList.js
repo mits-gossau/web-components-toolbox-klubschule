@@ -32,6 +32,13 @@ export default class WishList extends HTMLElement {
       }).then(json => {
         if (json.code !== successCode) this.guid = ''
         if (json.watchlistGuid) this.guid = json.watchlistGuid
+        document.body.dispatchEvent(new CustomEvent('wish-list-icon-indicator', {
+          detail: {
+            wishlist: {
+              entriesCount: json.watchlistEntriesCount
+            }
+          }
+        }))
       })
     }
     

@@ -137,10 +137,10 @@ export default class WishList extends Shadow() {
           <ks-m-tab>
             <ul class="tab-search-result">
               <li>
-                <button tab-target="content1" id="total-event-offers-tab-heading">${this.getTranslation('Wishlist.Events.Tab')}</button>
+                <button class="active" tab-target="content1" id="total-event-offers-tab-heading">${this.getTranslation('Wishlist.Events.Tab')}</button>
               </li>
               <li>
-                <button class="active" tab-target="content2" id="total-course-offers-tab-heading">${this.getTranslation('Wishlist.Offers.Tab')}</button>
+                <button tab-target="content2" id="total-course-offers-tab-heading">${this.getTranslation('Wishlist.Offers.Tab')}</button>
               </li>
             </ul>
             <div>

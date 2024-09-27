@@ -1,7 +1,7 @@
 :host {
-    --tile-default-background-color: var(--m-white);
-    --tile-default-border-color: var(--m-gray-700);
-    --tile-default-overlay-backround-color: var(--m-gray-700);
+    --tile-default-background-color: var(--m-white, #fff);
+    --tile-default-border-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
+    --tile-default-overlay-backround-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
     --tile-default-icon-color: var(--icon-color-blue);
     --tile-default-foot-display: flex;
     --tile-default-foot-justify-content: space-between;
@@ -9,7 +9,7 @@
     --tile-default-foot-padding: 0;
     --tile-default-foot-passed-display: none;
     --tile-default-icon-box-dimension: 1.625em;
-    --tile-default-icon-box-color: var(--m-white);
+    --tile-default-icon-box-color: var(--m-white, #fff);
     --tile-default-overlay-display: none;
     --tile-default-overlay-background-color: transparent;
     --tile-default-title-font-family: var(--mdx-sys-font-flex-headline3-font-family);
