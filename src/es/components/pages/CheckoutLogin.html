@@ -4,20 +4,29 @@
 <ks-o-checkout-layout>
 
     <section id="top">
-        <ks-m-checkout-color-stage 
-            back-label="Zurück" 
-            back-link="#"
-            title="Login"
-        >
+        <ks-m-checkout-color-stage back-label="Zurück" back-link="#" title="Login">
         </ks-m-checkout-color-stage>
     </section>
 
     <section id="main">
         <ks-a-heading tag="h2">Mit Migros Konto anmelden</ks-a-heading>
-        <mdx-login-button class="margin-bottom-m" size="md"></mdx-login-button>
+        <mdx-login avatar="{
+            'login-avatar-arialabel': 'Migros Account from: '
+        }" button="{
+            'loginbuttonclick': '() => 
+    self.open
+    (\'
+    https://migros.account.ch/login/
+    ', \'_self\')'
+        }" all="{
+            'is-logged-in': false,
+            'language': 'de',
+            'size': 'sm'
+        }"></mdx-login>
         <ks-a-heading tag="h3">Ihre Vorteile mit einem Migros Konto</ks-a-heading>
         <ul class="advantages-list margin-bottom-l">
-            <li><a-icon-mdx icon-name="Check"></a-icon-mdx>Schnellere Anmeldung durch Adressübernahme aus Ihrem Migros Konto</li>
+            <li><a-icon-mdx icon-name="Check"></a-icon-mdx>Schnellere Anmeldung durch Adressübernahme aus Ihrem Migros
+                Konto</li>
             <li><a-icon-mdx icon-name="Check"></a-icon-mdx>Nutzung der Merkliste über diverse Geräte hinweg.</li>
             <li><a-icon-mdx icon-name="Check"></a-icon-mdx>Verwaltung Ihrer Abonnement-Termine</li>
         </ul>
@@ -25,7 +34,8 @@
 
     <section id="sidebar">
         <ks-a-heading tag="h2">Als Gast anmelden</ks-a-heading>
-        <ks-a-button href="#" namespace="button-secondary-" color="secondary" class="margin-bottom-m">Weiter als Gast</ks-a-button>
+        <ks-a-button href="#" namespace="button-secondary-" color="secondary" class="margin-bottom-m">Weiter als
+            Gast</ks-a-button>
         <p class="margin-bottom-l">Sie können später ein Migros Konto erstellen, falls Sie wollen.</p>
     </section>
 
