@@ -63,7 +63,9 @@ export default class WishList extends HTMLElement {
                 return json
               })
               : Promise.resolve({
-                watchlistEntries: []
+                watchlistEntries: [],
+                watchlistEntriesVeranstaltung: [],
+                watchlistEntriesAngebot: []
               })
           },
           bubbles: true,
