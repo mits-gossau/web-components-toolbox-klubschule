@@ -533,6 +533,7 @@ export default class Event extends Shadow() {
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
     const {
       bezeichnung,
+      centerid,
       datum_label,
       detail_label_less,
       detail_label_more,
@@ -540,6 +541,7 @@ export default class Event extends Shadow() {
       icons,
       ist_abokurs_offen,
       kurs_id,
+      kurs_typ,
       lektionen_label,
       location,
       buttons,
@@ -551,6 +553,7 @@ export default class Event extends Shadow() {
     } = this.data.course
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
+    const offerButton = buttons?.length ? buttons.find(({ event }) => event === 'offerlink') : null
 
     this.html = /* HTML */`
       <div class="event${this.isWishList ? " wishlist" : ""}${this.isWishList && this.isPassed ? " passed" : ""}">
@@ -561,9 +564,9 @@ export default class Event extends Shadow() {
               <span class="days">${days.join(', ')}</span>
               ${zusatztitel ? /* html */ `<div class="badge">${zusatztitel}</div>` : ''}
             </div>
-            ${this.isWishList && !this.isPassed ? /* html */ `
-              <ks-a-link href="/test" icon-right="ArrowRight" class="link-more">
-                <span>Zur Angebotsseite</span>
+            ${this.isWishList && !this.isPassed && offerButton ? /* html */ `
+              <ks-a-link mode="false" href="${offerButton.link}" icon-right="ArrowRight" class="link-more">
+                ${offerButton.text}
               </ks-a-link>
             ` : ''}
           </div>
@@ -598,7 +601,7 @@ export default class Event extends Shadow() {
           ${this.isWishList && this.isPassed ? '' : /* html */ `
             <div class="controls">
               <div class="controls-left">
-                ${this.isWishList && !this.isPassed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${parentkey}"></a-icon-mdx>` : ''}
+                ${this.isWishList && !this.isPassed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${kurs_typ}_${kurs_id}_${centerid}"></a-icon-mdx>` : ''}
                 ${!ist_abokurs_offen && !this.isPassed? /* html */ `
                   <ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'${this.isWishList ? " is-wish-list" : ""}></ks-m-buttons>
                 ` : ''}
@@ -620,7 +623,7 @@ export default class Event extends Shadow() {
             <div class="controls controls-passed">
               <span class="controls-passed__message">${this.getAttribute("passed-message")}</span>
               <div class="controls-passed__left">
-                ${this.isWishList ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${parentkey}"></a-icon-mdx>` : ''}
+                ${this.isWishList ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${kurs_typ}_${kurs_id}_${centerid}"></a-icon-mdx>` : ''}
                 ${buttons[0].text ? /* html */ `
                   <ks-a-button namespace="button-secondary-" color="secondary">
                     <span>${buttons[0].text || warnMandatory + 'passed.button.text'}</span>
