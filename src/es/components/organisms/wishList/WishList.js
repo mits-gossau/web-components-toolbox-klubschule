@@ -64,7 +64,7 @@ export default class WishList extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML() {
-    return !this.loadingBar && !this.offersPage
+    return !this.root.querySelector('ks-m-tab')
   }
 
   /**
@@ -75,6 +75,7 @@ export default class WishList extends Shadow() {
     this.css = /* css */`
       :host {
         width: 100% !important;
+        padding-top: var(--mdx-sys-spacing-flex-large-m);
       }
       :host > .error {
         color: var(--color-error);
@@ -84,6 +85,11 @@ export default class WishList extends Shadow() {
       }
       :host ks-m-tab {
         padding-top: var(--mdx-sys-spacing-flex-large-m);
+      }
+      @media only screen and (max-width: _max-width_) {
+        :host {
+          padding-top: var(--mdx-sys-spacing-flex-small-m);
+        }
       }
     `
     return this.fetchTemplate()
@@ -200,11 +206,35 @@ export default class WishList extends Shadow() {
   }
 
   renderMessage(message) {
-    if (!message) return console.error("Missing Markup for empty wishlist")
+    if (!message) return
+    const templateContent = message.content
+    if (!templateContent) return console.error("Missing Markup for empty wishlist")
+
+    // Lazy Load 
+    let notDefined
+    if ((notDefined = templateContent.querySelectorAll(':not(:defined)')) && notDefined.length) {
+      if (document.body.hasAttribute(this.getAttribute('load-custom-elements') || 'load-custom-elements')) {
+        this.dispatchEvent(new CustomEvent(this.getAttribute('load-custom-elements') || 'load-custom-elements', {
+          detail: {
+            nodes: Array.from(notDefined)
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      } else {
+        console.error(
+          'There are :not(:defined) web components in the template. You must load through wc-config or manually:',
+          notDefined,
+          this
+        )
+      }
+    }
+
     return /* html */ `
       <ks-o-body-section variant="default" background-color="var(--mdx-sys-color-accent-6-subtle1)" no-margin-y no-padding-y>
         <section id="${message.id}">
-          ${message.innerHTML}
+          ${Array.from(templateContent.children).reduce((acc, emptyMessage) => acc + emptyMessage.outerHTML, '')}
         </section>
       </ks-o-body-section>
     `
