@@ -10,20 +10,29 @@ export default class WishtlistIcon extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
 
-    this.updateIcon = event => {
+    this.updateIconInitialLoad = event => {
       this.entriesCount = event.detail.wishlist.entriesCount
       this.renderHTML()
+    }
+
+    this.updateIconAddOrDeleteItem = event => {
+      event.detail.fetch.then((data) => {
+        this.entriesCount = data.watchlistEntries?.length
+        this.renderHTML()
+      })
     }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('wish-list-icon-indicator', this.updateIcon)
+    document.body.addEventListener('wish-list-icon-indicator', this.updateIconInitialLoad)
+    document.body.addEventListener('wish-list', this.updateIconAddOrDeleteItem)
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('wish-list-icon-indicator', this.updateIcon)
+    document.body.removeEventListener('wish-list-icon-indicator', this.updateIconInitialLoad)
+    document.body.removeEventListener('wish-list', this.updateIconAddOrDeleteItem)
   }
 
   /**
