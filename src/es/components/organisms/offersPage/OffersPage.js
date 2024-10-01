@@ -7,6 +7,9 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @export
 * @class OffersPage
 * @type {CustomElementConstructor}
+* note: headless makes sure that no filters are loaded
+* note: is-wish-list makes sure that no badge legend is loaded
+* TODO: take headless to hide the badge legend
 */
 export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
@@ -543,7 +546,7 @@ export default class OffersPage extends Shadow() {
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
           <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
-            ${this.hasAttribute('headless')
+            ${this.hasAttribute('headless') 
         ? ''
         : /* html */`
               <o-grid namespace="grid-12er-">

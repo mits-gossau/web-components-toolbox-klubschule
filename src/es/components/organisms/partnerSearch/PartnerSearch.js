@@ -176,17 +176,17 @@ export default class PartnerSearch extends Shadow() {
       const data = this.lastData = await fetch
       this.html = ''      
       if(this.tab == 1) {
-        this.hiddenMessages[0].removeAttribute('hidden')
+        this.hiddenMessages[0]?.removeAttribute('hidden')
       } else if (this.tab == 2) {
-        this.hiddenMessages[1].removeAttribute('hidden')
+        this.hiddenMessages[1]?.removeAttribute('hidden') 
       } else {
         this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
       }
       this.html = this.hiddenMessages
-      const headline = this.hiddenMessages[this.hiddenMessages.length - 1].querySelector("h2")
-      let headlineText = headline.innerText
+      const headline = this.hiddenMessages[this.hiddenMessages.length - 1]?.querySelector("h2") 
+      let headlineText = headline?.innerText || ''
       headlineText = headlineText.replace("{0}", this.searchText)
-      headline.textContent = headlineText
+      if (headline) headline.textContent = headlineText
 
       const partnerResultsSection = this.root.querySelector("#partner-results")
 
