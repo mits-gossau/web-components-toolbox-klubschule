@@ -658,7 +658,7 @@ export default class Event extends Shadow() {
         name: 'ks-m-badge'
       },
       {
-        path: `${this.importMetaUrl}../../atoms/Link/Link.js`,
+        path: `${this.importMetaUrl}../../atoms/link/Link.js`,
         name: 'ks-a-link'
       },
       {
