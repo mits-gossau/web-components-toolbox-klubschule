@@ -624,7 +624,7 @@ export default class Event extends Shadow() {
               <span class="controls-passed__message">${this.getAttribute("passed-message")}</span>
               <div class="controls-passed__left">
                 ${this.isWishList ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${kurs_typ}_${kurs_id}_${centerid}"></a-icon-mdx>` : ''}
-                ${buttons[0].text ? /* html */ `
+                ${buttons[0]?.text ? /* html */ `
                   <ks-a-button namespace="button-secondary-" color="secondary">
                     <span>${buttons[0].text || warnMandatory + 'passed.button.text'}</span>
                   </ks-a-button>
