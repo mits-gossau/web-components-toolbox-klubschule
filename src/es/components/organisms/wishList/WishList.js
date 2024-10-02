@@ -254,8 +254,6 @@ export default class WishList extends Shadow() {
 
     const activeWatchListEntries = entryList.filter(({ aktiv }) => aktiv)
     const passedWatchListEntries = entryList.filter(({ aktiv }) => !aktiv)
-    if (passedWatchListEntries[0]) passedWatchListEntries.push(JSON.parse(JSON.stringify(passedWatchListEntries[0])))
-    console.log('*********', passedWatchListEntries)
     // id assembly: courseType_courseId_centerid
     initialRequestEntries.filter[0].children = activeWatchListEntries.map(entry => ({ ...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true, disabled: true }))
 
