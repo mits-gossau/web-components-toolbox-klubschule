@@ -64,7 +64,7 @@ export default class WishList extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML() {
-    return !this.loadingBar && !this.offersPage
+    return !this.root.querySelector('ks-m-tab')
   }
 
   /**
@@ -75,6 +75,7 @@ export default class WishList extends Shadow() {
     this.css = /* css */`
       :host {
         width: 100% !important;
+        padding-top: var(--mdx-sys-spacing-flex-large-m);
       }
       :host > .error {
         color: var(--color-error);
@@ -84,6 +85,11 @@ export default class WishList extends Shadow() {
       }
       :host ks-m-tab {
         padding-top: var(--mdx-sys-spacing-flex-large-m);
+      }
+      @media only screen and (max-width: _max-width_) {
+        :host {
+          padding-top: var(--mdx-sys-spacing-flex-small-m);
+        }
       }
     `
     return this.fetchTemplate()
@@ -137,10 +143,10 @@ export default class WishList extends Shadow() {
           <ks-m-tab>
             <ul class="tab-search-result">
               <li>
-                <button tab-target="content1" id="total-event-offers-tab-heading">${this.getTranslation('Wishlist.Events.Tab')}</button>
+                <button class="active" tab-target="content1" id="total-event-offers-tab-heading">${this.getTranslation('Wishlist.Events.Tab')}</button>
               </li>
               <li>
-                <button class="active" tab-target="content2" id="total-course-offers-tab-heading">${this.getTranslation('Wishlist.Offers.Tab')}</button>
+                <button tab-target="content2" id="total-course-offers-tab-heading">${this.getTranslation('Wishlist.Offers.Tab')}</button>
               </li>
             </ul>
             <div>
@@ -200,10 +206,35 @@ export default class WishList extends Shadow() {
   }
 
   renderMessage(message) {
+    if (!message) return
+    const templateContent = message.content
+    if (!templateContent) return console.error("Missing Markup for empty wishlist")
+
+    // Lazy Load 
+    let notDefined
+    if ((notDefined = templateContent.querySelectorAll(':not(:defined)')) && notDefined.length) {
+      if (document.body.hasAttribute(this.getAttribute('load-custom-elements') || 'load-custom-elements')) {
+        this.dispatchEvent(new CustomEvent(this.getAttribute('load-custom-elements') || 'load-custom-elements', {
+          detail: {
+            nodes: Array.from(notDefined)
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      } else {
+        console.error(
+          'There are :not(:defined) web components in the template. You must load through wc-config or manually:',
+          notDefined,
+          this
+        )
+      }
+    }
+
     return /* html */ `
       <ks-o-body-section variant="default" background-color="var(--mdx-sys-color-accent-6-subtle1)" no-margin-y no-padding-y>
         <section id="${message.id}">
-          ${message.innerHTML}
+          ${Array.from(templateContent.children).reduce((acc, emptyMessage) => acc + emptyMessage.outerHTML, '')}
         </section>
       </ks-o-body-section>
     `
@@ -252,12 +283,12 @@ export default class WishList extends Shadow() {
             endpoint="${this.getAttribute('endpoint')}"
             initial-request='${JSON.stringify(initialRequestEntries)}'
             with-facet-target
-            ${isEvent ? ` event-detail-url="${this.getAttribute('event-detail-url')}` : ''}
+            ${isEvent ? ` event-detail-url="${this.eventDetailURL}"` : ''}
             ${isEvent ? "" : " no-search-tab"}
           ></ks-o-offers-page>
         ` : ''}
         ${passedWatchListEntries?.length ? /* html */ `
-          <ks-c-event-detail endpoint="${this.getAttribute("event-detail-url")}">
+          <ks-c-event-detail endpoint="${this.eventDetailURL}">
             <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="passed-offers-section" tabindex="0" aria-label="Section">  
               <div class="passed-tile-wrapper">  
                 <h2>${isEvent ? this.getTranslation('WishList.Events.Title') : this.getTranslation('WishList.Offers.Title')}</h2>
@@ -355,4 +386,9 @@ export default class WishList extends Shadow() {
   get isEasyPortal() {
     return !!this.hasAttribute('is-easy-portal')
   }
+
+  get eventDetailURL() {
+    return this.getAttribute('event-detail-url') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/'
+  }
+
 }

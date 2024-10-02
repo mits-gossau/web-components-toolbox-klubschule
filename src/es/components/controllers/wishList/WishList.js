@@ -32,6 +32,13 @@ export default class WishList extends HTMLElement {
       }).then(json => {
         if (json.code !== successCode) this.guid = ''
         if (json.watchlistGuid) this.guid = json.watchlistGuid
+        document.body.dispatchEvent(new CustomEvent('wish-list-icon-indicator', {
+          detail: {
+            wishlist: {
+              entriesCount: json.watchlistEntriesCount
+            }
+          }
+        }))
       })
     }
     
@@ -56,7 +63,9 @@ export default class WishList extends HTMLElement {
                 return json
               })
               : Promise.resolve({
-                watchlistEntries: []
+                watchlistEntries: [],
+                watchlistEntriesVeranstaltung: [],
+                watchlistEntriesAngebot: []
               })
           },
           bubbles: true,
@@ -141,7 +150,7 @@ export default class WishList extends HTMLElement {
     this.addEventListener('add-to-wish-list', this.addToWishListListener)
     this.addEventListener('remove-from-wish-list', this.removeFromWishListListener)
     this.addEventListener('remove-all-from-wish-list-offers', this.removeAllFromWishListListenerOffers)
-    this.addEventListener('remove-all-from-wish-list-event', this.removeAllFromWishListListenerEvents)
+    this.addEventListener('remove-all-from-wish-list-events', this.removeAllFromWishListListenerEvents)
   }
 
   disconnectedCallback () {

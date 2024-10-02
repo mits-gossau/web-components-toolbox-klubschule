@@ -20,7 +20,7 @@ export default class ExtraInfo extends Shadow() {
 
   renderCSS () {
     this.css = /* css */ `
-        :host div {
+        :host div.wrap {
           background-color: var(--mdx-sys-color-primary-default);
           padding: var(--mdx-sys-spacing-flex-large-xs);
         }

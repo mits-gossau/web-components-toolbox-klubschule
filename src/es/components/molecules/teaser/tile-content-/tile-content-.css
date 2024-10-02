@@ -13,7 +13,7 @@
   --teaser-tile-content-transition: color .3s ease-out , background-color .3s ease-out !important;
   
   --teaser-tile-content-pretitle-font-family: var(--mdx-sys-font-fix-title4-font-family);
-  --teaser-tile-content-pretitle-font-size: var(--mdx-sys-font-fix-title4-font-size);
+  --teaser-tile-content-pretitle-font-size: var(--mdx-sys-font-fix-body2);
   --teaser-tile-content-pretitle-font-weight: var(--mdx-sys-font-fix-title4-font-weight);
   --teaser-tile-content-pretitle-line-height: var(--mdx-sys-font-fix-title4-line-height);
 
@@ -142,10 +142,11 @@
   clip-path: polygon(0% 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%, 0% 0%);
   display: flex;
   align-items: center;
-  height: 1.5rem;
   width: fit-content;
-  padding-right: calc(var(--mdx-sys-spacing-fix-2xs) + 8px);
   padding-left: var(--mdx-sys-spacing-fix-2xs);
+  padding-right: calc(var(--mdx-sys-spacing-fix-2xs) + 8px);
+  color: var(--mdx-base-color-grey-0);
+  background: var(--color-${this.getAttribute('color')}, #00A2AD);
 }
 
 /* color exception ibaw-turquoise */
