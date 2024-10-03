@@ -1,0 +1,88 @@
+<!-- Standalone Code for Auvious -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0">
+  <meta name="description" content="Entdecken Sie unser vielf&#xE4;ltiges und inspirierendes Angebot in den Bereichen Sprachen, Gesundheit und Kreativit&#xE4;t.">
+  <link href=./src/es/components/web-components-toolbox/src/css/initial.css rel=stylesheet type="text/css">
+  <link href=./src/es/components/web-components-toolbox/src/css/reset.css rel=stylesheet type="text/css">
+  <link href=./src/es/components/web-components-toolbox/src/css/colors.css rel=stylesheet type="text/css">
+  <link href=./src/es/components/web-components-toolbox/src/css/fonts.css rel=stylesheet type="text/css">
+  <link href=./src/es/components/web-components-toolbox/src/css/variables.css rel=stylesheet type="text/css">
+  <link href=./src/css/variablesCustomKlubschule.css rel=stylesheet type="text/css">
+  <script async rel=preload as="script" type="text/javascript" src="./src/es/helpers/Environment.js"></script>
+  <script async rel=preload as="script" type="text/javascript" src="../wc-config.js"></script>
+  <title>So vielf&#xE4;ltig wie Du - Klubschule Migros</title>
+</head>
+
+<body>
+  <c-fetch-html>
+    <c-fetch-css>
+      <c-fetch-modules>
+        <p-general>
+          <o-header no-navigation menu-icon="true" namespace="header-nav-grid-" namespace-fallback is-checkout="false" is-easy-portal-header="true" mobile-breakpoint="0px">
+            <style>
+              :host, :host>header>a-logo:not(.specific), :host>header>div{
+                --logo-default-a-width: 85% !important;
+                --logo-default-width: var(--logo-default-a-width);
+                --logo-default-a-height: auto !important;
+                --logo-default-height: var(--logo-default-a-height);
+              }
+            </style>
+            <a-logo
+              namespace="logo-default-"
+              namespace-fallback
+              src="./src/img/3-brands-logo6.svg"
+              lang="de"
+              alt="Klubschule - IBAW - Pro"
+              mobile-breakpoint="0px"
+            ></a-logo>
+          </o-header>
+          <o-body>
+            <o-grid namespace="grid-2columns-content-stage-" first-container-vertical="" first-column-with="66%" background-color="#0053a6" width="100%">
+              <div class="stage-content">
+                <ks-a-heading tag="h1" color="#ffffff" content-stage>
+                  <h1>Herzlich willkommen zur Videoberatung</h1>
+                </ks-a-heading>
+              </div>
+              <aside>
+                <img style="object-position: center center"
+                    src="./src/img/kontakt.webp"
+                    alt="Kontakt"
+                    aspect-ratio="0.562" />
+              </aside>
+            </o-grid>
+            <o-grid namespace="grid-2columns-content-section-" first-container-vertical="" first-column-with="66%" width="100%">
+            <!-- Spalte 1 -->
+            <ks-o-body-section content-width-var="100%" no-margin-y>
+              <p>Wir freuen uns darauf Sie persönlich zu beraten. Drücken Sie hierfür bitte auf die Videokamera.</p>
+            </ks-o-body-section>
+            <!-- Spalte 2 -->
+            <aside>
+              <a-auvious
+                pc-environment="mypurecloud.ie"
+                pc-queue="Auvious_Miduca"
+                pc-organization-id="be370ae6-0264-49ac-aca7-5ebdcb5b9796"
+                pc-deployment-id="d25750e5-9bf9-4db8-ad9a-5a3209647249"
+                customer-display-name="customer"
+                kiosk-mode="true"
+                dark-mode="false"
+              ></a-auvious>
+              <p style="font: var(--mdx-sys-font-fix-body3);position: absolute; bottom: 0; right: 10em;">Wir legen Wert auf Ihre Privatsphäre. Das Gespräch wird nicht aufgezeichnet.</p>
+            </aside>
+            </o-grid>
+          </o-body>
+        </p-general>
+        <o-modal namespace="modal-default-">
+          <ks-a-button id="close" icon namespace="button-tertiary-" color="tertiary">
+            <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+          </ks-a-button>
+          <span style="color:white;">If event.detail has no child property!</span>
+        </o-modal>
+      </c-fetch-modules>
+    </c-fetch-css>
+  </c-fetch-html>
+  
+</body>
+</html>
