@@ -54,9 +54,11 @@ export default class WithFacet extends WebWorker() {
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
     const isMocked = this.hasAttribute('mock')
-    const endpoint = isMocked
+    const isMockedInfoEvents = this.hasAttribute('mock-info-events')    
+    let endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
+    if (isMockedInfoEvents) endpoint = new URL('./mock/info-events.json', import.meta.url).href
     this.abortController = null
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
     this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
@@ -123,7 +125,6 @@ export default class WithFacet extends WebWorker() {
     this.requestWithFacetListener = async event => {
       // Reset PPage after filter Change / Reset
       currentRequestObj.ppage = 0
-      debugger
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
       if (this.abortController) this.abortController.abort()
@@ -279,7 +280,7 @@ export default class WithFacet extends WebWorker() {
         i: 'it'
       }
       let request = {}
-      if (isMocked) {
+      if (isMocked || isMockedInfoEvents) {
         request = {
           method: 'GET'
         }
