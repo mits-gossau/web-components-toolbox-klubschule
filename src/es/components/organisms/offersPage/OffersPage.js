@@ -546,7 +546,7 @@ export default class OffersPage extends Shadow() {
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-          <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
+          <ks-o-body-section variant="default" no-margin-y ${this.hasAttribute('is-info-events') ? '' : `background-color="var(--mdx-sys-color-accent-6-subtle1)"`} id="with-facet-body-section">
             ${this.hasAttribute('headless') 
         ? ''
         : /* html */`
@@ -624,12 +624,13 @@ export default class OffersPage extends Shadow() {
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
+                ${this.hasAttribute('is-info-events') ? `style="width:100%"` : ''}
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
-              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
               ${this.isWishList ? '' : /* html */ `
                 <ks-a-with-facet-pagination 
                   id="pagination"
@@ -643,7 +644,7 @@ export default class OffersPage extends Shadow() {
                   </ks-a-button>
                 </ks-a-with-facet-pagination>
               `}
-              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
               ${this.isWishList ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
                   ${this.isEasyPortal
