@@ -14,7 +14,14 @@ export default class WishList extends Shadow() {
 
     this.messageEvents = this.root.querySelector('#message-events')
     this.messageOffers = this.root.querySelector('#message-offers')
-    this.wishListListener = event => this.renderHTML(event.detail.fetch)
+    this.wishListListener = async event => {
+      event.detail.fetch.catch(error => {
+        this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Wishlist.Error'}"></a-translation></span>`
+        if (this.lastData) this.renderLists(this.lastData)
+      })
+      const data = this.lastData = await event.detail.fetch
+      this.renderLists(data)
+    }
   }
 
   connectedCallback() {
@@ -119,48 +126,25 @@ export default class WishList extends Shadow() {
 
   /**
    * Render HTML
-   * @param {Promise<any>} [fetch=undefined]
    * @return {Promise<void>}
    */
-  async renderHTML(fetch) {
-    this.html = ''
-    this.renderLoading()
-    if (fetch) {
-      fetch.catch(error => {
-        this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Wishlist.Error'}"></a-translation></span>`
-        if (this.lastData) this.renderHTML(Promise.resolve(this.lastData))
-      })
-      const data = this.lastData = await fetch
-      this.html = ''
-
-      this.baseRequest = {
-        MandantId: this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 111,
-        PortalId: this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29,
-        sprachid: this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd',
-      }
-
-      this.html = /* html */`
-          <ks-m-tab>
-            <ul class="tab-search-result">
-              <li>
-                <button class="active" tab-target="content1" id="total-event-offers-tab-heading">${this.getTranslation('Wishlist.Events.Tab')}</button>
-              </li>
-              <li>
-                <button tab-target="content2" id="total-course-offers-tab-heading">${this.getTranslation('Wishlist.Offers.Tab')}</button>
-              </li>
-            </ul>
-            <div>
-              <div id="content1" tab-content-target>
-                ${this.renderList(data.watchlistEntriesVeranstaltung, true)}
-              </div>
-
-              <div id="content2" tab-content-target>
-                ${this.renderList(data.watchlistEntriesAngebot, false)}
-              </div>
-            </div>
-          </ks-m-tab>
-        `
-    }
+  async renderHTML() {
+    this.html = /* html */`
+      <ks-m-tab>
+        <ul class="tab-search-result">
+          <li>
+            <button class="active" tab-target="content1" id="total-event-offers-tab-heading">${this.getTranslation('Wishlist.Events.Tab')}</button>
+          </li>
+          <li>
+            <button tab-target="content2" id="total-course-offers-tab-heading">${this.getTranslation('Wishlist.Offers.Tab')}</button>
+          </li>
+        </ul>
+        <div>
+          <div id="content1" tab-content-target></div>
+          <div id="content2" tab-content-target></div>
+        </div>
+      </ks-m-tab>
+    `
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
@@ -197,10 +181,6 @@ export default class WishList extends Shadow() {
       {
         path: `${this.importMetaUrl}../offersPage/OffersPage.js`,
         name: 'ks-o-offers-page'
-      },
-      {
-        path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
-        name: 'mdx-component'
       }
     ])
   }
@@ -240,7 +220,17 @@ export default class WishList extends Shadow() {
     `
   }
 
-  renderList(entryList, isEvent) {
+  renderLists (data) {
+    const baseRequest = {
+      MandantId: this.hasAttribute('mandant-id') ? Number(this.getAttribute('mandant-id')) : 111,
+      PortalId: this.hasAttribute('portal-id') ? Number(this.getAttribute('portal-id')) : 29,
+      sprachid: this.getAttribute('sprach-id') || document.documentElement.getAttribute('lang')?.substring(0, 1) || 'd',
+    }
+    this.renderList(data.watchlistEntriesVeranstaltung, true, baseRequest, this.contentOne)
+    this.renderList(data.watchlistEntriesAngebot, false, baseRequest, this.contentTwo)
+  }
+
+  renderList(entryList, isEvent, baseRequest, node) {
     // assemble withfacet filter
     const filter = {
       color: '',
@@ -255,7 +245,7 @@ export default class WishList extends Shadow() {
     }
 
     const initialRequestEntries = {
-      ...this.baseRequest,
+      ...baseRequest,
       filter: [{
         children: [],
         ...filter
@@ -267,66 +257,75 @@ export default class WishList extends Shadow() {
     // id assembly: courseType_courseId_centerid
     initialRequestEntries.filter[0].children = activeWatchListEntries.map(entry => ({ ...structuredClone(filter), id: `${entry.kursTyp}_${entry.kursId}_${entry.centerId}`, selected: true, disabled: true }))
 
-    return entryList?.length ? /* html */ `
-        <ks-o-body-section variant="default" no-padding-y no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
-          <div part="delete-btn-wrapper">
-              <ks-a-button namespace="button-secondary-" color="tertiary" request-event-name="remove-all-from-wish-list-${isEvent ? "events" : "offers"}">
-                <a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>
-                <a-translation data-trans-key="${this.getAttribute('delete-all-text') ?? 'Wishlist.DeleteAll'}"></a-translation>
-              </ks-a-button>
-          </div>
-        </ks-o-body-section>
-        ${activeWatchListEntries?.length ? /* html */ `
-          <ks-o-offers-page
-            headless
-            is-wish-list
-            endpoint="${this.getAttribute('endpoint')}"
-            initial-request='${JSON.stringify(initialRequestEntries)}'
-            with-facet-target
-            ${isEvent ? ` event-detail-url="${this.eventDetailURL}"` : ''}
-            ${isEvent ? "" : " no-search-tab"}
-          ></ks-o-offers-page>
-        ` : ''}
-        ${passedWatchListEntries?.length ? /* html */ `
-          <ks-c-event-detail endpoint="${this.eventDetailURL}">
-            <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="passed-offers-section" tabindex="0" aria-label="Section">  
-              <div class="passed-tile-wrapper">  
-                <h2>${isEvent ? this.getTranslation('WishList.Events.Title') : this.getTranslation('WishList.Offers.Title')}</h2>
-                ${passedWatchListEntries.map(
-                  ({ course }) => /* html */ `
-                    <div>
-                      ${isEvent ? /* html */ `
-                        <ks-m-event 
-                          data='{
-                            "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
-                            "sprachid": "${course?.sprache_id || "d"}"
-                          }'
-                          is-wish-list
-                          is-passed
-                          tabindex="0"
-                          passed-message="${this.getTranslation("Wishlist.Events.Copy")}"
-                        >
-                        </ks-m-event>
-                      ` : /* html */ `
-                        <ks-m-tile 
-                          namespace="tile-passed-"
-                          data='${JSON.stringify(course)}'
-                          is-wish-list
-                          is-passed
-                          tabindex="0"
-                          passed-message="${this.getTranslation("Wishlist.Offers.Copy")}"
-                        >
-                        </ks-m-tile>
-                      `}
-                    </div>
-                  `
-                )}
+    return (node.innerHTML = entryList?.length ? /* html */ `
+      <ks-o-body-section variant="default" no-padding-y no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)">
+        <div part="delete-btn-wrapper">
+            <ks-a-button namespace="button-secondary-" color="tertiary" request-event-name="remove-all-from-wish-list-${isEvent ? "events" : "offers"}">
+              <a-icon-mdx icon-name="Trash" size="1em" class="icon-left"></a-icon-mdx>
+              <a-translation data-trans-key="${this.getAttribute('delete-all-text') ?? 'Wishlist.DeleteAll'}"></a-translation>
+            </ks-a-button>
+        </div>
+      </ks-o-body-section>
+      ${activeWatchListEntries?.length ? /* html */ `
+        <ks-o-offers-page
+          headless
+          is-wish-list
+          endpoint="${this.getAttribute('endpoint')}"
+          initial-request='${JSON.stringify(initialRequestEntries)}'
+          with-facet-target
+          ${isEvent ? ` event-detail-url="${this.eventDetailURL}"` : ''}
+          ${isEvent ? "" : " no-search-tab"}
+        ></ks-o-offers-page>
+      ` : ''}
+      ${passedWatchListEntries?.length ? /* html */ `
+        <ks-c-event-detail endpoint="${this.eventDetailURL}">
+          <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="passed-offers-section" tabindex="0" aria-label="Section">  
+            <div class="passed-tile-wrapper">  
+              <h2>${isEvent ? this.getTranslation('WishList.Events.Title') : this.getTranslation('WishList.Offers.Title')}</h2>
+              <div style="display: flex; flex-direction: column; gap: 1em;">
+              ${passedWatchListEntries.map(
+                ({ course }) => /* html */ `
+                  ${isEvent ? /* html */ `
+                    <ks-m-event 
+                      data='{
+                        "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
+                        "sprachid": "${course?.sprache_id || "d"}"
+                      }'
+                      is-wish-list
+                      is-passed
+                      tabindex="0"
+                      passed-message="${this.getTranslation("Wishlist.Events.Copy")}"
+                    >
+                    </ks-m-event>
+                  ` : /* html */ `
+                    <ks-m-tile 
+                      namespace="tile-passed-"
+                      data='${JSON.stringify(course.location
+                        ? {
+                          ...course,
+                          location: {
+                            iconName: 'Location',
+                            ...course.location
+                          }
+                        }
+                        : course
+                      )}'
+                      is-wish-list
+                      is-passed
+                      tabindex="0"
+                      passed-message="${this.getTranslation("Wishlist.Offers.Copy")}"
+                    >
+                    </ks-m-tile>
+                  `}
+                `
+              ).join('')}
               </div>
-            ${this.renderLegend()}
-          </ks-o-body-section>
-        </ks-c-event-detail>
-        ` : ''}
-      ` : this.renderMessage(isEvent ? this.messageEvents : this.messageOffers)
+            </div>
+          ${this.renderLegend()}
+        </ks-o-body-section>
+      </ks-c-event-detail>
+      ` : ''}
+    ` : this.renderMessage(isEvent ? this.messageEvents : this.messageOffers))
   }
 
   renderLegend() {
@@ -367,14 +366,6 @@ export default class WishList extends Shadow() {
     `
   }
 
-  renderLoading() {
-    this.html = /* html */`
-      <mdx-component>
-          <mdx-loading-bar></mdx-loading-bar>
-      </mdx-component>
-    `
-  }
-
   get loadingBar() {
     return this.root.querySelector('mdx-loading-bar')
   }
@@ -391,4 +382,11 @@ export default class WishList extends Shadow() {
     return this.getAttribute('event-detail-url') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/'
   }
 
+  get contentOne() {
+    return this.root.querySelector('ks-m-tab')?.root.querySelector('#content1')
+  }
+
+  get contentTwo() {
+    return this.root.querySelector('ks-m-tab')?.root.querySelector('#content2')
+  }
 }
