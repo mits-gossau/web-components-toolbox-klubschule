@@ -17,7 +17,7 @@ export default class OffersPage extends Shadow() {
         this.data = data
         this.searchTerm = data.searchText
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-        bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
+        if (!this.isWishList) bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
         // Set Sort
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
@@ -626,17 +626,19 @@ export default class OffersPage extends Shadow() {
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
-              <ks-a-with-facet-pagination 
-                id="pagination"
-                pagination-event-name="request-with-facet"
-                pagination-event-name="with-facet"
-                ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
-              >
-                <ks-a-button namespace="button-primary-" color="secondary">
-                    <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
-                    <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
-                </ks-a-button>
-              </ks-a-with-facet-pagination>
+              ${this.isWishList ? '' : /* html */ `
+                <ks-a-with-facet-pagination 
+                  id="pagination"
+                  pagination-event-name="request-with-facet"
+                  pagination-event-name="with-facet"
+                  ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
+                >
+                  <ks-a-button namespace="button-primary-" color="secondary">
+                      <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
+                      <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
+                  </ks-a-button>
+                </ks-a-with-facet-pagination>
+              `}
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               ${this.isWishList ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">

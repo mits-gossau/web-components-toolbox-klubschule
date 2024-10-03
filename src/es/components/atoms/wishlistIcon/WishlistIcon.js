@@ -10,9 +10,14 @@ export default class WishtlistIcon extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
 
-    this.updateIcon = event => {
-      event.detail.fetch.then((result) => {
-        this.data = result
+    this.updateIconInitialLoad = event => {
+      this.entriesCount = event.detail.wishlist.entriesCount
+      this.renderHTML()
+    }
+
+    this.updateIconAddOrDeleteItem = event => {
+      event.detail.fetch.then((data) => {
+        this.entriesCount = data.watchlistEntries?.length
         this.renderHTML()
       })
     }
@@ -21,11 +26,13 @@ export default class WishtlistIcon extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('wish-list', this.updateIcon)
+    document.body.addEventListener('wish-list-icon-indicator', this.updateIconInitialLoad)
+    document.body.addEventListener('wish-list', this.updateIconAddOrDeleteItem)
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('wish-list', this.updateIcon)
+    document.body.removeEventListener('wish-list-icon-indicator', this.updateIconInitialLoad)
+    document.body.removeEventListener('wish-list', this.updateIconAddOrDeleteItem)
   }
 
   /**
@@ -70,7 +77,7 @@ export default class WishtlistIcon extends Shadow() {
           mobile-size="1.3rem"
           color="#3d3d3d"
           rotate="0"
-          ${this.data?.watchlistEntriesAngebot?.length || this.data?.watchlistEntriesVeranstaltung?.length ? ` custom-notification="
+          ${this.entriesCount > 0 ? ` custom-notification="
             {
               'height':'.4rem',
               'width':'.4rem',

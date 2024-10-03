@@ -302,6 +302,11 @@ export default class EventDetail extends Shadow() {
   */
   renderHTML() {
     if (!this.data) console.error('Data json attribute is missing or corrupted!', this)
+    let aboTypenLinkParams;
+    if (this.data.abo_typen_link && this.data.abo_typen_link.split("?")[1]) {
+      aboTypenLinkParams = new URLSearchParams(this.data.abo_typen_link.split("?")[1]);
+    }
+
     this.html = /* HTML */ `
       <div class="details-left">
         <div>
@@ -447,13 +452,21 @@ export default class EventDetail extends Shadow() {
             `, '') : ''}
             ${this.data.abo_typen_link_label && this.data.abo_typen_link ? /* html */ `
               <ks-c-abonnements endpoint='${this.getAttribute('endpoint')}'>
-                <ks-m-abonnements 
-                  abo-id="${this.data.kurs_id}" 
-                  abonnements-api="${this.data.abo_typen_link}" 
-                  link-label="${this.data.abo_typen_link_label}" 
-                  button-close-label="${this.closeButton || `${this.getTranslation('Common.Close')}`}"
-                >
-                </ks-m-abonnements>
+                ${this.hasAttribute("is-abo") && this.data.abo_typen_link.split("?")[1] ? /* html */`
+                  <ks-c-with-facet
+                    endpoint="${this.getAttribute('endpoint')}"
+                    no-search-tab
+                    initial-request='{"filter":[],"PortalId":${aboTypenLinkParams?.get("portal_id") || 29},"sprachid":"${aboTypenLinkParams?.get("lang") || "d"}","MandantId":${aboTypenLinkParams?.get("mandant_id") || 111},"ppage":1,"psize":12}'
+                  >
+                ` : ''}
+                  <ks-m-abonnements 
+                    abo-id="${this.data.kurs_id}" 
+                    abonnements-api="${this.data.abo_typen_link}" 
+                    link-label="${this.data.abo_typen_link_label}" 
+                    button-close-label="${this.closeButton || `${this.getTranslation('Common.Close')}`}"
+                  >
+                  </ks-m-abonnements>
+                  ${this.hasAttribute("is-abo") ? /* html */`</ks-c-with-facet>` : ''}
               </ks-c-abonnements>
             ` : ''}
           </div>
@@ -468,6 +481,10 @@ export default class EventDetail extends Shadow() {
       {
         path: `${this.importMetaUrl}../../controllers/abonnements/Abonnements.js`,
         name: 'ks-c-abonnements'
+      },
+      {
+        path: `${this.importMetaUrl}../../controllers/withFacet/WithFacet.js`,
+        name: 'ks-c-with-facet'
       },
       {
         path: `${this.importMetaUrl}../../molecules/abonnements/Abonnements.js`,
