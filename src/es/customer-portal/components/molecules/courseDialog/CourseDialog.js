@@ -339,6 +339,9 @@ export default class CourseDialog extends Shadow() {
   renderDialogContentBookingSuccess (data, detail = {}, renderErrorNotification) {
     return /* html */`
       <style>
+        :host {
+          --dialog-left-slide-in-h2-margin: 0 0 2em 0;
+        }
         .success-message {
           display: flex;
           align-items: flex-start;
@@ -356,10 +359,20 @@ export default class CourseDialog extends Shadow() {
         .downloads {
           margin: 4em 0 1.5em 0;
         }
+        .detail {
+          display: flex;
+          flex-direction: column;
+          margin:0 0 1.5em 0;
+        }
+        .detail > span:first-child {
+          font-weight: 500;
+          line-height: 110%;
+        }
       </style>
       <!-- trans value = "Buchen nicht möglich versuchen sie es später nochmals" -->
       ${this.renderErrorNotification(renderErrorNotification, 'CP.cpErrorLoadingCourseDetail')}
       ${this.renderSuccessNotification(renderErrorNotification)} 
+      ${this.renderConfirmationDateAndLocationInfo(detail)}
       <div class="downloads">
         <h3>Downloads</h3>
         <div>${this.renderDownloads(data, detail)}</div>
@@ -480,6 +493,9 @@ export default class CourseDialog extends Shadow() {
 
     return /* html */`
       <style>
+        :host {
+          --dialog-left-slide-in-h2-margin: 0 0 2em 0;
+        }
         .success-message{
           display: flex;
           align-items: flex-start;
@@ -494,8 +510,18 @@ export default class CourseDialog extends Shadow() {
         h2.success {
           color: #00997F !important;
         }
+        .detail {
+          display: flex;
+          flex-direction: column;
+          margin:0 0 1.5em 0;
+        }
+        .detail > span:first-child {
+          font-weight: 500;
+          line-height: 110%;
+        }
       </style>
       ${successMessage}
+      ${this.renderConfirmationDateAndLocationInfo(detail)}
     `
   }
 
@@ -907,6 +933,38 @@ export default class CourseDialog extends Shadow() {
     } else {
       return ''
     }
+  }
+
+  /**
+   * Generates HTML content displaying date, time, location, and room information
+   * based on the provided `detail` object.
+   * @param {object} detail - `detail` object
+   * @returns {string} HTML template string. The function uses
+   * translation keys to dynamically insert translated text for labels such as "Datum" (Date), "Zeit"
+   * (Time), "Ort" (City),
+   */
+  renderConfirmationDateAndLocationInfo (detail) {
+    return /* html */`
+      <div class="detail">
+        <span>
+          <!-- trans value = Datum -->
+          <a-translation data-trans-key="CP.cpAppointmentListColumnDate"></a-translation>,
+          <!-- trans value = Zeit -->
+          <a-translation data-trans-key="CP.cpAppointmentListColumnTime"></a-translation>
+        </span>
+        <span>${detail.courseAppointmentDateFormatted}</span>
+        <span>${detail.courseAppointmentTimeFrom} - ${detail.courseAppointmentTimeTo}</span>
+      </div>
+      <div class="detail">
+        <span>
+          <!-- trans value = Ort -->
+          <a-translation data-trans-key="CP.cpAppointmentListColumnCity"></a-translation>/
+          <!-- trans value = Raum -->
+          <a-translation data-trans-key="CP.cpAppointmentIcsRoom"></a-translation>
+        </span>
+        <span>${detail.courseLocation} / <a-translation data-trans-key="CP.cpAppointmentIcsRoom"></a-translation> ${detail.roomDescription}</span>
+      </div>
+    `
   }
 
   /**
