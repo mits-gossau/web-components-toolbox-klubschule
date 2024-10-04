@@ -225,6 +225,7 @@ export default class WishList extends Shadow() {
   }
 
   renderList(entryList, isEvent, baseRequest, node) {
+    if (!node) return console.warn('no node available. Fix at Wishlist!')
     // assemble withfacet filter
     const filter = {
       color: '',
@@ -377,10 +378,10 @@ export default class WishList extends Shadow() {
   }
 
   get contentOne() {
-    return this.root.querySelector('ks-m-tab')?.root.querySelector('#content1')
+    return this.root.querySelector('ks-m-tab')?.root?.querySelector('#content1')
   }
 
   get contentTwo() {
-    return this.root.querySelector('ks-m-tab')?.root.querySelector('#content2')
+    return this.root.querySelector('ks-m-tab')?.root?.querySelector('#content2')
   }
 }
