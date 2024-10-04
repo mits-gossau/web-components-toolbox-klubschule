@@ -82,7 +82,6 @@ export default class WishList extends Shadow() {
     this.css = /* css */`
       :host {
         width: 100% !important;
-        padding-top: var(--mdx-sys-spacing-flex-large-m);
       }
       :host > .error {
         color: var(--color-error);
@@ -92,11 +91,6 @@ export default class WishList extends Shadow() {
       }
       :host ks-m-tab {
         padding-top: var(--mdx-sys-spacing-flex-large-m);
-      }
-      @media only screen and (max-width: _max-width_) {
-        :host {
-          padding-top: var(--mdx-sys-spacing-flex-small-m);
-        }
       }
     `
     return this.fetchTemplate()
