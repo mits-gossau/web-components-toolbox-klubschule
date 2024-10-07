@@ -39,15 +39,14 @@ export default class PartnerSearch extends Shadow() {
       Promise.all(showPromises).then(() => {
         this.hidden = false
         if (this.searchText.length) {
-          new Promise(resolve => this.dispatchEvent(new CustomEvent('request-partner-search', {
+          this.dispatchEvent(new CustomEvent('request-partner-search', {
             detail: {
-              searchText: this.searchText,
-              resolve
+              searchText: this.searchText
             },
             bubbles: true,
             cancelable: true,
             composed: true
-          }))).then(fetch => this.renderHTML(fetch))
+          }))
         } else {
           this.renderHTML(Promise.resolve(() => ({
             items: [],
@@ -174,25 +173,28 @@ export default class PartnerSearch extends Shadow() {
     if (fetch) {
       // fetch.catch(error => (this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'PartnerSearch.Error'}"></a-translation></span>`))
       const data = this.lastData = await fetch
-      this.html = ''      
+      this.html = ''
+      this.html = this.hiddenMessages
       if(this.tab == 1) {
-        this.hiddenMessages[0].removeAttribute('hidden')
+        this.root.querySelector('#empty-courses')?.removeAttribute('hidden')
       } else if (this.tab == 2) {
-        this.hiddenMessages[1].removeAttribute('hidden')
+        this.root.querySelector('#empty-content')?.removeAttribute('hidden')
       } else {
         this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
       }
-      this.html = this.hiddenMessages
-      const headline = this.hiddenMessages[this.hiddenMessages.length - 1].querySelector("h2")
-      let headlineText = headline.innerText
-      headlineText = headlineText.replace("{0}", this.searchText)
-      headline.textContent = headlineText
+      let headline
+      if ((headline = this.root.querySelector('#partner-results')?.querySelector("h2"))) {
+        let headlineText = headline.innerText
+        headlineText = headlineText.replace("{0}", this.searchText)
+        headline.textContent = headlineText
+      }
 
       const partnerResultsSection = this.root.querySelector("#partner-results")
 
       const filteredItems = data?.items?.filter(item  => item.count > 0)
 
-      if (filteredItems?.length) {
+      if (this.tab == 1 && filteredItems?.length) {
+        this.root.querySelector('#partner-results')?.removeAttribute('hidden')
         partnerResultsSection.insertAdjacentHTML('beforeend', /* html */ `
           <div class="partner-result-wrapper">
             ${filteredItems.reduce((acc, item) => 
