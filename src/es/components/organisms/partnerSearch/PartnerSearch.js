@@ -175,12 +175,14 @@ export default class PartnerSearch extends Shadow() {
       const data = this.lastData = await fetch
       this.html = ''
       this.html = this.hiddenMessages
-      if(this.tab == 1) {
-        this.root.querySelector('#empty-courses')?.removeAttribute('hidden')
-      } else if (this.tab == 2) {
-        this.root.querySelector('#empty-content')?.removeAttribute('hidden')
-      } else {
-        this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
+      if (!this.hasAttribute('has-courses')) {
+        if(this.tab == 1) {
+          this.root.querySelector('#empty-courses')?.removeAttribute('hidden')
+        } else if (this.tab == 2) {
+          this.root.querySelector('#empty-content')?.removeAttribute('hidden')
+        } else {
+          this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
+        }
       }
       let headline
       if ((headline = this.root.querySelector('#partner-results')?.querySelector("h2"))) {
