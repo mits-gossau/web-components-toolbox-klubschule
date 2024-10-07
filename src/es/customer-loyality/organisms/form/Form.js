@@ -301,6 +301,14 @@ export default class Form extends Shadow() {
             ? 'CustomerLoyality.AlreadyVoted.OptionLessonsAccepted'
             : 'CustomerLoyality.AlreadyVoted.OptionLessonsRejected'
         }"></a-translation></p>
+      </div>
+      <div class="already-voted-item">
+        <a-icon-mdx icon-name="${
+          voting.optionLessons.value ? 'CheckCircle' : 'X'
+        }" size="1em"></a-icon-mdx>
+        <p><a-translation replace-line-breaks key="${
+          'CustomerLoyality.PreferredVariant.' + voting.preferredVariant
+        }"></a-translation></p>
       </div>`
   }
 
