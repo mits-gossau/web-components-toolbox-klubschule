@@ -624,7 +624,7 @@ export default class OffersPage extends Shadow() {
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
-                ${this.hasAttribute('is-info-events') ? `style="width:100%"` : ''}
+                ${this.hasAttribute('is-info-events') ? ' is-info-events style="width:100%"' : ''}
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
               >
