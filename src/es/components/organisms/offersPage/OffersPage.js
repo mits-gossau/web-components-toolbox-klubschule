@@ -15,15 +15,41 @@ export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.showInputSection = false
+
     this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
+
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         if (!this.isWishList) bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
-        // Set Sort
+        this.showInputSection = (this.data.clat === null && this.data.courses.length === 0 && this.data.searchText !== '' && this.data.total === 0) ? false : true
+        const inputSectionContainer = bodySection.shadowRoot.querySelector('o-grid:first-of-type').shadowRoot.querySelector('#input-section-container')
+        const filterSelectContainer = bodySection.shadowRoot.querySelector('o-grid#filter-select-container')
+        const content1Container = this.ksMTab.shadowRoot.querySelector('#content1')
+        const spacing1 = bodySection.shadowRoot.querySelector('ks-a-spacing[type="s-flex"]:first-of-type')
+        const spacing2 = bodySection.shadowRoot.querySelector('ks-a-spacing[type="s-flex"]:nth-of-type(2)')
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
+
+        if (this.showInputSection) {
+          content1Container.style.paddingTop = '3em'
+          inputSectionContainer.removeAttribute('hidden')
+          filterSelectContainer.style.display = ''
+          spacing1.style.display = ''
+          spacing2.style.display = ''
+          sort.style.display = ''
+        } else {
+          content1Container.style.paddingTop = '0'
+          inputSectionContainer.setAttribute('hidden', '')
+          filterSelectContainer.style.display = 'none'
+          spacing1.style.display = 'none'
+          spacing2.style.display = 'none'
+          sort.style.display = 'none'
+        }
+
+        // Set Sort
         if (sort && !this.eventDetailURL) {
           this.fetchModules([
             {
@@ -415,7 +441,7 @@ export default class OffersPage extends Shadow() {
     ` : ''
 
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
-      <div col-lg="6" col-md="6" col-sm="12">
+      <div col-lg="6" col-md="6" col-sm="12" id="input-section-container" hidden>
         ${this.hasAttribute('with-location-input-label') ? /* html */`
           <style protected>
             :host .location-label { 
@@ -566,6 +592,7 @@ export default class OffersPage extends Shadow() {
                   ${locationInput}
                 </section>
               </o-grid>
+              
               <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
                 <dialog>
                   <!-- overlayer -->
@@ -599,8 +626,9 @@ export default class OffersPage extends Shadow() {
                   </div>
                 </dialog>
               </m-dialog>
+
               <ks-a-spacing type="s-flex"></ks-a-spacing>
-              <o-grid namespace="grid-432-auto-colums-auto-rows-">
+              <o-grid namespace="grid-432-auto-colums-auto-rows-" id="filter-select-container" style="display:none">
                 <section>
                   <style protected>
                     :host {
