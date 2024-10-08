@@ -35,6 +35,9 @@ export default class CheckoutBoxWrapper extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
+        --font-family-strong: var(--mdx-sys-font-fix-label2-font-family);
+        --font-weight-strong: var(--mdx-sys-font-fix-label2-font-weight);
+        --table-even-background-color: none;
         --total-width: var(--checkbox-wrapper-total-width, 400px);
         --background-color: var(--mdx-sys-color-neutral-on-default, white);
         --any-display: flex;
@@ -108,14 +111,23 @@ export default class CheckoutBoxWrapper extends Shadow() {
 
       :host .info-wrapper {
         margin: var(--mdx-sys-spacing-flex-large-2xs) 0;
-        gap: 10px;
-        justify-content: flex-start;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
       }
-
-      :host .info-wrapper span {
-        min-width: 120px
+      :host .info-wrapper table,
+      :host .info-wrapper table tr,
+      :host .info-wrapper table tr td {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      :host .info-wrapper table tr td:first-child {
+        min-width: 175px;
+        width: auto;
+        padding-right: var(--mdx-sys-spacing-fix-xs);
+      }
+      @media only screen and (max-width: _max-width_) {
+        :host .info-wrapper table tr td:first-child {
+          min-width: 120px;
+        }
       }
 
       :host ks-a-heading[tag="h3"] {

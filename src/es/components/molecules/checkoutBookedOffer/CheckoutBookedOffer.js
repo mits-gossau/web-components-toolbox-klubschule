@@ -69,10 +69,6 @@ export default class CheckoutBookedOffer extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
-      .checkout-booked-offer {
-        max-width: 600px;
-      }
-
       .checkout-booked-offer__name {
         font: var(--mdx-sys-font-fix-label1);
       }
@@ -146,16 +142,6 @@ export default class CheckoutBookedOffer extends Shadow() {
       .checkout-booked-offer__total-desc {
         color: var(--mdx-sys-color-neutral-bold1);
         font: var(--mdx-sys-font-fix-body3);
-      }
-
-      /* handle spacing on specific viewport */
-      /* https://jira.migros.net/browse/MIDUWEB-1317 */
-      @media (min-width: 768px) and (max-width: 1200px) {
-        .checkout-booked-offer__bottom {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 1rem;
-        }
       }
 
       @media only screen and (max-width: _max-width_) {
