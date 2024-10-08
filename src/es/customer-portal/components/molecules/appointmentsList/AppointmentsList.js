@@ -18,6 +18,14 @@ export default class AppointmentsList extends Shadow() {
     this.currentOpenDialogFilterType = null
     this.subscriptionHint = null
     this.gridRendered = false
+    this.hasLowSubscriptionBalance = false
+    this.hasLowAppointmentsBalance = false
+    this.hasLowSubscriptionDuration = false
+    this.lowAppointmentBalanceNotification = ''
+    this.lowSubscriptionBalanceNotification = ''
+    this.lowSubscriptionDurationNotification = ''
+    this.minAmount = 35
+    this.minDays = 14
   }
 
   connectedCallback () {
@@ -280,7 +288,7 @@ export default class AppointmentsList extends Shadow() {
               <div col-lg="6" col-md="6" col-sm="12">
                 ${subscriptionSelect}
               </div>
-              ${this.renderSubscriptionNotifications(appointments)}
+              ${!this.hasLowSubscriptionBalance && this.renderSubscriptionNotifications(appointments)}
               <div col-lg="12" col-md="12" col-sm="12">
                 <m-appointments-filter data-filter-type="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
               </div>
@@ -301,57 +309,78 @@ export default class AppointmentsList extends Shadow() {
   }
 
   renderSubscriptionNotifications (allSubscriptions) {
-    const { subscriptions } = allSubscriptions.filters
-    const selectedSubscription = subscriptions.find(element => element.selected === true)
-    const amountBefore = 2335
-    const daysBefore = 14 // 14 Days
-    let amountNotification = ''
-    let dateNotification = ''
+    let selectedSubscription = null
 
-    // balance notification
-    // ----------------------------
-    const subscriptionBalance = Number(parseFloat(selectedSubscription.subscriptionBalance.replace('CHF', '').trim()).toFixed(2))
-    if (subscriptionBalance < amountBefore) {
-      console.log('no cash')
-      amountNotification = /* html */`
+    if (allSubscriptions?.filters) {
+      const { subscriptions } = allSubscriptions?.filters
+      selectedSubscription = subscriptions.find(element => element.selected === true)
+    }
+
+    if (!this.hasLowAppointmentsBalance) {
+      this.hasLowAppointmentsBalance = true
+      this.lowAppointmentBalanceNotification = /* html */`
         <div style="padding-bottom:1rem;">
           <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
             <div slot="description">
-              <p>Amount Notification</p>
+              <p>
+                <a-translation data-trans-key="CP.cpLowAppointmentBalance"></a-translation>
+              </p>
             </div>
           </ks-m-system-notification>
         </div>
       `
     }
 
-    // date notification
-    // ----------------------------
-    // current date
-    const today = new Date()
+    if (!this.hasLowSubscriptionBalance && selectedSubscription) {
+      const subscriptionBalance = Number(parseFloat(selectedSubscription.subscriptionBalance.replace('CHF', '').trim()).toFixed(2))
+      if (subscriptionBalance < this.minAmount) {
+        this.hasLowSubscriptionBalance = true
+        this.lowSubscriptionBalanceNotification = /* html */`
+          <div style="padding-bottom:1rem;">
+            <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+              <div slot="description">
+                <p>
+                  <a-translation data-trans-key="CP.cpLowBalance"></a-translation>
+                </p>
+              </div>
+            </ks-m-system-notification>
+          </div>
+        `
+      }
+    }
 
-    // end date
-    const endDate = new Date(selectedSubscription.subscriptionValidTo)
+    if (!this.hasLowSubscriptionDuration && selectedSubscription) {
+      const today = new Date()
+      // const subscriptionValidTo = '2024-10-23'
+      const subscriptionValidTo = selectedSubscription.subscriptionValidTo
 
-    // calculate the date 14 days from today
-    const datePlus14Days = new Date(today.getTime() + daysBefore * 24 * 60 * 60 * 1000)
+      // end date of subscription
+      const endDate = new Date(subscriptionValidTo)
 
-    if (datePlus14Days >= endDate) {
-      console.log('AFTER !!! The date 14 days from today is after the end date.')
-      dateNotification = /* html */ `
-        <div>
-          <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
-            <div slot="description">
-              <p>Date Notification</p>
-            </div>
-          </ks-m-system-notification>
-        </div>
-      `
+      // calculate the date 14 days from today
+      const datePlus14Days = new Date(today.getTime() + this.minDays * 24 * 60 * 60 * 1000)
+
+      if (datePlus14Days >= endDate) {
+        this.hasLowSubscriptionDuration = true
+        this.lowSubscriptionDurationNotification = /* html */`
+          <div style="padding-bottom:1rem;">
+            <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+              <div slot="description">
+                <p>
+                  <a-translation data-trans-key="CP.cpShortValidity"></a-translation>
+                </p>
+              </div>
+            </ks-m-system-notification>
+          </div>
+        `
+      }
     }
 
     return /* html */ `
       <div col-lg="12" col-md="12" col-sm="12">
-        ${amountNotification}
-        ${dateNotification}
+        ${this.lowSubscriptionBalanceNotification}
+        ${this.lowAppointmentBalanceNotification}
+        ${this.lowSubscriptionDurationNotification}
       </div>
     `
   }
@@ -419,6 +448,9 @@ export default class AppointmentsList extends Shadow() {
       const dayWrapper = document.createElement('div')
       dayWrapper.insertAdjacentHTML('beforeend', `<ks-a-heading tag="h2">${day.weekday}</ks-a-heading>`)
       day[appointmentType].forEach(appointment => {
+        if (appointment.courseAppointmentStatus === 2 && !this.hasLowAppointmentsBalance) {
+          this.renderSubscriptionNotifications(selectedSubscription)
+        }
         const tile = this.makeTileComponent(tileComponent, appointment, selectedSubscription)
         dayWrapper.appendChild(tile)
       })
