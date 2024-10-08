@@ -308,14 +308,22 @@ export default class AppointmentsList extends Shadow() {
     })
   }
 
+  /**
+   * Renders notifications related to subscriptions.
+   * Notifications include low appointment balance, low subscription balance and low subscription duration.
+   *
+   * @param {object} allSubscriptions - Object containing all subscriptions.
+   * @returns {string} - HTML string containing the rendered notifications.
+   */
   renderSubscriptionNotifications (allSubscriptions) {
+    // Get the selected subscription
     let selectedSubscription = null
-
     if (allSubscriptions?.filters) {
       const { subscriptions } = allSubscriptions?.filters
       selectedSubscription = subscriptions.find(element => element.selected === true)
     }
 
+    // Render low appointment balance notification
     if (!this.hasLowAppointmentsBalance) {
       this.hasLowAppointmentsBalance = true
       this.lowAppointmentBalanceNotification = /* html */`
@@ -331,6 +339,7 @@ export default class AppointmentsList extends Shadow() {
       `
     }
 
+    // Render low subscription balance notification
     if (!this.hasLowSubscriptionBalance && selectedSubscription) {
       const subscriptionBalance = Number(parseFloat(selectedSubscription.subscriptionBalance.replace('CHF', '').trim()).toFixed(2))
       if (subscriptionBalance < this.minAmount) {
@@ -349,15 +358,11 @@ export default class AppointmentsList extends Shadow() {
       }
     }
 
+    // Render low subscription duration notification
     if (!this.hasLowSubscriptionDuration && selectedSubscription) {
       const today = new Date()
-      // const subscriptionValidTo = '2024-10-23'
       const subscriptionValidTo = selectedSubscription.subscriptionValidTo
-
-      // end date of subscription
       const endDate = new Date(subscriptionValidTo)
-
-      // calculate the date 14 days from today
       const datePlus14Days = new Date(today.getTime() + this.minDays * 24 * 60 * 60 * 1000)
 
       if (datePlus14Days >= endDate) {
@@ -376,6 +381,7 @@ export default class AppointmentsList extends Shadow() {
       }
     }
 
+    // Return the rendered HTML
     return /* html */ `
       <div col-lg="12" col-md="12" col-sm="12">
         ${this.lowSubscriptionBalanceNotification}
