@@ -12,10 +12,18 @@ export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.showLocationInput = false
+
     this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
+        console.log('data', data.clat, data.courses.length, data.searchText, data.total)
+
         this.searchTerm = data.searchText
+
+        this.showLocationInput = !(this.data.clat === null && this.data.courses.length === 0 && this.data.searchText !== '' && this.data.total === 0)
+        console.log('showLocationInput', this.showLocationInput)
+
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         if (!this.isWishList) bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
@@ -65,7 +73,7 @@ export default class OffersPage extends Shadow() {
       this.getTranslation = result.getTranslationSync
       const showPromises = []
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML(this.data))
       Promise.all(showPromises).then(() => (this.hidden = false))
     })
     this.addEventListener('with-facet', this.withFacetListener)
@@ -164,7 +172,7 @@ export default class OffersPage extends Shadow() {
    * Render HTML
    * @return Promise<void>
    */
-  renderHTML() {
+  renderHTML(data) {
     this.html = /* html */`<ks-c-with-facet
         ${this.hasAttribute('save-location-local-storage') ? 'save-location-local-storage' : ''}
         ${this.hasAttribute('save-location-session-storage') ? 'save-location-session-storage' : ''}
@@ -411,7 +419,7 @@ export default class OffersPage extends Shadow() {
     ` : ''
 
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
-      <div col-lg="6" col-md="6" col-sm="12">
+      <div col-lg="6" col-md="6" col-sm="12" id="location-input-container">
         ${this.hasAttribute('with-location-input-label') ? /* html */`
           <style protected>
             :host .location-label { 
@@ -562,6 +570,7 @@ export default class OffersPage extends Shadow() {
                   ${locationInput}
                 </section>
               </o-grid>
+              
               <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
                 <dialog>
                   <!-- overlayer -->
@@ -595,6 +604,7 @@ export default class OffersPage extends Shadow() {
                   </div>
                 </dialog>
               </m-dialog>
+
               <ks-a-spacing type="s-flex"></ks-a-spacing>
               <o-grid namespace="grid-432-auto-colums-auto-rows-">
                 <section>

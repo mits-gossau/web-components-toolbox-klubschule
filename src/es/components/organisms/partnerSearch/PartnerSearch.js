@@ -122,11 +122,14 @@ export default class PartnerSearch extends Shadow() {
         --h2-margin: 0 0 var(--mdx-sys-spacing-flex-large-s);
       }
       :host section + section {
-        margin: var(--mdx-sys-spacing-flex-large-m) 0 0;
+        margin: 0;
       }
       :host a-picture {
         --picture-teaser-img-max-width: unset;
         --picture-teaser-img-width: unset;
+      }
+      :host #empty-courses h2 {
+        margin-bottom: var(--mdx-sys-spacing-flex-large-s);
       }
       @media screen and (max-width: _max-width_) {
         :host a-picture {
