@@ -29,11 +29,10 @@ export default class PartnerSearch extends HTMLElement {
       if (initialRequest.sprachid) sprachid = initialRequest.sprachid
     }
 
-    this.abortControllerLocations = null
+    this.abortController = null
     this.requestPartnerSearchListener = event => {
-      /* https://jira.migros.net/browse/MIDUWEB-1590: Remove abort temporary */
-      //if (this.abortControllerLocations) this.abortControllerLocations.abort()
-      this.abortControllerLocations = new AbortController()
+      if (this.abortController) this.abortController.abort()
+      this.abortController = new AbortController()
       // assemble withfacet filter
       const filter = {
         hasChilds: false,
@@ -63,7 +62,7 @@ export default class PartnerSearch extends HTMLElement {
         }]
       }
       // @ts-ignore
-      event.detail.resolve(fetch(this.getAttribute('endpoint'), {
+      const fetchPromise = fetch(this.getAttribute('endpoint'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,11 +70,23 @@ export default class PartnerSearch extends HTMLElement {
         },
         mode: 'cors',
         body: JSON.stringify(body),
-        signal: this.abortControllerLocations.signal
+        signal: this.abortController.signal
       }).then(response => {
         if (response.status >= 200 && response.status <= 299) return response.json()
         throw new Error(response.statusText)
-      }))
+      })
+      if (event.detail.resolve) {
+        event.detail.resolve(fetchPromise)
+      } else {
+        this.dispatchEvent(new CustomEvent('partner-search', {
+          detail: {
+            fetch: fetchPromise
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      }
     }
   }
 
