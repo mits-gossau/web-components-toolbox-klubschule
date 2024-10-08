@@ -18,13 +18,52 @@ export default class AppointmentsList extends Shadow() {
     this.currentOpenDialogFilterType = null
     this.subscriptionHint = null
     this.gridRendered = false
+    /**
+     * @type {boolean}
+     * @description Flag indicating if the subscription balance is low.
+     */
     this.hasLowSubscriptionBalance = false
+
+    /**
+     * @type {boolean}
+     * @description Flag indicating if the appointment balance is low.
+     */
     this.hasLowAppointmentsBalance = false
+
+    /**
+     * @type {boolean}
+     * @description Flag indicating if the subscription duration is low.
+     */
     this.hasLowSubscriptionDuration = false
+
+    /**
+     * @type {string}
+     * @description Notification message for low appointment balance.
+     */
     this.lowAppointmentBalanceNotification = ''
+
+    /**
+     * @type {string}
+     * @description Notification message for low subscription balance.
+     */
     this.lowSubscriptionBalanceNotification = ''
+
+    /**
+     * @type {string}
+     * @description Notification message for low subscription duration.
+     */
     this.lowSubscriptionDurationNotification = ''
+
+    /**
+     * @type {number}
+     * @description Minimum subscription balance.
+     */
     this.minAmount = 35
+
+    /**
+     * @type {number}
+     * @description Minimum subscription duration.
+     */
     this.minDays = 14
   }
 
