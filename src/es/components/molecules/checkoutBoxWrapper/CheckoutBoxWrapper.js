@@ -115,6 +115,7 @@ export default class CheckoutBoxWrapper extends Shadow() {
       :host .info-wrapper table,
       :host .info-wrapper table tr,
       :host .info-wrapper table tr td {
+        --table-padding: 0 !important;
         width: 100%;
         margin: 0;
         padding: 0;
