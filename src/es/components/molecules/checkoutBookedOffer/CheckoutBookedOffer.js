@@ -108,6 +108,10 @@ export default class CheckoutBookedOffer extends Shadow() {
         padding-top: 0.2em;
       }
 
+      .checkout-booked-offer__info-list li span:last-child {
+        white-space: nowrap;
+      }
+
       .checkout-booked-offer__price-info {
         display: flex;
         flex-direction: column;
@@ -122,6 +126,7 @@ export default class CheckoutBookedOffer extends Shadow() {
       .checkout-booked-offer__bottom {
         display: flex;
         justify-content: space-between;
+        gap: 1rem;
       }
 
       .checkout-booked-offer__total {
@@ -137,11 +142,13 @@ export default class CheckoutBookedOffer extends Shadow() {
         flex-direction: column;
         align-items: flex-end;
         gap: 0.5rem;
+        white-space: nowrap;
       }
 
       .checkout-booked-offer__total-desc {
         color: var(--mdx-sys-color-neutral-bold1);
         font: var(--mdx-sys-font-fix-body3);
+        text-align: right;
       }
 
       @media only screen and (max-width: _max-width_) {
