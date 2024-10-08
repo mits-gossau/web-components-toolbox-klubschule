@@ -38,3 +38,42 @@ export const getTileState = (type, data) => {
     infoTransKey: content.infoTransKey
   }
 }
+
+/**
+ * Check if a course can be booked with the current subscription.
+ *
+ * @param {Object} course - The course to book.
+ * @param {Object} subscription - The subscription to use.
+ * @returns {boolean} - True if the course can be booked, false otherwise.
+ */
+export const isBookable = (course, subscription) => {
+  // Get the lesson price from the course.
+  const { lessonPrice } = course
+
+  // Get the subscription balance from the subscription.
+  const { subscriptionBalance } = subscription
+
+  // Hard-coded value for debugging purposes.
+  // TODO: Delete if not needed
+  // const subscriptionBalance = 'CHF 32.00'
+
+  // Parse the lesson price and the subscription balance.
+  const lessonPriceFloat = getParsedPriceValue(lessonPrice)
+  const subscriptionBalanceFloat = getParsedPriceValue(subscriptionBalance)
+
+  // Return true if the lesson price is less than or equal to the subscription balance.
+  return lessonPriceFloat <= subscriptionBalanceFloat
+}
+
+/**
+ * Parse a lesson or subscription price and return a float value.
+ *
+ * @param {string} price - The price in the format "CHF x.xx".
+ * @returns {number} - The parsed price as a float.
+ */
+export const getParsedPriceValue = (price) => {
+  // Remove the "CHF" from the string and trim any whitespace.
+  const parsedPrice = price.replace('CHF', '').trim()
+  // Return the parsed price as a float.
+  return parseFloat(parsedPrice)
+}

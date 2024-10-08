@@ -94,7 +94,7 @@ export default class Event extends Shadow() {
       }
 
       :host .event.wishlist .dates ks-a-link {
-        margin-top: auto;
+        width: fit-content;
       }
 
       :host .head {

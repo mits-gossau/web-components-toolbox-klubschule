@@ -82,7 +82,6 @@ export default class WishList extends Shadow() {
     this.css = /* css */`
       :host {
         width: 100% !important;
-        padding-top: var(--mdx-sys-spacing-flex-large-m);
       }
       :host > .error {
         color: var(--color-error);
@@ -92,11 +91,6 @@ export default class WishList extends Shadow() {
       }
       :host ks-m-tab {
         padding-top: var(--mdx-sys-spacing-flex-large-m);
-      }
-      @media only screen and (max-width: _max-width_) {
-        :host {
-          padding-top: var(--mdx-sys-spacing-flex-small-m);
-        }
       }
     `
     return this.fetchTemplate()
@@ -231,6 +225,7 @@ export default class WishList extends Shadow() {
   }
 
   renderList(entryList, isEvent, baseRequest, node) {
+    if (!node) return console.warn('no node available. Fix at Wishlist!')
     // assemble withfacet filter
     const filter = {
       color: '',
@@ -383,10 +378,10 @@ export default class WishList extends Shadow() {
   }
 
   get contentOne() {
-    return this.root.querySelector('ks-m-tab')?.root.querySelector('#content1')
+    return this.root.querySelector('ks-m-tab')?.root?.querySelector('#content1')
   }
 
   get contentTwo() {
-    return this.root.querySelector('ks-m-tab')?.root.querySelector('#content2')
+    return this.root.querySelector('ks-m-tab')?.root?.querySelector('#content2')
   }
 }
