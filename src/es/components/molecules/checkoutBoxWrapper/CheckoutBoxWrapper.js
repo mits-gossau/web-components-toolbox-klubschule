@@ -110,7 +110,8 @@ export default class CheckoutBoxWrapper extends Shadow() {
       }
 
       :host .info-wrapper {
-        margin: var(--mdx-sys-spacing-flex-large-2xs) 0;
+        margin-bottom: 0;
+        margin: var(--mdx-sys-spacing-flex-large-2xs) 0 !important;
       }
       :host .info-wrapper table,
       :host .info-wrapper table tr,
