@@ -21,14 +21,17 @@ export default class OffersPage extends Shadow() {
 
         this.searchTerm = data.searchText
 
-        this.showLocationInput = !(this.data.clat === null && this.data.courses.length === 0 && this.data.searchText !== '' && this.data.total === 0)
-        console.log('showLocationInput', this.showLocationInput)
-
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         if (!this.isWishList) bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
+        this.showLocationInput = !(this.data.clat === null && this.data.courses.length === 0 && this.data.searchText !== '' && this.data.total === 0)
+        console.log('showLocationInput', this.showLocationInput, bodySection.shadowRoot.querySelector('o-grid:first-of-type').shadowRoot.querySelector('#input-section-container'))
+
+        // if (this.showLocationInput) this.root.querySelector('#location-input-container').removeAttribute('hidden')
+
         // Set Sort
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
+        console.log('sort', sort)
         if (sort && !this.eventDetailURL) {
           this.fetchModules([
             {
@@ -73,7 +76,7 @@ export default class OffersPage extends Shadow() {
       this.getTranslation = result.getTranslationSync
       const showPromises = []
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML(this.data))
+      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
       Promise.all(showPromises).then(() => (this.hidden = false))
     })
     this.addEventListener('with-facet', this.withFacetListener)
@@ -172,7 +175,7 @@ export default class OffersPage extends Shadow() {
    * Render HTML
    * @return Promise<void>
    */
-  renderHTML(data) {
+  renderHTML() {
     this.html = /* html */`<ks-c-with-facet
         ${this.hasAttribute('save-location-local-storage') ? 'save-location-local-storage' : ''}
         ${this.hasAttribute('save-location-session-storage') ? 'save-location-session-storage' : ''}
@@ -419,7 +422,7 @@ export default class OffersPage extends Shadow() {
     ` : ''
 
     const locationInput = this.hasAttribute('with-location-input') ? /* html */`
-      <div col-lg="6" col-md="6" col-sm="12" id="location-input-container">
+      <div col-lg="6" col-md="6" col-sm="12" hidden>
         ${this.hasAttribute('with-location-input-label') ? /* html */`
           <style protected>
             :host .location-label { 
@@ -560,7 +563,7 @@ export default class OffersPage extends Shadow() {
                     align-items: flex-end;
                   }
                 </style>
-                <section class="input-section">
+                <section class="input-section" id="input-section-container">
                   ${this.hasAttribute('no-search-tab')
           ? /* html */`<div col-lg="12" col-md="12" col-sm="12">
                         <ks-a-with-facet-counter ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-a-with-facet-counter>
