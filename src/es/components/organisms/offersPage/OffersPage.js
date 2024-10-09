@@ -25,20 +25,20 @@ export default class OffersPage extends Shadow() {
         this.showInputSection = (this.data.clat === null && this.data.courses.length === 0 && this.data.searchText !== '' && this.data.total === 0) ? false : true
         const inputSectionContainer = bodySection.shadowRoot.querySelector('o-grid:first-of-type').shadowRoot.querySelector('#input-section-container')
         const filterSelectContainer = bodySection.shadowRoot.querySelector('o-grid#filter-select-container')
-        const content1Container = this.ksMTab.shadowRoot.querySelector('#content1')
+        const content1Container = this.ksMTab ? this.ksMTab.shadowRoot.querySelector('#content1') : undefined
         const spacing1 = bodySection.shadowRoot.querySelector('ks-a-spacing[type="s-flex"]:first-of-type')
         const spacing2 = bodySection.shadowRoot.querySelector('ks-a-spacing[type="s-flex"]:nth-of-type(2)')
         const sort = bodySection.shadowRoot.querySelector('#sort-options')
 
         if (this.showInputSection) {
-          content1Container.style.paddingTop = '3em'
+          content1Container ? content1Container.style.paddingTop = '3em' : ''
           inputSectionContainer.removeAttribute('hidden')
           filterSelectContainer.style.display = ''
           spacing1.style.display = ''
           spacing2.style.display = ''
           sort.style.display = ''
         } else {
-          content1Container.style.paddingTop = '0'
+          content1Container ? content1Container.style.paddingTop = '0' : ''
           inputSectionContainer.setAttribute('hidden', '')
           filterSelectContainer.style.display = 'none'
           spacing1.style.display = 'none'
