@@ -1,0 +1,139 @@
+{
+    "filters": [],
+    "courses": [
+        {
+            "key": "-IBfNY4BFiWED_Ky1Lad",
+            "typ": "E",
+            "id": "1689314",
+            "centerid": "1013",
+            "gebaeudeid": "306",
+            "ortid": "129",
+            "parentkey": "D_97351",
+            "bezeichnung": "Infoveranstaltung",
+            "dateBegin": "2024-06-20",
+            "dateEnd": "2024-06-20",
+            "location": {
+                "name": "Chur, Gartenstrasse 5",
+                "badge": ""
+            },
+            "days": [
+                "Mo"
+            ],
+            "timeBegin": "18:00",
+            "timeEnd": "21:20",
+            "price": {
+                "amount": "135.0 CHF",
+                "price": 135.0,
+                "per": "",
+                "pre": ""
+            },
+            "state": 0,
+            "permission": false,
+            "abnormal": false,
+            "cat_code": 0,
+            "score": 1,
+            "atyp": [
+                "E"
+            ],
+            "button": {
+                "text": "Buchen",
+                "link": "kurse/kurs/1001-Nacht-Orientalische-Kuche--E_1689314_1013/Configuration"
+            },
+            "buttons": [
+                {
+                    "text": "Ortsauswahl",
+                    "link": null,
+                    "typ": "secondary",
+                    "event": "child",
+                    "iconName": "ChevronDown",
+                    "filters": null
+                }
+            ],
+            "icons": [],
+            "infotextshort": "Kinder sind stetig aktiv und bewegen sich gerne. Das kann auch zu Verletzungen und Unfällen führen. In diesem Kurs lernen Sie, wie Sie in verschiedenen Situationen, sei dies bei kleineren oder grösseren Verletzungen oder Notfällen resultierend aus Krankheit, richtig und schnell reagieren. Zudem e..."
+        },
+        {
+            "key": "lw6c-IwBm0S_K5Z8BZgq",
+            "typ": "6A",
+            "id": "10137",
+            "centerid": "1016",
+            "gebaeudeid": "11016",
+            "ortid": "135",
+            "parentkey": "6A_10137",
+            "bezeichnung": "Beratungsgespräch",
+            "dateBegin": "2018-10-11",
+            "location": "",
+            "locations": [
+                "St. Gallen"
+            ],
+            "days": [],
+            "timeBegin": "00:00",
+            "timeEnd": "00:00",
+            "price": {
+                "amount": "150.0 CHF",
+                "price": 150.0,
+                "per": "",
+                "pre": "ab"
+            },
+            "lessons": 0.0,
+            "state": 0,
+            "button": {
+                "text": "Details"
+            },
+            "buttons": [
+                {
+                    "text": "Ortsauswahl",
+                    "link": null,
+                    "typ": "secondary",
+                    "event": "child",
+                    "iconName": "ChevronDown",
+                    "filters": null
+                }
+            ],
+            "icons": [],
+            "infotextshort": "Kinder sind stetig aktiv und bewegen sich gerne. Das kann auch zu Verletzungen und Unfällen führen. In diesem Kurs lernen Sie, wie Sie in verschiedenen Situationen, sei dies bei kleineren oder grösseren Verletzungen oder Notfällen resultierend aus Krankheit, richtig und schnell reagieren. Zudem e...",
+            "permission": false,
+            "cantonshare": false,
+            "cantonshareprice": 0,
+            "abnormal": false,
+            "diploma": 0,
+            "cat_code": 0,
+            "score": 1,
+            "link_url": "https://miducawebappdev.azurewebsites.net/angebote/kurse/kurs/abo-groupfitness-und-entsp--1-mon--sg--6A_10137_1016",
+            "atyp": [
+                "6A"
+            ],
+            "count": 1
+        }
+    ],
+    "sort": {
+        "label": "Sortierung",
+        "items": [
+            {
+                "id": 1,
+                "label": "Nach Relevanz"
+            },
+            {
+                "id": 2,
+                "label": "In der Nähe"
+            },
+            {
+                "id": 3,
+                "label": "Alphabetisch"
+            }
+        ],
+        "sort": 1
+    },
+    "sorting": 1,
+    "sort_title": 1,
+    "sort_date": 0,
+    "sort_location": 0,
+    "sort_day": 0,
+    "sort_time": 0,
+    "sort_price": 0,
+    "ppage": 1,
+    "psize": 6,
+    "pnext": 6,
+    "total": 3241,
+    "success": true
+}
