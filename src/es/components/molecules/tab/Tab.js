@@ -79,6 +79,7 @@ export default class Tab extends Shadow() {
           cursor: pointer;
           padding: 1em 0;
           color: var(--mdx-comp-tabs-label-color-default);
+          white-space: nowrap;
         }
 
         :host ul li button.active {
