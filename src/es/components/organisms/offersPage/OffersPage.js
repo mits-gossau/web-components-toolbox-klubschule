@@ -32,14 +32,14 @@ export default class OffersPage extends Shadow() {
 
         if (this.showInputSection) {
           content1Container ? content1Container.style.paddingTop = '3em' : ''
-          inputSectionContainer.removeAttribute('hidden')
+          inputSectionContainer ? inputSectionContainer.removeAttribute('hidden') : ''
           filterSelectContainer.style.display = ''
           spacing1.style.display = ''
           spacing2.style.display = ''
           sort.style.display = ''
         } else {
           content1Container ? content1Container.style.paddingTop = '0' : ''
-          inputSectionContainer.setAttribute('hidden', '')
+          inputSectionContainer ? inputSectionContainer.setAttribute('hidden', '') : ''
           filterSelectContainer.style.display = 'none'
           spacing1.style.display = 'none'
           spacing2.style.display = 'none'
