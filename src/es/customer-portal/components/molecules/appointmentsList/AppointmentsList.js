@@ -18,6 +18,53 @@ export default class AppointmentsList extends Shadow() {
     this.currentOpenDialogFilterType = null
     this.subscriptionHint = null
     this.gridRendered = false
+    /**
+     * @type {boolean}
+     * @description Flag indicating if the subscription balance is low.
+     */
+    this.hasLowSubscriptionBalance = false
+
+    /**
+     * @type {boolean}
+     * @description Flag indicating if the appointment balance is low.
+     */
+    this.hasLowAppointmentsBalance = false
+
+    /**
+     * @type {boolean}
+     * @description Flag indicating if the subscription duration is low.
+     */
+    this.hasLowSubscriptionDuration = false
+
+    /**
+     * @type {string}
+     * @description Notification message for low appointment balance.
+     */
+    this.lowAppointmentBalanceNotification = ''
+
+    /**
+     * @type {string}
+     * @description Notification message for low subscription balance.
+     */
+    this.lowSubscriptionBalanceNotification = ''
+
+    /**
+     * @type {string}
+     * @description Notification message for low subscription duration.
+     */
+    this.lowSubscriptionDurationNotification = ''
+
+    /**
+     * @type {number}
+     * @description Minimum subscription balance.
+     */
+    this.minAmount = 35
+
+    /**
+     * @type {number}
+     * @description Minimum subscription duration.
+     */
+    this.minDays = 14
   }
 
   connectedCallback () {
@@ -243,6 +290,10 @@ export default class AppointmentsList extends Shadow() {
         {
           path: `${this.importMetaUrl}../../../../../css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
           name: 'mdx-component'
+        },
+        {
+          path: `${this.importMetaUrl}'../../../../../../components/molecules/systemNotification/SystemNotification.js`,
+          name: 'ks-m-system-notification'
         }
       ])
       return Promise.all([fetchModules]).then((children) => {
@@ -276,6 +327,7 @@ export default class AppointmentsList extends Shadow() {
               <div col-lg="6" col-md="6" col-sm="12">
                 ${subscriptionSelect}
               </div>
+              ${!this.hasLowSubscriptionBalance && this.renderSubscriptionNotifications(appointments)}
               <div col-lg="12" col-md="12" col-sm="12">
                 <m-appointments-filter data-filter-type="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
               </div>
@@ -293,6 +345,89 @@ export default class AppointmentsList extends Shadow() {
       // TODO: Handle error
       console.error(e)
     })
+  }
+
+  /**
+   * Renders notifications related to subscriptions.
+   * Notifications include low appointment balance, low subscription balance and low subscription duration.
+   *
+   * @param {object} allSubscriptions - Object containing all subscriptions.
+   * @returns {string} - HTML string containing the rendered notifications.
+   */
+  renderSubscriptionNotifications (allSubscriptions) {
+    // Get the selected subscription
+    let selectedSubscription = null
+    if (allSubscriptions?.filters) {
+      const { subscriptions } = allSubscriptions?.filters
+      selectedSubscription = subscriptions.find(element => element.selected === true)
+    }
+
+    // Render low appointment balance notification
+    if (!this.hasLowAppointmentsBalance) {
+      this.hasLowAppointmentsBalance = true
+      this.lowAppointmentBalanceNotification = /* html */`
+        <div style="padding-bottom:1rem;">
+          <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+            <div slot="description">
+              <p>
+                <a-translation data-trans-key="CP.cpLowAppointmentBalance"></a-translation>
+              </p>
+            </div>
+          </ks-m-system-notification>
+        </div>
+      `
+    }
+
+    // Render low subscription balance notification
+    if (!this.hasLowSubscriptionBalance && selectedSubscription) {
+      const subscriptionBalance = Number(parseFloat(selectedSubscription.subscriptionBalance.replace('CHF', '').trim()).toFixed(2))
+      if (subscriptionBalance < this.minAmount) {
+        this.hasLowSubscriptionBalance = true
+        this.lowSubscriptionBalanceNotification = /* html */`
+          <div style="padding-bottom:1rem;">
+            <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+              <div slot="description">
+                <p>
+                  <a-translation data-trans-key="CP.cpLowBalance"></a-translation>
+                </p>
+              </div>
+            </ks-m-system-notification>
+          </div>
+        `
+      }
+    }
+
+    // Render low subscription duration notification
+    if (!this.hasLowSubscriptionDuration && selectedSubscription) {
+      const today = new Date()
+      const subscriptionValidTo = selectedSubscription.subscriptionValidTo
+      const endDate = new Date(subscriptionValidTo)
+      const datePlus14Days = new Date(today.getTime() + this.minDays * 24 * 60 * 60 * 1000)
+
+      if (datePlus14Days >= endDate) {
+        this.hasLowSubscriptionDuration = true
+        this.lowSubscriptionDurationNotification = /* html */`
+          <div style="padding-bottom:1rem;">
+            <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
+              <div slot="description">
+                <p>
+                  <a-translation data-trans-key="CP.cpShortValidity"></a-translation>
+                </p>
+              </div>
+            </ks-m-system-notification>
+          </div>
+        `
+      }
+    }
+
+    // Return the rendered HTML
+    return /* html */ `
+      <div col-lg="12" col-md="12" col-sm="12">
+        ${this.lowSubscriptionBalanceNotification}
+        ${this.lowAppointmentBalanceNotification}
+        ${this.lowSubscriptionDurationNotification}
+      </div>
+    `
   }
 
   renderLoading () {
@@ -358,6 +493,9 @@ export default class AppointmentsList extends Shadow() {
       const dayWrapper = document.createElement('div')
       dayWrapper.insertAdjacentHTML('beforeend', `<ks-a-heading tag="h2">${day.weekday}</ks-a-heading>`)
       day[appointmentType].forEach(appointment => {
+        if (appointment.courseAppointmentStatus === 2 && !this.hasLowAppointmentsBalance) {
+          this.renderSubscriptionNotifications(selectedSubscription)
+        }
         const tile = this.makeTileComponent(tileComponent, appointment, selectedSubscription)
         dayWrapper.appendChild(tile)
       })
