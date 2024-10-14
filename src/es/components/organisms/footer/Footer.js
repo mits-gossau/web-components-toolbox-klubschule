@@ -239,6 +239,10 @@ export default class KsFooter extends Footer {
         }
       ])
     ]).then(([iconMdx, button]) => {
+      // Overwrite ordering by super footer.js
+      const copyrightTag = this.root.querySelector('.copyright')
+      copyrightTag && copyrightTag.classList.remove('copyright')
+      if (this.hasAttribute('no-the-top-button')) return
       this.html = /* html */`
         <ks-a-button id=to-the-top-button namespace="button-primary-" icon=true color=secondary>
           <a-icon-mdx icon-name=ArrowUp size="1rem"></a-icon-mdx>
@@ -249,10 +253,6 @@ export default class KsFooter extends Footer {
         left: 0,
         behavior: 'smooth'
       }))
-      
-      // Overwrite ordering by super footer.js
-      const copyrightTag = this.root.querySelector('.copyright')
-      copyrightTag && copyrightTag.classList.remove('copyright')
     })
   }
     
