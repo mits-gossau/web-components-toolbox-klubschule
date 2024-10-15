@@ -143,7 +143,7 @@ export default class TileFactory extends Shadow() {
             ` : (
               ((course.locations?.length > 1 || course.buttons[0].link === null &&  course.buttons[0].iconName === 'ChevronDown' &&  course.buttons[0].typ === 'quaternary') || this.isNearbySearch) && course.filter?.length
                 ? /* html */`
-                <m-load-template-tag mode="false">
+                <m-load-template-tag>
                 <template>
                   <ks-o-tile-list data='{
                     ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course).replace(/'/g, '’').replace(/"/g, '\"') : this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')},
@@ -156,7 +156,7 @@ export default class TileFactory extends Shadow() {
                   </m-load-template-tag>
                 `
                 : /* html */`
-                  <m-load-template-tag mode="false">
+                  <m-load-template-tag>
                   <template>
                   <ks-m-tile namespace="tile-default-" data='{
                     ${this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')}
@@ -168,9 +168,14 @@ export default class TileFactory extends Shadow() {
             return acc = acc + tile
           },
           '<section>'
-        ) + `<ks-o-partner-search search-text="${data.searchText}"${data.courses.length ? ' has-courses': ''} tab="1">
+        )
+        + (!data.courses.length
+          ? /* html */`<ks-o-partner-search search-text="${data.searchText}"${data.courses.length ? ' has-courses': ''} tab="1">
               ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
-            </ks-o-partner-search></section>`
+            </ks-o-partner-search>`
+          : '')
+        + /* html */`</section>`
+        // TODO: ABOVE ks-o-partner-search must be moved to the location of ks-a-with-facet-pagination which is at /home/deck/Documents/vm_work/web-components-toolbox-klubschule/src/es/components/organisms/offersPage/OffersPage.js:659
         this.lastFilterSelection = data.filter
       }, 0)
     }).catch(error => {
