@@ -55,7 +55,8 @@ export default class FavoriteButton extends Shadow() {
     /** @type {Promise<void>} */
     this.wishListPromise = new Promise(resolve => (wishListResolve = resolve))
     this.wishListListener = async event => {
-      this.setFavoured((isFavoured = (await event.detail.fetch).watchlistEntries.some(entry => (id.courseType === entry.kursTyp && id.courseId === String(entry.kursId) && id.centerId === String(entry.centerId)))))
+      const hasFavouredFunc = entry => (id.courseType === entry.kursTyp && id.courseId === String(entry.kursId) && id.centerId === String(entry.centerId))
+      this.setFavoured((isFavoured = (await event.detail.fetch).watchlistEntriesAngebot?.some(hasFavouredFunc) || (await event.detail.fetch).watchlistEntriesVeranstaltung?.some(hasFavouredFunc)))
       wishListResolve(true)
     }
   }

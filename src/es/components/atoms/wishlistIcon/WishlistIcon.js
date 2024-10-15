@@ -17,7 +17,7 @@ export default class WishtlistIcon extends Shadow() {
 
     this.updateIconAddOrDeleteItem = event => {
       event.detail.fetch.then((data) => {
-        this.entriesCount = data.watchlistEntries?.length
+        this.entriesCount = (data.watchlistEntriesAngebot?.length || 0) + (data.watchlistEntriesVeranstaltung?.length || 0)
         this.renderHTML()
       })
     }
