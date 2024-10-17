@@ -15,7 +15,6 @@
   <script async rel=preload as="script" type="text/javascript" src="./wc-config.js"></script>
   <title>So vielf&#xE4;ltig wie Du - Klubschule Migros</title>
 </head>
-
 <body>
   <c-fetch-html>
     <c-fetch-css>
@@ -31,16 +30,16 @@
               }
             </style>
             <a-logo
-              namespace="logo-default-"
-              namespace-fallback
-              src="./src/img/2-brands-logo6.svg"
-              lang="de"
-              alt="Klubschule - IBAW - Pro"
-              mobile-breakpoint="0px"
+            namespace="logo-default-"
+            namespace-fallback
+            src="./src/img/2-brands-logo6.svg"
+            lang="de"
+            alt="Klubschule - IBAW - Pro"
+            mobile-breakpoint="0px"
             ></a-logo>
           </o-header>
           <o-body>
-            <o-grid namespace="grid-2columns-content-stage-" first-container-vertical="" first-column-with="66%" background-color="#0053a6" width="100%">
+            <o-grid namespace="grid-2columns-content-stage-" center first-container-vertical="" first-column-with="66%" background-color="#0053a6" width="100%">
               <div class="stage-content">
                 <ks-a-heading tag="h1" color="#ffffff" content-stage>
                   <h1>Herzlich willkommen zur Videoberatung</h1>
@@ -48,86 +47,90 @@
               </div>
               <aside>
                 <img style="object-position: center center; cursor: pointer;"
-                  onclick="this.dispatchEvent(new CustomEvent('auvious-launch', { bubbles: true, cancelable: true, composed: true }))"
-                  src="./src/img/kontakt.webp"
-                  alt="Kontakt"
-                  aspect-ratio="0.562" />
+                onclick="this.dispatchEvent(new CustomEvent('auvious-launch', { bubbles: true, cancelable: true, composed: true }))"
+                src="./src/img/kontakt.webp"
+                alt="Kontakt"
+                aspect-ratio="0.562" />
               </aside>
             </o-grid>
             <o-grid namespace="grid-2columns-content-section-" first-container-vertical="" first-column-with="66%" width="100%">
-            <!-- Spalte 1 -->
-            <ks-o-body-section content-width-var="100%" no-margin-y></ks-o-body-section>
+              <!-- Spalte 1 -->
+              <ks-o-body-section content-width-var="100%" no-margin-y>
+                <ks-m-teaser namespace="teaser-text-image-" color="secondary" text-position="left">
+                  <div>
+                    <p>Wir freuen uns darauf Sie persönlich zu beraten. Drücken Sie hierfür bitte auf die Videokamera.</p>
+                  </div>
+                  <a-auvious
+                    pc-environment="mypurecloud.ie"
+                    pc-queue="Auvious_Miduca"
+                    pc-organization-id="be370ae6-0264-49ac-aca7-5ebdcb5b9796"
+                    pc-deployment-id="d25750e5-9bf9-4db8-ad9a-5a3209647249"
+                    customer-display-name="customer"
+                    kiosk-mode="true"
+                    dark-mode="false"
+                    greeting-action="video"
+                    reload-on-callEnded
+                    static
+                    button-size="7.5em"
+                  >
+                    <template>
+                      <!-- key expl.: https://docs.auvious.com/assets/files/de-4eebf6730ba65b91064fb20f6f97234b.json -->
+                      {
+                        "translations": {
+                          "We hope to see you again soon.": "Wir hoffen, Sie bald wieder zu sehen.",
+                          "How may we help you?": "Starten Sie den Video-Call",
+                          "Finding a representative...": "Verbindung wird aufgebaut..."
+                        }
+                      }
+                    </template>
+                  </a-auvious>
+                </ks-m-teaser>
+              </ks-o-body-section>
             <!-- Spalte 2 -->
             <aside>
-              <a-auvious
-                pc-environment="mypurecloud.ie"
-                pc-queue="Auvious_Miduca"
-                pc-organization-id="be370ae6-0264-49ac-aca7-5ebdcb5b9796"
-                pc-deployment-id="d25750e5-9bf9-4db8-ad9a-5a3209647249"
-                customer-display-name="customer"
-                kiosk-mode="true"
-                dark-mode="false"
-                greeting-action="video"
-                reload-on-callEnded
-              >
-                <template>
-                  {
-                    "texts": {
-                      "privacy": "Wir legen Wert auf Ihre Privatsphäre. Das Gespräch wird nicht aufgezeichnet."
-                    },
-                    "translations": {
-                      "We hope to see you again soon.": "Wir hoffen, Sie bald wieder zu sehen.",
-                      "How may we help you?": "Starten Sie den Video-Call",
-                      "Finding a representative...": "Verbindung wird aufgebaut..."
-                    }
-                  }
-                </template>
-              </a-auvious>
             </aside>
-            </o-grid>
-          </o-body>
-          <ks-o-footer namespace="footer-default-" no-the-top-button>
+        </o-grid>
+      </o-body>
+      <ks-o-footer namespace="footer-default-" no-the-top-button>
+        <div>
+          <div class="invert">
             <div>
-                <div class="invert">
-                  <div>
-                    <p style="font-size: 1rem; font-weight: normal;">Wir freuen uns darauf Sie persönlich zu beraten...</p>
-                  </div>
-                </div>
-                <div class="invert footer-links font-size-tiny-desktop">
-                  <div>
-                    <a style="font-size: 1rem; font-weight: normal; text-decoration: underline;" onclick="this.dispatchEvent(new CustomEvent('auvious-launch', { bubbles: true, cancelable: true, composed: true }))">Drücken Sie hierfür bitte auf die Videokamera.</a>
-                  </div>
-                  <div></div>
-                </div>
+              <p style="font-size: 1rem; font-weight: normal;">Wir legen Wert auf Ihre Privatsphäre. Das Gespräch wird nicht aufgezeichnet.</p>
             </div>
-            <div>
-                <div class="footer-links font-size-tiny-desktop">
-                    <ul>
-                        <li>
-                            <a-picture namespace="picture-store-logo-" defaultSource="./src/img/Logo.png" alt="Migros">
-                            </a-picture>
-                        </li>
-                        <li>
-                            <p>
-                                Teil des gesellschaftlichen Engagements der Migros-Gruppe:
-                            </p>
-                            <a target="">engagement.migros.ch</a>
-                        </li>
-                        <li>© Klubschule Migros 2024</li>
-                    </ul>
-                </div>
-            </div>
-          </ks-o-footer>
-        </p-general>
-        <o-modal namespace="modal-default-">
-          <ks-a-button id="close" icon namespace="button-tertiary-" color="tertiary">
-            <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
-          </ks-a-button>
-          <span style="color:white;">If event.detail has no child property!</span>
-        </o-modal>
-      </c-fetch-modules>
-    </c-fetch-css>
-  </c-fetch-html>
-  
+          </div>
+          <div class="invert footer-links font-size-tiny-desktop">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+        <div>
+          <div class="footer-links font-size-tiny-desktop">
+            <ul>
+              <li>
+                <a-picture namespace="picture-store-logo-" defaultSource="./src/img/Logo.png" alt="Migros">
+                </a-picture>
+              </li>
+              <li>
+                <p>
+                  Teil des gesellschaftlichen Engagements der Migros-Gruppe:
+                </p>
+                <a target="">engagement.migros.ch</a>
+              </li>
+              <li>© Klubschule Migros 2024</li>
+            </ul>
+          </div>
+        </div>
+      </ks-o-footer>
+    </p-general>
+    <o-modal namespace="modal-default-">
+      <ks-a-button id="close" icon namespace="button-tertiary-" color="tertiary">
+        <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
+      </ks-a-button>
+      <span style="color:white;">If event.detail has no child property!</span>
+    </o-modal>
+  </c-fetch-modules>
+</c-fetch-css>
+</c-fetch-html>
+
 </body>
 </html>
