@@ -93,9 +93,9 @@ export default class Event extends Shadow() {
         flex-direction: column;
       }
 
-      :host .event.wishlist .dates ks-a-link {
+      :host .event.wishlist .dates a-button {
         width: fit-content;
-        margin-top: auto;
+        margin-top: 0.75rem;
       }
 
       :host .head {
@@ -144,6 +144,8 @@ export default class Event extends Shadow() {
       }
 
       :host .meta {
+        display: flex;
+        flex-direction: column;
         list-style: none;
         margin: 0;
         padding: 0;
@@ -166,6 +168,10 @@ export default class Event extends Shadow() {
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+
+      :host .meta li:last-of-type {
+        margin-top: auto;
       }
 
       :host .meta span {
@@ -199,9 +205,13 @@ export default class Event extends Shadow() {
 
       :host .link-more,
       :host .link-more span {
-        font-size: 1.125rem;
-        line-height: 1.25rem;
-        font-weight: 500;
+        --button-transparent-padding: 0;
+        --button-transparent-font-size: 1.125rem;
+        --button-transparent-line-height: 1.25rem;
+        --button-transparent-font-weight: 500;
+        font-size: var(--button-transparent-font-size);
+        line-height: var(--button-transparent-line-height);
+        font-weight: var(--button-transparent-font-weight);
         margin-left: 0;
         margin-right: 0.25rem;
       }
@@ -560,15 +570,30 @@ export default class Event extends Shadow() {
       <div class="event${this.isWishList ? " wishlist" : ""}${this.isWishList && this.isPassed ? " passed" : ""}">
         <div class="head">
           <div class="dates">
-            <span class="date">${this.isWishList ? bezeichnung : datum_label}</span>
+            ${this.isWishList
+              ? /* HTML */`
+                <span class="date">${bezeichnung}</span>
+                <div class="time">
+                  <span class="days">${datum_label}</span>
+                </div>
+              `
+              : /* HTML */`<span class="date">${datum_label}</span>`
+            }
             <div class="time">
               <span class="days">${days.join(', ')}</span>
               ${zusatztitel ? /* html */ `<div class="badge">${zusatztitel}</div>` : ''}
             </div>
             ${this.isWishList && !this.isPassed && offerButton ? /* html */ `
-              <ks-a-link mode="false" href="${offerButton.link}" icon-right="ArrowRight" class="link-more">
-                ${offerButton.text}
-              </ks-a-link>
+              <a-button
+                class="link-more"
+                namespace="button-transparent-"
+                href="${offerButton.link}"
+                click-no-toggle-active
+                icon-right="ArrowRight"
+              >
+                <span>${offerButton.text}</span>
+                <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>
+              </a-button>
             ` : ''}
           </div>
           <ul class="meta">
@@ -624,9 +649,9 @@ export default class Event extends Shadow() {
             <div class="controls controls-passed">
               <span class="controls-passed__message">${this.getAttribute("passed-message")}</span>
               <div class="controls-passed__left">
-                ${this.isWishList ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${kurs_typ}_${kurs_id}_${centerid}"></a-icon-mdx>` : ''}
+                <a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${kurs_typ}_${kurs_id}_${centerid}"></a-icon-mdx>
                 ${buttons[0]?.text ? /* html */ `
-                  <ks-a-button namespace="button-secondary-" color="secondary">
+                  <ks-a-button href="${buttons[0].link}" namespace="button-secondary-" color="secondary">
                     <span>${buttons[0].text || warnMandatory + 'passed.button.text'}</span>
                   </ks-a-button>
                 ` : ''}
@@ -659,8 +684,8 @@ export default class Event extends Shadow() {
         name: 'ks-m-badge'
       },
       {
-        path: `${this.importMetaUrl}../../atoms/link/Link.js`,
-        name: 'ks-a-link'
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/button/Button.js`,
+        name: 'a-button'
       },
       {
         path: `${this.importMetaUrl}../../molecules/tooltip/Tooltip.js`,
