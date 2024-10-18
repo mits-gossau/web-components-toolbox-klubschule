@@ -39,57 +39,59 @@
             ></a-logo>
           </o-header>
           <o-body>
-            <o-grid namespace="grid-2columns-content-stage-" center first-container-vertical="" first-column-with="66%" background-color="#0053a6" width="100%">
-              <div class="stage-content">
-                <ks-a-heading tag="h1" color="#ffffff" content-stage>
-                  <h1>Herzlich willkommen zur Videoberatung</h1>
-                </ks-a-heading>
-              </div>
-              <aside>
-                <img style="object-position: center center; cursor: pointer;"
-                onclick="this.dispatchEvent(new CustomEvent('auvious-launch', { bubbles: true, cancelable: true, composed: true }))"
-                src="./src/img/kontakt.webp"
-                alt="Kontakt"
-                aspect-ratio="0.562" />
-              </aside>
-            </o-grid>
-            <o-grid namespace="grid-2columns-content-section-" first-container-vertical="" first-column-with="66%" width="100%">
-              <!-- Spalte 1 -->
-              <ks-o-body-section content-width-var="100%" no-margin-y>
-                <ks-m-teaser namespace="teaser-text-image-" color="secondary" text-position="left">
-                  <div>
-                    <p>Wir freuen uns darauf Sie persönlich zu beraten. Drücken Sie hierfür bitte auf die Videokamera.</p>
-                  </div>
-                  <a-auvious
-                    pc-environment="mypurecloud.ie"
-                    pc-queue="Auvious_Miduca"
-                    pc-organization-id="be370ae6-0264-49ac-aca7-5ebdcb5b9796"
-                    pc-deployment-id="d25750e5-9bf9-4db8-ad9a-5a3209647249"
-                    customer-display-name="customer"
-                    kiosk-mode="true"
-                    dark-mode="false"
-                    greeting-action="video"
-                    reload-on-callEnded
-                    static
-                    button-size="7.5em"
-                  >
-                    <template>
-                      <!-- key expl.: https://docs.auvious.com/assets/files/de-4eebf6730ba65b91064fb20f6f97234b.json -->
-                      {
-                        "translations": {
-                          "We hope to see you again soon.": "Wir hoffen, Sie bald wieder zu sehen.",
-                          "How may we help you?": "Starten Sie den Video-Call",
-                          "Finding a representative...": "Verbindung wird aufgebaut..."
-                        }
-                      }
-                    </template>
-                  </a-auvious>
-                </ks-m-teaser>
-              </ks-o-body-section>
-            <!-- Spalte 2 -->
-            <aside>
-            </aside>
-        </o-grid>
+            <main style="height: 100%; display: flex; flex-direction: column;">
+              <o-grid namespace="grid-2columns-content-stage-" center first-container-vertical="" first-column-with="66%" background-color="#0053a6" width="100%">
+                <div class="stage-content">
+                  <ks-a-heading tag="h1" color="#ffffff" content-stage>
+                    <h1>Herzlich willkommen zur Videoberatung</h1>
+                  </ks-a-heading>
+                </div>
+                <aside>
+                  <img style="object-position: center center; cursor: pointer;"
+                  onclick="this.dispatchEvent(new CustomEvent('auvious-launch', { bubbles: true, cancelable: true, composed: true }))"
+                  src="./src/img/kontakt.webp"
+                  alt="Kontakt"
+                  aspect-ratio="0.562" />
+                </aside>
+              </o-grid>
+              <o-grid namespace="grid-2columns-content-section-" first-container-vertical="" first-column-with="66%" width="100%" style="height: 100%;">
+                <section style="height: 100%;">
+                  <!-- Spalte 1 -->
+                  <o-wrapper style="--grid-2columns-content-section-first-column-padding-custom: 0; margin-left: 1.5rem;">
+                    <section style="height: 100%; align-content: center;">
+                      <p style="flex: 1;">Wir freuen uns darauf Sie persönlich zu beraten. Drücken Sie hierfür bitte auf die Videokamera.</p>
+                      <a-auvious
+                        pc-environment="mypurecloud.ie"
+                        pc-queue="Auvious_Miduca"
+                        pc-organization-id="be370ae6-0264-49ac-aca7-5ebdcb5b9796"
+                        pc-deployment-id="d25750e5-9bf9-4db8-ad9a-5a3209647249"
+                        customer-display-name="customer"
+                        kiosk-mode="true"
+                        dark-mode="false"
+                        greeting-action="video"
+                        reload-on-callEnded
+                        static
+                        button-size="7.5em"
+                      >
+                        <template>
+                          <!-- key expl.: https://docs.auvious.com/assets/files/de-4eebf6730ba65b91064fb20f6f97234b.json -->
+                          {
+                            "translations": {
+                              "We hope to see you again soon.": "Wir hoffen, Sie bald wieder zu sehen.",
+                              "How may we help you?": "Starten Sie den Video-Call",
+                              "Finding a representative...": "Verbindung wird aufgebaut..."
+                            }
+                          }
+                        </template>
+                      </a-auvious>
+                    </section>
+                  </o-wrapper>
+                <!-- Spalte 2 -->
+                <aside>
+                </aside>
+              </section>
+          </o-grid>
+        </main>
       </o-body>
       <ks-o-footer namespace="footer-default-" no-the-top-button>
         <div>
