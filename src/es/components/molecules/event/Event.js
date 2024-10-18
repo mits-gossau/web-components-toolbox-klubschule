@@ -88,14 +88,14 @@ export default class Event extends Shadow() {
         opacity: 0.5;
       }
 
-      :host .event.wishlist .dates {
+      :host .event .dates {
         display: flex;
         flex-direction: column;
+        gap: 0.75rem;
       }
 
       :host .event.wishlist .dates a-button {
         width: fit-content;
-        margin-top: 0.75rem;
       }
 
       :host .head {
@@ -124,7 +124,6 @@ export default class Event extends Shadow() {
         flex-wrap: wrap;
         flex-direction: row;
         align-items: center;
-        margin-top: 0.75rem;
         gap: 0.625rem;
       }
 
@@ -149,16 +148,13 @@ export default class Event extends Shadow() {
         list-style: none;
         margin: 0;
         padding: 0;
+        gap: 1rem;
       }
 
       :host .meta li {
         display: flex;
         flex-direction: row;
         align-items: center;
-      }
-
-      :host .meta li + li {
-        margin-top: 1rem;
       }
 
       :host .meta li div {
@@ -190,7 +186,7 @@ export default class Event extends Shadow() {
         color: var(--mdx-sys-color-primary-default);
         margin: 0;
         padding: 0;
-        margin-top: 1rem;
+        margin-top: auto;
         cursor: pointer;
         text-decoration: none;
       }
@@ -470,11 +466,6 @@ export default class Event extends Shadow() {
         :host .time {
           flex-direction: column;
           align-items: flex-start;
-          margin-top: 0.75rem;
-        }
-        
-        :host .wishlist .time {
-          margin-bottom: 0.75rem;
         }
   
         :host .days {

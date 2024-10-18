@@ -66,7 +66,7 @@ export default class KsFooter extends Footer {
     :host > footer .invert {
       margin: unset;
       padding: var(--content-spacing-mobile) var(--legal-flex-spacing-vertical) 0;
-      width: 67%;
+      width: 66%;
     }
     :host > footer .invert.footer-links {
       padding: var(--content-spacing-mobile) var(--content-spacing) 0;
@@ -82,7 +82,7 @@ export default class KsFooter extends Footer {
     :host footer>div:first-child .footer-links {
       background-color: var(--legal-background-color);
       text-align: center;
-      width: 33%;
+      width: 34%;
       border-left: var(--column-border-width) var(--column-border-color) solid;
     }
     :host footer>div:first-child>.footer-links>div>* {
