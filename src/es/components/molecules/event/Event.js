@@ -88,7 +88,7 @@ export default class Event extends Shadow() {
         opacity: 0.5;
       }
 
-      :host .event.wishlist .dates {
+      :host .event .dates {
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
@@ -466,10 +466,6 @@ export default class Event extends Shadow() {
         :host .time {
           flex-direction: column;
           align-items: flex-start;
-        }
-        
-        :host .wishlist .time {
-          margin-bottom: 0.75rem;
         }
   
         :host .days {
