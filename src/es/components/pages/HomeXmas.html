@@ -1,0 +1,401 @@
+<!-- Figma Link: Do not copy -->
+<code><a href="https://www.figma.com/file/thNWJxDbPikhVAE95eEHLI/Design-System-Pages-%7C%C2%A0Klubschule?type=design&node-id=3111%3A241100&mode=dev" target="_blank">figma</a></code>
+
+<a-snow-flakes spawn-min="3" spawn-max="9" disappear="60000"></a-snow-flakes>
+<!-- Stage -->
+<ks-m-stage namespace="stage-default-">
+    <a-picture picture-load defaultSource="https://dev.klubschule.ch/media/odxlz5kr/aspectratio.png?width=1920&amp;height=1080&amp;format=png&amp;quality=80&amp;v=1da76af23c21fd0"></a-picture>
+    <ks-a-heading tag="h1" display-2>So vielf&#xE4;ltig wie Du</ks-a-heading>
+    <ks-c-auto-complete
+        reset-input-value-based-url="q"
+        endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search"
+        search-url="http://localhost:3000/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=.%2Fsrc%2Fcss%2FvariablesCustomKlubschule.css&login=.%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2Flogin%2Fdefault-%2Fdefault-.html&logo=.%2Fsrc%2Fes%2Fcomponents%2Fatoms%2Flogo%2Fdefault-%2Fdefault-.html&nav=.%2Fsrc%2Fes%2Fcomponents%2Fweb-components-toolbox%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2FmultiLevelNavigation%2Fdefault-%2Fdefault-.html&footer=.%2Fsrc%2Fes%2Fcomponents%2Forganisms%2Ffooter%2Fdefault-%2Fdefault-.html&content=.%2Fsrc%2Fes%2Fcomponents%2Fpages%2FAngebotsliste-Suchergebnis.html"
+        disabled
+    >
+        <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+        <div class="container">
+            <a-input
+                inputid="home-page-input-search"
+                autofocus
+                placeholder="Suchen..."
+                icon-name="Search" 
+                icon-size="1.25em"
+                submit-search="request-auto-complete"
+                type="search"
+                answer-event-name="search-change"
+                delete-listener
+                search
+            >
+            </a-input>
+            <div id="close">
+                <a-icon-mdx icon-name="Plus" size="2em" color="#3d3d3d"></a-icon-mdx>
+            </div>
+        </div>
+        <div class="container">
+            <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
+            </ks-m-auto-complete-list>
+        </div>
+        <style>
+            :host > ks-a-button {
+                width: 100%;
+                --button-secondary-background-color: var(--m-white);
+                --button-secondary-background-color-hover: var(--m-white);
+                --button-secondary-width: 100%;
+                --button-secondary-border-color: var(--m-gray-700);
+                --button-secondary-border-color-hover: var(--m-gray-700);
+                --button-secondary-color: var(--m-gray-700);
+                --button-secondary-color-hover:  var(--m-gray-700);
+                --button-secondary-cursor: text;
+                --button-secondary-justify-content: space-between;
+                --button-secondary-padding: 0.5rem 1.5rem;
+                --button-secondary-font-size: 1.15rem;
+                --button-secondary-height: 2.88rem;
+                --svg-size: 1.5rem;
+                --svg-size-mobile: 1.2rem;
+                --button-secondary-icon-color: var(--mdx-sys-color-primary-default);
+                --button-secondary-font-weight: 400;
+            }
+            @media only screen and (max-width: 767px) {
+                :host > ks-a-button {
+                --button-secondary-padding: 0.5rem 0.9rem;
+                --button-secondary-font-size: 1rem;
+                --button-secondary-height: 2.22rem;
+                }
+            }
+        </style>
+        <ks-a-button id="show-modal" namespace="button-secondary-" answer-event-name="search-change">
+            Angebot suchen...
+            <a-icon-mdx icon-name="Search" class="icon-right">
+            </a-icon-mdx>
+        </ks-a-button>
+        </m-dialog>
+    </ks-c-auto-complete>
+</ks-m-stage>
+<!-- /Stage -->
+
+<!-- Sparteneinstieg mobile -->
+<ks-o-body-section no-margin-y variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)" display="none" display-mobile="block">
+    <ks-a-heading tag="h2" style-as="h1" border-top>Finden Sie Ihre neue Herausforderung</ks-a-heading>
+    <div class="extended-container-mobile">
+        <o-grid namespace="grid-12er-" gap=".5rem">
+            <section>
+            <div col-sm="4" col-md="4" col-lg="4">
+                <ks-m-teaser namespace=teaser-link-box- color="quinary" href="#">
+                    <h3>Linktext</h3>
+                    <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx>
+                </ks-m-teaser>
+            </div>
+            <div col-sm="4" col-md="4" col-lg="4">
+                <ks-m-teaser namespace=teaser-link-box- color="senary" href="#">
+                    <h3>Linktext</h3>
+                    <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx>
+                </ks-m-teaser>
+            </div>
+            <div col-sm="4" col-md="4" col-lg="4">
+                <ks-m-teaser namespace=teaser-link-box- color="septenary" href="#">
+                    <h3>Linktext</h3>
+                    <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx>
+                </ks-m-teaser>
+            </div>
+            <div col-sm="4" col-md="4" col-lg="4">
+                <ks-m-teaser namespace=teaser-link-box- color="secondary" href="#">
+                    <h3>Linktext</h3>
+                    <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx>
+                </ks-m-teaser>
+            </div>
+            <div col-sm="4" col-md="4" col-lg="4">
+                <ks-m-teaser namespace=teaser-link-box- color="secondary" href="#">
+                    <h3>Linktext</h3>
+                    <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx>
+                </ks-m-teaser>
+            </div>
+            <div col-sm="4" col-md="4" col-lg="4">
+                <ks-m-teaser namespace=teaser-link-box- color="secondary" href="#">
+                    <h3>Longer Text that uses multiple Lines Lorem Ipsum</h3>
+                    <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx>
+                </ks-m-teaser>
+            </div>
+            </section>
+        </o-grid>
+    </div>
+</ks-o-body-section>
+<!-- /Sparteneinstieg mobile -->
+
+<!-- Content -->
+<ks-o-body-section variant="default">
+    
+    <!-- CMS Titel -->
+    <ks-a-heading tag="h2" style-as="h1" border-top>
+        Angebote f&uuml;r Sie
+    </ks-a-heading>
+    <!-- /CMS Titel -->
+
+    <!-- CMS Teaser Slider -->
+    <m-carousel-two namespace=carousel-two-3-column- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+        <section>
+            <ks-m-teaser namespace=teaser-tile-content- color="secondary">
+                <figure>
+                    <figcaption>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </figcaption>
+                    <a-picture 
+                        namespace="picture-teaser-" 
+                        picture-load defaultSource="https://images.unsplash.com/photo-1682687220305-ce8a9ab237b1?q=80&w=400&h=225&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                        alt="randomized image">
+                    </a-picture>
+                </figure>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="quaternary">
+                <figure>
+                    <figcaption>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </figcaption>
+                    <a-picture 
+                        namespace="picture-teaser-" 
+                        picture-load defaultSource="https://images.unsplash.com/photo-1682687220305-ce8a9ab237b1?q=80&w=400&h=225&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                        alt="randomized image">
+                    </a-picture>
+                </figure>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="quinary">
+                <figure>
+                    <figcaption>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </figcaption>
+                    <a-picture 
+                        namespace="picture-teaser-" 
+                        picture-load defaultSource="https://images.unsplash.com/photo-1682687220305-ce8a9ab237b1?q=80&w=400&h=225&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                        alt="randomized image">
+                    </a-picture>
+                </figure>
+            </ks-m-teaser>
+            <ks-m-teaser namespace=teaser-tile-content- color="senary">
+                <figure>
+                    <figcaption>
+                        <strong>Pretitle</strong>
+                        <h3>Title</h3>
+                        <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                    </figcaption>
+                    <a-picture 
+                        namespace="picture-teaser-" 
+                        picture-load defaultSource="https://images.unsplash.com/photo-1682687220305-ce8a9ab237b1?q=80&w=400&h=225&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                        alt="randomized image">
+                    </a-picture>
+                </figure>
+            </ks-m-teaser>
+        </section>
+        <div>
+            <nav>
+                <a href="#previous" aria-label="previous slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+                <a href="#next" aria-label="next slide">
+                    <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                </a>
+            </nav>
+        </div>
+    </m-carousel-two>
+    <!-- /CMS Teaser Slider -->
+
+    <!-- CMS Content Container -->
+    <ks-o-body-section variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
+        <!-- CMS Titel -->
+        <ks-a-heading tag="h2" style-as="h1" border-top>
+            Wie w&auml;re es mit
+        </ks-a-heading>
+        <!-- /CMS Titel -->
+
+        <!-- CMS Teaser Slider -->
+        <m-carousel-two namespace=carousel-two-3-column- nav-flex-wrap separate nav-justify-content="end" nav-align-self="end" no-default-arrow-nav no-default-nav no-default-nav-linking>
+            <section>
+                <ks-m-teaser namespace=teaser-tile-content- color="secondary">
+                    <article>
+                        <div>
+                            <strong>Pretitle</strong>
+                            <h3>Title</h3>
+                            <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                        </div>
+                    </article>
+                </ks-m-teaser>
+                <ks-m-teaser namespace=teaser-tile-content- color="quaternary">
+                    <article>
+                        <div>
+                            <strong>Pretitle</strong>
+                            <h3>Title</h3>
+                            <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                        </div>
+                    </article>
+                </ks-m-teaser>
+                <ks-m-teaser namespace=teaser-tile-content- color="quinary">
+                    <article>
+                        <div>
+                            <strong>Pretitle</strong>
+                            <h3>Title</h3>
+                            <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                        </div>
+                    </article>
+                </ks-m-teaser>
+                <ks-m-teaser namespace=teaser-tile-content- color="senary">
+                    <article>
+                        <div>
+                            <strong>Pretitle</strong>
+                            <h3>Title</h3>
+                            <span>Link <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                        </div>
+                    </article>
+                </ks-m-teaser>
+            </section>
+            <div>
+                <nav>
+                    <a href="#previous" aria-label="previous slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                    <a href="#next" aria-label="next slide">
+                        <ks-a-button icon namespace="button-primary-" color="tertiary"><a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx></ks-a-button>
+                    </a>
+                </nav>
+            </div>
+        </m-carousel-two>
+        <!-- /CMS Teaser Slider -->
+    </ks-o-body-section>
+    <!-- /CMS Content Container -->
+
+    <!-- CMS Global Fullwidth Teaser -->
+    <ks-m-teaser namespace=teaser-fullwidth- color="secondary" text-position="left" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1600x800"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-tertiary-" color="secondary">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <!-- /CMS Global Fullwidth Teaser -->
+
+    <!-- CMS Global Fullwidth Teaser -->
+    <ks-m-teaser namespace=teaser-fullwidth- color="ks-red" text-position="right" href="#">
+        <a-picture 
+            namespace="picture-teaser-" 
+            picture-load defaultSource="https://via.placeholder.com/1600x800"
+            alt="randomized image">
+        </a-picture>
+        <div>
+            <h3>Headline</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            <ks-a-button big namespace="button-tertiary-" color="ks-red">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+        </div>
+    </ks-m-teaser>
+    <!-- /CMS Global Fullwidth Teaser -->
+
+    <!-- Facts -->
+    <ks-o-body-section variant="default" background="var(--mdx-sys-color-accent-6-subtle1)" has-background tabindex="0" aria-label="Section">
+        <div>
+            <ks-m-facts>
+                <h2>F&#xFC;r jeden das passende Angebot</h2>
+                <div class="facts">
+                    <div class="fact">
+                        <div><a-picture picture-load namespace="" defaultSource="../../../../img/facts-light-bulb.svg"></a-picture></div>
+                        <div><span>7.500</span><span>Kursleiter</span></div>
+                    </div>
+                    <a href="www.ibaw.ch" target="_blank" class="fact">
+                        <div><a-picture picture-load namespace="" defaultSource="../../../../img/facts-instructor.svg"></a-picture></div>
+                        <div><span>7.500</span><span>Kursleiter</span></div>
+                    </a>
+                    <a href="https://www.klubschule.ch" target="_blank" class="fact">
+                        <div><a-picture picture-load namespace="" defaultSource="../../../../img/facts-location.svg"></a-picture></div>
+                        <div><span>7.500</span><span>Teilnehmer</span></div>
+                    </a>
+                </div>
+
+                <ks-a-button namespace="button-primary-" href="/de/entdecken/story-1/" color="secondary" target="_self">
+                    <a-icon-mdx icon-name="AlertCircle" size="1em" class="icon-left" tabindex="0"> </a-icon-mdx>
+                    <span id="label">btn label</span>
+                </ks-a-button>
+            </ks-m-facts>
+        </div>
+    </ks-o-body-section>
+    <!-- /Facts -->
+
+    <!-- CMS Global TextImage -->
+    <ks-o-body-section variant="default">
+        <ks-m-teaser namespace=teaser-text-image- text-position="right" href="#">
+            <a-picture 
+                namespace="picture-teaser-" 
+                picture-load defaultSource="https://via.placeholder.com/1000x750"
+                aspect-ratio="0.75"
+                alt="randomized image">
+            </a-picture>
+            <div>
+                <h3>Headline</h3>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+            </div>
+        </ks-m-teaser>
+    </ks-o-body-section>
+    <!-- /CMS Global TextImage -->
+
+    <!-- CMS Global TextImage -->
+    <ks-o-body-section variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
+        <ks-m-teaser namespace=teaser-text-image- text-position="left" href="#">
+            <a-picture 
+                namespace="picture-teaser-" 
+                picture-load defaultSource="https://via.placeholder.com/1000x750"
+                aspect-ratio="0.75"
+                alt="randomized image">
+            </a-picture>
+            <div>
+                <h3>Headline</h3>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                <ks-a-button big namespace="button-primary-">Button <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>
+            </div>
+        </ks-m-teaser>
+    </ks-o-body-section>
+    <!-- /CMS Global TextImage -->
+    
+    <!-- CMS Global TextImage ohne Button -->
+    <ks-o-body-section variant="default">
+        <!-- no href attribute-->
+        <ks-m-teaser namespace=teaser-text-image- text-position="right">
+            <a-picture 
+                namespace="picture-teaser-" 
+                picture-load defaultSource="https://via.placeholder.com/1000x750"
+                aspect-ratio="0.75"
+                alt="randomized image">
+            </a-picture>
+            <div>
+                <h3>Text Image ohne Button</h3>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            </div>
+        </ks-m-teaser>
+    </ks-o-body-section>
+    <!-- /CMS Global TextImage ohne Button -->
+
+    <!-- CMS Global TextImage ohne Button -->
+    <ks-o-body-section variant="default" has-background background-color="var(--mdx-sys-color-accent-6-subtle1)">
+        <!-- no href attribute-->
+        <ks-m-teaser namespace=teaser-text-image- text-position="left">
+            <a-picture 
+                namespace="picture-teaser-" 
+                picture-load defaultSource="https://via.placeholder.com/1000x750"
+                aspect-ratio="0.75"
+                alt="randomized image">
+            </a-picture>
+            <div>
+                <h3>Text Image ohne Button</h3>
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+            </div>
+        </ks-m-teaser>
+    </ks-o-body-section>
+    <!-- /CMS Global TextImage ohne Button -->
+
+</ks-o-body-section>
+<!-- /Content -->
