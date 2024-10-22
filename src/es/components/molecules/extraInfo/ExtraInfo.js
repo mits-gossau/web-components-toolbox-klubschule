@@ -13,12 +13,6 @@ export default class ExtraInfo extends Shadow() {
 
     this.eventListenerNode = ExtraInfo.walksUpDomQueryMatches(this, "ks-o-offers-page")
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
-    this.dispatchEvent(new CustomEvent('request-with-facet',
-      {
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
   }
 
   disconnectedCallback () {
