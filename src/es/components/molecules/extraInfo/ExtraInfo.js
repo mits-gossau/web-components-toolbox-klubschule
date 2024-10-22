@@ -4,13 +4,26 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class ExtraInfo extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
+
+    this.eventListenerNode = ExtraInfo.walksUpDomQueryMatches(this, "ks-o-offers-page")
+    this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
+    this.dispatchEvent(new CustomEvent('request-with-facet',
+      {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
+  }
 
   shouldRenderCSS () {
     return !this.root.querySelector(
@@ -64,4 +77,37 @@ export default class ExtraInfo extends Shadow() {
         }
     `
   }
+
+  renderHTML (fetch) {
+    Promise.all([fetch]).then(() => {
+      fetch.then(response => {
+        setTimeout(() => {
+          const extraInfoWrapper = this.root.querySelector('.wrap')
+          let extraInfoContent = extraInfoWrapper.innerHTML
+
+          if (response.additionalinfos[0]?.label && extraInfoContent.includes('{{PRICE_LABEL}}')) {
+            extraInfoContent = extraInfoContent.replace('{{PRICE_LABEL}}', response.additionalinfos[0].label)
+          }
+          if (response.additionalinfos[0]?.text && extraInfoContent.includes('{{PRICE_TEXT}}')) {
+            extraInfoContent = extraInfoContent.replace('{{PRICE_TEXT}}', response.additionalinfos[0].text)
+          }
+          if (response.additionalinfos[1]?.label && extraInfoContent.includes('{{LESSONS_LABEL}}')) {
+            extraInfoContent = extraInfoContent.replace('{{LESSONS_LABEL}}', response.additionalinfos[1].label)
+          }
+          if (response.additionalinfos[1]?.text && extraInfoContent.includes('{{LESSONS_TEXT}}')) {
+            extraInfoContent = extraInfoContent.replace('{{LESSONS_TEXT}}', response.additionalinfos[1].text)
+          }
+          if (response.additionalinfos[2]?.label && extraInfoContent.includes('{{DURATION_LABEL}}')) {
+            extraInfoContent = extraInfoContent.replace('{{DURATION_LABEL}}', response.additionalinfos[2].label)
+          }
+          if (response.additionalinfos[2]?.text && extraInfoContent.includes('{{DURATION_TEXT}}')) {
+            extraInfoContent = extraInfoContent.replace('{{DURATION_TEXT}}', response.additionalinfos[2].text)
+          }
+
+          extraInfoWrapper.innerHTML = extraInfoContent
+        }, 0)
+      })
+    })
+  }
+  
 }
