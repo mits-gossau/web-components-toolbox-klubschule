@@ -32,27 +32,27 @@ If API delivers extra infos via WithFacet, following placeholder can be placed i
 
 ```html
 <ks-m-extra-info>
-	<div class="wrap" style="background-color: #0053a6;">
-			<div class="section">
-				<span class="title">{{PRICE_LABEL}}</span>
-				<p>{{PRICE_TEXT}}</p>
-			</div>
-			<div class="section">
-				<span class="title">{{LESSONS_LABEL}}</span>
-				<p>{{LESSONS_TEXT}}</p>
-			</div>
-			<div class="section">
-				<span class="title">{{DURATION_LABEL}}</span>
-				<p>{{DURATION_TEXT}}</p>
-			</div>
-			<div class="section">
-				<span class="title">Unterrichtsform</span>
-				<p>Präsenzveranstaltung<br>20% Präsenzunterricht<br>50% Online Unterricht<br>20% Selbststudium<br></p>
-			</div>
-			<div class="section">
-				<span class="title">Abschluss</span>
-				<p>Änderung auf D Stufe</p>
-			</div>
-	</div>
+    <div class="wrap" style="background-color: #0053a6;">
+        <div class="section">
+            <span class="title">{{PRICE_LABEL}}</span>
+            <p>{{PRICE_TEXT}}</p>
+        </div>
+        <div class="section">
+            <span class="title">{{LESSONS_LABEL}}</span>
+            <p>{{LESSONS_TEXT}}</p>
+        </div>
+        <div class="section">
+            <span class="title">{{DURATION_LABEL}}</span>
+            <p>{{DURATION_TEXT}}</p>
+        </div>
+        <div class="section">
+            <span class="title">Unterrichtsform</span>
+            <p>Präsenzveranstaltung<br>20% Präsenzunterricht<br>50% Online Unterricht<br>20% Selbststudium<br></p>
+        </div>
+        <div class="section">
+            <span class="title">Abschluss</span>
+            <p>Änderung auf D Stufe</p>
+        </div>
+    </div>
 </ks-m-extra-info>
 ```
