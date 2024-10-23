@@ -228,7 +228,7 @@ export default class Event extends Shadow() {
         gap: 1rem;
       }
 
-      :host .controls-left a-icon-mdx {
+      :host .controls-left a-icon-mdx, :host .controls-passed__left a-icon-mdx {
         color: var(--mdx-sys-color-primary-default);
       }
 

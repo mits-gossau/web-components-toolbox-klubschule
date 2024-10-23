@@ -51,7 +51,7 @@ export default class WishList extends HTMLElement {
           detail: {
             // answer with an empty watchlistEntries array, incase we don't have a guid yet, the guid will be received with the first add action
             fetch: this.guid
-              ? fetch(`${endpoint}/GetById?inclCourseDetail=false&watchlistGuid=${this.guid}`, {
+              ? fetch(`${endpoint}/GetById?watchlistGuid=${this.guid}`, {
                 method: 'GET',
                 signal: abortController.signal
               }).then(response => {
@@ -79,7 +79,7 @@ export default class WishList extends HTMLElement {
       let hasWatchlistGuidParameter = false
       this.dispatchEvent(new CustomEvent('wish-list', {
         detail: {
-          fetch: fetch(`${endpoint}/Add?inclCourseDetail=false${(hasWatchlistGuidParameter = !!this.guid) ? `&watchlistGuid=${this.guid}` : ''}&language=${event.detail.language || document.documentElement.getAttribute('lang')?.substring(0, 2) || 'de'}&courseType=${event.detail.courseType}&courseId=${event.detail.courseId}&centerId=${event.detail.centerId}`, {
+          fetch: fetch(`${endpoint}/Add?language=${event.detail.language || document.documentElement.getAttribute('lang')?.substring(0, 2) || 'de'}${(hasWatchlistGuidParameter = !!this.guid) ? `&watchlistGuid=${this.guid}` : ''}&courseType=${event.detail.courseType}&courseId=${event.detail.courseId}&centerId=${event.detail.centerId}`, {
             method: 'GET'
           }).then(response => {
             if (response.status >= 200 && response.status <= 299) return response.json()
@@ -106,7 +106,7 @@ export default class WishList extends HTMLElement {
       if (event.detail.this?.hasAttribute('course')) [event.detail.courseType, event.detail.courseId, event.detail.centerId] = event.detail.this.getAttribute('course').split('_')
       this.dispatchEvent(new CustomEvent('wish-list', {
         detail: {
-          fetch: fetch(`${endpoint}/Remove?inclCourseDetail=false&watchlistGuid=${this.guid}&language=${event.detail.language || document.documentElement.getAttribute('lang')?.substring(0, 2) || 'de'}&courseType=${event.detail.courseType}&courseId=${event.detail.courseId}&centerId=${event.detail.centerId}`, {
+          fetch: fetch(`${endpoint}/Remove?watchlistGuid=${this.guid}&language=${event.detail.language || document.documentElement.getAttribute('lang')?.substring(0, 2) || 'de'}&courseType=${event.detail.courseType}&courseId=${event.detail.courseId}&centerId=${event.detail.centerId}`, {
             method: 'GET'
           }).then(response => {
             if (response.status >= 200 && response.status <= 299) return response.json()
