@@ -294,7 +294,6 @@ export default class Tile extends Shadow() {
   renderHTML () {
     const warnMandatory = 'data attribute requires: '
     const data = this.tileData
-    console.log('data', data)
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
