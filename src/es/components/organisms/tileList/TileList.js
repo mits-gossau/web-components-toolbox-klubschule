@@ -300,6 +300,7 @@ export default class TileList extends Shadow() {
   renderHTML (data = TileList.parseAttribute(this.getAttribute('data'))) {
     const warnMandatory = 'data attribute requires: '
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
+      console.log('data', data)
     this.data = data
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
@@ -318,7 +319,9 @@ export default class TileList extends Shadow() {
                     "item_name": "${data.title || data.bezeichnung || 'No Title'}",                
                     "item_id": "${data.kurs_typ}_${data.kurs_id}",
                     "price": ${data.price?.price || data.preis_total || 0},
-                    "quantity": 1
+                    "quantity": 1,
+                    ${data.location?.center ? `"item_variant": "${data.location.center}",` : ''}
+                    "currency": "CHF"
                   }]
                 }
               }'

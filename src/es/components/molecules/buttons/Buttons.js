@@ -286,6 +286,7 @@ export default class Buttons extends Shadow() {
                 // @ts-ignore
                 'price': this.data.price.price,
                 'quantity': 1,
+                'item_variant':`${this.data.location?.center}`,
                 'currency': 'CHF'
               }]
             }
