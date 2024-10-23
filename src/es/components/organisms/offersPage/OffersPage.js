@@ -62,12 +62,13 @@ export default class OffersPage extends Shadow() {
           `, '')
           sort.innerHTML = /* html */ `
             <ks-m-sort namespace="sort-right-" with-facet>
-              ${this.data?.sort?.items?.length ? /* html */ `
+              ${this.data?.sort?.items?.length && this.data.courses?.length ? /* html */ `
                 <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort)?.label || ''}">
                   ${listElements}
                 </ul>
               ` : ''}
             </ks-m-sort>
+            ${this.data?.sort?.items?.length && this.data.courses?.length ? /* html */ `<ks-a-spacing type="s-fix"></ks-a-spacing>` : ''}
           `
         }
       })
@@ -115,41 +116,6 @@ export default class OffersPage extends Shadow() {
    */
   shouldRenderHTML() {
     return !this.root.querySelector('ks-c-with-facet') && !this.ksMTab
-  }
-
-  /**
-   * Fill markup with none static data
-   */
-  withFacetListener(event) {
-    Promise.resolve(event.detail.fetch).then((data) => {
-      this.data = data
-      const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-
-      // Set Sort
-      const sort = bodySection.shadowRoot.querySelector('#sort-options')
-      if (sort) {
-        this.fetchModules([
-          {
-            path: `${this.importMetaUrl}../../molecules/sort/Sort.js`,
-            name: 'ks-m-sort'
-          }
-        ])
-        const listElements = this.data.sort.items.reduce((acc, data) => acc + /* html */ `
-          <li ${this.data.sort.sort === data.id ? 'active' : ''} id="${data.id}">
-            ${data.label}
-          </li>
-        `, '')
-        sort.innerHTML = /* html */ `
-          <ks-m-sort namespace="sort-right-" with-facet>
-            ${this.data?.sort?.items?.length ? /* html */ `
-              <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort).label}">
-                ${listElements}
-              </ul>
-            ` : ''}
-          </ks-m-sort>
-        `
-      }
-    })
   }
 
   /**
@@ -352,6 +318,10 @@ export default class OffersPage extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/badge/Badge.js`,
         name: 'ks-m-badge'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
+        name: 'ks-o-partner-search'
       }
     ])
   }
@@ -644,7 +614,6 @@ export default class OffersPage extends Shadow() {
               </o-grid>
               <ks-a-spacing type="s-flex"></ks-a-spacing>
               <section id="sort-options"></section>
-              <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
@@ -652,9 +621,7 @@ export default class OffersPage extends Shadow() {
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
               >
-                ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
-              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               ${this.isWishList ? '' : /* html */ `
                 <ks-a-with-facet-pagination 
                   id="pagination"
@@ -662,12 +629,16 @@ export default class OffersPage extends Shadow() {
                   pagination-event-name="with-facet"
                   ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 >
+                  <ks-a-spacing type="2xl-fix"></ks-a-spacing>
                   <ks-a-button namespace="button-primary-" color="secondary">
                       <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
                       <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                   </ks-a-button>
                 </ks-a-with-facet-pagination>
               `}
+              <ks-o-partner-search search-text="${'buchhaltung'}" tab="1">
+                ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+              </ks-o-partner-search>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               ${this.isWishList ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
@@ -719,8 +690,10 @@ export default class OffersPage extends Shadow() {
               <ks-m-content-factory
                 ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
               >
-                ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-content-factory>
+              <ks-o-partner-search search-text="${'buchhaltung'}" tab="2">
+                ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+              </ks-o-partner-search>
             </div>
           </section>
         </o-grid>

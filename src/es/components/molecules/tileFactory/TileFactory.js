@@ -13,7 +13,6 @@ export default class TileFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
-    this.hiddenMessages = this.hiddenSections
   }
 
   connectedCallback () {
@@ -168,14 +167,7 @@ export default class TileFactory extends Shadow() {
             return acc = acc + tile
           },
           '<section>'
-        )
-        + (!data.courses.length
-          ? /* html */`<ks-o-partner-search search-text="${data.searchText}"${data.courses.length ? ' has-courses': ''} tab="1">
-              ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
-            </ks-o-partner-search>`
-          : '')
-        + /* html */`</section>`
-        // TODO: ABOVE ks-o-partner-search must be moved to the location of ks-a-with-facet-pagination which is at /home/deck/Documents/vm_work/web-components-toolbox-klubschule/src/es/components/organisms/offersPage/OffersPage.js:659
+        ) + /* html */`</section>`
         this.lastFilterSelection = data.filter
       }, 0)
     }).catch(error => {
@@ -207,10 +199,6 @@ export default class TileFactory extends Shadow() {
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/loadTemplateTag/LoadTemplateTag.js`,
         name: 'm-load-template-tag'
-      },
-      {
-        path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
-        name: 'ks-o-partner-search'
       }
     ])
   }
@@ -294,9 +282,5 @@ export default class TileFactory extends Shadow() {
 
   get section () {
     return this.root.querySelector('section')
-  }
-
-  get hiddenSections () {
-    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
   }
 }
