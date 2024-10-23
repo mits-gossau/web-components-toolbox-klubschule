@@ -312,7 +312,9 @@ export default class Tile extends Shadow() {
                   "item_name": "${data.title || data.bezeichnung || 'No Title'}",                
                   "item_id": "${data.kurs_typ}_${data.kurs_id}",
                   "price": ${data.price?.price || data.preis_total || 0},
-                  "quantity": 1
+                  "quantity": 1,
+                  ${data.location?.center ? `"item_variant": "${data.location.center}",` : ''}
+                  "currency": "CHF"
                 }]
               }
             }'
