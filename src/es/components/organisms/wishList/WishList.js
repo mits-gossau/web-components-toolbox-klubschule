@@ -42,14 +42,16 @@ export default class WishList extends Shadow() {
       const showPromises = []
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-      Promise.all(showPromises).then(() => (this.hidden = false))
+      Promise.all(showPromises).then(() => {
+        this.dispatchEvent(new CustomEvent('request-wish-list', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+        this.hidden = false
+      })
     })
     document.body.addEventListener('wish-list', this.wishListListener)
-    this.dispatchEvent(new CustomEvent('request-wish-list', {
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
   }
 
   disconnectedCallback() {

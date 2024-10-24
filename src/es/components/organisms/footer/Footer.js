@@ -66,7 +66,7 @@ export default class KsFooter extends Footer {
     :host > footer .invert {
       margin: unset;
       padding: var(--content-spacing-mobile) var(--legal-flex-spacing-vertical) 0;
-      width: 67%;
+      width: 66%;
     }
     :host > footer .invert.footer-links {
       padding: var(--content-spacing-mobile) var(--content-spacing) 0;
@@ -82,7 +82,7 @@ export default class KsFooter extends Footer {
     :host footer>div:first-child .footer-links {
       background-color: var(--legal-background-color);
       text-align: center;
-      width: 33%;
+      width: 34%;
       border-left: var(--column-border-width) var(--column-border-color) solid;
     }
     :host footer>div:first-child>.footer-links>div>* {
@@ -239,6 +239,10 @@ export default class KsFooter extends Footer {
         }
       ])
     ]).then(([iconMdx, button]) => {
+      // Overwrite ordering by super footer.js
+      const copyrightTag = this.root.querySelector('.copyright')
+      copyrightTag && copyrightTag.classList.remove('copyright')
+      if (this.hasAttribute('no-the-top-button')) return
       this.html = /* html */`
         <ks-a-button id=to-the-top-button namespace="button-primary-" icon=true color=secondary>
           <a-icon-mdx icon-name=ArrowUp size="1rem"></a-icon-mdx>
@@ -249,10 +253,6 @@ export default class KsFooter extends Footer {
         left: 0,
         behavior: 'smooth'
       }))
-      
-      // Overwrite ordering by super footer.js
-      const copyrightTag = this.root.querySelector('.copyright')
-      copyrightTag && copyrightTag.classList.remove('copyright')
     })
   }
     
