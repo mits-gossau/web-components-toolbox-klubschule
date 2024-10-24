@@ -14,12 +14,32 @@ export default class PartnerSearch extends Shadow() {
 
     this.hiddenMessages = this.hiddenSections
     this.searchText = this.getAttribute('search-text')
-    this.tab = this.getAttribute('tab')
-    this.partnerSearchListener = event => this.renderHTML(event.detail.fetch)
+    this.tab = Number(this.getAttribute('tab'))
+    this.withFacetListener = event => {
+      Promise.resolve(event.detail.fetch).then((data) => {
+        this.searchText = data.searchText
+        if (this.searchText.length) {
+          if (this.tab === 1) this.dispatchEvent(new CustomEvent('request-partner-search', {
+            detail: {
+              searchText: this.searchText
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+        } else {
+          this.hidden = true
+        }
+      })
+    }
+    this.partnerSearchListener = event => {
+      this.renderHTML(event.detail.fetch).then(() => (this.hidden = false))
+    }
   }
 
   connectedCallback(){
     this.hidden = true
+    this.eventListenerNode = this.hasAttribute('with-facet-target') ? PartnerSearch.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     new Promise(resolve => {
       this.dispatchEvent(new CustomEvent('request-translations',
         {
@@ -33,35 +53,16 @@ export default class PartnerSearch extends Shadow() {
     }).then(async result => {
       await result.fetch
       this.getTranslation = result.getTranslationSync
-      const showPromises = []
-      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-      Promise.all(showPromises).then(() => {
-        this.hidden = false
-        if (this.searchText.length) {
-          this.dispatchEvent(new CustomEvent('request-partner-search', {
-            detail: {
-              searchText: this.searchText
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }))
-        } else {
-          this.renderHTML(Promise.resolve(() => ({
-            items: [],
-            success: false
-          })))
-        }
-      })
+      if (this.shouldRenderCSS()) this.renderCSS()
     })
-
-    document.body.addEventListener('partner-search', this.partnerSearchListener)
+    this.eventListenerNode.addEventListener('partner-search', this.partnerSearchListener)
+    this.eventListenerNode.addEventListener('with-facet', this.withFacetListener)
 
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('partner-search', this.partnerSearchListener)
+    this.eventListenerNode.removeEventListener('partner-search', this.partnerSearchListener)
+    this.eventListenerNode.removeEventListener('with-facet', this.withFacetListener)
   }
 
   /**
@@ -79,7 +80,6 @@ export default class PartnerSearch extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    // TODO: check for something like this.sections
     return !this.loadingBar && !this.sections
   }
 
@@ -179,9 +179,9 @@ export default class PartnerSearch extends Shadow() {
       this.html = ''
       this.html = this.hiddenMessages
       if (!this.hasAttribute('has-courses')) {
-        if(this.tab == 1) {
+        if(this.tab === 1) {
           this.root.querySelector('#empty-courses')?.removeAttribute('hidden')
-        } else if (this.tab == 2) {
+        } else if (this.tab === 2) {
           this.root.querySelector('#empty-content')?.removeAttribute('hidden')
         } else {
           this.hiddenMessages.forEach(message => message.removeAttribute('hidden'))
@@ -198,7 +198,7 @@ export default class PartnerSearch extends Shadow() {
 
       const filteredItems = data?.items?.filter(item  => item.count > 0)
 
-      if (this.tab == 1 && filteredItems?.length) {
+      if (this.tab === 1 && filteredItems?.length) {
         this.root.querySelector('#partner-results')?.removeAttribute('hidden')
         partnerResultsSection.insertAdjacentHTML('beforeend', /* html */ `
           <div class="partner-result-wrapper">
