@@ -228,7 +228,7 @@ export default class Event extends Shadow() {
         gap: 1rem;
       }
 
-      :host .controls-left a-icon-mdx {
+      :host .controls-left a-icon-mdx, :host .controls-passed__left a-icon-mdx {
         color: var(--mdx-sys-color-primary-default);
       }
 
@@ -761,6 +761,7 @@ export default class Event extends Shadow() {
                       'item_id': `${data.kurs_typ}_${data.kurs_id}`, 
                       'price': data.preis_total,
                       'quantity': 1,
+                      'item_variant': `${data.location?.center ? data.location.center : ''}`,
                       'currency': 'CHF',       
                     }]
                   }

@@ -220,6 +220,7 @@ export default class Buttons extends Shadow() {
                   "item_name": "${this.data.title || this.data.bezeichnung || 'No Title'}",                
                   "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
                   "price": ${this.data.price?.price || this.data.preis_total || 0},
+                  "item_variant": "${this.data.location?.center}",
                   "quantity": 1
                 }]
               }
@@ -287,6 +288,7 @@ export default class Buttons extends Shadow() {
                 // @ts-ignore
                 'price': this.data.price.price,
                 'quantity': 1,
+                'item_variant':`${this.data.location?.center ? this.data.location.center : ''}`,
                 'currency': 'CHF'
               }]
             }
