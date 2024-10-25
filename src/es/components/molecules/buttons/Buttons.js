@@ -110,6 +110,7 @@ export default class Buttons extends Shadow() {
     this.data = JSON.parse(this.getAttribute('course-data')) || {}
     // @ts-ignore
     const dataButtons = this.data?.buttons?.length ? this.data.buttons : JSON.parse(this.getAttribute('data-buttons')) || [{}]
+    const hasButtons = dataButtons.length === 1 && Object.keys(dataButtons[0]).length === 0 ? false : true
     const filteredDataButtons = dataButtons.filter(({ event }) => event !== 'offerlink')
     const optionalBigAttr = this.hasAttribute('big') ? 'big' : ''
     const optionalSmallAttr = this.hasAttribute('small') ? 'small' : ''
@@ -230,11 +231,11 @@ export default class Buttons extends Shadow() {
       )
     }, '')
 
-    this.html = /* html */`
+    this.html = hasButtons ? /* html */`
       <div class="buttons-container">
         ${buttons}
       </div>
-    `
+    ` : ''
 
     return this.fetchModules([
       {
