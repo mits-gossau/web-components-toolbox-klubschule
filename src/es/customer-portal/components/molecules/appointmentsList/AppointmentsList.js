@@ -421,13 +421,14 @@ export default class AppointmentsList extends Shadow() {
     }
 
     // Return the rendered HTML
-    return /* html */ `
-      <div col-lg="12" col-md="12" col-sm="12">
-        ${this.lowSubscriptionBalanceNotification}
-        ${this.lowAppointmentBalanceNotification}
-        ${this.lowSubscriptionDurationNotification}
-      </div>
-    `
+    return ''
+    // return /* html */ `
+    //   <div col-lg="12" col-md="12" col-sm="12">
+    //     ${this.lowSubscriptionBalanceNotification}
+    //     ${this.lowAppointmentBalanceNotification}
+    //     ${this.lowSubscriptionDurationNotification}
+    //   </div>
+    // `
   }
 
   renderLoading () {
