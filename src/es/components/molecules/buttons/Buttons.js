@@ -216,7 +216,7 @@ export default class Buttons extends Shadow() {
               "event": "${this.hasAttribute('is-abo') ? 'add_to_cart' : 'select_item'}",
               "ecommerce": {    
                 "items": [{ 
-                  "item_name": "${this.data.title || this.data.bezeichnung || 'No Title'}",                
+                  "item_name": "${this.getAttribute('parent-title') || this.data.title || this.data.bezeichnung || 'No Title'}",                
                   "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
                   "price": ${this.data.price?.price || this.data.preis_total || 0},
                   "item_variant": "${this.data.location?.center}",

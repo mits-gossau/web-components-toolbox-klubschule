@@ -295,6 +295,7 @@ export default class Tile extends Shadow() {
     const warnMandatory = 'data attribute requires: '
     const data = this.tileData
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
+    if (this.hasAttribute('parent-title')) data.parentTitle = this.getAttribute('parent-title')
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     this.html = /* HTML */`
@@ -309,7 +310,7 @@ export default class Tile extends Shadow() {
               "event": "select_item",
               "ecommerce": {    
                 "items": [{ 
-                  "item_name": "${data.title || data.bezeichnung || 'No Title'}",                
+                  "item_name": "${data.parentTitle || data.title || data.bezeichnung || 'No Title'}",                
                   "item_id": "${data.kurs_typ}_${data.kurs_id}",
                   "price": ${data.price?.price || data.preis_total || 0},
                   "quantity": 1,
@@ -350,7 +351,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             ${this.hasAttribute('is-wish-list') && !this.isPassed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? `${data.parentkey}${data.centerid ? `_${data.centerid}` : ''}` : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
-            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
+            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons parent-title='${data.parentTitle}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
