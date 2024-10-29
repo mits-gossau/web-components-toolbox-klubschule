@@ -39,11 +39,11 @@ export default class WithFacet extends WebWorker() {
     let timeoutId = null
     const coordinatesToTerm = new Map()
     // the initial request object received through the attribute, never changes and is always included
-    const initialRequestObj = JSON.parse(this.getAttribute('initial-request'))
+    const initialRequestObj = JSON.parse(this.getAttribute('initial-request')) || {}
     // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
-    let currentCompleteFilterObj = currentRequestObj.filter
+    let currentCompleteFilterObj = currentRequestObj.filter || []
 
     // base request nullFilter
     let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
@@ -54,9 +54,11 @@ export default class WithFacet extends WebWorker() {
     this.url = new URL(self.location.href)
     this.params = this.catchURLParams()
     const isMocked = this.hasAttribute('mock')
-    const endpoint = isMocked
+    const isMockedInfoEvents = this.hasAttribute('mock-info-events')    
+    let endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
+    if (isMockedInfoEvents) endpoint = new URL('./mock/info-events.json', import.meta.url).href
     this.abortController = null
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
     this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
@@ -123,7 +125,6 @@ export default class WithFacet extends WebWorker() {
     this.requestWithFacetListener = async event => {
       // Reset PPage after filter Change / Reset
       currentRequestObj.ppage = 0
-
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
       if (this.abortController) this.abortController.abort()
@@ -279,7 +280,7 @@ export default class WithFacet extends WebWorker() {
         i: 'it'
       }
       let request = {}
-      if (isMocked) {
+      if (isMocked || isMockedInfoEvents) {
         request = {
           method: 'GET'
         }
