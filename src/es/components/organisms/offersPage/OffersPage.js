@@ -7,6 +7,9 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @export
 * @class OffersPage
 * @type {CustomElementConstructor}
+* note: headless makes sure that no filters are loaded
+* note: is-wish-list makes sure that no badge legend is loaded
+* TODO: take headless to hide the badge legend
 */
 export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
@@ -197,6 +200,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('save-location-session-storage') ? 'save-location-session-storage' : ''}
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
+        ${this.hasAttribute('mock-info-events') ? ` mock-info-events="${this.getAttribute('mock-info-events')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''}
         ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
         ${this.hasAttribute('expand-event-name') ? ` expand-event-name='${this.getAttribute('expand-event-name')}'` : ''}
@@ -569,8 +573,8 @@ export default class OffersPage extends Shadow() {
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-          <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="with-facet-body-section">
-            ${this.hasAttribute('headless')
+          <ks-o-body-section variant="default" no-margin-y ${this.hasAttribute('is-info-events') ? '' : `background-color="var(--mdx-sys-color-accent-6-subtle1)"`} id="with-facet-body-section">
+            ${this.hasAttribute('headless') 
         ? ''
         : /* html */`
               <o-grid namespace="grid-12er-">
@@ -649,12 +653,13 @@ export default class OffersPage extends Shadow() {
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
+                ${this.hasAttribute('is-info-events') ? ' is-info-events style="width:100%"' : ''}
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
-              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
               ${this.isWishList ? '' : /* html */ `
                 <ks-a-with-facet-pagination 
                   id="pagination"
@@ -668,7 +673,7 @@ export default class OffersPage extends Shadow() {
                   </ks-a-button>
                 </ks-a-with-facet-pagination>
               `}
-              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
               ${this.isWishList ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
                   ${this.isEasyPortal

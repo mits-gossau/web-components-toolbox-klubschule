@@ -134,6 +134,11 @@ export default class AppointmentsList extends Shadow() {
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
+    // reset notification triggers
+    this.hasLowSubscriptionBalance = false
+    this.hasLowAppointmentsBalance = false
+    this.hasLowSubscriptionDuration = false
+
     this.renderHTML(event.detail.fetch).then(() => {
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
         this.select = this.root.querySelector('o-grid')?.root.querySelector('ks-m-select')?.root.querySelector('div')?.querySelector('select')
@@ -306,6 +311,7 @@ export default class AppointmentsList extends Shadow() {
           mAppointments.setAttribute('data-filter', JSON.stringify(appointments.filters))
           mAppointments.setAttribute('data-filter-type', this.currentOpenDialogFilterType)
           this.root.querySelector('.list-wrapper').innerHTML = dayList.list.join('')
+          this.renderSubscriptionNotifications(appointments)
         } else {
           this.gridRendered = true
           this.html = ''
@@ -355,6 +361,10 @@ export default class AppointmentsList extends Shadow() {
    * @returns {string} - HTML string containing the rendered notifications.
    */
   renderSubscriptionNotifications (allSubscriptions) {
+    // do nothing if subscription type is 'pauschalabo'
+    if (allSubscriptions?.subscriptionMode === 'PAUSCHALABO' || allSubscriptions?.selectedSubscription?.subscriptionMode === 'PAUSCHALABO') {
+      return ''
+    }
     // Get the selected subscription
     let selectedSubscription = null
     if (allSubscriptions?.filters) {
