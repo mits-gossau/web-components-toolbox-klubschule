@@ -78,25 +78,16 @@ export default class ExtraInfo extends Shadow() {
         setTimeout(() => {
           const extraInfoWrapper = this.root.querySelector('.wrap')
           let extraInfoContent = extraInfoWrapper.innerHTML
+          extraInfoContent = ''
 
-          if (response.additionalinfos[0]?.label && extraInfoContent.includes('{{PRICE_LABEL}}')) {
-            extraInfoContent = extraInfoContent.replace('{{PRICE_LABEL}}', response.additionalinfos[0].label)
-          }
-          if (response.additionalinfos[0]?.text && extraInfoContent.includes('{{PRICE_TEXT}}')) {
-            extraInfoContent = extraInfoContent.replace('{{PRICE_TEXT}}', response.additionalinfos[0].text)
-          }
-          if (response.additionalinfos[1]?.label && extraInfoContent.includes('{{LESSONS_LABEL}}')) {
-            extraInfoContent = extraInfoContent.replace('{{LESSONS_LABEL}}', response.additionalinfos[1].label)
-          }
-          if (response.additionalinfos[1]?.text && extraInfoContent.includes('{{LESSONS_TEXT}}')) {
-            extraInfoContent = extraInfoContent.replace('{{LESSONS_TEXT}}', response.additionalinfos[1].text)
-          }
-          if (response.additionalinfos[2]?.label && extraInfoContent.includes('{{DURATION_LABEL}}')) {
-            extraInfoContent = extraInfoContent.replace('{{DURATION_LABEL}}', response.additionalinfos[2].label)
-          }
-          if (response.additionalinfos[2]?.text && extraInfoContent.includes('{{DURATION_TEXT}}')) {
-            extraInfoContent = extraInfoContent.replace('{{DURATION_TEXT}}', response.additionalinfos[2].text)
-          }
+          response.additionalinfos.forEach(additionalInfo => {
+            extraInfoContent += `
+              <div class="section">
+                <span class="title">${additionalInfo.label}</span>
+                <p>${additionalInfo.text}</p>
+              </div>
+            `
+          })
 
           extraInfoWrapper.innerHTML = extraInfoContent
         }, 0)
