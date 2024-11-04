@@ -76,6 +76,8 @@ export default class ExtraInfo extends Shadow() {
     Promise.all([fetch]).then(() => {
       fetch.then(response => {
         setTimeout(() => {
+          if (response.additionalinfos.length === 0) return
+
           const extraInfoWrapper = this.root.querySelector('.wrap')
           let extraInfoContent = extraInfoWrapper.innerHTML
           extraInfoContent = ''
