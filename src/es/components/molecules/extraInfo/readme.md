@@ -16,3 +16,5 @@
     <div class="wrap" style="background-color: purple;"></div>
 </ks-m-extra-info>
 ```
+
+Hint: This component rerender html sections if API sends additional infos.
