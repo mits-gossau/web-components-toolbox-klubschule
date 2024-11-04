@@ -99,6 +99,7 @@ export default class KsFigure extends Shadow(HTMLElement) {
       :host figcaption {
         font: var(--mdx-sys-font-flex-large-custom1);
         margin: var(--mdx-sys-spacing-fix-s) 0 0;
+        line-height: 1.375em;
       }
       :host([open]) figcaption {
         color: white;
@@ -123,9 +124,10 @@ export default class KsFigure extends Shadow(HTMLElement) {
           display: block;
         }
         :host figcaption {
-          font: var(--mdx--sys-font-flex-small-custom1);
-          margin: var(--mdx-sys-spacing-fix-s) 0 0;
-          width: var(--any-content-width-mobile, var(--content-width-mobile, calc(100% - var(--content-spacing-mobile, var(--content-spacing)) * 2)));
+          font: var(--mdx-sys-font-flex-small-custom1);
+          margin: var(--mdx-sys-spacing-fix-s) auto 0;
+          width: var(--any-content-width-mobile, var(--content-width-mobile, calc(100% - var(--mdx-sys-spacing-fix-2xs, var(--content-spacing-mobile, var(--content-spacing))) * 2)));
+          line-height: 1.42857em;
         }
         :host figcaption.carousel {
           margin-left: var(--mdx-sys-spacing-fix-s);
