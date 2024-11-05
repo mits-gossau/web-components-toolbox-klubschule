@@ -157,21 +157,14 @@ export default class FilterSelect extends Shadow() {
 
   generateQuickFilters(filterData) {
     let quickFilters = []
-    let quickFilterSelected = []
 
     filterData.forEach(filterItem => {
-      // get quick filters
       if (filterItem.isquick) {
         quickFilters.push({id: filterItem.id, order: filterItem.isquick, label: filterItem.label})
       }
-      // get selected quick filters
-      if (filterItem.selected || (filterItem.children && filterItem.children.some(child => child.selected))) {
-        if (filterItem.isquick) {
-          // remove quick filter if it is selected
-          // quickFilters = quickFilters.filter(quickFilter => quickFilter.id !== filterItem.id)
-        }
-      }
     })
+
+    if (quickFilters.length === 0) return
 
     this.html = quickFilters.sort((a, b) => a.order - b.order).map(quickFilter => {
       const requestEventName = `dialog-open-first-level,dialog-open-${quickFilter.id}`

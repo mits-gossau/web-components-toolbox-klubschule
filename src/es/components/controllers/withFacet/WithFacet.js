@@ -150,6 +150,7 @@ export default class WithFacet extends WebWorker() {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
+        console.log(result[0], result[1])
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (filterKey === 'q') {
@@ -461,7 +462,7 @@ export default class WithFacet extends WebWorker() {
       }
 
       // only the first level allows selected falls when including selected children
-      if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) {
+      if (treeShookFilterItem.children?.length || treeShookFilterItem.selected || treeShookFilterItem.isquick > 0) {
         if (treeShookFilterItem.urlpara === filterKey) {
           treeShookFilterItem.skipCountUpdate = true
         }
