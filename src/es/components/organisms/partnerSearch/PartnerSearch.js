@@ -90,7 +90,7 @@ export default class PartnerSearch extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       :host {
-        --picture-teaser-img-height: 48px;
+        --picture-teaser-img-height: 4.75em;
         --h2-margin: 0 0 var(--mdx-sys-spacing-flex-large-m);
         --h3-margin: 0 0 var(--mdx-sys-spacing-flex-large-xs);
         --picture-teaser-display: block;
@@ -132,6 +132,9 @@ export default class PartnerSearch extends Shadow() {
         margin-bottom: var(--mdx-sys-spacing-flex-large-s);
       }
       @media screen and (max-width: _max-width_) {
+        :host {
+          --picture-teaser-img-height: 3em;
+        }
         :host a-picture {
           margin-right: auto;
         }
