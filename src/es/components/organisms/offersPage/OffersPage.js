@@ -16,11 +16,13 @@ export default class OffersPage extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.showInputSection = false
+    this.showInfoEventsHeadline = false
 
     this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
+        if (this.data.additionalinfos.length > 0) this.showInfoEventsHeadline = true
 
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         if (!this.isWishList) bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
@@ -650,7 +652,7 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options"></section>
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
-              ${this.hasAttribute('is-info-events') ? `<ks-a-spacing type="m-flex"></ks-a-spacing><ks-a-heading tag="h2" no-margin-x>${this.getTranslation('CourseList.ConsultingInfoEvent')}</ks-a-heading>` : ''}
+              ${this.hasAttribute('is-info-events') && this.showInfoEventsHeadline ? `<ks-a-spacing type="m-flex"></ks-a-spacing><ks-a-heading tag="h2" no-margin-x>${this.getTranslation('CourseList.ConsultingInfoEvent')}</ks-a-heading>` : ''}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
