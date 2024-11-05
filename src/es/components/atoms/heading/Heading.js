@@ -253,6 +253,11 @@ export default class Heading extends Shadow() {
       :host([no-margin-bottom]) > * {
         margin-bottom: 0 !important;
       }
+      :host([no-margin-x]) {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100%;
+      }
 
       @media only screen and (max-width: _max-width_) {
         :host([border-top]) [border-top]::before {

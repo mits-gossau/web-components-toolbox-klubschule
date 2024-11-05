@@ -234,6 +234,7 @@
   --header-nav-right-padding: 0;
   --header-nav-grid-a-menu-icon-border-radius-custom: 1px;
   --header-nav-grid-a-menu-icon-height: 2px;
+  --header-nav-grid-transition: none;
   --header-content-width: calc(min(100%, var(--body-max-width)) - 2.5rem);
   --header-content-width-mobile: calc(min(100%, var(--body-max-width)) - 1rem);
   --header-easy-portal-content-width: calc(min(100%, var(--body-max-width)) - 2rem);

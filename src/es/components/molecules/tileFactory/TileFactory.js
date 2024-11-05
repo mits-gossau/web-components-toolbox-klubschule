@@ -113,11 +113,11 @@ export default class TileFactory extends Shadow() {
       }
     ])
     this.html = /* html */`
+      ${this.hasAttribute('loading-text') ? `<p>${this.getAttribute('loading-text')}</p>` : ''}
       <mdx-component class="mdx-loading">
           <mdx-loading-bar></mdx-loading-bar>
       </mdx-component>
     `
-
     fetch.then(data => {
       setTimeout(() => {
         // remove loading component

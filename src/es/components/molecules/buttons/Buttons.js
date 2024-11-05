@@ -174,7 +174,7 @@ export default class Buttons extends Shadow() {
         return acc + parentDiv.innerHTML
       }
       const isBookMarkButton = button.event === 'bookmark'
-      const bookMarkButton = isBookMarkButton ? /* html */ `<ks-m-favorite-button course="${this.data.kurs_typ}_${this.data.kurs_id}_${this.data.centerid}" button-typ="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}"></ks-m-favorite-button>` : ''
+      const bookMarkButton = isBookMarkButton ? /* html */ `<ks-m-favorite-button course="${this.data.kurs_typ}_${this.data.kurs_id}_${this.data.centerid}" button-typ="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" ${optionalSmallAttr}></ks-m-favorite-button>` : ''
       const content = button.event === 'bookmark' ? bookMarkButton :  /* html */`
         <ks-a-button 
           ${button.iconName && !button.text ? 'icon' : ''} 
