@@ -150,7 +150,6 @@ export default class WithFacet extends WebWorker() {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
-        console.log(result[0], result[1])
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (filterKey === 'q') {
