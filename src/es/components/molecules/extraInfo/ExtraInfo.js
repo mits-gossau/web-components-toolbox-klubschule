@@ -4,13 +4,20 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class ExtraInfo extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
+
+    this.eventListenerNode = ExtraInfo.walksUpDomQueryMatches(this, "ks-o-offers-page")
+    this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
+  }
 
   shouldRenderCSS () {
     return !this.root.querySelector(
@@ -64,4 +71,30 @@ export default class ExtraInfo extends Shadow() {
         }
     `
   }
+
+  renderHTML (fetch) {
+    Promise.all([fetch]).then(() => {
+      fetch.then(response => {
+        setTimeout(() => {
+          if (response.additionalinfos.length === 0) return
+
+          const extraInfoWrapper = this.root.querySelector('.wrap')
+          let extraInfoContent = extraInfoWrapper.innerHTML
+          extraInfoContent = ''
+
+          response.additionalinfos.forEach(additionalInfo => {
+            extraInfoContent += `
+              <div class="section">
+                <span class="title">${additionalInfo.label}</span>
+                <p>${additionalInfo.text}</p>
+              </div>
+            `
+          })
+
+          extraInfoWrapper.innerHTML = extraInfoContent
+        }, 0)
+      })
+    })
+  }
+  
 }

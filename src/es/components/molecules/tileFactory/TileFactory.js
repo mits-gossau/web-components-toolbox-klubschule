@@ -113,11 +113,11 @@ export default class TileFactory extends Shadow() {
       }
     ])
     this.html = /* html */`
+      ${this.hasAttribute('loading-text') ? `<p>${this.getAttribute('loading-text')}</p>` : ''}
       <mdx-component class="mdx-loading">
           <mdx-loading-bar></mdx-loading-bar>
       </mdx-component>
     `
-
     fetch.then(data => {
       setTimeout(() => {
         // remove loading component
@@ -135,13 +135,14 @@ export default class TileFactory extends Shadow() {
             const tile = this.isEventSearch ? /* html */ `
               <ks-m-event
                 ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
+                ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
                 data='{
                   "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
                   "sprachid": "${data.sprachid}"
                 }'
               ></ks-m-event>
             ` : (
-              ((course.locations?.length > 1 || course.buttons[0].link === null &&  course.buttons[0].iconName === 'ChevronDown' &&  course.buttons[0].typ === 'quaternary') || this.isNearbySearch) && course.filter?.length
+              ((course.locations?.length > 1 || course.buttons[0]?.link === null &&  course.buttons[0].iconName === 'ChevronDown' &&  course.buttons[0].typ === 'quaternary') || this.isNearbySearch) && course.filter?.length
                 ? /* html */`
                 <m-load-template-tag>
                 <template>
@@ -150,7 +151,7 @@ export default class TileFactory extends Shadow() {
                     "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
-                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}>
+                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}>
                   </ks-o-tile-list>
                   </template>
                   </m-load-template-tag>
@@ -160,7 +161,7 @@ export default class TileFactory extends Shadow() {
                   <template>
                   <ks-m-tile namespace="tile-default-" data='{
                     ${this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')}
-                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
+                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
                   </template>
                   </m-load-template-tag>
                 `
