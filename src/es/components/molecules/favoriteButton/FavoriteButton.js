@@ -128,7 +128,7 @@ export default class FavoriteButton extends Shadow() {
   renderHTML () {
     this.html = ''
     const div = document.createElement('div')
-    div.innerHTML = `<ks-a-button namespace="${this.hasAttribute("button-typ") ? this.getAttribute("button-typ") : "button-tertiary-"}" color="secondary"></ks-a-button>`
+    div.innerHTML = `<ks-a-button ${this.hasAttribute("small") ? 'small' : ''} namespace="${this.hasAttribute("button-typ") ? this.getAttribute("button-typ") : "button-tertiary-"}" color="secondary"></ks-a-button>`
     this.button = div.children[0]
     div.innerHTML = '<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>'
     this.icon = div.children[0]

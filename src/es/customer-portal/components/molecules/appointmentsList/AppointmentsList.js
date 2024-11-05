@@ -65,6 +65,12 @@ export default class AppointmentsList extends Shadow() {
      * @description Minimum subscription duration.
      */
     this.minDays = 14
+
+    /**
+     * @type {string}
+     * @description Current subscription balance.
+     */
+    this.currentSubscriptionBalance = ''
   }
 
   connectedCallback () {
@@ -134,6 +140,11 @@ export default class AppointmentsList extends Shadow() {
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
+    // reset notification triggers
+    this.hasLowSubscriptionBalance = false
+    this.hasLowAppointmentsBalance = false
+    this.hasLowSubscriptionDuration = false
+
     this.renderHTML(event.detail.fetch).then(() => {
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
         this.select = this.root.querySelector('o-grid')?.root.querySelector('ks-m-select')?.root.querySelector('div')?.querySelector('select')
@@ -175,19 +186,22 @@ export default class AppointmentsList extends Shadow() {
   /**
    * request the current subscription balance
    */
-  requestSubscriptionBalanceListener = () => {
+  requestSubscriptionBalanceListener = (event) => {
     if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
-      this.dispatchEvent(new CustomEvent('request-subscription-balance',
-        {
-          detail: {
-            subscriptionType: '',
-            subscriptionId: 0
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }
-      ))
+      event.detail.fetch.then((appointments) => {
+        this.currentSubscriptionBalance = appointments.subscriptionBalance
+        this.dispatchEvent(new CustomEvent('request-subscription-balance',
+          {
+            detail: {
+              subscriptionType: '',
+              subscriptionId: 0
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }
+        ))
+      })
     }
   }
 
@@ -198,6 +212,7 @@ export default class AppointmentsList extends Shadow() {
   updateSubscriptionBalanceListener = (event) => {
     event.detail.fetch.then((appointments) => {
       let { subscriptionValidTo, subscriptionMode, subscriptionBalance } = appointments.selectedSubscription
+      subscriptionBalance = this.currentSubscriptionBalance // SAP Timing Issue!
       if (subscriptionMode === 'PAUSCHALABO') return
       subscriptionValidTo = `<a-translation data-trans-key="CP.cpAppointmentListSubscriptionsValidTo"></a-translation> ${this.formatSubscriptionValidFromDate(subscriptionValidTo)}`
       subscriptionBalance = subscriptionMode === 'WERTABO' ? `| <a-translation data-trans-key="CP.cpSubscriptionColumnBalance"></a-translation> ${subscriptionBalance}` : ''
@@ -306,6 +321,7 @@ export default class AppointmentsList extends Shadow() {
           mAppointments.setAttribute('data-filter', JSON.stringify(appointments.filters))
           mAppointments.setAttribute('data-filter-type', this.currentOpenDialogFilterType)
           this.root.querySelector('.list-wrapper').innerHTML = dayList.list.join('')
+          this.renderSubscriptionNotifications(appointments)
         } else {
           this.gridRendered = true
           this.html = ''
@@ -355,6 +371,10 @@ export default class AppointmentsList extends Shadow() {
    * @returns {string} - HTML string containing the rendered notifications.
    */
   renderSubscriptionNotifications (allSubscriptions) {
+    // do nothing if subscription type is 'pauschalabo'
+    if (allSubscriptions?.subscriptionMode === 'PAUSCHALABO' || allSubscriptions?.selectedSubscription?.subscriptionMode === 'PAUSCHALABO') {
+      return ''
+    }
     // Get the selected subscription
     let selectedSubscription = null
     if (allSubscriptions?.filters) {
@@ -477,6 +497,12 @@ export default class AppointmentsList extends Shadow() {
           </ks-m-select>
       </div>
     `
+
+    if (this.subscriptionHint) {
+      // render again for updated value when change route
+      this.subscriptionHint.querySelector('.hint').innerHTML = `<span>${hintDataValidFromDate} ${hintDataSubscriptionBalance}</span>`
+    }
+
     return html
   }
 

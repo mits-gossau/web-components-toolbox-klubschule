@@ -110,6 +110,7 @@ export default class Buttons extends Shadow() {
     this.data = JSON.parse(this.getAttribute('course-data')) || {}
     // @ts-ignore
     const dataButtons = this.data?.buttons?.length ? this.data.buttons : JSON.parse(this.getAttribute('data-buttons')) || [{}]
+    const hasButtons = dataButtons.length === 1 && Object.keys(dataButtons[0]).length === 0 ? false : true
     const filteredDataButtons = dataButtons.filter(({ event }) => event !== 'offerlink')
     const optionalBigAttr = this.hasAttribute('big') ? 'big' : ''
     const optionalSmallAttr = this.hasAttribute('small') ? 'small' : ''
@@ -173,7 +174,7 @@ export default class Buttons extends Shadow() {
         return acc + parentDiv.innerHTML
       }
       const isBookMarkButton = button.event === 'bookmark'
-      const bookMarkButton = isBookMarkButton ? /* html */ `<ks-m-favorite-button course="${this.data.kurs_typ}_${this.data.kurs_id}_${this.data.centerid}" button-typ="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}"></ks-m-favorite-button>` : ''
+      const bookMarkButton = isBookMarkButton ? /* html */ `<ks-m-favorite-button course="${this.data.kurs_typ}_${this.data.kurs_id}_${this.data.centerid}" button-typ="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" ${optionalSmallAttr}></ks-m-favorite-button>` : ''
       const content = button.event === 'bookmark' ? bookMarkButton :  /* html */`
         <ks-a-button 
           ${button.iconName && !button.text ? 'icon' : ''} 
@@ -219,6 +220,7 @@ export default class Buttons extends Shadow() {
                   "item_name": "${this.getAttribute('parent-title') || this.data.title || this.data.bezeichnung || 'No Title'}",                
                   "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
                   "price": ${this.data.price?.price || this.data.preis_total || 0},
+                  "item_variant": "${this.data.location?.center}",
                   "quantity": 1
                 }]
               }
@@ -230,11 +232,11 @@ export default class Buttons extends Shadow() {
       )
     }, '')
 
-    this.html = /* html */`
+    this.html = hasButtons ? /* html */`
       <div class="buttons-container">
         ${buttons}
       </div>
-    `
+    ` : ''
 
     return this.fetchModules([
       {
@@ -286,6 +288,7 @@ export default class Buttons extends Shadow() {
                 // @ts-ignore
                 'price': this.data.price.price,
                 'quantity': 1,
+                'item_variant':`${this.data.location?.center ? this.data.location.center : ''}`,
                 'currency': 'CHF'
               }]
             }
