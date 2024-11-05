@@ -572,8 +572,6 @@ export default class OffersPage extends Shadow() {
       </ks-c-auto-complete>
     ` : ''
 
-    console.log(this.data)
-
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
