@@ -118,7 +118,6 @@ export default class TileFactory extends Shadow() {
           <mdx-loading-bar></mdx-loading-bar>
       </mdx-component>
     `
-
     fetch.then(data => {
       setTimeout(() => {
         // remove loading component
