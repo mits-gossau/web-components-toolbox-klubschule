@@ -972,7 +972,7 @@ export default class CourseDialog extends Shadow() {
    */
   icsDownload (filename, fileBody) {
     const link = document.createElement('a')
-    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileBody))
+    link.setAttribute('href', 'data:text/calendar;charset=utf-8,' + encodeURIComponent(fileBody))
     link.setAttribute('download', filename)
     link.innerHTML = /* html */ `
       <span>
