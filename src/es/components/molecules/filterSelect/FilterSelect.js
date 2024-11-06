@@ -155,6 +155,42 @@ export default class FilterSelect extends Shadow() {
     })
   }
 
+  generateQuickFilters(filterData) {
+    let quickFilters = []
+
+    filterData.forEach(filterItem => {
+      if (filterItem.isquick) {
+        quickFilters.push({id: filterItem.id, order: filterItem.isquick, label: filterItem.label})
+      }
+      // check recursive if filterItem or its children is selected and remove the parent filterItem from quickFilters
+      const selectedFilter = this.findSelectedAndParents(filterItem)
+      if (selectedFilter && selectedFilter.selected) {
+        quickFilters = quickFilters.filter(quickFilter => quickFilter.id !== filterItem.id)
+      }
+    })
+
+    if (quickFilters.length === 0) return
+
+    this.html = quickFilters.sort((a, b) => a.order - b.order).map(quickFilter => {
+      const requestEventName = `dialog-open-first-level,dialog-open-${quickFilter.id}`
+
+      return /* html */`
+        <ks-a-button small namespace="button-secondary-" color="tertiary" justify-content="flex-start" request-event-name="${requestEventName}" click-no-toggle-active>
+          <style>
+            :host button {
+              width: 100% !important;
+            }
+            :host button span {
+              text-align: left;
+            }
+            </style>
+          <span>${quickFilter.label}</span>
+          <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx>
+        </ks-a-button>
+      `
+    }).join('')
+  }
+
   findSelectedAndParents(obj, parents = [], parentValue) {
     if (obj.selected) {
       return { selected: true, parents: parents.map(parent => parentValue ? parentValue : parent.id) }
@@ -219,6 +255,8 @@ export default class FilterSelect extends Shadow() {
         }
 
         this.generateFilterButtons(response?.filters)
+
+        this.generateQuickFilters(response?.filters)
       })
     })
   }
