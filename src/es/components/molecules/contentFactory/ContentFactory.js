@@ -137,7 +137,7 @@ export default class ContentFactory extends Shadow() {
       '<section>'
       ) + '</section>'
       if (!data.contentItems.length && this.section) this.section.innerHTML = /* html */`
-      <ks-o-partner-search search-text="${data.searchText}" tab="2">
+      <ks-o-partner-search search-text="${data.searchText}"${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''} tab="2">
         ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
       </ks-o-partner-search>
       `

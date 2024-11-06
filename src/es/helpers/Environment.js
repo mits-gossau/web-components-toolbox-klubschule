@@ -7,6 +7,8 @@ const currentScriptUrl = new URL(document.currentScript.src)
 self.Environment = {
   isTestingEnv: location.hostname === 'localhost' || location.hostname.includes('.local') || location.hostname.includes('umb.') || location.hostname.includes('test.') || location.hostname.includes('testadmin.'),
   language: currentScriptUrl.searchParams.get('language') || document.documentElement.getAttribute('lang') || 'de',
+  mcsBaseUrl: currentScriptUrl.searchParams.get('mcsBaseUrl') || 'https://digital-campaign-factory.migros.ch',
+  mcsVersion: currentScriptUrl.searchParams.get('mcsVersion'), /* || 'v1.112.3', // the newest version gets fetched if this parameter is not set */
   mobileBreakpoint: ({ constructor, tagName, namespace } = {}) => {
     switch (true) {
       case constructor && typeof constructor.includes === 'function' && constructor.includes('Header'):
