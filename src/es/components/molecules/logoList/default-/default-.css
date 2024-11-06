@@ -1,5 +1,5 @@
 :host {
-    --img-max-height: 75px;
+    --img-max-height: 76px;
 }
 
 :host([centered]) {
@@ -8,7 +8,7 @@
 }
 
 :host a-picture {
-    --img-height: 48px;
+    --img-height: 76px;
 }
 
 @media screen and (max-width: _max-width_) {
