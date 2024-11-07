@@ -96,7 +96,8 @@ export default class FilterCategories extends Shadow() {
         const count = center.count ? `(${center.count})` : ''
         const disabled = center.disabled ? 'disabled' : ''
         const checked = center.selected ? 'checked' : ''
-        const visible = center.visible ? 'visible' : ''
+        const visible = center.visible && center.count !== 0 ? 'visible' : ''
+        if (!visible) return
         const centerCheckbox = /* html */`
           <mdx-component mutation-callback-event-name="request-with-facet">
             <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}" filter-id="${centerUrlpara}-${center.id}"></mdx-checkbox>
@@ -122,7 +123,8 @@ export default class FilterCategories extends Shadow() {
         const count = center.count ? `(${center.count})` : ''
         const disabled = center.disabled ? 'disabled' : ''
         const checked = center.selected ? 'checked' : ''
-        const visible = center.visible ? 'visible' : ''
+        const visible = center.visible && center.count !== 0 ? 'visible' : ''
+        if (!visible) return
         const id = `[filter-id="${centerUrlpara}-${center.id}"]`
         let centerFilterCheckbox = null
 
@@ -149,7 +151,8 @@ export default class FilterCategories extends Shadow() {
     const subNav = []
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
-    const visible = child.visible ? 'visible' : ''
+    const visible = child.visible && child.count !== 0 ? 'visible' : ''
+    if (!visible) return subNav
     const isMultipleChoice = parentItem.typ === 'multi'
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
@@ -176,8 +179,6 @@ export default class FilterCategories extends Shadow() {
       </ks-m-nav-level-item>
     `
 
-    if (!visible) return subNav
-
     const div = document.createElement('div')
     div.innerHTML = isMultipleChoice ? mdxCheckbox : navLevelItem
     // @ts-ignore
@@ -190,7 +191,8 @@ export default class FilterCategories extends Shadow() {
   updateFilter (generatedFilters, child, parentItem) {
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
-    const visible = child.visible ? 'visible' : ''
+    const visible = child.visible && child.count !== 0 ? 'visible' : ''
+    if (!visible) return
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
@@ -283,7 +285,8 @@ export default class FilterCategories extends Shadow() {
     if (this.firstTreeItem && level !== 0) {
       selectedFilters = ''
     }
-    
+    // if nav level item has all children with count 0, hide it 
+    const hidden = filterItem.children.length > 0 && filterItem.children.every(child => child.count === 0) ? 'hidden' : ''
     const checked = filterItem.selected ? 'checked' : ''
     const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
     const filterId = `filter-id="${parentItem.urlpara}-${filterItem.urlpara}"`
@@ -303,7 +306,7 @@ export default class FilterCategories extends Shadow() {
     `
 
     div.innerHTML = /* html */`
-      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+      <m-dialog ${hidden ? 'style="display:none"' : ''} id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
