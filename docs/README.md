@@ -37,6 +37,9 @@ To set up the web-components-toolbox, follow these steps:
     - ```npm install```
     - ```npm run serve```
 
+### Install Dependencies:
+- execute ```git submodule update --init --recursive --force``` (Note: Avoid using the --remote flag when opening the project. Using the --remote flag loads the latest Frontend Solution into the Backend Solution and ignores to which commit the parent module points.)
+
 ## Usage Guidelines
 ### Component Development
 When developing components for Klubschule, adhere to the following guidelines:
