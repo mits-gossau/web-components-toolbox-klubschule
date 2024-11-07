@@ -22,7 +22,7 @@ export default class OffersPage extends Shadow() {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
-        if (this.data.additionalinfos.length > 0) this.showInfoEventsHeadline = true
+        if (this.data.additionalinfos?.length > 0) this.showInfoEventsHeadline = true
 
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
         if (!this.isWishList) bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
@@ -658,7 +658,8 @@ export default class OffersPage extends Shadow() {
                 ${this.isWishList ? ' is-wish-list' : ''}
                 ${this.hasAttribute('is-info-events') ? ` is-info-events loading-text="${this.getTranslation('CourseList.LabelLoaderInfoEvent')}" style="width:100%"` : ''}
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
-                ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
+                ${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}
+                ${this.hasAttribute('error-text') ? ` error-text="${this.getAttribute('error-text')}"` : ''}
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
@@ -725,6 +726,7 @@ export default class OffersPage extends Shadow() {
           <section>
             <div col-lg="12" col-md="12" col-sm="12">
               <ks-m-content-factory
+                ${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}
                 ${this.hasAttribute('error-text') ? `error-text="${this.getAttribute('error-text')}"` : ''}
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}

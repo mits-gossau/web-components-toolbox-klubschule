@@ -461,7 +461,7 @@ export default class WithFacet extends WebWorker() {
       }
 
       // only the first level allows selected falls when including selected children
-      if (treeShookFilterItem.children?.length || treeShookFilterItem.selected) {
+      if (treeShookFilterItem.children?.length || treeShookFilterItem.selected || treeShookFilterItem.isquick > 0) {
         if (treeShookFilterItem.urlpara === filterKey) {
           treeShookFilterItem.skipCountUpdate = true
         }

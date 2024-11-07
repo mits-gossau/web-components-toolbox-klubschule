@@ -38,7 +38,7 @@ export default class PartnerSearch extends Shadow() {
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
       Promise.all(showPromises).then(() => {
         this.hidden = false
-        if (this.searchText.length) {
+        if (!this.hasAttribute('no-partner-search') && this.searchText.length) {
           this.dispatchEvent(new CustomEvent('request-partner-search', {
             detail: {
               searchText: this.searchText

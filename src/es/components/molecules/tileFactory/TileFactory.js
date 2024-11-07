@@ -171,7 +171,7 @@ export default class TileFactory extends Shadow() {
           '<section>'
         )
         + (!data.courses.length
-          ? /* html */`<ks-o-partner-search search-text="${data.searchText}"${data.courses.length ? ' has-courses': ''} tab="1">
+          ? /* html */`<ks-o-partner-search search-text="${data.searchText}"${data.courses.length ? ' has-courses': ''}${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''} tab="1">
               ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
             </ks-o-partner-search>`
           : '')
