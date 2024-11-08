@@ -96,10 +96,10 @@ export default class FilterCategories extends Shadow() {
         const count = center.count ? `(${center.count})` : ''
         const disabled = center.disabled ? 'disabled' : ''
         const checked = center.selected ? 'checked' : ''
-        const hidden = center.visible ? '' : 'hidden'
+        const visible = center.visible ? 'visible' : ''
         const centerCheckbox = /* html */`
           <mdx-component mutation-callback-event-name="request-with-facet">
-            <mdx-checkbox ${checked} ${disabled} ${hidden} variant="no-border" label="${center.label} ${count}" filter-id="${centerUrlpara}-${center.id}"></mdx-checkbox>
+            <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label="${center.label} ${count}" filter-id="${centerUrlpara}-${center.id}"></mdx-checkbox>
           </mdx-component>
         `
         const div = document.createElement('div')
@@ -122,14 +122,14 @@ export default class FilterCategories extends Shadow() {
         const count = center.count ? `(${center.count})` : ''
         const disabled = center.disabled ? 'disabled' : ''
         const checked = center.selected ? 'checked' : ''
-        const hidden = center.visible ? '' : 'hidden'
+        const visible = center.visible ? 'visible' : ''
         const id = `[filter-id="${centerUrlpara}-${center.id}"]`
         let centerFilterCheckbox = null
 
         if (centerFilters.find(centerFilter => (centerFilterCheckbox = centerFilter.querySelector(id) || (centerFilter.matches(id) && centerFilter)))) {
           // @ts-ignore
           centerFilterCheckbox.setAttribute('label', `${center.label} ${count}`)
-          const attributes = { disabled, checked, hidden }
+          const attributes = { disabled, checked, visible }
 
           Object.entries(attributes).forEach(([key, value]) => {
             if (value) {
@@ -149,13 +149,13 @@ export default class FilterCategories extends Shadow() {
     const subNav = []
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
-    const hidden = child.visible ? '' : 'hidden'
+    const visible = child.visible ? 'visible' : ''
     const isMultipleChoice = parentItem.typ === 'multi'
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
     const mdxCheckbox = /* html */`
       <mdx-component mutation-callback-event-name="request-with-facet">
-        <mdx-checkbox ${checked} ${disabled} ${hidden} variant="no-border" label='${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}' filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
+        <mdx-checkbox ${checked} ${disabled} ${visible} variant="no-border" label='${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}' filter-id="${parentItem.urlpara}-${child.urlpara}"></mdx-checkbox>
       </mdx-component>
     `
     const navLevelItem = /* html */`
@@ -176,7 +176,7 @@ export default class FilterCategories extends Shadow() {
       </ks-m-nav-level-item>
     `
 
-    if (!child.visible) return subNav
+    if (!visible) return subNav
 
     const div = document.createElement('div')
     div.innerHTML = isMultipleChoice ? mdxCheckbox : navLevelItem
@@ -190,7 +190,7 @@ export default class FilterCategories extends Shadow() {
   updateFilter (generatedFilters, child, parentItem) {
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
-    const hidden = child.visible ? '' : 'hidden'
+    const visible = child.visible ? 'visible' : ''
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
@@ -205,7 +205,7 @@ export default class FilterCategories extends Shadow() {
         // @ts-ignore
         if (text) text.textContent = `${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}`
       }
-      const attributes = { disabled, checked, hidden }
+      const attributes = { disabled, checked, visible }
       Object.entries(attributes).forEach(([key, value]) => {
         if (value) {
           filterItem.setAttribute(key, '')
