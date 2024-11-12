@@ -18,23 +18,6 @@ export default class AppointmentsList extends Shadow() {
     this.currentOpenDialogFilterType = null
     this.subscriptionHint = null
     this.gridRendered = false
-    /**
-     * @type {boolean}
-     * @description Flag indicating if the subscription balance is low.
-     */
-    this.hasLowSubscriptionBalance = false
-
-    /**
-     * @type {boolean}
-     * @description Flag indicating if the appointment balance is low.
-     */
-    this.hasLowAppointmentsBalance = false
-
-    /**
-     * @type {boolean}
-     * @description Flag indicating if the subscription duration is low.
-     */
-    this.hasLowSubscriptionDuration = false
 
     /**
      * @type {string}
@@ -140,11 +123,6 @@ export default class AppointmentsList extends Shadow() {
   }
 
   subscriptionCourseAppointmentsListener = (event) => {
-    // reset notification triggers
-    this.hasLowSubscriptionBalance = false
-    this.hasLowAppointmentsBalance = false
-    this.hasLowSubscriptionDuration = false
-
     this.renderHTML(event.detail.fetch).then(() => {
       if (!this.dataset.showFilters || this.dataset.showFilters === 'true') {
         this.select = this.root.querySelector('o-grid')?.root.querySelector('ks-m-select')?.root.querySelector('div')?.querySelector('select')
@@ -211,6 +189,10 @@ export default class AppointmentsList extends Shadow() {
    */
   updateSubscriptionBalanceListener = (event) => {
     event.detail.fetch.then((appointments) => {
+      // update notifications
+      this.updateNotificationsView(appointments)
+
+      // update subscription hint
       let { subscriptionValidTo, subscriptionMode, subscriptionBalance } = appointments.selectedSubscription
       subscriptionBalance = this.currentSubscriptionBalance // SAP Timing Issue!
       if (subscriptionMode === 'PAUSCHALABO') return
@@ -321,7 +303,7 @@ export default class AppointmentsList extends Shadow() {
           mAppointments.setAttribute('data-filter', JSON.stringify(appointments.filters))
           mAppointments.setAttribute('data-filter-type', this.currentOpenDialogFilterType)
           this.root.querySelector('.list-wrapper').innerHTML = dayList.list.join('')
-          this.renderSubscriptionNotifications(appointments)
+          this.updateNotificationsView(appointments)
         } else {
           this.gridRendered = true
           this.html = ''
@@ -343,7 +325,7 @@ export default class AppointmentsList extends Shadow() {
               <div col-lg="6" col-md="6" col-sm="12">
                 ${subscriptionSelect}
               </div>
-              ${!this.hasLowSubscriptionBalance && this.renderSubscriptionNotifications(appointments)}
+              ${this.renderSubscriptionNotifications(appointments)}
               <div col-lg="12" col-md="12" col-sm="12">
                 <m-appointments-filter data-filter-type="${this.currentOpenDialogFilterType}" data-counter="${this.numberOfAppointments}" data-filter="${escapeForHtml(JSON.stringify(appointments.filters))}"></m-appointments-filter> 
               </div>
@@ -371,6 +353,10 @@ export default class AppointmentsList extends Shadow() {
    * @returns {string} - HTML string containing the rendered notifications.
    */
   renderSubscriptionNotifications (allSubscriptions) {
+    this.lowSubscriptionBalanceNotification = ''
+    this.lowAppointmentBalanceNotification = ''
+    this.lowSubscriptionDurationNotification = ''
+
     // do nothing if subscription type is 'pauschalabo'
     if (allSubscriptions?.subscriptionMode === 'PAUSCHALABO' || allSubscriptions?.selectedSubscription?.subscriptionMode === 'PAUSCHALABO') {
       return ''
@@ -381,10 +367,8 @@ export default class AppointmentsList extends Shadow() {
       const { subscriptions } = allSubscriptions?.filters
       selectedSubscription = subscriptions.find(element => element.selected === true)
     }
-
     // Render low appointment balance notification
-    if (!this.hasLowAppointmentsBalance) {
-      this.hasLowAppointmentsBalance = true
+    if (allSubscriptions.selectedSubscription.lowAppointmentBalance) {
       this.lowAppointmentBalanceNotification = /* html */`
         <div style="padding-bottom:1rem;">
           <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
@@ -397,12 +381,10 @@ export default class AppointmentsList extends Shadow() {
         </div>
       `
     }
-
     // Render low subscription balance notification
-    if (!this.hasLowSubscriptionBalance && selectedSubscription) {
+    if (allSubscriptions.selectedSubscription.lowBalance) {
       const subscriptionBalance = Number(parseFloat(selectedSubscription.subscriptionBalance.replace('CHF', '').trim()).toFixed(2))
       if (subscriptionBalance < this.minAmount) {
-        this.hasLowSubscriptionBalance = true
         this.lowSubscriptionBalanceNotification = /* html */`
           <div style="padding-bottom:1rem;">
             <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
@@ -418,14 +400,12 @@ export default class AppointmentsList extends Shadow() {
     }
 
     // Render low subscription duration notification
-    if (!this.hasLowSubscriptionDuration && selectedSubscription) {
+    if (selectedSubscription) {
       const today = new Date()
       const subscriptionValidTo = selectedSubscription.subscriptionValidTo
       const endDate = new Date(subscriptionValidTo)
       const datePlus14Days = new Date(today.getTime() + this.minDays * 24 * 60 * 60 * 1000)
-
       if (datePlus14Days >= endDate) {
-        this.hasLowSubscriptionDuration = true
         this.lowSubscriptionDurationNotification = /* html */`
           <div style="padding-bottom:1rem;">
             <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
@@ -442,7 +422,7 @@ export default class AppointmentsList extends Shadow() {
 
     // Return the rendered HTML
     return /* html */ `
-      <div col-lg="12" col-md="12" col-sm="12">
+      <div col-lg="12" col-md="12" col-sm="12" class="balance-notifications">
         ${this.lowSubscriptionBalanceNotification}
         ${this.lowAppointmentBalanceNotification}
         ${this.lowSubscriptionDurationNotification}
@@ -519,8 +499,8 @@ export default class AppointmentsList extends Shadow() {
       const dayWrapper = document.createElement('div')
       dayWrapper.insertAdjacentHTML('beforeend', `<ks-a-heading tag="h2">${day.weekday}</ks-a-heading>`)
       day[appointmentType].forEach(appointment => {
-        if (appointment.courseAppointmentStatus === 2 && !this.hasLowAppointmentsBalance) {
-          this.renderSubscriptionNotifications(selectedSubscription)
+        if (appointment.courseAppointmentStatus === 2) {
+          this.renderSubscriptionNotifications(appointments)
         }
         const tile = this.makeTileComponent(tileComponent, appointment, selectedSubscription)
         dayWrapper.appendChild(tile)
@@ -621,6 +601,18 @@ export default class AppointmentsList extends Shadow() {
     // @ts-ignore
     const formatter = new Intl.DateTimeFormat(self.Environment.language, options)
     return formatter.format(dateObject)
+  }
+
+  /**
+   * Update the notifications view with the new appointment data
+   * @param {object} appointments - appointment data
+   */
+  updateNotificationsView (appointments) {
+    const notifications = this.oGrid.root.querySelector('.balance-notifications')
+    if (notifications) {
+      // Render the notifications view with the new appointment data
+      notifications.outerHTML = this.renderSubscriptionNotifications(appointments)
+    }
   }
 
   get oGrid () {
