@@ -150,6 +150,7 @@ export default class TileFactory extends Shadow() {
                     ${this.isNearbySearch ? this.fillGeneralTileInfoNearBy(course).replace(/'/g, '’').replace(/"/g, '\"') : this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')},
                     "filter": ${JSON.stringify(course.filter).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+                    "spartename": ${JSON.stringify(course.spartename).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                     "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}>
                   </ks-o-tile-list>
