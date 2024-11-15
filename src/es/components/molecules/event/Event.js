@@ -204,7 +204,7 @@ export default class Event extends Shadow() {
         --button-transparent-padding: 0;
         --button-transparent-font-size: 1.125rem;
         --button-transparent-line-height: 1.25rem;
-        --button-transparent-font-weight: 500;
+        --button-transparent-font-weight: 501;
         font-size: var(--button-transparent-font-size);
         line-height: var(--button-transparent-line-height);
         font-weight: var(--button-transparent-font-weight);
