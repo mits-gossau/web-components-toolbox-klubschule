@@ -57,7 +57,7 @@ export default class AutoComplete extends Shadow() {
     let apiUrl = `${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}`
     // check if attribute with-auto-complete-content exists and if so add content=true as parameter to apiUrl
     if (this.hasAttribute('with-auto-complete-content')) {
-      const url = new URL(apiUrl)
+      const url = new URL(apiUrl, location.origin)
       url.searchParams.set('content', 'true')
       apiUrl = url.toString()
     }
