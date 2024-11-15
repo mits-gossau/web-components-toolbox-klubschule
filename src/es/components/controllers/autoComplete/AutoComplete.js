@@ -230,7 +230,7 @@ export default class AutoComplete extends Shadow() {
             },
             {
                 "title": "<strong>Englisch</strong> Schwerpunkte",
-                "text": null,
+                "text": "Englisch Schwerpunkte lorem ipsum dolor amet lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame",
                 "term": null,
                 "typ": -1,
                 "link": "/sprachen/englischkurse/englisch-schwerpunkte/",
