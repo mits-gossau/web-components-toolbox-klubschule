@@ -217,12 +217,12 @@ export default class OffersPage extends Shadow() {
         : /* html */`
             <ks-m-tab>
               <ul class="tab-search-result">
-                <li>
+                <li data-tab="courses">
                   <ks-a-with-facet-counter label="${this.getTranslation('Search.TabCourse')}" ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}>
                     <button class="active" tab-target="content1" id="total-offers-tab-heading">&nbsp;</button>
                   </ks-a-with-facet-counter>
                 </li>
-                <li>
+                <li data-tab="content">
                   <ks-a-with-facet-counter label="${this.getTranslation('Search.TabContent')}" ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''} total="contentItems.length">
                     <button tab-target="content2" id="total-stories-tab-heading"></button>
                   </ks-a-with-facet-counter>
