@@ -41,7 +41,7 @@ export default class PartnerOfferInfo extends Shadow() {
         justify-content: flex-start;
         align-items: flex-end;
 
-        font: var(--mdx-sys-font-flex-large-body2);
+        font: var(--mdx-sys-font-flex-large-body3);
         text-align: var(--p-text-align, start);
         text-transform: var(--p-text-transform, none);
         margin: var(--p-margin, 0 auto var(--content-spacing));
