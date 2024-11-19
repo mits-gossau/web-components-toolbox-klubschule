@@ -369,7 +369,10 @@ export default class AutoCompleteList extends Shadow() {
               if (sprachid === "f") searchBaseUrl = "/fr/recherche/"
               if (sprachid === "i") searchBaseUrl = "/it/ricerca/"
               const prefix = location.hostname === 'localhost' ? 'https://dev.klubschule.ch' : ''
-              const inputSearchValue = this.getRootNode().querySelector('[inputid="offers-page-input-search"]').shadowRoot.querySelector('input#offers-page-input-search').value
+              const inputSearch = ['offers-page', 'error-page', 'home-page']
+                .map(page => this.getRootNode().querySelector(`[inputid="${page}-input-search"]`))
+                .find(element => element) || ''
+              const inputSearchValue = inputSearch?.shadowRoot?.querySelector('input').value || ''
               const suffix = '?q=' + inputSearchValue + '&tab=content2'
               const contentItemsElement = document.createElement('div')
               contentItemsElement.classList.add('content')
