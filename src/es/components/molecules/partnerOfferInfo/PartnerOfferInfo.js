@@ -1,5 +1,5 @@
 // @ts-check
-import { Shadow } from '../../prototypes/Shadow.js'
+import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /**
 * @export
@@ -12,11 +12,7 @@ export default class PartnerOfferInfo extends Shadow() {
   }
 
   connectedCallback () {
-    this.hidden = true
-    const showPromises = []
-    if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-    if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-    Promise.all(showPromises).then(() => (this.hidden = false))
+    if (this.shouldRenderCSS()) this.renderCSS()
   }
 
   disconnectedCallback () {}
@@ -31,63 +27,43 @@ export default class PartnerOfferInfo extends Shadow() {
   }
 
   /**
-   * evaluates if a render is necessary
-   *
-   * @return {boolean}
-   */
-  shouldRenderHTML () {
-    return !this.div
-  }
-
-  /**
    * renders the css
    * @returns Promise<void>
    */
   renderCSS () {
     this.css = /* css */`
-      :host {}
+      :host > p {
+        display: flex;
+        gap: 1em;
+        align-content: flex-end;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: flex-end;
+
+        font: var(--mdx-sys-font-flex-large-body2);
+        text-align: var(--p-text-align, start);
+        text-transform: var(--p-text-transform, none);
+        margin: var(--p-margin, 0 auto var(--content-spacing));
+      }
+      :host a {
+        display: inline-block;
+        margin: 0;
+      }
+      :host a > img {
+        height: var(--partner-offer-info-logo-height, 40px);
+        max-height: var(--partner-offer-info-logo-height, 40px);
+        width: auto;
+      }
       @media only screen and (max-width: _max-width_) {
-        :host {}
+        :host > p {
+          gap: 0;
+          align-content: flex-start;
+          flex-direction: column;
+          flex-wrap: wrap;
+          align-items: flex-start;
+        }
       }
     `
-    return this.fetchTemplate()
-  }
-
-  /**
-   * fetches the template
-   */
-  fetchTemplate () {
-    /** @type {import("../../prototypes/Shadow.js").fetchCSSParams[]} */
-    const styles = [
-      {
-        path: `${this.importMetaUrl}../../../../css/reset.css`, // no variables for this reason no namespace
-        namespace: false
-      },
-      {
-        path: `${this.importMetaUrl}../../../../css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
-        namespaceFallback: true
-      }
-    ]
-    switch (this.getAttribute('namespace')) {
-      case 'partner-offer-info-default-':
-        return this.fetchCSS([{
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
-          namespace: false
-        }, ...styles])
-      default:
-        return this.fetchCSS(styles)
-    }
-  }
-
-  /**
-   * Render HTML
-   * @returns Promise<void>
-   */
-  renderHTML () {
-    this.html = '<div>Content rendered from Component: PartnerOfferInfo</div>'
-  }
-
-  get div () {
-    return this.root.querySelector('div')
   }
 }
