@@ -197,10 +197,6 @@ export default class OffersPage extends Shadow() {
    * @return Promise<void>
    */
   renderHTML() {
-
-    // extend tabs to make the second one active via url
-
-
     this.html = /* html */`<ks-c-with-facet
         ${this.hasAttribute('save-location-local-storage') ? 'save-location-local-storage' : ''}
         ${this.hasAttribute('save-location-session-storage') ? 'save-location-session-storage' : ''}
