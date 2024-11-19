@@ -369,6 +369,7 @@ export default class AutoCompleteList extends Shadow() {
               if (sprachid === "f") searchBaseUrl = "/fr/recherche/"
               if (sprachid === "i") searchBaseUrl = "/it/ricerca/"
               const prefix = location.hostname === 'localhost' ? 'https://dev.klubschule.ch' : ''
+              const suffix = '?tab=content2'
               const contentItemsElement = document.createElement('div')
               contentItemsElement.classList.add('content')
               const contentUnsortedList = document.createElement('ul')
@@ -395,7 +396,7 @@ export default class AutoCompleteList extends Shadow() {
               })
               contentItemsElement.appendChild(contentUnsortedList)
               const showAllResults = document.createElement('a')
-              showAllResults.href = searchBaseUrl
+              showAllResults.href = searchBaseUrl + suffix
               showAllResults.innerHTML = `${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>`
               contentItemsElement.appendChild(showAllResults)
               this.list.after(contentItemsElement)
