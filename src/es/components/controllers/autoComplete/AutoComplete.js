@@ -81,7 +81,7 @@ export default class AutoComplete extends Shadow() {
       }
       const token = event.detail.value
 
-      if (!token || token.length < 3) {
+      if (!token || token.length < 3 || token.trim() === '') {
         this.clearAutocomplete()
         // update results
         return this.dispatchEvent(new CustomEvent('request-with-facet',
