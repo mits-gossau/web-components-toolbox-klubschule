@@ -5,12 +5,32 @@ export default class Tab extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    // Add click event to tabs
+    this.clickEventListener = event => {
+      this.tabActive.classList.remove('active')
+      this.contentActive.classList.remove('show')
+
+      event.target.classList.add('active')
+      this.tabActive = event.target
+      this.tabActiveId = event.target.getAttribute('tab-target')
+      this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`)
+      this.contentActive.classList.add('show')
+    }
+  }
+
+  connectedCallback () {
+    if (this.shouldRenderCSS()) this.renderCSS()
+
     this.tabs = this.root.querySelectorAll('button')
     this.tabActive = this.root.querySelector('button.active')
     this.tabActiveId = this.tabActive.getAttribute('tab-target')
     this.contents = this.root.querySelector(`div[tab-content-target]`)
     this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`)
     this.contentActive.classList.add('show')
+
+    this.tabs.forEach(tab => {
+      tab.addEventListener('click', this.clickEventListener)
+    })
 
     // Get url parameter and set active tab, if any, else set first tab active
     const urlParams = new URLSearchParams(window.location.search)
@@ -31,30 +51,10 @@ export default class Tab extends Shadow() {
     }
 
     // Set first tab active by default
-    if (!tabParam) {
+    if (!tabParam && this.tabs.length && this.contents.length) {
       this.tabs[0].classList.add('active')
       this.contents[0].classList.add('show')
     }
-
-    // Add click event to tabs
-    this.clickEventListener = event => {
-      this.tabActive.classList.remove('active')
-      this.contentActive.classList.remove('show')
-
-      event.target.classList.add('active')
-      this.tabActive = event.target
-      this.tabActiveId = event.target.getAttribute('tab-target')
-      this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`)
-      this.contentActive.classList.add('show')
-    }
-  }
-
-  connectedCallback () {
-    this.tabs.forEach(tab => {
-      tab.addEventListener('click', this.clickEventListener)
-    })
-
-    if (this.shouldRenderCSS()) this.renderCSS()
   }
 
   disconnectedCallback () {
