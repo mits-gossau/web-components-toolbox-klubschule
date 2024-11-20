@@ -735,10 +735,11 @@ export default class Event extends Shadow() {
         return
       }
 
+      const getLanguage = language => language && language !== "null" ? language : null
       new Promise(resolve => this.dispatchEvent(new CustomEvent('request-event-detail', {
         detail: {
           resolve,
-          language: this.data.course.language || this.data.sprachid,
+          language: getLanguage(this.data.course.language) || getLanguage(this.data.sprachid) || getLanguage(this.data.course.sprache_id),
           typ: this.data.course.typ || this.data.course.kurs_typ,
           id: this.data.course.id || this.data.course.kurs_id,
           center_id: this.data.course.center_id || this.data.course.centerid
