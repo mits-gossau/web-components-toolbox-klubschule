@@ -307,30 +307,7 @@ export default class TileList extends Shadow() {
     <div class="o-tile-list">
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
-
-            <ks-c-gtm-event
-              mode="false" 
-              listen-to="click"
-              event-data='{
-                "event": "select_item",
-                "ecommerce": {    
-                  "items": [{ 
-                    "item_name": "${data.title || data.bezeichnung || 'No Title'}",                
-                    "item_id": "${data.kurs_typ}_${data.kurs_id}",
-                    "price": ${data.price?.price || data.preis_total || 0},
-                    ${data.spartename?.[0] ? `"item_category": "${data.spartename[0]}",` : ''}
-                    ${data.spartename?.[1] ? `"item_category2": "${data.spartename[1]}",` : ''}
-                    ${data.spartename?.[2] ? `"item_category3": "${data.spartename[2]}",` : ''}
-                    ${data.spartename?.[3] ? `"item_category4": "${data.spartename[3]}",` : ''}
-                    "quantity": 1,
-                    ${data.location?.center ? `"item_variant": "${data.location.center}",` : ''}
-                    "currency": "CHF"
-                  }]
-                }
-              }'
-            >
-              <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
-            </ks-c-gtm-event>
+            <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
             ${data.infotextshort
               ? /* html */`
                 <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
@@ -379,7 +356,7 @@ export default class TileList extends Shadow() {
         </div>
         <div class="o-tile-list__details">
           <div class="o-tile-list__tiles">
-            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile ${this.hasAttribute('no-url-params')? 'no-url-params' : '' } namespace="tile-default-" inside-tile-list parent-title='${data.bezeichnung || data.title || "No Title"}' data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`, '') : ''}
+            ${data.tiles?.length ? data.tiles.reduce((acc, tile) => acc + /* html */`<ks-m-tile ${this.hasAttribute('no-url-params')? 'no-url-params' : '' } namespace="tile-default-" inside-tile-list parent-title='${data.bezeichnung || data.title || "No Title"}' ${data.sort === 2 ? 'sort-nearby' : ''} data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`, '') : ''}
           </div>
           <div
             id="request-more-locations"
@@ -468,7 +445,7 @@ export default class TileList extends Shadow() {
       }
 
       // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
-      return acc + /* html */`<ks-m-tile ${this.hasAttribute('no-url-params')? 'no-url-params' : '' } namespace="tile-default-" inside-tile-list parent-title='${this.data.bezeichnung || this.data.title || "No Title"}' data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`
+      return acc + /* html */`<ks-m-tile ${this.hasAttribute('no-url-params')? 'no-url-params' : '' } namespace="tile-default-" inside-tile-list parent-title='${this.data.bezeichnung || this.data.title || "No Title"}' ${this.data.sort === 2 ? 'sort-nearby' : ''} data='${JSON.stringify(tile).replace(/'/g, '’').replace(/"/g, '\"')}'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>`
     }, '')
     if (add) {
       const div = document.createElement('div')

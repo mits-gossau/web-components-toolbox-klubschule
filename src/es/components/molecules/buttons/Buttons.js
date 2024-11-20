@@ -190,25 +190,6 @@ export default class Buttons extends Shadow() {
         </ks-a-button>
       `
 
-      // To be done: Set item_category
-      //   {
-      //     "event": "select_item",
-      //     "ecommerce": {    
-      //       "items": [{ 
-      //         "item_name": "${this.data.bezeichnung}",                
-      //         "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
-      //         "price": ${this.data.price.price},
-      //         "item_category": "Sprachen",
-      //         "item_category2": "Kurs",
-      //         "item_category3": "Spanisch", 
-      //         "item_category4": "", 
-      //         "quantity": 1,
-      //         "item_variant": "${this.data.locations?.length ? this.data.locations[0] : "Online"}",
-      //       }]
-      //     }
-      //   }
-      // }
-
       return acc + (
         (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
           <ks-c-gtm-event 
@@ -217,10 +198,14 @@ export default class Buttons extends Shadow() {
               "event": "${this.hasAttribute('is-abo') ? 'add_to_cart' : 'select_item'}",
               "ecommerce": {    
                 "items": [{ 
-                  "item_name": "${this.getAttribute('parent-title') || this.data.title || this.data.bezeichnung || 'No Title'}",                
+                  "item_name": "${this.hasAttribute('parent-title') && !this.hasAttribute('sort-nearby') ? this.getAttribute('parent-title') : this.data.title || this.data.bezeichnung || 'No Title'}",                
                   "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
                   "price": ${this.data.price?.price || this.data.preis_total || 0},
                   "item_variant": "${this.data.location?.center}",
+                  ${this.data.spartename?.[0] ? `"item_category": "${this.data.spartename[0]}",` : ''}
+                  ${this.data.spartename?.[1] ? `"item_category2": "${this.data.spartename[1]}",` : ''}
+                  ${this.data.spartename?.[2] ? `"item_category3": "${this.data.spartename[2]}",` : ''}
+                  ${this.data.spartename?.[3] ? `"item_category4": "${this.data.spartename[3]}",` : ''}
                   "quantity": 1
                 }]
               }
@@ -287,6 +272,10 @@ export default class Buttons extends Shadow() {
                 'item_id': `${this.data.kurs_typ}_${this.data.kurs_id}`, 
                 // @ts-ignore
                 'price': this.data.price.price,
+                'item_category': `${this.data.spartename?.[0] || ''}`,
+                'item_category2': `${this.data.spartename?.[1] || ''}`,
+                'item_category3': `${this.data.spartename?.[2] || ''}`,
+                'item_category4': `${this.data.spartename?.[3] || ''}`,
                 'quantity': 1,
                 'item_variant':`${this.data.location?.center ? this.data.location.center : ''}`,
                 'currency': 'CHF'

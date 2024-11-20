@@ -313,6 +313,10 @@ export default class Tile extends Shadow() {
                   "item_name": "${data.parentTitle || data.title || data.bezeichnung || 'No Title'}",                
                   "item_id": "${data.kurs_typ}_${data.kurs_id}",
                   "price": ${data.price?.price || data.preis_total || 0},
+                  ${data.spartename?.[0] ? `"item_category": "${data.spartename[0]}",` : ''}
+                  ${data.spartename?.[1] ? `"item_category2": "${data.spartename[1]}",` : ''}
+                  ${data.spartename?.[2] ? `"item_category3": "${data.spartename[2]}",` : ''}
+                  ${data.spartename?.[3] ? `"item_category4": "${data.spartename[3]}",` : ''}
                   "quantity": 1,
                   ${data.location?.center ? `"item_variant": "${data.location.center}",` : ''}
                   "currency": "CHF"
@@ -351,7 +355,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             ${this.hasAttribute('is-wish-list') && !this.isPassed && !this.hasAttribute('is-info-events') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? `${data.parentkey}${data.centerid ? `_${data.centerid}` : ''}` : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
-            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
+            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">

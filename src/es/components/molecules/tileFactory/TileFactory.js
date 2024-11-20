@@ -161,7 +161,8 @@ export default class TileFactory extends Shadow() {
                   <m-load-template-tag>
                   <template>
                   <ks-m-tile namespace="tile-default-" data='{
-                    ${this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')}
+                    ${this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')},
+                    "spartename": ${JSON.stringify(course.spartename).replace(/'/g, '’').replace(/"/g, '\"') || ''}
                   }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
                   </template>
                   </m-load-template-tag>
