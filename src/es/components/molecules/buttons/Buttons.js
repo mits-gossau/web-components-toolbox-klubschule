@@ -221,6 +221,10 @@ export default class Buttons extends Shadow() {
                   "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
                   "price": ${this.data.price?.price || this.data.preis_total || 0},
                   "item_variant": "${this.data.location?.center}",
+                  ${this.data.spartename?.[0] ? `"item_category": "${this.data.spartename[0]}",` : ''}
+                  ${this.data.spartename?.[1] ? `"item_category2": "${this.data.spartename[1]}",` : ''}
+                  ${this.data.spartename?.[2] ? `"item_category3": "${this.data.spartename[2]}",` : ''}
+                  ${this.data.spartename?.[3] ? `"item_category4": "${this.data.spartename[3]}",` : ''}
                   "quantity": 1
                 }]
               }

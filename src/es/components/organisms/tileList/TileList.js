@@ -307,30 +307,7 @@ export default class TileList extends Shadow() {
     <div class="o-tile-list">
         <div class="o-tile-list__head">
           <div class="o-tile-list__top">
-
-            <ks-c-gtm-event
-              mode="false" 
-              listen-to="click"
-              event-data='{
-                "event": "select_item",
-                "ecommerce": {    
-                  "items": [{ 
-                    "item_name": "${data.title || data.bezeichnung || 'No Title'}",                
-                    "item_id": "${data.kurs_typ}_${data.kurs_id}",
-                    "price": ${data.price?.price || data.preis_total || 0},
-                    ${data.spartename?.[0] ? `"item_category": "${data.spartename[0]}",` : ''}
-                    ${data.spartename?.[1] ? `"item_category2": "${data.spartename[1]}",` : ''}
-                    ${data.spartename?.[2] ? `"item_category3": "${data.spartename[2]}",` : ''}
-                    ${data.spartename?.[3] ? `"item_category4": "${data.spartename[3]}",` : ''}
-                    "quantity": 1,
-                    ${data.location?.center ? `"item_variant": "${data.location.center}",` : ''}
-                    "currency": "CHF"
-                  }]
-                }
-              }'
-            >
-              <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
-            </ks-c-gtm-event>
+            <span class="o-tile-list__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
             ${data.infotextshort
               ? /* html */`
                 <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
