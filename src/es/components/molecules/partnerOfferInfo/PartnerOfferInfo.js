@@ -63,6 +63,9 @@ export default class PartnerOfferInfo extends Shadow() {
           flex-wrap: wrap;
           align-items: flex-start;
         }
+        :host a {
+          margin-bottom: var(--mdx-sys-spacing-flex-2xs);
+        }
       }
     `
   }
