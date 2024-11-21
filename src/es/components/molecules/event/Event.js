@@ -204,7 +204,7 @@ export default class Event extends Shadow() {
         --button-transparent-padding: 0;
         --button-transparent-font-size: 1.125rem;
         --button-transparent-line-height: 1.25rem;
-        --button-transparent-font-weight: 500;
+        --button-transparent-font-weight: 501;
         font-size: var(--button-transparent-font-size);
         line-height: var(--button-transparent-line-height);
         font-weight: var(--button-transparent-font-weight);
@@ -735,10 +735,11 @@ export default class Event extends Shadow() {
         return
       }
 
+      const getLanguage = language => language && language !== "null" ? language : null
       new Promise(resolve => this.dispatchEvent(new CustomEvent('request-event-detail', {
         detail: {
           resolve,
-          language: this.data.course.language || this.data.sprachid,
+          language: getLanguage(this.data.course.language) || getLanguage(this.data.sprachid) || getLanguage(this.data.course.sprache_id),
           typ: this.data.course.typ || this.data.course.kurs_typ,
           id: this.data.course.id || this.data.course.kurs_id,
           center_id: this.data.course.center_id || this.data.course.centerid
@@ -760,6 +761,10 @@ export default class Event extends Shadow() {
                       'item_name': `${data.bezeichnung}`,                
                       'item_id': `${data.kurs_typ}_${data.kurs_id}`, 
                       'price': data.preis_total,
+                      'item_category': `${data.spartename?.[0] || ''}`,
+                      'item_category2': `${data.spartename?.[1] || ''}`,
+                      'item_category3': `${data.spartename?.[2] || ''}`,
+                      'item_category4': `${data.spartename?.[3] || ''}`,
                       'quantity': 1,
                       'item_variant': `${data.location?.center ? data.location.center : ''}`,
                       'currency': 'CHF',       

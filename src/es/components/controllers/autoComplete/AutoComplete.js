@@ -57,7 +57,7 @@ export default class AutoComplete extends Shadow() {
     let apiUrl = `${this.getAttribute('endpoint-auto-complete') || 'https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search'}`
     // check if attribute with-auto-complete-content exists and if so add content=true as parameter to apiUrl
     if (this.hasAttribute('with-auto-complete-content')) {
-      const url = new URL(apiUrl)
+      const url = new URL(apiUrl, location.origin)
       url.searchParams.set('content', 'true')
       apiUrl = url.toString()
     }
@@ -81,7 +81,7 @@ export default class AutoComplete extends Shadow() {
       }
       const token = event.detail.value
 
-      if (!token || token.length < 3) {
+      if (!token || token.length < 3 || token.trim() === '') {
         this.clearAutocomplete()
         // update results
         return this.dispatchEvent(new CustomEvent('request-with-facet',
@@ -230,7 +230,7 @@ export default class AutoComplete extends Shadow() {
             },
             {
                 "title": "<strong>Englisch</strong> Schwerpunkte",
-                "text": null,
+                "text": "Englisch Schwerpunkte lorem ipsum dolor amet lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame",
                 "term": null,
                 "typ": -1,
                 "link": "/sprachen/englischkurse/englisch-schwerpunkte/",

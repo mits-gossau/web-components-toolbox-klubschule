@@ -184,14 +184,30 @@ export default class AutoCompleteList extends Shadow() {
         }
 
         :host .heading {
-          font-size: 0.875em;
-          line-height: 1em;
-          font-weight: 500;
-          margin-bottom: 1em;
+          color: var(--mdx-sys-color-neutral-default);
+          font: var(--mdx-sys-font-fix-label3);
+          margin-bottom: var(--mdx-sys-spacing-flex-2xs, 1em);
         }
 
         :host .list {
           width: 100%;
+        }
+
+        :host .list li {
+          padding: 0;
+        }
+
+        :host .list li + li {
+          margin-top: var(--mdx-sys-spacing-flex-xs, 1.125em);;
+        }
+
+        :host .list li .text {
+          display: -webkit-box;
+          max-width: 100%;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         :host .list li:hover .text {
@@ -208,9 +224,16 @@ export default class AutoCompleteList extends Shadow() {
         }
 
         :host .title {
-          font-size: 1em;
-          line-height: 1.125em;
-          font-weight: 500;
+          display: block !important;
+          color: var(--mdx-sys-color-neutral-bold4);
+          font: var(--mdx-sys-font-fix-label2);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        :host .title strong {
+          display: inline-block;
         }
 
         :host .text {
@@ -259,6 +282,7 @@ export default class AutoCompleteList extends Shadow() {
 
         :host .responsive-picture {
           width: 56px;
+          min-width: 56px;
         }
 
         @media only screen and (max-width: _max-width_) {
@@ -340,10 +364,16 @@ export default class AutoCompleteList extends Shadow() {
             if (this.hasAttribute('with-auto-complete-content')) {
               if (this.content) this.content.remove() // delete existing content items
               if (contentItems === null || !contentItems.length) return
+              if (contentItems.length > 4) contentItems = contentItems.slice(0, 4)
               let searchBaseUrl = "/suche/"
               if (sprachid === "f") searchBaseUrl = "/fr/recherche/"
               if (sprachid === "i") searchBaseUrl = "/it/ricerca/"
               const prefix = location.hostname === 'localhost' ? 'https://dev.klubschule.ch' : ''
+              const inputSearch = ['offers-page', 'error-page', 'home-page', 'header']
+                .map(page => this.getRootNode().querySelector(`[inputid="${page}-input-search"]`))
+                .find(element => element) || ''
+              const inputSearchValue = inputSearch?.shadowRoot?.querySelector('input').value || ''
+              const suffix = '?q=' + inputSearchValue + '&tab=content2'
               const contentItemsElement = document.createElement('div')
               contentItemsElement.classList.add('content')
               const contentUnsortedList = document.createElement('ul')
@@ -370,7 +400,7 @@ export default class AutoCompleteList extends Shadow() {
               })
               contentItemsElement.appendChild(contentUnsortedList)
               const showAllResults = document.createElement('a')
-              showAllResults.href = searchBaseUrl
+              showAllResults.href = searchBaseUrl + suffix
               showAllResults.innerHTML = `${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>`
               contentItemsElement.appendChild(showAllResults)
               this.list.after(contentItemsElement)
