@@ -399,10 +399,12 @@ export default class AutoCompleteList extends Shadow() {
                 contentUnsortedList.appendChild(listItem)
               })
               contentItemsElement.appendChild(contentUnsortedList)
-              const showAllResults = document.createElement('a')
-              showAllResults.href = searchBaseUrl + suffix
-              showAllResults.innerHTML = `${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>`
-              contentItemsElement.appendChild(showAllResults)
+              if (contentItems.length > 4) {
+                const showAllResults = document.createElement('a')
+                showAllResults.href = searchBaseUrl + suffix
+                showAllResults.innerHTML = `${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>`
+                contentItemsElement.appendChild(showAllResults)
+              }
               this.list.after(contentItemsElement)
             }
           })
