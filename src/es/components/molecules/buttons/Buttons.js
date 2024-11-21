@@ -71,6 +71,9 @@ export default class Buttons extends Shadow() {
           justify-content: space-between;
           width: 100%
         }
+        :host:has(.buttons-container ks-m-favorite-button + ks-a-button) {
+          width: 100%;
+        }
       }
     `
     return this.fetchTemplate()
