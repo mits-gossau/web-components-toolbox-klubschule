@@ -24,16 +24,16 @@ export default class OffersPage extends Shadow() {
         this.searchTerm = data.searchText
         if (this.data.additionalinfos?.length > 0) this.showInfoEventsHeadline = true
 
-        const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-        if (!this.isWishList) bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
+        const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
+        if (!this.isWishList) bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
         // this.showInputSection = (this.data.clat === null && this.data.courses.length === 0 && this.data.searchText !== '' && this.data.total === 0) ? false : true
-        // const inputSectionContainer = bodySection.shadowRoot.querySelector('o-grid:first-of-type').shadowRoot.querySelector('#input-section-container')
-        // const filterSelectContainer = bodySection.shadowRoot.querySelector('o-grid#filter-select-container')
-        // const content1Container = this.ksMTab ? this.ksMTab.shadowRoot.querySelector('#content1') : undefined
-        // const spacing1 = bodySection.shadowRoot.querySelector('ks-a-spacing[type="s-flex"]:first-of-type')
-        // const spacing2 = bodySection.shadowRoot.querySelector('ks-a-spacing[type="s-flex"]:nth-of-type(2)')
-        // const sort = bodySection.shadowRoot.querySelector('#sort-options')
+        // const inputSectionContainer = bodySection.root.querySelector('o-grid:first-of-type').root.querySelector('#input-section-container')
+        // const filterSelectContainer = bodySection.root.querySelector('o-grid#filter-select-container')
+        // const content1Container = this.ksMTab ? this.ksMTab.root.querySelector('#content1') : undefined
+        // const spacing1 = bodySection.root.querySelector('ks-a-spacing[type="s-flex"]:first-of-type')
+        // const spacing2 = bodySection.root.querySelector('ks-a-spacing[type="s-flex"]:nth-of-type(2)')
+        // const sort = bodySection.root.querySelector('#sort-options')
 
         // if (this.showInputSection) {
         //   content1Container ? content1Container.style.paddingTop = '3em' : ''
@@ -52,7 +52,7 @@ export default class OffersPage extends Shadow() {
         // }
 
         // Set Sort
-        const sort = bodySection.shadowRoot.querySelector('#sort-options')
+        const sort = bodySection.root.querySelector('#sort-options')
         if (sort && !this.eventDetailURL) {
           this.fetchModules([
             {
@@ -74,6 +74,11 @@ export default class OffersPage extends Shadow() {
               ` : ''}
             </ks-m-sort>
           `
+          // adjust load more button text depending the sort option
+          let moreText
+          if ((moreText = bodySection.root.querySelector('ks-a-with-facet-pagination')?.querySelector('ks-a-button')?.root.querySelector('.more-text'))) {
+            moreText.textContent = this.data.sort.sort === 2 ? this.getTranslation('CourseList.MoreLocationsPlaceholder') : this.getTranslation('CourseList.MoreOffersPlaceholder')
+          }
         }
       })
     }
@@ -128,10 +133,10 @@ export default class OffersPage extends Shadow() {
   withFacetListener(event) {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
-      const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+      const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
 
       // Set Sort
-      const sort = bodySection.shadowRoot.querySelector('#sort-options')
+      const sort = bodySection.root.querySelector('#sort-options')
       if (sort) {
         this.fetchModules([
           {
@@ -672,7 +677,7 @@ export default class OffersPage extends Shadow() {
                   ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 >
                   <ks-a-button namespace="button-primary-" color="secondary">
-                      <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
+                      <span class="more-text">${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
                       <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                   </ks-a-button>
                 </ks-a-with-facet-pagination>
