@@ -191,8 +191,8 @@ export default class Buttons extends Shadow() {
       `
 
       let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
-      if (this.data.parentkey) {
-        itemId = this.data.parentkey + '--' + itemId
+      if (this.data.parent_kurs_id && this.data.parent_kurs_typ) {
+        itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
       }
 
       return acc + (
