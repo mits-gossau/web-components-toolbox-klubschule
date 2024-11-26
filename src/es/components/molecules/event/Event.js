@@ -750,9 +750,8 @@ export default class Event extends Shadow() {
       }))).then((data) => {
         // GTM tracking of click on more details
         let itemId = data.kurs_typ + '_' + data.kurs_id
-        if (data.parent_kurs_id && data.parent_kurs_typ) {
-          itemId = data.parent_kurs_typ + '_' + data.parent_kurs_id + '--' + itemId
-        }
+        if (data.centerid) itemId = itemId + '_' + data.centerid
+        if (data.parent_kurs_id && data.parent_kurs_typ) itemId = data.parent_kurs_typ + '_' + data.parent_kurs_id + '--' + itemId
         // @ts-ignore
         if (typeof window !== 'undefined' && window.dataLayer) {
             try {
