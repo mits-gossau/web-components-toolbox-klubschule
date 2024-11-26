@@ -189,11 +189,9 @@ export default class Buttons extends Shadow() {
           ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
         </ks-a-button>
       `
-
       let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
-      if (this.data.parent_kurs_id && this.data.parent_kurs_typ) {
-        itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
-      }
+      if (this.data.centerid) itemId = itemId + '_' + this.data.centerid
+      if (this.data.parent_kurs_id && this.data.parent_kurs_typ) itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
 
       return acc + (
         (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
@@ -266,9 +264,8 @@ export default class Buttons extends Shadow() {
     if (typeof window !== 'undefined' && window.dataLayer) {
       try {
         let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
-        if (this.data.parent_kurs_id && this.data.parent_kurs_typ) {
-          itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
-        }
+        if (this.data.centerid) itemId = itemId + '_' + this.data.centerid
+        if (this.data.parent_kurs_id && this.data.parent_kurs_typ) itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
         // @ts-ignore
         window.dataLayer.push(
           {

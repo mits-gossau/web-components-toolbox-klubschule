@@ -296,6 +296,9 @@ export default class Tile extends Shadow() {
     const data = this.tileData
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     if (this.hasAttribute('parent-title')) data.parentTitle = this.getAttribute('parent-title')
+    let itemId = data.kurs_typ + '_' + data.kurs_id
+    if (data.centerid) itemId = itemId + '_' + data.centerid
+    if (data.parent_kurs_id && data.parent_kurs_typ) itemId = data.parent_kurs_typ + '_' + data.parent_kurs_id + '--' + itemId
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     this.html = /* HTML */`
@@ -311,7 +314,7 @@ export default class Tile extends Shadow() {
               "ecommerce": {    
                 "items": [{ 
                   "item_name": "${data.parentTitle || data.title || data.bezeichnung || 'No Title'}",                
-                  "item_id": "${data.kurs_typ}_${data.kurs_id}",
+                  "item_id": "${itemId}",
                   "price": ${data.price?.price || data.preis_total || 0},
                   ${data.spartename?.[0] ? `"item_category": "${data.spartename[0]}",` : ''}
                   ${data.spartename?.[1] ? `"item_category2": "${data.spartename[1]}",` : ''}
