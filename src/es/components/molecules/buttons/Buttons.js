@@ -190,6 +190,11 @@ export default class Buttons extends Shadow() {
         </ks-a-button>
       `
 
+      let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
+      if (this.data.parentkey) {
+        itemId = this.data.parentkey + '--' + itemId
+      }
+
       return acc + (
         (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
           <ks-c-gtm-event 
@@ -199,7 +204,7 @@ export default class Buttons extends Shadow() {
               "ecommerce": {    
                 "items": [{ 
                   "item_name": "${this.hasAttribute('parent-title') && !this.hasAttribute('sort-nearby') ? this.getAttribute('parent-title') : this.data.title || this.data.bezeichnung || 'No Title'}",                
-                  "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
+                  "item_id": "${itemId}",
                   "price": ${this.data.price?.price || this.data.preis_total || 0},
                   "item_variant": "${this.data.location?.center}",
                   ${this.data.spartename?.[0] ? `"item_category": "${this.data.spartename[0]}",` : ''}
