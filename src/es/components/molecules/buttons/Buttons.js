@@ -265,6 +265,10 @@ export default class Buttons extends Shadow() {
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {
       try {
+        let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
+        if (this.data.parent_kurs_id && this.data.parent_kurs_typ) {
+          itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
+        }
         // @ts-ignore
         window.dataLayer.push(
           {
@@ -274,7 +278,7 @@ export default class Buttons extends Shadow() {
                 // @ts-ignore
                 'item_name': `${this.data.bezeichnung}`,                
                 // @ts-ignore
-                'item_id': `${this.data.kurs_typ}_${this.data.kurs_id}`, 
+                'item_id': `${itemId}`, 
                 // @ts-ignore
                 'price': this.data.price.price,
                 'item_category': `${this.data.spartename?.[0] || ''}`,
