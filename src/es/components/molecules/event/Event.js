@@ -748,7 +748,11 @@ export default class Event extends Shadow() {
         cancelable: true,
         composed: true
       }))).then((data) => {
-        // GTM Tracking of Click on More Details
+        // GTM tracking of click on more details
+        let itemId = data.kurs_typ + '_' + data.kurs_id
+        if (data.parentkey) {
+          itemId = data.parentkey + '--' + itemId
+        }
         // @ts-ignore
         if (typeof window !== 'undefined' && window.dataLayer) {
             try {
@@ -759,7 +763,7 @@ export default class Event extends Shadow() {
                   'ecommerce': {    
                     'items': [{ 
                       'item_name': `${data.bezeichnung}`,                
-                      'item_id': `${data.kurs_typ}_${data.kurs_id}`, 
+                      'item_id': `${itemId}`, 
                       'price': data.preis_total,
                       'item_category': `${data.spartename?.[0] || ''}`,
                       'item_category2': `${data.spartename?.[1] || ''}`,
