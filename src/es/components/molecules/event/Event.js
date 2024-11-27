@@ -769,7 +769,7 @@ export default class Event extends Shadow() {
                       'item_category3': `${data.spartename?.[2] || ''}`,
                       'item_category4': `${data.spartename?.[3] || ''}`,
                       'quantity': 1,
-                      'item_variant': `${data.location?.center ? data.location.center : ''}`,
+                      'item_variant': `${data.location?.center ? data.location.center : data?.center ? data.center : this.data?.course?.location?.center ? this.data.course.location.center : ''}`,
                       'currency': 'CHF',       
                     }]
                   }
