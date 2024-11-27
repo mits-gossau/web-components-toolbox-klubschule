@@ -786,7 +786,7 @@ export default class OffersPage extends Shadow() {
               delete-listener
               ${this.hasAttribute('with-auto-complete') ? 'any-key-listener' : ''}
               search
-              autocomplete="off"
+              autocomplete="${this.hasAttribute('endpoint-auto-complete') ? 'on' : 'off'}"
             >
             </a-input>
             <div id="close">
