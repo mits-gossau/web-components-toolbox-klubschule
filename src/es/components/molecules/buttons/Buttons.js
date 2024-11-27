@@ -71,6 +71,9 @@ export default class Buttons extends Shadow() {
           justify-content: space-between;
           width: 100%
         }
+        :host:has(.buttons-container ks-m-favorite-button + ks-a-button) {
+          width: 100%;
+        }
       }
     `
     return this.fetchTemplate()
@@ -189,6 +192,9 @@ export default class Buttons extends Shadow() {
           ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
         </ks-a-button>
       `
+      let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
+      if (this.data.centerid) itemId = itemId + '_' + this.data.centerid
+      if (this.data.parent_kurs_id && this.data.parent_kurs_typ) itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
 
       return acc + (
         (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
@@ -199,7 +205,7 @@ export default class Buttons extends Shadow() {
               "ecommerce": {    
                 "items": [{ 
                   "item_name": "${this.hasAttribute('parent-title') && !this.hasAttribute('sort-nearby') ? this.getAttribute('parent-title') : this.data.title || this.data.bezeichnung || 'No Title'}",                
-                  "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
+                  "item_id": "${itemId}",
                   "price": ${this.data.price?.price || this.data.preis_total || 0},
                   "item_variant": "${this.data.location?.center}",
                   ${this.data.spartename?.[0] ? `"item_category": "${this.data.spartename[0]}",` : ''}
@@ -260,6 +266,9 @@ export default class Buttons extends Shadow() {
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {
       try {
+        let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
+        if (this.data.centerid) itemId = itemId + '_' + this.data.centerid
+        if (this.data.parent_kurs_id && this.data.parent_kurs_typ) itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
         // @ts-ignore
         window.dataLayer.push(
           {
@@ -269,7 +278,7 @@ export default class Buttons extends Shadow() {
                 // @ts-ignore
                 'item_name': `${this.data.bezeichnung}`,                
                 // @ts-ignore
-                'item_id': `${this.data.kurs_typ}_${this.data.kurs_id}`, 
+                'item_id': `${itemId}`, 
                 // @ts-ignore
                 'price': this.data.price.price,
                 'item_category': `${this.data.spartename?.[0] || ''}`,

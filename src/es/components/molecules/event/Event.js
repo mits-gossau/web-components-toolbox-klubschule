@@ -748,7 +748,10 @@ export default class Event extends Shadow() {
         cancelable: true,
         composed: true
       }))).then((data) => {
-        // GTM Tracking of Click on More Details
+        // GTM tracking of click on more details
+        let itemId = data.kurs_typ + '_' + data.kurs_id
+        if (data.centerid) itemId = itemId + '_' + data.centerid
+        if (data.parent_kurs_id && data.parent_kurs_typ) itemId = data.parent_kurs_typ + '_' + data.parent_kurs_id + '--' + itemId
         // @ts-ignore
         if (typeof window !== 'undefined' && window.dataLayer) {
             try {
@@ -759,14 +762,14 @@ export default class Event extends Shadow() {
                   'ecommerce': {    
                     'items': [{ 
                       'item_name': `${data.bezeichnung}`,                
-                      'item_id': `${data.kurs_typ}_${data.kurs_id}`, 
+                      'item_id': `${itemId}`, 
                       'price': data.preis_total,
                       'item_category': `${data.spartename?.[0] || ''}`,
                       'item_category2': `${data.spartename?.[1] || ''}`,
                       'item_category3': `${data.spartename?.[2] || ''}`,
                       'item_category4': `${data.spartename?.[3] || ''}`,
                       'quantity': 1,
-                      'item_variant': `${data.location?.center ? data.location.center : ''}`,
+                      'item_variant': `${data.location?.center ? data.location.center : data?.center ? data.center : this.data?.course?.location?.center ? this.data.course.location.center : ''}`,
                       'currency': 'CHF',       
                     }]
                   }

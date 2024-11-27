@@ -201,7 +201,7 @@
   --button-badge-padding: var(--mdx-sys-spacing-fix-3xs) var(--mdx-sys-spacing-fix-2xs);
   --button-badge-border-radius: 3px;
 
-  --dialog-top-slide-in-dialog-min-height: 470px;
+  --dialog-top-slide-in-dialog-min-height: 480px;
   --emotion-pictures-default-img-max-height: 50vh;
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);

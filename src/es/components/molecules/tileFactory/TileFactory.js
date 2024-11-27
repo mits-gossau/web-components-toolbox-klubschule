@@ -230,7 +230,8 @@ export default class TileFactory extends Shadow() {
           : course.locations
             ? course.locations.join(', ')
             : ''}",
-        "badge": "${course.location.badge ? course.location.badge : ''}"
+        "badge": "${course.location.badge ? course.location.badge : ''}",
+        "center": "${course.location.center ? course.location.center : course.center ? course.center : ''}"
       },
       "centerid": "${course.centerid}",
       "kurs_typ": "${course.kurs_typ}",

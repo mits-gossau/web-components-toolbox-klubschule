@@ -12,6 +12,7 @@ export default class Tab extends Shadow() {
 
       event.target.classList.add('active')
       this.tabActive = event.target
+      this.tabActive.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
       this.tabActiveId = event.target.getAttribute('tab-target')
       this.contentActive = this.root.querySelector(`div[tab-content-target]#${this.tabActiveId}`)
       this.contentActive.classList.add('show')
