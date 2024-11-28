@@ -195,6 +195,7 @@ export default class Buttons extends Shadow() {
       let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
       if (this.data.centerid) itemId = itemId + '_' + this.data.centerid
       if (this.data.parent_kurs_id && this.data.parent_kurs_typ) itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
+      if (this.data.parentkey) itemId = this.data.parentkey + '--' + itemId
 
       return acc + (
         (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
@@ -269,6 +270,7 @@ export default class Buttons extends Shadow() {
         let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
         if (this.data.centerid) itemId = itemId + '_' + this.data.centerid
         if (this.data.parent_kurs_id && this.data.parent_kurs_typ) itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
+        if (this.data.parentkey) itemId = this.data.parentkey + '--' + itemId
         // @ts-ignore
         window.dataLayer.push(
           {
