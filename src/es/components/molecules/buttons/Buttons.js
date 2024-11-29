@@ -192,10 +192,6 @@ export default class Buttons extends Shadow() {
           ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
         </ks-a-button>
       `
-      let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
-      if (this.data.centerid) itemId = itemId + '_' + this.data.centerid
-      if (this.data.parent_kurs_id && this.data.parent_kurs_typ) itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
-
       return acc + (
         (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
           <ks-c-gtm-event 
@@ -205,9 +201,10 @@ export default class Buttons extends Shadow() {
               "ecommerce": {    
                 "items": [{ 
                   "item_name": "${this.hasAttribute('parent-title') && !this.hasAttribute('sort-nearby') ? this.getAttribute('parent-title') : this.data.title || this.data.bezeichnung || 'No Title'}",                
-                  "item_id": "${itemId}",
+                  "item_id": "${this.getItemId(this.data)}",
                   "price": ${this.data.price?.price || this.data.preis_total || 0},
-                  "item_variant": "${this.data.location?.center}",
+                  "oprice": ${this.data.price?.oprice|| 0},
+                  "item_variant": "${this.data.location?.center ? this.data.location.center : this.data.center ? this.data.center : ''}",
                   ${this.data.spartename?.[0] ? `"item_category": "${this.data.spartename[0]}",` : ''}
                   ${this.data.spartename?.[1] ? `"item_category2": "${this.data.spartename[1]}",` : ''}
                   ${this.data.spartename?.[2] ? `"item_category3": "${this.data.spartename[2]}",` : ''}
@@ -266,9 +263,6 @@ export default class Buttons extends Shadow() {
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {
       try {
-        let itemId = this.data.kurs_typ + '_' + this.data.kurs_id
-        if (this.data.centerid) itemId = itemId + '_' + this.data.centerid
-        if (this.data.parent_kurs_id && this.data.parent_kurs_typ) itemId = this.data.parent_kurs_typ + '_' + this.data.parent_kurs_id + '--' + itemId
         // @ts-ignore
         window.dataLayer.push(
           {
@@ -278,15 +272,16 @@ export default class Buttons extends Shadow() {
                 // @ts-ignore
                 'item_name': `${this.data.bezeichnung}`,                
                 // @ts-ignore
-                'item_id': `${itemId}`, 
+                'item_id': `${this.getItemId(this.data)}`, 
                 // @ts-ignore
                 'price': this.data.price.price,
+                'oprice': this.data.price.oprice,
                 'item_category': `${this.data.spartename?.[0] || ''}`,
                 'item_category2': `${this.data.spartename?.[1] || ''}`,
                 'item_category3': `${this.data.spartename?.[2] || ''}`,
                 'item_category4': `${this.data.spartename?.[3] || ''}`,
                 'quantity': 1,
-                'item_variant':`${this.data.location?.center ? this.data.location.center : ''}`,
+                'item_variant':`${this.data.location?.center ? this.data.location.center : this.data.center ? this.data.center : ''}`,
                 'currency': 'CHF'
               }]
             }
@@ -386,5 +381,13 @@ export default class Buttons extends Shadow() {
         window.location.href = data.link
       }
     })
+  }
+
+  getItemId (data) {
+    // more fun here: https://jira.migros.net/browse/MIDUWEB-1687
+    const itemId = data.kurs_typ + '_' + data.kurs_id
+    const centerId = data.centerid ? `_${data.centerid}` : ''
+    const parentId = data.parentkey || data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
+    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}`
   }
 }

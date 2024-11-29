@@ -749,9 +749,6 @@ export default class Event extends Shadow() {
         composed: true
       }))).then((data) => {
         // GTM tracking of click on more details
-        let itemId = data.kurs_typ + '_' + data.kurs_id
-        if (data.centerid) itemId = itemId + '_' + data.centerid
-        if (data.parent_kurs_id && data.parent_kurs_typ) itemId = data.parent_kurs_typ + '_' + data.parent_kurs_id + '--' + itemId
         // @ts-ignore
         if (typeof window !== 'undefined' && window.dataLayer) {
             try {
@@ -762,8 +759,8 @@ export default class Event extends Shadow() {
                   'ecommerce': {    
                     'items': [{ 
                       'item_name': `${data.bezeichnung}`,                
-                      'item_id': `${itemId}`, 
-                      'price': data.preis_total,
+                      'item_id': `${this.getItemId(data)}`, 
+                      'price': /*data.preis_kurs || */data.preis_total, // coming soon: https://jira.migros.net/browse/MIDUWEB-1687
                       'item_category': `${data.spartename?.[0] || ''}`,
                       'item_category2': `${data.spartename?.[1] || ''}`,
                       'item_category3': `${data.spartename?.[2] || ''}`,
@@ -806,6 +803,13 @@ export default class Event extends Shadow() {
 
   get isPassed () {
     return this.hasAttribute('is-passed')
+  }
+
+  getItemId (data) {
+    const itemId = data.kurs_typ + '_' + data.kurs_id
+    const centerId = data.centerid ? `_${data.centerid}` : ''
+    const parentId = data.parentkey || data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
+    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}`
   }
 
   get mockData () {
