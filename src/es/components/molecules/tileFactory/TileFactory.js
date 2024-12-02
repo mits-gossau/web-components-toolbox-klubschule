@@ -242,8 +242,7 @@ export default class TileFactory extends Shadow() {
         "pre": "${course.price.pre}",
         "amount": "${course.price.amount}",
         "per": "${course.price.per}",
-        "price": ${course.price.price},
-        "oprice": ${course.price.oprice}
+        "price": ${course.price.oprice || course.price.price}
       },
       "parentkey": "${course.parentkey}"
     `
@@ -285,8 +284,7 @@ export default class TileFactory extends Shadow() {
       "status": "${event.status}",
       "status_label": "${event.status_label}",
       "lektionen_label": "${event.lektionen_label}",
-      "price": ${JSON.stringify(event.price)},
-      "oprice": ${JSON.stringify(event.oprice)},
+      "price": ${event.oprice ? JSON.stringify(event.oprice) : JSON.stringify(event.price)},
       "icons": ${JSON.stringify(event.icons)},
       "buttons": ${JSON.stringify(event.buttons) || '[]'},
       ${aboTypesAsJson || ''}

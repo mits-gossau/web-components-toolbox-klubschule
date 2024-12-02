@@ -202,8 +202,7 @@ export default class Buttons extends Shadow() {
                 "items": [{ 
                   "item_name": "${this.hasAttribute('parent-title') && !this.hasAttribute('sort-nearby') ? this.getAttribute('parent-title') : this.data.title || this.data.bezeichnung || 'No Title'}",                
                   "item_id": "${this.getItemId(this.data)}",
-                  "price": ${this.data.price?.price || this.data.preis_total || 0},
-                  "oprice": ${this.data.price?.oprice|| 0},
+                  "price": ${this.data.price?.oprice || this.data.price?.price || this.data.preis_total || 0},
                   "item_variant": "${this.data.location?.center ? this.data.location.center : this.data.center ? this.data.center : ''}",
                   ${this.data.spartename?.[0] ? `"item_category": "${this.data.spartename[0]}",` : ''}
                   ${this.data.spartename?.[1] ? `"item_category2": "${this.data.spartename[1]}",` : ''}
@@ -274,8 +273,7 @@ export default class Buttons extends Shadow() {
                 // @ts-ignore
                 'item_id': `${this.getItemId(this.data)}`, 
                 // @ts-ignore
-                'price': this.data.price.price,
-                'oprice': this.data.price.oprice,
+                'price': this.data.price.oprice || this.data.price.price,
                 'item_category': `${this.data.spartename?.[0] || ''}`,
                 'item_category2': `${this.data.spartename?.[1] || ''}`,
                 'item_category3': `${this.data.spartename?.[2] || ''}`,
@@ -384,10 +382,9 @@ export default class Buttons extends Shadow() {
   }
 
   getItemId (data) {
-    // more fun here: https://jira.migros.net/browse/MIDUWEB-1687
     const itemId = data.kurs_typ + '_' + data.kurs_id
     const centerId = data.centerid ? `_${data.centerid}` : ''
-    const parentId = data.parentkey || data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
-    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}`
+    const parentId = data.parentkey ? data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
+    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}${centerId}`
   }
 }
