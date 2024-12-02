@@ -422,7 +422,7 @@ export default class Tile extends Shadow() {
   getItemId (data) {
     const itemId = data.kurs_typ + '_' + data.kurs_id
     const centerId = data.centerid ? `_${data.centerid}` : ''
-    const parentId = data.parentkey || data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
-    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}`
+    const parentId = data.parentkey ? data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
+    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}${centerId}`
   }
 }
