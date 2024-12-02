@@ -318,7 +318,7 @@ export default class Tile extends Shadow() {
                   ${data.spartename?.[2] ? `"item_category3": "${data.spartename[2]}",` : ''}
                   ${data.spartename?.[3] ? `"item_category4": "${data.spartename[3]}",` : ''}
                   "quantity": 1,
-                  "item_variant": "${data.location?.center ? data.location.center : data.center ? data.center : ''}",
+                  "item_variant": "${data.location?.center ? data.location.center : data.center ? data.center.bezeichnung_internet : ''}",
                   "currency": "CHF"
                 }]
               }
@@ -422,7 +422,7 @@ export default class Tile extends Shadow() {
   getItemId (data) {
     const itemId = data.kurs_typ + '_' + data.kurs_id
     const centerId = data.centerid ? `_${data.centerid}` : ''
-    const parentId = data.parentkey || data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
-    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}`
+    const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
+    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
   }
 }
