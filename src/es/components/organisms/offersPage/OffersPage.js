@@ -16,7 +16,6 @@ export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.showInputSection = false
     this.showInfoEventsHeadline = false
 
     this.withFacetListener = (event) => {
@@ -27,6 +26,17 @@ export default class OffersPage extends Shadow() {
 
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
         if (!this.isWishList) bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
+
+        // Set headline for info events
+        if (this.hasAttribute('is-info-events') && this.showInfoEventsHeadline) {
+          const headlineContainer = bodySection.root.querySelector('#info-events-headline-container')
+          headlineContainer.innerHTML = /* html */ `
+            <ks-a-spacing type="m-flex"></ks-a-spacing>
+            <ks-a-heading tag="h2" no-margin-x>
+              ${this.getTranslation('CourseList.LabelInfoEvents')}
+            </ks-a-heading>
+          `
+        }
 
         // Set Sort
         const sort = bodySection.root.querySelector('#sort-options')
@@ -554,6 +564,7 @@ export default class OffersPage extends Shadow() {
       </ks-c-auto-complete>
     ` : ''
 
+
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
@@ -634,7 +645,7 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options"></section>
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
-              ${this.hasAttribute('is-info-events') && this.showInfoEventsHeadline ? `<ks-a-spacing type="m-flex"></ks-a-spacing><ks-a-heading tag="h2" no-margin-x>${this.getTranslation('CourseList.ConsultingInfoEvent')}</ks-a-heading>` : ''}
+              ${this.hasAttribute('is-info-events') ? '<div id="info-events-headline-container" style="width:100%"></div>' : ''}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
