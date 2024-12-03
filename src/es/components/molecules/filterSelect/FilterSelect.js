@@ -175,18 +175,29 @@ export default class FilterSelect extends Shadow() {
       const requestEventName = `dialog-open-first-level,dialog-open-${quickFilter.id}`
 
       return /* html */`
-        <ks-a-button small namespace="button-secondary-" color="tertiary" justify-content="flex-start" request-event-name="${requestEventName}" click-no-toggle-active>
-          <style>
-            :host button {
-              width: 100% !important;
-            }
-            :host button span {
-              text-align: left;
-            }
-            </style>
-          <span>${quickFilter.label}</span>
-          <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx>
-        </ks-a-button>
+        <ks-c-gtm-event
+          mode="false" 
+          listen-to="click"
+          event-data='{
+            "event": "quick_filter_selection",
+            "quick_filter_name": "${quickFilter.label}", 
+            "quick_filter_category": "${quickFilter.label}",
+          }'
+        >
+          <ks-a-button small namespace="button-secondary-" color="tertiary" justify-content="flex-start" request-event-name="${requestEventName}" click-no-toggle-active>
+            <style>
+              :host,
+              :host button {
+                width: 100% !important;
+              }
+              :host button span {
+                text-align: left;
+              }
+              </style>
+            <span>${quickFilter.label}</span>
+            <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx>
+          </ks-a-button>
+        </ks-c-gtm-event>
       `
     }).join('')
   }
@@ -235,6 +246,10 @@ export default class FilterSelect extends Shadow() {
     {
       path: `${this.importMetaUrl}../../molecules/autoCompleteList/AutoCompleteList.js`,
       name: 'ks-m-auto-complete-list'
+    },
+    {
+      path: `${this.importMetaUrl}../../controllers/gtmEvent/GtmEvent.js`,
+      name: 'ks-c-gtm-event'
     }]).then(() => {
       Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
         this.html = ''
