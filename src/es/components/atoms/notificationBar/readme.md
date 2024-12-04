@@ -14,6 +14,7 @@
 </ks-a-notification-bar>
 ```
 
-### Variations (check out example page above):
+### Attribute variations (check out example page above):
 - *storage-type*: optional `localStorage` to keep the users "seen" decision in the localStorage to only show it once. Default is in the sessionStorage.
 - *id*: optional random id, to show the component only once per id
+- *pro*: optional changes the background color from MDX default to accent 1 (--color-secondary aka. --mdx-sys-color-primary-default to --mdx-sys-color-accent-1-default) 

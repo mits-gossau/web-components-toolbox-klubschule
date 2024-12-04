@@ -10,10 +10,16 @@ export default class NotificationBar extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    if (this.storage.getItem(this.storageKey)) this.remove()
+    if (this.storage.getItem(this.storageKey)) {
+      this.setAttribute('aria-expanded', 'false')
+      this.remove()
+    } else {
+      this.setAttribute('aria-expanded', 'true')
+    }
 
     this.clickEventListener = event => {
       this.storage.setItem(this.storageKey, 'seen')
+      this.setAttribute('aria-expanded', 'false')
       this.remove()
     }
   }
@@ -75,6 +81,10 @@ export default class NotificationBar extends Shadow() {
         background-color: var(--color-secondary);
         --color: var(--background-color);
         --color-hover: var(--color);
+      }
+      :host([pro]:not([error])) > section {
+        --p-font-weight: 700;
+        background-color: var(--mdx-sys-color-accent-1-default);
       }
       :host([error]) > section {
         background-color: var(--mdx-sys-color-error-subtle3, var(--color-error));
