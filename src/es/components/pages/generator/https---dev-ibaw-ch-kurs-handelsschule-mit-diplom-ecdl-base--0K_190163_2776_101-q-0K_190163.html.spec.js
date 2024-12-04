@@ -5,8 +5,8 @@
     const PROJECT_NAME = dir.splice(3)[0]
     const WAITING_TIMEOUT = 200
 
-    test('https---www-klubschule-ch-raeume-deutschschweiz-raumvermietung-luzern.html', async ({ page, browserName }) => {
-      await page.goto('./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=./src/css/variablesCustomKlubschule.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html&content=./src/es/components/pages/generator/https---www-klubschule-ch-raeume-deutschschweiz-raumvermietung-luzern.html')
+    test('https---dev-ibaw-ch-kurs-handelsschule-mit-diplom-ecdl-base--0K_190163_2776_101-q-0K_190163.html', async ({ page, browserName }) => {
+      await page.goto('./src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=./src/css/variablesCustomKlubschule.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html&content=./src/es/components/pages/generator/https---dev-ibaw-ch-kurs-handelsschule-mit-diplom-ecdl-base--0K_190163_2776_101-q-0K_190163.html')
       const demoPage = await page.waitForSelector('body')
       const wcLoaded = await demoPage.getAttribute('wc-config-load')
       console.log('wait for wc-load')
