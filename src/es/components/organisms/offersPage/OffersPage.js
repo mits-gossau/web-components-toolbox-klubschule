@@ -193,6 +193,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('save-location-local-storage') ? 'save-location-local-storage' : ''}
         ${this.hasAttribute('save-location-session-storage') ? 'save-location-session-storage' : ''}
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
+        ${this.hasAttribute('endpoint-info-events') ? `endpoint-info-events="${this.getAttribute('endpoint-info-events')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('mock-info-events') ? ` mock-info-events="${this.getAttribute('mock-info-events')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''}
