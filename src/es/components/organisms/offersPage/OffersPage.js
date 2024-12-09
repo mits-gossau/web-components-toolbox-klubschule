@@ -9,47 +9,34 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 * note: headless makes sure that no filters are loaded
 * note: is-wish-list makes sure that no badge legend is loaded
+* note: is-info-events makes sure that the headline is shown
 * TODO: take headless to hide the badge legend
 */
 export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.showInputSection = false
     this.showInfoEventsHeadline = false
 
     this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
-        if (this.data.additionalinfos?.length > 0) this.showInfoEventsHeadline = true
+        if (this.data.courses?.length > 0) this.showInfoEventsHeadline = true
 
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
         if (!this.isWishList) bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
-        // this.showInputSection = (this.data.clat === null && this.data.courses.length === 0 && this.data.searchText !== '' && this.data.total === 0) ? false : true
-        // const inputSectionContainer = bodySection.root.querySelector('o-grid:first-of-type').root.querySelector('#input-section-container')
-        // const filterSelectContainer = bodySection.root.querySelector('o-grid#filter-select-container')
-        // const content1Container = this.ksMTab ? this.ksMTab.root.querySelector('#content1') : undefined
-        // const spacing1 = bodySection.root.querySelector('ks-a-spacing[type="s-flex"]:first-of-type')
-        // const spacing2 = bodySection.root.querySelector('ks-a-spacing[type="s-flex"]:nth-of-type(2)')
-        // const sort = bodySection.root.querySelector('#sort-options')
-
-        // if (this.showInputSection) {
-        //   content1Container ? content1Container.style.paddingTop = '3em' : ''
-        //   inputSectionContainer ? inputSectionContainer.removeAttribute('hidden') : ''
-        //   filterSelectContainer.style.display = ''
-        //   spacing1.style.display = ''
-        //   spacing2.style.display = ''
-        //   sort.style.display = ''
-        // } else {
-        //   content1Container ? content1Container.style.paddingTop = '0' : ''
-        //   inputSectionContainer ? inputSectionContainer.setAttribute('hidden', '') : ''
-        //   filterSelectContainer.style.display = 'none'
-        //   spacing1.style.display = 'none'
-        //   spacing2.style.display = 'none'
-        //   sort.style.display = 'none'
-        // }
+        // Set headline for info events
+        if (this.hasAttribute('is-info-events') && this.showInfoEventsHeadline) {
+          const headlineContainer = bodySection.root.querySelector('#info-events-headline-container')
+          headlineContainer.innerHTML = /* html */ `
+            <ks-a-spacing type="m-flex"></ks-a-spacing>
+            <ks-a-heading tag="h2" no-margin-x>
+              ${this.getTranslation('CourseList.LabelInfoEvents')}
+            </ks-a-heading>
+          `
+        }
 
         // Set Sort
         const sort = bodySection.root.querySelector('#sort-options')
@@ -577,6 +564,7 @@ export default class OffersPage extends Shadow() {
       </ks-c-auto-complete>
     ` : ''
 
+
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
@@ -657,7 +645,7 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options"></section>
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
-              ${this.hasAttribute('is-info-events') && this.showInfoEventsHeadline ? `<ks-a-spacing type="m-flex"></ks-a-spacing><ks-a-heading tag="h2" no-margin-x>${this.getTranslation('CourseList.ConsultingInfoEvent')}</ks-a-heading>` : ''}
+              ${this.hasAttribute('is-info-events') ? '<div id="info-events-headline-container" style="width:100%"></div>' : ''}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
