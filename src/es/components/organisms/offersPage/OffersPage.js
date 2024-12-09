@@ -619,7 +619,7 @@ export default class OffersPage extends Shadow() {
                   </div>
                   <div class="container dialog-footer">
                     <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
-                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}                    ></ks-a-number-of-offers-button>
+                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-a-number-of-offers-button>
                   </div>
                 </dialog>
               </m-dialog>
@@ -657,8 +657,9 @@ export default class OffersPage extends Shadow() {
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
-              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
-              ${this.isWishList ? '' : /* html */ `
+              <!--${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}-->
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              ${this.isWishList && !this.hasAttribute('is-info-events') ? '' : /* html */ `
                 <ks-a-with-facet-pagination 
                   id="pagination"
                   pagination-event-name="request-with-facet"
@@ -671,7 +672,8 @@ export default class OffersPage extends Shadow() {
                   </ks-a-button>
                 </ks-a-with-facet-pagination>
               `}
-              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
+              <!--${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}-->
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               ${this.isWishList ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
                   ${this.isEasyPortal
