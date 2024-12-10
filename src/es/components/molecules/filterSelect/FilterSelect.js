@@ -5,6 +5,19 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /**
+ * @typedef {Object} FilterItem
+ * @property {string} id
+ * @property {string} label
+ * @property {string} typ
+ * @property {boolean} selected
+ * @property {boolean} visible
+ * @property {Array<FilterItem>} children
+ * @property {string} [urlpara]
+ * @property {number} [level]
+ * @property {boolean} [isquick]
+ */
+
+/**
 * filterSelect listening to the WithFacet controller
 *
 * @export
@@ -106,6 +119,9 @@ export default class FilterSelect extends Shadow() {
   generateFilterButtons(filterData) {
     let treeIds = null
     let treeUrlPara = null
+    /**
+     * @param {FilterItem} filterItem
+     */
     const processFilterItem = (filterItem) => {
       const isCenterFilter = filterItem.typ === 'group'
       const isSectorFilter = filterItem.typ === 'tree'
@@ -143,14 +159,14 @@ export default class FilterSelect extends Shadow() {
         }
 
         if (selectedFilterItems.length > 0) {
-          this.html = this.createFilterButton(filterItem, selectedFilterItems, treeIds && treeIds['parents']?.includes(filterItem.id) ? treeIds : [], filterItem.level?.length && treeIds && treeUrlPara && treeUrlPara['parents'][0])
+          this.html = this.createFilterButton(filterItem, selectedFilterItems, treeIds && treeIds['parents']?.includes(filterItem.id) ? treeIds : [], filterItem.level && treeIds && treeUrlPara && treeUrlPara['parents'][0])
         }
       
         filterItem.children.forEach(child => processFilterItem(child)) // recursive call
       }
     }
   
-    filterData.forEach(filterItem => {
+    filterData.forEach(/** @param {FilterItem} filterItem */ filterItem => {
       processFilterItem(filterItem)
     })
   }
@@ -158,7 +174,7 @@ export default class FilterSelect extends Shadow() {
   generateQuickFilters(filterData) {
     let quickFilters = []
 
-    filterData.forEach(filterItem => {
+    filterData.forEach(/** @param {FilterItem} filterItem */ filterItem => {
       if (filterItem.isquick) {
         quickFilters.push({id: filterItem.id, order: filterItem.isquick, label: filterItem.label})
       }
