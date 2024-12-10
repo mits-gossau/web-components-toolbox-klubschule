@@ -122,7 +122,8 @@ export default class TileFactory extends Shadow() {
       setTimeout(() => {
         // remove loading component
         this.root.querySelector('.mdx-loading')?.remove()
-        if (data.ppage === 1 || data.pskip === data.psize) this.html = ''
+        // TODO: change condition to have more-loading-button work on info events
+        //if (data.ppage === 1 || data.pskip === data.psize) this.html = ''
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -130,6 +131,7 @@ export default class TileFactory extends Shadow() {
         this.isNearbySearch = data.sort.sort === 2
         this.psize = data.psize
         this.pnext = data.pnext
+        debugger
         this.html = data.courses.reduce(
           (acc, course) => {
             const tile = this.isEventSearch ? /* html */ `
