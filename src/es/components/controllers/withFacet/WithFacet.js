@@ -367,7 +367,6 @@ export default class WithFacet extends WebWorker() {
           const endpointInfoEventsUrl = new URL(endpointInfoEvents)
           endpointInfoEventsUrl.searchParams.set('ppage', currentRequestObj.ppage + 1)
           endpointInfoEvents = endpointInfoEventsUrl.href
-          console.log('currentRequestObj', currentRequestObj)
         }
       }, 50)
 
