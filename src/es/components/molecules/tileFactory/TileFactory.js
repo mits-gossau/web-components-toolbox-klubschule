@@ -4,6 +4,65 @@
 
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/**
+ * @typedef {Object} Course
+ * @property {string} bezeichnung
+ * @property {string} infotextshort
+ * @property {Object} location
+ * @property {string} location.name
+ * @property {string} location.badge
+ * @property {string} location.center
+ * @property {string} center
+ * @property {string} centerid
+ * @property {string} kurs_typ
+ * @property {string} kurs_id
+ * @property {Array<Object>} buttons
+ * @property {Array<Object>} icons
+ * @property {Object} price
+ * @property {string} price.pre
+ * @property {string} price.amount
+ * @property {string} price.per
+ * @property {number} price.price
+ * @property {number} price.oprice
+ * @property {string} parentkey
+ * @property {Array<Object>} filter
+ * @property {Array<string>} locations
+ * @property {string} spartename
+ */
+
+/**
+ * @typedef {Object} Event
+ * @property {string} id
+ * @property {string} centerid
+ * @property {string} typ
+ * @property {Object} location
+ * @property {string} location.name
+ * @property {string} datum_label
+ * @property {string} days_label
+ * @property {string} download_label
+ * @property {string} wochentag_label
+ * @property {string} termin_label
+ * @property {string} termin_alle_label
+ * @property {string} zeit_label
+ * @property {string} uhrzeit_label
+ * @property {Array<string>} days
+ * @property {string} start_zeit
+ * @property {string} ende_zeit
+ * @property {boolean} ist_zeit_unregelmaessig
+ * @property {string} detail_label_more
+ * @property {string} detail_label_less
+ * @property {string} status
+ * @property {string} status_label
+ * @property {string} lektionen_label
+ * @property {Object} price
+ * @property {number} oprice
+ * @property {string} parentkey
+ * @property {Array<Object>} icons
+ * @property {Array<Object>} buttons
+ * @property {Array<Object>} abo_typen
+ * @property {boolean} deletable
+ */
+
 export default class TileFactory extends Shadow() {
   /**
   * @param options
@@ -113,17 +172,16 @@ export default class TileFactory extends Shadow() {
       }
     ])
     this.html = /* html */`
-      ${this.hasAttribute('loading-text') ? `<p>${this.getAttribute('loading-text')}</p>` : ''}
+      ${this.hasAttribute('loading-text') ? `<p class="mdx-loading">${this.getAttribute('loading-text')}</p>` : ''}
       <mdx-component class="mdx-loading">
           <mdx-loading-bar></mdx-loading-bar>
       </mdx-component>
     `
     fetch.then(data => {
       setTimeout(() => {
-        // remove loading component
-        this.root.querySelector('.mdx-loading')?.remove()
-        // TODO: change condition to have more-loading-button work on info events
-        //if (data.ppage === 1 || data.pskip === data.psize) this.html = ''
+        this.root.querySelectorAll('.mdx-loading').forEach(el => el.remove())
+        if ((data.ppage === 1 || data.pskip === data.psize) && !this.hasAttribute('is-info-events')) this.html = ''
+
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
@@ -131,17 +189,16 @@ export default class TileFactory extends Shadow() {
         this.isNearbySearch = data.sort.sort === 2
         this.psize = data.psize
         this.pnext = data.pnext
-        debugger
         this.html = data.courses.reduce(
-          (acc, course) => {
+          (acc, /** @type {Course} */ course) => {
             const tile = this.isEventSearch ? /* html */ `
               <ks-m-event
-                ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
-                ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
-                data='{
-                  "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
-                  "sprachid": "${data.sprachid}"
-                }'
+          ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
+          ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
+          data='{
+            "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
+            "sprachid": "${data.sprachid}"
+          }'
               ></ks-m-event>
             ` : (
               ((course.locations?.length > 1 || course.buttons[0]?.link === null &&  course.buttons[0].iconName === 'ChevronDown' &&  course.buttons[0].typ === 'quaternary') || this.isNearbySearch) && course.filter?.length
@@ -220,7 +277,7 @@ export default class TileFactory extends Shadow() {
     ])
   }
 
-  fillGeneralTileInfo (course) {
+  fillGeneralTileInfo (/** @type {Course} */ course) {
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     return `
       "title": "${course.bezeichnung}",
@@ -250,7 +307,7 @@ export default class TileFactory extends Shadow() {
     `
   }
 
-  fillGeneralTileInfoNearBy (course) {
+  fillGeneralTileInfoNearBy (/** @type {Course} */ course) {
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     return `
       "title": "${course.bezeichnung}",
@@ -260,7 +317,7 @@ export default class TileFactory extends Shadow() {
     `
   }
 
-  fillGeneralTileInfoEvents (event) {
+  fillGeneralTileInfoEvents (/** @type {Event} */ event) {
     const aboTypes = event.abo_typen?.reduce((acc, abo, index) => acc + `{"text": "${abo.text}","typ": "${abo.typ}","title": "${abo.title}","link": "${abo.link}"}${index >= event.buttons.length - 1 ? '' : ','}`, '')
     const aboTypesAsJson = aboTypes ? `"abo_typen": [${aboTypes}],` : undefined
     return `{
