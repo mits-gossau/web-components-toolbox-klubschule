@@ -282,6 +282,7 @@ export default class WithFacet extends WebWorker() {
       if (isInfoEvents) {
         const endpointInfoEventsUrl = new URL(endpointInfoEvents)
         currentRequestObj.psize = endpointInfoEventsUrl.searchParams.has('psize') ? Number(endpointInfoEventsUrl.searchParams.get('psize')) : 3
+        currentRequestObj.searchText = ''
       } else {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
       }
