@@ -657,7 +657,6 @@ export default class OffersPage extends Shadow() {
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
-              <!--${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}-->
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               ${this.isWishList && !this.hasAttribute('is-info-events') ? '' : /* html */ `
                 <ks-a-with-facet-pagination 
@@ -672,7 +671,6 @@ export default class OffersPage extends Shadow() {
                   </ks-a-button>
                 </ks-a-with-facet-pagination>
               `}
-              <!--${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}-->
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               ${this.isWishList ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
