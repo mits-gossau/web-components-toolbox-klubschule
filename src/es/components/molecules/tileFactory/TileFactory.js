@@ -193,12 +193,12 @@ export default class TileFactory extends Shadow() {
           (acc, /** @type {Course} */ course) => {
             const tile = this.isEventSearch ? /* html */ `
               <ks-m-event
-          ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
-          ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
-          data='{
-            "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
-            "sprachid": "${data.sprachid}"
-          }'
+                ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
+                ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
+                data='{
+                  "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
+                  "sprachid": "${data.sprachid}"
+                }'
               ></ks-m-event>
             ` : (
               ((course.locations?.length > 1 || course.buttons[0]?.link === null &&  course.buttons[0].iconName === 'ChevronDown' &&  course.buttons[0].typ === 'quaternary') || this.isNearbySearch) && course.filter?.length
