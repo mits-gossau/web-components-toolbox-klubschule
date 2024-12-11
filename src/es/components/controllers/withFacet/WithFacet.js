@@ -282,6 +282,7 @@ export default class WithFacet extends WebWorker() {
       if (isInfoEvents) {
         const endpointInfoEventsUrl = new URL(endpointInfoEvents)
         currentRequestObj.psize = endpointInfoEventsUrl.searchParams.has('psize') ? Number(endpointInfoEventsUrl.searchParams.get('psize')) : 3
+        currentRequestObj.ppage = endpointInfoEventsUrl.searchParams.has('ppage') ? Number(endpointInfoEventsUrl.searchParams.get('ppage')) : 0
         currentRequestObj.searchText = ''
       } else {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
@@ -360,7 +361,16 @@ export default class WithFacet extends WebWorker() {
           cancelable: true,
           composed: true
         }))
+
+        // increase ppage for next request of info events
+        if (isInfoEvents) {
+          const endpointInfoEventsUrl = new URL(endpointInfoEvents)
+          endpointInfoEventsUrl.searchParams.set('ppage', currentRequestObj.ppage + 1)
+          endpointInfoEvents = endpointInfoEventsUrl.href
+        }
       }, 50)
+
+      
     }
 
     this.abortControllerLocations = null
