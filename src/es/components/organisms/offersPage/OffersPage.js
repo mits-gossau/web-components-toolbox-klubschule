@@ -193,6 +193,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('save-location-local-storage') ? 'save-location-local-storage' : ''}
         ${this.hasAttribute('save-location-session-storage') ? 'save-location-session-storage' : ''}
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
+        ${this.hasAttribute('endpoint-info-events') ? `endpoint-info-events="${this.getAttribute('endpoint-info-events')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('mock-info-events') ? ` mock-info-events="${this.getAttribute('mock-info-events')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''}
@@ -618,7 +619,7 @@ export default class OffersPage extends Shadow() {
                   </div>
                   <div class="container dialog-footer">
                     <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
-                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}                    ></ks-a-number-of-offers-button>
+                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-a-number-of-offers-button>
                   </div>
                 </dialog>
               </m-dialog>
@@ -656,8 +657,8 @@ export default class OffersPage extends Shadow() {
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
-              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
-              ${this.isWishList ? '' : /* html */ `
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              ${this.isWishList && !this.hasAttribute('is-info-events') ? '' : /* html */ `
                 <ks-a-with-facet-pagination 
                   id="pagination"
                   pagination-event-name="request-with-facet"
@@ -670,7 +671,7 @@ export default class OffersPage extends Shadow() {
                   </ks-a-button>
                 </ks-a-with-facet-pagination>
               `}
-              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               ${this.isWishList ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
                   ${this.isEasyPortal
