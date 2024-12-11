@@ -59,7 +59,10 @@ export default class WithFacet extends WebWorker() {
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
     const isInfoEvents = this.hasAttribute('endpoint-info-events')
-    const endpointInfoEvents = this.getAttribute('endpoint-info-events') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Informationevent'
+    let endpointInfoEvents = this.getAttribute('endpoint-info-events') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Informationevent'
+    if (!endpointInfoEvents.startsWith('http://') && !endpointInfoEvents.startsWith('https://')) {
+      endpointInfoEvents = `${this.url.origin}${endpointInfoEvents}`;
+    }
     if (isMockedInfoEvents) endpoint = new URL('./mock/info-events.json', import.meta.url).href
     this.abortController = null
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')

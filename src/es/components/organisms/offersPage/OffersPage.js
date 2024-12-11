@@ -670,8 +670,8 @@ export default class OffersPage extends Shadow() {
                       <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                   </ks-a-button>
                 </ks-a-with-facet-pagination>
+                <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               `}
-              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               ${this.isWishList ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
                   ${this.isEasyPortal
