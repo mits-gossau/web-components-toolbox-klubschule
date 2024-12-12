@@ -359,7 +359,6 @@ export default class AppointmentsList extends Shadow() {
 
     // trigger notification if subscription type is 'wertabo'
     const triggerNotification = allSubscriptions?.subscriptionMode === 'WERTABO' || allSubscriptions?.selectedSubscription?.subscriptionMode === 'WERTABO'
-    debugger
 
     // Get the selected subscription
     let selectedSubscription = null
@@ -368,7 +367,7 @@ export default class AppointmentsList extends Shadow() {
       selectedSubscription = subscriptions.find(element => element.selected === true)
     }
     // Render low appointment balance notification
-    if (allSubscriptions.selectedSubscription.lowAppointmentBalance) {
+    if (triggerNotification && allSubscriptions.selectedSubscription.lowAppointmentBalance) {
       this.lowAppointmentBalanceNotification = /* html */`
         <div style="padding-bottom:1rem;">
           <ks-m-system-notification namespace="system-notification-default-" icon-name="AlertCircle" icon-size="1.625em" no-border>
@@ -382,7 +381,7 @@ export default class AppointmentsList extends Shadow() {
       `
     }
     // Render low subscription balance notification
-    if (allSubscriptions.selectedSubscription.lowBalance) {
+    if (triggerNotification && allSubscriptions.selectedSubscription.lowBalance) {
       const subscriptionBalance = Number(parseFloat(selectedSubscription.subscriptionBalance.replace('CHF', '').trim()).toFixed(2))
       if (subscriptionBalance < this.minAmount) {
         this.lowSubscriptionBalanceNotification = /* html */`
