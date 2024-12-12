@@ -58,6 +58,11 @@ export default class WithFacet extends WebWorker() {
     let endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
+    const isInfoEvents = this.hasAttribute('endpoint-info-events')
+    let endpointInfoEvents = this.getAttribute('endpoint-info-events') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Informationevent'
+    if (!endpointInfoEvents.startsWith('http://') && !endpointInfoEvents.startsWith('https://')) {
+      endpointInfoEvents = `${this.url.origin}${endpointInfoEvents}`;
+    }
     if (isMockedInfoEvents) endpoint = new URL('./mock/info-events.json', import.meta.url).href
     this.abortController = null
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
@@ -274,6 +279,15 @@ export default class WithFacet extends WebWorker() {
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
+      if (isInfoEvents) {
+        const endpointInfoEventsUrl = new URL(endpointInfoEvents)
+        currentRequestObj.psize = endpointInfoEventsUrl.searchParams.has('psize') ? Number(endpointInfoEventsUrl.searchParams.get('psize')) : 3
+        currentRequestObj.ppage = endpointInfoEventsUrl.searchParams.has('ppage') ? Number(endpointInfoEventsUrl.searchParams.get('ppage')) : 0
+        currentRequestObj.searchText = ''
+      } else {
+        currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
+      }
+
       const LanguageEnum = {
         d: 'de',
         f: 'fr',
@@ -306,7 +320,7 @@ export default class WithFacet extends WebWorker() {
         this.dispatchEvent(new CustomEvent('with-facet', {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
-            fetch: fetch(endpoint, request).then(response => {
+            fetch: fetch(isInfoEvents ? endpointInfoEvents : endpoint, request).then(response => {
               if (response.status >= 200 && response.status <= 299) {
                 return response.json()
               }
@@ -347,7 +361,16 @@ export default class WithFacet extends WebWorker() {
           cancelable: true,
           composed: true
         }))
+
+        // increase ppage for next request of info events
+        if (isInfoEvents) {
+          const endpointInfoEventsUrl = new URL(endpointInfoEvents)
+          endpointInfoEventsUrl.searchParams.set('ppage', currentRequestObj.ppage + 1)
+          endpointInfoEvents = endpointInfoEventsUrl.href
+        }
       }, 50)
+
+      
     }
 
     this.abortControllerLocations = null
@@ -363,9 +386,15 @@ export default class WithFacet extends WebWorker() {
 
       const searchText = isAboList ? null : currentRequestObj.searchText || initialRequestObj.searchText
 
+      let mandantId = this.getAttribute('mandant-id') || initialRequestObj.MandantId || 111
+      if (isInfoEvents) {
+        const endpointInfoEventsUrl = new URL(endpointInfoEvents)
+        if (endpointInfoEventsUrl.searchParams.has('mandant_id')) mandantId = endpointInfoEventsUrl.searchParams.get('mandant_id')
+      }
+
       let body = `{
         "filter": ${JSON.stringify(subLevelFilter)},
-        "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
+        "MandantId": ${mandantId},
         "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
