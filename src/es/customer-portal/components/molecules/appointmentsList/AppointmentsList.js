@@ -357,10 +357,10 @@ export default class AppointmentsList extends Shadow() {
     this.lowAppointmentBalanceNotification = ''
     this.lowSubscriptionDurationNotification = ''
 
-    // do nothing if subscription type is 'pauschalabo'
-    if (allSubscriptions?.subscriptionMode === 'PAUSCHALABO' || allSubscriptions?.selectedSubscription?.subscriptionMode === 'PAUSCHALABO') {
-      return ''
-    }
+    // trigger notification if subscription type is 'wertabo'
+    const triggerNotification = allSubscriptions?.subscriptionMode === 'WERTABO' || allSubscriptions?.selectedSubscription?.subscriptionMode === 'WERTABO'
+    debugger
+
     // Get the selected subscription
     let selectedSubscription = null
     if (allSubscriptions?.filters) {
