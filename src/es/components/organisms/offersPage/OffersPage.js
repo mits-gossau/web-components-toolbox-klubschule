@@ -25,7 +25,7 @@ export default class OffersPage extends Shadow() {
         if (this.data.courses?.length > 0) this.showInfoEventsHeadline = true
 
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
-        if (!this.isWishList) bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
+        if (!this.isWishList || this.hasAttribute('is-info-events')) bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
         // Set headline for info events
         if (this.hasAttribute('is-info-events') && this.showInfoEventsHeadline) {
