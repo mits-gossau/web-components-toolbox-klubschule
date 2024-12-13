@@ -17,5 +17,5 @@
 ### Attribute variations (check out example page above):
 - *storage-type*: optional `localStorage` to keep the users "seen" decision in the localStorage to only show it once. Default is in the sessionStorage.
 - *id*: optional string: random id, to show the component only once per id
-- *error*: optional (no value) changes the background color from MDX default to error subtle3 (--color-secondary aka. --mdx-sys-color-primary-default to --mdx-sys-color-error-subtle3) and the font shows in default black
+- *error*: optional (no value) changes the background color from MDX default to error subtle3 (--color-secondary aka. --mdx-sys-color-primary-default to --mdx-sys-color-error-subtle3) and the font shows in default black 
 - *pro*: optional (no value) changes the background color from MDX default to accent 1 (--color-secondary aka. --mdx-sys-color-primary-default to --mdx-sys-color-accent-1-default) 
