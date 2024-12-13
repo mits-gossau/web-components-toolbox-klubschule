@@ -124,6 +124,15 @@ export default class TileFactory extends Shadow() {
     :host > section:last-child {
       margin-bottom: 0;
     }
+    :host > section.other-locations {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    :host > section.other-locations > * {
+      flex: 1 1 calc(33.333% - 20px);
+      width: calc(33.333% - 20px);
+      max-width: calc(33.333% - 20px);
+    }
     :host > .error {
       color: var(--color-error);
     }
@@ -229,7 +238,7 @@ export default class TileFactory extends Shadow() {
             )
             return acc = acc + tile
           },
-          '<section>'
+          `<section ${this.hasAttribute('is-other-locations') ? 'class="other-locations"' : ''}>`
         )
         + (!data.courses.length
           ? /* html */`<ks-o-partner-search search-text="${data.searchText}"${data.courses.length ? ' has-courses': ''}${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''} tab="1">
