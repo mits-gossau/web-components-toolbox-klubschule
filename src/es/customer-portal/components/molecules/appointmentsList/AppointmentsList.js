@@ -399,6 +399,7 @@ export default class AppointmentsList extends Shadow() {
     }
 
     // Render low subscription duration notification
+    // Ignore subscription type for duration notification
     if (selectedSubscription) {
       const today = new Date()
       const subscriptionValidTo = selectedSubscription.subscriptionValidTo
