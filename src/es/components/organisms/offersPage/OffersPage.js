@@ -666,7 +666,7 @@ export default class OffersPage extends Shadow() {
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
                 ${this.hasAttribute('is-info-events') ? ` is-info-events loading-text="${this.getTranslation('CourseList.LabelLoaderInfoEvent')}" style="width:100%"` : ''}
-                ${this.hasAttribute('is-other-locations') ? ` is-other-locations` : ''}
+                ${this.hasAttribute('is-other-locations') ? ` is-other-locations next-start-dates-text="${this.getTranslation('CourseList.NextStartDatesText')}"` : ''}
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}
                 ${this.hasAttribute('error-text') ? ` error-text="${this.getAttribute('error-text')}"` : ''}
