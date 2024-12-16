@@ -2,6 +2,7 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class FavoriteButton extends Shadow() {
+  #isFavoured
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
@@ -20,7 +21,7 @@ export default class FavoriteButton extends Shadow() {
       if (!id.isValid()) console.warn('Favorite button for wishlist has invalid values!', this)
     }
 
-    let isFavoured = false
+    this.isFavoured = false
 
     let timeout = null
     this.resizeListener = event => {
@@ -35,9 +36,9 @@ export default class FavoriteButton extends Shadow() {
     }
 
     this.favoritesClickListener = event => {
-      this.setFavoured((isFavoured = !isFavoured))
+      this.isFavoured = !this.isFavoured
       if (!id.isValid()) return console.warn('Favorite button for wishlist has invalid values!', this)
-      this.dispatchEvent(new CustomEvent(isFavoured ? 'add-to-wish-list' : 'remove-from-wish-list', {
+      this.dispatchEvent(new CustomEvent(this.isFavoured ? 'add-to-wish-list' : 'remove-from-wish-list', {
         detail: {
           language: this.getAttribute('language'),
           courseType: id.courseType,
@@ -56,7 +57,7 @@ export default class FavoriteButton extends Shadow() {
     this.wishListPromise = new Promise(resolve => (wishListResolve = resolve))
     this.wishListListener = async event => {
       const hasFavouredFunc = entry => (id.courseType === entry.kursTyp && id.courseId === String(entry.kursId) && id.centerId === String(entry.centerId))
-      this.setFavoured((isFavoured = (await event.detail.fetch).watchlistEntriesAngebot?.some(hasFavouredFunc) || (await event.detail.fetch).watchlistEntriesVeranstaltung?.some(hasFavouredFunc)))
+      this.isFavoured = (await event.detail.fetch).watchlistEntriesAngebot?.some(hasFavouredFunc) || (await event.detail.fetch).watchlistEntriesVeranstaltung?.some(hasFavouredFunc)
       wishListResolve(true)
     }
   }
@@ -158,17 +159,25 @@ export default class FavoriteButton extends Shadow() {
     ])
   }
 
-  setFavoured (value) {
+  get isMobile () {
+    return self.matchMedia(`(max-width: ${this.mobileBreakpoint})`).matches
+  }
+
+  set isFavoured (value) {
+    // test at: http://localhost:3000/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=./src/css/variablesCustomKlubschule.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html&content=./src/es/components/pages/generator/https---int-klubschule-ch-gesundheit-pilates-kurs-pilates--D_91708_2678_394.html
     if (value) {
+      this.setAttribute('is-favoured', '')
       this.icon?.setAttribute('icon-name', 'HeartFilled')
       this.text?.setAttribute('data-trans-key', this.getAttribute('on-text') ?? 'Wishlist.Remembered')
     } else {
+      this.removeAttribute('is-favoured')
       this.icon?.setAttribute('icon-name', 'Heart')
       this.text?.setAttribute('data-trans-key', this.getAttribute('off-text') ?? 'Wishlist.Remember')
     }
+    this.#isFavoured = value
   }
 
-  get isMobile () {
-    return self.matchMedia(`(max-width: ${this.mobileBreakpoint})`).matches
+  get isFavoured () {
+    return this.#isFavoured
   }
 }
