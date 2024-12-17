@@ -33,7 +33,7 @@ export default class OffersPage extends Shadow() {
           headlineContainer.innerHTML = /* html */ `
             <ks-a-spacing type="m-flex"></ks-a-spacing>
             <ks-a-heading tag="h2" no-margin-x>
-              ${this.getTranslation('CourseList.LabelInfoEvents')}
+              ${this.getTranslation('CourseList.ConsultingInfoEvent')}
             </ks-a-heading>
           `
         }
