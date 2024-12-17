@@ -308,7 +308,6 @@ export default class Tile extends Shadow() {
   renderHTML () {
     const warnMandatory = 'data attribute requires: '
     const data = this.tileData
-    console.log('data', data)
     if (!data) return console.error('Data json attribute is missing or corrupted!', this)
     if (this.hasAttribute('parent-title')) data.parentTitle = this.getAttribute('parent-title')
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
@@ -350,7 +349,7 @@ export default class Tile extends Shadow() {
             : ''
           }
         </div>
-        <div class="m-tile__body">
+        <div class="m-tile__body" ${this.hasAttribute('is-other-locations') ? `style="display:none;"` : ''}>
           ${!this.hasAttribute('is-other-locations') && data.location?.name
             ? /* html */`
               ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
