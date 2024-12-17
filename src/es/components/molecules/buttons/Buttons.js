@@ -9,41 +9,14 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Buttons extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-
-    this.favoriteButtonClickEventListener = event => {
-      if (this.favoriteButton && this.favoriteButton.hasAttribute('is-favoured')) this.dataLayerPush({
-        'event': 'add_to_wishlist',
-        'ecommerce': {    
-            'items': [{ 
-            // @ts-ignore
-            'item_name': `${this.data.bezeichnung}`,                
-            // @ts-ignore
-            'item_id': `${this.getItemId(this.data)}`, 
-            // @ts-ignore
-            'price': this.data.price.oprice || this.data.price.price,
-            'item_category': `${this.data.spartename?.[0] || ''}`,
-            'item_category2': `${this.data.spartename?.[1] || ''}`,
-            'item_category3': `${this.data.spartename?.[2] || ''}`,
-            'item_category4': `${this.data.spartename?.[3] || ''}`,
-            'item_category5': `${this.data.spartename?.[4] || ''}`, 
-            'quantity': 1,
-            'item_variant':`${this.data.location?.center ? this.data.location.center : this.data.center ? this.data.center.bezeichnung_internet : ''}`,
-            'index': 0,
-            'currency': 'CHF'
-          }]
-        }
-      })
-    }
   }
 
   connectedCallback() {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    if (this.favoriteButton) this.favoriteButton.addEventListener('click', this.favoriteButtonClickEventListener)
   }
 
   disconnectedCallback() {
-    if (this.favoriteButton) this.favoriteButton.removeEventListener('click', this.favoriteButtonClickEventListener)
   }
 
   /**
@@ -205,7 +178,7 @@ export default class Buttons extends Shadow() {
         return acc + parentDiv.innerHTML
       }
       const isBookMarkButton = button.event === 'bookmark'
-      const bookMarkButton = isBookMarkButton ? /* html */ `<ks-m-favorite-button course="${this.data.kurs_typ}_${this.data.kurs_id}_${this.data.centerid}" button-typ="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" ${optionalSmallAttr}></ks-m-favorite-button>` : ''
+      const bookMarkButton = isBookMarkButton ? /* html */ `<ks-m-favorite-button course="${this.data.kurs_typ}_${this.data.kurs_id}_${this.data.centerid}" button-typ="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" ${optionalSmallAttr} course-data='${JSON.stringify(this.data).replace(/'/g, '’')}'></ks-m-favorite-button>` : ''
       const content = button.event === 'bookmark' ? bookMarkButton :  /* html */`
         <ks-a-button 
           ${button.iconName && !button.text ? 'icon' : ''} 
@@ -406,9 +379,5 @@ export default class Buttons extends Shadow() {
         console.error('Failed to push event data:', err)
       }
     }
-  }
-
-  get favoriteButton () {
-    return this.root.querySelector('ks-m-favorite-button')
   }
 }

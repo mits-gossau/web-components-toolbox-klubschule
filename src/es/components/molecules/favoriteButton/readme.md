@@ -20,3 +20,4 @@
 - (alternative) *course-type*: Add attribute `course-type`
 - (alternative) *course-id*: Add attribute `course-id`
 - (alternative) *center-id*: Add attribute `center-id`
+- (optional) *course-data*: JSON string with the course data same as delivered by the search api aka. with-facet, allows GTM data layer push, if set.
