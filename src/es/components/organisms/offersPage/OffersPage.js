@@ -16,6 +16,8 @@ export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.setAttribute('with-facet-target', '')
+
     this.showInfoEventsHeadline = false
 
     this.withFacetListener = (event) => {
@@ -661,7 +663,7 @@ export default class OffersPage extends Shadow() {
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
               ${this.hasAttribute('is-info-events') ? '<div id="info-events-headline-container" style="width:100%"></div>' : ''}
-              ${this.hasAttribute('is-other-locations') ? '<ks-a-spacing type="m-flex"></ks-a-spacing><div id="other-locations-headline-container"></div>' : ''}
+              ${this.hasAttribute('is-other-locations') ? '<div id="other-locations-headline-container"></div>' : ''}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
