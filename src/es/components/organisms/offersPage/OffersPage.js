@@ -37,6 +37,15 @@ export default class OffersPage extends Shadow() {
             </ks-a-heading>
           `
         }
+        // Set headline for other locations
+        if (this.hasAttribute('is-other-locations')) {
+          const headlineContainer = bodySection.root.querySelector('#other-locations-headline-container')
+          headlineContainer.innerHTML = /* html */ `
+            <ks-a-heading tag="h2" no-margin-x>
+              ${this.getTranslation('CourseList.LabelOtherLocations')}
+            </ks-a-heading>
+          `
+        }
 
         // Set Sort
         const sort = bodySection.root.querySelector('#sort-options')
@@ -569,7 +578,12 @@ export default class OffersPage extends Shadow() {
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-          <ks-o-body-section variant="default" no-margin-y ${this.hasAttribute('is-info-events') ? '' : `background-color="var(--mdx-sys-color-accent-6-subtle1)"`} id="with-facet-body-section">
+          <ks-o-body-section 
+            variant="default" 
+            no-margin-y 
+            ${this.hasAttribute('is-info-events') ? '' : this.hasAttribute('is-other-locations') ? `background-color="white"` : `background-color="var(--mdx-sys-color-accent-6-subtle1)"`} 
+            id="with-facet-body-section"
+          >
             ${this.hasAttribute('headless') 
         ? ''
         : /* html */`
@@ -647,10 +661,12 @@ export default class OffersPage extends Shadow() {
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
               ${this.hasAttribute('is-info-events') ? '<div id="info-events-headline-container" style="width:100%"></div>' : ''}
+              ${this.hasAttribute('is-other-locations') ? '<ks-a-spacing type="m-flex"></ks-a-spacing><div id="other-locations-headline-container"></div>' : ''}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
                 ${this.hasAttribute('is-info-events') ? ` is-info-events loading-text="${this.getTranslation('CourseList.LabelLoaderInfoEvent')}" style="width:100%"` : ''}
+                ${this.hasAttribute('is-other-locations') ? ` is-other-locations next-start-dates-text="${this.getTranslation('CourseList.NextStartDatesText')}"` : ''}
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}
                 ${this.hasAttribute('error-text') ? ` error-text="${this.getAttribute('error-text')}"` : ''}
@@ -672,7 +688,7 @@ export default class OffersPage extends Shadow() {
                 </ks-a-with-facet-pagination>
                 <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               `}
-              ${this.isWishList ? '' : /* html */ `
+              ${this.isWishList || this.hasAttribute('is-other-locations') ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
                   ${this.isEasyPortal
           ? /* html */`

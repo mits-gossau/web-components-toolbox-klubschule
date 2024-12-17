@@ -73,6 +73,7 @@ export default class TileFactory extends Shadow() {
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
     this.hiddenMessages = this.hiddenSections
+    this.isOtherLocations = this.hasAttribute('is-other-locations')
   }
 
   connectedCallback () {
@@ -124,6 +125,15 @@ export default class TileFactory extends Shadow() {
     :host > section:last-child {
       margin-bottom: 0;
     }
+    :host > section.other-locations {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    :host > section.other-locations > * {
+      flex: 1 1 calc(33.333% - 20px);
+      width: calc(33.333% - 20px);
+      max-width: calc(33.333% - 20px);
+    }
     :host > .error {
       color: var(--color-error);
     }
@@ -135,6 +145,14 @@ export default class TileFactory extends Shadow() {
       :host > section {
         margin-left: -0.5rem;
         margin-right: -0.5rem;
+      }
+      :host > section.other-locations {
+        flex-direction: column;
+      }
+      :host > section.other-locations > * {
+        flex: 1 1 100%;
+        width: 100%;
+        max-width: 100%;
       }
     }
     `
@@ -219,17 +237,21 @@ export default class TileFactory extends Shadow() {
                 : /* html */`
                   <m-load-template-tag>
                   <template>
-                  <ks-m-tile namespace="tile-default-" data='{
-                    ${this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')},
-                    "spartename": ${JSON.stringify(course.spartename).replace(/'/g, '’').replace(/"/g, '\"') || ''}
-                  }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}></ks-m-tile>
+                  <ks-m-tile 
+                    namespace="tile-default-" 
+                    data='{${this.isOtherLocations ? this.fillGeneralTileOtherLocations(course).replace(/'/g, '’').replace(/"/g, '\"') : this.fillGeneralTileInfo(course).replace(/'/g, '’').replace(/"/g, '\"')}}'
+                    ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
+                    ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
+                    ${this.hasAttribute('is-other-locations') ? ` is-other-locations next-start-dates-text="${this.getAttribute('next-start-dates-text')}"` : ''}
+                    ${this.isNearbySearch ? ' nearby-search' : ''}
+                  ></ks-m-tile>
                   </template>
                   </m-load-template-tag>
                 `
             )
             return acc = acc + tile
           },
-          '<section>'
+          `<section ${this.hasAttribute('is-other-locations') ? 'class="other-locations"' : ''}>`
         )
         + (!data.courses.length
           ? /* html */`<ks-o-partner-search search-text="${data.searchText}"${data.courses.length ? ' has-courses': ''}${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''} tab="1">
@@ -278,7 +300,9 @@ export default class TileFactory extends Shadow() {
   }
 
   fillGeneralTileInfo (/** @type {Course} */ course) {
-    // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
+    // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. 
+    // This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. 
+    // See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     return `
       "title": "${course.bezeichnung}",
       "infotextshort": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
@@ -303,12 +327,52 @@ export default class TileFactory extends Shadow() {
         "per": "${course.price.per}",
         "price": ${course.price.oprice || course.price.price}
       },
-      "parentkey": "${course.parentkey}"
+      "parentkey": "${course.parentkey}",
+      "spartename": ${JSON.stringify(course.spartename).replace(/'/g, '’').replace(/"/g, '\"') || ''}
+    `
+  }
+
+  fillGeneralTileOtherLocations (/** @type {Course} */ course) {
+    // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. 
+    // This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. 
+    // See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
+    return `
+      "title": "${course.location?.name
+          ? course.location.name
+          : course.locations
+            ? course.locations.join(', ')
+            : ''}",
+      "infotextshort": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+      "location": {
+        "iconName": "",
+        "name": "${course.location?.name
+          ? course.location.name
+          : course.locations
+            ? course.locations.join(', ')
+            : ''}",
+        "badge": "${course.location.badge ? course.location.badge : ''}",
+        "center": "${course.location.center ? course.location.center : course.center ? course.center : ''}"
+      },
+      "centerid": "${course.centerid}",
+      "kurs_typ": "${course.kurs_typ}",
+      "kurs_id": "${course.kurs_id}",
+      "buttons": ${JSON.stringify(course.buttons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+      "icons": ${JSON.stringify(course.icons).replace(/'/g, '’').replace(/"/g, '\"') || ''},
+      "price": {
+        "pre": "${course.price.pre}",
+        "amount": "${course.price.amount}",
+        "per": "${course.price.per}",
+        "price": ${course.price.oprice || course.price.price}
+      },
+      "parentkey": "${course.parentkey}",
+      "spartename": ${JSON.stringify(course.spartename).replace(/'/g, '’').replace(/"/g, '\"') || ''}
     `
   }
 
   fillGeneralTileInfoNearBy (/** @type {Course} */ course) {
-    // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
+    // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. 
+    // This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. 
+    // See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     return `
       "title": "${course.bezeichnung}",
       "infotextshort": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
