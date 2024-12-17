@@ -120,7 +120,7 @@ export default class Buttons extends Shadow() {
 
     // keep existing url params
     let filteredURLParams = ''
-    const shouldKeepURLParams = this.hasAttribute('keep-url-params')
+    const shouldKeepURLParams = this.hasAttribute('keep-url-params') && !this.hasAttribute('is-info-events')
     if (shouldKeepURLParams) {
       const urlParams = this.hasAttribute('keep-url-params') ? window.location.search : ''
       const urlParamsMap = new URLSearchParams(urlParams)
