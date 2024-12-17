@@ -16,6 +16,8 @@ export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.setAttribute('with-facet-target', '')
+
     this.showInfoEventsHeadline = false
 
     this.withFacetListener = (event) => {
