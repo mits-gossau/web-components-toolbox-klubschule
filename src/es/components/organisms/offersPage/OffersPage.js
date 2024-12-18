@@ -210,6 +210,7 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''}
         ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
         ${this.hasAttribute('expand-event-name') ? ` expand-event-name='${this.getAttribute('expand-event-name')}'` : ''}
+        ${this.hasAttribute('is-other-locations') ? ' is-other-locations' : ''}
       >
       <ks-c-partner-search ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''} ${this.hasAttribute('endpoint-search-partner') ? `endpoint="${this.getAttribute('endpoint-search-partner')}"` : ''}${this.hasAttribute("alternative-portal-ids-search") ? ` alternative-portal-ids-search="${this.getAttribute("alternative-portal-ids-search")}"` : ''}>
         ${this.hasAttribute('with-main-search-input')

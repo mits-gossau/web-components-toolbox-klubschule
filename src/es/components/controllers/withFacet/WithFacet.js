@@ -59,6 +59,7 @@ export default class WithFacet extends WebWorker() {
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
     const isInfoEvents = this.hasAttribute('endpoint-info-events')
+    const isOtherLocations = this.hasAttribute('is-other-locations')
     let endpointInfoEvents = this.getAttribute('endpoint-info-events') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Informationevent'
     if (!endpointInfoEvents.startsWith('http://') && !endpointInfoEvents.startsWith('https://')) {
       endpointInfoEvents = `${this.url.origin}${endpointInfoEvents}`;
@@ -287,6 +288,15 @@ export default class WithFacet extends WebWorker() {
       } else {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
       }
+      
+      if (isOtherLocations) {
+        const endpointOtherLocationsUrl = new URL(endpoint)
+        currentRequestObj.psize = endpointOtherLocationsUrl.searchParams.has('psize') ? Number(endpointOtherLocationsUrl.searchParams.get('psize')) : 6
+        currentRequestObj.ppage = endpointOtherLocationsUrl.searchParams.has('ppage') ? Number(endpointOtherLocationsUrl.searchParams.get('ppage')) : 0
+        currentRequestObj.searchText = ''
+      } else {
+        currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
+      }
 
       const LanguageEnum = {
         d: 'de',
@@ -362,15 +372,10 @@ export default class WithFacet extends WebWorker() {
           composed: true
         }))
 
-        // increase ppage for next request of info events
-        if (isInfoEvents) {
-          const endpointInfoEventsUrl = new URL(endpointInfoEvents)
-          endpointInfoEventsUrl.searchParams.set('ppage', currentRequestObj.ppage + 1)
-          endpointInfoEvents = endpointInfoEventsUrl.href
-        }
+        // update ppage
+        if (isOtherLocations) endpoint = this.updatePpage(endpoint, currentRequestObj.ppage)
+        if (isInfoEvents) endpointInfoEvents = this.updatePpage(endpointInfoEvents, currentRequestObj.ppage)
       }, 50)
-
-      
     }
 
     this.abortControllerLocations = null
@@ -524,6 +529,12 @@ export default class WithFacet extends WebWorker() {
 
   catchURLParams() {
     return new URLSearchParams(self.location.search)
+  }
+
+  updatePpage(endpointUrl, currentPpage) {
+    const url = new URL(endpointUrl);
+    url.searchParams.set('ppage', currentPpage + 1);
+    return url.href;
   }
 
   updateURLParam(key, value, isTree = false) {
