@@ -62,7 +62,7 @@ export default class WithFacet extends WebWorker() {
     const isOtherLocations = this.hasAttribute('is-other-locations')
     let endpointInfoEvents = this.getAttribute('endpoint-info-events') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Informationevent'
     if (!endpointInfoEvents.startsWith('http://') && !endpointInfoEvents.startsWith('https://')) {
-      endpointInfoEvents = `${this.url.origin}${endpointInfoEvents}`;
+      endpointInfoEvents = `${this.url.origin}${endpointInfoEvents}`
     }
     if (isMockedInfoEvents) endpoint = new URL('./mock/info-events.json', import.meta.url).href
     this.abortController = null
@@ -290,6 +290,9 @@ export default class WithFacet extends WebWorker() {
       }
       
       if (isOtherLocations) {
+        if (!endpoint.startsWith('http://') && !endpoint.startsWith('https://')) {
+          endpoint = `${this.url.origin}${endpoint}`
+        }
         const endpointOtherLocationsUrl = new URL(endpoint)
         currentRequestObj.psize = endpointOtherLocationsUrl.searchParams.has('psize') ? Number(endpointOtherLocationsUrl.searchParams.get('psize')) : 6
         currentRequestObj.ppage = endpointOtherLocationsUrl.searchParams.has('ppage') ? Number(endpointOtherLocationsUrl.searchParams.get('ppage')) : 0
