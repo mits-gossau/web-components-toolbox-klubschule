@@ -191,20 +191,12 @@ export default class WithFacet extends WebWorker() {
         }
 
         // GTM Tracking of Filters
-        // @ts-ignore
-        if (typeof window !== 'undefined' && window.dataLayer) {
-          try {
-            // @ts-ignore
-            window.dataLayer.push({
-              'event': 'filterSelection',
-              'filterName': event.detail.target.label, //the name of the clicked filter.
-              'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
-            })
-          } catch (err) {
-            console.error('Failed to push event data:', err)
-          }
-        }
-
+        if (event.detail?.target?.checked) this.dataLayerPush({
+          'event': 'filterSelection',
+          'filterName': event.detail.target.label, //the name of the clicked filter.
+          'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
+        })
+        
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
@@ -644,5 +636,17 @@ export default class WithFacet extends WebWorker() {
         "HasChilds": false
       }
     ]
+  }
+
+  dataLayerPush (value) {
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(value)
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
   }
 }
