@@ -53,3 +53,17 @@
     >
     </ks-m-contact-row>
 ```
+
+### Contact Form
+
+```
+    <ks-m-contact-row
+        id=show-modal
+        name=Kontaktformular
+        icon-name=Mail
+        href=javascript:;
+        onclick="this.dispatchEvent(new CustomEvent('open-form-6c33799d-bfa7-4188-a75f-5b9413f6bfe3', { bubbles: true, cancelable: true, composed: true, detail: { command: 'show-modal' } }))"
+        gtm-data="{&quot;event&quot;:&quot;virtual_pageview&quot;,&quot;pageview&quot;:&quot;/kontaktformular-open&quot;,&quot;center&quot;:&quot;aarau&quot;}"
+    >
+    </ks-m-contact-row>
+```
