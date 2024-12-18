@@ -6,7 +6,11 @@ export default class FavoriteButton extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.gtm_data = this.hasAttribute('course-data') ? JSON.parse(this.getAttribute('course-data')) : null
+    try {
+      this.gtm_data = this.hasAttribute('course-data') ? JSON.parse(this.getAttribute('course-data')) : null
+    } catch (error) {
+      console.warn('Wishlist FavoriteButton.js aka. <ks-m-favorite-button> received corrupted course-data and is not going to send the add to wishlist event to GTM:', this)
+    }
     // id assembly: courseType_courseId_centerId
     const id = {
       courseType: this.getAttribute('course-type'),
