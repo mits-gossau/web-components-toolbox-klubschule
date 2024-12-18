@@ -9,14 +9,26 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Contact extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)
+
+    try {
+      this.gtm_data = this.hasAttribute('gtm-data') ? JSON.parse(this.getAttribute('gtm-data')) : null
+    } catch (error) {
+      console.warn('Wishlist FavoriteButton.js aka. <ks-m-favorite-button> received corrupted gtm-data and is not going to send the add to wishlist event to GTM:', this)
+    }
+
+    this.clickEventListener = event => {
+      if (this.gtm_data) this.dataLayerPush(this.gtm_data)
+    }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+    this.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
+    this.removeEventListener('click', this.clickEventListener)
   }
 
   /**
@@ -130,6 +142,18 @@ export default class Contact extends Shadow() {
         name: 'a-icon-mdx'
       }
     ])
+  }
+
+  dataLayerPush (value) {
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(value)
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
   }
 
   get data () {

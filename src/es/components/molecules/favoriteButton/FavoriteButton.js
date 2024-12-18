@@ -2,9 +2,15 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 export default class FavoriteButton extends Shadow() {
+  #isFavoured
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    try {
+      this.gtm_data = this.hasAttribute('course-data') ? JSON.parse(this.getAttribute('course-data')) : null
+    } catch (error) {
+      console.warn('Wishlist FavoriteButton.js aka. <ks-m-favorite-button> received corrupted course-data and is not going to send the add to wishlist event to GTM:', this)
+    }
     // id assembly: courseType_courseId_centerId
     const id = {
       courseType: this.getAttribute('course-type'),
@@ -20,7 +26,7 @@ export default class FavoriteButton extends Shadow() {
       if (!id.isValid()) console.warn('Favorite button for wishlist has invalid values!', this)
     }
 
-    let isFavoured = false
+    this.isFavoured = false
 
     let timeout = null
     this.resizeListener = event => {
@@ -34,10 +40,10 @@ export default class FavoriteButton extends Shadow() {
       }, 200)
     }
 
-    this.favoritesClickListener = event => {
-      this.setFavoured((isFavoured = !isFavoured))
+    this.clickEventListener = event => {
+      this.isFavoured = !this.isFavoured
       if (!id.isValid()) return console.warn('Favorite button for wishlist has invalid values!', this)
-      this.dispatchEvent(new CustomEvent(isFavoured ? 'add-to-wish-list' : 'remove-from-wish-list', {
+      this.dispatchEvent(new CustomEvent(this.isFavoured ? 'add-to-wish-list' : 'remove-from-wish-list', {
         detail: {
           language: this.getAttribute('language'),
           courseType: id.courseType,
@@ -48,6 +54,28 @@ export default class FavoriteButton extends Shadow() {
         cancelable: true,
         composed: true
       }))
+      if (this.gtm_data && this.isFavoured) this.dataLayerPush({
+        'event': 'add_to_wishlist',
+        'ecommerce': {    
+            'items': [{ 
+            // @ts-ignore
+            'item_name': `${this.gtm_data.bezeichnung}`,                
+            // @ts-ignore
+            'item_id': `${this.getItemId(this.gtm_data)}`, 
+            // @ts-ignore
+            'price': this.gtm_data.price.oprice || this.gtm_data.price.price,
+            'item_category': `${this.gtm_data.spartename?.[0] || ''}`,
+            'item_category2': `${this.gtm_data.spartename?.[1] || ''}`,
+            'item_category3': `${this.gtm_data.spartename?.[2] || ''}`,
+            'item_category4': `${this.gtm_data.spartename?.[3] || ''}`,
+            'item_category5': `${this.gtm_data.spartename?.[4] || ''}`, 
+            'quantity': 1,
+            'item_variant':`${this.gtm_data.location?.center ? this.gtm_data.location.center : this.gtm_data.center ? this.gtm_data.center.bezeichnung_internet : ''}`,
+            'index': 0,
+            'currency': 'CHF'
+          }]
+        }
+      })
     }
 
     /** @type {(any)=>void} */
@@ -56,7 +84,7 @@ export default class FavoriteButton extends Shadow() {
     this.wishListPromise = new Promise(resolve => (wishListResolve = resolve))
     this.wishListListener = async event => {
       const hasFavouredFunc = entry => (id.courseType === entry.kursTyp && id.courseId === String(entry.kursId) && id.centerId === String(entry.centerId))
-      this.setFavoured((isFavoured = (await event.detail.fetch).watchlistEntriesAngebot?.some(hasFavouredFunc) || (await event.detail.fetch).watchlistEntriesVeranstaltung?.some(hasFavouredFunc)))
+      this.isFavoured = (await event.detail.fetch).watchlistEntriesAngebot?.some(hasFavouredFunc) || (await event.detail.fetch).watchlistEntriesVeranstaltung?.some(hasFavouredFunc)
       wishListResolve(true)
     }
   }
@@ -69,7 +97,7 @@ export default class FavoriteButton extends Shadow() {
     this.resizeListener()
     Promise.all(showPromises).then(() => (this.hidden = false))
     self.addEventListener('resize', this.resizeListener)
-    this.addEventListener('click', this.favoritesClickListener)
+    this.addEventListener('click', this.clickEventListener)
     document.body.addEventListener('wish-list', this.wishListListener)
     this.dispatchEvent(new CustomEvent('request-wish-list', {
       bubbles: true,
@@ -80,7 +108,7 @@ export default class FavoriteButton extends Shadow() {
 
   disconnectedCallback () {
     self.removeEventListener('resize', this.resizeListener)
-    this.removeEventListener('click', this.favoritesClickListener)
+    this.removeEventListener('click', this.clickEventListener)
     document.body.removeEventListener('wish-list', this.wishListListener)
   }
 
@@ -158,17 +186,44 @@ export default class FavoriteButton extends Shadow() {
     ])
   }
 
-  setFavoured (value) {
+  get isMobile () {
+    return self.matchMedia(`(max-width: ${this.mobileBreakpoint})`).matches
+  }
+
+  set isFavoured (value) {
+    // test at: http://localhost:3000/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=./src/css/variablesCustomKlubschule.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html&content=./src/es/components/pages/generator/https---int-klubschule-ch-gesundheit-pilates-kurs-pilates--D_91708_2678_394.html
     if (value) {
+      this.setAttribute('is-favoured', '')
       this.icon?.setAttribute('icon-name', 'HeartFilled')
       this.text?.setAttribute('data-trans-key', this.getAttribute('on-text') ?? 'Wishlist.Remembered')
     } else {
+      this.removeAttribute('is-favoured')
       this.icon?.setAttribute('icon-name', 'Heart')
       this.text?.setAttribute('data-trans-key', this.getAttribute('off-text') ?? 'Wishlist.Remember')
     }
+    this.#isFavoured = value
   }
 
-  get isMobile () {
-    return self.matchMedia(`(max-width: ${this.mobileBreakpoint})`).matches
+  get isFavoured () {
+    return this.#isFavoured
+  }
+
+  getItemId (data) {
+    const itemId = data.kurs_typ + '_' + data.kurs_id
+    const centerId = data.centerid ? `_${data.centerid}` : ''
+    const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
+    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
+  }
+
+  dataLayerPush (value) {
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(value)
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
   }
 }

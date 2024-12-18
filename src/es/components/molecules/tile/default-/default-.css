@@ -19,4 +19,9 @@
     --tile-default-title-color-hover: var(--mdx-sys-color-primary-default);
     --tile-default-price-font: var(--mdx-sys-font-fix-label4);
     --tile-default-price-strong-font: var(--mdx-sys-font-fix-label1);
+    --tile-default-next-start-dates-label-color: var(--mdx-sys-color-neutral-bold1);
+    --tile-default-next-start-dates-label-font: var(--mdx-sys-font-fix-body2);
+    --tile-default-next-start-dates-font: var(--mdx-sys-font-flex-small-custom1);
+    --tile-default-title-other-locations-color: var(--mdx-sys-color-neutral-bold4);
+    --tile-default-title-other-locations-font: var(--mdx-sys-font-fix-label0);
 }
