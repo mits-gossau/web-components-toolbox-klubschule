@@ -44,7 +44,7 @@ export default class Checkout extends Shadow() {
     this.requestCheckoutListener = (event) => {
       // get value from select
 
-      if ('withInsurance' in event.detail) {
+      if (event.detail && 'withInsurance' in event.detail) {
         this.withInsurance = event.detail?.withInsurance
       }
 

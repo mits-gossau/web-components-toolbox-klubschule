@@ -663,8 +663,8 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options"></section>
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
-              ${this.hasAttribute('is-info-events') && this.hasCourses  ? /*html*/`<div id="info-events-headline-container" style="width:100%"></div>` : ''}
-              ${this.hasAttribute('is-other-locations') && this.hasCourses ? /*html*/`<div id="other-locations-headline-container"></div>` : ''}
+              ${this.hasAttribute('is-info-events') ? /*html*/`<div id="info-events-headline-container" style="width:100%"></div>` : ''}
+              ${this.hasAttribute('is-other-locations') ? /*html*/`<div id="other-locations-headline-container"></div>` : ''}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
