@@ -40,7 +40,7 @@ export default class OffersPage extends Shadow() {
           `
         }
         // Set headline for other locations
-        if (this.hasAttribute('is-other-locations')) {
+        if (this.hasAttribute('is-other-locations') && this.data.courses > 0) {
           const headlineContainer = bodySection.root.querySelector('#other-locations-headline-container')
           headlineContainer.innerHTML = /* html */ `
             <ks-a-heading tag="h2" no-margin-x>
@@ -664,7 +664,7 @@ export default class OffersPage extends Shadow() {
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
               ${this.hasAttribute('is-info-events') ? '<div id="info-events-headline-container" style="width:100%"></div>' : ''}
-              ${this.hasAttribute('is-other-locations') ? '<div id="other-locations-headline-container"></div>' : ''}
+              ${this.hasAttribute('is-other-locations') && this.data.courses > 0 ? '<div id="other-locations-headline-container"></div>' : ''}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
