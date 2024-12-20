@@ -58,6 +58,12 @@ export default class WithFacet extends WebWorker() {
     let endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
+    const isInfoEvents = this.hasAttribute('endpoint-info-events')
+    const isOtherLocations = this.hasAttribute('is-other-locations')
+    let endpointInfoEvents = this.getAttribute('endpoint-info-events') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Informationevent'
+    if (!endpointInfoEvents.startsWith('http://') && !endpointInfoEvents.startsWith('https://')) {
+      endpointInfoEvents = `${this.url.origin}${endpointInfoEvents}`
+    }
     if (isMockedInfoEvents) endpoint = new URL('./mock/info-events.json', import.meta.url).href
     this.abortController = null
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
@@ -186,20 +192,12 @@ export default class WithFacet extends WebWorker() {
         }
 
         // GTM Tracking of Filters
-        // @ts-ignore
-        if (typeof window !== 'undefined' && window.dataLayer) {
-          try {
-            // @ts-ignore
-            window.dataLayer.push({
-              'event': 'filterSelection',
-              'filterName': event.detail.target.label, //the name of the clicked filter.
-              'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
-            })
-          } catch (err) {
-            console.error('Failed to push event data:', err)
-          }
-        }
-
+        if (event.detail?.target?.checked) this.dataLayerPush({
+          'event': 'filterSelection',
+          'filterName': event.detail.target.label, //the name of the clicked filter.
+          'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
+        })
+        
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
@@ -274,6 +272,27 @@ export default class WithFacet extends WebWorker() {
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
+      if (isInfoEvents) {
+        const endpointInfoEventsUrl = new URL(endpointInfoEvents)
+        currentRequestObj.psize = endpointInfoEventsUrl.searchParams.has('psize') ? Number(endpointInfoEventsUrl.searchParams.get('psize')) : 3
+        currentRequestObj.ppage = endpointInfoEventsUrl.searchParams.has('ppage') ? Number(endpointInfoEventsUrl.searchParams.get('ppage')) : 0
+        currentRequestObj.searchText = ''
+      } else {
+        currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
+      }
+      
+      if (isOtherLocations) {
+        if (!endpoint.startsWith('http://') && !endpoint.startsWith('https://')) {
+          endpoint = `${this.url.origin}${endpoint}`
+        }
+        const endpointOtherLocationsUrl = new URL(endpoint)
+        currentRequestObj.psize = endpointOtherLocationsUrl.searchParams.has('psize') ? Number(endpointOtherLocationsUrl.searchParams.get('psize')) : 6
+        currentRequestObj.ppage = endpointOtherLocationsUrl.searchParams.has('ppage') ? Number(endpointOtherLocationsUrl.searchParams.get('ppage')) : 0
+        currentRequestObj.searchText = ''
+      } else {
+        currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
+      }
+
       const LanguageEnum = {
         d: 'de',
         f: 'fr',
@@ -306,7 +325,7 @@ export default class WithFacet extends WebWorker() {
         this.dispatchEvent(new CustomEvent('with-facet', {
           detail: {
             /** @type {Promise<fetchAutoCompleteEventDetail>} */
-            fetch: fetch(endpoint, request).then(response => {
+            fetch: fetch(isInfoEvents ? endpointInfoEvents : endpoint, request).then(response => {
               if (response.status >= 200 && response.status <= 299) {
                 return response.json()
               }
@@ -347,6 +366,10 @@ export default class WithFacet extends WebWorker() {
           cancelable: true,
           composed: true
         }))
+
+        // update ppage
+        if (isOtherLocations) endpoint = this.updatePpage(endpoint, currentRequestObj.ppage)
+        if (isInfoEvents) endpointInfoEvents = this.updatePpage(endpointInfoEvents, currentRequestObj.ppage)
       }, 50)
     }
 
@@ -363,9 +386,15 @@ export default class WithFacet extends WebWorker() {
 
       const searchText = isAboList ? null : currentRequestObj.searchText || initialRequestObj.searchText
 
+      let mandantId = this.getAttribute('mandant-id') || initialRequestObj.MandantId || 111
+      if (isInfoEvents) {
+        const endpointInfoEventsUrl = new URL(endpointInfoEvents)
+        if (endpointInfoEventsUrl.searchParams.has('mandant_id')) mandantId = endpointInfoEventsUrl.searchParams.get('mandant_id')
+      }
+
       let body = `{
         "filter": ${JSON.stringify(subLevelFilter)},
-        "MandantId": ${this.getAttribute('mandant-id') || initialRequestObj.MandantId || 110},
+        "MandantId": ${mandantId},
         "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
@@ -424,6 +453,8 @@ export default class WithFacet extends WebWorker() {
       const isMatchingKey = (filterItem.urlpara === filterKey) && (filterItem.urlpara !== undefined)
       const isUrlpara = filterItem.urlpara === filterValue
       if (zeroLevel) isSectorFilter = Number(filterItem.id) === 7 && filterItem.typ === "tree"
+
+      filterItem.skipCountUpdate = false
 
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
@@ -493,6 +524,12 @@ export default class WithFacet extends WebWorker() {
 
   catchURLParams() {
     return new URLSearchParams(self.location.search)
+  }
+
+  updatePpage(endpointUrl, currentPpage) {
+    const url = new URL(endpointUrl);
+    url.searchParams.set('ppage', currentPpage + 1);
+    return url.href;
   }
 
   updateURLParam(key, value, isTree = false) {
@@ -613,5 +650,17 @@ export default class WithFacet extends WebWorker() {
         "HasChilds": false
       }
     ]
+  }
+
+  dataLayerPush (value) {
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(value)
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
   }
 }

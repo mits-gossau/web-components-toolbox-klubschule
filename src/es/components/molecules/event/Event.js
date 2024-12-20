@@ -748,7 +748,7 @@ export default class Event extends Shadow() {
         cancelable: true,
         composed: true
       }))).then((data) => {
-        // GTM Tracking of Click on More Details
+        // GTM tracking of click on more details
         // @ts-ignore
         if (typeof window !== 'undefined' && window.dataLayer) {
             try {
@@ -759,14 +759,14 @@ export default class Event extends Shadow() {
                   'ecommerce': {    
                     'items': [{ 
                       'item_name': `${data.bezeichnung}`,                
-                      'item_id': `${data.kurs_typ}_${data.kurs_id}`, 
-                      'price': data.preis_total,
+                      'item_id': `${this.getItemId(data)}`, 
+                      'price': /*data.preis_kurs || */data.preis_total, // coming soon: https://jira.migros.net/browse/MIDUWEB-1687
                       'item_category': `${data.spartename?.[0] || ''}`,
                       'item_category2': `${data.spartename?.[1] || ''}`,
                       'item_category3': `${data.spartename?.[2] || ''}`,
                       'item_category4': `${data.spartename?.[3] || ''}`,
                       'quantity': 1,
-                      'item_variant': `${data.location?.center ? data.location.center : ''}`,
+                      'item_variant': `${data.location?.center ? data.location.center : data?.center ? data.center.bezeichnung_internet : this.data?.course?.location?.center ? this.data.course.location.center : ''}`,
                       'currency': 'CHF',       
                     }]
                   }
@@ -803,6 +803,13 @@ export default class Event extends Shadow() {
 
   get isPassed () {
     return this.hasAttribute('is-passed')
+  }
+
+  getItemId (data) {
+    const itemId = data.kurs_typ + '_' + data.kurs_id
+    const centerId = data.centerid ? `_${data.centerid}` : ''
+    const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
+    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
   }
 
   get mockData () {

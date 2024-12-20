@@ -122,18 +122,21 @@ export default class AutoCompleteList extends Shadow() {
           padding-left: 1em;
         }
 
-        :host div {
-          display: flex;
-        }
-
         :host ul {
           list-style: none;
           padding: 0;
           margin: 0;
+        }
+
+        :host > div {
+          display: flex;
+        }
+
+        :host > div > ul {
           flex: 1;
         }
 
-        :host div:only-child ul {
+        :host > div:only-child > ul {
           width: 100%;
           flex-basis: 100%;
         }
@@ -173,13 +176,13 @@ export default class AutoCompleteList extends Shadow() {
           line-height: 1.25em;
         }
 
-        :host .content {
+        :host > div > .content {
           display: flex;
           flex-direction: column;
           flex: 1;
         }
 
-        :host div ul + :host div .content {
+        :host > div > ul + :host > div > .content {
           width: 50%;
         }
 
@@ -362,9 +365,13 @@ export default class AutoCompleteList extends Shadow() {
 
             // render content items
             if (this.hasAttribute('with-auto-complete-content')) {
+              let displayShowAllResultsLink = false
               if (this.content) this.content.remove() // delete existing content items
               if (contentItems === null || !contentItems.length) return
-              if (contentItems.length > 4) contentItems = contentItems.slice(0, 4)
+              if (contentItems.length > 4) {
+                contentItems = contentItems.slice(0, 4)
+                displayShowAllResultsLink = true
+              }
               let searchBaseUrl = "/suche/"
               if (sprachid === "f") searchBaseUrl = "/fr/recherche/"
               if (sprachid === "i") searchBaseUrl = "/it/ricerca/"
@@ -399,10 +406,12 @@ export default class AutoCompleteList extends Shadow() {
                 contentUnsortedList.appendChild(listItem)
               })
               contentItemsElement.appendChild(contentUnsortedList)
-              const showAllResults = document.createElement('a')
-              showAllResults.href = searchBaseUrl + suffix
-              showAllResults.innerHTML = `${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>`
-              contentItemsElement.appendChild(showAllResults)
+              if (displayShowAllResultsLink) {
+                const showAllResults = document.createElement('a')
+                showAllResults.href = searchBaseUrl + suffix
+                showAllResults.innerHTML = `${this.getTranslation('Search.Autocomplete.ShowAllResults')} <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>`
+                contentItemsElement.appendChild(showAllResults)
+              }
               this.list.after(contentItemsElement)
             }
           })

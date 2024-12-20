@@ -83,18 +83,7 @@ export default class AutoComplete extends Shadow() {
 
       if (!token || token.length < 3 || token.trim() === '') {
         this.clearAutocomplete()
-        // update results
-        return this.dispatchEvent(new CustomEvent('request-with-facet',
-          {
-            detail: {
-              key: 'input-search',
-              value: ''
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          })
-        )
+        return null
       }
       if (this.hasAttribute('mock')) return this.dispatchMock()
       if (this.abortController) this.abortController.abort()

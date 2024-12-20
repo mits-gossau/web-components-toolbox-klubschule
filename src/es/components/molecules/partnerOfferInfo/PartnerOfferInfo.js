@@ -62,6 +62,8 @@ export default class PartnerOfferInfo extends Shadow() {
           flex-direction: column;
           flex-wrap: wrap;
           align-items: flex-start;
+
+          font: var(--font-size-mobile);
         }
         :host a {
           margin-bottom: var(--mdx-sys-spacing-flex-2xs);

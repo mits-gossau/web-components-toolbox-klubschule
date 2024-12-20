@@ -104,6 +104,11 @@ export default class Tile extends Shadow() {
         cursor: pointer;
       }
 
+      :host .m-tile__title-other-locations {
+        color: var(--title-other-locations-color);
+        font: var(--title-other-locations-font);
+      }
+
       :host .m-tile__title:hover {
         color: var(--title-color-hover);
       }
@@ -119,6 +124,15 @@ export default class Tile extends Shadow() {
           line-height: 1.25em;
           font-weight: 400;          
           padding: 0 0.5em 0 0;
+      }
+
+      :host .m-tile__content__next-start-dates-label {
+        color: var(--next-start-dates-label-color);
+        font: var(--next-start-dates-label-font);
+      }
+
+      :host .m-tile__content__next-start-dates {
+        font: var(--next-start-dates-font);
       }
 
       :host .m-tile__body a-icon-mdx {
@@ -311,22 +325,22 @@ export default class Tile extends Shadow() {
               "ecommerce": {    
                 "items": [{ 
                   "item_name": "${data.parentTitle || data.title || data.bezeichnung || 'No Title'}",                
-                  "item_id": "${data.kurs_typ}_${data.kurs_id}",
+                  "item_id": "${this.getItemId(data)}",
                   "price": ${data.price?.price || data.preis_total || 0},
                   ${data.spartename?.[0] ? `"item_category": "${data.spartename[0]}",` : ''}
                   ${data.spartename?.[1] ? `"item_category2": "${data.spartename[1]}",` : ''}
                   ${data.spartename?.[2] ? `"item_category3": "${data.spartename[2]}",` : ''}
                   ${data.spartename?.[3] ? `"item_category4": "${data.spartename[3]}",` : ''}
                   "quantity": 1,
-                  ${data.location?.center ? `"item_variant": "${data.location.center}",` : ''}
+                  "item_variant": "${data.location?.center ? data.location.center : data.center ? data.center.bezeichnung_internet : ''}",
                   "currency": "CHF"
                 }]
               }
             }'
           >
-            <span class="m-tile__title">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
+            <span class="${this.hasAttribute('is-other-locations') ? 'm-tile__title-other-locations' : 'm-tile__title'}">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
           </ks-c-gtm-event>
-          ${data.infotextshort
+          ${data.infotextshort && !this.isInsideTileList
             ? /* html */`
               <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
                 <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
@@ -335,11 +349,20 @@ export default class Tile extends Shadow() {
             : ''
           }
         </div>
-        <div class="m-tile__body">
-          ${data.location?.name
+        <div class="m-tile__body" ${this.hasAttribute('is-other-locations') ? `style="display:none;"` : ''}>
+          ${!this.hasAttribute('is-other-locations') && data.location?.name
             ? /* html */`
               ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
               <span class="m-tile__content">${data.location?.name || warnMandatory + 'location'}</span>
+            `
+            : ''
+          }
+          ${this.hasAttribute('is-other-locations') 
+            ? /* html */`
+              <!--<span class="m-tile__content">
+                <span class="m-tile__content__next-start-dates-label">${this.getAttribute('next-start-dates-text')}</span><br />
+                <span class="m-tile__content__next-start-dates">TODO: Termine eintragen</span>
+              </span>-->
             `
             : ''
           }
@@ -355,7 +378,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             ${this.hasAttribute('is-wish-list') && !this.isPassed && !this.hasAttribute('is-info-events') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? `${data.parentkey}${data.centerid ? `_${data.centerid}` : ''}` : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
-            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
+            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons ${this.hasAttribute('is-info-events') ? 'is-info-events' : '' } ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
@@ -417,5 +440,12 @@ export default class Tile extends Shadow() {
 
   get isPassed () {
     return this.hasAttribute('is-passed')
+  }
+
+  getItemId (data) {
+    const itemId = data.kurs_typ + '_' + data.kurs_id
+    const centerId = data.centerid ? `_${data.centerid}` : ''
+    const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
+    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
   }
 }

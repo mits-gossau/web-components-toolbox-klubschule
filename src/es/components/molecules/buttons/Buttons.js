@@ -16,7 +16,8 @@ export default class Buttons extends Shadow() {
     if (this.shouldRenderHTML()) this.renderHTML()
   }
 
-  disconnectedCallback() { }
+  disconnectedCallback() {
+  }
 
   /**
    * evaluates if a render is necessary
@@ -71,6 +72,9 @@ export default class Buttons extends Shadow() {
           justify-content: space-between;
           width: 100%
         }
+        :host:has(.buttons-container ks-m-favorite-button + ks-a-button) {
+          width: 100%;
+        }
       }
     `
     return this.fetchTemplate()
@@ -117,7 +121,7 @@ export default class Buttons extends Shadow() {
 
     // keep existing url params
     let filteredURLParams = ''
-    const shouldKeepURLParams = this.hasAttribute('keep-url-params')
+    const shouldKeepURLParams = this.hasAttribute('keep-url-params') && !this.hasAttribute('is-info-events')
     if (shouldKeepURLParams) {
       const urlParams = this.hasAttribute('keep-url-params') ? window.location.search : ''
       const urlParamsMap = new URLSearchParams(urlParams)
@@ -174,7 +178,7 @@ export default class Buttons extends Shadow() {
         return acc + parentDiv.innerHTML
       }
       const isBookMarkButton = button.event === 'bookmark'
-      const bookMarkButton = isBookMarkButton ? /* html */ `<ks-m-favorite-button course="${this.data.kurs_typ}_${this.data.kurs_id}_${this.data.centerid}" button-typ="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" ${optionalSmallAttr}></ks-m-favorite-button>` : ''
+      const bookMarkButton = isBookMarkButton ? /* html */ `<ks-m-favorite-button course="${this.data.kurs_typ}_${this.data.kurs_id}_${this.data.centerid}" button-typ="${button.typ ? 'button-' + button.typ + '-' : 'button-secondary-'}" ${optionalSmallAttr} course-data='${JSON.stringify(this.data).replace(/'/g, '’')}'></ks-m-favorite-button>` : ''
       const content = button.event === 'bookmark' ? bookMarkButton :  /* html */`
         <ks-a-button 
           ${button.iconName && !button.text ? 'icon' : ''} 
@@ -189,7 +193,6 @@ export default class Buttons extends Shadow() {
           ${button.iconName && button.text ? `<a-icon-mdx namespace="icon-mdx-ks-" icon-name="${button.iconName}" size="1em" class="icon-right"></a-icon-mdx>` : ''}
         </ks-a-button>
       `
-
       return acc + (
         (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
           <ks-c-gtm-event 
@@ -199,9 +202,9 @@ export default class Buttons extends Shadow() {
               "ecommerce": {    
                 "items": [{ 
                   "item_name": "${this.hasAttribute('parent-title') && !this.hasAttribute('sort-nearby') ? this.getAttribute('parent-title') : this.data.title || this.data.bezeichnung || 'No Title'}",                
-                  "item_id": "${this.data.kurs_typ}_${this.data.kurs_id}",
-                  "price": ${this.data.price?.price || this.data.preis_total || 0},
-                  "item_variant": "${this.data.location?.center}",
+                  "item_id": "${this.getItemId(this.data)}",
+                  "price": ${this.data.price?.oprice || this.data.price?.price || this.data.preis_total || 0},
+                  "item_variant": "${this.data.location?.center ? this.data.location.center : this.data.center ? this.data.center.bezeichnung_internet : ''}",
                   ${this.data.spartename?.[0] ? `"item_category": "${this.data.spartename[0]}",` : ''}
                   ${this.data.spartename?.[1] ? `"item_category2": "${this.data.spartename[1]}",` : ''}
                   ${this.data.spartename?.[2] ? `"item_category3": "${this.data.spartename[2]}",` : ''}
@@ -257,36 +260,26 @@ export default class Buttons extends Shadow() {
 
   openDialogOverlay(button) {
     // GTM Tracking of Click Register now
-    // @ts-ignore
-    if (typeof window !== 'undefined' && window.dataLayer) {
-      try {
-        // @ts-ignore
-        window.dataLayer.push(
-          {
-            'event': 'add_to_cart',
-            'ecommerce': {    
-              'items': [{ 
-                // @ts-ignore
-                'item_name': `${this.data.bezeichnung}`,                
-                // @ts-ignore
-                'item_id': `${this.data.kurs_typ}_${this.data.kurs_id}`, 
-                // @ts-ignore
-                'price': this.data.price.price,
-                'item_category': `${this.data.spartename?.[0] || ''}`,
-                'item_category2': `${this.data.spartename?.[1] || ''}`,
-                'item_category3': `${this.data.spartename?.[2] || ''}`,
-                'item_category4': `${this.data.spartename?.[3] || ''}`,
-                'quantity': 1,
-                'item_variant':`${this.data.location?.center ? this.data.location.center : ''}`,
-                'currency': 'CHF'
-              }]
-            }
-          }
-        )
-      } catch (err) {
-        console.error('Failed to push event data:', err)
+    this.dataLayerPush({
+      'event': 'add_to_cart',
+      'ecommerce': {    
+        'items': [{ 
+          // @ts-ignore
+          'item_name': `${this.data.bezeichnung}`,                
+          // @ts-ignore
+          'item_id': `${this.getItemId(this.data)}`, 
+          // @ts-ignore
+          'price': this.data.price.oprice || this.data.price.price,
+          'item_category': `${this.data.spartename?.[0] || ''}`,
+          'item_category2': `${this.data.spartename?.[1] || ''}`,
+          'item_category3': `${this.data.spartename?.[2] || ''}`,
+          'item_category4': `${this.data.spartename?.[3] || ''}`,
+          'quantity': 1,
+          'item_variant':`${this.data.location?.center ? this.data.location.center : this.data.center ? this.data.center.bezeichnung_internet : ''}`,
+          'currency': 'CHF'
+        }]
       }
-    }
+    })
     // for local testing add `https://dev.klubschule.ch${button.event}` to the checkoutOverlayAPI
     new Promise(resolveCheckout => {
       this.dispatchEvent(new CustomEvent(`checkout-overlay-api`, {
@@ -303,20 +296,10 @@ export default class Buttons extends Shadow() {
       if (data.texte?.length) {
 
         // GTM Tracking of Checkout Overlay
-        // @ts-ignore
-        if (typeof window !== 'undefined' && window.dataLayer) {
-          try {
-            // @ts-ignore
-            window.dataLayer.push(
-              {
-                'event': 'virtual_pageview',
-                'pageview': '/hinweis-overlay',
-              }
-            )
-          } catch (err) {
-            console.error('Failed to push event data:', err)
-          }
-        }
+        this.dataLayerPush({
+          'event': 'virtual_pageview',
+          'pageview': '/hinweis-overlay',
+        })
 
         const tempWrapper = document.createElement("div")
 
@@ -377,5 +360,24 @@ export default class Buttons extends Shadow() {
         window.location.href = data.link
       }
     })
+  }
+
+  getItemId (data) {
+    const itemId = data.kurs_typ + '_' + data.kurs_id
+    const centerId = data.centerid ? `_${data.centerid}` : ''
+    const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
+    return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
+  }
+
+  dataLayerPush (value) {
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(value)
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
   }
 }

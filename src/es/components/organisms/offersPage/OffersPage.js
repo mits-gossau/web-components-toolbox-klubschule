@@ -9,50 +9,48 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 * note: headless makes sure that no filters are loaded
 * note: is-wish-list makes sure that no badge legend is loaded
+* note: is-info-events makes sure that the headline is shown
 * TODO: take headless to hide the badge legend
 */
 export default class OffersPage extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.showInputSection = false
-    this.showInfoEventsHeadline = false
+    this.setAttribute('with-facet-target', '')
+
+    this.hasCourses = false
 
     this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
-        if (this.data.additionalinfos?.length > 0) this.showInfoEventsHeadline = true
+        if (this.data.courses?.length > 0) this.hasCourses = true
 
-        const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
-        if (!this.isWishList) bodySection.shadowRoot.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
+        const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
+        if (!this.isWishList || this.hasAttribute('is-info-events')) bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
-        // this.showInputSection = (this.data.clat === null && this.data.courses.length === 0 && this.data.searchText !== '' && this.data.total === 0) ? false : true
-        // const inputSectionContainer = bodySection.shadowRoot.querySelector('o-grid:first-of-type').shadowRoot.querySelector('#input-section-container')
-        // const filterSelectContainer = bodySection.shadowRoot.querySelector('o-grid#filter-select-container')
-        // const content1Container = this.ksMTab ? this.ksMTab.shadowRoot.querySelector('#content1') : undefined
-        // const spacing1 = bodySection.shadowRoot.querySelector('ks-a-spacing[type="s-flex"]:first-of-type')
-        // const spacing2 = bodySection.shadowRoot.querySelector('ks-a-spacing[type="s-flex"]:nth-of-type(2)')
-        // const sort = bodySection.shadowRoot.querySelector('#sort-options')
-
-        // if (this.showInputSection) {
-        //   content1Container ? content1Container.style.paddingTop = '3em' : ''
-        //   inputSectionContainer ? inputSectionContainer.removeAttribute('hidden') : ''
-        //   filterSelectContainer.style.display = ''
-        //   spacing1.style.display = ''
-        //   spacing2.style.display = ''
-        //   sort.style.display = ''
-        // } else {
-        //   content1Container ? content1Container.style.paddingTop = '0' : ''
-        //   inputSectionContainer ? inputSectionContainer.setAttribute('hidden', '') : ''
-        //   filterSelectContainer.style.display = 'none'
-        //   spacing1.style.display = 'none'
-        //   spacing2.style.display = 'none'
-        //   sort.style.display = 'none'
-        // }
+        // Set headline for info events
+        if (this.hasAttribute('is-info-events') && this.hasCourses) {
+          const headlineContainer = bodySection.root.querySelector('#info-events-headline-container')
+          headlineContainer.innerHTML = /* html */ `
+            <ks-a-spacing type="m-flex"></ks-a-spacing>
+            <ks-a-heading tag="h2" no-margin-x>
+              ${this.getTranslation('CourseList.ConsultingInfoEvent')}
+            </ks-a-heading>
+          `
+        }
+        // Set headline for other locations
+        if (this.hasAttribute('is-other-locations') && this.hasCourses) {
+          const headlineContainer = bodySection.root.querySelector('#other-locations-headline-container')
+          headlineContainer.innerHTML = /* html */ `
+            <ks-a-heading tag="h2" no-margin-x>
+              ${this.getTranslation('CourseList.LabelOtherLocations')}
+            </ks-a-heading>
+          `
+        }
 
         // Set Sort
-        const sort = bodySection.shadowRoot.querySelector('#sort-options')
+        const sort = bodySection.root.querySelector('#sort-options')
         if (sort && !this.eventDetailURL) {
           this.fetchModules([
             {
@@ -74,6 +72,11 @@ export default class OffersPage extends Shadow() {
               ` : ''}
             </ks-m-sort>
           `
+          // adjust load more button text depending the sort option
+          let moreText
+          if ((moreText = bodySection.root.querySelector('ks-a-with-facet-pagination')?.querySelector('ks-a-button')?.root.querySelector('.more-text'))) {
+            moreText.textContent = this.data.sort.sort === 2 ? this.getTranslation('CourseList.MoreLocationsPlaceholder') : this.getTranslation('CourseList.MoreOffersPlaceholder')
+          }
         }
       })
     }
@@ -128,10 +131,10 @@ export default class OffersPage extends Shadow() {
   withFacetListener(event) {
     Promise.resolve(event.detail.fetch).then((data) => {
       this.data = data
-      const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.shadowRoot.querySelector('ks-o-body-section')
+      const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
 
       // Set Sort
-      const sort = bodySection.shadowRoot.querySelector('#sort-options')
+      const sort = bodySection.root.querySelector('#sort-options')
       if (sort) {
         this.fetchModules([
           {
@@ -201,11 +204,13 @@ export default class OffersPage extends Shadow() {
         ${this.hasAttribute('save-location-local-storage') ? 'save-location-local-storage' : ''}
         ${this.hasAttribute('save-location-session-storage') ? 'save-location-session-storage' : ''}
         ${this.hasAttribute('endpoint') ? `endpoint="${this.getAttribute('endpoint')}"` : ''}
+        ${this.hasAttribute('endpoint-info-events') ? `endpoint-info-events="${this.getAttribute('endpoint-info-events')}"` : ''}
         ${this.hasAttribute('mock') ? ` mock="${this.getAttribute('mock')}"` : ''}
         ${this.hasAttribute('mock-info-events') ? ` mock-info-events="${this.getAttribute('mock-info-events')}"` : ''}
         ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''}
         ${this.hasAttribute('no-search-tab') ? 'no-search-tab' : ''}
         ${this.hasAttribute('expand-event-name') ? ` expand-event-name='${this.getAttribute('expand-event-name')}'` : ''}
+        ${this.hasAttribute('is-other-locations') ? ' is-other-locations' : ''}
       >
       <ks-c-partner-search ${this.hasAttribute('initial-request') ? ` initial-request='${this.getAttribute('initial-request').replace(/'/g, '’').replace(/"/g, '\"')}'` : ''} ${this.hasAttribute('endpoint-search-partner') ? `endpoint="${this.getAttribute('endpoint-search-partner')}"` : ''}${this.hasAttribute("alternative-portal-ids-search") ? ` alternative-portal-ids-search="${this.getAttribute("alternative-portal-ids-search")}"` : ''}>
         ${this.hasAttribute('with-main-search-input')
@@ -572,10 +577,16 @@ export default class OffersPage extends Shadow() {
       </ks-c-auto-complete>
     ` : ''
 
+
     return /* html */ `
         ${this.eventDetailURL ? /* html */`<ks-c-event-detail endpoint="${this.eventDetailURL}">` : ''}
           <!-- ks-o-body-section is only here to undo the ks-c-with-facet within body main, usually that controller would be outside of the o-body --->
-          <ks-o-body-section variant="default" no-margin-y ${this.hasAttribute('is-info-events') ? '' : `background-color="var(--mdx-sys-color-accent-6-subtle1)"`} id="with-facet-body-section">
+          <ks-o-body-section 
+            variant="default" 
+            no-margin-y 
+            ${this.hasAttribute('is-info-events') ? '' : this.hasAttribute('is-other-locations') ? `background-color="white"` : `background-color="var(--mdx-sys-color-accent-6-subtle1)"`} 
+            id="with-facet-body-section"
+          >
             ${this.hasAttribute('headless') 
         ? ''
         : /* html */`
@@ -625,7 +636,7 @@ export default class OffersPage extends Shadow() {
                   </div>
                   <div class="container dialog-footer">
                     <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
-                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}                    ></ks-a-number-of-offers-button>
+                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-a-number-of-offers-button>
                   </div>
                 </dialog>
               </m-dialog>
@@ -652,19 +663,21 @@ export default class OffersPage extends Shadow() {
               <section id="sort-options"></section>
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
-              ${this.hasAttribute('is-info-events') && this.showInfoEventsHeadline ? `<ks-a-spacing type="m-flex"></ks-a-spacing><ks-a-heading tag="h2" no-margin-x>${this.getTranslation('CourseList.ConsultingInfoEvent')}</ks-a-heading>` : ''}
+              ${this.hasAttribute('is-info-events') && this.hasCourses  ? /*html*/`<div id="info-events-headline-container" style="width:100%"></div>` : ''}
+              ${this.hasAttribute('is-other-locations') && this.hasCourses ? /*html*/`<div id="other-locations-headline-container"></div>` : ''}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
                 ${this.hasAttribute('is-info-events') ? ` is-info-events loading-text="${this.getTranslation('CourseList.LabelLoaderInfoEvent')}" style="width:100%"` : ''}
+                ${this.hasAttribute('is-other-locations') ? ` is-other-locations next-start-dates-text="${this.getTranslation('CourseList.NextStartDatesText')}"` : ''}
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}
                 ${this.hasAttribute('error-text') ? ` error-text="${this.getAttribute('error-text')}"` : ''}
               >
                 ${this.hiddenSections.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
-              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
-              ${this.isWishList ? '' : /* html */ `
+              <ks-a-spacing type="2xl-fix"></ks-a-spacing>
+              ${this.isWishList && !this.hasAttribute('is-info-events') ? '' : /* html */ `
                 <ks-a-with-facet-pagination 
                   id="pagination"
                   pagination-event-name="request-with-facet"
@@ -672,13 +685,13 @@ export default class OffersPage extends Shadow() {
                   ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 >
                   <ks-a-button namespace="button-primary-" color="secondary">
-                      <span>${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
+                      <span class="more-text">${this.getTranslation('CourseList.MoreOffersPlaceholder')}</span>
                       <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right">
                   </ks-a-button>
                 </ks-a-with-facet-pagination>
+                <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               `}
-              ${this.hasAttribute('is-info-events') ? '' : `<ks-a-spacing type="2xl-fix"></ks-a-spacing>`}
-              ${this.isWishList ? '' : /* html */ `
+              ${this.isWishList || this.hasAttribute('is-other-locations') ? '' : /* html */ `
                 <ks-m-badge-legend namespace="badge-legend-default-">
                   ${this.isEasyPortal
           ? /* html */`
@@ -781,7 +794,7 @@ export default class OffersPage extends Shadow() {
               delete-listener
               ${this.hasAttribute('with-auto-complete') ? 'any-key-listener' : ''}
               search
-              autocomplete="off"
+              autocomplete="${this.hasAttribute('endpoint-auto-complete') ? 'on' : 'off'}"
             >
             </a-input>
             <div id="close">
