@@ -26,6 +26,7 @@ export default class OffersPage extends Shadow() {
         this.searchTerm = data.searchText
         if (this.data.courses?.length > 0) this.hasCourses = true
 
+        const otherLocationsHeadline = this.getTranslation('CourseList.LabelOtherLocations').replace('{course_title}', this.data.courses[0]?.bezeichnung)
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
         if (!this.isWishList || this.hasAttribute('is-info-events')) bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
@@ -44,7 +45,7 @@ export default class OffersPage extends Shadow() {
           const headlineContainer = bodySection.root.querySelector('#other-locations-headline-container')
           headlineContainer.innerHTML = /* html */ `
             <ks-a-heading tag="h2" no-margin-x>
-              ${this.getTranslation('CourseList.LabelOtherLocations')}
+              ${otherLocationsHeadline}
             </ks-a-heading>
           `
         }
