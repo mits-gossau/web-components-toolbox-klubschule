@@ -22,11 +22,11 @@ export default class BackForward extends Shadow() {
     if (this.shouldRenderHTML()) this.renderHTML()
 
     this.closeButton = this.root.querySelector('#close')
-    this.closeButton.addEventListener('click', this.clickEventListener)
+    if (this.closeButton) this.closeButton.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
-    this.closeButton.removeEventListener('click', this.clickEventListener)
+    if (this.closeButton) this.closeButton.removeEventListener('click', this.clickEventListener)
   }
 
   shouldRenderHTML () {

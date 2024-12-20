@@ -1,0 +1,104 @@
+<main>
+        <div style="width: 100%">
+                    <m-simple-form-validation no-validation-error-css namespace="simple-form-miduweb-" mode="false">
+
+                        <form id="configurationForm" name="configurationForm" action="https://dev.klubschule.ch/kreativitaet/kochen-und-getraenke/laenderkueche/europa/kurs/italienische-kuche-frische-pasta-und-pastasaucen--E_1766315_2663_1551/loginmethod" method="post">
+                            <ks-c-checkout endpoint="https://dev.klubschule.ch/umbraco/api/commerceAPI/Recalculate" initial-request="{&quot;portalId&quot;:29,&quot;mandantId&quot;:111,&quot;kursTyp&quot;:&quot;E&quot;,&quot;kursId&quot;:1766315,&quot;centerId&quot;:2663,&quot;spracheId&quot;:&quot;d&quot;,&quot;mitVersicherung&quot;:false}">
+                                <ks-o-checkout mode="false">
+                                    <ks-o-checkout-layout mode="false">
+
+                                        <input type="hidden" data-val="true" data-val-required="The SessionKey field is required." id="Meta_SessionKey" name="Meta.SessionKey" value="E_1766315_2663_111" />
+                                        <input type="hidden" data-val="true" data-val-required="The MandantId field is required." id="Meta_MandantId" name="Meta.MandantId" value="111" />
+                                        <input type="hidden" data-val="true" data-val-required="The IstFirma field is required." id="Meta_IstFirma" name="Meta.IstFirma" value="False" />
+                                        <input type="hidden" data-val="true" data-val-required="The PortalId field is required." id="Meta_PortalId" name="Meta.PortalId" value="29" />
+                                        <input type="hidden" data-val="true" data-val-required="The SpracheId field is required." id="Meta_SpracheId" name="Meta.SpracheId" value="d" />
+                                        <input type="hidden" data-val="true" data-val-required="The KursTyp field is required." id="Meta_KursTyp" name="Meta.KursTyp" value="E" />
+                                        <input type="hidden" data-val="true" data-val-required="The KursId field is required." id="Meta_KursId" name="Meta.KursId" value="1766315" />
+                                        <input type="hidden" data-val="true" data-val-required="The CenterId field is required." id="Meta_CenterId" name="Meta.CenterId" value="2663" />
+                                        <input type="hidden" data-val="true" data-val-required="The WarenkorbTyp field is required." id="Meta_WarenkorbTyp" name="Meta.WarenkorbTyp" value="MIDUCA" />
+                                        <input type="hidden" data-val="true" data-val-required="The ShowLehrmittel field is required." id="Data_Configuration_ShowLehrmittel" name="Data.Configuration.ShowLehrmittel" value="False" />
+                                        <input type="hidden" data-val="true" data-val-required="The ShowVersicherung field is required." id="Data_Configuration_ShowVersicherung" name="Data.Configuration.ShowVersicherung" value="True" />
+                                        <input type="hidden" data-val="true" data-val-required="The ShowAbodauer field is required." id="Data_Configuration_ShowAbodauer" name="Data.Configuration.ShowAbodauer" value="False" />
+
+                                        <section id="top">
+                                            <ks-m-checkout-color-stage back-label="Zur&#xFC;ck"
+                                                                       back-link="javascript:history.go(-1)"
+                                                                       title="Zusatzoptionen: Italienische K&#xFC;che: Frische Pasta und Pastasaucen">
+                                            </ks-m-checkout-color-stage>
+                                        </section>
+
+                                        <section id="main">
+
+
+
+                                                <div>
+                                                        <section>
+                                                            <ks-m-checkout-insurance mode="false" id="ks-m-checkout-insurance">
+                                                                <ks-a-heading tag="h2" tabindex="0">
+                                                                    Kurskosten absichern?
+                                                                </ks-a-heading>
+
+                                                                Mit einer Annullationskostenversicherung erhalten Sie in folgenden Fällen Ihr Geld zurück:
+<ul>
+    <li>Krankheit, Verletzung, Tod</li>
+    <li>unvorhergesehener Wechsel des Arbeitsplatzes</li>
+    <li>unverschuldete Kündigung&nbsp;des Arbeitsplatzes</li>
+    <li>beruflich bedingter Wohnortwechsel</li>
+</ul>
+
+                                                                <ks-a-radio mode="false">
+                                                                    <div class="wrap">
+                                                                        <label for="Annulationskostenversicherung_1" insurance-label>
+Mit Versicherung +3.65 (2.59% des Gesamtbetrags) inkl. Lehrmittel / Material. Mit dem Abschluss der Versicherung akzeptieren Sie die <a href="https://www.klubschule.ch/services/agb/" target="_blank" rel="noopener noreferrer">Allgemeinen Vertragsbedingungen der ERV</a>                                                                        </label>
+                                                                        <input type="radio" value="true" required error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span" id="Annulationskostenversicherung_1" data-val="true" data-val-required="The Annulationskostenversicherung field is required." name="Data.Configuration.Annulationskostenversicherung">
+                                                                        <div class="box"></div>
+                                                                    </div>
+                                                                    <div class="wrap">
+                                                                        <label for="Annulationskostenversicherung_0">
+                                                                            Ohne Versicherung
+                                                                        </label>
+                                                                        <input type="radio" value="false" required error-message-reference-point-changed="true" no-error-text-p error-text-tag-name="span" id="Annulationskostenversicherung_0" checked="checked" name="Data.Configuration.Annulationskostenversicherung">
+                                                                        <div class="box"></div>
+                                                                    </div>
+                                                                    <div class="message">
+                                                                        <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="var(--ks-error-icon-size)" rotate="0" class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
+                                                                    </div>
+                                                                </ks-a-radio>
+                                                            </ks-m-checkout-insurance>
+                                                        </section>
+                                                </div>
+                                        </section>
+
+                                        <section id="sidebar">
+                                            
+
+        <ks-m-checkout-booked-offer headline="Sie haben sich f&#xFC;r folgendes Angebot entschieden"
+                                    name="Italienische K&#xFC;che: Frische Pasta und Pastasaucen"
+                                    status="{&quot;code&quot;:&quot;1&quot;,&quot;label&quot;:&quot;Garantierte Durchf&#xFC;hrung&quot;}"
+                                    date="17.01.2025 - 17.01.2025"
+                                    time="Fr, 18:00 - 21:20"
+                                    street="Grosspeterstrasse 18"
+                                    city="4052&amp;nbsp;Basel"
+                                    course-price="140.00 CHF"
+                                    initial-configuration-price-data="{&quot;annulationskostenversicherungPreis&quot;:&quot;&quot;,&quot;lehrmittelPreis&quot;:&quot;&quot;,&quot;materialPreis&quot;:&quot;&quot;,&quot;totalPreis&quot;:&quot;140.00 CHF&quot;}"
+                                    price-labels="{&quot;coursePrice&quot;:&quot;Kursgeld&quot;,&quot;insurance&quot;:&quot;Annullationskostenversicherung&quot;,&quot;teachingAids&quot;:&quot;Lehrmittel&quot;,&quot;material&quot;:&quot;Materialkosten&quot;,&quot;total&quot;:&quot;Gesamtbetrag&quot;,&quot;tax&quot;:&quot;inkl. allf&#xE4;lliger MWST&quot;}"
+                                    tabindex="0">
+        </ks-m-checkout-booked-offer>
+
+                                        </section>
+
+                                        <section id="bottom">
+                                            <ks-m-back-forward back-label="Zur&#xFC;ck"
+                                                               back-link="javascript:history.go(-1)"
+                                                               forward-label="Weiter zur Anmeldung"
+                                                               submit></ks-m-back-forward>
+
+                                        </section>
+                                    </ks-o-checkout-layout>
+                                </ks-o-checkout>
+                            </ks-c-checkout>
+                        </form>
+                    </m-simple-form-validation>
+        </div>
+    </main>
+<script type="text/javascript" src="./loader.js"></script>
