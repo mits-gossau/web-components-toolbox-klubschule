@@ -193,9 +193,9 @@ export default class WithFacet extends WebWorker() {
 
         // GTM Tracking of Filters
         if (event.detail?.target?.checked) this.dataLayerPush({
-          'event': 'filterSelection',
-          'filterName': event.detail.target.label, //the name of the clicked filter.
-          'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
+          'event': 'quick_filter_selection',
+          'quick_filter_name': event.detail.target.label, //the name of the clicked filter.
+          'quick_filter_category': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
         })
         
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
