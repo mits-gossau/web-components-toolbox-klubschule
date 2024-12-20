@@ -177,6 +177,7 @@ export default class FilterSelect extends Shadow() {
       return /* html */`
         <ks-a-button small namespace="button-secondary-" color="tertiary" justify-content="flex-start" request-event-name="${requestEventName}" click-no-toggle-active>
           <style>
+            :host,
             :host button {
               width: 100% !important;
             }
