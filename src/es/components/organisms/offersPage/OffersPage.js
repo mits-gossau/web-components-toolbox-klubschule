@@ -18,19 +18,19 @@ export default class OffersPage extends Shadow() {
 
     this.setAttribute('with-facet-target', '')
 
-    this.showInfoEventsHeadline = false
+    this.showHeadline = false
 
     this.withFacetListener = (event) => {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
-        if (this.data.courses?.length > 0) this.showInfoEventsHeadline = true
+        if (this.data.courses?.length > 0) this.showHeadline = true
 
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
         if (!this.isWishList || this.hasAttribute('is-info-events')) bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
 
         // Set headline for info events
-        if (this.hasAttribute('is-info-events') && this.showInfoEventsHeadline) {
+        if (this.hasAttribute('is-info-events') && this.showHeadline) {
           const headlineContainer = bodySection.root.querySelector('#info-events-headline-container')
           headlineContainer.innerHTML = /* html */ `
             <ks-a-spacing type="m-flex"></ks-a-spacing>
@@ -40,7 +40,7 @@ export default class OffersPage extends Shadow() {
           `
         }
         // Set headline for other locations
-        if (this.hasAttribute('is-other-locations') && this.data.courses > 0) {
+        if (this.hasAttribute('is-other-locations') && this.showHeadline) {
           const headlineContainer = bodySection.root.querySelector('#other-locations-headline-container')
           headlineContainer.innerHTML = /* html */ `
             <ks-a-heading tag="h2" no-margin-x>
@@ -664,7 +664,7 @@ export default class OffersPage extends Shadow() {
               <ks-a-spacing type="s-fix"></ks-a-spacing>
             `}
               ${this.hasAttribute('is-info-events') ? '<div id="info-events-headline-container" style="width:100%"></div>' : ''}
-              ${this.hasAttribute('is-other-locations') && this.data.courses > 0 ? '<div id="other-locations-headline-container"></div>' : ''}
+              ${this.hasAttribute('is-other-locations') && this.showHeadline ? '<div id="other-locations-headline-container"></div>' : ''}
               <ks-m-tile-factory 
                 ${this.eventDetailURL ? 'is-event ' : ''}
                 ${this.isWishList ? ' is-wish-list' : ''}
