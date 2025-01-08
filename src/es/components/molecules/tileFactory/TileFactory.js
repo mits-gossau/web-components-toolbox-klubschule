@@ -72,7 +72,7 @@ export default class TileFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
-    this.hiddenMessages = this.hiddenSections
+    this.hiddenMessages = this.hiddenSectionsPartnerSearch
     this.isOtherLocations = this.hasAttribute('is-other-locations')
   }
 
@@ -423,7 +423,9 @@ export default class TileFactory extends Shadow() {
     return this.root.querySelector('section')
   }
 
-  get hiddenSections () {
-    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
+  get hiddenSectionsPartnerSearch () {
+    let result = Array.from(this.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
+    if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden]'))
+    return result
   }
 }

@@ -12,7 +12,7 @@ export default class PartnerSearch extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.hiddenMessages = this.hiddenSections
+    this.hiddenMessages = this.hiddenSectionsPartnerSearch
     this.searchText = this.getAttribute('search-text')
     this.tab = this.getAttribute('tab')
     this.partnerSearchListener = event => this.renderHTML(event.detail.fetch)
@@ -258,7 +258,9 @@ export default class PartnerSearch extends Shadow() {
     return this.root.querySelector('mdx-loading-bar')
   }
 
-  get hiddenSections () {
-    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
+  get hiddenSectionsPartnerSearch () {
+    let result = Array.from(this.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
+    if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden]'))
+    return result
   }
 }
