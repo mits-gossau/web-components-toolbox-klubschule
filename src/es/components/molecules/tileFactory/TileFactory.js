@@ -210,7 +210,7 @@ export default class TileFactory extends Shadow() {
         this.pnext = data.pnext
         this.html = data.courses.reduce(
           (acc, /** @type {Course} */ course, i) => {
-            const tile = this.isEventSearch ? /* html */ `
+            let tile = this.isEventSearch ? /* html */ `
               <ks-m-event
                 ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
                 ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
@@ -250,7 +250,8 @@ export default class TileFactory extends Shadow() {
                   </m-load-template-tag>
                 `
             )
-            return acc = acc + tile + (i === 2 ? this.hiddenTroublemakerMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.innerHTML), '') : '')
+            if (this.hiddenTroublemakerMessages && data.courses.length && (data.courses.length <= 2 ? i === 0 : i === 1)) tile += this.hiddenTroublemakerMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.innerHTML), '')
+            return acc + tile
           },
           `<section ${this.hasAttribute('is-other-locations') ? 'class="other-locations"' : ''}>`
         )
