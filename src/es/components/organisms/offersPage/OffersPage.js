@@ -676,6 +676,7 @@ export default class OffersPage extends Shadow() {
                 ${this.hasAttribute('error-text') ? ` error-text="${this.getAttribute('error-text')}"` : ''}
               >
                 ${this.hiddenSectionsPartnerSearch.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+                ${this.hiddenSectionsTroublemaker.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
               </ks-m-tile-factory>
               <ks-a-spacing type="2xl-fix"></ks-a-spacing>
               ${this.isWishList && !this.hasAttribute('is-info-events') ? '' : /* html */ `
@@ -766,7 +767,13 @@ export default class OffersPage extends Shadow() {
 
   get hiddenSectionsPartnerSearch () {
     let result = Array.from(this.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
-    if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden]'))
+    if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
+    return result
+  }
+
+  get hiddenSectionsTroublemaker () {
+    let result = Array.from(this.querySelectorAll('section[hidden][slot=troublemaker]'))
+    if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden][slot=troublemaker]'))
     return result
   }
 

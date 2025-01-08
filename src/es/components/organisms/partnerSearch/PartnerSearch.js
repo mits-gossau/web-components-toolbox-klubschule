@@ -260,7 +260,7 @@ export default class PartnerSearch extends Shadow() {
 
   get hiddenSectionsPartnerSearch () {
     let result = Array.from(this.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
-    if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden]'))
+    if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
     return result
   }
 }
