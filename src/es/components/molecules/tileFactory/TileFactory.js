@@ -73,7 +73,7 @@ export default class TileFactory extends Shadow() {
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
     this.hiddenMessages = this.hiddenSectionsPartnerSearch
-    this.hiddenTroublemakerMessages = this.hiddenSectionsTroublemaker
+    this.hiddenTroublemakerMessages = this.templateTroublemaker
     this.isOtherLocations = this.hasAttribute('is-other-locations')
   }
 
@@ -250,7 +250,13 @@ export default class TileFactory extends Shadow() {
                   </m-load-template-tag>
                 `
             )
-            if (this.hiddenTroublemakerMessages && data.courses.length && (data.courses.length <= 2 ? i === 0 : i === 1)) tile += this.hiddenTroublemakerMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.innerHTML), '')
+            if (this.hiddenTroublemakerMessages && data.courses.length && (data.courses.length <= 2 ? i === 0 : i === 1)) tile += /* html */`
+              <m-load-template-tag>
+                <template>
+                  ${this.hiddenTroublemakerMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.innerHTML), '')}
+                </template>
+              </m-load-template-tag>
+            `
             return acc + tile
           },
           `<section ${this.hasAttribute('is-other-locations') ? 'class="other-locations"' : ''}>`
@@ -431,9 +437,9 @@ export default class TileFactory extends Shadow() {
     return result
   }
 
-  get hiddenSectionsTroublemaker () {
-    let result = Array.from(this.querySelectorAll('section[hidden][slot=troublemaker]'))
-    if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden][slot=troublemaker]'))
+  get templateTroublemaker () {
+    let result = Array.from(this.querySelectorAll('template[slot=troublemaker]'))
+    if (!result.length) result = Array.from(this.root.querySelectorAll('template[slot=troublemaker]'))
     return result
   }
 }

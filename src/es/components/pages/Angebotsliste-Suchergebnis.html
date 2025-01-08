@@ -52,31 +52,20 @@
         
       </div>
 </section>
-<section slot="troublemaker" hidden id="troublemaker">
-  <h2>Wir sind auf unseren Partnerseiten fündig geworden.</h2>
-      <div data-partner="30">
-        <a-picture namespace="" alt="IBAW" picture-load="" defaultSource="https://www.klubschule.ch/media/vy1pzafc/ibaw-rgb-positiv.svg" aspect-ratio="NaN" sources-keep-query-aspect-ratio="" style="--img-object-position: Default (16/9)"></a-picture>
-
-        Aus- und Weiterbildungen Informatik, Wirtschaft &amp; Ausbildung der Ausbildenden
-
-        
-          <ks-a-button namespace="button-secondary-">
-            {0} Veranstaltungen
-            <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>
-          </ks-a-button>
-        
+<template slot="troublemaker" id="troublemaker">
+  <ks-m-troublemaker namespace="troublemaker-default-" color="var(--color-ks-green)" href="baaahhh">
+    <a href="baaah">
+      <div>
+        <h3>Dynamic Headline</h3>
+        <p>Dynamic Text: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
       </div>
-      <div hidden data-partner="31">
-        <a-picture namespace="" alt="Logo Klubschule Pro" picture-load="" defaultSource="https://www.klubschule.ch/media/nrlfcsmo/logo-klubschule-pro.svg" aspect-ratio="NaN" sources-keep-query-aspect-ratio="" style="--img-object-position: Default (16/9)"></a-picture>
-
-        Berufliche Aus- und Weiterbildungen in der Ostschweiz
-
-        
-          <ks-a-button namespace="button-secondary-">
-            {0} Veranstaltungen
-            <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>
+      <div>
+        <ks-a-button namespace="button-primary-" color="secondary" hover-selector="ks-m-troublemaker">
+          Passende Abos anzeigen<a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
           </ks-a-button>
-        
+        </div>
       </div>
-</section>
+    </a>
+  </ks-m-troublemaker>
+</template>
 </ks-o-offers-page>
