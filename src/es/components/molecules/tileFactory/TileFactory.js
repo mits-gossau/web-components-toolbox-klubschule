@@ -250,8 +250,8 @@ export default class TileFactory extends Shadow() {
                   </m-load-template-tag>
                 `
             )
-            if (this.hiddenTroublemakerMessages && data.courses.length && (data.courses.length <= 2 ? i === 0 : i === 1)) tile += /* html */`
-              <m-load-template-tag>
+            if (this.hiddenTroublemakerMessages && data.courses.length && (data.courses.length <= 2 ? i === 0 : i === 1) && !this.root.querySelector('#trouble-maker, ks-m-troublemaker')) tile += /* html */`
+              <m-load-template-tag id="trouble-maker">
                 <template>
                   ${this.hiddenTroublemakerMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.innerHTML), '')}
                 </template>
