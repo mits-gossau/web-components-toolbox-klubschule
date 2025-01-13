@@ -304,7 +304,7 @@ export default class TileFactory extends Shadow() {
     // This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. 
     // See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
     return `
-      "title": "${JSON.stringify(course.bezeichnung).replace(/'/g, '’').replace(/"/g, '\"') || ''}",
+      "title": ${JSON.stringify(course.bezeichnung).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "infotextshort": ${JSON.stringify(course.infotextshort).replace(/'/g, '’').replace(/"/g, '\"') || ''},
       "location": {
         "iconName": "Location",
