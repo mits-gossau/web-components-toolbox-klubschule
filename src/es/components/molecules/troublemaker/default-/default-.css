@@ -1,5 +1,5 @@
 :host {
-  --orig-color-secondary: ${this.hasAttribute('color') ? this.getAttribute('color') : 'var(--color-secondary)'};
+  --attr-color-secondary: ${this.hasAttribute('color-prop') ? this.getAttribute('color-prop') : this.hasAttribute('color') ? `var(--color-${this.getAttribute('color')})`  : 'var(--color-secondary)'};
 }
 
 :host > a {
@@ -7,8 +7,8 @@
   --a-color: var(--color);
   --a-color-hover: var(--color);
   color: var(--color) !important;
-  background-color: ${this.hasAttribute('color') ? this.getAttribute('color') : 'var(--color-secondary)'};
-  border: 0.0625em solid ${this.hasAttribute('color') ? this.getAttribute('color') : 'var(--color-secondary)'};
+  background-color: var(--attr-color-secondary);
+  border: 0.0625em solid var(--attr-color-secondary);
   margin: 0 !important;
   display: flex !important;
   gap: 3em;
@@ -16,7 +16,7 @@
 }
 
 :host > a[href]:hover {
-  --color: ${this.hasAttribute('color') ? this.getAttribute('color') : 'var(--color-secondary)'};
+  --color: var(--attr-color-secondary);
   background-color: var(--background-color);
   border-color: var(--color);
 }
@@ -51,7 +51,7 @@
   --color-secondary-hover: var(--color);
 }
 :host > a > div:last-of-type > *::part(button) {
-  --button-primary-color: var(--orig-color-secondary);
+  --button-primary-color: var(--attr-color-secondary);
   --button-primary-label-white-space: nowrap;
   --button-secondary-label-white-space: nowrap;
   --button-tertiary-label-white-space: nowrap;

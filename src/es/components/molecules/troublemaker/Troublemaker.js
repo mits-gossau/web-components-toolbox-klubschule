@@ -9,12 +9,6 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Troublemaker extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-
-    // link behavior made accessible
-    if (this.hasAttribute('href')) {
-      this.setAttribute('data-href', this.getAttribute('href'))
-      this.setAttribute('role', 'link')
-    }
   }
 
   connectedCallback () {
