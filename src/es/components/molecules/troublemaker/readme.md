@@ -8,7 +8,7 @@
 
 ## CMS Integration
 ```
-<ks-m-troublemaker namespace="troublemaker-default-" color-prop="var(--color-ks-green)" href="baaahhh">
+<ks-m-troublemaker namespace="troublemaker-default-" color-prop="var(--color-ks-green)">
   <a href="baaah">
     <div>
       <h3>Dynamic Headline</h3>
