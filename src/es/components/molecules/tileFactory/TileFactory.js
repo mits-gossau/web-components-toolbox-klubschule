@@ -190,13 +190,6 @@ export default class TileFactory extends Shadow() {
       }
     ])
     this.html = ''
-    // this.html = /* html */`
-    //   ${this.hasAttribute('loading-text') ? `<p class="mdx-loading">${this.getAttribute('loading-text')}</p>` : ''}
-    //   <mdx-component class="mdx-loading">
-    //       <mdx-loading-bar></mdx-loading-bar>
-    //   </mdx-component>
-    // `
-    // debugger
     fetch.then(data => {
       setTimeout(() => {
         this.root.querySelectorAll('.mdx-loading').forEach(el => el.remove())
