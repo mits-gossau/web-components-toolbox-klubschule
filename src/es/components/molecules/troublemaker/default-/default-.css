@@ -41,7 +41,7 @@
   margin-bottom: 0;
 }
 
-:host > a > div:last-of-type {
+:host > a > div:last-of-type:not(:first-of-type) {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
@@ -74,7 +74,7 @@
     margin-bottom: 0.6em;
   }
   
-  :host > a > div:last-of-type {
+  :host > a > div:last-of-type:not(:first-of-type) {
     justify-content: flex-start;
     align-items: flex-start;
   }
