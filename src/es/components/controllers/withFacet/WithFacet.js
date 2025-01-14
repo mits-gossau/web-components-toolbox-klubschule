@@ -191,8 +191,6 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam(filterKey, filterValue, false)
         }
 
-        console.log('filter:', filterGroupName, currentCompleteFilterObj)
-
         // check if currentCompleteFilterObj has already selected children, then you know it is no quick filter anymore
         const isQuickfilter = currentCompleteFilterObj.find(filterItem => filterItem.children?.find(child => child.selected)) ? false : true
 
