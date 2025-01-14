@@ -79,6 +79,11 @@ export default class OffersPage extends Shadow() {
             moreText.textContent = this.data.sort.sort === 2 ? this.getTranslation('CourseList.MoreLocationsPlaceholder') : this.getTranslation('CourseList.MoreOffersPlaceholder')
           }
         }
+
+        // display pagination with load more button
+        if (this.hasCourses) {
+          bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
+        }
       })
     }
     this.isEasyPortal = !!this.hasAttribute('is-easy-portal')
@@ -681,6 +686,7 @@ export default class OffersPage extends Shadow() {
               ${this.isWishList && !this.hasAttribute('is-info-events') ? '' : /* html */ `
                 <ks-a-with-facet-pagination 
                   id="pagination"
+                  style="display: none;"
                   pagination-event-name="request-with-facet"
                   pagination-event-name="with-facet"
                   ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
