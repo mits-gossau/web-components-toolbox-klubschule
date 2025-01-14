@@ -86,10 +86,10 @@ You can find a simple example markup in the above linked example pages.
 </ks-o-offers-page>
 ```
 Place the following nodes inside the `ks-o-offers-page` if applicable
-- 1. <section slot="empty-courses" hidden id="empty-courses">
-- 2. <section slot="empty-content" hidden id="empty-content">
-- 3. <section slot="partner-results" hidden id="partner-results">
-- 4. <template slot="troublemaker" id="troublemaker">
+- 1. `<section slot="empty-courses" hidden id="empty-courses">`
+- 2. `<section slot="empty-content" hidden id="empty-content">`
+- 3. `<section slot="partner-results" hidden id="partner-results">`
+- 4. `<template slot="troublemaker" id="troublemaker">`
 Section 1.-3. are forwarded to [ks-o-partner-search - readme](`https://github.com/mits-gossau/web-components-toolbox-klubschule/blob/master/src/es/components/organisms/partnerSearch/readme.md`). Template 4. is for a tile trouble maker, which is placed within the tile list. More about the [`ks-m-troublemaker - readme`](https://github.com/mits-gossau/web-components-toolbox-klubschule/blob/master/src/es/components/molecules/troublemaker/readme.md)
 
 ### Attributes
