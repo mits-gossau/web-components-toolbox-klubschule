@@ -179,7 +179,7 @@ export default class FilterSelect extends Shadow() {
           listen-to="click"
           event-data='{
             "event": "quick_filter_selection",
-            "quick_filter_category": "${quickFilter.label}"
+            "quick_filter_category": "${quickFilter.label.replace(/'/g, '’').replace(/"/g, '\"')}"
           }'
         >
           <ks-a-button small namespace="button-secondary-" color="tertiary" justify-content="flex-start" request-event-name="${requestEventName}" click-no-toggle-active>
