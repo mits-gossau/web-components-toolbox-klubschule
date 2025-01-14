@@ -191,10 +191,14 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam(filterKey, filterValue, false)
         }
 
+        console.log('filter:', filterGroupName, currentCompleteFilterObj)
+
+        // check if currentCompleteFilterObj has already selected children, then you know it is no quick filter anymore
+        const isQuickfilter = currentCompleteFilterObj.find(filterItem => filterItem.children?.find(child => child.selected)) ? false : true
+
         // GTM Tracking of Filters
-        if (event.detail?.target?.checked) this.dataLayerPush({
+        if (event.detail?.target?.checked && isQuickfilter) this.dataLayerPush({
           'event': 'quick_filter_selection',
-          'quick_filter_name': event.detail.target.label, //the name of the clicked filter.
           'quick_filter_category': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
         })
         
