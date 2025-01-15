@@ -72,7 +72,8 @@ export default class TileFactory extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
-    this.hiddenMessages = this.hiddenSections
+    this.hiddenMessages = this.hiddenSectionsPartnerSearch
+    this.hiddenTroublemakerMessages = this.templateTroublemaker
     this.isOtherLocations = this.hasAttribute('is-other-locations')
   }
 
@@ -203,8 +204,8 @@ export default class TileFactory extends Shadow() {
         this.psize = data.psize
         this.pnext = data.pnext
         this.html = data.courses.reduce(
-          (acc, /** @type {Course} */ course) => {
-            const tile = this.isEventSearch ? /* html */ `
+          (acc, /** @type {Course} */ course, i) => {
+            let tile = this.isEventSearch ? /* html */ `
               <ks-m-event
                 ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
                 ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
@@ -244,7 +245,14 @@ export default class TileFactory extends Shadow() {
                   </m-load-template-tag>
                 `
             )
-            return acc = acc + tile
+            if (this.hiddenTroublemakerMessages && data.courses.length && (data.courses.length <= 2 ? i === 0 : i === 1) && !this.root.querySelector('#trouble-maker, ks-m-troublemaker')) tile += /* html */`
+              <m-load-template-tag id="trouble-maker">
+                <template>
+                  ${this.hiddenTroublemakerMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.innerHTML), '')}
+                </template>
+              </m-load-template-tag>
+            `
+            return acc + tile
           },
           `<section ${this.hasAttribute('is-other-locations') ? 'class="other-locations"' : ''}>`
         )
@@ -418,7 +426,15 @@ export default class TileFactory extends Shadow() {
     return this.root.querySelector('section')
   }
 
-  get hiddenSections () {
-    return Array.from(this.querySelectorAll('section[hidden]') || this.root.querySelectorAll('section[hidden]'))
+  get hiddenSectionsPartnerSearch () {
+    let result = Array.from(this.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
+    if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
+    return result
+  }
+
+  get templateTroublemaker () {
+    let result = Array.from(this.querySelectorAll('template[slot=troublemaker]'))
+    if (!result.length) result = Array.from(this.root.querySelectorAll('template[slot=troublemaker]'))
+    return result
   }
 }

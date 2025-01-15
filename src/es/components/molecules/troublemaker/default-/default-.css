@@ -1,3 +1,81 @@
 :host {
-    
+  --attr-color-secondary: ${this.hasAttribute('color-prop') ? this.getAttribute('color-prop') : this.hasAttribute('color') ? `var(--color-${this.getAttribute('color')})`  : 'var(--color-secondary)'};
+}
+
+:host > a {
+  --color: var(--background-color);
+  --a-color: var(--color);
+  --a-color-hover: var(--color);
+  color: var(--color) !important;
+  background-color: var(--attr-color-secondary);
+  border: 0.0625em solid var(--attr-color-secondary);
+  margin: 0 !important;
+  display: flex !important;
+  gap: 3em;
+  justify-content: space-between;
+}
+
+:host > a[href]:hover {
+  --color: var(--attr-color-secondary);
+  background-color: var(--background-color);
+  border-color: var(--color);
+}
+
+:host a:not([href]) {
+  cursor: default;
+}
+
+:host > a > div > span {
+  font-size: 1.5em;
+  line-height: 1.625em;
+}
+
+:host > a > div:first-of-type > *:first-child {
+  margin-bottom: 0.5em;
+}
+
+:host > a > div > p {
+  font-size: 1.125em;
+  line-height: 1.5em;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+:host > a > div:last-of-type:not(:first-of-type) {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+:host > a > div:last-of-type > * {
+  --color-secondary: var(--background-color);
+  --color-secondary-hover: var(--color);
+}
+:host > a > div:last-of-type > *::part(button) {
+  --button-primary-color: var(--attr-color-secondary);
+  --button-primary-label-white-space: nowrap;
+  --button-secondary-label-white-space: nowrap;
+  --button-tertiary-label-white-space: nowrap;
+  --button-quaternary-label-white-space: nowrap;
+  text-wrap: nowrap;
+  width: 100%;
+}
+
+@media only screen and (max-width: _max-width_) {
+  :host > a {
+    flex-direction: column;
+    gap: 1em;
+  }
+  
+  :host > a > div:first-of-type, :host > a > div:last-of-type > * {
+    width: 100%;
+  }
+  
+  :host > a > div:first-of-type > *:first-child {
+    margin-bottom: 0.6em;
+  }
+  
+  :host > a > div:last-of-type:not(:first-of-type) {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
 }

@@ -11,6 +11,88 @@
 
 You can find a simple example markup in the above linked example pages. 
 
+## CMS Integration
+```
+<ks-o-offers-page
+    endpoint="https://int.klubschule.ch/Umbraco/Api/CourseApi/Search"
+    endpoint-search-partner="https://int.klubschule.ch/Umbraco/Api/CourseApi/SearchPartner"
+    initial-request='{&quot;searchcontent&quot;:true,&quot;CurrentPageId&quot;:0,&quot;filter&quot;:[{&quot;PartitionKey&quot;:null,&quot;RowKey&quot;:null,&quot;label&quot;:null,&quot;id&quot;:&quot;&quot;,&quot;typ&quot;:null,&quot;level&quot;:&quot;&quot;,&quot;count&quot;:0,&quot;color&quot;:&quot;&quot;,&quot;urlpara&quot;:&quot;&quot;,&quot;selected&quot;:false,&quot;disabled&quot;:false,&quot;isquick&quot;:null,&quot;visible&quot;:false,&quot;sort&quot;:0,&quot;hideCount&quot;:false,&quot;skipCountUpdate&quot;:null,&quot;children&quot;:null,&quot;HasChilds&quot;:false},{&quot;PartitionKey&quot;:null,&quot;RowKey&quot;:null,&quot;label&quot;:null,&quot;id&quot;:&quot;30&quot;,&quot;typ&quot;:null,&quot;level&quot;:&quot;&quot;,&quot;count&quot;:0,&quot;color&quot;:&quot;&quot;,&quot;urlpara&quot;:&quot;&quot;,&quot;selected&quot;:true,&quot;disabled&quot;:true,&quot;isquick&quot;:null,&quot;visible&quot;:false,&quot;sort&quot;:0,&quot;hideCount&quot;:false,&quot;skipCountUpdate&quot;:null,&quot;children&quot;:[{&quot;PartitionKey&quot;:null,&quot;RowKey&quot;:null,&quot;label&quot;:null,&quot;id&quot;:&quot;1&quot;,&quot;typ&quot;:null,&quot;level&quot;:&quot;&quot;,&quot;count&quot;:0,&quot;color&quot;:&quot;&quot;,&quot;urlpara&quot;:&quot;&quot;,&quot;selected&quot;:true,&quot;disabled&quot;:true,&quot;isquick&quot;:null,&quot;visible&quot;:false,&quot;sort&quot;:0,&quot;hideCount&quot;:false,&quot;skipCountUpdate&quot;:null,&quot;children&quot;:null,&quot;HasChilds&quot;:false}],&quot;HasChilds&quot;:true}],&quot;sorting&quot;:1,&quot;SaveNulltreffer&quot;:null,&quot;onlyfaceted&quot;:null,&quot;onlycourse&quot;:false,&quot;clat&quot;:null,&quot;clong&quot;:null,&quot;cdist&quot;:null,&quot;abo_kurs_typ&quot;:null,&quot;abo_kurs_id&quot;:null,&quot;SearchTitle&quot;:null,&quot;SearchKeyword&quot;:null,&quot;SearchDescription&quot;:null,&quot;hasCollapse&quot;:false,&quot;hasCollapseOrt&quot;:false,&quot;collapseParent&quot;:false,&quot;PortalId&quot;:29,&quot;sprachid&quot;:&quot;d&quot;,&quot;MandantId&quot;:111,&quot;pskip&quot;:null,&quot;ppage&quot;:0,&quot;psize&quot;:12,&quot;pnext&quot;:24,&quot;searchText&quot;:&quot;&quot;}'
+    endpoint-auto-complete="https://int.klubschule.ch/Umbraco/Api/Autocomplete/search"
+    google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"
+    search-url="http://localhost:3000/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=.%2Fsrc%2Fcss%2FvariablesCustomKlubschule.css&login=.%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2Flogin%2Fdefault-%2Fdefault-.html&logo=.%2Fsrc%2Fes%2Fcomponents%2Fatoms%2Flogo%2Fdefault-%2Fdefault-.html&nav=.%2Fsrc%2Fes%2Fcomponents%2Fweb-components-toolbox%2Fsrc%2Fes%2Fcomponents%2Fmolecules%2FmultiLevelNavigation%2Fdefault-%2Fdefault-.html&footer=.%2Fsrc%2Fes%2Fcomponents%2Forganisms%2Ffooter%2Fdefault-%2Fdefault-.html&content=.%2Fsrc%2Fes%2Fcomponents%2Fpages%2FAngebotsliste-Suchergebnis.html"
+    with-main-search-input
+    with-location-input
+    with-location-input-label
+    with-filter-search
+    with-auto-complete
+    with-auto-complete-content
+    alternative-portal-ids-search="[30,31]"
+    error-text="Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
+    save-location-local-storage
+    save-location-session-storage
+>
+<section slot="empty-courses" hidden id="empty-courses">
+  <h3>Es konnten keine Angebote gefunden werden.</h3>
+</section>
+<section slot="empty-content" hidden id="empty-content">
+  <h2>Es konnten keine Stories oder Informationen gefunden werden.</h2>
+  Tipps für ein besseres Suchresultat
+  - Geben sie einen anderen Suchbegriff ein.
+  - Reduzieren sie gesetzte Filter.
+</section>
+<section slot="partner-results" hidden id="partner-results">
+  <h2>Wir sind auf unseren Partnerseiten fündig geworden.</h2>
+      <div hidden data-partner="30">
+        <a-picture namespace="" alt="IBAW" picture-load="" defaultSource="https://www.klubschule.ch/media/vy1pzafc/ibaw-rgb-positiv.svg" aspect-ratio="NaN" sources-keep-query-aspect-ratio="" style="--img-object-position: Default (16/9)"></a-picture>
+
+        Aus- und Weiterbildungen Informatik, Wirtschaft &amp; Ausbildung der Ausbildenden
+
+        
+          <ks-a-button namespace="button-secondary-">
+            {0} Veranstaltungen
+            <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>
+          </ks-a-button>
+        
+      </div>
+      <div hidden data-partner="31">
+        <a-picture namespace="" alt="Logo Klubschule Pro" picture-load="" defaultSource="https://www.klubschule.ch/media/nrlfcsmo/logo-klubschule-pro.svg" aspect-ratio="NaN" sources-keep-query-aspect-ratio="" style="--img-object-position: Default (16/9)"></a-picture>
+
+        Berufliche Aus- und Weiterbildungen in der Ostschweiz
+
+        
+          <ks-a-button namespace="button-secondary-">
+            {0} Veranstaltungen
+            <a-icon-mdx icon-name="ArrowRight" size="1em"></a-icon-mdx>
+          </ks-a-button>
+        
+      </div>
+</section>
+<template slot="troublemaker" id="troublemaker">
+  <ks-m-troublemaker namespace="troublemaker-default-" color-prop="var(--color-ks-green)" href="baaahhh">
+    <a href="baaah">
+      <div>
+        <h3>Dynamic Headline</h3>
+        <p>Dynamic Text: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+      </div>
+      <div>
+        <ks-a-button namespace="button-primary-" color="secondary" hover-selector="ks-m-troublemaker">
+          Passende Abos anzeigen<a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
+          </ks-a-button>
+        </div>
+      </div>
+    </a>
+  </ks-m-troublemaker>
+</template>
+</ks-o-offers-page>
+```
+Place the following nodes inside the `ks-o-offers-page` if applicable
+- 1. `<section slot="empty-courses" hidden id="empty-courses">`
+- 2. `<section slot="empty-content" hidden id="empty-content">`
+- 3. `<section slot="partner-results" hidden id="partner-results">`
+- 4. `<template slot="troublemaker" id="troublemaker">`
+
+Section 1.-3. are forwarded to [ks-o-partner-search - readme](`https://github.com/mits-gossau/web-components-toolbox-klubschule/blob/master/src/es/components/organisms/partnerSearch/readme.md`). Template 4. is for a tile trouble maker, which is placed within the tile list. More about the [`ks-m-troublemaker - readme`](https://github.com/mits-gossau/web-components-toolbox-klubschule/blob/master/src/es/components/molecules/troublemaker/readme.md)
+
 ### Attributes
 
 - `endpoint="https://miducabulaliwebappdev-test.azurewebsites.net/api/CourseSearch/withfacet"`: BE API where data is coming from
