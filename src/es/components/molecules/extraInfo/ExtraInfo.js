@@ -73,6 +73,12 @@ export default class ExtraInfo extends Shadow() {
   }
 
   renderHTML (fetch) {
+    // get all <p> elements and insert ... as placeholder until fetch is done
+    const paragraphs = this.root.querySelectorAll('p')
+    paragraphs.forEach(paragraph => {
+      paragraph.innerHTML = '...'
+    })
+
     Promise.all([fetch]).then(() => {
       fetch.then(response => {
         setTimeout(() => {
