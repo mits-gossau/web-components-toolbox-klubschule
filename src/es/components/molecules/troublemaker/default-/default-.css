@@ -22,7 +22,7 @@
 }
 
 :host a:not([href]) {
-  cursor: default;
+  cursor: auto;
 }
 
 :host > a > div > span {

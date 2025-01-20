@@ -9,14 +9,38 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Troublemaker extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+
+    // GTM Tracking of Click by making sure the push into the dataLayer took place before following the link
+    this.clickEventListener = event => {
+      const target = event.composedPath().find(node => node.tagName === 'A')
+      if (target) {
+        const href = target.getAttribute('href')
+        if (href) {
+          event.preventDefault()
+          const action = () => window.open(href, target.getAttribute('target'))
+          const timeout = setTimeout(action, 1000)
+          this.dataLayerPush({
+            'event': 'interrupter_click',
+            'interrupter_name': this.getAttribute('gtm-name'), // name of the troublemaker content
+            'eventCallback': () => {
+              clearTimeout(timeout)
+              action()
+            }
+          })
+        }
+      }
+    }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+    this.addEventListener('click', this.clickEventListener)
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    this.removeEventListener('click', this.clickEventListener)
+  }
 
   /**
    * evaluates if a render is necessary
@@ -111,6 +135,18 @@ export default class Troublemaker extends Shadow() {
         name: 'a-icon-mdx'
       }
     ])
+  }
+
+  dataLayerPush (value) {
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(value)
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
   }
 
   get container () {
