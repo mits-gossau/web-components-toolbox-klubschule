@@ -42,4 +42,5 @@
   `pro-greengray`: pro greengray  
   `pro-terracotta`: pro terracotta  
 - *color-prop*: Set Attribute `color-prop` to your css color value or better variable or consume by default --color-secondary. Note: This attribute trumps the color attribute, in case both are set at the same time
+- *gtm-name*: Set Attribute `gtm-name` to define the dataLayer push interrupter_name. "Der interrupter_name ist ein dynamischer Wert, da der Störer je nach Seite einen anderen Inhalt hat." Bsp.: "abo kaufen" https://jira.migros.net/browse/MIDUWEB-1717
 
