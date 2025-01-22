@@ -342,12 +342,12 @@ export default class FilterCategories extends Shadow() {
     if (level === 0 && filterItem.typ === 'tree') this.firstTreeItem = filterItem
     if (level === 0 && filterItem.typ !== 'tree') this.firstTreeItem = null
     if (filterItem.typ === 'tree') this.getSelectedFilters(filterItem, 'tree')
-    if (!filterItem.visible) return
     if (parentItem === null) parentItem = filterItem
     if (firstFilterItemId === null) firstFilterItemId = filterItem.id
 
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
+      generatedNavLevelItem.navLevelItem.style.display = filterItem.visible ? 'block' : 'none' // check if filter is visible
       if (generatedNavLevelItem.navLevelItem.root.querySelector('dialog')) generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
       // update additional text with selected filter(s) only for the first level 
       if (level === 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
@@ -355,6 +355,8 @@ export default class FilterCategories extends Shadow() {
     } else {
       this.generatedNavLevelItemMap.set(level + '_' + filterItem.id, (generatedNavLevelItem = this.generateNavLevelItem(response, parentItem, filterItem, mainNav, level)))
     }
+
+    if (!filterItem.visible) return
 
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {

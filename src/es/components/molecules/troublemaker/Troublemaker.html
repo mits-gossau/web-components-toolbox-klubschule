@@ -1,0 +1,51 @@
+<h1 id="tile">Troublemaker (Störer)</h1>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Default (--color-secondary)</h2>
+    <ks-m-troublemaker namespace="troublemaker-default-" gtm-name="site name of troublemakers location"></ks-m-troublemaker>
+</section>
+<hr>
+<section style="background-color: #f5ebeb; padding: 1em;">
+    <h2>Default with dynamic html [color-prop=var(--color-ks-green)]</h2>
+    <ks-m-troublemaker namespace="troublemaker-default-" color-prop="var(--color-ks-green)" gtm-name="site name of troublemakers location">
+        <a href="baaah">
+          <div>
+            <h3>Dynamic Headline</h3>
+            <p>Dynamic Text: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+          </div>
+          <div>
+            <ks-a-button namespace="button-primary-" color="secondary" hover-selector="ks-m-troublemaker">
+              Passende Abos anzeigen<a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
+            </ks-a-button>
+          </div>
+        </a>
+      </ks-m-troublemaker>
+</section>
+<hr>
+<section style="background-color: #f5ebeb; padding: 1em;">
+  <h2>Default with dynamic html [color=ks-orange]</h2>
+  <ks-m-troublemaker namespace="troublemaker-default-" color="ks-orange" gtm-name="site name of troublemakers location">
+      <a href="baaah">
+        <div>
+          <h3>Dynamic Headline</h3>
+          <p>Dynamic Text: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+        </div>
+        <div>
+          <ks-a-button namespace="button-primary-" color="secondary" hover-selector="ks-m-troublemaker">
+            Passende Abos anzeigen<a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowRight" size="1em" class="icon-right">
+          </ks-a-button>
+        </div>
+      </a>
+    </ks-m-troublemaker>
+</section>
+<hr>
+<section style="background-color: #f5ebeb; padding: 1em;">
+  <h2>Default with dynamic html [color=ks-green] without cta</h2>
+  <ks-m-troublemaker namespace="troublemaker-default-" color="ks-green" gtm-name="site name of troublemakers location">
+      <a>
+        <div>
+          <h3>Dynamic Headline</h3>
+          <p>Dynamic Text: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+        </div>
+      </a>
+    </ks-m-troublemaker>
+</section>
