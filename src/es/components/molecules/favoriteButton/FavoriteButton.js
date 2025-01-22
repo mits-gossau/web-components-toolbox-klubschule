@@ -7,9 +7,9 @@ export default class FavoriteButton extends Shadow() {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     try {
-      this.gtm_data = this.hasAttribute('course-data') ? JSON.parse(this.getAttribute('course-data')) : null
+      this.gtm_data = this.hasAttribute('event-data') ? JSON.parse(this.getAttribute('event-data')) : this.hasAttribute('course-data') ? JSON.parse(this.getAttribute('course-data')) : null
     } catch (error) {
-      console.warn('Wishlist FavoriteButton.js aka. <ks-m-favorite-button> received corrupted course-data and is not going to send the add to wishlist event to GTM:', this)
+      console.warn('Wishlist FavoriteButton.js aka. <ks-m-favorite-button> received corrupted event-data or course-data and is not going to send the add to wishlist event to GTM:', this)
     }
     // id assembly: courseType_courseId_centerId
     const id = {
@@ -54,28 +54,30 @@ export default class FavoriteButton extends Shadow() {
         cancelable: true,
         composed: true
       }))
-      if (this.gtm_data && this.isFavoured) this.dataLayerPush({
-        'event': 'add_to_wishlist',
-        'ecommerce': {    
+      if (this.gtm_data && this.isFavoured) this.hasAttribute('event-data')
+        ? this.dataLayerPush(this.gtm_data)
+        : this.dataLayerPush({
+          'event': 'add_to_wishlist',
+          'ecommerce': {    
             'items': [{ 
-            // @ts-ignore
-            'item_name': `${this.gtm_data.bezeichnung}`,                
-            // @ts-ignore
-            'item_id': `${this.getItemId(this.gtm_data)}`, 
-            // @ts-ignore
-            'price': this.gtm_data.price.oprice || this.gtm_data.price.price,
-            'item_category': `${this.gtm_data.spartename?.[0] || ''}`,
-            'item_category2': `${this.gtm_data.spartename?.[1] || ''}`,
-            'item_category3': `${this.gtm_data.spartename?.[2] || ''}`,
-            'item_category4': `${this.gtm_data.spartename?.[3] || ''}`,
-            'item_category5': `${this.gtm_data.spartename?.[4] || ''}`, 
-            'quantity': 1,
-            'item_variant':`${this.gtm_data.location?.center ? this.gtm_data.location.center : this.gtm_data.center ? this.gtm_data.center.bezeichnung_internet : ''}`,
-            'index': 0,
-            'currency': 'CHF'
-          }]
-        }
-      })
+              // @ts-ignore
+              'item_name': `${this.gtm_data.bezeichnung}`,                
+              // @ts-ignore
+              'item_id': `${this.getItemId(this.gtm_data)}`, 
+              // @ts-ignore
+              'price': this.gtm_data.price.oprice || this.gtm_data.price.price,
+              'item_category': `${this.gtm_data.spartename?.[0] || ''}`,
+              'item_category2': `${this.gtm_data.spartename?.[1] || ''}`,
+              'item_category3': `${this.gtm_data.spartename?.[2] || ''}`,
+              'item_category4': `${this.gtm_data.spartename?.[3] || ''}`,
+              'item_category5': `${this.gtm_data.spartename?.[4] || ''}`, 
+              'quantity': 1,
+              'item_variant':`${this.gtm_data.location?.center ? this.gtm_data.location.center : this.gtm_data.center ? this.gtm_data.center.bezeichnung_internet : ''}`,
+              'index': 0,
+              'currency': 'CHF'
+            }]
+          }
+        })
     }
 
     /** @type {(any)=>void} */
