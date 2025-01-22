@@ -190,7 +190,6 @@ export default class TileFactory extends Shadow() {
         name: 'mdx-component'
       }
     ])
-    this.html = ''
     fetch.then(data => {
       setTimeout(() => {
         this.root.querySelectorAll('.mdx-loading').forEach(el => el.remove())
