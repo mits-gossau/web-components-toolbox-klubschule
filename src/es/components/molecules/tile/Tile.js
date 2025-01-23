@@ -340,7 +340,7 @@ export default class Tile extends Shadow() {
           >
             <span class="${this.hasAttribute('is-other-locations') ? 'm-tile__title-other-locations' : 'm-tile__title'}">${data.title || data.bezeichnung || warnMandatory + 'title'}</span>
           </ks-c-gtm-event>
-          ${data.infotextshort && !this.isInsideTileList
+          ${data.infotextshort && !this.isInsideTileList || data.infotextshort && this.hasAttribute('nearby-search')
             ? /* html */`
               <ks-m-tooltip namespace="tooltip-right-" text='${data.infotextshort}'>
                 <a-icon-mdx namespace="icon-mdx-ks-tile-" icon-name="Info" size="1.5em" class="icon-right"></a-icon-mdx>
