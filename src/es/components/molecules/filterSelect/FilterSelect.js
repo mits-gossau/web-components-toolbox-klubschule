@@ -159,7 +159,7 @@ export default class FilterSelect extends Shadow() {
     let quickFilters = []
 
     filterData.forEach(filterItem => {
-      if (filterItem.isquick) {
+      if (filterItem.isquick && filterItem.visible) {
         quickFilters.push({id: filterItem.id, order: filterItem.isquick, label: filterItem.label})
       }
       // check recursive if filterItem or its children is selected and remove the parent filterItem from quickFilters
