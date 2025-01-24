@@ -293,9 +293,9 @@ export default class FilterCategories extends Shadow() {
     this.total = response.total
 
     navLevelItem.innerHTML = /* html */`
-      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')}">
+      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || filterItem.label?.replace(/'/g, '’').replace(/"/g, '\"')}">
         <div class="wrap">
-          <span class="text">${filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}</span>
+          <span class="text">${filterItem.label?.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}</span>
           <span class="additional">${selectedFilters}</span>
         </div>
         <a-icon-mdx namespace="icon-link-list-" icon-name="ChevronRight" size="1.5em" rotate="0" class="icon-right"></a-icon-mdx>
@@ -308,7 +308,7 @@ export default class FilterCategories extends Shadow() {
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
           </a-button>
-          <h3>${filterItem.label.replace(/'/g, '’').replace(/"/g, '\"')}</h3>
+          <h3>${filterItem.label?.replace(/'/g, '’').replace(/"/g, '\"')}</h3>
           <a-button request-event-name="backdrop-clicked" id="close">
             <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
           </a-button>
