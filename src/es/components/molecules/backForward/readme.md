@@ -12,6 +12,7 @@
 - `submit?`: add this attribute if a submit button is needed
 - `forward-link?=string`
 - `forward-disabled`: if this attribute exists, forward button will be disabled
+- `event-data`: add JSON value for gtm events
 
 ## Markup Examples
 
@@ -34,5 +35,17 @@
     back-link="#back"
     forward-label="Weiter"
     forward-link="/"
+></ks-m-back-forward>
+```
+
+### Example 3 (with submit and gtm data)
+
+```
+<ks-m-back-forward
+    back-label="Zurück"
+    back-link="#back"
+    forward-label="Weiter"
+    submit
+    event-data="{&quot;event&quot;:&quot;virtual_pageview&quot; ...}"
 ></ks-m-back-forward>
 ```
