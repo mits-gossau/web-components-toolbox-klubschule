@@ -178,6 +178,14 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('sorting', currentRequestObj.sorting)
         }
         this.deleteParamFromUrl(filterKey)
+      } else if (event?.detail?.selectedFilterId) {
+        // selected filter click/touch (filter pills)
+        const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
+        selectedFilterItem.skipCountUpdate = true
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        console.log('event.detail.selectedFilterId', event.detail.selectedFilterId, currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId))
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
         // triggered by component interaction eg. checkbox or nav-level-item
@@ -197,7 +205,7 @@ export default class WithFacet extends WebWorker() {
           'filterName': event.detail.target.label, //the name of the clicked filter.
           'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
         })
-        
+
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
@@ -454,12 +462,14 @@ export default class WithFacet extends WebWorker() {
       const isUrlpara = filterItem.urlpara === filterValue
       if (zeroLevel) isSectorFilter = Number(filterItem.id) === 7 && filterItem.typ === "tree"
 
-      filterItem.skipCountUpdate = !!filterItem.skipCountUpdate
+      // filterItem.skipCountUpdate = !!filterItem.skipCountUpdate
+      filterItem.skipCountUpdate = false
 
       // only the first level has the urlpara === filterKey check
       if (!zeroLevel || isMatchingKey) {
         if (isCenterFilter) {
           filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
+          console.log(selectedParent)
         } else if (isSectorFilter && isTree) { // sector filter ("Angebotsbereich")
           filterItem.skipCountUpdate = true
           if (!filterItem.selected && isUrlpara) {
@@ -469,6 +479,7 @@ export default class WithFacet extends WebWorker() {
           }
         } else if (filterItem.selected && isUrlpara) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
+          console.log(selectedParent)
         } else if (filterItem.selected && !isUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isUrlpara && isParentSelected) {
