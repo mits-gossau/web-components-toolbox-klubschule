@@ -461,7 +461,6 @@ export default class WithFacet extends WebWorker() {
       const isUrlpara = filterItem.urlpara === filterValue
       if (zeroLevel) isSectorFilter = Number(filterItem.id) === 7 && filterItem.typ === "tree"
 
-      // filterItem.skipCountUpdate = !!filterItem.skipCountUpdate
       filterItem.skipCountUpdate = false
 
       // only the first level has the urlpara === filterKey check
