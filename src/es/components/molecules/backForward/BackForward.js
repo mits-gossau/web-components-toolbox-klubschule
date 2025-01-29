@@ -4,6 +4,12 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class BackForward extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, mode: 'false', ...options }, ...args)  
+
+    try {
+      this.eventData = this.hasAttribute('event-data') ? JSON.parse(this.getAttribute('event-data')) : null
+    } catch (error) {
+      console.warn('BackForward.js aka. <ks-m-back-forward> received corrupted event-data and is not going to send event to GTM:', this)
+    }
     
     /* close dialog in form overlay */
     this.clickEventListener = () => {
@@ -15,17 +21,27 @@ export default class BackForward extends Shadow() {
         })
       )
     }
+
+    this.submitEventListener = () => { 
+      if (this.eventData) {
+        this.dataLayerPush(this.eventData)
+      }
+    }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
 
+    this.submitButton = this.root.querySelector('.back-forward__forward-btn[type="submit"]')
+    if (this.submitButton) this.submitButton.addEventListener('click', this.submitEventListener)
+
     this.closeButton = this.root.querySelector('#close')
     if (this.closeButton) this.closeButton.addEventListener('click', this.clickEventListener)
   }
 
   disconnectedCallback () {
+    if (this.submitButton) this.submitButton.removeEventListener('click', this.submitEventListener)
     if (this.closeButton) this.closeButton.removeEventListener('click', this.clickEventListener)
   }
 
@@ -122,5 +138,17 @@ export default class BackForward extends Shadow() {
 
   get wrapper () {
     return this.root.querySelector('.back-forward')
+  }
+
+  dataLayerPush (value) {
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(value)
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
   }
 }

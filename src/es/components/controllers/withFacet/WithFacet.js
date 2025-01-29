@@ -52,7 +52,7 @@ export default class WithFacet extends WebWorker() {
 
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
-    this.params = this.catchURLParams()
+    this.params = new URLSearchParams(self.location.search)
     const isMocked = this.hasAttribute('mock')
     const isMockedInfoEvents = this.hasAttribute('mock-info-events')    
     let endpoint = isMocked
@@ -520,10 +520,6 @@ export default class WithFacet extends WebWorker() {
     // Bad API needs filter for payload but responses with filters
     if (requestObj.filters) delete requestObj.filters
     return requestObj
-  }
-
-  catchURLParams() {
-    return new URLSearchParams(self.location.search)
   }
 
   updatePpage(endpointUrl, currentPpage) {
