@@ -184,8 +184,7 @@ export default class WithFacet extends WebWorker() {
         selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        console.log('event.detail.selectedFilterId', event.detail.selectedFilterId, currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId))
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]        
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
         // triggered by component interaction eg. checkbox or nav-level-item

@@ -198,6 +198,7 @@ export default class FilterCategories extends Shadow() {
     if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
       // @ts-ignore
       if (filterItem && filterItem !== null) {
+        console.log('updateFilter 0', filterItem)
         // @ts-ignore
         const text = filterItem.shadowRoot.querySelector('.text') || filterItem.querySelector('.text')
         // @ts-ignore
@@ -319,7 +320,7 @@ export default class FilterCategories extends Shadow() {
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
-          <div class="sub-level ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
+          <div class="sub-level sub-level-${filterItem.id} ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
         </div>
         <div class="container dialog-footer">
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
@@ -358,6 +359,8 @@ export default class FilterCategories extends Shadow() {
 
     if (!filterItem.visible) return
 
+    generatedNavLevelItem.subLevel.innerHTML = ''
+    
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {
       // update total button / Avoid bug with uBlock not finding the dialog
@@ -386,7 +389,8 @@ export default class FilterCategories extends Shadow() {
           if (child.children && child.children.length > 0) {
             this.generateFilters(response, child, generatedNavLevelItem.subLevel, filterItem, firstFilterItemId, level) // recursive call
           } else {
-            const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
+            // const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
+            const generatedFilters = this.generateFilterElement(response, child, filterItem, firstFilterItemId)
             if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedFilters[0])) {
               this.updateFilter(generatedFilters, child, filterItem)
             } else {
