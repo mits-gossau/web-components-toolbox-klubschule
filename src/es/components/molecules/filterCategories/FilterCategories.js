@@ -20,11 +20,18 @@ export default class FilterCategories extends Shadow() {
     this.generateFilterMap = new Map()
     this.total = 0
     this.firstTreeItem = null
+    this.mainLevelNav = null
 
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
     this.keepDialogOpenEventListener = event => {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
+    }
+
+    this.clickNavLevelItemLevel0EventListener = id => {
+      return () => {
+        this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id } }))
+      }
     }
   }
 
@@ -46,6 +53,28 @@ export default class FilterCategories extends Shadow() {
   disconnectedCallback () {
     this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
     this.removeEventListener('click', this.keepDialogOpenEventListener)
+  }
+
+  addEventListenersToDialogs = mainNav => {
+    const dialogs = mainNav.querySelectorAll('m-dialog')
+
+    dialogs.forEach(dialog => {
+      const filterId = dialog.getAttribute('id').replace('filter-', '')
+      const navLevelItem = dialog.shadowRoot.querySelector('ks-m-nav-level-item')
+      navLevelItem.addEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId))
+    })
+  }
+
+  observeMainNav = mainNav => {
+    const observer = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          this.addEventListenersToDialogs(mainNav)
+        }
+      }
+    })
+
+    observer.observe(mainNav, { childList: true, subtree: true })
   }
 
   shouldRenderCSS () {
@@ -198,7 +227,6 @@ export default class FilterCategories extends Shadow() {
     if (generatedFilters.find(filter => (filterItem = filter.querySelector(id) || (filter.matches(id) && filter)))) {
       // @ts-ignore
       if (filterItem && filterItem !== null) {
-        console.log('updateFilter 0', filterItem)
         // @ts-ignore
         const text = filterItem.shadowRoot.querySelector('.text') || filterItem.querySelector('.text')
         // @ts-ignore
@@ -435,7 +463,10 @@ export default class FilterCategories extends Shadow() {
 
     const mainNav = document.createElement('div')
     mainNav.setAttribute('class', 'main-level')
-
+    
+    // this.addEventListenersToDialogs(mainNav)
+    this.observeMainNav(mainNav)
+    
     this.html = mainNav
 
     return mainNav

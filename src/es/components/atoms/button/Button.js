@@ -54,18 +54,7 @@ export default class KsButton extends Button {
       }
     }
 
-    this.clickListener = (id) => {
-      return () => {
-        this.dispatchEvent(new CustomEvent('request-with-facet', {
-          bubbles: true,
-          cancelable: true,
-          composed: true,
-          detail: {
-            selectedFilterId: id
-          }
-        }))
-      }
-    }
+    this.clickListener = id => {return () => this.dispatchEvent(new CustomEvent('request-with-facet', {bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id }}))}
 
     if (this.getAttribute('request-event-name') && this.getAttribute('request-event-name').includes('request-with-facet')) {
       // @ts-ignore
