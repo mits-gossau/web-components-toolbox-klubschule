@@ -467,7 +467,6 @@ export default class WithFacet extends WebWorker() {
       if (!zeroLevel || isMatchingKey) {
         if (isCenterFilter) {
           filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
-          console.log(selectedParent)
         } else if (isSectorFilter && isTree) { // sector filter ("Angebotsbereich")
           filterItem.skipCountUpdate = true
           if (!filterItem.selected && isUrlpara) {
@@ -477,7 +476,6 @@ export default class WithFacet extends WebWorker() {
           }
         } else if (filterItem.selected && isUrlpara) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
-          console.log(selectedParent)
         } else if (filterItem.selected && !isUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
         } else if (!filterItem.selected && isUrlpara && isParentSelected) {
