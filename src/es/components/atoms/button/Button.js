@@ -54,8 +54,12 @@ export default class KsButton extends Button {
       }
     }
 
-    this.clickListener = id => {return () => this.dispatchEvent(new CustomEvent('request-with-facet', {bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id }}))}
-
+    this.clickListener = id => {
+      return () => {
+        this.dispatchEvent(new CustomEvent('request-with-facet', {bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id }}))
+        this.dispatchEvent(new CustomEvent('hide-all-sublevels', {bubbles: true, cancelable: true, composed: true}))
+      }
+    }
     if (this.getAttribute('request-event-name') && this.getAttribute('request-event-name').includes('request-with-facet')) {
       // @ts-ignore
       if (this.getAttribute('request-event-name').match(/dialog-open-(\d+)/)) this.addEventListener('click', this.clickListener(this.getAttribute('request-event-name').match(/dialog-open-(\d+)/)?.[1]))

@@ -31,8 +31,11 @@ export default class FilterCategories extends Shadow() {
     this.clickNavLevelItemLevel0EventListener = id => {
       return () => {
         this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id } }))
+        this.dispatchEvent(new CustomEvent('hide-all-sublevels', {bubbles: true, cancelable: true, composed: true}))
       }
     }
+    
+    this.hideAllSublevelsEventListener = () => this.hideSubLevels()
   }
 
   connectedCallback () {
@@ -48,11 +51,13 @@ export default class FilterCategories extends Shadow() {
       }))
 
     this.addEventListener('click', this.keepDialogOpenEventListener)
+    document.body.addEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
   }
 
   disconnectedCallback () {
     this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
     this.removeEventListener('click', this.keepDialogOpenEventListener)
+    document.body.removeEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
   }
 
   addEventListenersToDialogs = mainNav => {
@@ -358,13 +363,25 @@ export default class FilterCategories extends Shadow() {
       </m-dialog>
     `
 
+    this.subLevel = div.querySelector('m-dialog')?.shadowRoot?.querySelector(`.sub-level-${filterItem.id}`)
+    if (this.subLevel) this.subLevel.setAttribute('hidden', '')
+
     return {
       navLevelItem: div.children[0],
-      // @ts-ignore
-      subLevel: div.querySelector('m-dialog')?.root.querySelector('.sub-level'),
+      subLevel: this.subLevel,
       id: filterItem.id
     }
   }
+
+  toggleSubLevels = (show) => {
+    const dialogs = this.mainNav.querySelectorAll('m-dialog')
+    dialogs.forEach(dialog => {
+      const subLevel = dialog.shadowRoot.querySelector('.sub-level')
+      if (subLevel) show ? subLevel.removeAttribute('hidden') : subLevel.setAttribute('hidden', '')
+    })
+  }
+  showSubLevels = () => this.toggleSubLevels(true)
+  hideSubLevels = () => this.toggleSubLevels(false)
 
   generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
     level++
@@ -453,6 +470,8 @@ export default class FilterCategories extends Shadow() {
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)
           })
+
+          this.showSubLevels()
         }, 0)
       })
     })
