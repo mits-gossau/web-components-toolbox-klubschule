@@ -20,7 +20,6 @@ export default class FilterCategories extends Shadow() {
     this.generateFilterMap = new Map()
     this.total = 0
     this.firstTreeItem = null
-    this.mainLevelNav = null
 
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
@@ -483,7 +482,6 @@ export default class FilterCategories extends Shadow() {
     const mainNav = document.createElement('div')
     mainNav.setAttribute('class', 'main-level')
     
-    // this.addEventListenersToDialogs(mainNav)
     this.observeMainNav(mainNav)
     
     this.html = mainNav
