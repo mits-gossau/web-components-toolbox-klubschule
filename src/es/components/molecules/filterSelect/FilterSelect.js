@@ -85,7 +85,9 @@ export default class FilterSelect extends Shadow() {
   }
 
   createFilterButton (filterItem, selectedFilter, treeIds = [], filterGroupUrlPara = null) {
-    let requestEventName = 'request-with-facet,dialog-open-first-level'
+    const isNotTreeFilter = filterItem.typ !== 'tree' && !filterItem.id.includes('N')
+    console.log('isNotTreeFilter', isNotTreeFilter)
+    let requestEventName = `${isNotTreeFilter ? '' : 'request-with-facet,'}dialog-open-first-level`
 
     treeIds && treeIds['parents']?.length > 0 ? requestEventName += ','+treeIds['parents']?.map(id => `dialog-open-${id}`).join(',') : requestEventName += ','+`dialog-open-${filterItem.id}`
 
