@@ -53,6 +53,17 @@ export default class KsButton extends Button {
         this.closestSimpleForm.addEventListener(FINISH_LOADING_EVENT, this.simpleFormResponseListener)
       }
     }
+
+    this.clickListener = id => {
+      return () => {
+        this.dispatchEvent(new CustomEvent('request-with-facet', {bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id }}))
+        this.dispatchEvent(new CustomEvent('hide-all-sublevels', {bubbles: true, cancelable: true, composed: true}))
+      }
+    }
+    if (this.getAttribute('request-event-name') && this.getAttribute('request-event-name').includes('request-with-facet')) {
+      // @ts-ignore
+      if (this.getAttribute('request-event-name').match(/dialog-open-(\d+)/)) this.addEventListener('click', this.clickListener(this.getAttribute('request-event-name').match(/dialog-open-(\d+)/)?.[1]))
+    }
   }
 
   disconnectedCallback() {
@@ -63,6 +74,11 @@ export default class KsButton extends Button {
     }
     if (this.closestSimpleForm) {
       this.button.removeEventListener(this.responseEventName, this.simpleFormResponseListener)
+    }
+
+    if (this.getAttribute('request-event-name') && this.getAttribute('request-event-name').includes('request-with-facet')) {
+      // @ts-ignore
+      if (this.getAttribute('request-event-name').match(/dialog-open-(\d+)/)) this.removeEventListener('click', this.clickListener(this.getAttribute('request-event-name').match(/dialog-open-(\d+)/)?.[1]))
     }
   }
 

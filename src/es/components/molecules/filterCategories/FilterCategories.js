@@ -20,12 +20,22 @@ export default class FilterCategories extends Shadow() {
     this.generateFilterMap = new Map()
     this.total = 0
     this.firstTreeItem = null
+    this.mainLevelNav = null
 
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
     this.keepDialogOpenEventListener = event => {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
     }
+
+    this.clickNavLevelItemLevel0EventListener = id => {
+      return () => {
+        this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id } }))
+        this.dispatchEvent(new CustomEvent('hide-all-sublevels', {bubbles: true, cancelable: true, composed: true}))
+      }
+    }
+    
+    this.hideAllSublevelsEventListener = () => this.hideSubLevels()
   }
 
   connectedCallback () {
@@ -41,11 +51,28 @@ export default class FilterCategories extends Shadow() {
       }))
 
     this.addEventListener('click', this.keepDialogOpenEventListener)
+    document.body.addEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
   }
 
   disconnectedCallback () {
     this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
     this.removeEventListener('click', this.keepDialogOpenEventListener)
+    document.body.removeEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
+  }
+
+  addEventListenersToDialogs = mainNav => {
+    const dialogs = mainNav.querySelectorAll('m-dialog')
+
+    dialogs.forEach(dialog => {
+      const filterId = dialog.getAttribute('id').replace('filter-', '')
+      const navLevelItem = dialog.shadowRoot.querySelector('ks-m-nav-level-item')
+      navLevelItem.addEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId))
+    })
+  }
+
+  observeMainNav = mainNav => {
+    const observer = new MutationObserver(() => this.addEventListenersToDialogs(mainNav))
+    observer.observe(mainNav, { childList: true, subtree: true })
   }
 
   shouldRenderCSS () {
@@ -303,7 +330,7 @@ export default class FilterCategories extends Shadow() {
     `
 
     div.innerHTML = /* html */`
-      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} filter-level="level-${level}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
@@ -319,7 +346,7 @@ export default class FilterCategories extends Shadow() {
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
-          <div class="sub-level ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
+          <div class="sub-level sub-level-${filterItem.id} ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
         </div>
         <div class="container dialog-footer">
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
@@ -329,13 +356,24 @@ export default class FilterCategories extends Shadow() {
       </m-dialog>
     `
 
+    this.subLevel = div.querySelector('m-dialog')?.shadowRoot?.querySelector(`.sub-level-${filterItem.id}`)
+
     return {
       navLevelItem: div.children[0],
-      // @ts-ignore
-      subLevel: div.querySelector('m-dialog')?.root.querySelector('.sub-level'),
+      subLevel: this.subLevel,
       id: filterItem.id
     }
   }
+
+  toggleSubLevels = (show) => {
+    const dialogs = this.mainNav.querySelectorAll('m-dialog')
+    dialogs.forEach(dialog => {
+      const subLevel = dialog.shadowRoot.querySelector('.sub-level')
+      if (subLevel) show ? subLevel.removeAttribute('hidden') : subLevel.setAttribute('hidden', '')
+    })
+  }
+  showSubLevels = () => this.toggleSubLevels(true)
+  hideSubLevels = () => this.toggleSubLevels(false)
 
   generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
     level++
@@ -358,6 +396,11 @@ export default class FilterCategories extends Shadow() {
 
     if (!filterItem.visible) return
 
+    // check if filterItem.typ is not tree or id has no capital N inside (true for all tree filter items)
+    if (filterItem.typ !== 'tree' && !filterItem.id.includes('N')) {
+      generatedNavLevelItem.subLevel.innerHTML = ''
+    }
+    
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {
       // update total button / Avoid bug with uBlock not finding the dialog
@@ -386,7 +429,8 @@ export default class FilterCategories extends Shadow() {
           if (child.children && child.children.length > 0) {
             this.generateFilters(response, child, generatedNavLevelItem.subLevel, filterItem, firstFilterItemId, level) // recursive call
           } else {
-            const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
+            // const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
+            const generatedFilters = this.generateFilterElement(response, child, filterItem, firstFilterItemId)
             if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedFilters[0])) {
               this.updateFilter(generatedFilters, child, filterItem)
             } else {
@@ -421,6 +465,8 @@ export default class FilterCategories extends Shadow() {
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)
           })
+
+          this.showSubLevels()
         }, 0)
       })
     })
@@ -431,7 +477,9 @@ export default class FilterCategories extends Shadow() {
 
     const mainNav = document.createElement('div')
     mainNav.setAttribute('class', 'main-level')
-
+    
+    this.observeMainNav(mainNav)
+    
     this.html = mainNav
 
     return mainNav
