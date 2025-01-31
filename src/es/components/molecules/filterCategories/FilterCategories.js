@@ -377,6 +377,7 @@ export default class FilterCategories extends Shadow() {
 
   generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
     level++
+    const isTreeFilter = filterItem.typ === 'tree' || filterItem.id.includes('N')
     if (level === 0 && filterItem.typ === 'tree') this.firstTreeItem = filterItem
     if (level === 0 && filterItem.typ !== 'tree') this.firstTreeItem = null
     if (filterItem.typ === 'tree') this.getSelectedFilters(filterItem, 'tree')
@@ -395,11 +396,7 @@ export default class FilterCategories extends Shadow() {
     }
 
     if (!filterItem.visible) return
-
-    // check if filterItem.typ is not tree or id has no capital N inside (true for all tree filter items)
-    if (filterItem.typ !== 'tree' && !filterItem.id.includes('N')) {
-      generatedNavLevelItem.subLevel.innerHTML = ''
-    }
+    if (!isTreeFilter) generatedNavLevelItem.subLevel.innerHTML = ''
     
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {
@@ -429,8 +426,8 @@ export default class FilterCategories extends Shadow() {
           if (child.children && child.children.length > 0) {
             this.generateFilters(response, child, generatedNavLevelItem.subLevel, filterItem, firstFilterItemId, level) // recursive call
           } else {
-            // const generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
-            const generatedFilters = this.generateFilterElement(response, child, filterItem, firstFilterItemId)
+            let generatedFilters = this.generateFilterElement(response, child, filterItem, firstFilterItemId)
+            if (isTreeFilter) generatedFilters = this.generateFilterMap.get(level + '_' + filterItem.id + '_' + i) || this.generateFilterMap.set(level + '_' + filterItem.id + '_' + i, this.generateFilterElement(response, child, filterItem, firstFilterItemId)).get(level + '_' + filterItem.id + '_' + i)
             if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedFilters[0])) {
               this.updateFilter(generatedFilters, child, filterItem)
             } else {
