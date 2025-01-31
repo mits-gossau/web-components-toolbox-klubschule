@@ -357,7 +357,6 @@ export default class FilterCategories extends Shadow() {
     `
 
     this.subLevel = div.querySelector('m-dialog')?.shadowRoot?.querySelector(`.sub-level-${filterItem.id}`)
-    // if (this.subLevel && filterItem.typ !== 'tree') this.subLevel.setAttribute('hidden', '')
 
     return {
       navLevelItem: div.children[0],
@@ -370,7 +369,6 @@ export default class FilterCategories extends Shadow() {
     const dialogs = this.mainNav.querySelectorAll('m-dialog')
     dialogs.forEach(dialog => {
       const subLevel = dialog.shadowRoot.querySelector('.sub-level')
-      // console.log(subLevel, dialog)
       if (subLevel) show ? subLevel.removeAttribute('hidden') : subLevel.setAttribute('hidden', '')
     })
   }
