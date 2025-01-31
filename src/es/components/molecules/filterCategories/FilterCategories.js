@@ -71,14 +71,7 @@ export default class FilterCategories extends Shadow() {
   }
 
   observeMainNav = mainNav => {
-    const observer = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-          this.addEventListenersToDialogs(mainNav)
-        }
-      }
-    })
-
+    const observer = new MutationObserver(() => this.addEventListenersToDialogs(mainNav))
     observer.observe(mainNav, { childList: true, subtree: true })
   }
 
@@ -337,7 +330,7 @@ export default class FilterCategories extends Shadow() {
     `
 
     div.innerHTML = /* html */`
-      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} filter-level="level-${level}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
@@ -364,7 +357,7 @@ export default class FilterCategories extends Shadow() {
     `
 
     this.subLevel = div.querySelector('m-dialog')?.shadowRoot?.querySelector(`.sub-level-${filterItem.id}`)
-    if (this.subLevel) this.subLevel.setAttribute('hidden', '')
+    // if (this.subLevel && filterItem.typ !== 'tree') this.subLevel.setAttribute('hidden', '')
 
     return {
       navLevelItem: div.children[0],
@@ -377,6 +370,7 @@ export default class FilterCategories extends Shadow() {
     const dialogs = this.mainNav.querySelectorAll('m-dialog')
     dialogs.forEach(dialog => {
       const subLevel = dialog.shadowRoot.querySelector('.sub-level')
+      // console.log(subLevel, dialog)
       if (subLevel) show ? subLevel.removeAttribute('hidden') : subLevel.setAttribute('hidden', '')
     })
   }
@@ -404,7 +398,10 @@ export default class FilterCategories extends Shadow() {
 
     if (!filterItem.visible) return
 
-    generatedNavLevelItem.subLevel.innerHTML = ''
+    // check if filterItem.typ is not tree or id has no capital N inside (true for all tree filter items)
+    if (filterItem.typ !== 'tree' && !filterItem.id.includes('N')) {
+      generatedNavLevelItem.subLevel.innerHTML = ''
+    }
     
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {
@@ -483,7 +480,6 @@ export default class FilterCategories extends Shadow() {
     const mainNav = document.createElement('div')
     mainNav.setAttribute('class', 'main-level')
     
-    // this.addEventListenersToDialogs(mainNav)
     this.observeMainNav(mainNav)
     
     this.html = mainNav
