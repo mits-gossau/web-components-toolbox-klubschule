@@ -215,7 +215,6 @@ export default class FilterCategories extends Shadow() {
   }
 
   updateFilter (generatedFilters, child, parentItem) {
-    console.log('updateFilter', generatedFilters, child, parentItem)
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
     const hidden = child.visible ? '' : 'hidden'
