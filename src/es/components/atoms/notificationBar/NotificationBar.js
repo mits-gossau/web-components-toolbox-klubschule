@@ -65,12 +65,12 @@ export default class NotificationBar extends Shadow() {
         --a-font-weight: 501;
         --p-font-size: 1rem;
         --p-font-weight: 501;
+        --a-text-decoration: underline;
+        --a-text-decoration-hover: var(--a-text-decoration);
       }
       :host > section {
         --a-color: var(--color);
         --a-color-hover: var(--color);
-        --a-text-decoration: underline;
-        --a-text-decoration-hover: var(--a-text-decoration);
         color: var(--color);
         display: flex;
         gap: 0.5em;
@@ -134,7 +134,7 @@ export default class NotificationBar extends Shadow() {
     ]
     switch (this.getAttribute('namespace')) {
       default:
-        return this.fetchCSS(styles)
+        return this.fetchCSS(styles, false)
     }
   }
 
