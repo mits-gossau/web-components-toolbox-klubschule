@@ -44,7 +44,6 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter || []
-
     // base request nullFilter
     let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
     // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
@@ -201,9 +200,7 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        if (isTree) {
-          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        }
+        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
       } else if (event?.detail?.key === 'location-search') {
         // location search
         // keep the last search location inside currentRequestObj and store it in url params
@@ -479,7 +476,7 @@ export default class WithFacet extends WebWorker() {
           // @ts-ignore
           selectedParent.skipCountUpdate = true
         } 
-      } else if (zeroLevel && isTree) {
+      } else if (zeroLevel && isTree && isSectorFilter) {
         filterItem.skipCountUpdate = true
       }
 
@@ -504,16 +501,20 @@ export default class WithFacet extends WebWorker() {
   }
 
   static getLastSelectedFilterItem(filterItems) {
-    filterItems.forEach(filterItem => {
+    const treeFilters = filterItems.filter(filterItem => filterItem.typ === 'tree')
+    treeFilters.forEach(filterItem => {
       if (filterItem.children?.length) {
         filterItem.selected = false
+        filterItem.skipCountUpdate = false
         this.getLastSelectedFilterItem(filterItem.children)
       } else {
-        return filterItem.selected = true
+        filterItem.selected = true
+        filterItem.skipCountUpdate = true
+        return filterItem
       }
     })
 
-    return filterItems
+    return [...treeFilters, ...filterItems.filter(filterItem => filterItem.typ !== 'tree')]
   }
 
   static cleanRequest(requestObj) {
