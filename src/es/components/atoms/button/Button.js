@@ -47,22 +47,23 @@ export default class KsButton extends Button {
       this.closestForm = this.closest('form')
       this.closestForm?.addEventListener('submit', this.formSubmitLoadingListener)
 
-      /* when there is a simple form check the response event to clean up the spinner */
+      // when there is a simple form check the response event to clean up the spinner
       this.closestSimpleForm = this.closest('m-simple-form-validation, m-simple-form')
-      if (this.closestSimpleForm) {
-        this.closestSimpleForm.addEventListener(FINISH_LOADING_EVENT, this.simpleFormResponseListener)
-      }
+      if (this.closestSimpleForm) this.closestSimpleForm.addEventListener(FINISH_LOADING_EVENT, this.simpleFormResponseListener)
     }
 
-    this.clickListener = id => {
+    this.clickListener = ({ id, type }) => {
       return () => {
-        this.dispatchEvent(new CustomEvent('request-with-facet', {bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id }}))
+        this.dispatchEvent(new CustomEvent('request-with-facet', {bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id, filterType: type }}))
         this.dispatchEvent(new CustomEvent('hide-all-sublevels', {bubbles: true, cancelable: true, composed: true}))
       }
     }
     if (this.getAttribute('request-event-name') && this.getAttribute('request-event-name').includes('request-with-facet')) {
-      // @ts-ignore
-      if (this.getAttribute('request-event-name').match(/dialog-open-(\d+)/)) this.addEventListener('click', this.clickListener(this.getAttribute('request-event-name').match(/dialog-open-(\d+)/)?.[1]))
+      if (this.getAttribute('request-event-name').match(/dialog-open-(\d+)/)) {
+        const filterId = this.getAttribute('request-event-name').split(',').filter(item => item.includes('dialog-open-')).pop().split('-').pop()
+        const filterType = this.getAttribute('filter-type')
+        this.addEventListener('click', this.clickListener({ id: filterId, type: filterType }))
+      }
     }
   }
 

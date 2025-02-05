@@ -85,13 +85,19 @@ export default class FilterSelect extends Shadow() {
   }
 
   createFilterButton (filterItem, selectedFilter, treeIds = [], filterGroupUrlPara = null) {
-    let requestEventName = 'request-with-facet,dialog-open-first-level'
+    console.log('filterItem', filterItem, selectedFilter, treeIds, filterGroupUrlPara)
 
-    treeIds && treeIds['parents']?.length > 0 ? requestEventName += ','+treeIds['parents']?.map(id => `dialog-open-${id}`).join(',') : requestEventName += ','+`dialog-open-${filterItem.id}`
+    const isTreeFilter = treeIds && treeIds['parents']?.length > 0
+    let requestEventName = 'request-with-facet,dialog-open-first-level'
+    isTreeFilter ? requestEventName += ','+treeIds['parents']?.map(id => `dialog-open-${id}`).join(',')+`` : requestEventName += ','+`dialog-open-${filterItem.id}`
+    // if isTreeFilter and filterItem.children: iterate through filterItem.children and find selected child with child.label===selectedFilter, if found get the child.id
+    const selectedFilterId = isTreeFilter && filterItem.children && filterItem.children.find(child => child.label === selectedFilter[0])?.id
+    console.log('selectedFilterId', selectedFilterId)
+    if (selectedFilterId) requestEventName += `,dialog-open-${selectedFilterId}`
 
     return /* html */`
       <m-double-button namespace="double-button-default-" width="100%">
-        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="${requestEventName}" click-no-toggle-active>
+        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="${requestEventName}" ${isTreeFilter ? `filter-type="tree"` : ''} click-no-toggle-active>
           <span part="label1">${selectedFilter}</span>
           <span part="label2" dynamic></span>
         </ks-a-button>

@@ -179,12 +179,22 @@ export default class WithFacet extends WebWorker() {
         this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.selectedFilterId) {
         // selected filter click/touch on filter pills
+        console.log('selectedFilterId', event.detail.selectedFilterId, event.detail.filterType, currentCompleteFilterObj)
+        const isTree = event.detail.filterType === 'tree'
+        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        console.log('currentRequestObj.filter', currentRequestObj.filter)
+
+        // find the selected filter item (not tree)
         const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
+        if (!selectedFilterItem) return
+
         selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]        
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        console.log('currentRequestObj.filter', currentRequestObj.filter)
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
+        console.log('filterGroupName', filterGroupName)
         // current filter click/touch
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
@@ -508,21 +518,58 @@ export default class WithFacet extends WebWorker() {
   }
 
   static getLastSelectedFilterItem(filterItems) {
-    const treeFilters = filterItems.filter(filterItem => filterItem.typ === 'tree')
-    treeFilters.forEach(filterItem => {
+    filterItems.forEach(filterItem => {
       if (filterItem.children?.length) {
         filterItem.selected = false
         filterItem.skipCountUpdate = false
         this.getLastSelectedFilterItem(filterItem.children)
       } else {
-        filterItem.selected = true
-        filterItem.skipCountUpdate = true
-        return filterItem
+        return filterItem.selected = true
       }
     })
 
-    return [...treeFilters, ...filterItems.filter(filterItem => filterItem.typ !== 'tree')]
+    return filterItems
   }
+
+  // static getLastSelectedFilterItem(filterItems) {
+  //   filterItems.forEach(filterItem => {
+  //     if (filterItem.selected) {
+  //       filterItem.skipCountUpdate = true
+  //       return filterItem
+  //     } else if (filterItem.children?.length) {
+  //       filterItem.selected = false
+  //       this.getLastSelectedFilterItem(filterItem.children)
+  //     } 
+  //   })
+
+  //   return filterItems
+  // }
+
+  // static getLastSelectedFilterItem(filterItems) {
+  //   const treeFilters = filterItems.filter(filterItem => filterItem.typ === 'tree')
+  //   treeFilters.forEach(filterItem => {
+  //     console.log('filterItem', filterItem)
+  //     if (filterItem.selected) {
+  //       filterItem.skipCountUpdate = true
+  //       console.log('filterItem', filterItem)
+  //     } else if (filterItem.children?.length) {
+  //       // take filterItem.children
+  //     }
+
+  //     // if (filterItem.children?.length) {
+  //     //   filterItem.selected = false
+  //     //   filterItem.skipCountUpdate = false
+  //     //   this.getLastSelectedFilterItem(filterItem.children)
+  //     // } else {
+  //     //   filterItem.selected = true
+  //     //   filterItem.skipCountUpdate = true
+  //     //   // return filterItem
+  //     // }
+  //   })
+  //   console.log('treeFilters', treeFilters)
+
+  //   return [...treeFilters, ...filterItems.filter(filterItem => filterItem.typ !== 'tree')]
+  // }
 
   static cleanRequest(requestObj) {
     // Bad API needs filter for payload but responses with filters
