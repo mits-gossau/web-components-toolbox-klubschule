@@ -1,0 +1,89 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0">
+    <meta name="title" content="HITZBERGER - News">
+    <meta name="keywords" content="Yoga, Hitzberger, Fokus">
+    <meta name="description" content="News Description">
+    <link href="../src/css/initial.css" rel=stylesheet type="text/css">
+    <link href="../src/css/reset.css" rel=stylesheet type="text/css">
+    <link href="../src/css/colors.css" rel=stylesheet type="text/css">
+    <link href="../src/css/fonts.css" rel=stylesheet type="text/css">
+    <link href="../src/css/variables.css" rel=stylesheet type="text/css">
+    <script async rel=preload as="script" type="text/javascript" src="../src/es/helpers/Environment.js?msrcVersion=20230117142619"></script>
+    <!-- wc-config.js gets loaded once the template fetched its body path -->
+    <!-- <script async rel=preload as="script" type="text/javascript" src="../wc-config.js"></script> -->
+    <title>&lt;a-picture&gt; preload</title>
+    <link href="http://localhost:3000/./src/css/variablesCustomKlubschule.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <c-fetch-html no-storage>
+        <c-fetch-css no-storage>
+            <c-fetch-modules>
+                <h1>Picture Preload</h1>
+                <a-picture namespace="picture-cover-" defaultSource="https://placehold.co/600x400"></a-picture>
+            </c-fetch-modules>
+        </c-fetch-css>
+    </c-fetch-html>
+
+    <script>
+        const loadWcConfig = () => {
+          const script = document.createElement('script')
+          script.setAttribute('src', location.href.replace(/((src)|(docs))\/.*/, 'wc-config.js?triggerImmediately=true'))
+          document.head.appendChild(script)
+        }
+        const loadHTML = (path, selector, append = false, rootFolder, setChild = 'appendChild') => {
+          if (!path) return null
+          if (!rootFolder) rootFolder = 'docs'
+          path = location.href.replace(new RegExp(`${rootFolder}\/.*`), path)
+          return fetch(path).then(res => res.text()).then(innerHTML => {
+            // fix relative links
+            innerHTML = innerHTML.replace(/([^\.])\.\/([^\.])/g, `$1${path.replace(/(.*\/)(.*)$/, '$1')}$2`)
+            if (append === true) {
+              const div = document.createElement('div')
+              div.innerHTML = innerHTML
+              Array.from(div.childNodes).forEach(node => {
+                if (node) document.querySelector(selector)[setChild](node)
+              })
+            } else if (append === 'outer') {
+              document.querySelector(selector).outerHTML = innerHTML
+            } else {
+              document.querySelector(selector).innerHTML = innerHTML
+            }
+            // fetched html scripts don't execute automatically, create new script tags and append them to head
+            Array.from(document.querySelectorAll('.template-script')).forEach(script => {
+              const newScript = document.createElement('script')
+              newScript.setAttribute('src', script.getAttribute('src'))
+              document.head.appendChild(newScript)
+              script.remove()
+            })
+          })
+        }
+        const loadCSS = (path, rootFolder) => {
+          if (!path) return null
+          if (!rootFolder) rootFolder = 'docs'
+          const link = document.createElement('link')
+          link.setAttribute('href', location.href.replace(new RegExp(`${rootFolder}\/.*`), path))
+          link.setAttribute('rel', 'stylesheet')
+          link.setAttribute('type', 'text/css')
+          document.head.appendChild(link)
+          return Promise.resolve()
+        }
+        const url = new URL(location.href)
+        // allow body to use no shadow dom / mode=false
+        document.querySelector('o-body').setAttribute('mode', url.searchParams.get('body-mode') || document.querySelector('o-body').getAttribute('mode') || '')
+        Promise.all([
+          loadCSS(url.searchParams.get('css'), url.searchParams.get('rootFolder')),
+          loadHTML(url.searchParams.get('login'), 'p-general', true, url.searchParams.get('rootFolder'), 'prepend'),
+          url.searchParams.get('header')
+            ? loadHTML(url.searchParams.get('header'), 'o-header', 'outer', url.searchParams.get('rootFolder'))
+            : null,
+          loadHTML(url.searchParams.get('logo'), 'o-header', true, url.searchParams.get('rootFolder')),
+          loadHTML(url.searchParams.get('nav'), 'o-header', true, url.searchParams.get('rootFolder')),
+          loadHTML(url.searchParams.get('content'), 'o-body', undefined, url.searchParams.get('rootFolder')),
+          loadHTML(url.searchParams.get('footer'), 'p-general', true, url.searchParams.get('rootFolder'))
+        ]).then(() => loadWcConfig())
+      </script>
+</body>
+</html>
