@@ -520,56 +520,23 @@ export default class WithFacet extends WebWorker() {
   static getLastSelectedFilterItem(filterItems) {
     filterItems.forEach(filterItem => {
       if (filterItem.children?.length) {
-        filterItem.selected = false
+        console.log('filterItem with children', filterItem)
         filterItem.skipCountUpdate = false
-        this.getLastSelectedFilterItem(filterItem.children)
-      } else {
-        return filterItem.selected = true
+        this.getLastSelectedFilterItem(filterItem.children) // recursive call
       }
+
+      // if (filterItem.children?.some(child => child.selected) 
+      //   && filterItem.children?.some(child => child.children.length === 0)
+      //   && !filterItem.selected
+      // ) {
+      //   console.log ('last of the tree', filterItem.label)
+      //   filterItem.skipCountUpdate = true
+      //   filterItem.children.find(child => child.selected).skipCountUpdate = false
+      // }
     })
 
     return filterItems
   }
-
-  // static getLastSelectedFilterItem(filterItems) {
-  //   filterItems.forEach(filterItem => {
-  //     if (filterItem.selected) {
-  //       filterItem.skipCountUpdate = true
-  //       return filterItem
-  //     } else if (filterItem.children?.length) {
-  //       filterItem.selected = false
-  //       this.getLastSelectedFilterItem(filterItem.children)
-  //     } 
-  //   })
-
-  //   return filterItems
-  // }
-
-  // static getLastSelectedFilterItem(filterItems) {
-  //   const treeFilters = filterItems.filter(filterItem => filterItem.typ === 'tree')
-  //   treeFilters.forEach(filterItem => {
-  //     console.log('filterItem', filterItem)
-  //     if (filterItem.selected) {
-  //       filterItem.skipCountUpdate = true
-  //       console.log('filterItem', filterItem)
-  //     } else if (filterItem.children?.length) {
-  //       // take filterItem.children
-  //     }
-
-  //     // if (filterItem.children?.length) {
-  //     //   filterItem.selected = false
-  //     //   filterItem.skipCountUpdate = false
-  //     //   this.getLastSelectedFilterItem(filterItem.children)
-  //     // } else {
-  //     //   filterItem.selected = true
-  //     //   filterItem.skipCountUpdate = true
-  //     //   // return filterItem
-  //     // }
-  //   })
-  //   console.log('treeFilters', treeFilters)
-
-  //   return [...treeFilters, ...filterItems.filter(filterItem => filterItem.typ !== 'tree')]
-  // }
 
   static cleanRequest(requestObj) {
     // Bad API needs filter for payload but responses with filters

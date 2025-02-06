@@ -85,14 +85,14 @@ export default class FilterSelect extends Shadow() {
   }
 
   createFilterButton (filterItem, selectedFilter, treeIds = [], filterGroupUrlPara = null) {
-    console.log('filterItem', filterItem, selectedFilter, treeIds, filterGroupUrlPara)
+    // console.log('FilterSelect.js filterItem', filterItem, selectedFilter, treeIds, filterGroupUrlPara)
 
     const isTreeFilter = treeIds && treeIds['parents']?.length > 0
     let requestEventName = 'request-with-facet,dialog-open-first-level'
     isTreeFilter ? requestEventName += ','+treeIds['parents']?.map(id => `dialog-open-${id}`).join(',')+`` : requestEventName += ','+`dialog-open-${filterItem.id}`
     // if isTreeFilter and filterItem.children: iterate through filterItem.children and find selected child with child.label===selectedFilter, if found get the child.id
     const selectedFilterId = isTreeFilter && filterItem.children && filterItem.children.find(child => child.label === selectedFilter[0])?.id
-    console.log('selectedFilterId', selectedFilterId)
+    // console.log('FilterSelect.js selectedFilterId', selectedFilterId)
     if (selectedFilterId) requestEventName += `,dialog-open-${selectedFilterId}`
 
     return /* html */`
