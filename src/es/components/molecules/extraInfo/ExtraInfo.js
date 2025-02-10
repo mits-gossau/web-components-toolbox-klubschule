@@ -5,9 +5,10 @@ export default class ExtraInfo extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.storedParagraphs = []
+    this.paragraphs = this.root.querySelectorAll('p')
+    this.storedParagraphs = this.paragraphs ? Array.from(this.paragraphs).map(paragraph => paragraph.cloneNode(true)) : []
+    this.paragraphs.forEach(paragraph => paragraph.innerHTML = '...')
     
-
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
   }
 
@@ -76,26 +77,13 @@ export default class ExtraInfo extends Shadow() {
   }
 
   renderHTML (fetch) {
-    // get all <p> elements and insert ... as placeholder until fetch is done
-    const paragraphs = this.root.querySelectorAll('p')
-    const storedParagraphs = paragraphs
-    console.log('storedParagraphs', storedParagraphs)
-    paragraphs.forEach(paragraph => {
-      this.storedParagraphs.push(paragraph)
-      console.log('paragraph', paragraph)
-      paragraph.innerHTML = '...'
-    })
-    // console.log('this.storedParagraphs', this.storedParagraphs)
+ 
 
     Promise.all([fetch]).then(() => {
       fetch.then(response => {
         setTimeout(() => {
           if (!response.additionalinfos || response.additionalinfos?.length === 0) {
-            console.log('No additionalinfos found in response')
-            //add back stored paragraphs
-            storedParagraphs.forEach((paragraph, index) => {
-              paragraph.innerHTML = paragraphs[index].innerHTML
-            })
+            this.storedParagraphs.forEach((paragraph, index) => paragraph.innerHTML = this.paragraphs[index].innerHTML)
 
             return
           }
