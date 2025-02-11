@@ -329,6 +329,19 @@ export default class FilterCategories extends Shadow() {
       </ks-m-nav-level-item>
     `
 
+    // div.innerHTML = /* html */`
+    //   <ks-m-dialog 
+    //     filter-item='${JSON.stringify(filterItem)}'
+    //     filter-data='${JSON.stringify({ total: response.total, total_label: response.total_label })}'
+    //     filter-level='${level}'
+    //     remain-open='${shouldRemainOpen}'
+    //     translation-key-close='${this.getAttribute('translation-key-close')}'
+    //     translation-key-reset='${this.getAttribute('translation-key-reset')}' 
+    //   >
+    //     <slot>${navLevelItem.innerHTML}</slot>
+    //   </ks-m-dialog>
+    // ` 
+
     div.innerHTML = /* html */`
       <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} filter-level="level-${level}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
@@ -449,6 +462,9 @@ export default class FilterCategories extends Shadow() {
         }, {
           path: `${this.importMetaUrl}../navLevelItem/NavLevelItem.js`,
           name: 'ks-m-nav-level-item'
+        }, {
+          path: `${this.importMetaUrl}../dialog/Dialog.js`,
+          name: 'ks-m-dialog'
         }, {
           path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
           name: 'm-dialog'

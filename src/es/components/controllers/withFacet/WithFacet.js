@@ -179,10 +179,8 @@ export default class WithFacet extends WebWorker() {
         this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.selectedFilterId) {
         // selected filter click/touch on filter pills
-        console.log('selectedFilterId', event.detail.selectedFilterId, event.detail.filterType, currentCompleteFilterObj)
         const isTree = event.detail.filterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        console.log('currentRequestObj.filter', currentRequestObj.filter)
 
         // find the selected filter item (not tree)
         const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
@@ -192,9 +190,7 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        console.log('currentRequestObj.filter', currentRequestObj.filter)
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
-        console.log('filterGroupName', filterGroupName)
         // current filter click/touch
         // triggered by component interaction eg. checkbox or nav-level-item
         // build dynamic filters according to the event
@@ -336,55 +332,58 @@ export default class WithFacet extends WebWorker() {
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
+        const detail = {
+          /** @type {Promise<fetchAutoCompleteEventDetail>} */
+          fetch: fetch(isInfoEvents ? endpointInfoEvents : endpoint, request).then(response => {
+            if (response.status >= 200 && response.status <= 299) {
+              return response.json()
+            }
+            throw new Error(response.statusText)
+          }).then(json => {
+            // update filters with api response
+            currentRequestObj.filter = currentCompleteFilterObj = json.filters
+            return json
+          })
+        }
+        if (event.detail?.resolve) return event.detail.resolve(detail)
         this.dispatchEvent(new CustomEvent('with-facet', {
-          detail: {
-            /** @type {Promise<fetchAutoCompleteEventDetail>} */
-            fetch: fetch(isInfoEvents ? endpointInfoEvents : endpoint, request).then(response => {
-              if (response.status >= 200 && response.status <= 299) {
-                return response.json()
-              }
-              throw new Error(response.statusText)
-            }).then(json => {
-              // update filters with api response
-              currentRequestObj.filter = currentCompleteFilterObj = json.filters
-              return json
-            }).finally(json => {
-              // update inputs
-              this.dispatchEvent(new CustomEvent('search-change', {
-                detail: {
-                  searchTerm: (json || currentRequestObj)?.searchText
-                },
-                bubbles: true,
-                cancelable: true,
-                composed: true
-              }))
-              const searchCoordinates = !(json || currentRequestObj)?.clat || !(json || currentRequestObj)?.clong ? '' : `${(json || currentRequestObj).clat}, ${(json || currentRequestObj).clong}`
-              if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
-
-              // Read location name from URL
-              const cname = this.params.get('cname')
-              if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
-
-              this.dispatchEvent(new CustomEvent('location-change', {
-                detail: {
-                  searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
-                  searchCoordinates
-                },
-                bubbles: true,
-                cancelable: true,
-                composed: true
-              }))
-            })
-          },
+          detail,
           bubbles: true,
           cancelable: true,
           composed: true
         }))
+        detail.fetch.finally(json => {
+          // update inputs
+          this.dispatchEvent(new CustomEvent('search-change', {
+            detail: {
+              searchTerm: (json || currentRequestObj)?.searchText
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+          const searchCoordinates = !(json || currentRequestObj)?.clat || !(json || currentRequestObj)?.clong ? '' : `${(json || currentRequestObj).clat}, ${(json || currentRequestObj).clong}`
+          if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+
+          // Read location name from URL
+          const cname = this.params.get('cname')
+          if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
+
+          this.dispatchEvent(new CustomEvent('location-change', {
+            detail: {
+              searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
+              searchCoordinates
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+        })
 
         // update ppage
         if (isOtherLocations) endpoint = this.updatePpage(endpoint, currentRequestObj.ppage)
         if (isInfoEvents) endpointInfoEvents = this.updatePpage(endpointInfoEvents, currentRequestObj.ppage)
-      }, 50)
+      }, event.detail?.resolve ? 0 : 50)
     }
 
     this.abortControllerLocations = null
