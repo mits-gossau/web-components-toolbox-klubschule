@@ -474,7 +474,7 @@ export default class WithFacet extends WebWorker() {
         if (isCenterFilter) {
           filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
         } else if (isSectorFilter && isTree) { // sector filter ("Angebotsbereich")
-          filterItem.skipCountUpdate = true
+          // filterItem.skipCountUpdate = true
           if (!filterItem.selected && isUrlpara) {
             filterItem.selected = true
           } else if (filterItem.selected && !isUrlpara) {
@@ -490,7 +490,7 @@ export default class WithFacet extends WebWorker() {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
           // @ts-ignore
-          selectedParent.skipCountUpdate = true
+          // selectedParent.skipCountUpdate = true
         } 
       } else if (zeroLevel && isTree && isSectorFilter) {
         filterItem.skipCountUpdate = true
@@ -519,19 +519,10 @@ export default class WithFacet extends WebWorker() {
   static getLastSelectedFilterItem(filterItems) {
     filterItems.forEach(filterItem => {
       if (filterItem.children?.length) {
-        console.log('filterItem with children', filterItem)
         filterItem.skipCountUpdate = false
+        if (filterItem.level === '') filterItem.skipCountUpdate = true
         this.getLastSelectedFilterItem(filterItem.children) // recursive call
       }
-
-      // if (filterItem.children?.some(child => child.selected) 
-      //   && filterItem.children?.some(child => child.children.length === 0)
-      //   && !filterItem.selected
-      // ) {
-      //   console.log ('last of the tree', filterItem.label)
-      //   filterItem.skipCountUpdate = true
-      //   filterItem.children.find(child => child.selected).skipCountUpdate = false
-      // }
     })
 
     return filterItems

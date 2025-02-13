@@ -391,6 +391,8 @@ export default class FilterCategories extends Shadow() {
   generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
     level++
     const isTreeFilter = filterItem.typ === 'tree' || filterItem.id.includes('N')
+    const isCenterFilter = filterItem.id === '13'
+    if (level === 0 && filterItem.count === 0) return
     if (level === 0 && filterItem.typ === 'tree') this.firstTreeItem = filterItem
     if (level === 0 && filterItem.typ !== 'tree') this.firstTreeItem = null
     if (filterItem.typ === 'tree') this.getSelectedFilters(filterItem, 'tree')
@@ -409,7 +411,7 @@ export default class FilterCategories extends Shadow() {
     }
 
     if (!filterItem.visible) return
-    if (!isTreeFilter) generatedNavLevelItem.subLevel.innerHTML = ''
+    if (!isTreeFilter && !isCenterFilter) generatedNavLevelItem.subLevel.innerHTML = ''
     
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {
@@ -427,7 +429,7 @@ export default class FilterCategories extends Shadow() {
     
     if (!Array.from(mainNav.childNodes).includes(generatedNavLevelItem.navLevelItem)) mainNav.appendChild(generatedNavLevelItem.navLevelItem)
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
-      if (filterItem.id === '13') { // center filters
+      if (isCenterFilter) { // center filters
         const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, this.generateCenterFilter(response, filterItem)).get(level + '_' + filterItem.id)
         if (Array.from(generatedNavLevelItem.subLevel.childNodes).includes(generatedCenterFilters[0])) {
           this.updateCenterFilter(generatedCenterFilters, filterItem)
