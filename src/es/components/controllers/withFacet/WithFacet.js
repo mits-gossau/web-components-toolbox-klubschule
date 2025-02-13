@@ -474,7 +474,6 @@ export default class WithFacet extends WebWorker() {
         if (isCenterFilter) {
           filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
         } else if (isSectorFilter && isTree) { // sector filter ("Angebotsbereich")
-          // filterItem.skipCountUpdate = true
           if (!filterItem.selected && isUrlpara) {
             filterItem.selected = true
           } else if (filterItem.selected && !isUrlpara) {
@@ -489,8 +488,6 @@ export default class WithFacet extends WebWorker() {
         } else if (isParentSelected) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
-          // @ts-ignore
-          // selectedParent.skipCountUpdate = true
         } 
       } else if (zeroLevel && isTree && isSectorFilter) {
         filterItem.skipCountUpdate = true
