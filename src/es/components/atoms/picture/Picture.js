@@ -42,7 +42,7 @@ export default class KsPicture extends Picture {
     switch (this.getAttribute('namespace')) {
       case 'picture-default-':
         return this.fetchCSS([{
-          path: `${this.importMetaUrl}/default-/default-.css`, // apply namespace since it is specific and no fallback
+          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }], false)
       default:
