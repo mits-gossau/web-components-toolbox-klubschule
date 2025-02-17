@@ -275,9 +275,11 @@ export default class WithFacet extends WebWorker() {
       } else {
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
+        const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
+        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
       }
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
