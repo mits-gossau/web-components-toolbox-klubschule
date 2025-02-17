@@ -66,6 +66,8 @@ export default class FilterCategories extends Shadow() {
     dialogs.forEach(dialog => {
       const filterId = dialog.getAttribute('id').replace('filter-', '')
       const navLevelItem = dialog.shadowRoot.querySelector('ks-m-nav-level-item')
+
+      navLevelItem.removeEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId))
       navLevelItem.addEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId))
     })
   }
