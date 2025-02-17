@@ -44,7 +44,6 @@ export default class WithFacet extends WebWorker() {
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter || []
-
     // base request nullFilter
     let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
     // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
@@ -178,6 +177,19 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('sorting', currentRequestObj.sorting)
         }
         this.deleteParamFromUrl(filterKey)
+      } else if (event?.detail?.selectedFilterId) {
+        // selected filter click/touch on filter pills
+        const isTree = event.detail.filterType === 'tree'
+        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+
+        // find the selected filter item (not tree)
+        const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
+        if (!selectedFilterItem) return
+
+        selectedFilterItem.skipCountUpdate = true
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
         // triggered by component interaction eg. checkbox or nav-level-item
@@ -197,13 +209,11 @@ export default class WithFacet extends WebWorker() {
           'filterName': event.detail.target.label, //the name of the clicked filter.
           'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
         })
-        
+
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        if (isTree) {
-          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        }
+        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
       } else if (event?.detail?.key === 'location-search') {
         // location search
         // keep the last search location inside currentRequestObj and store it in url params
@@ -322,55 +332,58 @@ export default class WithFacet extends WebWorker() {
       // multiple components ask for this public event dispatch, when the same wait for 50ms until no more of the same request enter
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
+        const detail = {
+          /** @type {Promise<fetchAutoCompleteEventDetail>} */
+          fetch: fetch(isInfoEvents ? endpointInfoEvents : endpoint, request).then(response => {
+            if (response.status >= 200 && response.status <= 299) {
+              return response.json()
+            }
+            throw new Error(response.statusText)
+          }).then(json => {
+            // update filters with api response
+            currentRequestObj.filter = currentCompleteFilterObj = json.filters
+            return json
+          })
+        }
+        if (event.detail?.resolve) return event.detail.resolve(detail)
         this.dispatchEvent(new CustomEvent('with-facet', {
-          detail: {
-            /** @type {Promise<fetchAutoCompleteEventDetail>} */
-            fetch: fetch(isInfoEvents ? endpointInfoEvents : endpoint, request).then(response => {
-              if (response.status >= 200 && response.status <= 299) {
-                return response.json()
-              }
-              throw new Error(response.statusText)
-            }).then(json => {
-              // update filters with api response
-              currentRequestObj.filter = currentCompleteFilterObj = json.filters
-              return json
-            }).finally(json => {
-              // update inputs
-              this.dispatchEvent(new CustomEvent('search-change', {
-                detail: {
-                  searchTerm: (json || currentRequestObj)?.searchText
-                },
-                bubbles: true,
-                cancelable: true,
-                composed: true
-              }))
-              const searchCoordinates = !(json || currentRequestObj)?.clat || !(json || currentRequestObj)?.clong ? '' : `${(json || currentRequestObj).clat}, ${(json || currentRequestObj).clong}`
-              if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
-
-              // Read location name from URL
-              const cname = this.params.get('cname')
-              if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
-
-              this.dispatchEvent(new CustomEvent('location-change', {
-                detail: {
-                  searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
-                  searchCoordinates
-                },
-                bubbles: true,
-                cancelable: true,
-                composed: true
-              }))
-            })
-          },
+          detail,
           bubbles: true,
           cancelable: true,
           composed: true
         }))
+        detail.fetch.finally(json => {
+          // update inputs
+          this.dispatchEvent(new CustomEvent('search-change', {
+            detail: {
+              searchTerm: (json || currentRequestObj)?.searchText
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+          const searchCoordinates = !(json || currentRequestObj)?.clat || !(json || currentRequestObj)?.clong ? '' : `${(json || currentRequestObj).clat}, ${(json || currentRequestObj).clong}`
+          if (event?.detail?.description && searchCoordinates) coordinatesToTerm.set(searchCoordinates, event.detail.description)
+
+          // Read location name from URL
+          const cname = this.params.get('cname')
+          if (cname) coordinatesToTerm.set(searchCoordinates, decodeURIComponent(cname))
+
+          this.dispatchEvent(new CustomEvent('location-change', {
+            detail: {
+              searchTerm: event?.detail?.description || coordinatesToTerm.get(searchCoordinates) || searchCoordinates || '',
+              searchCoordinates
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+        })
 
         // update ppage
         if (isOtherLocations) endpoint = this.updatePpage(endpoint, currentRequestObj.ppage)
         if (isInfoEvents) endpointInfoEvents = this.updatePpage(endpointInfoEvents, currentRequestObj.ppage)
-      }, 50)
+      }, event.detail?.resolve ? 0 : 50)
     }
 
     this.abortControllerLocations = null
@@ -461,7 +474,6 @@ export default class WithFacet extends WebWorker() {
         if (isCenterFilter) {
           filterItem.selected = !filterItem.selected // toggle filterItem if it is not selected
         } else if (isSectorFilter && isTree) { // sector filter ("Angebotsbereich")
-          filterItem.skipCountUpdate = true
           if (!filterItem.selected && isUrlpara) {
             filterItem.selected = true
           } else if (filterItem.selected && !isUrlpara) {
@@ -476,10 +488,8 @@ export default class WithFacet extends WebWorker() {
         } else if (isParentSelected) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
-          // @ts-ignore
-          selectedParent.skipCountUpdate = true
         } 
-      } else if (zeroLevel && isTree) {
+      } else if (zeroLevel && isTree && isSectorFilter) {
         filterItem.skipCountUpdate = true
       }
 
@@ -506,10 +516,9 @@ export default class WithFacet extends WebWorker() {
   static getLastSelectedFilterItem(filterItems) {
     filterItems.forEach(filterItem => {
       if (filterItem.children?.length) {
-        filterItem.selected = false
-        this.getLastSelectedFilterItem(filterItem.children)
-      } else {
-        return filterItem.selected = true
+        filterItem.skipCountUpdate = false
+        if (filterItem.level === '') filterItem.skipCountUpdate = true
+        this.getLastSelectedFilterItem(filterItem.children) // recursive call
       }
     })
 
