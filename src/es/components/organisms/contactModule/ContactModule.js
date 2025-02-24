@@ -46,9 +46,20 @@ export default class ContactModule extends Facts {
   renderCSS () {
     super.renderCSS()
     this.css = /* css */`
-      :host {}
+      :host .facts {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      :host .fact {
+        width: auto;
+        justify-content: flex-start;
+      }
+      :host .fact > .fact {
+        padding: 0;
+      }
       @media only screen and (max-width: _max-width_) {
-        :host {}
+        :host .facts {
+          grid-template-columns: repeat(auto-fit, minmax(50%, 50%));
+        }
       }
     `
     return this.fetchTemplate()
