@@ -3,6 +3,7 @@
 > ContactModule Organisms
 
 - [JIRA](https://jira.migros.net/browse/MIDUWEB-1847)
+- [JIRA](https://jira.migros.net/browse/MIDUWEB-18)
 - [Figma](https://www.figma.com/design/PZlfqoBJ4RnR4rjpj38xai/Design-System-Core-%7C%C2%A0Klubschule-Master?node-id=13740-267450&m=dev)
 - [Example](https://github.com/mits-gossau/web-components-toolbox/blob/master/docs/TemplateMiduweb.html#L73)
 - [Demo](https://mits-gossau.github.io/web-components-toolbox-klubschule/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=./src/css/variablesCustomKlubschule.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html&content=./src/es/components/organisms/contactModule/default-/default-.html)
