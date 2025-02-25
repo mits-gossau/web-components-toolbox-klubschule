@@ -28,9 +28,9 @@ export default class FilterCategories extends Shadow() {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
     }
 
-    this.clickNavLevelItemLevel0EventListener = id => {
+    this.clickNavLevelItemLevel0EventListener = (id, type) => {
       return () => {
-        this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id } }))
+        this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id, selectedFilterType: type } }))
         this.dispatchEvent(new CustomEvent('hide-all-sublevels', {bubbles: true, cancelable: true, composed: true}))
       }
     }
@@ -65,10 +65,11 @@ export default class FilterCategories extends Shadow() {
 
     dialogs.forEach(dialog => {
       const filterId = dialog.getAttribute('id').replace('filter-', '')
+      const filterType = dialog.getAttribute('filter-type')
       const navLevelItem = dialog.shadowRoot.querySelector('ks-m-nav-level-item')
 
-      navLevelItem.removeEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId))
-      navLevelItem.addEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId))
+      navLevelItem.removeEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId, filterType))
+      navLevelItem.addEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId, filterType))
     })
   }
 
@@ -322,7 +323,7 @@ export default class FilterCategories extends Shadow() {
     this.total = response.total
 
     navLevelItem.innerHTML = /* html */`
-      <ks-m-nav-level-item ${this.firstTreeItem ? `type="${this.firstTreeItem.typ}"` : ''} namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || filterItem.label?.replace(/'/g, '’').replace(/"/g, '\"')}">
+      <ks-m-nav-level-item type="${this.firstTreeItem ? this.firstTreeItem.typ : filterItem.typ}" namespace="${namespace}" ${level > 0 ? 'request-event-name="request-with-facet"' : ''} id="show-modal" ${filterId} filter-key="${filterItem.urlpara}" label="${this.firstTreeItem?.label.replace(/'/g, '’').replace(/"/g, '\"') || filterItem.label?.replace(/'/g, '’').replace(/"/g, '\"')}">
         <div class="wrap">
           <span class="text">${filterItem.label?.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}</span>
           <span class="additional">${selectedFilters}</span>
@@ -332,7 +333,7 @@ export default class FilterCategories extends Shadow() {
     `
 
     div.innerHTML = /* html */`
-      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} filter-level="level-${level}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} filter-type="${this.firstTreeItem ? this.firstTreeItem.typ : filterItem.typ}" filter-level="level-${level}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
         <div class="container dialog-header" tabindex="0">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>

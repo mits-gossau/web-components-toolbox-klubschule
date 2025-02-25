@@ -181,13 +181,13 @@ export default class WithFacet extends WebWorker() {
         // selected filter click/touch on filter pills
         const isTree = event.detail.filterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-
+        const isMulti = event.detail?.selectedFilterType === 'multi' || false
+        
         // find the selected filter item (not tree)
         const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
         if (!selectedFilterItem) return
-
         selectedFilterItem.skipCountUpdate = true
-        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
@@ -457,7 +457,7 @@ export default class WithFacet extends WebWorker() {
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false) {
+  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false, isMulti = false) {
     // @ts-ignore
     const isParentSelected = selectedParent?.urlpara === filterKey
     const treeShookFilters = []
@@ -499,7 +499,7 @@ export default class WithFacet extends WebWorker() {
 
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
-      } else if (filterItem.children) {
+      } else if (filterItem.children && !isMulti) {
         [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isSectorFilter, isTree)
       }
 
@@ -511,6 +511,7 @@ export default class WithFacet extends WebWorker() {
         treeShookFilters.push(treeShookFilterItem)
       }
     })
+
     // returns [0] unmutated filters
     return [filters, treeShookFilters]
   }
