@@ -178,10 +178,13 @@ export default class WithFacet extends WebWorker() {
         }
         this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.selectedFilterId) {
-        // selected filter click/touch on filter pills
+        // selected filter click/touch on filter pills or filter navLevelItem on level 0
+        // triggered by FilterSelect or FilterCategories
+        if (!currentRequestObj.filter?.length && localStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(localStorage.getItem('currentFilter') || '[]')
+        if (!currentCompleteFilterObj.length && localStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(localStorage.getItem('currentFilter') || '[]')
+        const isMulti = event.detail?.selectedFilterType === 'multi' || false
         const isTree = event.detail.filterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        const isMulti = event.detail?.selectedFilterType === 'multi' || false
         
         // find the selected filter item (not tree)
         const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
@@ -282,6 +285,8 @@ export default class WithFacet extends WebWorker() {
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
       }
 
+      event?.detail?.loadMore === 'without-facet' ? currentRequestObj.onlycourse = true : currentRequestObj.onlycourse = false
+
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
       if (isInfoEvents) {
@@ -344,6 +349,9 @@ export default class WithFacet extends WebWorker() {
           }).then(json => {
             // update filters with api response
             currentRequestObj.filter = currentCompleteFilterObj = json.filters
+
+            if (json.filters.length) localStorage.setItem('currentFilter', JSON.stringify(json.filters))
+
             return json
           })
         }

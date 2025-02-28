@@ -16,7 +16,8 @@ export default class WithFacetPagination extends Shadow() {
     this.clickEventListener = event => this.dispatchEvent(new CustomEvent('request-with-facet',
       {
         detail: {
-          ppage: this.ppage
+          ppage: this.ppage,
+          loadMore: 'without-facet' 
         },
         bubbles: true,
         cancelable: true,

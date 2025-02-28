@@ -252,6 +252,7 @@ export default class FilterSelect extends Shadow() {
     }]).then(() => {
       Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
         this.html = ''
+        const filter = response?.filters.length > 0 ? response.filters : JSON.parse(localStorage.getItem('currentFilter') || '[]')
 
         // render search button at first
         if (response.searchText && this.hasAttribute('with-filter-search-button')) {
@@ -268,9 +269,9 @@ export default class FilterSelect extends Shadow() {
           `
         }
 
-        this.generateFilterButtons(response?.filters)
+        this.generateFilterButtons(filter)
 
-        this.generateQuickFilters(response?.filters)
+        this.generateQuickFilters(filter)
       })
     })
   }
