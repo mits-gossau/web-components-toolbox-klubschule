@@ -17,7 +17,7 @@ export default class WithFacetPagination extends Shadow() {
       {
         detail: {
           ppage: this.ppage,
-          loadMore: 'without-facet' 
+          loadCoursesOnly: true
         },
         bubbles: true,
         cancelable: true,

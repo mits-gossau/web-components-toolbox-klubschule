@@ -191,6 +191,7 @@ export default class TileFactory extends Shadow() {
       }
     ])
     fetch.then(data => {
+      if (data.courses.length === 0) return
       setTimeout(() => {
         this.root.querySelectorAll('.mdx-loading').forEach(el => el.remove())
         if ((data.ppage === 1 || data.pskip === data.psize) && !this.hasAttribute('is-info-events')) this.html = ''
@@ -199,9 +200,14 @@ export default class TileFactory extends Shadow() {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
         }
+
+        // if (data.courses.length === 0 && sessionStorage.getItem('currentCourses')) data.courses = JSON.parse(sessionStorage.getItem('currentCourses') || '[]')
+        
+
         this.isNearbySearch = data.sort.sort === 2
         this.psize = data.psize
         this.pnext = data.pnext
+
         this.html = data.courses.reduce(
           (acc, /** @type {Course} */ course, i) => {
             let tile = this.isEventSearch ? /* html */ `

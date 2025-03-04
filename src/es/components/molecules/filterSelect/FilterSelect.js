@@ -252,7 +252,7 @@ export default class FilterSelect extends Shadow() {
     }]).then(() => {
       Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
         this.html = ''
-        const filter = response?.filters.length > 0 ? response.filters : JSON.parse(localStorage.getItem('currentFilter') || '[]')
+        const filter = response?.filters.length > 0 ? response.filters : JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
 
         // render search button at first
         if (response.searchText && this.hasAttribute('with-filter-search-button')) {
