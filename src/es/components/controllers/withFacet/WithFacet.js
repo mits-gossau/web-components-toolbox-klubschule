@@ -73,7 +73,6 @@ export default class WithFacet extends WebWorker() {
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
     this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
     
-
     this.fillStorage = storageType => {
       const isLocalStorageType = storageType === 'local'
       // update storage based on url
@@ -460,8 +459,6 @@ export default class WithFacet extends WebWorker() {
         throw new Error(response.statusText)
       }))
     }
-
-    // this.backdropClickedEventListener = this.requestWithFacetListener({...event, detail: { key: 'location-search' }})
   }
 
   connectedCallback() {
