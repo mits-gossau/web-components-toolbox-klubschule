@@ -23,22 +23,9 @@ export default class FilterSelect extends Shadow() {
 
     this.eventListenerNode = this.hasAttribute('with-facet-target') ? FilterSelect.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
-    this.dispatchEvent(new CustomEvent('request-with-facet',
-      {
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
+    this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true }))
     this.translationPromise = new Promise(resolve => {
-      this.dispatchEvent(new CustomEvent('request-translations',
-        {
-          detail: {
-            resolve
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }))
+      this.dispatchEvent(new CustomEvent('request-translations', { detail: { resolve }, bubbles: true, cancelable: true, composed: true }))
     }).then(async result => {
       await result.fetch
       this.getTranslation = result.getTranslationSync
