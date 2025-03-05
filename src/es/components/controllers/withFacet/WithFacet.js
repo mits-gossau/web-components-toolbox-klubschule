@@ -36,7 +36,7 @@ export default class WithFacet extends WebWorker() {
       ...options
     }, ...args)
 
-    this.filterOnly = true
+    this.filterOnly = false
 
     let timeoutId = null
     const coordinatesToTerm = new Map()
@@ -223,7 +223,6 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        
         this.filterOnly = true
       } else if (event?.detail?.key === 'location-search') {
         // location search
