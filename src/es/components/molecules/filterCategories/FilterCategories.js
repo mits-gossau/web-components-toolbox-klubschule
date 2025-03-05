@@ -462,11 +462,7 @@ export default class FilterCategories extends Shadow() {
     ]).then(() => {
       fetch.then(response => {
         setTimeout(() => {
-          if (response.filters.length === 0) {
-            response.filters = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
-
-            return
-          }
+          if (response.filters.length === 0) return
 
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)

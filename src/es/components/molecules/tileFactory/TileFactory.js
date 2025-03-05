@@ -199,10 +199,7 @@ export default class TileFactory extends Shadow() {
         if (!data) {
           this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
           return
-        }
-
-        // if (data.courses.length === 0 && sessionStorage.getItem('currentCourses')) data.courses = JSON.parse(sessionStorage.getItem('currentCourses') || '[]')
-        
+        }        
 
         this.isNearbySearch = data.sort.sort === 2
         this.psize = data.psize
