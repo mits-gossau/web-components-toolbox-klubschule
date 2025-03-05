@@ -36,6 +36,8 @@ export default class WithFacet extends WebWorker() {
       ...options
     }, ...args)
 
+    this.filterOnly = true
+
     let timeoutId = null
     const coordinatesToTerm = new Map()
     // the initial request object received through the attribute, never changes and is always included
@@ -47,7 +49,10 @@ export default class WithFacet extends WebWorker() {
     // base request nullFilter
     let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
     // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
-    if (initialFilter.length < 1) initialFilter = this.getNullFilter()
+    if (initialFilter.length < 1) {
+      this.filterOnly = false
+      initialFilter = this.getNullFilter()
+    }
 
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
@@ -67,7 +72,7 @@ export default class WithFacet extends WebWorker() {
     this.abortController = null
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
     this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
-
+    
     this.fillStorage = storageType => {
       const isLocalStorageType = storageType === 'local'
       // update storage based on url
@@ -178,10 +183,13 @@ export default class WithFacet extends WebWorker() {
         }
         this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.selectedFilterId) {
-        // selected filter click/touch on filter pills
+        // selected filter click/touch on filter pills or filter navLevelItem on level 0
+        // triggered by FilterSelect or FilterCategories
+        if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
+        if (!currentCompleteFilterObj.length && sessionStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
+        const isMulti = event.detail?.selectedFilterType === 'multi' || false
         const isTree = event.detail.filterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        const isMulti = event.detail?.selectedFilterType === 'multi' || false
         
         // find the selected filter item (not tree)
         const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
@@ -190,6 +198,7 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
         // triggered by component interaction eg. checkbox or nav-level-item
@@ -282,6 +291,12 @@ export default class WithFacet extends WebWorker() {
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
       }
 
+      // filter only
+      this.filterOnly ? currentRequestObj.onlyfaceted = 1 : delete currentRequestObj.onlyfaceted
+
+      // load more 
+      event?.detail?.loadCoursesOnly ? currentRequestObj.onlycourse = true : delete currentRequestObj.onlycourse
+
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
       if (isInfoEvents) {
@@ -344,6 +359,10 @@ export default class WithFacet extends WebWorker() {
           }).then(json => {
             // update filters with api response
             currentRequestObj.filter = currentCompleteFilterObj = json.filters
+
+            if (json.courses.length) sessionStorage.setItem('currentCourses', JSON.stringify(json.courses))
+            if (json.filters.length) sessionStorage.setItem('currentFilter', JSON.stringify(json.filters))
+
             return json
           })
         }
@@ -447,6 +466,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.addEventListener('reset-all-filters', this.requestWithFacetListener) : this.addEventListener('reset-all-filters', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
+    document.addEventListener('backdrop-clicked', this.handleBackdropClicked)
   }
 
   disconnectedCallback() {
@@ -454,6 +474,12 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.removeEventListener('reset-all-filters', this.requestWithFacetListener) : this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
+    document.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
+  }
+
+  handleBackdropClicked = () => {
+    this.filterOnly = false
+    this.dispatchEvent(new CustomEvent('request-with-facet'))
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry

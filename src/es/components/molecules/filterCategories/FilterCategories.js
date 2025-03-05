@@ -30,7 +30,7 @@ export default class FilterCategories extends Shadow() {
 
     this.clickNavLevelItemLevel0EventListener = (id, type) => {
       return () => {
-        this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id, selectedFilterType: type } }))
+        this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id, selectedFilterType: type, loadFilterOnly: true } }))
         this.dispatchEvent(new CustomEvent('hide-all-sublevels', {bubbles: true, cancelable: true, composed: true}))
       }
     }
