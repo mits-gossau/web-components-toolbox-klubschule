@@ -382,7 +382,6 @@ export default class FilterCategories extends Shadow() {
     level++
     const isTreeFilter = filterItem.typ === 'tree' || filterItem.id.includes('N')
     const isCenterFilter = filterItem.id === '13'
-    if (level === 0 && filterItem.count === 0) return
     if (level === 0 && filterItem.typ === 'tree') this.firstTreeItem = filterItem
     if (level === 0 && filterItem.typ !== 'tree') this.firstTreeItem = null
     if (filterItem.typ === 'tree') this.getSelectedFilters(filterItem, 'tree')
