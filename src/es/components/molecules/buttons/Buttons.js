@@ -209,7 +209,8 @@ export default class Buttons extends Shadow() {
                   ${this.data.spartename?.[1] ? `"item_category2": "${this.data.spartename[1]}",` : ''}
                   ${this.data.spartename?.[2] ? `"item_category3": "${this.data.spartename[2]}",` : ''}
                   ${this.data.spartename?.[3] ? `"item_category4": "${this.data.spartename[3]}",` : ''}
-                  "quantity": 1
+                  "quantity": 1,
+                  "currency": "CHF"
                 }]
               }
             }'

@@ -49,6 +49,30 @@ Veranstaltung w&#xE4;hlen                                </span>
                                 <div>
                                     <p>Verbessern Sie jetzt Ihre Haltung, Ihre Muskulatur und Ihr Wohlbefinden mit Pilates. Das von Joseph Hubertus Pilates konzipierte Ganzkörpertraining hilft bei der Kräftigung der tiefen Bauchmuskulatur, der Rückenmuskeln sowie des Beckenbodens. Durch die bewusste Bewegungsausführung in den Übungen verbessern Sie kontinuierlich Ihre Bewegungsqualität. Unabhängig von Ihrer körperlichen Fitness gibt Ihnen Pilates die Möglichkeit, ein neues Körpergefühl zu erlangen. Nutzen Sie diese Chance und starten Sie jetzt mit dem wirkungsvollen Training!</p>
                                 </div>
+                                <div class="margin-y-m">
+                                    <m-mobile-desktop-switch visible="mobile">
+                                        <ks-m-extra-info>
+                                            <div class="wrap" style="background-color: #00997f;">
+                                                    <div class="section">
+                                                        <span class="title">Preis</span>
+                                                        <p><span>CHF 100.00</span></p>
+                                                    </div>
+                                                    <div class="section">
+                                                        <span class="title">Lektion(en)</span>
+                                                        <p>5 Lektionen à 50 Minuten</p>
+                                                    </div>
+                                                    <div class="section">
+                                                        <span class="title">Dauer</span>
+                                                        <p>5 Kurstage</p>
+                                                    </div>
+                                                    <div class="section">
+                                                        <span class="title">Unterrichtsform</span>
+                                                        <p>Präsenzveranstaltung</p>
+                                                    </div>
+                                            </div>
+                                        </ks-m-extra-info>
+                                    </m-mobile-desktop-switch>
+                                </div>
 
                             <div>
                                         <m-details namespace="details-default-icon-right-">
@@ -122,16 +146,7 @@ Veranstaltung w&#xE4;hlen                                </span>
                                             </details>
                                         </m-details>
                             </div>
-                        
-
-                                    <ks-o-offers-page headless
-                                                      no-search-tab
-                                                      is-wish-list
-                                                      is-info-events
-                                                      with-facet-target
-                                                      endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
-                                                      endpoint-info-events="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Informationevent?lang=d&amp;id=91708&amp;typ=D&amp;center_id=2680&amp;mandant_id=111&amp;portal_id=29&amp;ppage=0&amp;psize=3">
-                                    </ks-o-offers-page>
+                    
 
                     </ks-o-body-section>
 
@@ -143,26 +158,28 @@ Veranstaltung w&#xE4;hlen                                </span>
 
                                 <!-- ExtraInfos (Konfigurierbar zur Anzeige)-->
                                         <section>
-                                            <ks-m-extra-info>
-                                                <div class="wrap" style="background-color: #00997f;">
-                                                        <div class="section">
-                                                            <span class="title">Preis</span>
-                                                            <p><span>CHF 100.00</span></p>
-                                                        </div>
-                                                        <div class="section">
-                                                            <span class="title">Lektion(en)</span>
-                                                            <p>5 Lektionen à 50 Minuten</p>
-                                                        </div>
-                                                        <div class="section">
-                                                            <span class="title">Dauer</span>
-                                                            <p>5 Kurstage</p>
-                                                        </div>
-                                                        <div class="section">
-                                                            <span class="title">Unterrichtsform</span>
-                                                            <p>Präsenzveranstaltung</p>
-                                                        </div>
-                                                </div>
-                                            </ks-m-extra-info>
+                                            <m-mobile-desktop-switch visible="desktop">
+                                                <ks-m-extra-info>
+                                                    <div class="wrap" style="background-color: #00997f;">
+                                                            <div class="section">
+                                                                <span class="title">Preis</span>
+                                                                <p><span>CHF 100.00</span></p>
+                                                            </div>
+                                                            <div class="section">
+                                                                <span class="title">Lektion(en)</span>
+                                                                <p>5 Lektionen à 50 Minuten</p>
+                                                            </div>
+                                                            <div class="section">
+                                                                <span class="title">Dauer</span>
+                                                                <p>5 Kurstage</p>
+                                                            </div>
+                                                            <div class="section">
+                                                                <span class="title">Unterrichtsform</span>
+                                                                <p>Präsenzveranstaltung</p>
+                                                            </div>
+                                                    </div>
+                                                </ks-m-extra-info>
+                                            </m-mobile-desktop-switch>
                                         </section>
 
                                 <ks-a-heading tag="h3">
@@ -194,7 +211,7 @@ Veranstaltung w&#xE4;hlen                                </span>
         <m-simple-form-validation namespace="simple-form-miduweb-"
                                   mode="false"
                                   no-validation-error-css
-                                  endpoint="https://dev.klubschule.ch/umbraco/forms/api/v1/entries/6c33799d-bfa7-4188-a75f-5b9413f6bfe3"
+                                  endpoint="https://www.klubschule.ch/umbraco/forms/api/v1/entries/6c33799d-bfa7-4188-a75f-5b9413f6bfe3"
                                   method="POST"
                                   headers="{
 											'Content-Type': 'application/json',
@@ -238,7 +255,7 @@ Veranstaltung w&#xE4;hlen                                </span>
                     }
             </style>
 
-<form action="https://dev.klubschule.ch/kurse/kursdetail?typ=D&amp;id=91708&amp;center_id=2680&amp;gebaeude_id=410&amp;urlpath=https://dev.klubschule.ch/gesundheit/pilates/kurs/pilates--D_91708_2680_410&amp;urlroot=https://dev.klubschule.ch/gesundheit/pilates&amp;lang=de-CH" enctype="multipart/form-data" id="form-dialog-55011576-bae9-4267-8da5-284a216207fc" method="post">                <div class="container dialog-header" tabindex="0">
+<form action="https://www.klubschule.ch/kurse/kursdetail?typ=D&amp;id=91708&amp;center_id=2680&amp;gebaeude_id=410&amp;urlpath=https://www.klubschule.ch/gesundheit/pilates/kurs/pilates--D_91708_2680_410&amp;urlroot=https://www.klubschule.ch/gesundheit/pilates&amp;lang=de-CH" enctype="multipart/form-data" id="form-dialog-55011576-bae9-4267-8da5-284a216207fc" method="post">                <div class="container dialog-header" tabindex="0">
                     <div id="back"></div>
                     <h3>Kontaktformular</h3>
                     <div id="close">
@@ -668,7 +685,7 @@ Veranstaltung w&#xE4;hlen                                </span>
 	 data-disable-validation-dependency-check="false"></div>
 
 
-<script defer="defer" src="https://dev.klubschule.ch/App_Plugins/UmbracoForms/Assets/themes/default/umbracoforms.min.js?v=13.4.0" type="application/javascript"></script>
+<script defer="defer" src="https://www.klubschule.ch/App_Plugins/UmbracoForms/Assets/themes/default/umbracoforms.min.js?v=13.4.0" type="application/javascript"></script>
 
 
                                     <ks-m-contact-row id="show-modal"
@@ -697,11 +714,11 @@ Veranstaltung w&#xE4;hlen                                </span>
 
 
         <!-- Veranstaltungsliste -->
-        <ks-o-offers-page endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search"
-                          endpoint-auto-complete="https://dev.klubschule.ch/Umbraco/Api/Autocomplete/search?portal=29&amp;mandant=111&amp;lang=d"
-                          endpoint-search-partner="https://dev.klubschule.ch/Umbraco/Api/CourseApi/SearchPartner"
-                          search-url="https://dev.klubschule.ch/suche/"
-                          event-detail-url="https://dev.klubschule.ch/Umbraco/Api/CourseApi/detail/"
+        <ks-o-offers-page endpoint="https://www.klubschule.ch/Umbraco/Api/CourseApi/Search"
+                          endpoint-auto-complete="https://www.klubschule.ch/Umbraco/Api/Autocomplete/search?portal=29&amp;mandant=111&amp;lang=d"
+                          endpoint-search-partner="https://www.klubschule.ch/Umbraco/Api/CourseApi/SearchPartner"
+                          search-url="https://www.klubschule.ch/suche/"
+                          event-detail-url="https://www.klubschule.ch/Umbraco/Api/CourseApi/detail/"
                           google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"
                           initial-request='{&quot;searchcontent&quot;:false,&quot;CurrentPageId&quot;:0,&quot;filter&quot;:[{&quot;PartitionKey&quot;:null,&quot;RowKey&quot;:null,&quot;label&quot;:&quot;ParentKey&quot;,&quot;id&quot;:&quot;17&quot;,&quot;typ&quot;:null,&quot;level&quot;:&quot;&quot;,&quot;count&quot;:0,&quot;color&quot;:&quot;&quot;,&quot;urlpara&quot;:&quot;&quot;,&quot;selected&quot;:true,&quot;isselected&quot;:null,&quot;disabled&quot;:true,&quot;isquick&quot;:null,&quot;visible&quot;:false,&quot;sort&quot;:0,&quot;hideCount&quot;:false,&quot;skipCountUpdate&quot;:null,&quot;children&quot;:[{&quot;PartitionKey&quot;:null,&quot;RowKey&quot;:null,&quot;label&quot;:null,&quot;id&quot;:&quot;D_91708_2680_410&quot;,&quot;typ&quot;:null,&quot;level&quot;:&quot;&quot;,&quot;count&quot;:0,&quot;color&quot;:&quot;&quot;,&quot;urlpara&quot;:&quot;&quot;,&quot;selected&quot;:true,&quot;isselected&quot;:null,&quot;disabled&quot;:true,&quot;isquick&quot;:null,&quot;visible&quot;:false,&quot;sort&quot;:0,&quot;hideCount&quot;:false,&quot;skipCountUpdate&quot;:null,&quot;children&quot;:null,&quot;HasChilds&quot;:false}],&quot;HasChilds&quot;:true},{&quot;PartitionKey&quot;:null,&quot;RowKey&quot;:null,&quot;label&quot;:null,&quot;id&quot;:&quot;22&quot;,&quot;typ&quot;:null,&quot;level&quot;:&quot;&quot;,&quot;count&quot;:0,&quot;color&quot;:&quot;&quot;,&quot;urlpara&quot;:&quot;&quot;,&quot;selected&quot;:true,&quot;isselected&quot;:null,&quot;disabled&quot;:true,&quot;isquick&quot;:null,&quot;visible&quot;:false,&quot;sort&quot;:0,&quot;hideCount&quot;:false,&quot;skipCountUpdate&quot;:null,&quot;children&quot;:[{&quot;PartitionKey&quot;:null,&quot;RowKey&quot;:null,&quot;label&quot;:null,&quot;id&quot;:&quot;D_91708_2680_410&quot;,&quot;typ&quot;:null,&quot;level&quot;:&quot;&quot;,&quot;count&quot;:0,&quot;color&quot;:&quot;&quot;,&quot;urlpara&quot;:&quot;&quot;,&quot;selected&quot;:true,&quot;isselected&quot;:null,&quot;disabled&quot;:true,&quot;isquick&quot;:null,&quot;visible&quot;:false,&quot;sort&quot;:0,&quot;hideCount&quot;:false,&quot;skipCountUpdate&quot;:null,&quot;children&quot;:null,&quot;HasChilds&quot;:false}],&quot;HasChilds&quot;:true}],&quot;sorting&quot;:4,&quot;SaveNulltreffer&quot;:null,&quot;onlyfaceted&quot;:null,&quot;onlycourse&quot;:false,&quot;clat&quot;:null,&quot;clong&quot;:null,&quot;cdist&quot;:null,&quot;abo_kurs_typ&quot;:null,&quot;abo_kurs_id&quot;:null,&quot;SearchTitle&quot;:null,&quot;SearchKeyword&quot;:null,&quot;SearchDescription&quot;:null,&quot;hasCollapse&quot;:false,&quot;hasCollapseOrt&quot;:false,&quot;collapseParent&quot;:false,&quot;PortalId&quot;:29,&quot;sprachid&quot;:&quot;d&quot;,&quot;MandantId&quot;:111,&quot;pskip&quot;:null,&quot;ppage&quot;:0,&quot;psize&quot;:12,&quot;pnext&quot;:24,&quot;searchText&quot;:null}'
                           no-search-tab
@@ -737,7 +754,7 @@ Veranstaltung w&#xE4;hlen                                </span>
                                           with-facet-target
                                           no-search-tab
                                           is-other-locations
-                                          endpoint="https://dev.klubschule.ch/Umbraco/Api/CourseApi/SearchLocation?lang=d&amp;id=91708&amp;typ=D&amp;center_id=2680&amp;mandant_id=111&amp;portal_id=29&amp;ppage=0">
+                                          endpoint="https://www.klubschule.ch/Umbraco/Api/CourseApi/SearchLocation?lang=d&amp;id=91708&amp;typ=D&amp;center_id=2680&amp;mandant_id=111&amp;portal_id=29&amp;ppage=0">
                         </ks-o-offers-page>
                     </ks-o-body-section>
 

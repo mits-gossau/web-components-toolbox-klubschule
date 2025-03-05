@@ -23,26 +23,12 @@ export default class FilterSelect extends Shadow() {
 
     this.eventListenerNode = this.hasAttribute('with-facet-target') ? FilterSelect.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
-    this.dispatchEvent(new CustomEvent('request-with-facet',
-      {
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
+    this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true }))
     this.translationPromise = new Promise(resolve => {
-      this.dispatchEvent(new CustomEvent('request-translations',
-        {
-          detail: {
-            resolve
-          },
-          bubbles: true,
-          cancelable: true,
-          composed: true
-        }))
+      this.dispatchEvent(new CustomEvent('request-translations', { detail: { resolve }, bubbles: true, cancelable: true, composed: true }))
     }).then(async result => {
       await result.fetch
       this.getTranslation = result.getTranslationSync
-      const showPromises = []
     })
   }
 
@@ -86,13 +72,15 @@ export default class FilterSelect extends Shadow() {
   }
 
   createFilterButton (filterItem, selectedFilter, treeIds = [], filterGroupUrlPara = null) {
-    let requestEventName = 'dialog-open-first-level'
-
-    treeIds && treeIds['parents']?.length > 0 ? requestEventName += ','+treeIds['parents']?.map(id => `dialog-open-${id}`).join(',') : requestEventName += ','+`dialog-open-${filterItem.id}`
+    const isTreeFilter = treeIds && treeIds['parents']?.length > 0
+    let requestEventName = 'request-with-facet,dialog-open-first-level'
+    isTreeFilter ? requestEventName += ','+treeIds['parents']?.map(id => `dialog-open-${id}`).join(',')+`` : requestEventName += ','+`dialog-open-${filterItem.id}`
+    const selectedFilterId = isTreeFilter && filterItem.children && filterItem.children.find(child => child.label === selectedFilter[0])?.id
+    if (selectedFilterId) requestEventName += `,dialog-open-${selectedFilterId}`
 
     return /* html */`
       <m-double-button namespace="double-button-default-" width="100%">
-        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="${requestEventName}" click-no-toggle-active>
+        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="${requestEventName}" ${isTreeFilter ? `filter-type="tree"` : ''} click-no-toggle-active>
           <span part="label1">${selectedFilter}</span>
           <span part="label2" dynamic></span>
         </ks-a-button>
@@ -251,6 +239,7 @@ export default class FilterSelect extends Shadow() {
     }]).then(() => {
       Promise.all([this.translationPromise, fetch]).then(([translation, response]) => {
         this.html = ''
+        const filter = response.filters
 
         // render search button at first
         if (response.searchText && this.hasAttribute('with-filter-search-button')) {
@@ -267,9 +256,9 @@ export default class FilterSelect extends Shadow() {
           `
         }
 
-        this.generateFilterButtons(response?.filters)
+        this.generateFilterButtons(filter)
 
-        this.generateQuickFilters(response?.filters)
+        this.generateQuickFilters(filter)
       })
     })
   }
