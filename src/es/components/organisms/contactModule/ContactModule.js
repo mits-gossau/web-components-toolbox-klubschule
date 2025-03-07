@@ -50,6 +50,8 @@ export default class ContactModule extends Grid {
       :host > section > *.contact > div.buttons {
         --button-primary-width: 100%;
         --button-secondary-width: 100%;
+        --button-tertiary-width: 100%;
+        --button-quaternary-width: 100%;
         display: grid;
         gap: var(--mdx-sys-spacing-fix-m, 1.5rem);
         width: fit-content;
