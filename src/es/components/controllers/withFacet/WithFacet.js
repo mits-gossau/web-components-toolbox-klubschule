@@ -185,11 +185,10 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.detail?.selectedFilterId) {
         // selected filter click/touch on filter pills or filter navLevelItem on level 0
         // triggered by FilterSelect or FilterCategories
-        // if (!currentRequestObj.courses?.length && sessionStorage.getItem('currentCourses')) currentRequestObj.courses = JSON.parse(sessionStorage.getItem('currentCourses') || '[]')
         if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         if (!currentCompleteFilterObj.length && sessionStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         
-          const isMulti = event.detail?.selectedFilterType === 'multi' || false
+        const isMulti = event.detail?.selectedFilterType === 'multi' || false
         const isTree = event.detail.filterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         
@@ -365,7 +364,7 @@ export default class WithFacet extends WebWorker() {
 
             if (json.courses.length) sessionStorage.setItem('currentCourses', JSON.stringify(json.courses))
             if (json.filters.length) sessionStorage.setItem('currentFilter', JSON.stringify(json.filters))
-            
+
             return json
           }),
           onlyfaceted: currentRequestObj.onlyfaceted
