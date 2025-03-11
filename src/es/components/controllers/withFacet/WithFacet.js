@@ -187,6 +187,7 @@ export default class WithFacet extends WebWorker() {
         // triggered by FilterSelect or FilterCategories
         if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         if (!currentCompleteFilterObj.length && sessionStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
+        
         const isMulti = event.detail?.selectedFilterType === 'multi' || false
         const isTree = event.detail.filterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
@@ -365,7 +366,8 @@ export default class WithFacet extends WebWorker() {
             if (json.filters.length) sessionStorage.setItem('currentFilter', JSON.stringify(json.filters))
 
             return json
-          })
+          }),
+          onlyfaceted: currentRequestObj.onlyfaceted
         }
         if (event.detail?.resolve) return event.detail.resolve(detail)
         this.dispatchEvent(new CustomEvent('with-facet', {
