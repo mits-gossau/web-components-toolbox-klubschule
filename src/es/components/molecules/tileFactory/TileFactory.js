@@ -71,7 +71,7 @@ export default class TileFactory extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
+    this.withFacetEventNameListener = event => this.renderHTML(event.detail)
     this.hiddenMessages = this.hiddenSectionsPartnerSearch
     this.hiddenTroublemakerMessages = this.templateTroublemaker
     this.isOtherLocations = this.hasAttribute('is-other-locations')
@@ -179,10 +179,10 @@ export default class TileFactory extends Shadow() {
 
   /**
   * renderHTML
-  * @param {any} fetch - An array of course fetch objects.
+  * @param {any} detail - An object of data 
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  async renderHTML (fetch) {
+  async renderHTML (detail) {
     /* loading */
     this.fetchModules([
       {
@@ -190,7 +190,10 @@ export default class TileFactory extends Shadow() {
         name: 'mdx-component'
       }
     ])
-    fetch.then(data => {
+    detail.fetch.then(data => {
+      // if no courses are found and onlyfaceted is set, do not render anything
+      if (detail.onlyfaceted && data.courses.length === 0) return
+      
       setTimeout(() => {
         this.root.querySelectorAll('.mdx-loading').forEach(el => el.remove())
         if ((data.ppage === 1 || data.pskip === data.psize) && !this.hasAttribute('is-info-events')) this.html = ''

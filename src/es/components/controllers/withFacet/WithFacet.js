@@ -187,6 +187,7 @@ export default class WithFacet extends WebWorker() {
         // triggered by FilterSelect or FilterCategories
         if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         if (!currentCompleteFilterObj.length && sessionStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
+        
         const isMulti = event.detail?.selectedFilterType === 'multi' || false
         const isTree = event.detail.filterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
@@ -288,7 +289,7 @@ export default class WithFacet extends WebWorker() {
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = result[1]
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
       }
 
@@ -365,7 +366,8 @@ export default class WithFacet extends WebWorker() {
             if (json.filters.length) sessionStorage.setItem('currentFilter', JSON.stringify(json.filters))
 
             return json
-          })
+          }),
+          onlyfaceted: currentRequestObj.onlyfaceted
         }
         if (event.detail?.resolve) return event.detail.resolve(detail)
         this.dispatchEvent(new CustomEvent('with-facet', {
@@ -627,6 +629,16 @@ export default class WithFacet extends WebWorker() {
 
   deleteParamFromUrl(filterKey) {
     if (this.params) {
+      // delete sector filter
+      const sectorRegex = /^[0-9]{1}N[0-9]{5}$/
+      if (sectorRegex.test(filterKey)) {
+        const keys = Array.from(this.params.keys())
+        for (const key of keys) {
+          const value = this.params.get(key)
+          if (value && sectorRegex.test(value)) this.params.delete(key)
+        }
+      }
+      // delete all other filters
       this.params.delete(filterKey)
       WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
