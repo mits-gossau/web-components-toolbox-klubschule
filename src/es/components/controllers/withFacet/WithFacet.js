@@ -627,6 +627,16 @@ export default class WithFacet extends WebWorker() {
 
   deleteParamFromUrl(filterKey) {
     if (this.params) {
+      // delete sector filter
+      const sectorRegex = /^[0-9]{1}N[0-9]{5}$/
+      if (sectorRegex.test(filterKey)) {
+        const keys = Array.from(this.params.keys())
+        for (const key of keys) {
+          const value = this.params.get(key)
+          if (value && sectorRegex.test(value)) this.params.delete(key)
+        }
+      }
+      // delete all other filters
       this.params.delete(filterKey)
       WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
