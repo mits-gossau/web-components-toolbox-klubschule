@@ -191,6 +191,8 @@ export default class TileFactory extends Shadow() {
       }
     ])
     fetch.then(data => {
+      if (data.courses.length === 0) return
+      
       setTimeout(() => {
         this.root.querySelectorAll('.mdx-loading').forEach(el => el.remove())
         if ((data.ppage === 1 || data.pskip === data.psize) && !this.hasAttribute('is-info-events')) this.html = ''
