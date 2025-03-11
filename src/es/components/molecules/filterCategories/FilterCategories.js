@@ -309,7 +309,7 @@ export default class FilterCategories extends Shadow() {
     const navLevelItem = document.createElement('div')
     let selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label.replace(/'/g, '’').replace(/"/g, '\"')).join(', ') || ''
     // @ts-ignore
-    if (level === 0 && filterItem.typ === 'tree') selectedFilters = this.getSelectedFilters(filterItem)[0]?.label.replace(/'/g, '’').replace(/"/g, '\"') || ""
+    if (level === 0 && filterItem.typ === 'tree' && this.getSelectedFilters(filterItem)) selectedFilters = this.getSelectedFilters(filterItem)[0]?.label.replace(/'/g, '’').replace(/"/g, '\"') || ""
     if (this.firstTreeItem && level !== 0) {
       selectedFilters = ''
     }
