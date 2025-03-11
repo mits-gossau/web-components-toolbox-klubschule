@@ -221,6 +221,7 @@ export default class FilterCategories extends Shadow() {
     const disabled = child.disabled ? 'disabled' : ''
     const checked = child.selected ? 'checked' : ''
     const hidden = child.visible ? '' : 'hidden'
+    const namespace = checked ? 'nav-level-item-active-' : 'nav-level-item-default-'
     let numberOfOffers = child.count && child.count !== 0 ? `(${child.count})` : '(0)'
     if (child.hideCount) numberOfOffers = ''
     const id = `[filter-id="${parentItem.urlpara}-${child.urlpara}"]`
@@ -235,12 +236,16 @@ export default class FilterCategories extends Shadow() {
         // @ts-ignore
         if (text) text.textContent = `${child.label.replace(/'/g, '’').replace(/"/g, '\"')} ${numberOfOffers}`
       }
-      const attributes = { disabled, checked, hidden }
+      const attributes = { disabled, checked, hidden, namespace }
       Object.entries(attributes).forEach(([key, value]) => {
-        if (value) {
-          filterItem.setAttribute(key, '')
+        if (key === 'namespace') {
+          filterItem.setAttribute(key, value)
         } else {
-          filterItem.removeAttribute(key)
+          if (value) {
+            filterItem.setAttribute(key, '')
+          } else {
+            filterItem.removeAttribute(key)
+          }
         }
       })
     }
