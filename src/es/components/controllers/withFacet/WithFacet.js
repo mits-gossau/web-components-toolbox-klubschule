@@ -515,7 +515,7 @@ export default class WithFacet extends WebWorker() {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
         } else if (filterItem.selected && !isUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
-        } else if (!filterItem.selected && isUrlpara && isParentSelected) {
+        } else if (!filterItem.selected && isUrlpara && isParentSelected && !isStartTimeSelectedFromFilterPills) {
           filterItem.selected = true // select filterItem if it is not selected
         } else if (isParentSelected) {
           // @ts-ignore
