@@ -188,6 +188,9 @@ export default class WithFacet extends WebWorker() {
         if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         if (!currentCompleteFilterObj.length && sessionStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         
+        // exception, because parent id matches with children urlpara in case of start time filter (Startzeitpunkt)
+        // exception only on click on filter pills, on filter navLevelItem everything works as expected
+        // this would not be needed if filter ids where unique and urlparas would match
         const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
         const isMulti = event.detail?.selectedFilterType === 'multi' || false
         const isTree = event.detail.filterType === 'tree'
