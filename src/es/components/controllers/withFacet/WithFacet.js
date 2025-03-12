@@ -187,6 +187,8 @@ export default class WithFacet extends WebWorker() {
         // triggered by FilterSelect or FilterCategories
         if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         if (!currentCompleteFilterObj.length && sessionStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
+        
+        const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
         const isMulti = event.detail?.selectedFilterType === 'multi' || false
         const isTree = event.detail.filterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
@@ -195,7 +197,7 @@ export default class WithFacet extends WebWorker() {
         const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
         if (!selectedFilterItem) return
         selectedFilterItem.skipCountUpdate = true
-        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti)
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         this.filterOnly = true
@@ -288,7 +290,7 @@ export default class WithFacet extends WebWorker() {
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = result[1]
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
       }
 
@@ -365,7 +367,8 @@ export default class WithFacet extends WebWorker() {
             if (json.filters.length) sessionStorage.setItem('currentFilter', JSON.stringify(json.filters))
 
             return json
-          })
+          }),
+          onlyfaceted: currentRequestObj.onlyfaceted
         }
         if (event.detail?.resolve) return event.detail.resolve(detail)
         this.dispatchEvent(new CustomEvent('with-facet', {
@@ -484,7 +487,7 @@ export default class WithFacet extends WebWorker() {
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false, isMulti = false) {
+  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false, isMulti = false, isStartTimeSelectedFromFilterPills = false) {
     // @ts-ignore
     const isParentSelected = selectedParent?.urlpara === filterKey
     const treeShookFilters = []
@@ -508,11 +511,11 @@ export default class WithFacet extends WebWorker() {
           } else if (filterItem.selected && !isUrlpara) {
             filterItem.selected = false 
           }
-        } else if (filterItem.selected && isUrlpara) {
+        } else if (filterItem.selected && isUrlpara && !isStartTimeSelectedFromFilterPills) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
         } else if (filterItem.selected && !isUrlpara) {
           filterItem.selected = true // keep filterItem selected if it is already selected
-        } else if (!filterItem.selected && isUrlpara && isParentSelected) {
+        } else if (!filterItem.selected && isUrlpara && isParentSelected && !isStartTimeSelectedFromFilterPills) {
           filterItem.selected = true // select filterItem if it is not selected
         } else if (isParentSelected) {
           // @ts-ignore
@@ -527,7 +530,7 @@ export default class WithFacet extends WebWorker() {
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children && !isMulti) {
-        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isSectorFilter, isTree)
+        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isSectorFilter, isTree, isMulti, isStartTimeSelectedFromFilterPills)
       }
 
       // only the first level allows selected falls when including selected children
@@ -627,6 +630,16 @@ export default class WithFacet extends WebWorker() {
 
   deleteParamFromUrl(filterKey) {
     if (this.params) {
+      // delete sector filter
+      const sectorRegex = /^[0-9]{1}N[0-9]{5}$/
+      if (sectorRegex.test(filterKey)) {
+        const keys = Array.from(this.params.keys())
+        for (const key of keys) {
+          const value = this.params.get(key)
+          if (value && sectorRegex.test(value)) this.params.delete(key)
+        }
+      }
+      // delete all other filters
       this.params.delete(filterKey)
       WithFacet.historyReplaceState({}, '', `${this.url.origin}${this.url.pathname}?${this.params.toString()}`)
     }
