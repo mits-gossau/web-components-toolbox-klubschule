@@ -10,8 +10,25 @@ export default class ContactModule extends Grid {
   constructor (...args) {
     super(...args)
 
-    this.setAttribute('auto-fill', 'calc(33.33% - 1em)')
-    this.setAttribute('gap', '4em 1.5em')
+    switch (this.getAttribute('grid-template-columns')) {
+      case '1':
+        this.setAttribute('auto-fill', '100%')
+        this.setAttribute('gap', '4em')
+        break
+      case '2':
+        this.setAttribute('auto-fill', 'calc(50% - 0.75em)')
+        this.setAttribute('gap', '4em 1.5em')
+        break
+      case '4':
+        this.setAttribute('auto-fill', 'calc(25% - 1.125em)')
+        this.setAttribute('gap', '4em 1.5em')
+        break
+      // case '3':
+      default:
+        this.setAttribute('auto-fill', 'calc(33.33% - 1em)')
+        this.setAttribute('gap', '4em 1.5em')
+        break
+    }
     this.setAttribute('auto-fill-mobile', '100%')
     this.setAttribute('gap-mobile', '4em')
 
@@ -25,10 +42,11 @@ export default class ContactModule extends Grid {
 
     let currentMedia = null
     this.checkMedia = () => {
-      if (this.isMobile !== currentMedia) {
-        currentMedia = this.isMobile
+      const isMobile = this.isMobile || this.isSectionMobile
+      if (isMobile !== currentMedia) {
+        currentMedia = isMobile
         this.buttons.forEach(button => {
-          if (this.isMobile) {
+          if (isMobile) {
             button.setAttribute('small', '')
           } else {
             button.removeAttribute('small')
@@ -39,9 +57,10 @@ export default class ContactModule extends Grid {
   }
 
   connectedCallback () {
-    super.connectedCallback()
-    this.checkMedia()
+    const showPromises = super.connectedCallback()
+    Promise.all(showPromises).then(() => this.checkMedia())
     self.addEventListener('resize', this.resizeListener)
+    return showPromises
   }
 
   disconnectedCallback () {
@@ -55,6 +74,33 @@ export default class ContactModule extends Grid {
    * @return {Promise<void>}
    */
   renderCSS () {
+    const mobileCss = /* css */`
+      :host {
+        --margin: var(--margin-small);
+      }
+      :host > section > * > h2:has(+ p) {
+        --h-margin-bottom: calc(var(--margin) / 2);
+      }
+      :host > section > * > figure {
+        flex-direction: column;
+        gap: var(--margin-smallest);
+      }
+      :host > section > * > figure > ks-a-picture, :host > section > * > figure > *:not(figcaption) {
+        width: 70%;
+      }
+      :host > section > * > figure > figcaption {
+        width: 100%;
+      }
+      :host > section > * > figure > figcaption > h3 {
+        margin-bottom: var(--margin-smaller);
+      }
+      :host > section > * > figure > figcaption > div.buttons {
+        width: 100%;
+      }
+      :host > section > * div.buttons {
+        gap: var(--mdx-sys-spacing-fix-s, 1rem);
+      }
+    `
     this.css = /* css */`
       :host {
         --margin: var(--mdx-sys-spacing-fix-l, 2rem);
@@ -62,11 +108,17 @@ export default class ContactModule extends Grid {
         --margin-smaller: var(--mdx-sys-spacing-fix-s, 1rem);
         --margin-smallest: var(--mdx-sys-spacing-fix-xs, 0.75rem);
       }
-      :host > section > [wide] {
+      :host([count-section-children="1"][grid-template-columns="2"]) > section > * {
         grid-column: span 2;
       }
-      :host([count-section-children="1"]) > section > [wide], :host > section > [wide="100%"] {
+      :host([count-section-children="1"][grid-template-columns="3"]) > section > *, :host([count-section-children="1"]:not([grid-template-columns])) > section > * {
         grid-column: span 3;
+      }
+      :host([count-section-children="1"][grid-template-columns="4"]) > section > * {
+        grid-column: span 4;
+      }
+      :host > section {
+        container: section / inline-size;
       }
       :host > section > * > * {
         display: block;
@@ -137,34 +189,13 @@ export default class ContactModule extends Grid {
         }
       }
       @media only screen and (max-width: _max-width_) {
-        :host {
-          --margin: var(--margin-small);
-        }
-        :host([count-section-children="1"]) > section > [wide], :host > section > [wide], :host > section > [wide="100%"] {
+        :host([count-section-children="1"][grid-template-columns="2"]) > section > *, :host([count-section-children="1"][grid-template-columns="3"]) > section > *, :host([count-section-children="1"]:not([grid-template-columns])) > section > *, :host([count-section-children="1"][grid-template-columns="4"]) > section > * {
           grid-column: span 1;
         }
-        :host > section > * > h2:has(+ p) {
-          --h-margin-bottom: calc(var(--margin) / 2);
-        }
-        :host > section > * > figure {
-          flex-direction: column;
-          gap: var(--margin-smallest);
-        }
-        :host > section > * > figure > ks-a-picture, :host > section > * > figure > *:not(figcaption) {
-          width: 70%;
-        }
-        :host > section > * > figure > figcaption {
-          width: 100%;
-        }
-        :host > section > * > figure > figcaption > h3 {
-          margin-bottom: var(--margin-smaller);
-        }
-        :host > section > * > figure > figcaption > div.buttons {
-          width: 100%;
-        }
-        :host > section > * div.buttons {
-          gap: var(--mdx-sys-spacing-fix-s, 1rem);
-        }
+        ${mobileCss}
+      }
+      @container section (max-width: _max-width_) {
+        ${mobileCss}
       }
     `
     return super.renderCSS()
@@ -172,6 +203,10 @@ export default class ContactModule extends Grid {
 
   get isMobile () {
     return self.matchMedia(`(max-width: ${this.mobileBreakpoint})`).matches
+  }
+
+  get isSectionMobile () {
+    return this.section.clientWidth <= Number(this.mobileBreakpoint.replace('px', ''))
   }
 
   get buttons () {
