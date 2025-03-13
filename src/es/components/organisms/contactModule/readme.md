@@ -84,7 +84,7 @@
 ```
 
 ## CMS Integration contact item "universal"
-- the simple item mostly uses h2's in the design. Although, h2's are interchangeable with h3's and equally supported.
+- the universal item mostly uses h2's in the design. Although, h2's are interchangeable with h3's and equally supported.
 - in the design there are variants without a p - tag, which is optional
 - figure can optionally have a ks-a-picture
 - ks-a-picture's namespace is optional and should be used according to that component definitions
