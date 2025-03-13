@@ -19,18 +19,21 @@ export default class ContactModule extends Grid {
         this.setAttribute('auto-fill', 'calc(50% - 0.75em)')
         this.setAttribute('gap', '4em 1.5em')
         break
+      case '3':
+        this.setAttribute('auto-fill', 'calc(33.33% - 1em)')
+        this.setAttribute('gap', '4em 1.5em')
+        break
       case '4':
         this.setAttribute('auto-fill', 'calc(25% - 1.125em)')
         this.setAttribute('gap', '4em 1.5em')
         break
-      // case '3':
+      // auto:
       default:
-        this.setAttribute('auto-fill', 'calc(33.33% - 1em)')
         this.setAttribute('gap', '4em 1.5em')
         break
     }
     this.setAttribute('auto-fill-mobile', '100%')
-    this.setAttribute('gap-mobile', '4em')
+    this.setAttribute('gap-mobile', '3em')
 
     let timeout = null
     this.resizeListener = event => {
@@ -75,15 +78,16 @@ export default class ContactModule extends Grid {
    */
   renderCSS () {
     const mobileCss = /* css */`
-      :host {
+      :host > * {
         --margin: var(--margin-small);
+        --p-margin: 0 auto var(--margin-small);
       }
-      :host > section > * > h2:has(+ p) {
-        --h-margin-bottom: calc(var(--margin) / 2);
+      :host > section > * > :where(h2, h3):has(+ p) {
+        --h-margin-bottom: calc(var(--margin) / 6);
       }
       :host > section > * > figure {
         flex-direction: column;
-        gap: var(--margin-smallest);
+        gap: calc(var(--margin-smallest) / 1.5);
       }
       :host > section > * > figure > ks-a-picture, :host > section > * > figure > *:not(figcaption) {
         width: 70%;
@@ -91,7 +95,10 @@ export default class ContactModule extends Grid {
       :host > section > * > figure > figcaption {
         width: 100%;
       }
-      :host > section > * > figure > figcaption > h3 {
+      :host > section > * > figure > figcaption > ks-m-contact-row:has(+ .buttons) {
+        margin-bottom: var(--margin-small);
+      }
+      :host > section > * > figure > figcaption > :where(h2, h3) {
         margin-bottom: var(--margin-smaller);
       }
       :host > section > * > figure > figcaption > div.buttons {
@@ -99,6 +106,7 @@ export default class ContactModule extends Grid {
       }
       :host > section > * div.buttons {
         gap: var(--mdx-sys-spacing-fix-s, 1rem);
+        min-width: 75%;
       }
     `
     this.css = /* css */`
@@ -107,18 +115,17 @@ export default class ContactModule extends Grid {
         --margin-small: var(--mdx-sys-spacing-fix-m, 1.5rem);
         --margin-smaller: var(--mdx-sys-spacing-fix-s, 1rem);
         --margin-smallest: var(--mdx-sys-spacing-fix-xs, 0.75rem);
+        display: block;
+        container: host / inline-size;
       }
       :host([count-section-children="1"][grid-template-columns="2"]) > section > * {
         grid-column: span 2;
       }
-      :host([count-section-children="1"][grid-template-columns="3"]) > section > *, :host([count-section-children="1"]:not([grid-template-columns])) > section > * {
+      :host([count-section-children="1"][grid-template-columns="3"]) > section > * {
         grid-column: span 3;
       }
       :host([count-section-children="1"][grid-template-columns="4"]) > section > * {
         grid-column: span 4;
-      }
-      :host > section {
-        container: section / inline-size;
       }
       :host > section > * > * {
         display: block;
@@ -127,10 +134,13 @@ export default class ContactModule extends Grid {
       :host > section > * > a {
         --a-margin: var(--margin);
       }
-      :host > section > * > h2:has(+ p) {
+      :host > section > * > :where(h2, h3):has(+ p) {
         --h-margin-bottom: calc(var(--margin) / 8);
       }
-      :host > section > * > h3 {
+      :host > section > * > :where(h2, h3):has(+ figure) {
+        --h-margin-bottom: calc(var(--margin-small) / 2);
+      }
+      :host > section > * > :where(h2, h3) {
         --h-margin-bottom: var(--margin);
       }
       :host > section > * > ks-m-contact-row:not(:has(+ .buttons)) {
@@ -146,7 +156,8 @@ export default class ContactModule extends Grid {
         margin-left: 0;
       }
       :host > section > * > figure {
-        --picture-default-img-object-fit: cover;
+        --img-object-fit: cover;
+        --picture-default-img-object-fit: var(--img-object-fit);
         display: flex;
         gap: var(--margin-smaller);
         margin: 0;
@@ -157,16 +168,19 @@ export default class ContactModule extends Grid {
       :host > section > * > figure > figcaption {
         width: calc(70% - var(--margin-smaller));
       }
-      :host > section > * > figure > figcaption > h3 {
+      :host > section > * > figure > figcaption > :where(h2, h3) {
         margin-bottom: var(--margin-small);
       }
-      :host > section > * > figure > figcaption > h3:has(+ p) {
+      :host > section > * > figure > figcaption > :where(h2, h3):has(+ p) {
         margin-bottom: 0;
       }
       :host > section > * > figure > figcaption > div.buttons {
         gap: var(--margin-smaller);
       }
-      :host > section > * > a.logo > img, :host > section > * > img.logo {
+      :host > section > * > *.logo {
+        --img-max-height: 3.125em;
+      }
+      :host > section > * > *.logo > img, :host > section > * > img.logo {
         max-height: 3.125em;
       }
       :host > section > * div.buttons {
@@ -177,6 +191,17 @@ export default class ContactModule extends Grid {
         display: grid;
         gap: var(--margin-small);
         width: fit-content;
+      }
+      ${this.hasAttribute('force-mobile-figure')
+        ? mobileCss + /* css */`
+          :host([force-mobile-figure]) > section {
+            gap: 3em 1.5em;
+          }
+          :host([force-mobile-figure]) > section > * > figure > ks-a-picture, :host([force-mobile-figure]) > section > * > figure > *:not(figcaption) {
+            width: 62.5%;
+          }
+        `
+        : ''
       }
       @media only screen and (min-width: calc(_max-width_ + 1px)) {
         :host > section > * > figure > figcaption > div.buttons.horizontal {
@@ -189,12 +214,12 @@ export default class ContactModule extends Grid {
         }
       }
       @media only screen and (max-width: _max-width_) {
-        :host([count-section-children="1"][grid-template-columns="2"]) > section > *, :host([count-section-children="1"][grid-template-columns="3"]) > section > *, :host([count-section-children="1"]:not([grid-template-columns])) > section > *, :host([count-section-children="1"][grid-template-columns="4"]) > section > * {
+        :host([count-section-children="1"][grid-template-columns="2"]) > section > *, :host([count-section-children="1"][grid-template-columns="3"]) > section > *, , :host([count-section-children="1"][grid-template-columns="4"]) > section > * {
           grid-column: span 1;
         }
         ${mobileCss}
       }
-      @container section (max-width: _max-width_) {
+      @container host (max-width: _max-width_) {
         ${mobileCss}
       }
     `
