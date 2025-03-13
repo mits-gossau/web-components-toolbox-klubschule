@@ -18,7 +18,7 @@
 </ks-o-contact-module>
 ```
 
-## CMS Integration as child of <ks-o-body-section> *(background support)*
+## CMS Integration as child of < ks-o-body-section > *(background support)*
 ```
 <ks-o-body-section variant="default" background="var(--mdx-sys-color-accent-6-subtle1)" has-background>
   <p>Haben Sie Fragen zu unseren Firmenkursen? Nehmen Sie mit uns Kontakt auf.</p>
