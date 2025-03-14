@@ -34,6 +34,9 @@ export default class Contact extends Shadow() {
         flex-direction: column;
         gap: var(--mdx-sys-spacing-fix-m, 24px);
       }
+      :host > ks-m-contact-row {
+        margin-bottom: 0;
+      }
     `
   }
 }
