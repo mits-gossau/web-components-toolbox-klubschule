@@ -1,3 +1,11 @@
+:host {
+  --button-primary-transition: none;
+  --button-secondary-transition: none;
+  --button-tertiary-transition: none;
+  --button-quaternary-transition: none;
+  --button-search-transition: none;
+}
+
 :host([namespace=button-primary-]) {
   --button-primary-background-color-active: var(--color-${this.getAttribute('color')}-active, var(--color-active));
   --button-primary-background-color-hover: var(--color-${this.getAttribute('color')}-hover, var(--color-hover));
