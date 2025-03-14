@@ -168,6 +168,9 @@ export default class ContactModule extends Grid {
       :host > section > * > figure > figcaption {
         width: calc(70% - var(--margin-smaller));
       }
+      :host > section > * > figure > figcaption > p:has(+ p) {
+        margin-bottom: 0;
+      }
       :host > section > * > figure > figcaption > :where(h2, h3) {
         margin-bottom: var(--margin-small);
       }
