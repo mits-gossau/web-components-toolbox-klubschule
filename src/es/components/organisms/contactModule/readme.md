@@ -152,5 +152,5 @@
 3. **.logo**: is used at item "simple". The class .logo is set on the a - tag wrapping the logo image or directly on the image tag, if there is no link. It ensures the correct logo size.
 
 ### Attribute variations (check out example page above):
-1. **grid-template-columns**: optional `number` define how many columns the grid shall posses. The grid has automatically one column, if omitted.
-2. **force-mobile-figure**: optional `has` is used at item "universal" to enforce the picture above the figcaption for desktop.
+1. **grid-template-columns**: optional `'1', '2', '3', '4' default '1'` define how many columns the grid shall posses. The grid has automatically one column, if omitted.
+2. **force-mobile-figure**: optional `has default none` is used at item "universal" to enforce the picture to align above the figcaption for desktop.
