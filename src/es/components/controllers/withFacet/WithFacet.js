@@ -326,6 +326,9 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
       }
 
+      // escape quotation marks from search text
+      if (currentRequestObj.searchText && !currentRequestObj.searchText.includes('\\"')) currentRequestObj.searchText = currentRequestObj.searchText.replace(/"/g, '\\"')
+
       const LanguageEnum = {
         d: 'de',
         f: 'fr',
