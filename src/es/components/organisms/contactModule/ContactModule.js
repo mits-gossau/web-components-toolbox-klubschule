@@ -60,7 +60,7 @@ export default class ContactModule extends Grid {
   }
 
   connectedCallback () {
-    const showPromises = super.connectedCallback()
+    const showPromises = super.connectedCallback() || []
     Promise.all(showPromises).then(() => this.checkMedia())
     self.addEventListener('resize', this.resizeListener)
     return showPromises
@@ -81,6 +81,16 @@ export default class ContactModule extends Grid {
       :host > * {
         --margin: var(--margin-small);
         --p-margin: 0 auto var(--margin-small);
+      }
+      ${this.hasAttribute('background')
+        ? /* css */`
+          :host > section {
+            padding: var(--mdx-sys-spacing-fix-2xs, 0.5rem);
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+          }
+        `
+        : ''
       }
       :host > section > * > :where(h2, h3):has(+ p) {
         --h-margin-bottom: calc(var(--margin) / 6);
@@ -117,6 +127,15 @@ export default class ContactModule extends Grid {
         --margin-smallest: var(--mdx-sys-spacing-fix-xs, 0.75rem);
         display: block;
         container: host / inline-size;
+      }
+      ${this.hasAttribute('background')
+        ? /* css */`
+          :host > section {
+            background: ${this.getAttribute('background')};
+            padding: var(--mdx-sys-spacing-fix-s, 1rem);
+          }
+        `
+        : ''
       }
       :host([count-section-children="1"][grid-template-columns="2"]) > section > * {
         grid-column: span 2;

@@ -154,3 +154,4 @@
 ### Attribute variations (check out example page above):
 1. **grid-template-columns**: optional `'1', '2', '3', '4' default '1'` define how many columns the grid shall posses. The grid has automatically one column, if omitted.
 2. **force-mobile-figure**: optional `has default none` is used at item "universal" to enforce the picture to align above the figcaption for desktop.
+3. **background**: optional `css - string` is used to set an inline background. Expl.: `background="var(--mdx-sys-color-accent-6-subtle1)"`.
