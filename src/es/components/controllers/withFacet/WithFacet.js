@@ -305,7 +305,7 @@ export default class WithFacet extends WebWorker() {
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
-     if (isInfoEvents) {
+      if (isInfoEvents) {
         const endpointInfoEventsUrl = new URL(endpointInfoEvents)
         currentRequestObj.psize = endpointInfoEventsUrl.searchParams.has('psize') ? Number(endpointInfoEventsUrl.searchParams.get('psize')) : 3
         currentRequestObj.ppage = endpointInfoEventsUrl.searchParams.has('ppage') ? Number(endpointInfoEventsUrl.searchParams.get('ppage')) : 0
