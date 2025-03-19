@@ -304,6 +304,11 @@ export default class WithFacet extends WebWorker() {
       event?.detail?.loadCoursesOnly ? currentRequestObj.onlycourse = true : delete currentRequestObj.onlycourse
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
+      // if loadCoursesOnly, check, if filter are in sessionStorage "currentFilter" 
+      if (currentRequestObj.onlycourse && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
+
+      // escape quotation marks from search text
+      if (currentRequestObj.searchText && !currentRequestObj.searchText.includes('\\"')) currentRequestObj.searchText = currentRequestObj.searchText.replace(/"/g, '\\"')
 
       if (isInfoEvents) {
         const endpointInfoEventsUrl = new URL(endpointInfoEvents)
@@ -325,9 +330,6 @@ export default class WithFacet extends WebWorker() {
       } else {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
       }
-
-      // escape quotation marks from search text
-      if (currentRequestObj.searchText && !currentRequestObj.searchText.includes('\\"')) currentRequestObj.searchText = currentRequestObj.searchText.replace(/"/g, '\\"')
 
       const LanguageEnum = {
         d: 'de',
@@ -362,6 +364,11 @@ export default class WithFacet extends WebWorker() {
           /** @type {Promise<fetchAutoCompleteEventDetail>} */
           fetch: fetch(isInfoEvents ? endpointInfoEvents : endpoint, request).then(response => {
             if (response.status >= 200 && response.status <= 299) {
+              console.log('response', response)
+              // check if response filters are empty, if so, use the current filters
+              if (response.headers.get('content-type')?.includes('application/json'))
+
+
               return response.json()
             }
             throw new Error(response.statusText)
@@ -371,6 +378,8 @@ export default class WithFacet extends WebWorker() {
 
             if (json.courses.length) sessionStorage.setItem('currentCourses', JSON.stringify(json.courses))
             if (json.filters.length) sessionStorage.setItem('currentFilter', JSON.stringify(json.filters))
+            // if json.filters is empty, check if sessionStorage has currentFilter
+            if (!json.filters.length && sessionStorage.getItem('currentFilter')) json.filters = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
 
             return json
           }),
