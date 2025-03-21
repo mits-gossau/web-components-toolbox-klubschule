@@ -363,6 +363,8 @@ export default class WithFacet extends WebWorker() {
             }
             throw new Error(response.statusText)
           }).then(json => {
+            // TODO/ERROR: Api answers with empty filter payload when using ppage (next page). Workaround for keeping filters when returned empty.
+            if (event?.detail?.ppage && !json.filters.length) json.filters = currentRequestObj.filter
             // update filters with api response
             currentRequestObj.filter = currentCompleteFilterObj = json.filters
 
