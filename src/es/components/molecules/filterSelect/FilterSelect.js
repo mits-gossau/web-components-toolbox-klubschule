@@ -84,7 +84,15 @@ export default class FilterSelect extends Shadow() {
           <span part="label1">${selectedFilter}</span>
           <span part="label2" dynamic></span>
         </ks-a-button>
-        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="flex-start" request-event-name="reset-filter" filter-key="${filterGroupUrlPara || filterItem.urlpara}" filter-value="${selectedFilter}">
+        <ks-a-button 
+          small 
+          namespace="button-primary-" 
+          color="tertiary" 
+          justify-content="flex-start" 
+          request-event-name="reset-filter" 
+          filter-key="${filterGroupUrlPara || filterItem.urlpara}" 
+          filter-value="${selectedFilter}"
+        >
           <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
         </ks-a-button>
       </m-double-button>
@@ -160,7 +168,7 @@ export default class FilterSelect extends Shadow() {
     if (quickFilters.length === 0) return
 
     this.html = quickFilters.sort((a, b) => a.order - b.order).map(quickFilter => {
-      const requestEventName = `dialog-open-first-level,dialog-open-${quickFilter.id}`
+      const requestEventName = `request-with-facet,dialog-open-first-level,dialog-open-${quickFilter.id}`
 
       return /* html */`
         <ks-c-gtm-event 
@@ -170,7 +178,14 @@ export default class FilterSelect extends Shadow() {
             "quick_filter_category": "${quickFilter.label.replace(/'/g, '’').replace(/"/g, '\"')}"
           }'
         >
-          <ks-a-button small namespace="button-secondary-" color="tertiary" justify-content="flex-start" request-event-name="${requestEventName}" click-no-toggle-active>
+          <ks-a-button 
+            small 
+            namespace="button-secondary-" 
+            color="tertiary" 
+            justify-content="flex-start" 
+            request-event-name="${requestEventName}" 
+            click-no-toggle-active
+          >
             <style>
               :host,
               :host button {
