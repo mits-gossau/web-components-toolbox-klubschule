@@ -23,6 +23,11 @@ export default class KsBodyStyle extends Mutation(BodyStyle) {
     }, ...args)
   }
 
+  connectedCallback () {
+    super.connectedCallback()
+    if (this.root.querySelector('ks-o-offers-page')) this.setAttribute('has-ks-o-offers-page', '')
+  }
+
   mutationCallback (mutationList, observer) {
     // check for a first modification, which can be triggered by the LoadTemplateTag component
     this.addClassToLastChild()

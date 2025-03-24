@@ -375,7 +375,7 @@ export default class WithFacet extends WebWorker() {
 
             if (json.courses.length) sessionStorage.setItem('currentCourses', JSON.stringify(json.courses))
             if (json.filters.length) sessionStorage.setItem('currentFilter', JSON.stringify(json.filters))
-            // if json.filters is empty, check if sessionStorage has currentFilter
+            if (isInfoEvents && !json.courses.length) this.dispatchEvent(new CustomEvent('info-events-empty', { bubbles: true, composed: true, cancelable: true }))
             if (!json.filters.length && sessionStorage.getItem('currentFilter')) json.filters = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
 
             return json

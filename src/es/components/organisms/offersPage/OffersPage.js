@@ -87,6 +87,8 @@ export default class OffersPage extends Shadow() {
       })
     }
     this.isEasyPortal = !!this.hasAttribute('is-easy-portal')
+
+    this.infoEventsEmptyListener = () => this.remove()
   }
 
   connectedCallback() {
@@ -110,10 +112,12 @@ export default class OffersPage extends Shadow() {
       Promise.all(showPromises).then(() => (this.hidden = false))
     })
     this.addEventListener('with-facet', this.withFacetListener)
+    this.addEventListener('info-events-empty', this.infoEventsEmptyListener)
   }
 
   disconnectedCallback() {
     this.removeEventListener('with-facet', this.withFacetListener)
+    this.removeEventListener('info-events-empty', this.infoEventsEmptyListener)
   }
 
   shouldRenderCSS() {
