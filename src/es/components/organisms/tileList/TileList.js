@@ -417,7 +417,7 @@ export default class TileList extends Shadow() {
   }
 
   renderTile (tileData, add = false, locationsString = '') {
-    const locationsList = locationsString.split(', ').map(location => location.trim())
+    const locationsList = locationsString.split(', ').map(location => location.trim()) || []
     const locationIndexMap = locationsList.reduce((acc, location, index) => {
       acc[location] = index
       return acc
