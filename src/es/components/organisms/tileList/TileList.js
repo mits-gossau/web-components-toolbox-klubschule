@@ -44,7 +44,7 @@ export default class TileList extends Shadow() {
             bubbles: true,
             cancelable: true,
             composed: true
-          }))).then(data => this.renderTile(data))
+          }))).then(data => this.renderTile(data, false, this.data.location?.name))
         }
       }
     }
@@ -416,20 +416,18 @@ export default class TileList extends Shadow() {
     ])
   }
 
-  renderTile (tileData, add = false) {
+  renderTile (tileData, add = false, locationsString = '') {
+    const locationsList = locationsString.split(', ').map(location => location.trim())
+    const locationIndexMap = locationsList.reduce((acc, location, index) => {
+      acc[location] = index
+      return acc
+    }, {})
+
     if (tileData.courses.length) {
       tileData.courses.sort((a, b) => {
-        const nameA = a.location.name.toUpperCase() // ignore upper and lowercase
-        const nameB = b.location.name.toUpperCase() // ignore upper and lowercase
-        if (nameA < nameB) {
-            return -1
-        }
-        if (nameA > nameB) {
-            return 1
-        }
-
-        // names must be equal
-        return 0
+        const nameA = a.location.center
+        const nameB = b.location.center
+        return locationIndexMap[nameA] - locationIndexMap[nameB];
       })
     }
 
