@@ -31,7 +31,7 @@ export default class FilterCategories extends Shadow() {
     this.clickNavLevelItemLevel0EventListener = (id, type) => {
       return () => {
         this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true, detail: { selectedFilterId: id, selectedFilterType: type, loadFilterOnly: true } }))
-        this.dispatchEvent(new CustomEvent('hide-all-sublevels', {bubbles: true, cancelable: true, composed: true}))
+        this.dispatchEvent(new CustomEvent('hide-all-sublevels', { bubbles: true, cancelable: true, composed: true }))
       }
     }
     
@@ -40,16 +40,9 @@ export default class FilterCategories extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-
     this.eventListenerNode = this.hasAttribute('with-facet-target') ? FilterCategories.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
-    this.dispatchEvent(new CustomEvent('request-with-facet',
-      {
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
-
+    this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true }))
     this.addEventListener('click', this.keepDialogOpenEventListener)
     document.body.addEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
   }
@@ -61,13 +54,10 @@ export default class FilterCategories extends Shadow() {
   }
 
   addEventListenersToDialogs = mainNav => {
-    const dialogs = mainNav.querySelectorAll('m-dialog')
-
-    dialogs.forEach(dialog => {
+    mainNav.querySelectorAll('m-dialog').forEach(dialog => {
       const filterId = dialog.getAttribute('id').replace('filter-', '')
       const filterType = dialog.getAttribute('filter-type')
       const navLevelItem = dialog.shadowRoot.querySelector('ks-m-nav-level-item')
-
       navLevelItem.removeEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId, filterType))
       navLevelItem.addEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId, filterType))
     })

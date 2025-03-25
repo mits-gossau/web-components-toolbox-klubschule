@@ -145,9 +145,7 @@ export default class WithFacet extends WebWorker() {
       if (event?.detail?.ppage) {
         // ppage reuse last request
         currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
-        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
-        currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
@@ -159,6 +157,7 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
+        if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
@@ -193,7 +192,7 @@ export default class WithFacet extends WebWorker() {
         // this would not be needed if filter ids where unique and urlparas would match
         const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
         const isMulti = event.detail?.selectedFilterType === 'multi' || false
-        const isTree = event.detail.filterType === 'tree'
+        const isTree = event.detail?.selectedFilterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         
         // find the selected filter item (not tree)
@@ -326,6 +325,9 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
       }
 
+      // escape quotation marks from search text
+      if (currentRequestObj.searchText && !currentRequestObj.searchText.includes('\\"')) currentRequestObj.searchText = currentRequestObj.searchText.replace(/"/g, '\\"')
+
       const LanguageEnum = {
         d: 'de',
         f: 'fr',
@@ -370,6 +372,8 @@ export default class WithFacet extends WebWorker() {
 
             if (json.courses.length) sessionStorage.setItem('currentCourses', JSON.stringify(json.courses))
             if (json.filters.length) sessionStorage.setItem('currentFilter', JSON.stringify(json.filters))
+            if (isInfoEvents && !json.courses.length) this.dispatchEvent(new CustomEvent('info-events-empty', { bubbles: true, composed: true, cancelable: true }))
+            if (!json.filters.length && sessionStorage.getItem('currentFilter')) json.filters = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
 
             return json
           }),
