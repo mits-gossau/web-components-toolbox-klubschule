@@ -188,7 +188,7 @@ export default class KsButton extends Button {
     if (this.removeBtn) this.removeBtn.style.display = 'none'
     let searchTerm = event.detail.searchTerm
     // check, if search term has escaped quotations '\"' marks and remove backslashes
-    if (searchTerm.includes('\\"')) searchTerm = searchTerm.replace(/\\"/g, '"')
+    if (searchTerm?.includes('\\"')) searchTerm = searchTerm.replace(/\\"/g, '"')
     if (searchTerm && this.removeBtn) {
       this.buttonSpan.classList.remove('hide')
       this.removeBtn.style.display = 'inline'
