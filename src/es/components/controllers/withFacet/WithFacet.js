@@ -146,6 +146,9 @@ export default class WithFacet extends WebWorker() {
         // ppage reuse last request
         currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
+        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        currentCompleteFilterObj = result[0]
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
