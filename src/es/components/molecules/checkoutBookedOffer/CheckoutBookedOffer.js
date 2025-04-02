@@ -109,7 +109,7 @@ export default class CheckoutBookedOffer extends Shadow() {
       }
 
       .checkout-booked-offer__info-list li span:last-child {
-        white-space: nowrap;
+        white-space: normal;
       }
 
       .checkout-booked-offer__price-info {
