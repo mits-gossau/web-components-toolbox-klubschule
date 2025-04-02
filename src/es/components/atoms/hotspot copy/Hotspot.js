@@ -1,12 +1,12 @@
 // @ts-check
-import { Shadow } from '../../prototypes/Shadow.js'
+import Hotspot from '../../web-components-toolbox/src/es/components/atoms/hotspot/Hotspot.js'
 
 /**
 * @export
 * @class Hotspot
 * @type {CustomElementConstructor}
 */
-export default class Hotspot extends Shadow() {
+export default class KsHotspot extends Hotspot {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
