@@ -11,16 +11,12 @@
     gap: 70px;
 }
 
-:host a-picture {
-    --img-height: 76px;
-}
-
 @media screen and (max-width: _max-width_) {
-    :host ul {
-        gap: 1.5em;
+    :host {
+        --img-max-height: 68px;
     }
 
-    :host a-picture {
-      --img-height: 68px;
+    :host ul {
+        gap: 1.5em;
     }
 }
