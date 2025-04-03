@@ -443,6 +443,8 @@
   --icon-mdx-ks-event-tick-color: var(--mdx-base-color-grey-0);
   --icon-mdx-ks-event-color: var(--mdx-base-color-grey-950);
   --icon-mdx-ks-event-link-color: var(--mdx-base-color-klubschule-blue-600);
+  --icon-mdx-ks-svg-height: 1rem;
+  --icon-mdx-ks-svg-width: 1rem;
 
   /* fix form icon sizes */
   --icon-mdx-ks-forms-svg-height: 1rem;

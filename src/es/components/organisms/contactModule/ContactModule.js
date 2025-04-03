@@ -146,9 +146,14 @@ export default class ContactModule extends Grid {
       :host([count-section-children="1"][grid-template-columns="4"]) > section > * {
         grid-column: span 4;
       }
+      :host > section > * {
+        display: flex;
+        flex-direction: column;
+      }
       :host > section > * > * {
         display: block;
         margin-bottom: var(--margin);
+        width: 100%;
       }
       :host > section > * > a {
         --a-margin: var(--margin);
@@ -211,8 +216,11 @@ export default class ContactModule extends Grid {
         --button-tertiary-width: 100%;
         --button-quaternary-width: 100%;
         display: grid;
+        grid-auto-rows: min-content;
+        align-content: end;
         gap: var(--margin-small);
         width: fit-content;
+        flex: 1;
       }
       ${this.hasAttribute('force-mobile-figure')
         ? mobileCss + /* css */`

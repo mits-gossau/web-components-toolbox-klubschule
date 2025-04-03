@@ -70,13 +70,16 @@ export default class Contact extends Shadow() {
         text-decoration-line: var(--a-text-decoration) !important;
         margin-bottom: 0 !important;
       }
+      :host a a-icon-mdx {
+        display: block;
+      }
       :host .contact-row {
         display: flex !important;
         gap: var(--mdx-sys-spacing-fix-m, 24px);
         margin-bottom: var(--mdx-sys-spacing-fix-xs);
       }
       :host .contact-row > *:nth-child(2) {
-        flex: 1;
+        flex-shrink: 10;
       }
       :host a:hover {
         text-decoration: var(--a-text-decoration-hover) !important;
@@ -88,6 +91,10 @@ export default class Contact extends Shadow() {
       }
       :host a-icon-mdx {
         flex-shrink: 0;
+      }
+      :host a > div > span {
+        white-space: break-spaces;
+        word-break: break-word;
       }
     `
     return this.fetchCSS([
@@ -120,7 +127,7 @@ export default class Contact extends Shadow() {
       <${tag} ${href ? `href="${this.getAttribute('href')}"` : ''} ${id ? `id="${id}"` : ''} ${target ? `target="${target}"` : ''} class="contact-row">
         <a-icon-mdx 
           ${href ? 'namespace="icon-mdx-ks-"' : ''}
-          size="${this.getAttribute('icon-size') || '1em'}"
+          size="${this.getAttribute('icon-size') || '1rem'}"
           ${this.getAttribute('icon-url') ? `icon-url="${this.getAttribute('icon-url')}"` : `icon-name="${this.getAttribute('icon-name')}"`} 
         >
         </a-icon-mdx>
