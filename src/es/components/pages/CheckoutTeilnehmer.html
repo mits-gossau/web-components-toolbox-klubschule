@@ -254,10 +254,11 @@
               <div class="wrap">
                   <label for="email">Email *</label>
                   <input id="email" name="email" type="email"
-                      pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required
+                      required
                       error-message-reference-point-changed="true" no-error-text-p
                       error-text-tag-name="span"
-                      data-m-v-rules='{"required": {"error-message": "Bitte E-Mail angeben."}}'>
+                      data-m-v-rules='{"required": {"error-message": "Bitte E-Mail angeben."},"email": {"error-message": "Bitte richtige e-mail eingeben."}}'
+                      >
                   <div class="message">
                       <a-icon-mdx namespace="icon-mdx-ks-forms-" icon-name="AlertCircle" size="1em"
                           class="icon-left" new-error-message-reference-point="true"></a-icon-mdx>
