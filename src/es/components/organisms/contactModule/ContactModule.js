@@ -209,6 +209,7 @@ export default class ContactModule extends Grid {
       }
       :host > section > * > *.logo > img, :host > section > * > img.logo {
         max-height: 3.125em;
+        max-width: fit-content;
       }
       :host > section > * div.buttons {
         --button-primary-width: 100%;
