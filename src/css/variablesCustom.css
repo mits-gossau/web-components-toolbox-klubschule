@@ -19,6 +19,10 @@
   --background-color-tertiary-hover: var(--mdx-sys-color-brand-neutral-0);
   --background-color-tertiary: var(--mdx-sys-color-brand-neutral-0);
 
+  /* --- MDX Deviation --- */
+  --h4-font-size: 1.25rem;
+  --h4-font-weight: 500;
+
   /* --- Selectable CMS background colors Start --- */
   --background-color-ks-blue: var(--mdx-sys-color-brand-neutral-0);
   --background-color-ks-blue-active: var(--mdx-sys-color-brand-neutral-0);
