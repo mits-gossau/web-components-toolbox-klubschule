@@ -156,7 +156,7 @@ export default class FilterSelect extends Shadow() {
 
     filterData.forEach(filterItem => {
       if (filterItem.isquick && filterItem.visible) {
-        quickFilters.push({id: filterItem.id, order: filterItem.isquick, label: filterItem.label})
+        quickFilters.push({id: filterItem.id, order: filterItem.isquick, label: filterItem.label, type: filterItem.typ})
       }
       // check recursive if filterItem or its children is selected and remove the parent filterItem from quickFilters
       const selectedFilter = this.findSelectedAndParents(filterItem)
@@ -185,6 +185,7 @@ export default class FilterSelect extends Shadow() {
             justify-content="flex-start" 
             request-event-name="${requestEventName}" 
             click-no-toggle-active
+            filter-type="${quickFilter.type}"
           >
             <style>
               :host,

@@ -195,7 +195,7 @@ export default class WithFacet extends WebWorker() {
         // exception only on click on filter pills, on filter navLevelItem everything works as expected
         // this would not be needed if filter ids where unique and urlparas would match
         const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
-        const isMulti = event.detail?.selectedFilterType === 'multi' || false
+        const isMulti = event.detail?.selectedFilterType === 'multi' || event.detail?.filterType === 'multi' || false
         const isTree = event.detail?.selectedFilterType === 'tree'
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         
@@ -226,7 +226,6 @@ export default class WithFacet extends WebWorker() {
           'filterName': event.detail.target.label, //the name of the clicked filter.
           'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
         })
-
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
