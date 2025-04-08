@@ -280,6 +280,7 @@
   --icon-color-blue: var(--mdx-sys-color-primary-default);
   --content-width: 80%;
   --hotspot-width: 22rem;
+  --hotspot-default-btn-pulse-background-color: rgba(255, 255, 255, .8);
   --body-no-scroll-overflow: visible;
   --top-slide-in-close-height: 3rem; 
   --left-slide-in-close-height: 3rem; 
