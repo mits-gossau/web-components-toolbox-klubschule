@@ -48,7 +48,6 @@ export default class WithFacet extends WebWorker() {
     let currentCompleteFilterObj = currentRequestObj.filter || []
     // base request nullFilter
     let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
-    // let initialFilter = currentCompleteFilterObj
     // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
     if (initialFilter.length < 1) {
       this.filterOnly = false
