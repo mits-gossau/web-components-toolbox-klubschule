@@ -42,22 +42,18 @@ export default class WithFacet extends WebWorker() {
     const coordinatesToTerm = new Map()
     // the initial request object received through the attribute, never changes and is always included
     const initialRequestObj = JSON.parse(this.getAttribute('initial-request')) || {}
-    console.log('initialRequestObj', initialRequestObj)
     // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter || []
-    console.log('currentRequestObj', currentCompleteFilterObj)
     // base request nullFilter
     let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
     // let initialFilter = currentCompleteFilterObj
-    console.log('initialFilter', initialFilter)
     // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
     if (initialFilter.length < 1) {
       this.filterOnly = false
       initialFilter = this.getNullFilter()
     }
-    console.log('initialFilter', initialFilter)
 
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
@@ -170,7 +166,11 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
-        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, initialRequestObj.filter)
+        // get the filter from initial request with id === 7 and find inside the children the selected filter
+        if (isTree) {
+          currentRequestObj.filter = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentRequestObj.filter, initialRequestObj.filter)
+          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        }
         if (filterKey === 'q') {
           delete currentRequestObj.searchText
           if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
@@ -196,15 +196,20 @@ export default class WithFacet extends WebWorker() {
         // triggered by FilterSelect or FilterCategories
         if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         if (!currentCompleteFilterObj.length && sessionStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
-        
         // exception, because parent id matches with children urlpara in case of start time filter (Startzeitpunkt)
         // exception only on click on filter pills, on filter navLevelItem everything works as expected
         // this would not be needed if filter ids where unique and urlparas would match
         const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
         const isMulti = event.detail?.selectedFilterType === 'multi' || event.detail?.filterType === 'multi' || false
         const isTree = event.detail?.selectedFilterType === 'tree' || event.detail?.filterType === 'tree' || false
-        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        
+        if (isTree) {
+          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+          // get the filter from initial request with id === 7 and find inside the children the selected filter
+        } else {
+          // take the current filter object (response from api), find the sector filter with id 7 and repalace it entirely with initialSelectedSectorfilter
+          // this is needed because the api does not return the selected sector filter 
+          currentCompleteFilterObj = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentCompleteFilterObj, initialRequestObj.filter)
+        }
         // find the selected filter item (not tree)
         const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
         if (!selectedFilterItem) return
@@ -212,7 +217,6 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        // currentRequestObj.filter = initialRequestObj.filter
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
@@ -226,7 +230,6 @@ export default class WithFacet extends WebWorker() {
         } else {
           this.updateURLParam(filterKey, filterValue, false)
         }
-
         // GTM Tracking of Filters
         if (event.detail?.target?.checked) this.dataLayerPush({
           'event': 'filterSelection',
@@ -718,6 +721,21 @@ export default class WithFacet extends WebWorker() {
         "HasChilds": false
       }
     ]
+  }
+
+  static getSectorFilterWithInitialFallback (currentFilter, initialFilter) {
+    const initialSectorFilter = initialFilter.find((filter) => Number(filter.id) === 7)
+    let index = 0
+    const sectorFilter = currentFilter.find((filter, i) => {
+      index = i
+      return Number(filter.id) === 7 && (!filter.selected || filter.children.every(child => !child.selected))
+    })
+    if (initialSectorFilter && sectorFilter) {
+      sectorFilter.children = initialSectorFilter.children
+      sectorFilter.selected = true
+      currentFilter[index] = sectorFilter
+    }
+    return currentFilter
   }
 
   dataLayerPush (value) {
