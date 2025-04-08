@@ -42,17 +42,22 @@ export default class WithFacet extends WebWorker() {
     const coordinatesToTerm = new Map()
     // the initial request object received through the attribute, never changes and is always included
     const initialRequestObj = JSON.parse(this.getAttribute('initial-request')) || {}
+    console.log('initialRequestObj', initialRequestObj)
     // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
     let currentRequestObj = structuredClone(initialRequestObj)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filter, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filter || []
+    console.log('currentRequestObj', currentCompleteFilterObj)
     // base request nullFilter
     let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
+    // let initialFilter = currentCompleteFilterObj
+    console.log('initialFilter', initialFilter)
     // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
     if (initialFilter.length < 1) {
       this.filterOnly = false
       initialFilter = this.getNullFilter()
     }
+    console.log('initialFilter', initialFilter)
 
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
@@ -163,7 +168,9 @@ export default class WithFacet extends WebWorker() {
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter]
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
+        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, initialRequestObj.filter)
         if (filterKey === 'q') {
           delete currentRequestObj.searchText
           if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
@@ -195,7 +202,7 @@ export default class WithFacet extends WebWorker() {
         // this would not be needed if filter ids where unique and urlparas would match
         const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
         const isMulti = event.detail?.selectedFilterType === 'multi' || event.detail?.filterType === 'multi' || false
-        const isTree = event.detail?.selectedFilterType === 'tree'
+        const isTree = event.detail?.selectedFilterType === 'tree' || event.detail?.filterType === 'tree' || false
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         
         // find the selected filter item (not tree)
@@ -205,6 +212,7 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        // currentRequestObj.filter = initialRequestObj.filter
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
