@@ -1,4 +1,4 @@
-# ContactModule
+# ImageHotspot
 
 > ImageHotspot.
 
