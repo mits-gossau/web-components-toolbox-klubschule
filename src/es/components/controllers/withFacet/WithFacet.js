@@ -309,9 +309,12 @@ export default class WithFacet extends WebWorker() {
 
       if (isInfoEvents) {
         const endpointInfoEventsUrl = new URL(endpointInfoEvents)
+        console.log('endpointInfoEventsUrl', endpointInfoEventsUrl.searchParams.get('portal_id'))
         currentRequestObj.psize = endpointInfoEventsUrl.searchParams.has('psize') ? Number(endpointInfoEventsUrl.searchParams.get('psize')) : 3
         currentRequestObj.ppage = endpointInfoEventsUrl.searchParams.has('ppage') ? Number(endpointInfoEventsUrl.searchParams.get('ppage')) : 0
         currentRequestObj.searchText = ''
+        currentRequestObj.PortalId = endpointInfoEventsUrl.searchParams.has('portal_id') ? Number(endpointInfoEventsUrl.searchParams.get('portal_id')) : 29
+
       } else {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
       }
@@ -446,7 +449,7 @@ export default class WithFacet extends WebWorker() {
       let body = `{
         "filter": ${JSON.stringify(subLevelFilter)},
         "MandantId": ${mandantId},
-        "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || 29},
+        "PortalId": ${this.getAttribute('portal-id') || currentRequestObj.PortalId || initialRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
         "sorting": 2
