@@ -314,7 +314,6 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj.ppage = endpointInfoEventsUrl.searchParams.has('ppage') ? Number(endpointInfoEventsUrl.searchParams.get('ppage')) : 0
         currentRequestObj.searchText = ''
         currentRequestObj.PortalId = endpointInfoEventsUrl.searchParams.has('portal_id') ? Number(endpointInfoEventsUrl.searchParams.get('portal_id')) : 29
-
       } else {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
       }
