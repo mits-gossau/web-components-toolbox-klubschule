@@ -449,7 +449,7 @@ export default class WithFacet extends WebWorker() {
       let body = `{
         "filter": ${JSON.stringify(subLevelFilter)},
         "MandantId": ${mandantId},
-        "PortalId": ${this.getAttribute('portal-id') || currentRequestObj.PortalId || initialRequestObj.PortalId || 29},
+        "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || currentRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
         "sorting": 2
