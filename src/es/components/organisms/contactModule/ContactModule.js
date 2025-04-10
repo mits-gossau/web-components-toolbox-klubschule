@@ -92,7 +92,7 @@ export default class ContactModule extends Grid {
         `
         : ''
       }
-      :host > section > * > :where(h2, h3):has(+ p) {
+      :host > section > * > :where(h2, h3, h4):has(+ p) {
         --h-margin-bottom: calc(var(--margin) / 6);
       }
       :host > section > * > figure {
@@ -108,7 +108,7 @@ export default class ContactModule extends Grid {
       :host > section > * > figure > figcaption > ks-m-contact-row:has(+ .buttons) {
         margin-bottom: var(--margin-small);
       }
-      :host > section > * > figure > figcaption > :where(h2, h3) {
+      :host > section > * > figure > figcaption > :where(h2, h3, h4) {
         margin-bottom: var(--margin-smaller);
       }
       :host > section > * > figure > figcaption > div.buttons {
@@ -146,20 +146,25 @@ export default class ContactModule extends Grid {
       :host([count-section-children="1"][grid-template-columns="4"]) > section > * {
         grid-column: span 4;
       }
+      :host > section > * {
+        display: flex;
+        flex-direction: column;
+      }
       :host > section > * > * {
         display: block;
         margin-bottom: var(--margin);
+        width: 100%;
       }
       :host > section > * > a {
         --a-margin: var(--margin);
       }
-      :host > section > * > :where(h2, h3):has(+ p) {
+      :host > section > * > :where(h2, h3, h4):has(+ p) {
         --h-margin-bottom: calc(var(--margin) / 8);
       }
-      :host > section > * > :where(h2, h3):has(+ figure) {
+      :host > section > * > :where(h2, h3, h4):has(+ figure) {
         --h-margin-bottom: calc(var(--margin-small) / 2);
       }
-      :host > section > * > :where(h2, h3) {
+      :host > section > * > :where(h2, h3, h4) {
         --h-margin-bottom: var(--margin);
       }
       :host > section > * > ks-m-contact-row:not(:has(+ .buttons)) {
@@ -190,10 +195,10 @@ export default class ContactModule extends Grid {
       :host > section > * > figure > figcaption > p:has(+ p) {
         margin-bottom: 0;
       }
-      :host > section > * > figure > figcaption > :where(h2, h3) {
+      :host > section > * > figure > figcaption > :where(h2, h3, h4) {
         margin-bottom: var(--margin-small);
       }
-      :host > section > * > figure > figcaption > :where(h2, h3):has(+ p) {
+      :host > section > * > figure > figcaption > :where(h2, h3, h4):has(+ p) {
         margin-bottom: 0;
       }
       :host > section > * > figure > figcaption > div.buttons {
@@ -204,6 +209,7 @@ export default class ContactModule extends Grid {
       }
       :host > section > * > *.logo > img, :host > section > * > img.logo {
         max-height: 3.125em;
+        max-width: fit-content;
       }
       :host > section > * div.buttons {
         --button-primary-width: 100%;
@@ -211,8 +217,12 @@ export default class ContactModule extends Grid {
         --button-tertiary-width: 100%;
         --button-quaternary-width: 100%;
         display: grid;
+        grid-auto-rows: min-content;
+        align-content: end;
+        justify-content: flex-start;
         gap: var(--margin-small);
         width: fit-content;
+        flex: 1;
       }
       ${this.hasAttribute('force-mobile-figure')
         ? mobileCss + /* css */`

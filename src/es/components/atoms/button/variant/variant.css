@@ -133,7 +133,7 @@
 :host([big]) button {
   --svg-height: var(--mdx-comp-button-large-sizing-icon-default);
   --svg-width: var(--mdx-comp-button-large-sizing-icon-default);
-  --button-primary-height: 3.25rem; /* mdx token missing */
+  --button-primary-height: max(3.25rem, auto); /* mdx token missing */
   --button-primary-padding:
     var(--mdx-comp-button-primary-large-padding-vertical-default)
     var(--mdx-comp-button-primary-large-padding-horizontal-default);
@@ -195,7 +195,7 @@
 :host([small]) button {
   --svg-height: var(--mdx-comp-button-small-sizing-icon-default);
   --svg-width: var(--mdx-comp-button-small-sizing-icon-default);
-  --button-primary-height: 2rem; /* mdx token missing */
+  --button-primary-height: max(2rem, auto); /* mdx token missing */
   --button-primary-padding:
     var(--mdx-comp-button-primary-small-padding-vertical-default)
     var(--mdx-comp-button-primary-small-padding-horizontal-default);
