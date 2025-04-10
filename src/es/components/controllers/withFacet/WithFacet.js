@@ -205,7 +205,7 @@ export default class WithFacet extends WebWorker() {
           currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
           // get the filter from initial request with id === 7 and find inside the children the selected filter
         } else {
-          // take the current filter object (response from api), find the sector filter with id 7 and repalace it entirely with initialSelectedSectorfilter
+          // take the current filter object (response from api), find the sector filter with id 7 and replace it entirely with initialSelectedSectorfilter
           // this is needed because the api does not return the selected sector filter 
           currentCompleteFilterObj = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentCompleteFilterObj, initialRequestObj.filter)
         }
