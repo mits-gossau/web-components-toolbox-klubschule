@@ -24,9 +24,16 @@ export default class OffersPage extends Shadow() {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
-        if (this.data.courses?.length > 0) this.hasCourses = true
+        
+        let courseTitle = ''
+        if (this.data.courses?.length > 0) {
+          this.hasCourses = true
+          courseTitle = this.data.courses[0]?.bezeichnung || ''
+        } else if (sessionStorage.getItem('currentCourses')) {
+          courseTitle = JSON.parse(sessionStorage.getItem('currentCourses') || '')[0]?.bezeichnung || ''
+        }
 
-        const otherLocationsHeadline = this.getTranslation('CourseList.LabelOtherLocations').replace('{course_title}', this.data.courses[0]?.bezeichnung)
+        const otherLocationsHeadline = this.getTranslation('CourseList.LabelOtherLocations').replace('{course_title}', courseTitle)    
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
         if (!this.isWishList || this.hasAttribute('is-info-events')) {
           const pagination = bodySection.root.querySelector('#pagination')
