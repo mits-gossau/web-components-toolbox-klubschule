@@ -77,4 +77,6 @@
   
   --nav-level-item-default-hover-background-color: var(--mdx-base-color-pro-terracotta-100);
 
+  /* --- MDX Deviation --- */
+  --h4-font-weight: 700;
 }

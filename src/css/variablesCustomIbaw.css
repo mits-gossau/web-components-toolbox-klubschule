@@ -53,4 +53,6 @@
   /* brand exceptions for footer are handled via brand attribute and custom styling */
   --nav-level-item-default-hover-background-color: var(--mdx-base-color-ibaw-turquoise-100);
 
+  /* --- MDX Deviation --- */
+  --h4-font-weight: 700;
 }
