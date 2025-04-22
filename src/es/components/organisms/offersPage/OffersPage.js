@@ -24,14 +24,8 @@ export default class OffersPage extends Shadow() {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.searchTerm = data.searchText
-        let courseTitle = ''
-        if (this.data.courses?.length > 0) {
-          this.hasCourses = true
-          courseTitle = this.data.courses[0]?.bezeichnung || ''
-        } else if (sessionStorage.getItem('currentCourses')) {
-          courseTitle = JSON.parse(sessionStorage.getItem('currentCourses') || '')[0]?.bezeichnung || ''
-        }
-        const otherLocationsHeadline = this.getTranslation('CourseList.LabelOtherLocations').replace('{course_title}', courseTitle)    
+        let contentStageTitle = document.querySelector('o-body')?.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-a-heading[content-stage]')?.shadowRoot?.querySelector('h1')?.innerHTML
+        const otherLocationsHeadline = this.getTranslation('CourseList.LabelOtherLocations').replace('{course_title}', contentStageTitle)
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
         if (!this.isWishList || this.hasAttribute('is-info-events')) {
           const pagination = bodySection.root.querySelector('#pagination')
@@ -50,7 +44,7 @@ export default class OffersPage extends Shadow() {
           `
         }
         // Set headline for other locations
-        if (this.hasAttribute('is-other-locations') && this.hasCourses) {
+        if (this.hasAttribute('is-other-locations') && contentStageTitle) {
           const headlineContainer = bodySection.root.querySelector('#other-locations-headline-container')
           headlineContainer.innerHTML = /* html */ `
             <ks-a-heading tag="h2" no-margin-x>
