@@ -55,7 +55,8 @@ export default class Checkout extends Shadow() {
         "kursTyp": "${initialRequestObjFrozen.kursTyp}",
         "kursId": ${initialRequestObjFrozen.kursId},
         "centerId": ${initialRequestObjFrozen.centerId},
-        "spracheId": "${initialRequestObjFrozen.spracheId}"
+        "spracheId": "${initialRequestObjFrozen.spracheId}",
+        "selectedLehrmittel": ${initialRequestObjFrozen.selectedLehrmittel}
       `
 
       if (event.detail?.id && event.detail?.value) {
