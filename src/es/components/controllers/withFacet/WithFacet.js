@@ -111,6 +111,14 @@ export default class WithFacet extends WebWorker() {
       this.updateURLParam('clat', dataFromStorage.clat)
       this.updateURLParam('clong', dataFromStorage.clong)
       this.updateURLParam('cname', dataFromStorage.cnameCoded)
+      if (!this.params.has('sorting')) {
+        if (sessionStorage.getItem('currentSorting')) {
+          this.updateURLParam('sorting', currentRequestObj.sorting)
+        } else {
+          this.updateURLParam('sorting', 2)
+          sessionStorage.setItem('currentSorting', '2')
+        }
+      }
     }
 
     // @ts-ignore
@@ -295,6 +303,7 @@ export default class WithFacet extends WebWorker() {
         // sorting
         currentRequestObj.sorting = event.detail.id || 3
         this.updateURLParam('sorting', currentRequestObj.sorting)
+        sessionStorage.setItem('currentSorting', currentRequestObj.sorting)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
