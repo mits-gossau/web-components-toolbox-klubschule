@@ -38,7 +38,7 @@ export default class Checkout extends Shadow() {
 
     const initialRequest = this.getAttribute('initial-request')
     const initialRequestObjFrozen = Object.freeze(JSON.parse(initialRequest.replaceAll("'", '"')))
-    this.selectedOptions = []
+    this.selectedOptions = initialRequestObjFrozen.selectedLehrmittel
     this.withInsurance = initialRequestObjFrozen.mitVersicherung
 
     this.requestCheckoutListener = (event) => {
@@ -47,17 +47,6 @@ export default class Checkout extends Shadow() {
       if (event.detail && 'withInsurance' in event.detail) {
         this.withInsurance = event.detail?.withInsurance
       }
-
-      const basicRequest = `
-        "mitVersicherung": ${this.withInsurance},
-        "portalId": ${initialRequestObjFrozen.portalId},
-        "mandantId": ${initialRequestObjFrozen.mandantId},
-        "kursTyp": "${initialRequestObjFrozen.kursTyp}",
-        "kursId": ${initialRequestObjFrozen.kursId},
-        "centerId": ${initialRequestObjFrozen.centerId},
-        "spracheId": "${initialRequestObjFrozen.spracheId}",
-        "selectedLehrmittel": ${initialRequestObjFrozen.selectedLehrmittel}
-      `
 
       if (event.detail?.id && event.detail?.value) {
         const hadActiveSelection = this.selectedOptions.find(({ lehrmittelId }) => event.detail.id === lehrmittelId)
@@ -68,6 +57,10 @@ export default class Checkout extends Shadow() {
             lehrmittelOption: event.detail?.value
           })
       }
+
+      const changedRequest = initialRequestObjFrozen
+      changedRequest.withInsurance = this.withInsurance
+      changedRequest.selectedLehrmittel = this.selectedOptions
 
       // todo emit event with changed data
       this.dispatchEvent(
@@ -81,14 +74,7 @@ export default class Checkout extends Shadow() {
                   'Content-Type': 'application/json'
                 },
                 mode: 'cors',
-                body: this.selectedOptions.length
-                  ? `{
-                    ${basicRequest},
-                    "selectedLehrmittel": [${this.selectedOptions.reduce((acc, selectedOption, index) => acc + `${JSON.stringify(selectedOption)}${this.selectedOptions.length - 1 === index ? '' : ','}`, '')}]
-                  }`
-                  : `{
-                    ${basicRequest}
-                  }`
+                body: JSON.stringify(changedRequest)
               }).then(response => {
                 if (response.status >= 200 && response.status <= 299) return response.json()
                 throw new Error(response.statusText)
