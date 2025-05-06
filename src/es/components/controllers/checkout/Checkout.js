@@ -49,7 +49,7 @@ export default class Checkout extends Shadow() {
       }
 
       if (event.detail?.id && event.detail?.value) {
-        const hadActiveSelection = this.selectedOptions.find(({ lehrmittelId }) => event.detail.id === lehrmittelId)
+        const hadActiveSelection = this.selectedOptions.find(({ lehrmittelId }) => Number(event.detail.id) === Number(lehrmittelId))
         hadActiveSelection
           ? hadActiveSelection.lehrmittelOption = event.detail.value
           : this.selectedOptions.push({
@@ -58,8 +58,8 @@ export default class Checkout extends Shadow() {
           })
       }
 
-      const changedRequest = initialRequestObjFrozen
-      changedRequest.withInsurance = this.withInsurance
+      const changedRequest = Object.assign({}, initialRequestObjFrozen)
+      changedRequest.mitVersicherung = this.withInsurance
       changedRequest.selectedLehrmittel = this.selectedOptions
 
       // todo emit event with changed data
