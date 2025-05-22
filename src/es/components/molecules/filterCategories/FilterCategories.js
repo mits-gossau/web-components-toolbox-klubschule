@@ -458,8 +458,6 @@ export default class FilterCategories extends Shadow() {
         setTimeout(() => {
           if (response.filters.length === 0) return
 
-          this.mainNav.innerHTML = ''
-
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)
           })
