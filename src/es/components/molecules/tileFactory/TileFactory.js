@@ -261,7 +261,7 @@ export default class TileFactory extends Shadow() {
           `<section ${this.hasAttribute('is-other-locations') ? 'class="other-locations"' : ''}>`
         )
         + (!data.courses.length && !detail.onlyfaceted
-          ? /* html */`<ks-o-partner-search search-text="${data.searchText}"${data.courses.length ? ' has-courses': ''}${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''} tab="1">
+          ? /* html */`<ks-o-partner-search search-text="${data.searchText}"${data.courses.length ? ' has-courses': ''}${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''} tab="1"${data.hasSelectedFilter ? ' has-selected-filter' : ''}>
               ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
             </ks-o-partner-search>`
           : '')

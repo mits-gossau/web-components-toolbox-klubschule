@@ -150,11 +150,13 @@ export default class WithFacet extends WebWorker() {
 
       let filterId = null
       let filterGroupName = null
+      let hasSelectedFilter = false
       if (event?.detail?.ppage) {
         // ppage reuse last request
         currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
@@ -170,6 +172,7 @@ export default class WithFacet extends WebWorker() {
         const filterKey = event.detail.this.getAttribute('filter-key')
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
+        hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
@@ -222,6 +225,7 @@ export default class WithFacet extends WebWorker() {
         if (!selectedFilterItem) return
         selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
+        hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         this.filterOnly = true
@@ -244,6 +248,7 @@ export default class WithFacet extends WebWorker() {
           'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
         })
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
+        hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
@@ -275,6 +280,7 @@ export default class WithFacet extends WebWorker() {
           }
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.detail?.key === 'input-search') {
@@ -288,6 +294,7 @@ export default class WithFacet extends WebWorker() {
           this.deleteParamFromUrl('q')
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
 
@@ -305,6 +312,7 @@ export default class WithFacet extends WebWorker() {
         this.updateURLParam('sorting', currentRequestObj.sorting)
         sessionStorage.setItem('currentSorting', currentRequestObj.sorting)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
       } else {
@@ -312,6 +320,7 @@ export default class WithFacet extends WebWorker() {
         // always shake out the response filters to only include selected filters or selected in ancestry
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
@@ -389,7 +398,7 @@ export default class WithFacet extends WebWorker() {
           }).then(json => {
             // TODO/ERROR: Api answers with empty filter payload when using ppage (next page). Workaround for keeping filters when returned empty.
             if (event?.detail?.ppage && !json.filters.length) json.filters = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : currentRequestObj.filter || initialFilter || []  
-            
+            json.hasSelectedFilter = hasSelectedFilter
             // update filters with api response
             currentRequestObj.filter = currentCompleteFilterObj = json.filters
 
@@ -519,7 +528,7 @@ export default class WithFacet extends WebWorker() {
   }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
-  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false, isMulti = false, isStartTimeSelectedFromFilterPills = false) {
+  static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false, isMulti = false, isStartTimeSelectedFromFilterPills = false, hasSelectedFilter = false) {
     // @ts-ignore
     const isParentSelected = selectedParent?.urlpara === filterKey
     const treeShookFilters = []
@@ -559,10 +568,11 @@ export default class WithFacet extends WebWorker() {
 
       let treeShookFilterItem = structuredClone(filterItem)
 
+      if (!hasSelectedFilter && filterItem.selected) hasSelectedFilter = true
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children && !isMulti) {
-        [filterItem.children, treeShookFilterItem.children] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isSectorFilter, isTree, isMulti, isStartTimeSelectedFromFilterPills)
+        [filterItem.children, treeShookFilterItem.children, hasSelectedFilter] = WithFacet.updateFilters(filterItem.children, filterKey, filterValue, reset, false, filterItem, isSectorFilter, isTree, isMulti, isStartTimeSelectedFromFilterPills, hasSelectedFilter)
       }
 
       // only the first level allows selected falls when including selected children
@@ -575,7 +585,7 @@ export default class WithFacet extends WebWorker() {
     })
 
     // returns [0] unmutated filters
-    return [filters, treeShookFilters]
+    return [filters, treeShookFilters, hasSelectedFilter]
   }
 
   static getLastSelectedFilterItem(filterItems) {

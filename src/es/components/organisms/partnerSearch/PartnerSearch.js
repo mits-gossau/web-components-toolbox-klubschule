@@ -229,6 +229,7 @@ export default class PartnerSearch extends Shadow() {
               `, '')}
           </div>
         `)
+        if (!this.hasAttribute('has-selected-filter')) this.scrollIntoView()
       } else {
         partnerResultsSection?.setAttribute('hidden', '')
       }
