@@ -487,6 +487,9 @@
 
   /* grid x */
   --grid-x-padding-bottom: var(--mdx-sys-spacing-flex-large-s);
+
+  /* ios fix */
+  --button-primary-background-color-hover-mobile: var(--button-primary-background-color-custom);
 }
 
 @media screen and (min-width: 1441px) {

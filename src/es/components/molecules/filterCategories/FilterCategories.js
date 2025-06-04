@@ -340,7 +340,7 @@ export default class FilterCategories extends Shadow() {
         </div>
         <div class="dialog-content">
           ${this.hasAttribute('translation-key-reset') ? /* html */`<p class="reset-link">
-            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-key="${filterItem.urlpara}">
+            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-key="${filterItem.urlpara}" filter-type="${this.firstTreeItem ? this.firstTreeItem.typ : filterItem.typ}" id="reset-filter">
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
