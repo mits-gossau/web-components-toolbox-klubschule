@@ -53,23 +53,9 @@ self.Environment = {
     }
   },
   getEnvUrl: function () {
-    const url = window.location.href
-    const urlObj = new URL(url)
-    const subdomain = urlObj.hostname.split('.')[0]
-    switch (subdomain) {
-      case 'intadmin':
-        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
-      case 'int':
-        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
-      case 'localhost':
-        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
-      case 'dev':
-        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
-      case 'devadmin':
-        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
-      default:
-        return 'https://miducaexportapicustomerportalprd.azurewebsites.net'
-    }
+    const url = window.location.href;
+    const urlObj = new URL(url);
+    return urlObj.origin;
   },
   getApiBaseUrl: function (type) {
     switch (type) {
