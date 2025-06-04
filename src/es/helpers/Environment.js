@@ -58,33 +58,33 @@ self.Environment = {
     const subdomain = urlObj.hostname.split('.')[0]
     switch (subdomain) {
       case 'intadmin':
-        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
+        return 'https://intadmin.klubschule.ch/'
       case 'int':
-        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
+        return 'https://int.klubschule.ch/'
       case 'localhost':
-        return 'https://miducaexportapicustomerportalint.azurewebsites.net'
+        return 'https://dev.klubschule.ch/'
       case 'dev':
-        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
+        return 'https://dev.klubschule.ch/'
       case 'devadmin':
-        return 'https://miducaexportapicustomerportaldev.azurewebsites.net'
+        return 'https://devadmin.klubschule.ch/'
       default:
-        return 'https://miducaexportapicustomerportalprd.azurewebsites.net'
+        return 'https://www.klubschule.ch/'
     }
   },
   getApiBaseUrl: function (type) {
     switch (type) {
       case 'customer-portal': {
         return {
-          apiSubscriptionCourseAppointments: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointments`,
-          apiSubscriptionCourseAppointmentBooking: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointmentbooking`,
-          apiSubscriptionCourseAppointmentDetail: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointmentdetail`,
-          apiSubscriptionCourseAppointmentReversal: `${this.getEnvUrl()}/api/CustomerPortal/subscriptioncourseappointmentreversal`,
-          apiBookedSubscriptionCourseAppointments: `${this.getEnvUrl()}/api/CustomerPortal/bookedsubscriptioncourseappointments`,
-          apiSubscriptions: `${this.getEnvUrl()}/api/CustomerPortal/subscriptions`,
-          apiSubscriptionDetail: `${this.getEnvUrl()}/api/CustomerPortal/subscription`,
-          apiSubscriptionPdf: `${this.getEnvUrl()}/api/CustomerPortal/subscriptionpdf`,
-          apiCourseListFilterSettings: `${this.getEnvUrl()}/api/CustomerPortal/courselistfiltersettings`,
-          coursePDF: `${this.getEnvUrl()}/api/CustomerPortal/coursepdf`
+          apiSubscriptionCourseAppointments: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/subscriptioncourseappointments`,
+          apiSubscriptionCourseAppointmentBooking: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/subscriptioncourseappointmentbooking`,
+          apiSubscriptionCourseAppointmentDetail: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/subscriptioncourseappointmentdetail`,
+          apiSubscriptionCourseAppointmentReversal: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/subscriptioncourseappointmentreversal`,
+          apiBookedSubscriptionCourseAppointments: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/bookedsubscriptioncourseappointments`,
+          apiSubscriptions: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/subscriptions`,
+          apiSubscriptionDetail: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/subscription`,
+          apiSubscriptionPdf: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/subscriptionpdf`,
+          apiCourseListFilterSettings: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/courselistfiltersettings`,
+          coursePDF: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/coursepdf`
         }
       }
       default:
