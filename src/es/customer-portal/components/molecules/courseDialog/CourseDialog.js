@@ -877,7 +877,7 @@ export default class CourseDialog extends Shadow() {
    */
   renderDownloads (courseData, courseDetail) {
     // @ts-ignore
-    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').coursePDF}/${courseData.courseType}/${courseData.courseId}/${courseData.centerId}/${self.Environment.language.substring(0, 2)}`
+    const pdfLink = `${self.Environment.getApiBaseUrl('customer-portal').coursePDF}/?${courseData.courseType}/${courseData.courseId}/${courseData.centerId}/${self.Environment.language.substring(0, 2)}`
     return /* html */ `
       <ks-m-link-list namespace="link-list-download-">
         <ul>
