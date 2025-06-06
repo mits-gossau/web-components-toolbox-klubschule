@@ -72,15 +72,17 @@ export default class OffersPage extends Shadow() {
               ${data.label}
             </li>
           `, '')
-          sort.innerHTML = /* html */ `
-            <ks-m-sort namespace="sort-right-" with-facet>
-              ${this.data?.sort?.items?.length ? /* html */ `
-                <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort)?.label || ''}">
-                  ${listElements}
-                </ul>
-              ` : ''}
-            </ks-m-sort>
-          `
+          sort.innerHTML = this.data.courses.length
+            ? /* html */ `
+              <ks-m-sort namespace="sort-right-" with-facet>
+                ${this.data?.sort?.items?.length ? /* html */ `
+                  <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort)?.label || ''}">
+                    ${listElements}
+                  </ul>
+                ` : ''}
+              </ks-m-sort>
+            `
+            : ''
           // adjust load more button text depending the sort option
           let moreText
           if ((moreText = bodySection.root.querySelector('ks-a-with-facet-pagination')?.querySelector('ks-a-button')?.root.querySelector('.more-text'))) {
