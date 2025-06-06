@@ -53,7 +53,6 @@ export default class WithFacet extends WebWorker() {
       this.filterOnly = false
       initialFilter = this.getNullFilter()
     }
-    
 
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
@@ -225,7 +224,6 @@ export default class WithFacet extends WebWorker() {
         }
         if (!selectedFilterItem) return
         selectedFilterItem.skipCountUpdate = true
-        if (initialFilter.length === 1 && initialFilter[0].id === "") initialFilter = [] 
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...currentRequestObj.filter, ...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
