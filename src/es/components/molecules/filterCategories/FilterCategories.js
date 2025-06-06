@@ -386,7 +386,15 @@ export default class FilterCategories extends Shadow() {
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
       generatedNavLevelItem.navLevelItem.style.display = filterItem.visible ? 'block' : 'none' // check if filter is visible
-      if (generatedNavLevelItem.navLevelItem.root.querySelector('dialog')) generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
+      // update show all offers buttons 
+      if (generatedNavLevelItem.navLevelItem.root.querySelector('dialog')) {
+        const dialog = generatedNavLevelItem.navLevelItem.root.querySelector('dialog')
+        const total = `${response.total.toString()} ${response.total_label}`
+        dialog.querySelector('.dialog-content').querySelector('.sub-level').querySelectorAll('m-dialog').forEach(dialog => {
+          dialog.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = total
+        })
+        dialog.querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = total
+      }
       // update additional text with selected filter(s) only for the first level 
       if (level === 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').setAttribute('namespace', filterItem.selected ? 'nav-level-item-active-' : 'nav-level-item-default-')
