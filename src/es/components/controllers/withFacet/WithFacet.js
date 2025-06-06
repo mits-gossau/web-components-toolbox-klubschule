@@ -217,8 +217,11 @@ export default class WithFacet extends WebWorker() {
           // this is needed because the api does not return the selected sector filter 
           currentCompleteFilterObj = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentCompleteFilterObj, initialRequestObj.filter)
         }
-        // find the selected filter item (not tree)
-        const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
+        // find the selected filter item 
+        let selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId || (filter.children && filter.children.length && filter.children.find(child => child.id === event.detail.selectedFilterId)))
+        if (selectedFilterItem?.children && selectedFilterItem.children.length) {
+          selectedFilterItem = selectedFilterItem.children.find(child => child.id === event.detail.selectedFilterId)
+        }
         if (!selectedFilterItem) return
         selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
