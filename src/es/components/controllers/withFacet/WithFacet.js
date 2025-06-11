@@ -327,8 +327,9 @@ export default class WithFacet extends WebWorker() {
         if (this.params.has('clat') && currentRequestObj.sorting) {
           this.updateURLParam('sorting', currentRequestObj.sorting)
         } else if (!this.params.has('clat') && currentRequestObj.sorting && this.params.get('sorting')) {
-          sessionStorage.setItem('currentSorting', currentRequestObj.sorting)
-          localStorage.setItem('currentSorting', currentRequestObj.sorting)
+          // update sessionStorage if sorting is set
+          if (sessionStorage.getItem('currentSorting')) sessionStorage.setItem('currentSorting', currentRequestObj.sorting)
+          if (localStorage.getItem('currentSorting')) localStorage.setItem('currentSorting', currentRequestObj.sorting)
           this.updateURLParam('sorting', currentRequestObj.sorting)
         }
       }
