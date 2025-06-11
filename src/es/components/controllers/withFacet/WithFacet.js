@@ -321,6 +321,12 @@ export default class WithFacet extends WebWorker() {
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
       }
 
+      // update sorting from sessionStorage or localStorage as single source of truth
+      if (sessionStorage.getItem('currentSorting') || localStorage.getItem('currentSorting')) {
+        currentRequestObj.sorting = Number(sessionStorage.getItem('currentSorting') || localStorage.getItem('currentSorting'))
+        this.updateURLParam('sorting', currentRequestObj.sorting)
+      }
+
       // filter only
       this.filterOnly ? currentRequestObj.onlyfaceted = 1 : delete currentRequestObj.onlyfaceted
 
