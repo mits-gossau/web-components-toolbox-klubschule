@@ -113,7 +113,7 @@ export default class WithFacet extends WebWorker() {
       this.updateURLParam('cname', dataFromStorage.cnameCoded)
       if (!this.params.has('sorting')) {
         if (sessionStorage.getItem('currentSorting')) {
-          this.updateURLParam('sorting', currentRequestObj.sorting)
+          this.updateURLParam('sorting', sessionStorage.getItem('currentSorting'))
         } else {
           this.updateURLParam('sorting', 2)
           sessionStorage.setItem('currentSorting', '2')
@@ -319,19 +319,6 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-      }
-
-      // update sorting from sessionStorage or localStorage as single source of truth
-      if (sessionStorage.getItem('currentSorting') || localStorage.getItem('currentSorting')) {
-        currentRequestObj.sorting = Number(sessionStorage.getItem('currentSorting') || localStorage.getItem('currentSorting'))
-        if (this.params.has('clat') && currentRequestObj.sorting) {
-          this.updateURLParam('sorting', currentRequestObj.sorting)
-        } else if (!this.params.has('clat') && currentRequestObj.sorting && this.params.get('sorting')) {
-          // update sessionStorage if sorting is set
-          if (sessionStorage.getItem('currentSorting')) sessionStorage.setItem('currentSorting', currentRequestObj.sorting)
-          if (localStorage.getItem('currentSorting')) localStorage.setItem('currentSorting', currentRequestObj.sorting)
-          this.updateURLParam('sorting', currentRequestObj.sorting)
-        }
       }
 
       // filter only
