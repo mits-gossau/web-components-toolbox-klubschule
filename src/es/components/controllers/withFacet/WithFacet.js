@@ -199,6 +199,7 @@ export default class WithFacet extends WebWorker() {
         }
         this.deleteParamFromUrl(filterKey)
       } else if (event?.detail?.selectedFilterId) {
+        console.log('selectedFilterId', event.detail.selectedFilterId, currentRequestObj.filter)
         // selected filter click/touch on filter pills or filter navLevelItem on level 0
         // triggered by FilterSelect or FilterCategories
         if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
@@ -226,8 +227,10 @@ export default class WithFacet extends WebWorker() {
         selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...currentRequestObj.filter, ...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        const merged = [...currentRequestObj.filter, ...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        currentRequestObj.filter = merged.filter((filter, index, self) => index === self.findIndex(f => f.id === filter.id))
         this.filterOnly = true
+        console.log('selectedFilterId', event.detail.selectedFilterId, currentRequestObj.filter)
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
         // triggered by component interaction eg. checkbox or nav-level-item
