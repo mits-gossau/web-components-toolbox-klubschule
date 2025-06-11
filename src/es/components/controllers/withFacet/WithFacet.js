@@ -324,7 +324,13 @@ export default class WithFacet extends WebWorker() {
       // update sorting from sessionStorage or localStorage as single source of truth
       if (sessionStorage.getItem('currentSorting') || localStorage.getItem('currentSorting')) {
         currentRequestObj.sorting = Number(sessionStorage.getItem('currentSorting') || localStorage.getItem('currentSorting'))
-        this.updateURLParam('sorting', currentRequestObj.sorting)
+        if (this.params.has('clat') && currentRequestObj.sorting) {
+          this.updateURLParam('sorting', currentRequestObj.sorting)
+        } else if (!this.params.has('clat') && currentRequestObj.sorting && this.params.get('sorting')) {
+          sessionStorage.setItem('currentSorting', currentRequestObj.sorting)
+          localStorage.setItem('currentSorting', currentRequestObj.sorting)
+          this.updateURLParam('sorting', currentRequestObj.sorting)
+        }
       }
 
       // filter only
