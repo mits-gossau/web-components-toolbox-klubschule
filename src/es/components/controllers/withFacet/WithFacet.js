@@ -171,7 +171,7 @@ export default class WithFacet extends WebWorker() {
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         // get the filter from initial request with id === 7 and find inside the children the selected filter
         if (isTree) {
