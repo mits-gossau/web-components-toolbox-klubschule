@@ -326,6 +326,8 @@ export default class WithFacet extends WebWorker() {
 
       // load more 
       event?.detail?.loadCoursesOnly ? currentRequestObj.onlycourse = true : delete currentRequestObj.onlycourse
+      // remove filter with id 30 from array currentRequestObj.filter if onlycourse is true
+      if (currentRequestObj.onlycourse) currentRequestObj.filter.forEach((filter, index) => { if (filter.id === "30") currentRequestObj.filter.splice(index, 1) })
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
