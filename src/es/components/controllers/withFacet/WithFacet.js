@@ -509,6 +509,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
     this.addEventListener('backdrop-clicked', this.handleBackdropClicked)
+    this.addEventListener('request-advisory-text-api', () => this.skipNextFacetRequest = true)
   }
 
   disconnectedCallback() {
@@ -517,9 +518,15 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
     this.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
+    this.removeEventListener('request-advisory-text-api', () => this.skipNextFacetRequest = true)
   }
 
   handleBackdropClicked = () => {
+    if (this.skipNextFacetRequest) {
+      this.skipNextFacetRequest = false
+      return
+    }
+    
     this.filterOnly = false
     this.dispatchEvent(new CustomEvent('request-with-facet'))
   }
