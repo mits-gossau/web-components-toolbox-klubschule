@@ -111,6 +111,14 @@ export default class WithFacet extends WebWorker() {
       this.updateURLParam('clat', dataFromStorage.clat)
       this.updateURLParam('clong', dataFromStorage.clong)
       this.updateURLParam('cname', dataFromStorage.cnameCoded)
+      if (!this.params.has('sorting')) {
+        if (sessionStorage.getItem('currentSorting')) {
+          this.updateURLParam('sorting', sessionStorage.getItem('currentSorting'))
+        } else {
+          this.updateURLParam('sorting', 2)
+          sessionStorage.setItem('currentSorting', '2')
+        }
+      }
     }
 
     // @ts-ignore
@@ -154,7 +162,7 @@ export default class WithFacet extends WebWorker() {
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
-        currentRequestObj.filter = initialFilter
+        currentRequestObj.filter = initialRequestObj.filter || initialFilter || []
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
       } else if (event?.type === 'reset-filter') {
@@ -163,7 +171,13 @@ export default class WithFacet extends WebWorker() {
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
+        // get the filter from initial request with id === 7 and find inside the children the selected filter
+        if (isTree) {
+          currentRequestObj.filter = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentRequestObj.filter, initialRequestObj.filter)
+          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        }
         if (filterKey === 'q') {
           delete currentRequestObj.searchText
           if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
@@ -189,22 +203,31 @@ export default class WithFacet extends WebWorker() {
         // triggered by FilterSelect or FilterCategories
         if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         if (!currentCompleteFilterObj.length && sessionStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
-        
         // exception, because parent id matches with children urlpara in case of start time filter (Startzeitpunkt)
         // exception only on click on filter pills, on filter navLevelItem everything works as expected
         // this would not be needed if filter ids where unique and urlparas would match
         const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
-        const isMulti = event.detail?.selectedFilterType === 'multi' || false
-        const isTree = event.detail?.selectedFilterType === 'tree'
-        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        
-        // find the selected filter item (not tree)
-        const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
+        const isMulti = event.detail?.selectedFilterType === 'multi' || event.detail?.filterType === 'multi' || false
+        const isTree = event.detail?.selectedFilterType === 'tree' || event.detail?.filterType === 'tree' || false
+        if (isTree) {
+          // get the filter from initial request with id === 7 and find inside the children the selected filter
+          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        } else {
+          // take the current filter object (response from api), find the sector filter with id 7 and replace it entirely with initialSelectedSectorfilter
+          // this is needed because the api does not return the selected sector filter 
+          currentCompleteFilterObj = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentCompleteFilterObj, initialRequestObj.filter)
+        }
+        // find the selected filter item 
+        let selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId || (filter.children && filter.children.length && filter.children.find(child => child.id === event.detail.selectedFilterId)))
+        if (selectedFilterItem?.children && selectedFilterItem.children.length) {
+          selectedFilterItem = selectedFilterItem.children.find(child => child.id === event.detail.selectedFilterId)
+        }
         if (!selectedFilterItem) return
         selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        const merged = [...currentRequestObj.filter, ...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        currentRequestObj.filter = merged.filter((filter, index, self) => index === self.findIndex(f => f.id === filter.id))
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
@@ -218,14 +241,12 @@ export default class WithFacet extends WebWorker() {
         } else {
           this.updateURLParam(filterKey, filterValue, false)
         }
-
         // GTM Tracking of Filters
         if (event.detail?.target?.checked) this.dataLayerPush({
           'event': 'filterSelection',
           'filterName': event.detail.target.label, //the name of the clicked filter.
           'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
         })
-
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
@@ -286,6 +307,7 @@ export default class WithFacet extends WebWorker() {
         // sorting
         currentRequestObj.sorting = event.detail.id || 3
         this.updateURLParam('sorting', currentRequestObj.sorting)
+        sessionStorage.setItem('currentSorting', currentRequestObj.sorting)
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
@@ -304,6 +326,8 @@ export default class WithFacet extends WebWorker() {
 
       // load more 
       event?.detail?.loadCoursesOnly ? currentRequestObj.onlycourse = true : delete currentRequestObj.onlycourse
+      // remove filter with id 30 from array currentRequestObj.filter if onlycourse is true
+      if (currentRequestObj.onlycourse) currentRequestObj.filter.forEach((filter, index) => { if (filter.id === "30") currentRequestObj.filter.splice(index, 1) })
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
@@ -484,7 +508,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.addEventListener('reset-all-filters', this.requestWithFacetListener) : this.addEventListener('reset-all-filters', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
-    document.addEventListener('backdrop-clicked', this.handleBackdropClicked)
+    this.addEventListener('backdrop-clicked', this.handleBackdropClicked)
   }
 
   disconnectedCallback() {
@@ -492,7 +516,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-all-filters' ? self.removeEventListener('reset-all-filters', this.requestWithFacetListener) : this.removeEventListener('reset-all-filters', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
-    document.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
+    this.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
   }
 
   handleBackdropClicked = () => {
@@ -712,6 +736,21 @@ export default class WithFacet extends WebWorker() {
         "HasChilds": false
       }
     ]
+  }
+
+  static getSectorFilterWithInitialFallback (currentFilter, initialFilter) {
+    const initialSectorFilter = initialFilter.find((filter) => Number(filter.id) === 7)
+    let index = 0
+    const sectorFilter = currentFilter.find((filter, i) => {
+      index = i
+      return Number(filter.id) === 7 && (!filter.selected || filter.children.every(child => !child.selected))
+    })
+    if (initialSectorFilter && sectorFilter) {
+      sectorFilter.children = initialSectorFilter.children
+      sectorFilter.selected = true
+      currentFilter[index] = sectorFilter
+    }
+    return currentFilter
   }
 
   dataLayerPush (value) {
