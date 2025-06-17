@@ -58,6 +58,10 @@ export default class FilterCategories extends Shadow() {
       const filterId = dialog.getAttribute('id').replace('filter-', '')
       const filterType = dialog.getAttribute('filter-type')
       const navLevelItem = dialog.shadowRoot.querySelector('ks-m-nav-level-item')
+      // todo: Clarification of why the EventListeners are first removed and then added again
+      // Until then, the following exceptions are needed to show the sublevels correctly
+      const exceptionIds = ['7', '9', '13', '14'] // Abgeotsbereich, Angebotsart, Center, Status
+      if (exceptionIds.includes(filterId)) return
       navLevelItem.removeEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId, filterType))
       navLevelItem.addEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId, filterType))
     })
