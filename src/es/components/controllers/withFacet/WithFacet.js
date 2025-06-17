@@ -228,6 +228,11 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         const merged = [...currentRequestObj.filter, ...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         currentRequestObj.filter = merged.filter((filter, index, self) => index === self.findIndex(f => f.id === filter.id))
+        // check currentRequestObj.filter if children exist and if so, remove the children from the filter for a cleaner request
+        currentRequestObj.filter = currentRequestObj.filter.map(filter => {
+          if (filter.children && filter.children.length) filter.children = filter.children.filter(child => child.selected || child.isquick > 0)
+          return filter
+        })
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
