@@ -209,31 +209,29 @@ export default class WithFacet extends WebWorker() {
         const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
         const isMulti = event.detail?.selectedFilterType === 'multi' || event.detail?.filterType === 'multi' || false
         const isTree = event.detail?.selectedFilterType === 'tree' || event.detail?.filterType === 'tree' || false
-        if (isTree) {
-          // get the filter from initial request with id === 7 and find inside the children the selected filter
-          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        } else {
-          // take the current filter object (response from api), find the sector filter with id 7 and replace it entirely with initialSelectedSectorfilter
-          // this is needed because the api does not return the selected sector filter 
-          currentCompleteFilterObj = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentCompleteFilterObj, initialRequestObj.filter)
-        }
-        // find the selected filter item 
-        let selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId || (filter.children && filter.children.length && filter.children.find(child => child.id === event.detail.selectedFilterId)))
-        if (selectedFilterItem?.children && selectedFilterItem.children.length) {
-          selectedFilterItem = selectedFilterItem.children.find(child => child.id === event.detail.selectedFilterId)
-        }
+        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        let selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
         if (!selectedFilterItem) return
         selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
-        const merged = [...currentRequestObj.filter, ...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        currentRequestObj.filter = merged.filter((filter, index, self) => index === self.findIndex(f => f.id === filter.id))
-        // cleanup
+
+        // CLEANUP; needed because the api cannot handle children
         currentRequestObj.filter = currentRequestObj.filter.map(filter => {
           if (filter.children && filter.children.length && !filter.children.some(child => child.selected || child.isquick > 0)) filter.children = []
           if (filter.children && filter.children.length && filter.children.some(child => child.selected)) filter.skipCountUpdate = true
           return filter
         })
+        // CLEANUP; get array of objects of currentRequestObj.filter, take the one with id 7, go through the children and keep only the selected one 
+        // CLEANUP; this is needed because the api only takes the selected filters into account
+        currentRequestObj.filter = currentRequestObj.filter.map(filter => {
+          if (filter.id === '7' && filter.children && filter.children.length) {
+            filter.children = filter.children.filter(child => child.selected || child.isquick > 0)
+            if (filter.children.length === 0) filter.children = []
+          }
+          return filter
+        })
+
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
