@@ -228,6 +228,12 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         const merged = [...currentRequestObj.filter, ...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         currentRequestObj.filter = merged.filter((filter, index, self) => index === self.findIndex(f => f.id === filter.id))
+        // cleanup
+        currentRequestObj.filter = currentRequestObj.filter.map(filter => {
+          if (filter.children && filter.children.length && !filter.children.some(child => child.selected || child.isquick > 0)) filter.children = []
+          if (filter.children && filter.children.length && filter.children.some(child => child.selected)) filter.skipCountUpdate = true
+          return filter
+        })
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
@@ -509,6 +515,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
     this.addEventListener('backdrop-clicked', this.handleBackdropClicked)
+    this.addEventListener('request-advisory-text-api', () => this.skipNextFacetRequest = true)
   }
 
   disconnectedCallback() {
@@ -517,9 +524,15 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
     this.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
+    this.removeEventListener('request-advisory-text-api', () => this.skipNextFacetRequest = true)
   }
 
   handleBackdropClicked = () => {
+    if (this.skipNextFacetRequest) {
+      this.skipNextFacetRequest = false
+      return
+    }
+    
     this.filterOnly = false
     this.dispatchEvent(new CustomEvent('request-with-facet'))
   }
