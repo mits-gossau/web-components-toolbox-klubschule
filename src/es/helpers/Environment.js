@@ -31,7 +31,7 @@ self.Environment = {
       case 'fr':
         return {
           url: 'https://{env}.ecole-club.ch',
-          path: 'rechecher'
+          path: 'recherche'
         }
       case 'it-CH':
       case 'it':
@@ -53,9 +53,9 @@ self.Environment = {
     }
   },
   getEnvUrl: function () {
-    const url = window.location.href;
-    const urlObj = new URL(url);
-    return urlObj.origin;
+    const url = window.location.href
+    const urlObj = new URL(url)
+    return urlObj.origin
   },
   getApiBaseUrl: function (type) {
     switch (type) {
