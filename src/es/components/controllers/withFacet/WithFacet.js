@@ -215,23 +215,6 @@ export default class WithFacet extends WebWorker() {
         selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
-
-        // CLEANUP; needed because the api cannot handle children
-        currentRequestObj.filter = currentRequestObj.filter.map(filter => {
-          if (filter.children && filter.children.length && !filter.children.some(child => child.selected || child.isquick > 0)) filter.children = []
-          if (filter.children && filter.children.length && filter.children.some(child => child.selected)) filter.skipCountUpdate = true
-          return filter
-        })
-        // CLEANUP; get array of objects of currentRequestObj.filter, take the one with id 7, go through the children and keep only the selected one 
-        // CLEANUP; this is needed because the api only takes the selected filters into account
-        currentRequestObj.filter = currentRequestObj.filter.map(filter => {
-          if (filter.id === '7' && filter.children && filter.children.length) {
-            filter.children = filter.children.filter(child => child.selected || child.isquick > 0)
-            if (filter.children.length === 0) filter.children = []
-          }
-          return filter
-        })
-
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
