@@ -212,9 +212,9 @@ export default class WithFacet extends WebWorker() {
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         let selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
         if (!selectedFilterItem) return
-        selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
+        currentRequestObj.filter.forEach((filter) => { if (filter.id === selectedFilterItem.id) filter.skipCountUpdate = true })
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
