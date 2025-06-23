@@ -2,8 +2,7 @@
 Consistent code reduces errors and facilitates collaboration.
 
 ## 1. General Principles
-- **DRY (Don't Repeat Yourself)**: Reusable functions instead of copy-paste.
-- **KISS (Keep It Simple)**: Avoid unnecessary complexity.
+- **Use (or extend) existing components**: Make sure to use existing components as much as possible. If adjustments are necessary, extend the component.
 - **Readability > Cleverness**: Code must be understandable to others.
 
 ## 2. Language-specific rules
