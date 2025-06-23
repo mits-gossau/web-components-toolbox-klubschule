@@ -8,33 +8,24 @@ Consistent code reduces errors and facilitates collaboration.
 
 ## 2. Language-specific rules
 ### JavaScript
-- **Variables**: 
-  ```javascript
-  // Good
-  const userCount = 10;
-  let isLoading = true;
-  
-  // Bad
-  var total = 10;
-  ```
 - **Functions**:  
   ```javascript
   // Prefer arrow functions
   const calculateSum = (a, b) => a + b;
   ```
-
+### General
 - **Filename**: `PascalCase` (e.g. `UserProfile.js`)
 
 ## 3. Formating
 | Element          | Rule                          |
 |------------------|--------------------------------|
 | Quotation marks | Single Quotes (`'`)         |
-| Semikolons       | Never use               |
+| Semicolons       | Never use               |
 
 ## 4. Testing
 - TODO
 
-## 5. Commit-Regeln
+## 5. Commit-Rules
 - **Conventional Commits**:
   ```
   feat: add user profile page
