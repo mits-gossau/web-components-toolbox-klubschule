@@ -3,7 +3,7 @@ Consistent code reduces errors and facilitates collaboration.
 
 ## 1. General Principles
 - **Use (or extend) existing components**: Make sure to use existing components as much as possible. If adjustments are necessary, extend the component.
-- **Readability > Cleverness**: Code must be understandable to others.
+- **Readability > Cleverness**: The code must be simple and understandable for others..
 
 ## 2. Language-specific rules
 ### JavaScript
