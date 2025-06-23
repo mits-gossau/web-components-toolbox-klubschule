@@ -30,7 +30,7 @@ npm run fix    # Check code style
 ```bash
   git push origin feat/my-feature
   ```
-2. Create a [pull request](https://github.com///pulls) against `main`
+2. Create a [pull request](https://github.com/mits-gossau/web-components-toolbox-klubschule/pulls) against `main`
 3. Fill out the PR template completely:
 
    ```markdown
