@@ -21,8 +21,11 @@ export default class FilterCategories extends Shadow() {
     this.total = 0
     this.firstTreeItem = null
     this.mainLevelNav = null
+    this.reset = false
 
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
+
+    this.resetFilterEventListener = event => { if (event?.type === 'reset-filter') this.reset = true }
 
     this.keepDialogOpenEventListener = event => {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
@@ -42,6 +45,7 @@ export default class FilterCategories extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     this.eventListenerNode = this.hasAttribute('with-facet-target') ? FilterCategories.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
+    this.eventListenerNode.addEventListener('reset-filter', this.resetFilterEventListener)
     this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true }))
     this.addEventListener('click', this.keepDialogOpenEventListener)
     document.body.addEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
@@ -49,6 +53,7 @@ export default class FilterCategories extends Shadow() {
 
   disconnectedCallback () {
     this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
+    this.eventListenerNode.removeEventListener('reset-filter', this.resetFilterEventListener)
     this.removeEventListener('click', this.keepDialogOpenEventListener)
     document.body.removeEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
   }
@@ -344,7 +349,7 @@ export default class FilterCategories extends Shadow() {
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
-          <div class="sub-level sub-level-${filterItem.id} ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
+          <div class="sub-level sub-level-${filterItem.id} ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>
         </div>
         <div class="container dialog-footer">
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
@@ -429,6 +434,12 @@ export default class FilterCategories extends Shadow() {
           generatedCenterFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
         }
       } else {
+        const dialog = generatedNavLevelItem.navLevelItem.root.querySelector('dialog')
+        if (this.reset && dialog.hasAttribute('open')) {
+          dialog.removeAttribute('open')
+          this.reset = false
+        }
+        generatedNavLevelItem.subLevel.innerHTML = ''
         filterItem.children.forEach((child, i) => {
           if (child.children && child.children.length > 0) {
             this.generateFilters(response, child, generatedNavLevelItem.subLevel, filterItem, firstFilterItemId, level) // recursive call
