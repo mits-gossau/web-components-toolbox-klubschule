@@ -12,6 +12,40 @@ Consistent code reduces errors and facilitates collaboration.
   // Prefer arrow functions
   const calculateSum = (a, b) => a + b;
   ```
+
+- **Controllers**:
+  ```javascript
+  // KEEP CONTROLLER FN AS SIMPLE AS POSSOBLE!!!
+  // USE CONTROLLER FN ONLY FOR API CALLS AND EVENT DISPATCHING!!!
+
+  /**
+   * Add description
+   * @param {CustomEventInit} event
+   */
+  if (this.abortController[EventAction]) this.abortController[EventAction].abort()
+    this.abortController[EventAction] = new AbortController()
+    const { [ResponseKey] } = event.detail
+    const data = {
+      userId,
+      subscriptionType,
+      subscriptionId,
+      language: this.getLanguage()
+    }
+    const fetchOptions = this.fetchPOSTOptions(data, this.abortController[EventAction])
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').[API]}`
+    this.dispatchEvent(new CustomEvent('update-[event-action]', {
+      detail: {
+        fetch: fetch(endpoint, fetchOptions).then(async response => {
+          if (response.status >= 200 && response.status <= 299) return await response.json()
+          throw new Error(response.statusText)
+        })
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: tru`
+    }))
+  ```
 ### General
 - **Filename**: `PascalCase` (e.g. `UserProfile.js`)
 
