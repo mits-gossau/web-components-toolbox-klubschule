@@ -294,6 +294,11 @@
     {
       selector: 'kp-router',
       url: './src/es/kunden-portal/event-driven-web-components-router/src/Router.js'
+    },
+    {
+      selector: 'kp-m-',
+      separateFolder: true,
+      url: './src/es/kunden-portal/components/molecules/'
     }
   ] // directories
   // ↑↑↑ adjustable ↑↑↑

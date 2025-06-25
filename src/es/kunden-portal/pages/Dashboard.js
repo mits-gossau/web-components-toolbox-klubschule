@@ -23,7 +23,7 @@ export default class Dashboard extends Index {
   }
 
   shouldRenderHTML () {
-    return !this.appointmentList
+    return !this.root.querySelector('div')
   }
 
   shouldRenderCSS () {
@@ -31,13 +31,25 @@ export default class Dashboard extends Index {
   }
 
   renderHTML () {
-    // this.fetchModules([
-    //   {
-    //     path: `${this.importMetaUrl}../components/molecules/appointmentsList/AppointmentsList.js`,
-    //     name: 'm-appointments-list'
-    //   }
-    // ])
-    this.html = '<h1>Dashboard</h1>'
+    this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../components/atoms/button/Button.js`,
+        name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+        name: 'o-grid'
+      }
+    ])
+    this.html = /* html */ `
+      <o-grid namespace="grid-12er-">
+        <div col-lg="12" col-md="12" col-sm="12">
+          <h1>Dashboard</h1>
+        </div>
+        <div col-lg="12" col-md="12" col-sm="12">
+        <ks-a-button namespace="button-primary-">Test API</ks-a-button>
+        </div>
+      </o-grid>`
   }
 
   renderCSS () {
@@ -47,9 +59,5 @@ export default class Dashboard extends Index {
         :host {}
       }
     `
-  }
-
-  get appointmentList () {
-    return this.root.querySelector('m-appointments-list')
   }
 }
