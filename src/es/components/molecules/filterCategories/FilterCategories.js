@@ -25,7 +25,9 @@ export default class FilterCategories extends Shadow() {
 
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
-    this.resetFilterEventListener = event => { if (event?.type === 'reset-filter') this.reset = true }
+    this.resetFilterEventListener = event => { 
+      if (event?.type === 'reset-filter') this.reset = true 
+    }
 
     this.keepDialogOpenEventListener = event => {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
@@ -409,7 +411,7 @@ export default class FilterCategories extends Shadow() {
 
     if (!filterItem.visible) return
     if (!isTreeFilter && !isCenterFilter) generatedNavLevelItem.subLevel.innerHTML = ''
-    
+
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {
       // update total button / Avoid bug with uBlock not finding the dialog
@@ -434,11 +436,6 @@ export default class FilterCategories extends Shadow() {
           generatedCenterFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
         }
       } else {
-        const dialog = generatedNavLevelItem.navLevelItem.root.querySelector('dialog')
-        if (this.reset && dialog.hasAttribute('open')) {
-          dialog.removeAttribute('open')
-          this.reset = false
-        }
         generatedNavLevelItem.subLevel.innerHTML = ''
         filterItem.children.forEach((child, i) => {
           if (child.children && child.children.length > 0) {
@@ -477,6 +474,15 @@ export default class FilterCategories extends Shadow() {
         setTimeout(() => {
           if (response.filters.length === 0) return
 
+          if (this.reset) {
+            if (this.root.querySelector('.main-level')) this.root.querySelector('.main-level').remove()
+            this.generatedNavLevelItemMap.clear()
+            this.generateCenterFilterMap.clear()
+            this.generateFilterMap.clear()
+            this.firstTreeItem = null
+            this.reset = false
+          }
+        
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)
           })
@@ -492,7 +498,7 @@ export default class FilterCategories extends Shadow() {
 
     const mainNav = document.createElement('div')
     mainNav.setAttribute('class', 'main-level')
-    
+  
     this.observeMainNav(mainNav)
     
     this.html = mainNav
