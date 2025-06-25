@@ -21,14 +21,14 @@ export default class FilterCategories extends Shadow() {
     this.total = 0
     this.firstTreeItem = null
     this.mainLevelNav = null
+
     this.reset = false
-
+    this.resetFilterPill = false
+    this.resetFilterEventListener = event => { if (event?.type === 'reset-filter') this.reset = true }
+    this.resetFilterPillEventListener = (event) => { if (event?.type === 'reset-filter-pill') this.resetFilterPill = true }
+    
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
-
-    this.resetFilterEventListener = event => { 
-      if (event?.type === 'reset-filter') this.reset = true 
-    }
-
+    
     this.keepDialogOpenEventListener = event => {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
     }
@@ -48,6 +48,7 @@ export default class FilterCategories extends Shadow() {
     this.eventListenerNode = this.hasAttribute('with-facet-target') ? FilterCategories.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
     this.eventListenerNode.addEventListener('reset-filter', this.resetFilterEventListener)
+    this.eventListenerNode.addEventListener('reset-filter-pill', this.resetFilterPillEventListener)
     this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true }))
     this.addEventListener('click', this.keepDialogOpenEventListener)
     document.body.addEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
@@ -56,6 +57,7 @@ export default class FilterCategories extends Shadow() {
   disconnectedCallback () {
     this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
     this.eventListenerNode.removeEventListener('reset-filter', this.resetFilterEventListener)
+    this.eventListenerNode.removeEventListener('reset-filter-pill', this.resetFilterPillEventListener)
     this.removeEventListener('click', this.keepDialogOpenEventListener)
     document.body.removeEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
   }
@@ -306,7 +308,7 @@ export default class FilterCategories extends Shadow() {
 
   generateNavLevelItem (response, parentItem, filterItem, mainNav, level) {
     const filterIdPrefix = 'filter-'
-    const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton && !this.resetFilterPill
     const div = document.createElement('div')
     const navLevelItem = document.createElement('div')
     let selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label.replace(/'/g, '’').replace(/"/g, '\"')).join(', ') || ''
@@ -454,6 +456,15 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
+  cleanup () {
+    if (this.root.querySelector('.main-level')) this.root.querySelector('.main-level').remove()
+    this.generatedNavLevelItemMap.clear()
+    this.generateCenterFilterMap.clear()
+    this.generateFilterMap.clear()
+    this.firstTreeItem = null
+    this.reset = false
+  }
+
   renderHTML (fetch) {
     Promise.all([
       fetch,
@@ -474,14 +485,7 @@ export default class FilterCategories extends Shadow() {
         setTimeout(() => {
           if (response.filters.length === 0) return
 
-          if (this.reset) {
-            if (this.root.querySelector('.main-level')) this.root.querySelector('.main-level').remove()
-            this.generatedNavLevelItemMap.clear()
-            this.generateCenterFilterMap.clear()
-            this.generateFilterMap.clear()
-            this.firstTreeItem = null
-            this.reset = false
-          }
+          if (this.reset) this.cleanup()
         
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)
