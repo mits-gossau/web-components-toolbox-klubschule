@@ -97,7 +97,7 @@ export default class FilterSelect extends Shadow() {
           namespace="button-primary-" 
           color="tertiary" 
           justify-content="flex-start" 
-          request-event-name="reset-filter" 
+          request-event-name="reset-filter,reset-filter-pill" 
           filter-key="${filterGroupUrlPara || filterItem.urlpara}" 
           filter-value="${selectedFilter}"
           ${isTreeFilter ? `filter-type="tree"` : ''}
