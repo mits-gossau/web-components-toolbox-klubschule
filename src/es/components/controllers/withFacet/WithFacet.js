@@ -57,6 +57,7 @@ export default class WithFacet extends WebWorker() {
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(self.location.search)
+    const isSearchPage = ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.startsWith(path))
     const isMocked = this.hasAttribute('mock')
     const isMockedInfoEvents = this.hasAttribute('mock-info-events')    
     let endpoint = isMocked
@@ -162,8 +163,7 @@ export default class WithFacet extends WebWorker() {
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
-        const hasAnyParams = Array.from(this.params.keys()).length > 0
-        if (hasAnyParams) {
+        if (isSearchPage) {
           currentRequestObj.filter = initialFilter || []
         } else {
           currentRequestObj.filter = initialRequestObj.filter || initialFilter || []
@@ -176,8 +176,7 @@ export default class WithFacet extends WebWorker() {
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
-        const hasFilterKeyInParams = this.params.has(filterKey)
-        if (hasFilterKeyInParams) {
+        if (isSearchPage) {
           currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         } else {
           currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
