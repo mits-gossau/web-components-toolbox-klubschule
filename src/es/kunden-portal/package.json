@@ -10,7 +10,6 @@
     "test:debug": "playwright test --config=playwright.config.js tests/debug.spec.js",
     "test:report": "playwright show-report playwright-report"
   },
-  "keywords": ["playwright", "testing", "web-components", "kunden-portal"],
-  "author": "Development Team",
+  "author": "edx.mgb@gmail.com",
   "license": "MIT"
 }
