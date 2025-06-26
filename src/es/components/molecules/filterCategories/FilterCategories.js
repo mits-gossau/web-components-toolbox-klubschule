@@ -22,8 +22,13 @@ export default class FilterCategories extends Shadow() {
     this.firstTreeItem = null
     this.mainLevelNav = null
 
+    this.reset = false
+    this.resetFilterPill = false
+    this.resetFilterEventListener = event => { if (event?.type === 'reset-filter') this.reset = true }
+    this.resetFilterPillEventListener = (event) => { if (event?.type === 'reset-filter-pill') this.resetFilterPill = true }
+    
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
-
+    
     this.keepDialogOpenEventListener = event => {
       this.lastId = event.composedPath().find(node => node.tagName === 'M-DIALOG' && node.hasAttribute('id')).getAttribute('id')
     }
@@ -42,6 +47,8 @@ export default class FilterCategories extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     this.eventListenerNode = this.hasAttribute('with-facet-target') ? FilterCategories.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
+    this.eventListenerNode.addEventListener('reset-filter', this.resetFilterEventListener)
+    this.eventListenerNode.addEventListener('reset-filter-pill', this.resetFilterPillEventListener)
     this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true }))
     this.addEventListener('click', this.keepDialogOpenEventListener)
     document.body.addEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
@@ -49,6 +56,8 @@ export default class FilterCategories extends Shadow() {
 
   disconnectedCallback () {
     this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
+    this.eventListenerNode.removeEventListener('reset-filter', this.resetFilterEventListener)
+    this.eventListenerNode.removeEventListener('reset-filter-pill', this.resetFilterPillEventListener)
     this.removeEventListener('click', this.keepDialogOpenEventListener)
     document.body.removeEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
   }
@@ -299,7 +308,7 @@ export default class FilterCategories extends Shadow() {
 
   generateNavLevelItem (response, parentItem, filterItem, mainNav, level) {
     const filterIdPrefix = 'filter-'
-    const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton && !this.resetFilterPill
     const div = document.createElement('div')
     const navLevelItem = document.createElement('div')
     let selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label.replace(/'/g, '’').replace(/"/g, '\"')).join(', ') || ''
@@ -344,7 +353,7 @@ export default class FilterCategories extends Shadow() {
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
-          <div class="sub-level sub-level-${filterItem.id} ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
+          <div class="sub-level sub-level-${filterItem.id} ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>
         </div>
         <div class="container dialog-footer">
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
@@ -396,7 +405,7 @@ export default class FilterCategories extends Shadow() {
 
     if (!filterItem.visible) return
     if (!isTreeFilter && !isCenterFilter) generatedNavLevelItem.subLevel.innerHTML = ''
-    
+
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {
       // update total button / Avoid bug with uBlock not finding the dialog
@@ -421,6 +430,7 @@ export default class FilterCategories extends Shadow() {
           generatedCenterFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
         }
       } else {
+        generatedNavLevelItem.subLevel.innerHTML = ''
         filterItem.children.forEach((child, i) => {
           if (child.children && child.children.length > 0) {
             this.generateFilters(response, child, generatedNavLevelItem.subLevel, filterItem, firstFilterItemId, level) // recursive call
@@ -436,6 +446,15 @@ export default class FilterCategories extends Shadow() {
         })
       }
     }
+  }
+
+  cleanup () {
+    if (this.root.querySelector('.main-level')) this.root.querySelector('.main-level').remove()
+    this.generatedNavLevelItemMap.clear()
+    this.generateCenterFilterMap.clear()
+    this.generateFilterMap.clear()
+    this.firstTreeItem = null
+    this.reset = false
   }
 
   renderHTML (fetch) {
@@ -458,6 +477,8 @@ export default class FilterCategories extends Shadow() {
         setTimeout(() => {
           if (response.filters.length === 0) return
 
+          if (this.reset) this.cleanup()
+        
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)
           })
@@ -473,7 +494,7 @@ export default class FilterCategories extends Shadow() {
 
     const mainNav = document.createElement('div')
     mainNav.setAttribute('class', 'main-level')
-    
+  
     this.observeMainNav(mainNav)
     
     this.html = mainNav
