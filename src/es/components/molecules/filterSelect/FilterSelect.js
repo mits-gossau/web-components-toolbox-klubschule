@@ -80,15 +80,7 @@ export default class FilterSelect extends Shadow() {
 
     return /* html */`
       <m-double-button namespace="double-button-default-" width="100%">
-        <ks-a-button 
-          small 
-          namespace="button-primary-" 
-          color="tertiary" 
-          justify-content="space-between" 
-          request-event-name="${requestEventName}" 
-          ${isTreeFilter ? `filter-type="tree"` : ''} 
-          click-no-toggle-active
-        >
+        <ks-a-button small namespace="button-primary-" color="tertiary" justify-content="space-between" request-event-name="${requestEventName}" ${isTreeFilter ? `filter-type="tree"` : ''} click-no-toggle-active>
           <span part="label1">${selectedFilter}</span>
           <span part="label2" dynamic></span>
         </ks-a-button>
@@ -100,7 +92,6 @@ export default class FilterSelect extends Shadow() {
           request-event-name="reset-filter,reset-filter-pill" 
           filter-key="${filterGroupUrlPara || filterItem.urlpara}" 
           filter-value="${selectedFilter}"
-          ${isTreeFilter ? `filter-type="tree"` : ''}
         >
           <a-icon-mdx icon-name="X" size="1em"></a-icon-mdx>
         </ks-a-button>
@@ -165,7 +156,7 @@ export default class FilterSelect extends Shadow() {
 
     filterData.forEach(filterItem => {
       if (filterItem.isquick && filterItem.visible) {
-        quickFilters.push({id: filterItem.id, order: filterItem.isquick, label: filterItem.label, type: filterItem.typ})
+        quickFilters.push({id: filterItem.id, order: filterItem.isquick, label: filterItem.label})
       }
       // check recursive if filterItem or its children is selected and remove the parent filterItem from quickFilters
       const selectedFilter = this.findSelectedAndParents(filterItem)
@@ -194,7 +185,6 @@ export default class FilterSelect extends Shadow() {
             justify-content="flex-start" 
             request-event-name="${requestEventName}" 
             click-no-toggle-active
-            filter-type="${quickFilter.type}"
           >
             <style>
               :host,
