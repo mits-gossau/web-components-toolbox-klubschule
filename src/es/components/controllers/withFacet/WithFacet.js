@@ -224,6 +224,12 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter.forEach((filter) => { if (filter.id === selectedFilterItem.id) filter.skipCountUpdate = true })
+        // CLEANUP; needed because the api cannot handle unselected children
+        const sectorFilter = currentRequestObj.filter.find(filter => Number(filter.id) === 7)
+        if (sectorFilter && Array.isArray(sectorFilter.children)) {
+          sectorFilter.children = sectorFilter.children.filter(child => child.selected)
+          if (sectorFilter.children.length === 0) currentRequestObj.filter = currentRequestObj.filter.filter(filter => Number(filter.id) !== 7)
+        }
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
