@@ -7,13 +7,18 @@ test.describe('Dashboard Component', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the kunden portal main page
     await page.goto('/src/es/kunden-portal/index.html')
-
+    
     // Wait for web components to load
     await page.waitForSelector('body[wc-config-load]', { timeout: 10000 })
-
+    
+    // Wait for dashboard component to be present
+    await page.waitForSelector('p-dashboard', { timeout: 10000 })
+    
     // Wait for fonts to be ready
     await page.evaluate(() => document.fonts.ready)
-    await page.waitForTimeout(WAITING_TIMEOUT)
+    
+    // Wait for components to fully render
+    await page.waitForTimeout(3000)
   })
 
   test('should render dashboard with correct elements', async ({ page }) => {

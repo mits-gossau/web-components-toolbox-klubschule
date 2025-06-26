@@ -1,0 +1,16 @@
+{
+  "name": "kunden-portal-tests",
+  "version": "1.0.0",
+  "description": "Playwright tests for Kunden Portal web components",
+  "scripts": {
+    "test": "playwright test --config=playwright.config.js",
+    "test:headed": "playwright test --config=playwright.config.js --headed",
+    "test:chrome": "playwright test --config=playwright.config.js --project='Desktop Chrome'",
+    "test:basic": "playwright test --config=playwright.config.js tests/basic.spec.js",
+    "test:debug": "playwright test --config=playwright.config.js tests/debug.spec.js",
+    "test:report": "playwright show-report playwright-report"
+  },
+  "keywords": ["playwright", "testing", "web-components", "kunden-portal"],
+  "author": "Development Team",
+  "license": "MIT"
+}

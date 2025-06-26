@@ -51,11 +51,11 @@ const config = {
       }
     }
   ],
-  webServer: {
-    command: 'npm run serve',
-    port: 3000,
-    reuseExistingServer: !process.env.CI
-  },
+  // webServer: {
+  //   command: 'npm run serve',
+  //   port: 3000,
+  //   reuseExistingServer: !process.env.CI
+  // },
   snapshotDir: './test-results/snapshots',
   outputDir: './test-results/output'
 }
