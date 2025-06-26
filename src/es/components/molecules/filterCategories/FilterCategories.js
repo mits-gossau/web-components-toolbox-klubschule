@@ -58,10 +58,6 @@ export default class FilterCategories extends Shadow() {
       const filterId = dialog.getAttribute('id').replace('filter-', '')
       const filterType = dialog.getAttribute('filter-type')
       const navLevelItem = dialog.shadowRoot.querySelector('ks-m-nav-level-item')
-      // todo: Clarification of why the EventListeners are first removed and then added again
-      // Until then, the following exceptions are needed to show the sublevels correctly
-      const exceptionIds = ['7', '9', '12', '13', '14'] // Abgeotsbereich, Angebotsart, Abschluss, Center, Status
-      if (exceptionIds.includes(filterId)) return
       navLevelItem.removeEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId, filterType))
       navLevelItem.addEventListener('click', this.clickNavLevelItemLevel0EventListener(filterId, filterType))
     })
@@ -344,7 +340,7 @@ export default class FilterCategories extends Shadow() {
         </div>
         <div class="dialog-content">
           ${this.hasAttribute('translation-key-reset') ? /* html */`<p class="reset-link">
-            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-key="${filterItem.urlpara}" filter-type="${this.firstTreeItem ? this.firstTreeItem.typ : filterItem.typ}" id="reset-filter">
+            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-key="${filterItem.urlpara}">
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
@@ -390,15 +386,7 @@ export default class FilterCategories extends Shadow() {
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
       generatedNavLevelItem.navLevelItem.style.display = filterItem.visible ? 'block' : 'none' // check if filter is visible
-      // update show all offers buttons 
-      if (generatedNavLevelItem.navLevelItem.root.querySelector('dialog')) {
-        const dialog = generatedNavLevelItem.navLevelItem.root.querySelector('dialog')
-        const total = `${response.total.toString()} ${response.total_label}`
-        dialog.querySelector('.dialog-content').querySelector('.sub-level').querySelectorAll('m-dialog').forEach(dialog => {
-          dialog.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = total
-        })
-        dialog.querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = total
-      }
+      if (generatedNavLevelItem.navLevelItem.root.querySelector('dialog')) generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
       // update additional text with selected filter(s) only for the first level 
       if (level === 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').setAttribute('namespace', filterItem.selected ? 'nav-level-item-active-' : 'nav-level-item-default-')
