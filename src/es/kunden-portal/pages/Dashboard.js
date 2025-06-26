@@ -2,7 +2,7 @@
 import Index from './Index.js'
 
 /**
- * Appointment List
+ * Dashboard
  *
  * @export
  * @class Dashboard
