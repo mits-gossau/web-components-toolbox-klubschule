@@ -9,7 +9,7 @@ const config = {
   },
   reporter: [
     ['line'],
-    ['html', { outputFolder: 'playwright-report' }]
+    ['html', { outputFolder: 'tests/playwright-report' }]
   ],
   use: {
     baseURL: 'http://localhost:3000',
@@ -56,8 +56,8 @@ const config = {
   //   port: 3000,
   //   reuseExistingServer: !process.env.CI
   // },
-  snapshotDir: './test-results/snapshots',
-  outputDir: './test-results/output'
+  snapshotDir: './tests/test-results/snapshots',
+  outputDir: './tests/test-results/output'
 }
 
 module.exports = config

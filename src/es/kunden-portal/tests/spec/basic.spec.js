@@ -39,7 +39,7 @@ test.describe('Kunden Portal Basic Tests', () => {
 
     // Wait for router to initialize
     await page.waitForSelector('kp-router', { timeout: 10000 })
-    
+
     // Wait for dashboard to be attached to the DOM (not necessarily visible)
     await page.waitForSelector('p-dashboard', { state: 'attached', timeout: 15000 })
 
@@ -48,11 +48,11 @@ test.describe('Kunden Portal Basic Tests', () => {
 
     const dashboard = page.locator('p-dashboard')
     expect(await dashboard.count()).toBe(1)
-    
+
     // Check that the dashboard content is rendered correctly
     const dashboardTitle = page.locator('p-dashboard h1')
     expect(await dashboardTitle.textContent()).toBe('Dashboard')
-    
+
     // The component should not have the hidden attribute
     expect(await dashboard.getAttribute('hidden')).toBeNull()
   })
@@ -122,19 +122,19 @@ test.describe('Kunden Portal Basic Tests', () => {
 
     // Test navigation with hash by setting the hash on current page instead of navigating
     await page.evaluate(() => { window.location.hash = '/' })
-    
+
     // Wait for router to process the hash route
     await page.waitForSelector('kp-router', { timeout: 10000 })
-    
+
     // Wait for dashboard to be attached to the DOM
     await page.waitForSelector('p-dashboard', { state: 'attached', timeout: 15000 })
-    
+
     // Wait for dashboard content to be rendered
     await page.waitForSelector('p-dashboard h1', { timeout: 10000 })
 
     const dashboard = page.locator('p-dashboard')
     expect(await dashboard.getAttribute('hidden')).toBeNull()
-    
+
     // Check that the dashboard content is rendered correctly
     const dashboardTitle = page.locator('p-dashboard h1')
     expect(await dashboardTitle.textContent()).toBe('Dashboard')
