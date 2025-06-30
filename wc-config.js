@@ -299,6 +299,11 @@
       selector: 'kp-m-',
       separateFolder: true,
       url: './src/es/kunden-portal/components/molecules/'
+    },
+    {
+      selector: 'kp-c-',
+      separateFolder: true,
+      url: './src/es/kunden-portal/controllers/'
     }
   ] // directories
   // ↑↑↑ adjustable ↑↑↑

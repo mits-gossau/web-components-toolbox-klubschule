@@ -18,25 +18,26 @@ export default class Dashboard extends HTMLElement {
   }
 
   connectedCallback () {
-    this.addEventListener('request-dashboard-initial-load', this.requestDashboardInitialListener)
+    this.addEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
   }
 
   disconnectedCallback () {
-    this.removeEventListener('request-dashboard-initial-load', this.requestDashboardInitialListener)
+    this.removeEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
   }
 
   /**
-   * Request initial data for the dashboard.
+   * Request FakeMe data for the dashboard.
    * @param {CustomEventInit} event
    */
-  requestDashboardInitialListener = async (event) => {
+  requestDashboardFakeMe = async (event) => {
+    debugger
     if (this.abortControllerDashboardInitial) this.abortControllerDashboardInitial.abort()
     this.abortControllerDashboardInitial = new AbortController()
     const data = {}
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointments}`
     const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerDashboardInitial)
-    this.dispatchEvent(new CustomEvent('update-dashboard-initial-load', {
+    this.dispatchEvent(new CustomEvent('update-dashboard-fake-me', {
       detail: {
         fetch: (this.subscriptionCourseAppointments = fetch(endpoint, fetchOptions).then(async response => {
           if (response.status >= 200 && response.status <= 299) {
