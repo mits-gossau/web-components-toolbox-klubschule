@@ -51,7 +51,7 @@ export default class Dashboard extends Index {
             color="secondary"
             namespace="button-primary-"
             request-event-name="request-dashboard-fake-me"
-            tag='[]'>
+            tag='[dashboard-fake-me]'>
             FakeMe
           </ks-a-button>
         </div>

@@ -33,16 +33,16 @@ export default class Dashboard extends HTMLElement {
     debugger
     if (this.abortControllerDashboardInitial) this.abortControllerDashboardInitial.abort()
     this.abortControllerDashboardInitial = new AbortController()
-    const data = {}
+    const data = {
+    }
     // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('customer-portal').apiSubscriptionCourseAppointments}`
-    const fetchOptions = this.fetchPOSTOptions(data, this.abortControllerDashboardInitial)
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').fakeMe}`
     this.dispatchEvent(new CustomEvent('update-dashboard-fake-me', {
       detail: {
-        fetch: (this.subscriptionCourseAppointments = fetch(endpoint, fetchOptions).then(async response => {
+        fetch: (this.subscriptionCourseAppointments = fetch(endpoint).then(async response => {
           if (response.status >= 200 && response.status <= 299) {
-            const appointments = await response.json()
-            return appointments
+            const data = await response.json()
+            return data
           }
         }))
       },
