@@ -5,7 +5,12 @@ Consistent code reduces errors and facilitates collaboration.
 - **Use (or extend) existing components**: Make sure to use existing components as much as possible. If adjustments are necessary, extend the component.
 - **Readability > Cleverness**: The code must be simple and understandable for others..
 
-## 2. Language-specific rules
+## 2. Event Driven Naming rules
+- **Event Names Schema**:  
+  * `update-<component>-<action>` for updating a component
+  * `request-<component>-<action>` for requesting something from a controller
+
+## 3. Language-specific rules
 ### JavaScript
 - **Functions**:  
   ```javascript
@@ -49,16 +54,16 @@ Consistent code reduces errors and facilitates collaboration.
 ### General
 - **Filename**: `PascalCase` (e.g. `UserProfile.js`)
 
-## 3. Formating
+## 4. Formating
 | Element          | Rule                          |
 |------------------|--------------------------------|
 | Quotation marks | Single Quotes (`'`)         |
 | Semicolons       | Never use               |
 
-## 4. Testing
+## 5. Testing
 - TODO
 
-## 5. Commit-Rules
+## 6. Commit-Rules
 - **Conventional Commits**:
   ```
   feat: add user profile page
