@@ -14,7 +14,7 @@
 export default class Dashboard extends HTMLElement {
   constructor () {
     super()
-    this.abortControllerDashboardInitial = null
+    this.abortControllerDashboardFakeMe = null
   }
 
   connectedCallback () {
@@ -26,25 +26,22 @@ export default class Dashboard extends HTMLElement {
   }
 
   /**
+   * GET Example for a CustomEvent to request data for the dashboard
    * Request FakeMe data for the dashboard.
    * @param {CustomEventInit} event
    */
   requestDashboardFakeMe = async (event) => {
-    debugger
-    if (this.abortControllerDashboardInitial) this.abortControllerDashboardInitial.abort()
-    this.abortControllerDashboardInitial = new AbortController()
-    const data = {
-    }
+    if (this.abortControllerDashboardFakeMe) this.abortControllerDashboardFakeMe.abort()
+    this.abortControllerDashboardFakeMe = new AbortController()
+    // const data = {}
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').fakeMe}`
     this.dispatchEvent(new CustomEvent('update-dashboard-fake-me', {
       detail: {
-        fetch: (this.subscriptionCourseAppointments = fetch(endpoint).then(async response => {
-          if (response.status >= 200 && response.status <= 299) {
-            const data = await response.json()
-            return data
-          }
-        }))
+        fetch: fetch(endpoint).then(async response => {
+          return await response.json()
+        }),
+        type: 'fake-me'
       },
       bubbles: true,
       cancelable: true,

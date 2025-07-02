@@ -20,6 +20,17 @@ export default class Dashboard extends Index {
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
+    document.body.addEventListener('update-dashboard-fake-me', this.requestFakeMeListener)
+  }
+
+  disconnectedCallback () {
+    document.body.removeEventListener('update-dashboard-fake-me', this.requestFakeMeListener)
+  }
+
+  requestFakeMeListener = (event) => {
+    event.detail.fetch.then((data) => {
+      console.log('FakeMe data:', data)
+    })
   }
 
   shouldRenderHTML () {
