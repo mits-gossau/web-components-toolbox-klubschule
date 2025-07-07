@@ -58,12 +58,19 @@ export default class Dashboard extends Index {
           <h1>Dashboard</h1>
         </div>
         <div col-lg="12" col-md="12" col-sm="12">
-          <ks-a-button
+          <!-- <ks-a-button
             color="secondary"
             namespace="button-primary-"
             request-event-name="request-dashboard-fake-me"
             tag='[dashboard-fake-me]'>
             FakeMe
+          </ks-a-button> -->
+          <ks-a-button
+            color="secondary"
+            namespace="button-primary-"
+            request-event-name="request-dashboard-subscriptions"
+            tag='[dashboard-subscriptions]'>
+            Subscriptions
           </ks-a-button>
         </div>
       </o-grid>`

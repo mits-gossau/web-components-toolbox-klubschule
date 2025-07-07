@@ -15,14 +15,17 @@ export default class Dashboard extends HTMLElement {
   constructor () {
     super()
     this.abortControllerDashboardFakeMe = null
+    this.abortControllerDashboardSubscriptions = null
   }
 
   connectedCallback () {
     this.addEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
+    this.addEventListener('request-dashboard-subscriptions', this.requestSubscriptions)
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
+    this.removeEventListener('request-dashboard-subscriptions', this.requestSubscriptions)
   }
 
   /**
@@ -47,6 +50,33 @@ export default class Dashboard extends HTMLElement {
       cancelable: true,
       composed: true
     }))
+  }
+
+  /**
+   * Sends a POST request to fetch user subscriptions for the dashboard.
+   * Dispatches the request to the API endpoint defined in Environment.
+   * @param {CustomEventInit} event - The event that triggered the request.
+   */
+  requestSubscriptions = (event) => {
+    if (this.abortControllerDashboardSubscriptions) this.abortControllerDashboardSubscriptions.abort()
+    this.abortControllerDashboardSubscriptions = new AbortController()
+
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').apiSubscriptions}`
+    const data = { language: 'de' }
+    const options = this.fetchPOSTOptions(data, this.abortControllerDashboardSubscriptions)
+
+    fetch(endpoint, options)
+      .then(async response => {
+        if (!response.ok) throw new Error('Network response was not ok')
+        return await response.json()
+      })
+      .then(subscriptions => {
+        console.log(subscriptions)
+      })
+      .catch(error => {
+        console.error(error)
+      })
   }
 
   /**

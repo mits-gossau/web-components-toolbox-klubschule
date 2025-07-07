@@ -51,6 +51,7 @@ self.Environment = {
     }
   },
   getEnvUrl: function () {
+    if (location.hostname === 'localhost') return 'https://dev.klubschule.ch'
     const url = window.location.href
     const urlObj = new URL(url)
     return urlObj.origin
@@ -60,7 +61,7 @@ self.Environment = {
       case 'kunden-portal': {
         return {
           fakeMe: 'https://jsonplaceholder.typicode.com/posts',
-          apiSubscriptions: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/subscriptions`
+          apiSubscriptions: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptions`
         }
       }
       default:
