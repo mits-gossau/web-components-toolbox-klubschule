@@ -12,18 +12,18 @@
  * @type {CustomElementConstructor}
  */
 export default class Dashboard extends HTMLElement {
-  constructor () {
+  constructor() {
     super()
     this.abortControllerDashboardFakeMe = null
     this.abortControllerDashboardSubscriptions = null
   }
 
-  connectedCallback () {
+  connectedCallback() {
     this.addEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
     this.addEventListener('request-dashboard-subscriptions', this.requestSubscriptions)
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     this.removeEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
     this.removeEventListener('request-dashboard-subscriptions', this.requestSubscriptions)
   }
@@ -66,17 +66,20 @@ export default class Dashboard extends HTMLElement {
     const data = { language: 'de' }
     const options = this.fetchPOSTOptions(data, this.abortControllerDashboardSubscriptions)
 
-    fetch(endpoint, options)
-      .then(async response => {
-        if (!response.ok) throw new Error('Network response was not ok')
-        return await response.json()
-      })
-      .then(subscriptions => {
-        console.log(subscriptions)
-      })
-      .catch(error => {
-        console.error(error)
-      })
+    this.dispatchEvent(new CustomEvent('update-subscriptions', {
+      detail: {
+        fetch: fetch(endpoint, options)
+          .then(async response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+            return await response.json()
+          })
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+
+
   }
 
   /**
@@ -85,7 +88,7 @@ export default class Dashboard extends HTMLElement {
    * @param {AbortController} abortController - Abort Fetch requests
    * @returns {Object} An object is being returned to use as option object for api fetch
    */
-  fetchPOSTOptions (data, abortController) {
+  fetchPOSTOptions(data, abortController) {
     return {
       method: 'POST',
       headers: {
