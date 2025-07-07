@@ -19,37 +19,11 @@ export default class Dashboard extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
     this.addEventListener('request-dashboard-subscriptions', this.requestSubscriptions)
   }
 
   disconnectedCallback() {
-    this.removeEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
     this.removeEventListener('request-dashboard-subscriptions', this.requestSubscriptions)
-  }
-
-  /**
-   * GET Example for a CustomEvent to request data for the dashboard
-   * Request FakeMe data for the dashboard.
-   * @param {CustomEventInit} event
-   */
-  requestDashboardFakeMe = async (event) => {
-    if (this.abortControllerDashboardFakeMe) this.abortControllerDashboardFakeMe.abort()
-    this.abortControllerDashboardFakeMe = new AbortController()
-    // const data = {}
-    // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').fakeMe}`
-    this.dispatchEvent(new CustomEvent('update-dashboard-fake-me', {
-      detail: {
-        fetch: fetch(endpoint).then(async response => {
-          return await response.json()
-        }),
-        type: 'fake-me'
-      },
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
   }
 
   /**
@@ -78,8 +52,6 @@ export default class Dashboard extends HTMLElement {
       cancelable: true,
       composed: true
     }))
-
-
   }
 
   /**
