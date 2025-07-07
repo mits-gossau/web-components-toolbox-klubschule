@@ -57,6 +57,7 @@ export default class WithFacet extends WebWorker() {
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(self.location.search)
+    const isSearchPage = ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.startsWith(path))
     const isMocked = this.hasAttribute('mock')
     const isMockedInfoEvents = this.hasAttribute('mock-info-events')    
     let endpoint = isMocked
@@ -162,6 +163,7 @@ export default class WithFacet extends WebWorker() {
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
+        isSearchPage ? (currentRequestObj.filter = initialFilter || []) : (currentRequestObj.filter = initialRequestObj.filter || initialFilter || [])
         currentRequestObj.filter = initialFilter
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
@@ -171,7 +173,16 @@ export default class WithFacet extends WebWorker() {
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        if (isSearchPage) {
+          currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        } else {
+          currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        }
+        const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
+        if (isTree) {
+          currentRequestObj.filter = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentRequestObj.filter, initialRequestObj.filter)
+          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        }
         if (filterKey === 'q') {
           delete currentRequestObj.searchText
           if (!currentRequestObj.clat) currentRequestObj.sorting = 3 // alphabetic
@@ -202,17 +213,24 @@ export default class WithFacet extends WebWorker() {
         // exception only on click on filter pills, on filter navLevelItem everything works as expected
         // this would not be needed if filter ids where unique and urlparas would match
         const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
-        const isMulti = event.detail?.selectedFilterType === 'multi' || false
-        const isTree = event.detail?.selectedFilterType === 'tree'
+        const isMulti = event.detail?.selectedFilterType === 'multi' || event.detail?.filterType === 'multi' || false
+        const isTree = event.detail?.selectedFilterType === 'tree' || event.detail?.filterType === 'tree' || false
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         
         // find the selected filter item (not tree)
-        const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
+        let selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
         if (!selectedFilterItem) return
-        selectedFilterItem.skipCountUpdate = true
+        // selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        currentRequestObj.filter.forEach((filter) => { if (filter.id === selectedFilterItem.id) filter.skipCountUpdate = true })
+        // CLEANUP; needed because the api cannot handle unselected children
+        const sectorFilter = currentRequestObj.filter.find(filter => Number(filter.id) === 7)
+        if (sectorFilter && Array.isArray(sectorFilter.children)) {
+          sectorFilter.children = sectorFilter.children.filter(child => child.selected)
+          if (sectorFilter.children.length === 0) currentRequestObj.filter = currentRequestObj.filter.filter(filter => Number(filter.id) !== 7)
+        }
+        // currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
@@ -313,6 +331,8 @@ export default class WithFacet extends WebWorker() {
 
       // load more 
       event?.detail?.loadCoursesOnly ? currentRequestObj.onlycourse = true : delete currentRequestObj.onlycourse
+      // remove filter with id 30 from array currentRequestObj.filter if onlycourse is true
+      // if (currentRequestObj.onlycourse) currentRequestObj.filter.forEach((filter, index) => { if (filter.id === "30") currentRequestObj.filter.splice(index, 1) })
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
@@ -728,6 +748,21 @@ export default class WithFacet extends WebWorker() {
         "HasChilds": false
       }
     ]
+  }
+
+  static getSectorFilterWithInitialFallback (currentFilter, initialFilter) {
+    const initialSectorFilter = initialFilter.find((filter) => Number(filter.id) === 7)
+    let index = 0
+    const sectorFilter = currentFilter.find((filter, i) => {
+      index = i
+      return Number(filter.id) === 7 && (!filter.selected || filter.children.every(child => !child.selected))
+    })
+    if (initialSectorFilter && sectorFilter) {
+      sectorFilter.children = initialSectorFilter.children
+      sectorFilter.selected = true
+      currentFilter[index] = sectorFilter
+    }
+    return currentFilter
   }
 
   dataLayerPush (value) {
