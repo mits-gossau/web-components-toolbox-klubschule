@@ -142,10 +142,12 @@ export default class WithFacet extends WebWorker() {
     if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
 
     // if the user has a location search, set the sorting to distance, but not on page refresh
-    if (this.params.has('clat') && document.referrer && !document.referrer.startsWith(window.location.origin + window.location.pathname) && !currentRequestObj.searchText) {
+    const isSamePath = sessionStorage.getItem('currentPathname') === window.location.pathname
+    if (this.params.has('clat') && !isSamePath && !currentRequestObj.searchText) {
       currentRequestObj.sorting = 2
-      this.updateURLParam('sorting', 2)
+      this.updateURLParam('sorting', 2) 
     }
+    sessionStorage.setItem('currentPathname', window.location.pathname)
 
     this.requestWithFacetListener = async event => {
       // Reset PPage after filter Change / Reset
