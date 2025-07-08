@@ -141,6 +141,14 @@ export default class WithFacet extends WebWorker() {
     // If shared with active Sorting, keep param for other user
     if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
 
+    // if the user has a location search, set the sorting to distance, but not on page refresh
+    const isReferrerOtherPage = document.referrer && !document.referrer.startsWith(window.location.origin + window.location.pathname)
+    console.log('isReferrerOtherPage', isReferrerOtherPage, document.referrer, document.referrer.startsWith(window.location.origin + window.location.pathname), window.location.origin, window.location.pathname)
+    if (this.params.has('clat') && isReferrerOtherPage) {
+      currentRequestObj.sorting = 2
+      this.updateURLParam('sorting', 2)
+    }
+
     this.requestWithFacetListener = async event => {
       // Reset PPage after filter Change / Reset
       currentRequestObj.ppage = 0
