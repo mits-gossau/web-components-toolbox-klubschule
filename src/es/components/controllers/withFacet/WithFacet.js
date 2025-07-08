@@ -331,7 +331,7 @@ export default class WithFacet extends WebWorker() {
       // load more 
       event?.detail?.loadCoursesOnly ? currentRequestObj.onlycourse = true : delete currentRequestObj.onlycourse
       // remove filter with id 30 from array currentRequestObj.filter, if onlycourse is true, to keep the filter on load more
-      if (currentRequestObj.onlycourse) currentRequestObj.filter.forEach((filter, index) => { if (filter.id === "30") currentRequestObj.filter.splice(index, 1) })
+      if (currentRequestObj.onlycourse) currentRequestObj.filter = currentRequestObj.filter.filter(filter => filter.id !== "30")
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
@@ -513,7 +513,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
     this.addEventListener('backdrop-clicked', this.handleBackdropClicked)
-    this.addEventListener('request-advisory-text-api', () => this.skipNextFacetRequest = true)
+    this.addEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
   }
 
   disconnectedCallback() {
@@ -522,7 +522,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
     this.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
-    this.removeEventListener('request-advisory-text-api', () => this.skipNextFacetRequest = true)
+    this.removeEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
   }
 
   handleBackdropClicked = () => {
@@ -534,6 +534,8 @@ export default class WithFacet extends WebWorker() {
     this.filterOnly = false
     this.dispatchEvent(new CustomEvent('request-with-facet'))
   }
+
+  handleRequestAdvisoryTextApi = () => { this.skipNextFacetRequest = true }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
   static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false, isMulti = false, isStartTimeSelectedFromFilterPills = false) {
