@@ -57,7 +57,7 @@ export default class WithFacet extends WebWorker() {
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(self.location.search)
-    const isSearchPage = ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.startsWith(path))
+    const isSearchPage = this.hasAttribute('search-page') || ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.startsWith(path))
     const isMocked = this.hasAttribute('mock')
     const isMockedInfoEvents = this.hasAttribute('mock-info-events')    
     let endpoint = isMocked

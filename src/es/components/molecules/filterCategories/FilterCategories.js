@@ -455,15 +455,6 @@ export default class FilterCategories extends Shadow() {
     }
   }
 
-  cleanup () {
-    if (this.root.querySelector('.main-level')) this.root.querySelector('.main-level').remove()
-    this.generatedNavLevelItemMap.clear()
-    this.generateCenterFilterMap.clear()
-    this.generateFilterMap.clear()
-    this.firstTreeItem = null
-    this.reset = false
-  }
-
   renderHTML (fetch) {
     Promise.all([
       fetch,
@@ -483,8 +474,6 @@ export default class FilterCategories extends Shadow() {
       fetch.then(response => {
         setTimeout(() => {
           if (response.filters.length === 0) return
-
-          // if (this.reset) this.cleanup()
 
           response.filters.forEach((filterItem) => {
             this.generateFilters(response, filterItem)
