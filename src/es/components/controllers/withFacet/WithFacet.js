@@ -214,7 +214,6 @@ export default class WithFacet extends WebWorker() {
         // triggered by FilterSelect or FilterCategories
         if (!currentRequestObj.filter?.length && sessionStorage.getItem('currentFilter')) currentRequestObj.filter = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
         if (!currentCompleteFilterObj.length && sessionStorage.getItem('currentFilter')) currentCompleteFilterObj = JSON.parse(sessionStorage.getItem('currentFilter') || '[]')
-        
         // exception, because parent id matches with children urlpara in case of start time filter (Startzeitpunkt)
         // exception only on click on filter pills, on filter navLevelItem everything works as expected
         // this would not be needed if filter ids where unique and urlparas would match
@@ -222,20 +221,13 @@ export default class WithFacet extends WebWorker() {
         const isMulti = event.detail?.selectedFilterType === 'multi' || event.detail?.filterType === 'multi' || false
         const isTree = event.detail?.selectedFilterType === 'tree' || event.detail?.filterType === 'tree' || false
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        
         // find the selected filter item (not tree)
         let selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
         if (!selectedFilterItem) return
-        // selectedFilterItem.skipCountUpdate = true
+        selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter.forEach((filter) => { if (filter.id === selectedFilterItem.id) filter.skipCountUpdate = true })
-        // CLEANUP; needed because the api cannot handle unselected children
-        const sectorFilter = currentRequestObj.filter.find(filter => Number(filter.id) === 7)
-        if (sectorFilter && Array.isArray(sectorFilter.children)) {
-          sectorFilter.children = sectorFilter.children.filter(child => child.selected)
-          if (sectorFilter.children.length === 0) currentRequestObj.filter = currentRequestObj.filter.filter(filter => Number(filter.id) !== 7)
-        }
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
