@@ -230,7 +230,6 @@ export default class WithFacet extends WebWorker() {
           sectorFilter.children = sectorFilter.children.filter(child => child.selected)
           if (sectorFilter.children.length === 0) currentRequestObj.filter = currentRequestObj.filter.filter(filter => Number(filter.id) !== 7)
         }
-        // currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
@@ -331,8 +330,8 @@ export default class WithFacet extends WebWorker() {
 
       // load more 
       event?.detail?.loadCoursesOnly ? currentRequestObj.onlycourse = true : delete currentRequestObj.onlycourse
-      // remove filter with id 30 from array currentRequestObj.filter if onlycourse is true
-      // if (currentRequestObj.onlycourse) currentRequestObj.filter.forEach((filter, index) => { if (filter.id === "30") currentRequestObj.filter.splice(index, 1) })
+      // remove filter with id 30 from array currentRequestObj.filter, if onlycourse is true, to keep the filter on load more
+      if (currentRequestObj.onlycourse) currentRequestObj.filter.forEach((filter, index) => { if (filter.id === "30") currentRequestObj.filter.splice(index, 1) })
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
