@@ -135,16 +135,14 @@ export default class WithFacet extends WebWorker() {
     // intial sorting when page is refreshed
     if (!currentRequestObj.sorting) {
       currentRequestObj.sorting = 3 // alphabetic
-      if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 2 // distance
+      if (currentRequestObj.clat && currentRequestObj.clong && !currentRequestObj.searchText) currentRequestObj.sorting = 2 // distance
     }
 
     // If shared with active Sorting, keep param for other user
     if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
 
     // if the user has a location search, set the sorting to distance, but not on page refresh
-    const isReferrerOtherPage = document.referrer && !document.referrer.startsWith(window.location.origin + window.location.pathname)
-    console.log('isReferrerOtherPage', isReferrerOtherPage, document.referrer, document.referrer.startsWith(window.location.origin + window.location.pathname), window.location.origin, window.location.pathname)
-    if (this.params.has('clat') && isReferrerOtherPage) {
+    if (this.params.has('clat') && document.referrer && !document.referrer.startsWith(window.location.origin + window.location.pathname) && !currentRequestObj.searchText) {
       currentRequestObj.sorting = 2
       this.updateURLParam('sorting', 2)
     }
@@ -275,7 +273,7 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('cname', encodeURIComponent(event.detail.description))
           if (this.saveLocationDataInLocalStorage) this.updateStorageBasedEvent('local', event)
           if (this.saveLocationDataInSessionStorage) this.updateStorageBasedEvent('session', event)
-          currentRequestObj.sorting = 2
+          if (!currentRequestObj.searchText) currentRequestObj.sorting = 2
           this.updateURLParam('sorting', 2)
         } else {
           if (this.saveLocationDataInLocalStorage && localStorage.getItem('locationData')) this.updateUrlBasedStorage('local')
@@ -307,13 +305,15 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
 
-        currentRequestObj.sorting = 1 // relevance
-        if (event?.detail?.value === '' && !currentRequestObj.clat) {
-          delete currentRequestObj.searchText
-          currentRequestObj.sorting = 3 // alphabetic
-        }
-        if (event?.detail?.value !== '' && currentRequestObj.clat) {
-          currentRequestObj.sorting = 2 // distance
+        if (!this.params.has('sorting')) {
+          currentRequestObj.sorting = 1 // relevance
+          if (event?.detail?.value === '' && !currentRequestObj.clat) {
+            delete currentRequestObj.searchText
+            currentRequestObj.sorting = 3 // alphabetic
+          }
+          if (event?.detail?.value !== '' && currentRequestObj.clat) {
+            currentRequestObj.sorting = 2 // distance
+          }
         }
       } else if (event?.detail?.key === 'sorting' && !!event.detail.id) {
         // sorting
