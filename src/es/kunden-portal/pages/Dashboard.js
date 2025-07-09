@@ -20,12 +20,87 @@ export default class Dashboard extends Index {
   connectedCallback() {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
+    document.body.addEventListener('update-bookings', this.requestBookingssListener)
     document.body.addEventListener('update-subscriptions', this.requestSubscriptionsListener)
-    this.dispatchEvent(new CustomEvent('request-dashboard-subscriptions', { bubbles: true, cancelable: true, composed: true }))
+    this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
+    this.dispatchEvent(new CustomEvent('request-subscriptions', { bubbles: true, cancelable: true, composed: true }))
   }
 
   disconnectedCallback() {
+    document.body.removeEventListener('update-bookings', this.requestBookingssListener)
     document.body.removeEventListener('update-subscriptions', this.requestSubscriptionsListener)
+  }
+
+  requestBookingssListener = (event) => {
+  event.detail.fetch
+    .then((data) => {
+      let bookingssDiv = this.root.querySelector('.container-bookings')
+      if (!bookingssDiv) {
+        bookingssDiv = document.createElement('div')
+        bookingssDiv.className = 'container-bookings'
+        const h2 = this.root.querySelector('h2')
+        if (h2 && h2.parentNode) {
+          h2.parentNode.insertBefore(bookingssDiv, h2.nextSibling)
+        } else {
+          this.root.appendChild(bookingssDiv)
+        }
+      }
+      bookingssDiv.innerHTML = ''
+
+      if (data.bookings?.length) {
+        data.bookings.forEach(booking => {
+          const courseDiv = document.createElement('div')
+          courseDiv.className = 'booking'
+
+          // Titel und Logo
+          const title = document.createElement('h3')
+          title.textContent = booking.courseTitle
+          courseDiv.appendChild(title)
+
+          if (booking.logoUrl) {
+            const logo = document.createElement('img')
+            logo.src = booking.logoUrl
+            logo.alt = booking.courseTitle
+            logo.style.maxWidth = '100px'
+            courseDiv.appendChild(logo)
+          }
+
+          // Kursort und Raum
+          const location = document.createElement('div')
+          location.textContent = `Ort: ${booking.courseLocation}${booking.roomDescription ? ', ' + booking.roomDescription : ''}`
+          courseDiv.appendChild(location)
+
+          // Kurszeitraum
+          const period = document.createElement('div')
+          period.textContent = `Zeitraum: ${booking.courseStartDate?.substring(0, 10)} bis ${booking.courseEndDate?.substring(0, 10)}`
+          courseDiv.appendChild(period)
+
+          // Termine
+          if (booking.appointments?.length) {
+            const appointmentsList = document.createElement('ul')
+            appointmentsList.className = 'appointments'
+            booking.appointments.forEach(app => {
+              const li = document.createElement('li')
+              li.textContent = app.appointmentDateFormatted
+              if (app.isNext) {
+                li.style.fontWeight = 'bold'
+                li.style.color = '#00796b'
+                li.title = 'Nächster Termin'
+              }
+              appointmentsList.appendChild(li)
+            })
+            courseDiv.appendChild(appointmentsList)
+          }
+
+          bookingssDiv.appendChild(courseDiv)
+        })
+      } else {
+        bookingssDiv.textContent = 'Keine Kurse'
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching bookings:', error)
+    })
   }
 
   requestSubscriptionsListener = (event) => {
@@ -79,7 +154,6 @@ export default class Dashboard extends Index {
       })
       .catch(error => {
         console.error('Error fetching subscriptions:', error)
-        
       })
   }
 
@@ -106,13 +180,8 @@ export default class Dashboard extends Index {
       <div id="dashboard">
         <o-grid namespace="grid-12er-">
           <div col-lg="12" col-md="12" col-sm="12">
-            <h1>Dashboard</h1>
-          </div>
-          <div col-lg="12" col-md="12" col-sm="12">
-          </div>
-          <div col-lg="12" col-md="12" col-sm="12">
-            <h2>Abonnemente</h2>
-            <div class="container-subscriptions"></div>
+            <h2>Meine nächsten Termine</h2>
+            <div class="container-bookings"></div>
           </div>
         </o-grid>
     </div>

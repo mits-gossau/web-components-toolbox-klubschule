@@ -14,16 +14,46 @@
 export default class Dashboard extends HTMLElement {
   constructor() {
     super()
-    this.abortControllerDashboardFakeMe = null
-    this.abortControllerDashboardSubscriptions = null
+    this.abortControllerBookings = null
+    // this.abortControllerSubscriptions = null
   }
 
   connectedCallback() {
-    this.addEventListener('request-dashboard-subscriptions', this.requestSubscriptions)
+    this.addEventListener('request-bookings', this.requestBookingss)
+    // this.addEventListener('request-subscriptions', this.requestSubscriptions)
   }
 
   disconnectedCallback() {
-    this.removeEventListener('request-dashboard-subscriptions', this.requestSubscriptions)
+    this.removeEventListener('request-bookings', this.requestBookingss)
+    // this.removeEventListener('request-subscriptions', this.requestSubscriptions)
+  }
+
+  /**
+   * Sends a POST request to fetch user bookings for the dashboard.
+   * Dispatches the request to the API endpoint defined in Environment.
+   * @param {CustomEventInit} event - The event that triggered the request.
+   */
+  requestBookingss = (event) => {
+    if (this.abortControllerBookings) this.abortControllerBookings.abort()
+    this.abortControllerBookings = new AbortController()
+
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBookings}`
+    const data = { language: 'de' }
+    const options = this.fetchPOSTOptions(data, this.abortControllerBookings)
+
+    this.dispatchEvent(new CustomEvent('update-bookings', {
+      detail: {
+        fetch: fetch(endpoint, options)
+          .then(async response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+            return await response.json()
+          })
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
   }
 
   /**
@@ -32,13 +62,13 @@ export default class Dashboard extends HTMLElement {
    * @param {CustomEventInit} event - The event that triggered the request.
    */
   requestSubscriptions = (event) => {
-    if (this.abortControllerDashboardSubscriptions) this.abortControllerDashboardSubscriptions.abort()
-    this.abortControllerDashboardSubscriptions = new AbortController()
+    if (this.abortControllerSubscriptions) this.abortControllerSubscriptions.abort()
+    this.abortControllerSubscriptions = new AbortController()
 
     // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').apiSubscriptions}`
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').subscriptions}`
     const data = { language: 'de' }
-    const options = this.fetchPOSTOptions(data, this.abortControllerDashboardSubscriptions)
+    const options = this.fetchPOSTOptions(data, this.abortControllerSubscriptions)
 
     this.dispatchEvent(new CustomEvent('update-subscriptions', {
       detail: {

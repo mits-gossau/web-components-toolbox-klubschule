@@ -60,8 +60,9 @@ self.Environment = {
     switch (type) {
       case 'kunden-portal': {
         return {
-          fakeMe: 'https://jsonplaceholder.typicode.com/posts',
-          apiSubscriptions: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptions`
+          myBooking: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/myBooking`,
+          myBookings: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/myBookings`,
+          subscriptions: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptions`,
         }
       }
       default:
