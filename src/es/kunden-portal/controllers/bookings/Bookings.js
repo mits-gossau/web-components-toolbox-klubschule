@@ -6,30 +6,25 @@
 /* global self */
 
 /**
- * EXAMPLE!!!
- * @example ./pages/Dashboard.js
- * @class Dashboard
+ * @class Bookings
  * @type {CustomElementConstructor}
  */
-export default class Dashboard extends HTMLElement {
+export default class Bookings extends HTMLElement {
   constructor() {
     super()
     this.abortControllerBookings = null
-    // this.abortControllerSubscriptions = null
   }
 
   connectedCallback() {
     this.addEventListener('request-bookings', this.requestBookingss)
-    // this.addEventListener('request-subscriptions', this.requestSubscriptions)
   }
 
   disconnectedCallback() {
     this.removeEventListener('request-bookings', this.requestBookingss)
-    // this.removeEventListener('request-subscriptions', this.requestSubscriptions)
   }
 
   /**
-   * Sends a POST request to fetch user bookings for the dashboard.
+   * Sends a POST request to fetch user bookings for bookings.
    * Dispatches the request to the API endpoint defined in Environment.
    * @param {CustomEventInit} event - The event that triggered the request.
    */
@@ -43,34 +38,6 @@ export default class Dashboard extends HTMLElement {
     const options = this.fetchPOSTOptions(data, this.abortControllerBookings)
 
     this.dispatchEvent(new CustomEvent('update-bookings', {
-      detail: {
-        fetch: fetch(endpoint, options)
-          .then(async response => {
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-            return await response.json()
-          })
-      },
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
-  }
-
-  /**
-   * Sends a POST request to fetch user subscriptions for the dashboard.
-   * Dispatches the request to the API endpoint defined in Environment.
-   * @param {CustomEventInit} event - The event that triggered the request.
-   */
-  requestSubscriptions = (event) => {
-    if (this.abortControllerSubscriptions) this.abortControllerSubscriptions.abort()
-    this.abortControllerSubscriptions = new AbortController()
-
-    // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').subscriptions}`
-    const data = { language: 'de' }
-    const options = this.fetchPOSTOptions(data, this.abortControllerSubscriptions)
-
-    this.dispatchEvent(new CustomEvent('update-subscriptions', {
       detail: {
         fetch: fetch(endpoint, options)
           .then(async response => {

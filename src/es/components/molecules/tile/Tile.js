@@ -20,7 +20,7 @@ export default class Tile extends Shadow() {
       window.open(this.tileLink, '_self')
     }
   }
-
+  
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
@@ -30,6 +30,18 @@ export default class Tile extends Shadow() {
 
   disconnectedCallback () {
     this.tileTitle?.removeEventListener('click', this.openLink)
+  }
+
+  static get observedAttributes() { return ['data'] }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'data' && newValue) {
+      try {
+        this.tileData = JSON.parse(newValue)
+      } catch (e) {
+        this.tileData = null
+      }
+    }
   }
 
   /**
@@ -312,7 +324,7 @@ export default class Tile extends Shadow() {
         return this.fetchCSS([
           {
             path: `${this.importMetaUrl}./booking-/booking-.css`,
-            namespace: false
+            namespace: false,
           }, ...styles])
       default:
         return this.fetchCSS(styles)
@@ -414,7 +426,7 @@ export default class Tile extends Shadow() {
         </div>      
       </div>
       <div class="m-tile__foot-passed">
-        <span class="m-tile__passed-message">${this.getAttribute("passed-message")}</span>
+        ${this.getAttribute("passed-message") ? /* html */`<span class="m-tile__passed-message">${this.getAttribute("passed-message")}</span>` : ''}
         <div class="m-tile__foot-left">
           ${this.hasAttribute('is-wish-list') && !this.hasAttribute('is-info-events') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? data.parentkey : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
         </div>

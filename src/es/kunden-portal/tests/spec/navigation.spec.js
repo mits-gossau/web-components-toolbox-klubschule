@@ -56,12 +56,13 @@ test.describe('Kunden Portal Navigation', () => {
     expect(routesConfig).toBeTruthy()
 
     // Parse and validate the routes configuration
+    // @ts-ignore
     const routes = JSON.parse(routesConfig)
     expect(routes).toHaveLength(3)
 
     // Verify each route configuration
     const expectedRoutes = [
-      { name: 'p-dashboard', path: '../../pages/Dashboard.js' },
+      { name: 'p-dashboard', path: '../../pages/Bookings.js' },
       { name: 'p-booked', path: '../../pages/Booked.js' },
       { name: 'p-subscriptions', path: '../../pages/Subscriptions.js' }
     ]
