@@ -188,7 +188,7 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__foot-right {
-        display: flex;
+        display: var(--foot-right-display, flex);
         flex-direction: row;
         justify-content: var(--foot-justify-content, normal);
         align-items: flex-end;

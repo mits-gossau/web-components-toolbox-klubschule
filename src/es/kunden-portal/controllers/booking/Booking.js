@@ -1,0 +1,69 @@
+// @ts-check
+/* global AbortController */
+/* global CustomEvent */
+/* global fetch */
+/* global HTMLElement */
+/* global self */
+
+/**
+ * @class Booking
+ * @type {CustomElementConstructor}
+ */
+export default class Booking extends HTMLElement {
+  constructor() {
+    super()
+    this.abortControllerBooking = null
+  }
+
+  connectedCallback() {
+    this.addEventListener('request-booking', this.requestBooking)
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('request-booking', this.requestBooking)
+  }
+
+  requestBooking = (event) => {
+    if (this.abortControllerBooking) this.abortControllerBooking.abort()
+    this.abortControllerBooking = new AbortController()
+
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBooking}`
+    const data = { 
+        language: 'de',
+        courseType: 'E',
+        courseId: 1706400
+    }
+    const options = this.fetchPOSTOptions(data, this.abortControllerBooking)
+
+    this.dispatchEvent(new CustomEvent('update-booking', {
+      detail: {
+        fetch: fetch(endpoint, options)
+          .then(async response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+            return await response.json()
+          })
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+
+  /**
+   * Returns an object with request method, http headers, body, and signal properties for making a POST request with fetch.
+   * @param {Object} data - The data that you want to send in the POST request. This data should be in a format that can be converted to JSON.
+   * @param {AbortController} abortController - Abort Fetch requests
+   * @returns {Object} An object is being returned to use as option object for api fetch
+   */
+  fetchPOSTOptions(data, abortController) {
+    return {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      signal: abortController.signal
+    }
+  }
+}

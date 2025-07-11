@@ -30,6 +30,7 @@
     --foot-flex-direction: column-reverse;
     --foot-align-items: center;
     --foot-padding: 0;
+    --foot-right-display: none;
     --foot-passed-display: none;
     --foot-width: 100%;
     --foot-price-margin-bottom: 24px;
@@ -82,6 +83,7 @@
     --tile-booking-foot-flex-direction: column-reverse;
     --tile-booking-foot-align-items: center;
     --tile-booking-foot-padding: 0;
+    --tile-booking-foot-right-display: none;
     --tile-booking-foot-passed-display: none;
     --tile-booking-foot-width: 100%;
     --tile-booking-foot-price-margin-bottom: 24px;

@@ -12,7 +12,7 @@ export default class Bookings extends Index {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.requestBookingssListener = (event) => {
+    this.requestBookingsListener = (event) => {
       event.detail.fetch
         .then((data) => {
           this.bookingsData = data.bookings || [] 
@@ -29,12 +29,12 @@ export default class Bookings extends Index {
   connectedCallback() {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
-    document.body.addEventListener('update-bookings', this.requestBookingssListener)
+    document.body.addEventListener('update-bookings', this.requestBookingsListener)
     this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
   }
 
   disconnectedCallback() {
-    document.body.removeEventListener('update-bookings', this.requestBookingssListener)
+    document.body.removeEventListener('update-bookings', this.requestBookingsListener)
   }
 
   shouldRenderHTML() {
@@ -118,7 +118,8 @@ export default class Bookings extends Index {
           icons: [],
           buttons: [{
             text: 'Detail ansehen',
-            typ: 'secondary'
+            typ: 'secondary',
+            event: 'open-booking-detail',
           }],
           price: {
             amount: booking.price?.amount || booking.price || ''
