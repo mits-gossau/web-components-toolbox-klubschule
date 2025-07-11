@@ -27,12 +27,15 @@ export default class Booking extends HTMLElement {
     if (this.abortControllerBooking) this.abortControllerBooking.abort()
     this.abortControllerBooking = new AbortController()
 
+    const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '')
+    const courseId = urlParams.get('courseId')
+
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBooking}`
     const data = { 
         language: 'de',
         courseType: 'E',
-        courseId: 1706400
+        courseId: courseId
     }
     const options = this.fetchPOSTOptions(data, this.abortControllerBooking)
 

@@ -120,6 +120,7 @@ export default class Bookings extends Index {
             text: 'Detail ansehen',
             typ: 'secondary',
             event: 'open-booking-detail',
+            link: `index.html#/booking?courseId=${booking.courseId}`
           }],
           price: {
             amount: booking.price?.amount || booking.price || ''

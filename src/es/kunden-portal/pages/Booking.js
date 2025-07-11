@@ -15,7 +15,7 @@ export default class Booking extends Index {
         this.requestBookingListener = (event) => {
             event.detail.fetch
                 .then((data) => {
-                    this.bookingData = data.booking || [] 
+                    this.bookingData = data || [] 
                     if (this.modulesLoaded) {
                         setTimeout(() => this.renderBooking(), 0)
                     }
@@ -47,9 +47,13 @@ export default class Booking extends Index {
 
     renderCSS() {
         this.css = /* css */`
-            :host {}
-            @media only screen and (max-width: _max-width_) {
-                :host {}
+            :host h2 {
+                color: var(--mdx-sys-color-accent-6-onSubtle);
+                font: var(--mdx-sys-font-flex-large-headline2);
+            }
+            :host h2 > span {
+                position: relative;
+                top: -4px;
             }
         `
     }
@@ -66,7 +70,7 @@ export default class Booking extends Index {
 
         this.html = /* html */`
         <div id="booking">
-            <h2><a-icon-mdx icon-name="shopping_list" size="1em"></a-icon-mdx> <span>Kurs Details</span></h2>
+            <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Kurs Details</span></h2>
             <div class="container-booking"></div>
         </div>
     `
@@ -74,8 +78,8 @@ export default class Booking extends Index {
 
     renderBooking() {
         const bookingDiv = this.shadowRoot.querySelector('#booking .container-booking')
-        if (!bookingDiv || !this.bookingsData) return
+        if (!bookingDiv || !this.bookingData) return
         bookingDiv.innerHTML = ''
-
+        bookingDiv.innerHTML = this.bookingData.course.courseTitle
     }
 }

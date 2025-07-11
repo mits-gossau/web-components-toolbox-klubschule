@@ -16,11 +16,11 @@ export default class Bookings extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('request-bookings', this.requestBookingss)
+    this.addEventListener('request-bookings', this.requestBookings)
   }
 
   disconnectedCallback() {
-    this.removeEventListener('request-bookings', this.requestBookingss)
+    this.removeEventListener('request-bookings', this.requestBookings)
   }
 
   /**
@@ -28,7 +28,7 @@ export default class Bookings extends HTMLElement {
    * Dispatches the request to the API endpoint defined in Environment.
    * @param {CustomEventInit} event - The event that triggered the request.
    */
-  requestBookingss = (event) => {
+  requestBookings = (event) => {
     if (this.abortControllerBookings) this.abortControllerBookings.abort()
     this.abortControllerBookings = new AbortController()
 
