@@ -267,8 +267,8 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('cname', encodeURIComponent(event.detail.description))
           if (this.saveLocationDataInLocalStorage) this.updateStorageBasedEvent('local', event)
           if (this.saveLocationDataInSessionStorage) this.updateStorageBasedEvent('session', event)
-          if (!currentRequestObj.searchText) currentRequestObj.sorting = 2
-          this.updateURLParam('sorting', 2)
+          currentRequestObj.sorting = 2
+          this.updateURLParam('sorting', currentRequestObj.sorting)
         } else {
           if (this.saveLocationDataInLocalStorage && localStorage.getItem('locationData')) this.updateUrlBasedStorage('local')
           else if (this.saveLocationDataInSessionStorage && sessionStorage.getItem('locationData')) this.updateUrlBasedStorage('session')
@@ -290,10 +290,12 @@ export default class WithFacet extends WebWorker() {
         if (event?.detail?.value) {
           this.updateURLParam('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
+          if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 1
         }
         if (event?.detail?.value === '') {
           delete currentRequestObj.searchText
           this.deleteParamFromUrl('q')
+          if (!currentRequestObj.clat) currentRequestObj.sorting = 3
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
