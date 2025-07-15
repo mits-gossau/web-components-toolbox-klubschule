@@ -169,9 +169,14 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
-        currentRequestObj = structuredClone(initialRequestObj)
+        // keep quick filters
+        let quickFilters = (currentRequestObj.filter || []).filter(f => f.isquick)
+        quickFilters = quickFilters.map(f => ({ ...f, selected: false, children: [] }))
+        isSearchPage
+          ? (currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)])
+          : (currentRequestObj.filter = [...quickFilters, ...(initialRequestObj.filter || initialFilter || []).filter(f => f.isquick)])
+        // reset all other params
         delete currentRequestObj.searchText
-        isSearchPage ? (currentRequestObj.filter = initialFilter || []) : (currentRequestObj.filter = initialRequestObj.filter || initialFilter || [])
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
       } else if (event?.type === 'reset-filter') {
