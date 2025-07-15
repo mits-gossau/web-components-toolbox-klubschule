@@ -189,7 +189,9 @@ export default class WithFacet extends WebWorker() {
           currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         } else {
           currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-          currentRequestObj.filter = (currentRequestObj.filter || []).filter(f => f.urlpara !== filterKey)
+          Array.from(this.params.keys()).forEach(paramKey => {
+            if (paramKey === filterKey) currentRequestObj.filter = (currentRequestObj.filter || []).filter(f => f.urlpara !== filterKey)
+          })
         }
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         if (isTree) {
