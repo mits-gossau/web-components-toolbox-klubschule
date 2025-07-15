@@ -172,7 +172,6 @@ export default class WithFacet extends WebWorker() {
         currentRequestObj = structuredClone(initialRequestObj)
         delete currentRequestObj.searchText
         isSearchPage ? (currentRequestObj.filter = initialFilter || []) : (currentRequestObj.filter = initialRequestObj.filter || initialFilter || [])
-        currentRequestObj.filter = initialFilter
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
       } else if (event?.type === 'reset-filter') {
