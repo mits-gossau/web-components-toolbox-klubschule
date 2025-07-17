@@ -177,13 +177,12 @@ export default class WithFacet extends WebWorker() {
         // keep quick filters
         let quickFilters = (currentRequestObj.filter || []).filter(f => f.isquick)
         quickFilters = quickFilters.map(f => ({ ...f, selected: false, children: [] }))
-        isSearchPage
-          ? (currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)])
-          : (currentRequestObj.filter = [...quickFilters, ...(initialRequestObj.filter || initialFilter || []).filter(f => f.isquick)])
+        isSearchPage ? (currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]) : currentRequestObj.filter = initialRequestObj.filter
         // reset all other params
         delete currentRequestObj.searchText
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
+        this.filterOnly = true
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
@@ -195,7 +194,12 @@ export default class WithFacet extends WebWorker() {
         } else {
           currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
           Array.from(this.params.keys()).forEach(paramKey => {
-            if (paramKey === filterKey) currentRequestObj.filter = (currentRequestObj.filter || []).filter(f => f.urlpara !== filterKey)
+            if (paramKey === filterKey) {
+              // check if filter has value in "isquick", then keep it, set "selected:false" and remove children []
+              // otherwise just remove it
+              currentRequestObj.filter = (currentRequestObj.filter || []).map(f => (f.urlpara === filterKey && f.isquick) ? { ...f, selected: false, children: [] } : f).filter(f => !(f.urlpara === filterKey && !f.isquick))
+              initialRequestObj.filter = (initialRequestObj.filter || []).map(f => (f.urlpara === filterKey && f.isquick) ? { ...f, selected: false, children: [] } : f).filter(f => !(f.urlpara === filterKey && !f.isquick))
+            }
           })
         }
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
