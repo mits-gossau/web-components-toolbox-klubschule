@@ -195,9 +195,15 @@ export default class WithFacet extends WebWorker() {
         } else {
           currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
           Array.from(this.params.keys()).forEach(paramKey => {
-            if (paramKey === filterKey) currentRequestObj.filter = (currentRequestObj.filter || []).filter(f => f.urlpara !== filterKey)
+            if (paramKey === filterKey) {
+              currentRequestObj.filter = (currentRequestObj.filter || []).filter(f => f.urlpara !== filterKey)
+              initialRequestObj.filter = (initialRequestObj.filter || []).filter(f => f.urlpara !== filterKey)
+            }
           })
         }
+        console.log(currentRequestObj.filter)
+        console.log(initialRequestObj.filter)
+        console.log(initialFilter)
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         if (isTree) {
           currentRequestObj.filter = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentRequestObj.filter, initialRequestObj.filter)
