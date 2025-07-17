@@ -59,7 +59,7 @@ export default class WithFacet extends WebWorker() {
     this.params = new URLSearchParams(self.location.search)
     const isSearchPage = this.hasAttribute('search-page') || ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.startsWith(path))
     const isMocked = this.hasAttribute('mock')
-    const isMockedInfoEvents = this.hasAttribute('mock-info-events')    
+    const isMockedInfoEvents = this.hasAttribute('mock-info-events')
     let endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
@@ -73,7 +73,7 @@ export default class WithFacet extends WebWorker() {
     this.abortController = null
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
     this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
-    
+
     this.fillStorage = storageType => {
       const isLocalStorageType = storageType === 'local'
       // update storage based on url
@@ -116,8 +116,13 @@ export default class WithFacet extends WebWorker() {
         if (sessionStorage.getItem('currentSorting')) {
           this.updateURLParam('sorting', sessionStorage.getItem('currentSorting'))
         } else {
-          this.updateURLParam('sorting', 2)
-          sessionStorage.setItem('currentSorting', '2')
+          if (isSearchPage && currentRequestObj.clat) {
+            this.updateURLParam('sorting', 1)
+            sessionStorage.setItem('currentSorting', '1')
+          } else {
+            this.updateURLParam('sorting', 2)
+            sessionStorage.setItem('currentSorting', '2')
+          }
         }
       }
     }
@@ -145,7 +150,7 @@ export default class WithFacet extends WebWorker() {
     const isSamePath = sessionStorage.getItem('currentPathname') === window.location.pathname
     if (this.params.has('clat') && !isSamePath && !currentRequestObj.searchText) {
       currentRequestObj.sorting = 2
-      this.updateURLParam('sorting', 2) 
+      this.updateURLParam('sorting', 2)
     }
     sessionStorage.setItem('currentPathname', window.location.pathname)
 
@@ -169,10 +174,14 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-all-filters') {
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
-        currentRequestObj = structuredClone(initialRequestObj)
+        // keep quick filters
+        let quickFilters = (currentRequestObj.filter || []).filter(f => f.isquick)
+        quickFilters = quickFilters.map(f => ({ ...f, selected: false, children: [] }))
+        isSearchPage
+          ? (currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)])
+          : (currentRequestObj.filter = [...quickFilters, ...(initialRequestObj.filter || initialFilter || []).filter(f => f.isquick)])
+        // reset all other params
         delete currentRequestObj.searchText
-        isSearchPage ? (currentRequestObj.filter = initialFilter || []) : (currentRequestObj.filter = initialRequestObj.filter || initialFilter || [])
-        currentRequestObj.filter = initialFilter
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
       } else if (event?.type === 'reset-filter') {
@@ -185,6 +194,9 @@ export default class WithFacet extends WebWorker() {
           currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         } else {
           currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+          Array.from(this.params.keys()).forEach(paramKey => {
+            if (paramKey === filterKey) currentRequestObj.filter = (currentRequestObj.filter || []).filter(f => f.urlpara !== filterKey)
+          })
         }
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         if (isTree) {
@@ -230,6 +242,7 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter.forEach((filter) => { if (filter.id === selectedFilterItem.id) filter.skipCountUpdate = true })
+        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
@@ -267,8 +280,8 @@ export default class WithFacet extends WebWorker() {
           this.updateURLParam('cname', encodeURIComponent(event.detail.description))
           if (this.saveLocationDataInLocalStorage) this.updateStorageBasedEvent('local', event)
           if (this.saveLocationDataInSessionStorage) this.updateStorageBasedEvent('session', event)
-          if (!currentRequestObj.searchText) currentRequestObj.sorting = 2
-          this.updateURLParam('sorting', 2)
+          currentRequestObj.sorting = 2
+          this.updateURLParam('sorting', currentRequestObj.sorting)
         } else {
           if (this.saveLocationDataInLocalStorage && localStorage.getItem('locationData')) this.updateUrlBasedStorage('local')
           else if (this.saveLocationDataInSessionStorage && sessionStorage.getItem('locationData')) this.updateUrlBasedStorage('session')
@@ -290,10 +303,12 @@ export default class WithFacet extends WebWorker() {
         if (event?.detail?.value) {
           this.updateURLParam('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
+          if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 1
         }
         if (event?.detail?.value === '') {
           delete currentRequestObj.searchText
           this.deleteParamFromUrl('q')
+          if (!currentRequestObj.clat) currentRequestObj.sorting = 3
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
@@ -346,7 +361,7 @@ export default class WithFacet extends WebWorker() {
       } else {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
       }
-      
+
       if (isOtherLocations) {
         if (!endpoint.startsWith('http://') && !endpoint.startsWith('https://')) {
           endpoint = `${this.url.origin}${endpoint}`
@@ -400,8 +415,8 @@ export default class WithFacet extends WebWorker() {
             throw new Error(response.statusText)
           }).then(json => {
             // TODO/ERROR: Api answers with empty filter payload when using ppage (next page). Workaround for keeping filters when returned empty.
-            if (event?.detail?.ppage && !json.filters.length) json.filters = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : currentRequestObj.filter || initialFilter || []  
-            
+            if (event?.detail?.ppage && !json.filters.length) json.filters = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : currentRequestObj.filter || initialFilter || []
+
             // update filters with api response
             currentRequestObj.filter = currentCompleteFilterObj = json.filters
 
@@ -562,7 +577,7 @@ export default class WithFacet extends WebWorker() {
           if (!filterItem.selected && isUrlpara) {
             filterItem.selected = true
           } else if (filterItem.selected && !isUrlpara) {
-            filterItem.selected = false 
+            filterItem.selected = false
           }
         } else if (filterItem.selected && isUrlpara && !isStartTimeSelectedFromFilterPills) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
@@ -573,7 +588,7 @@ export default class WithFacet extends WebWorker() {
         } else if (isParentSelected) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
-        } 
+        }
       } else if (zeroLevel && isTree && isSectorFilter) {
         filterItem.skipCountUpdate = true
       }
@@ -711,7 +726,7 @@ export default class WithFacet extends WebWorker() {
    * Needs to be done, since Backend is writing filterqueries into the initial request, when the page is refreshed/ shared
    * For more Informations: https://jira.migros.net/browse/MIDUWEB-1452
    * @returns Array with Filter Objects, which are non editable by the user
-  */ 
+  */
   getInitialBaseFilters(filters) {
     return filters.filter(
       (filter) => {
@@ -753,7 +768,7 @@ export default class WithFacet extends WebWorker() {
     ]
   }
 
-  static getSectorFilterWithInitialFallback (currentFilter, initialFilter) {
+  static getSectorFilterWithInitialFallback(currentFilter, initialFilter) {
     const initialSectorFilter = initialFilter.find((filter) => Number(filter.id) === 7)
     let index = 0
     const sectorFilter = currentFilter.find((filter, i) => {
@@ -768,7 +783,7 @@ export default class WithFacet extends WebWorker() {
     return currentFilter
   }
 
-  dataLayerPush (value) {
+  dataLayerPush(value) {
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {
       try {
