@@ -172,6 +172,8 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
+        // exclude selected filters from initialRequestObj.filter that are not in URL params
+        const excludeIds = (initialRequestObj.filter || []).filter(f => f.selected && f.urlpara && !this.params.has(f.urlpara)).map(f => f.id)
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         // keep quick filters
@@ -180,7 +182,18 @@ export default class WithFacet extends WebWorker() {
         if (isSearchPage) {
           currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]
         } else { 
-          currentRequestObj.filter = [...quickFilters, ...initialRequestObj.filter.filter(f => !quickFilters.some(qf => qf.id === f.id) || f.id === "7")]
+          // build currentRequestObj.filter:
+          // 1. first, keep all filters from initialRequestObj.filter whose ID is in excludeIds (untouched)
+          // 2. then, add quickFilters, but only if not already included above
+          // 3. finally, add all remaining filters from initialRequestObj.filter that are not in excludeIds and not in quickFilters
+          currentRequestObj.filter = [
+            ...initialRequestObj.filter.filter(f => excludeIds.includes(f.id)),
+            ...quickFilters.filter(qf => !excludeIds.includes(qf.id)),
+            ...initialRequestObj.filter.filter(f =>
+              !excludeIds.includes(f.id) &&
+              !quickFilters.some(qf => qf.id === f.id)
+            )
+          ]
         }
         // reset all other params
         delete currentRequestObj.searchText
