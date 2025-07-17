@@ -177,7 +177,11 @@ export default class WithFacet extends WebWorker() {
         // keep quick filters
         let quickFilters = (currentRequestObj.filter || []).filter(f => f.isquick)
         quickFilters = quickFilters.map(f => ({ ...f, selected: false, children: [] }))
-        isSearchPage ? (currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]) : currentRequestObj.filter = initialRequestObj.filter
+        if (isSearchPage) {
+          currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]
+        } else { 
+          currentRequestObj.filter = [...quickFilters, ...initialRequestObj.filter.filter(f => !quickFilters.some(qf => qf.id === f.id) || f.id === "7")]
+        }
         // reset all other params
         delete currentRequestObj.searchText
         currentRequestObj.sorting = 3
@@ -342,8 +346,19 @@ export default class WithFacet extends WebWorker() {
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        if (isSearchPage) {
+          currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        } else {
+          currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        }
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        // check, if filter of initialRequestObj.filter with id="7" is selected
+        // if true, replace it with filter id="7" in currentRequestObj.filter
+        const initialSectorFilter = (initialRequestObj.filter || []).find(f => String(f.id) === "7" && f.selected)
+        if (initialSectorFilter) {
+          const idx = (currentRequestObj.filter || []).findIndex(f => String(f.id) === "7")
+          idx !== -1 ? currentRequestObj.filter[idx] = structuredClone(initialSectorFilter) : currentRequestObj.filter.push(structuredClone(initialSectorFilter))
+        }
       }
 
       // filter only
