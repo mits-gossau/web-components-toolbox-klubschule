@@ -177,7 +177,11 @@ export default class WithFacet extends WebWorker() {
         // keep quick filters
         let quickFilters = (currentRequestObj.filter || []).filter(f => f.isquick)
         quickFilters = quickFilters.map(f => ({ ...f, selected: false, children: [] }))
-        isSearchPage ? (currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]) : currentRequestObj.filter = initialRequestObj.filter
+        if (isSearchPage) {
+          currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]
+        } else { 
+          currentRequestObj.filter = [...quickFilters, ...initialRequestObj.filter.filter(f => !quickFilters.some(qf => qf.id === f.id) || f.id === "7")]
+        }
         // reset all other params
         delete currentRequestObj.searchText
         currentRequestObj.sorting = 3
@@ -337,13 +341,20 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
       } else {
+        console.log(currentRequestObj.filter)
+        console.log(initialRequestObj.filter)
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        // if (isSearchPage) {
+          currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        // } else {
+        //   currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        // }
+          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        console.log(currentRequestObj.filter)
       }
 
       // filter only
