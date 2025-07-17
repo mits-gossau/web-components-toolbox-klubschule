@@ -172,18 +172,25 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
+        console.log(currentRequestObj.filter)
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         // keep quick filters
         let quickFilters = (currentRequestObj.filter || []).filter(f => f.isquick)
         quickFilters = quickFilters.map(f => ({ ...f, selected: false, children: [] }))
+        console.log('quickFilters', quickFilters)
         isSearchPage
           ? (currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)])
-          : (currentRequestObj.filter = [...quickFilters, ...(initialRequestObj.filter || initialFilter || []).filter(f => f.isquick)])
-        // reset all other params
+          : currentRequestObj.filter = initialRequestObj.filter
+          // : (currentRequestObj.filter = [...quickFilters, ...(initialRequestObj.filter || initialFilter || []).filter(f => f.isquick && !quickFilters.some(qf => qf.id === f.id))])
+        // // reset all other params
         delete currentRequestObj.searchText
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
+        this.filterOnly = true
+        console.log(currentRequestObj.filter)
+        console.log(initialRequestObj.filter)
+        console.log(initialFilter)
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
@@ -201,9 +208,6 @@ export default class WithFacet extends WebWorker() {
             }
           })
         }
-        console.log(currentRequestObj.filter)
-        console.log(initialRequestObj.filter)
-        console.log(initialFilter)
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         if (isTree) {
           currentRequestObj.filter = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentRequestObj.filter, initialRequestObj.filter)
