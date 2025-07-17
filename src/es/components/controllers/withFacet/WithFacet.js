@@ -341,20 +341,24 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
       } else {
-        console.log(currentRequestObj.filter)
-        console.log(initialRequestObj.filter)
         // default behavior
         // always shake out the response filters to only include selected filters or selected in ancestry
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
-        // if (isSearchPage) {
+        if (isSearchPage) {
           currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        // } else {
-        //   currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
-        // }
-          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-        console.log(currentRequestObj.filter)
+        } else {
+          currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        }
+        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        // check, if filter of initialRequestObj.filter with id="7" is selected
+        // if true, replace it with filter id="7" in currentRequestObj.filter
+        const initialSectorFilter = (initialRequestObj.filter || []).find(f => String(f.id) === "7" && f.selected)
+        if (initialSectorFilter) {
+          const idx = (currentRequestObj.filter || []).findIndex(f => String(f.id) === "7")
+          idx !== -1 ? currentRequestObj.filter[idx] = structuredClone(initialSectorFilter) : currentRequestObj.filter.push(structuredClone(initialSectorFilter))
+        }
       }
 
       // filter only
