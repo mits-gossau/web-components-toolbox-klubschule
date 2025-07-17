@@ -178,7 +178,7 @@ export default class WithFacet extends WebWorker() {
         let quickFilters = (currentRequestObj.filter || []).filter(f => f.isquick)
         quickFilters = quickFilters.map(f => ({ ...f, selected: false, children: [] }))
         isSearchPage ? (currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]) : currentRequestObj.filter = initialRequestObj.filter
-        // // reset all other params
+        // reset all other params
         delete currentRequestObj.searchText
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
