@@ -15,7 +15,6 @@ export default class Bookings extends Index {
     this.requestBookingsListener = (event) => {
       event.detail.fetch
         .then((data) => {
-          console.log('Bookings data received:', data)
           this.bookingsData = data.bookings || [] 
           if (this.modulesLoaded) {
             setTimeout(() => this.renderBookingsTiles(), 0)
