@@ -17,7 +17,7 @@ export default class Bookings extends Index {
         .then((data) => {
           this.bookingsData = data.bookings || [] 
           if (this.modulesLoaded) {
-            setTimeout(() => this.renderBookingsTiles(), 0)
+            setTimeout(() => this.renderAppointmentsTiles(), 0)
           }
         })
         .catch(error => {
@@ -34,7 +34,7 @@ export default class Bookings extends Index {
     if (!this.bookingsData) {
       this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
     } else if (this.modulesLoaded) {
-      setTimeout(() => this.renderBookingsTiles(), 0)
+      // setTimeout(() => this.renderAppointmentsTiles(), 0)
     }
   }
 
@@ -60,16 +60,16 @@ export default class Bookings extends Index {
         position: relative;
         top: -4px;
       }
-      :host .container-bookings {
+      :host .container-appointments {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         gap: var(--grid-12er-grid-gap, 1rem);
       }
-      :host .container-bookings .booking-tile {
+      :host .container-appointments .booking-tile {
         grid-column: span 4;
       }
       @media only screen and (max-width: _max-width_) {
-        :host .container-bookings .booking-tile {
+        :host .container-appointments .booking-tile {
           grid-column: span 12;
         }
       }
@@ -93,19 +93,18 @@ export default class Bookings extends Index {
     this.html = /* html */ `
       <div id="bookings">
         <h2><a-icon-mdx icon-name="calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
-        <div class="container-bookings"></div>
+        <div class="container-appointments"></div>
       </div>
     `
   }
 
-  renderBookingsTiles(limit = 6, offset = 0) {
-    const bookingsDiv = this.shadowRoot.querySelector('#bookings .container-bookings')
-    if (!bookingsDiv || !this.bookingsData) return
+  renderAppointmentsTiles(limit = 6, offset = Number(sessionStorage.getItem('appointmentsOffset')) || 0) {
+    const appointmentsDiv = this.shadowRoot.querySelector('#bookings .container-appointments')
+    if (!appointmentsDiv || !this.bookingsData) return
     
-    // clear on first load
-    if (offset === 0) bookingsDiv.innerHTML = ''
+    if (offset === 0) appointmentsDiv.innerHTML = ''
 
-    // all future appointments with course info
+    // future appointments with course info
     const today = new Date()
     const allAppointments = []
     this.bookingsData.forEach(booking => {
@@ -126,11 +125,10 @@ export default class Bookings extends Index {
       })
     })
 
-    // sort by appointmentDate ascending
-    // @ts-ignore
+    // @ts-ignore, sort by appointmentDate ascending
     allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
 
-    // slice for pagination
+    // slice for loading more appointments
     const visibleAppointments = allAppointments.slice(offset, offset + limit)
 
     if (visibleAppointments.length) {
@@ -162,10 +160,10 @@ export default class Bookings extends Index {
             amount: app.price?.amount || app.price || ''
           }
         }))
-        bookingsDiv.appendChild(tile)
+        appointmentsDiv.appendChild(tile)
       })
 
-      // load more appointments
+      // load more
       const container = this.shadowRoot.querySelector('#bookings')
       let moreBtnWrapper = container.querySelector('.more-bookings-wrapper')
       if (moreBtnWrapper) moreBtnWrapper.remove()
@@ -183,13 +181,41 @@ export default class Bookings extends Index {
           </ks-a-button>
         `
         moreBtn.onclick = () => {
-          this.renderBookingsTiles(limit, offset + limit)
+          sessionStorage.setItem('appointmentsOffset', String(offset + limit))
+          this.renderAppointmentsTiles(limit, offset + limit)
         }
         moreBtnWrapper.appendChild(moreBtn)
         container.appendChild(moreBtnWrapper)
       }
+
+      // load less
+      if (offset > 0) {
+        let lessBtnWrapper = container.querySelector('.less-bookings-wrapper')
+        if (lessBtnWrapper) lessBtnWrapper.remove()
+
+        lessBtnWrapper = document.createElement('div')
+        lessBtnWrapper.className = 'less-bookings-wrapper'
+        lessBtnWrapper.style = 'text-align:center;margin-top:1rem;'
+
+        const lessBtn = document.createElement('span')
+        lessBtn.innerHTML = /* html */`
+          <ks-a-button namespace="button-primary-" color="secondary">
+            <span class="less-text">Weniger anzeigen</span>
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowUpRight" size="1em" class="icon-right"></a-icon-mdx>
+          </ks-a-button>
+        `
+        lessBtn.onclick = () => {
+          sessionStorage.removeItem('appointmentsOffset')
+          lessBtn.innerHTML = ''
+          this.renderAppointmentsTiles(limit, 0)
+        }
+        lessBtnWrapper.appendChild(lessBtn)
+        container.appendChild(lessBtnWrapper)
+      }
+
     } else {
-      bookingsDiv.textContent = 'No Bookings'
+      appointmentsDiv.textContent = 'No Bookings'
+      sessionStorage.removeItem('appointmentsOffset')
     }
   }
 }
