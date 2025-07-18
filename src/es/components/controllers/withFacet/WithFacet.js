@@ -172,18 +172,34 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
+        // exclude selected filters from initialRequestObj.filter that are not in URL params
+        const excludeIds = (initialRequestObj.filter || []).filter(f => f.selected && f.urlpara && !this.params.has(f.urlpara)).map(f => f.id)
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         // keep quick filters
         let quickFilters = (currentRequestObj.filter || []).filter(f => f.isquick)
         quickFilters = quickFilters.map(f => ({ ...f, selected: false, children: [] }))
-        isSearchPage
-          ? (currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)])
-          : (currentRequestObj.filter = [...quickFilters, ...(initialRequestObj.filter || initialFilter || []).filter(f => f.isquick)])
+        if (isSearchPage) {
+          currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]
+        } else { 
+          // build currentRequestObj.filter:
+          // 1. first, keep all filters from initialRequestObj.filter whose ID is in excludeIds (untouched)
+          // 2. then, add quickFilters, but only if not already included above
+          // 3. finally, add all remaining filters from initialRequestObj.filter that are not in excludeIds and not in quickFilters
+          currentRequestObj.filter = [
+            ...initialRequestObj.filter.filter(f => excludeIds.includes(f.id)),
+            ...quickFilters.filter(qf => !excludeIds.includes(qf.id)),
+            ...initialRequestObj.filter.filter(f =>
+              !excludeIds.includes(f.id) &&
+              !quickFilters.some(qf => qf.id === f.id)
+            )
+          ]
+        }
         // reset all other params
         delete currentRequestObj.searchText
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
+        this.filterOnly = true
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this.getAttribute('filter-key')
@@ -195,7 +211,12 @@ export default class WithFacet extends WebWorker() {
         } else {
           currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
           Array.from(this.params.keys()).forEach(paramKey => {
-            if (paramKey === filterKey) currentRequestObj.filter = (currentRequestObj.filter || []).filter(f => f.urlpara !== filterKey)
+            if (paramKey === filterKey) {
+              // check if filter has value in "isquick", then keep it, set "selected:false" and remove children []
+              // otherwise just remove it
+              currentRequestObj.filter = (currentRequestObj.filter || []).map(f => (f.urlpara === filterKey && f.isquick) ? { ...f, selected: false, children: [] } : f).filter(f => !(f.urlpara === filterKey && !f.isquick))
+              initialRequestObj.filter = (initialRequestObj.filter || []).map(f => (f.urlpara === filterKey && f.isquick) ? { ...f, selected: false, children: [] } : f).filter(f => !(f.urlpara === filterKey && !f.isquick))
+            }
           })
         }
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
@@ -338,8 +359,19 @@ export default class WithFacet extends WebWorker() {
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        if (isSearchPage) {
+          currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        } else {
+          currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        }
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        // check, if filter of initialRequestObj.filter with id="7" is selected
+        // if true, replace it with filter id="7" in currentRequestObj.filter
+        const initialSectorFilter = (initialRequestObj.filter || []).find(f => String(f.id) === "7" && f.selected)
+        if (initialSectorFilter) {
+          const idx = (currentRequestObj.filter || []).findIndex(f => String(f.id) === "7")
+          idx !== -1 ? currentRequestObj.filter[idx] = structuredClone(initialSectorFilter) : currentRequestObj.filter.push(structuredClone(initialSectorFilter))
+        }
       }
 
       // filter only
