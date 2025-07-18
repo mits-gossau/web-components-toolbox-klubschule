@@ -93,41 +93,89 @@ export default class Bookings extends Index {
     `
   }
 
-  renderBookingsTiles() {
+  renderBookingsTiles(limit = 6, offset = 0) {
     const bookingsDiv = this.shadowRoot.querySelector('#bookings .container-bookings')
     if (!bookingsDiv || !this.bookingsData) return
-    bookingsDiv.innerHTML = ''
-    if (this.bookingsData.length) {
-      this.bookingsData.forEach(booking => {
+    
+    // clear on first load
+    if (offset === 0) bookingsDiv.innerHTML = ''
+
+    // all appointments with course info
+    const allAppointments = []
+    this.bookingsData.forEach(booking => {
+      (booking.appointments || []).forEach(appointment => {
+        allAppointments.push({
+          ...appointment,
+          courseTitle: booking.courseTitle,
+          courseId: booking.courseId,
+          courseLocation: booking.courseLocation,
+          roomDescription: booking.roomDescription,
+          logoUrl: booking.logoUrl,
+          price: booking.price,
+        })
+      })
+    })
+
+    // sort by appointmentDate ascending
+    // @ts-ignore
+    allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
+
+    // slice for pagination
+    const visibleAppointments = allAppointments.slice(offset, offset + limit)
+
+    if (visibleAppointments.length) {
+      visibleAppointments.forEach(app => {
         const TileElement = customElements.get('ks-m-tile')
         // @ts-ignore
         const tile = new TileElement()
         tile.setAttribute('class', 'booking-tile')
         tile.setAttribute('namespace', 'tile-booking-')
         tile.setAttribute('data', JSON.stringify({
-          title: booking.courseTitle,
-          nextAppointment: booking.appointments?.find(a => a.isNext)?.appointmentDateFormatted || '',
+          title: app.courseTitle,
+          nextAppointment: app.appointmentDateFormatted,
           location: {
             iconName: 'Location',
-            name: booking.courseLocation
+            name: app.courseLocation
           },
           room: {
             iconName: 'Monitor',
-            name: booking.roomDescription || ''
+            name: app.roomDescription || ''
           },
           icons: [],
           buttons: [{
             text: 'Detail ansehen',
             typ: 'secondary',
             event: 'open-booking-detail',
-            link: `index.html#/booking?courseId=${booking.courseId}`
+            link: `index.html#/booking?courseId=${app.courseId}`
           }],
           price: {
-            amount: booking.price?.amount || booking.price || ''
+            amount: app.price?.amount || app.price || ''
           }
         }))
         bookingsDiv.appendChild(tile)
       })
+
+      // more loading
+      const container = this.shadowRoot.querySelector('#bookings')
+      let moreBtnWrapper = container.querySelector('.more-bookings-wrapper')
+      if (moreBtnWrapper) moreBtnWrapper.remove()
+
+      if (offset + limit < allAppointments.length) {
+        moreBtnWrapper = document.createElement('div')
+        moreBtnWrapper.className = 'more-bookings-wrapper'
+        moreBtnWrapper.style = 'text-align:center;margin-top:2rem;'
+
+        const moreBtn = document.createElement('span')
+        moreBtn.innerHTML = /* html */`
+          <ks-a-button namespace="button-primary-" color="secondary">
+            <span class="more-text">Weitere laden</span>
+            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right"></a-icon-mdx>
+          </ks-a-button>
+        `
+        moreBtn.onclick = () => this.renderBookingsTiles(limit, offset + limit)
+        moreBtnWrapper.appendChild(moreBtn)
+        container.appendChild(moreBtnWrapper)
+      }
     } else {
       bookingsDiv.textContent = 'No Bookings'
     }
