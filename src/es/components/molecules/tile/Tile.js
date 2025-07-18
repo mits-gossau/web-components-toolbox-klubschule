@@ -20,7 +20,7 @@ export default class Tile extends Shadow() {
       window.open(this.tileLink, '_self')
     }
   }
-
+  
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
@@ -30,6 +30,18 @@ export default class Tile extends Shadow() {
 
   disconnectedCallback () {
     this.tileTitle?.removeEventListener('click', this.openLink)
+  }
+
+  static get observedAttributes() { return ['data'] }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'data' && newValue) {
+      try {
+        this.tileData = JSON.parse(newValue)
+      } catch (e) {
+        this.tileData = null
+      }
+    }
   }
 
   /**
@@ -64,7 +76,7 @@ export default class Tile extends Shadow() {
       :host .m-tile__wrap {
         position: relative;
         height: 100%;
-        padding: 1.5em;
+        padding: var(--wrap-padding, 1.5em);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -100,7 +112,7 @@ export default class Tile extends Shadow() {
         font-family: var(--title-font-family);
         font-size: var(--title-font-size);
         line-height: var(--title-line-height);
-        font-weight: var(--title-font-weight);   
+        font-weight: var(--title-font-weight);
         cursor: pointer;
       }
 
@@ -114,25 +126,32 @@ export default class Tile extends Shadow() {
       }
 
       :host .m-tile__body {
-        display: flex;
+        display: var(--body-display, flex);
         align-items: center;
         padding-bottom: 2em;
       }
       
       :host .m-tile__content {
-          font-size: 1em;
-          line-height: 1.25em;
-          font-weight: 400;          
-          padding: 0 0.5em 0 0;
+        font-size: 1em;
+        line-height: 1.25em;
+        font-weight: 400;          
+        padding: 0 0.5em 0 0;
       }
 
-      :host .m-tile__content__next-start-dates-label {
-        color: var(--next-start-dates-label-color);
-        font: var(--next-start-dates-label-font);
+      :host .m-tile__next-date {
+        display: block;
+        color: var(--next-date-color);
+        font: var(--next-date-font);
+        margin-bottom: var(--next-date-margin-bottom);
       }
 
-      :host .m-tile__content__next-start-dates {
-        font: var(--next-start-dates-font);
+      :host .m-tile__room {
+        margin-top: var(--room-margin-top);
+      }
+
+      :host .m-tile__room .m-tile__content {
+        color: var(--room-color);
+        font: var(--room-font);
       }
 
       :host .m-tile__body a-icon-mdx {
@@ -142,16 +161,17 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__foot {
-          display: var(--foot-display);
-          justify-content: var(--foot-justify-content);
-          flex-wrap: wrap;
-          align-items: var(--foot-align-items);
-          padding: var(--foot-padding);
-          gap: 1em;
+        display: var(--foot-display);
+        justify-content: var(--foot-justify-content);
+        flex-direction: var(--foot-flex-direction, row);
+        flex-wrap: wrap;
+        align-items: var(--foot-align-items);
+        padding: var(--foot-padding);
+        gap: 1em;
       }
 
       :host .m-tile__foot-passed {
-        display: var(--foot-passed-display);
+        display: var(--foot-passed-display);;
         justify-content: var(--foot-passed-justify-content);
         align-items: var(--foot-passed-align-items);
         padding: var(--foot-passed-padding);
@@ -159,52 +179,57 @@ export default class Tile extends Shadow() {
       }
       
       :host .m-tile__foot-left {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          gap: 0.5em;
+        display: flex;
+        flex-direction: row;
+        justify-content: var(--foot-justify-content, normal);
+        align-items: center;
+        gap: 0.5em;
+        width: var(--foot-width, auto);
       }
       
       :host .m-tile__foot-right {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-end;
-          flex-wrap: wrap;
-          justify-content: end;
+        display: var(--foot-right-display, flex);
+        flex-direction: row;
+        justify-content: var(--foot-justify-content, normal);
+        align-items: flex-end;
+        flex-wrap: wrap;
+        justify-content: end;
+        width: var(--foot-width, auto);
+        margin-bottom: var(--foot-price-margin-bottom, 0);
       }
       
       :host .m-tile__price {
-          font: var(--price-font); 
-          padding-left: 0.75em;
-          text-align: end;
+        font: var(--price-font); 
+        padding-left: 0.75em;
+        text-align: end;
       }
       
       :host .m-tile__price strong {
-          font: var(--price-strong-font);
+        font: var(--price-strong-font);
       }
       
       :host a-icon-mdx {
-          color: var(--icon-color);
+        color: var(--icon-color);
       }
       
       :host a-icon-mdx + ks-a-button {
-          margin-left: 0.5em;
+        margin-left: 0.5em;
       }
       
       :host .m-tile__icons {
-          display: flex;
-          align-items: center;
-          gap: 0.5em;;
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
       }
       
       :host .m-tile__icon-box {
-          background-color: var(--icon-color);
-          border-radius:  0.1875em;
-          height: var(--icon-box-dimension);
-          width: var(--icon-box-dimension);
-          display: flex;
-          justify-content: center;
-          align-items: center;
+        background-color: var(--icon-color);
+        border-radius:  0.1875em;
+        height: var(--icon-box-dimension);
+        width: var(--icon-box-dimension);
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       
       :host .m-tile__icon-box a-icon-mdx {
@@ -217,20 +242,19 @@ export default class Tile extends Shadow() {
 
       @media only screen and (max-width: 1024px) {
         :host .m-tile__wrap {
-          padding: 1rem 0.5rem;
+          padding: var(--wrap-padding, 1rem 0.5rem);
         }
       }
 
       @media only screen and (max-width: _max-width_) {
-
         :host .m-tile__content {
-            font-size: 0.875em;
-            line-height: 1.125em;
+          font-size: var(--content-font-size-mobile, 0.875em);
+          line-height: var(--content-line-height-mobile, 1.125em);
         }
 
         :host .m-tile__price strong {
-            padding-top: 0.75em;
-            padding-left: 0;
+          padding-top: 0.75em;
+          padding-left: 0;
         }
 
         :host .m-tile__foot {
@@ -238,9 +262,9 @@ export default class Tile extends Shadow() {
         }
 
         :host .m-tile__foot-right {
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 0.5rem;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 0.5rem;
         }
 
         :host .m-tile__foot-passed .m-tile__foot-left {
@@ -296,6 +320,12 @@ export default class Tile extends Shadow() {
           path: `${this.importMetaUrl}./passed-/passed-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }, ...styles])
+      case 'tile-booking-':
+        return this.fetchCSS([
+          {
+            path: `${this.importMetaUrl}./booking-/booking-.css`,
+            namespace: false,
+          }, ...styles])
       default:
         return this.fetchCSS(styles)
     }
@@ -350,6 +380,7 @@ export default class Tile extends Shadow() {
           }
         </div>
         <div class="m-tile__body" ${this.hasAttribute('is-other-locations') ? `style="display:none;"` : ''}>
+          ${data.nextAppointment ? /* html */`<span class="m-tile__content m-tile__next-date">${data.nextAppointment}</span>` : ''}
           ${!this.hasAttribute('is-other-locations') && data.location?.name
             ? /* html */`
               ${data.location?.iconName ? `<a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>` : ''}
@@ -357,12 +388,12 @@ export default class Tile extends Shadow() {
             `
             : ''
           }
-          ${this.hasAttribute('is-other-locations') 
+          ${data.room
             ? /* html */`
-              <!--<span class="m-tile__content">
-                <span class="m-tile__content__next-start-dates-label">${this.getAttribute('next-start-dates-text')}</span><br />
-                <span class="m-tile__content__next-start-dates">TODO: Termine eintragen</span>
-              </span>-->
+              <div class="m-tile__room">
+                ${data.room?.iconName ? `<a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>` : ''}
+                <span class="m-tile__content">${data.room?.name || warnMandatory + 'room'}</span>
+              </div>
             `
             : ''
           }
@@ -378,7 +409,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             ${this.hasAttribute('is-wish-list') && !this.isPassed && !this.hasAttribute('is-info-events') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? `${data.parentkey}${data.centerid ? `_${data.centerid}` : ''}` : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
-            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons ${this.hasAttribute('is-info-events') ? 'is-info-events' : '' } ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' small ${this.hasAttribute('no-url-params') || this.hasAttribute('is-other-locations') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
+            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons ${this.hasAttribute('is-info-events') ? 'is-info-events' : '' } ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' ${this.getAttribute('namespace') === 'tile-booking-' ? '' : 'small'} ${this.hasAttribute('no-url-params') || this.hasAttribute('is-other-locations') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
@@ -395,7 +426,7 @@ export default class Tile extends Shadow() {
         </div>      
       </div>
       <div class="m-tile__foot-passed">
-        <span class="m-tile__passed-message">${this.getAttribute("passed-message")}</span>
+        ${this.getAttribute("passed-message") ? /* html */`<span class="m-tile__passed-message">${this.getAttribute("passed-message")}</span>` : ''}
         <div class="m-tile__foot-left">
           ${this.hasAttribute('is-wish-list') && !this.hasAttribute('is-info-events') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? data.parentkey : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
         </div>

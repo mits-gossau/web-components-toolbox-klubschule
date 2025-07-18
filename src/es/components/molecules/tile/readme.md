@@ -14,3 +14,4 @@
 
 - `tile-default-`: Defines the default variation
 - `tile-passed-`: Defines the passed variation
+- `tile-booking-`: Defines the booking variation
