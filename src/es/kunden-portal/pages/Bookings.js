@@ -100,19 +100,24 @@ export default class Bookings extends Index {
     // clear on first load
     if (offset === 0) bookingsDiv.innerHTML = ''
 
-    // all appointments with course info
+    // all future appointments with course info
+    const today = new Date()
     const allAppointments = []
     this.bookingsData.forEach(booking => {
       (booking.appointments || []).forEach(appointment => {
-        allAppointments.push({
-          ...appointment,
-          courseTitle: booking.courseTitle,
-          courseId: booking.courseId,
-          courseLocation: booking.courseLocation,
-          roomDescription: booking.roomDescription,
-          logoUrl: booking.logoUrl,
-          price: booking.price,
-        })
+        const appointmentDate = new Date(appointment.appointmentDate)
+        // @ts-ignore
+        if (appointmentDate >= today.setHours(0,0,0,0)) {
+          allAppointments.push({
+            ...appointment,
+            courseTitle: booking.courseTitle,
+            courseId: booking.courseId,
+            courseLocation: booking.courseLocation,
+            roomDescription: booking.roomDescription,
+            logoUrl: booking.logoUrl,
+            price: booking.price,
+          })
+        }
       })
     })
 
@@ -155,7 +160,7 @@ export default class Bookings extends Index {
         bookingsDiv.appendChild(tile)
       })
 
-      // more loading
+      // load more appointments
       const container = this.shadowRoot.querySelector('#bookings')
       let moreBtnWrapper = container.querySelector('.more-bookings-wrapper')
       if (moreBtnWrapper) moreBtnWrapper.remove()
