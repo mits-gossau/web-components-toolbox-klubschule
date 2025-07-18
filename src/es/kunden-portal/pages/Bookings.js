@@ -30,7 +30,12 @@ export default class Bookings extends Index {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('update-bookings', this.requestBookingsListener)
-    this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
+    
+    if (!this.bookingsData) {
+      this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
+    } else if (this.modulesLoaded) {
+      setTimeout(() => this.renderBookingsTiles(), 0)
+    }
   }
 
   disconnectedCallback() {
@@ -177,7 +182,9 @@ export default class Bookings extends Index {
             <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right"></a-icon-mdx>
           </ks-a-button>
         `
-        moreBtn.onclick = () => this.renderBookingsTiles(limit, offset + limit)
+        moreBtn.onclick = () => {
+          this.renderBookingsTiles(limit, offset + limit)
+        }
         moreBtnWrapper.appendChild(moreBtn)
         container.appendChild(moreBtnWrapper)
       }
