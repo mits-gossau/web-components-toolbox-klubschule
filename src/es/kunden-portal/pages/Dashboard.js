@@ -2,13 +2,13 @@
 import Index from './Index.js'
 
 /**
- * Bookings
+ * Dashboard
  *
  * @export
- * @class Bookings
+ * @class Dashboard
  * @type {CustomElementConstructor}
  */
-export default class Bookings extends Index {
+export default class Dashboard extends Index {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
@@ -43,7 +43,7 @@ export default class Bookings extends Index {
   }
 
   shouldRenderHTML() {
-    return !this.root.querySelector('div#bookings')
+    return !this.root.querySelector('div#appointments')
   }
 
   shouldRenderCSS() {
@@ -91,15 +91,17 @@ export default class Bookings extends Index {
     })
 
     this.html = /* html */ `
-      <div id="bookings">
-        <h2><a-icon-mdx icon-name="calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
-        <div class="container-appointments"></div>
+      <div id="dashboard">
+        <div id="appointments">
+          <h2><a-icon-mdx icon-name="calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
+          <div class="container-appointments"></div>
+        </div>
       </div>
     `
   }
 
   renderAppointmentsTiles(limit = 6, offset = Number(sessionStorage.getItem('appointmentsOffset')) || 0) {
-    const appointmentsDiv = this.shadowRoot.querySelector('#bookings .container-appointments')
+    const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container-appointments')
     if (!appointmentsDiv || !this.bookingsData) return
     
     if (offset === 0) appointmentsDiv.innerHTML = ''
@@ -164,7 +166,7 @@ export default class Bookings extends Index {
       })
 
       // load more
-      const container = this.shadowRoot.querySelector('#bookings')
+      const container = this.shadowRoot.querySelector('#appointments')
       let moreBtnWrapper = container.querySelector('.more-bookings-wrapper')
       if (moreBtnWrapper) moreBtnWrapper.remove()
 

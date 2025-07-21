@@ -24,7 +24,7 @@
         <c-fetch-html>
             <c-fetch-css>
                 <c-fetch-modules>
-                    <kp-c-bookings>
+                    <kp-c-dashboard>
                         <kp-c-booking>
                             <p-general>
                                 <o-body>
@@ -38,15 +38,16 @@
                                         <kp-router 
                                             routes="[
                                                 {
+                                                    'name': 'p-dashboard',
+                                                    'path': '../../pages/Dashboard.js',
+                                                    'regExp': ['/[#=]{1}\/$/', '/^\/$/']
+                                                },
+                                                {
                                                     'name': 'p-booking',
                                                     'path': '../../pages/Booking.js',
                                                     'regExp': ['/[#=]{1}\/booking/']
                                                 },
-                                                {
-                                                    'name': 'p-bookings',
-                                                    'path': '../../pages/Bookings.js',
-                                                    'regExp': ['/[#=]{1}\/$/', '/^\/$/']
-                                                },
+                                                
                                                 {
                                                     'name': 'p-booked',
                                                     'path': '../../pages/Booked.js',
@@ -64,7 +65,7 @@
                                 </o-body>
                             </p-general>
                         </kp-c-booking>
-                    </kp-c-bookings>
+                    </kp-c-dashboard>
                 </c-fetch-modules>
             </c-fetch-css>
         </c-fetch-html>

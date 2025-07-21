@@ -6,13 +6,13 @@
 /* global self */
 
 /**
- * @class Bookings
+ * @class Dashboard
  * @type {CustomElementConstructor}
  */
-export default class Bookings extends HTMLElement {
+export default class Dashboard extends HTMLElement {
   constructor() {
     super()
-    this.abortControllerBookings = null
+    this.abortControllerDashboard = null
   }
 
   connectedCallback() {
@@ -29,13 +29,13 @@ export default class Bookings extends HTMLElement {
    * @param {CustomEventInit} event - The event that triggered the request.
    */
   requestBookings = (event) => {
-    if (this.abortControllerBookings) this.abortControllerBookings.abort()
-    this.abortControllerBookings = new AbortController()
+    if (this.abortControllerDashboard) this.abortControllerDashboard.abort()
+    this.abortControllerDashboard = new AbortController()
 
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBookings}`
     const data = { language: 'de' }
-    const options = this.fetchPOSTOptions(data, this.abortControllerBookings)
+    const options = this.fetchPOSTOptions(data, this.abortControllerDashboard)
 
     this.dispatchEvent(new CustomEvent('update-bookings', {
       detail: {
