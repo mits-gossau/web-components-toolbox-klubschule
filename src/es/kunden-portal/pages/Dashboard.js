@@ -18,6 +18,7 @@ export default class Dashboard extends Index {
           this.bookingsData = data.bookings || [] 
           if (this.modulesLoaded) {
             setTimeout(() => this.renderAppointmentsTiles(), 0)
+            setTimeout(() => this.renderBookingsTiles(), 0)
           }
         })
         .catch(error => {
@@ -30,12 +31,7 @@ export default class Dashboard extends Index {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('update-bookings', this.requestBookingsListener)
-    
-    if (!this.bookingsData) {
-      this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
-    } else if (this.modulesLoaded) {
-      // setTimeout(() => this.renderAppointmentsTiles(), 0)
-    }
+    if (!this.bookingsData) this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
   }
 
   disconnectedCallback() {
@@ -43,7 +39,7 @@ export default class Dashboard extends Index {
   }
 
   shouldRenderHTML() {
-    return !this.root.querySelector('div#appointments')
+    return !this.root.querySelector('div#dashboard')
   }
 
   shouldRenderCSS() {
@@ -65,11 +61,11 @@ export default class Dashboard extends Index {
         grid-template-columns: repeat(12, 1fr);
         gap: var(--grid-12er-grid-gap, 1rem);
       }
-      :host .container-appointments .booking-tile {
+      :host .container-appointments .appointment-tile {
         grid-column: span 4;
       }
       @media only screen and (max-width: _max-width_) {
-        :host .container-appointments .booking-tile {
+        :host .container-appointments .appointment-tile {
           grid-column: span 12;
         }
       }
@@ -83,6 +79,10 @@ export default class Dashboard extends Index {
         name: 'ks-a-button'
       },
       {
+        path: `${this.importMetaUrl}../../components/atoms/spacing/Spacing.js`,
+        name: 'ks-a-spacing'
+      },
+      {
         path: `${this.importMetaUrl}../../components/molecules/tile/Tile.js`,
         name: 'ks-m-tile'
       }
@@ -93,8 +93,13 @@ export default class Dashboard extends Index {
     this.html = /* html */ `
       <div id="dashboard">
         <div id="appointments">
-          <h2><a-icon-mdx icon-name="calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
+          <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
           <div class="container-appointments"></div>
+        </div>
+        <ks-a-spacing type="m-flex"></ks-a-spacing>
+        <div id="bookings">
+          <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
+          <div class="container-bookings"></div>
         </div>
       </div>
     `
@@ -138,8 +143,8 @@ export default class Dashboard extends Index {
         const TileElement = customElements.get('ks-m-tile')
         // @ts-ignore
         const tile = new TileElement()
-        tile.setAttribute('class', 'booking-tile')
-        tile.setAttribute('namespace', 'tile-booking-')
+        tile.setAttribute('class', 'appointment-tile')
+        tile.setAttribute('namespace', 'tile-appointment-')
         tile.setAttribute('data', JSON.stringify({
           title: app.courseTitle,
           nextAppointment: app.appointmentDateFormatted,
@@ -217,6 +222,61 @@ export default class Dashboard extends Index {
 
     } else {
       appointmentsDiv.textContent = 'No Bookings'
+      sessionStorage.removeItem('appointmentsOffset')
+    }
+  }
+
+  renderBookingsTiles() {
+    const bookingsDiv = this.shadowRoot.querySelector('#bookings .container-bookings')
+    if (!bookingsDiv || !this.bookingsData) return
+
+    bookingsDiv.innerHTML = ''
+
+    const allBookings = []
+    this.bookingsData.forEach(booking => {
+      allBookings.push({
+        "title": booking.courseTitle,
+        "location": {
+          "iconName": "Location",
+          "name": booking.courseLocation
+        },
+        "kurs_typ": booking.courseType,
+        "kurs_id": booking.courseId,
+        "buttons": [{
+          "text": "Detail ansehen",
+          "typ": "secondary",
+          "event": "open-booking-detail",
+          "link": `index.html#/booking?courseId=${booking.courseId}`
+        }],
+      })
+    })
+
+    // @ts-ignore, sort by appointmentDate ascending
+    allBookings.sort((a, b) => new Date(a.courseStartDate) - new Date(b.courseStartDate))
+
+    if (allBookings.length) {
+      allBookings.forEach(booking => {
+        const TileElement = customElements.get('ks-m-tile')
+        // @ts-ignore
+        const tile = new TileElement()
+        tile.setAttribute('class', 'booking-tile')
+        tile.setAttribute('namespace', 'tile-default-')
+        tile.setAttribute('data', JSON.stringify({
+          title: booking.title,
+          location: booking.location,
+          icons: [],
+          buttons: booking.buttons,
+          kurs_typ: booking.kurs_typ,
+          kurs_id: booking.kurs_id,
+          price: {
+            amount: booking.price?.amount || booking.price || ''
+          }
+        })
+        )
+        bookingsDiv.appendChild(tile)
+      })
+    } else {
+      bookingsDiv.textContent = 'No Bookings'
       sessionStorage.removeItem('appointmentsOffset')
     }
   }
