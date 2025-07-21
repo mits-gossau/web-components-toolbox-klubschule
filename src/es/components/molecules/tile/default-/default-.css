@@ -1,4 +1,30 @@
 :host {
+    --background-color: var(--m-white, #fff);
+    --border-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
+    --overlay-backround-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
+    --icon-color: var(--icon-color-blue);
+    --foot-display: flex;
+    --foot-justify-content: space-between;
+    --foot-align-items: center;
+    --foot-padding: 0;
+    --foot-passed-display: none;
+    --icon-box-dimension: 1.625em;
+    --icon-box-color: var(--m-white, #fff);
+    --overlay-display: none;
+    --overlay-background-color: transparent;
+    --title-font-family: var(--mdx-sys-font-flex-headline3-font-family);
+    --title-font-size: var(--mdx-sys-font-flex-headline3-font-size);
+    --title-line-height: var(--mdx-sys-font-flex-headline3-line-height);
+    --title-font-weight: var(--mdx-sys-font-flex-headline3-font-weight);
+    --title-color-hover: var(--mdx-sys-color-primary-default);
+    --price-font: var(--mdx-sys-font-fix-label4);
+    --price-strong-font: var(--mdx-sys-font-fix-label1);
+    --next-start-dates-label-color: var(--mdx-sys-color-neutral-bold1);
+    --next-start-dates-label-font: var(--mdx-sys-font-fix-body2);
+    --next-start-dates-font: var(--mdx-sys-font-flex-small-custom1);
+    --title-other-locations-color: var(--mdx-sys-color-neutral-bold4);
+    --title-other-locations-font: var(--mdx-sys-font-fix-label0);
+
     --tile-default-background-color: var(--m-white, #fff);
     --tile-default-border-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
     --tile-default-overlay-backround-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
