@@ -15,7 +15,7 @@ export default class Dashboard extends Index {
     this.requestBookingsListener = (event) => {
       event.detail.fetch
         .then((data) => {
-          this.bookingsData = data.bookings || [] 
+          this.bookingsData = data.bookings || []
           if (this.modulesLoaded) {
             setTimeout(() => this.renderAppointmentsTiles(), 0)
             setTimeout(() => this.renderBookingsTiles(), 0)
@@ -108,7 +108,7 @@ export default class Dashboard extends Index {
   renderAppointmentsTiles(limit = 6, offset = Number(sessionStorage.getItem('appointmentsOffset')) || 0) {
     const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container-appointments')
     if (!appointmentsDiv || !this.bookingsData) return
-    
+
     if (offset === 0) appointmentsDiv.innerHTML = ''
 
     // future appointments with course info
@@ -118,7 +118,7 @@ export default class Dashboard extends Index {
       (booking.appointments || []).forEach(appointment => {
         const appointmentDate = new Date(appointment.appointmentDate)
         // @ts-ignore
-        if (appointmentDate >= today.setHours(0,0,0,0)) {
+        if (appointmentDate >= today.setHours(0, 0, 0, 0)) {
           allAppointments.push({
             ...appointment,
             courseTitle: booking.courseTitle,
