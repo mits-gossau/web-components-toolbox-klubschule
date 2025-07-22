@@ -56,16 +56,21 @@ export default class Dashboard extends Index {
         position: relative;
         top: -4px;
       }
-      :host .container-appointments {
+      :host .container {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         gap: var(--grid-12er-grid-gap, 1rem);
       }
-      :host .container-appointments .appointment-tile {
+      :host #appointments .container .appointment-tile {
         grid-column: span 4;
       }
+      :host #bookings .container .booking-tile {
+        grid-column: span 12;
+      }
       @media only screen and (max-width: _max-width_) {
-        :host .container-appointments .appointment-tile {
+
+        :host #appointments .container .appointment-tile,
+        :host #bookings .container .booking-tile {
           grid-column: span 12;
         }
       }
@@ -94,19 +99,19 @@ export default class Dashboard extends Index {
       <div id="dashboard">
         <div id="appointments">
           <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
-          <div class="container-appointments"></div>
+          <div class="container"></div>
         </div>
         <ks-a-spacing type="m-flex"></ks-a-spacing>
         <div id="bookings">
           <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
-          <div class="container-bookings"></div>
+          <div class="container"></div>
         </div>
       </div>
     `
   }
 
   renderAppointmentsTiles(limit = 6, offset = Number(sessionStorage.getItem('appointmentsOffset')) || 0) {
-    const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container-appointments')
+    const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container')
     if (!appointmentsDiv || !this.bookingsData) return
 
     if (offset === 0) appointmentsDiv.innerHTML = ''
@@ -227,7 +232,7 @@ export default class Dashboard extends Index {
   }
 
   renderBookingsTiles() {
-    const bookingsDiv = this.shadowRoot.querySelector('#bookings .container-bookings')
+    const bookingsDiv = this.shadowRoot.querySelector('#bookings .container')
     if (!bookingsDiv || !this.bookingsData) return
 
     bookingsDiv.innerHTML = ''
