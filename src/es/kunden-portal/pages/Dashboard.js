@@ -252,16 +252,14 @@ export default class Dashboard extends Index {
         course: {
           kurs_typ: course.courseType,
           kurs_id: course.courseId,
-          // bezeichnung: course.courseTitle,
           datum_label: course.courseTitle,
           days: [daysEntry],
           location: {
             name: course.courseLocation,
             badge: course.roomDescription || ''
           },
-          logoUrl: course.logoUrl,
-          // start_zeit: course.courseStartDate,
-          // ende_zeit: course.courseEndDate,
+          state_of_booking: 'Gebucht',
+          logo_url: course.logoUrl,
           status: course.courseAppointmentStatus,
           status_label: course.courseAppointmentStatusText,
           buttons: [{

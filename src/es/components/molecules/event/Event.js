@@ -97,6 +97,25 @@ export default class Event extends Shadow() {
       :host .event.wishlist .dates a-button {
         width: fit-content;
       }
+      
+      :host .top {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: space-between;
+      }
+
+      :host .top .state-of-booking span {
+        border: 1px solid var(--mdx-sys-color-primary-default);
+        border-radius: 3px;
+        color: var(--mdx-sys-color-primary-default);
+        font: var(--mdx-sys-font-fix-body2);
+        padding: 4px 8px;
+      }
+
+      :host .top .logo {
+        text-align: right;
+        margin-bottom: 0.5rem;
+      }
 
       :host .head {
         display: grid;
@@ -533,6 +552,7 @@ export default class Event extends Shadow() {
   renderHTML () {
     const warnMandatory = 'data attribute requires: '
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
+      console.log(this.data.state_of_booking, this.data.logo_url)
     const {
       bezeichnung,
       centerid,
@@ -551,7 +571,9 @@ export default class Event extends Shadow() {
       price,
       status,
       status_label,
-      zusatztitel
+      zusatztitel,
+      state_of_booking,
+      logo_url
     } = this.data.course
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
@@ -559,6 +581,10 @@ export default class Event extends Shadow() {
 
     this.html = /* HTML */`
       <div class="event${this.isWishList ? " wishlist" : ""}${this.isWishList && this.isPassed ? " passed" : ""}">
+         ${state_of_booking || logo_url ? /* html */`<div class="top">
+            <div class="state-of-booking"><span>${state_of_booking ? state_of_booking : ''}</span></div>
+            <div class="logo">${logo_url ? /* html */`<img src="${logo_url}" height="40" width="40" />` : ''}</div>
+        </div>` : ''}
         <div class="head">
           <div class="dates">
             ${this.isWishList
