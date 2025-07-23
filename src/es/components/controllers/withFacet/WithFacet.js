@@ -172,6 +172,18 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
+        // take the params from url
+        // check the key with the urlpara from filter in currentRequestObj.filter
+        // find filter with same id in initialRequestObj.filter
+        // remove filters with same id from initialRequestObj.filter
+        const filtersToRemove = []
+        currentRequestObj.filter.forEach(filter => {
+          if (filter.urlpara && this.params.has(filter.urlpara)) {
+            const idx = (initialRequestObj.filter || []).findIndex(f => f.id === filter.id)
+            if (idx !== -1) filtersToRemove.push(idx)
+          }
+        })
+        filtersToRemove.sort((a, b) => b - a).forEach(idx => initialRequestObj.filter.splice(idx, 1))
         // exclude selected filters from initialRequestObj.filter that are not in URL params
         const excludeIds = (initialRequestObj.filter || []).filter(f => f.selected && f.urlpara && !this.params.has(f.urlpara)).map(f => f.id)
         // reset all filters
@@ -362,7 +374,7 @@ export default class WithFacet extends WebWorker() {
         if (isSearchPage) {
           currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         } else {
-          currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+          currentRequestObj.filter = [...result[1], ...(initialRequestObj.filter || []).filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         }
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         // check, if filter of initialRequestObj.filter with id="7" is selected
