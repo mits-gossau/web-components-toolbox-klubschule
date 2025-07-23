@@ -214,7 +214,7 @@ export default class WithFacet extends WebWorker() {
         this.filterOnly = true
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
-        const filterKey = event.detail.this.getAttribute('filter-key')
+        const filterKey = event.detail.this.getAttribute('filter-key') || event.detail.filterKey
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
@@ -332,6 +332,7 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.detail?.key === 'input-search') {
+        console.log(event?.detail?.value)
         // text field search
         if (event?.detail?.value) {
           this.updateURLParam('q', event.detail.value)
