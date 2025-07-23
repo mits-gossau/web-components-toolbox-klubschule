@@ -101,11 +101,11 @@ export default class Dashboard extends Index {
 
     this.html = /* html */ `
       <div id="dashboard">
-        <!-- <div id="appointments">
+        <div id="appointments">
           <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
           <div class="container"></div>
         </div>
-        <ks-a-spacing type="m-flex"></ks-a-spacing> -->
+        <ks-a-spacing type="m-flex"></ks-a-spacing>
         <div id="courses">
           <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
           <div class="container"></div>
