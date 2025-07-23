@@ -332,7 +332,6 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.detail?.key === 'input-search') {
-        console.log(event?.detail?.value)
         // text field search
         if (event?.detail?.value) {
           this.updateURLParam('q', event.detail.value)
