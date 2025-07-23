@@ -184,7 +184,7 @@ export default class AutoComplete extends Shadow() {
   }
 
   clearAutocomplete() {
-    this.dispatchEvent(new CustomEvent('reset-filter', {
+    window.dispatchEvent(new CustomEvent('reset-filter', {
       detail: { filterKey: 'q' },
       bubbles: true,
       cancelable: true,

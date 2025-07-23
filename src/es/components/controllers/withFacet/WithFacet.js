@@ -575,6 +575,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
     this.addEventListener('backdrop-clicked', this.handleBackdropClicked)
     this.addEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
+    window.addEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   disconnectedCallback() {
@@ -584,6 +585,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
     this.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
     this.removeEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
+    window.removeEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   handleBackdropClicked = () => {
