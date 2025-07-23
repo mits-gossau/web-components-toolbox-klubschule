@@ -602,7 +602,7 @@ export default class Event extends Shadow() {
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
               <span>${location.name}</span>
             </li>` : ''}
-            ${!(this.isWishList && this.isPassed) ? /* html */ `<li>
+            ${detail_label_more && !(this.isWishList && this.isPassed) ? /* html */ `<li>
               <button class="link-more expand">
                 <span class="more show">${this, detail_label_more}</span>
                 <span class="less">${this, detail_label_less}</span>

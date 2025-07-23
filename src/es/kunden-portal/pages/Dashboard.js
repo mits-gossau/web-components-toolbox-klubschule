@@ -17,8 +17,8 @@ export default class Dashboard extends Index {
         .then((data) => {
           this.bookingsData = data.bookings || []
           if (this.modulesLoaded) {
-            setTimeout(() => this.renderAppointmentsTiles(), 0)
-            setTimeout(() => this.renderBookingsTiles(), 0)
+            setTimeout(() => this.renderAppointments(), 0)
+            setTimeout(() => this.renderCourses(), 0)
           }
         })
         .catch(error => {
@@ -64,13 +64,13 @@ export default class Dashboard extends Index {
       :host #appointments .container .appointment-tile {
         grid-column: span 4;
       }
-      :host #bookings .container .booking-tile {
+      :host #courses .container .course-event {
         grid-column: span 12;
       }
       @media only screen and (max-width: _max-width_) {
 
         :host #appointments .container .appointment-tile,
-        :host #bookings .container .booking-tile {
+        :host #courses .container .course-event {
           grid-column: span 12;
         }
       }
@@ -90,6 +90,10 @@ export default class Dashboard extends Index {
       {
         path: `${this.importMetaUrl}../../components/molecules/tile/Tile.js`,
         name: 'ks-m-tile'
+      },
+      {
+        path: `${this.importMetaUrl}../../components/molecules/event/Event.js`,
+        name: 'ks-m-event'
       }
     ]).then(() => {
       this.modulesLoaded = true
@@ -97,12 +101,12 @@ export default class Dashboard extends Index {
 
     this.html = /* html */ `
       <div id="dashboard">
-        <div id="appointments">
+        <!-- <div id="appointments">
           <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
           <div class="container"></div>
         </div>
-        <ks-a-spacing type="m-flex"></ks-a-spacing>
-        <div id="bookings">
+        <ks-a-spacing type="m-flex"></ks-a-spacing> -->
+        <div id="courses">
           <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
           <div class="container"></div>
         </div>
@@ -110,7 +114,7 @@ export default class Dashboard extends Index {
     `
   }
 
-  renderAppointmentsTiles(limit = 6, offset = Number(sessionStorage.getItem('appointmentsOffset')) || 0) {
+  renderAppointments(limit = 6, offset = Number(sessionStorage.getItem('appointmentsOffset')) || 0) {
     const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container')
     if (!appointmentsDiv || !this.bookingsData) return
 
@@ -194,7 +198,7 @@ export default class Dashboard extends Index {
         `
         moreBtn.onclick = () => {
           sessionStorage.setItem('appointmentsOffset', String(offset + limit))
-          this.renderAppointmentsTiles(limit, offset + limit)
+          this.renderAppointments(limit, offset + limit)
         }
         moreBtnWrapper.appendChild(moreBtn)
         container.appendChild(moreBtnWrapper)
@@ -219,7 +223,7 @@ export default class Dashboard extends Index {
         lessBtn.onclick = () => {
           sessionStorage.removeItem('appointmentsOffset')
           lessBtn.innerHTML = ''
-          this.renderAppointmentsTiles(limit, 0)
+          this.renderAppointments(limit, 0)
         }
         lessBtnWrapper.appendChild(lessBtn)
         container.appendChild(lessBtnWrapper)
@@ -231,56 +235,55 @@ export default class Dashboard extends Index {
     }
   }
 
-  renderBookingsTiles() {
-    const bookingsDiv = this.shadowRoot.querySelector('#bookings .container')
+  renderCourses() {
+    const bookingsDiv = this.shadowRoot.querySelector('#courses .container')
     if (!bookingsDiv || !this.bookingsData) return
-
+    
     bookingsDiv.innerHTML = ''
 
-    const allBookings = []
-    this.bookingsData.forEach(booking => {
-      allBookings.push({
-        "title": booking.courseTitle,
-        "location": {
-          "iconName": "Location",
-          "name": booking.courseLocation
+    this.bookingsData.forEach(course => {
+      // Format days entry from start and end date
+      const start = new Date(course.courseStartDate)
+      const end = new Date(course.courseEndDate)
+      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+      const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
+
+      const courseData = {
+        course: {
+          kurs_typ: course.courseType,
+          kurs_id: course.courseId,
+          // bezeichnung: course.courseTitle,
+          datum_label: course.courseTitle,
+          days: [daysEntry],
+          location: {
+            name: course.courseLocation,
+            badge: course.roomDescription || ''
+          },
+          logoUrl: course.logoUrl,
+          // start_zeit: course.courseStartDate,
+          // ende_zeit: course.courseEndDate,
+          status: course.courseAppointmentStatus,
+          status_label: course.courseAppointmentStatusText,
+          buttons: [{
+            text: 'Detail ansehen',
+            typ: 'secondary',
+            event: 'open-booking-detail',
+            link: `index.html#/booking?courseId=${course.courseId}`
+          }],
+          icons: [],
         },
-        "kurs_typ": booking.courseType,
-        "kurs_id": booking.courseId,
-        "buttons": [{
-          "text": "Detail ansehen",
-          "typ": "secondary",
-          "event": "open-booking-detail",
-          "link": `index.html#/booking?courseId=${booking.courseId}`
-        }],
-      })
+        sprachid: 'd'
+      }
+
+      const EventElement = customElements.get('ks-m-event')
+      // @ts-ignore
+      const event = new EventElement()
+      event.setAttribute('class', 'course-event')
+      event.setAttribute('data', JSON.stringify(courseData))
+      bookingsDiv.appendChild(event)
     })
 
-    // @ts-ignore, sort by appointmentDate ascending
-    allBookings.sort((a, b) => new Date(a.courseStartDate) - new Date(b.courseStartDate))
-
-    if (allBookings.length) {
-      allBookings.forEach(booking => {
-        const TileElement = customElements.get('ks-m-tile')
-        // @ts-ignore
-        const tile = new TileElement()
-        tile.setAttribute('class', 'booking-tile')
-        tile.setAttribute('namespace', 'tile-default-')
-        tile.setAttribute('data', JSON.stringify({
-          title: booking.title,
-          location: booking.location,
-          icons: [],
-          buttons: booking.buttons,
-          kurs_typ: booking.kurs_typ,
-          kurs_id: booking.kurs_id,
-          price: {
-            amount: booking.price?.amount || booking.price || ''
-          }
-        })
-        )
-        bookingsDiv.appendChild(tile)
-      })
-    } else {
+    if (!bookingsDiv.hasChildNodes()) {
       bookingsDiv.textContent = 'No Bookings'
       sessionStorage.removeItem('appointmentsOffset')
     }
