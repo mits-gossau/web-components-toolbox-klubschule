@@ -456,11 +456,12 @@ export default class Event extends Shadow() {
 
       @media only screen and (max-width: _max-width_) {
         :host .event {
-          padding: 1rem 0.5rem;
+          padding: 16px;
+          padding-bottom: 24px;
         }
 
         :host .event.passed {
-          padding: 1rem 0.5rem 0;
+          padding-bottom: 0;
         }
 
         :host .head {
