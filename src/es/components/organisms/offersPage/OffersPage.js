@@ -122,11 +122,36 @@ export default class OffersPage extends Shadow() {
     })
     this.addEventListener('with-facet', this.withFacetListener)
     this.addEventListener('info-events-empty', this.infoEventsEmptyListener)
+
+    setTimeout(() => {
+      const allInputs = this.findSearchInputs(this.root)
+      allInputs.forEach(inputEl => {
+        if (inputEl.shadowRoot) {
+          const nativeInput = inputEl.shadowRoot.querySelector('input')
+          if (nativeInput) {
+            nativeInput.addEventListener('input', (e) => {
+              if (e.target.value === '') {
+                const withFacet = this.root.querySelector('ks-c-with-facet')
+                if (withFacet) withFacet.dispatchEvent(new CustomEvent('reset-filter', { detail: { filterKey: 'q', this: inputEl }, bubbles: true, cancelable: true, composed: true }))
+              }
+            })
+          }
+        }
+      })
+    }, 0)
   }
 
   disconnectedCallback() {
     this.removeEventListener('with-facet', this.withFacetListener)
     this.removeEventListener('info-events-empty', this.infoEventsEmptyListener)
+  }
+
+  findSearchInputs = (root) => {
+    let result = []
+    if (!root) return result
+    root.querySelectorAll('a-input[inputid="offers-page-input-search"]').forEach(el => result.push(el))
+    root.querySelectorAll('*').forEach(el => { if (el.shadowRoot) result = result.concat(this.findSearchInputs(el.shadowRoot)) })
+    return result
   }
 
   shouldRenderCSS() {
@@ -591,6 +616,8 @@ export default class OffersPage extends Shadow() {
           delete-listener
           autocomplete="off"
           search
+          request-event-name="reset-filter"
+          filter-key="q"
         >
         </a-input>
       </ks-c-auto-complete>

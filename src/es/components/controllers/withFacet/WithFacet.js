@@ -214,7 +214,7 @@ export default class WithFacet extends WebWorker() {
         this.filterOnly = true
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
-        const filterKey = event.detail.this.getAttribute('filter-key')
+        const filterKey = event.detail.this.getAttribute('filter-key') || event.detail.filterKey
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
