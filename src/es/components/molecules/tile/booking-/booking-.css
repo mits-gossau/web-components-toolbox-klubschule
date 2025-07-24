@@ -1,0 +1,104 @@
+:host {
+    --wrap-padding: 16px 16px 24px 16px;
+
+    --background-color: var(--m-white, #fff);
+    --border-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
+    --overlay-backround-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
+    --icon-color: var(--icon-color-blue);
+    --icon-box-dimension: 1.625em;
+    --icon-box-color: var(--m-white, #fff);
+    --overlay-display: none;
+    --overlay-background-color: transparent;
+
+    --title-font-family: var(--mdx-sys-font-flex-large-headline3-font-family);
+    --title-font-size: 20px;
+    --title-line-height: 110%;
+    --title-font-weight: var(--mdx-sys-font-flex-large-headline3-font-weight);
+    --title-color-hover: var(--mdx-sys-color-primary-default);
+    
+    --body-display: block;
+    --next-date-color: var(--mdx-sys-color-neutral-bold4);
+    --next-date-font: 400 20px / 110% 'Graphik';
+    --next-date-margin-bottom: 24px;
+
+    --room-color: var(--mdx-sys-color-neutral-bold4);
+    --room-font: 400 16px / 130% 'Graphik';
+    --room-margin-top: 16px;
+
+    --foot-display: flex;
+    --foot-justify-content: right;
+    --foot-flex-direction: column-reverse;
+    --foot-align-items: center;
+    --foot-padding: 0;
+    --foot-right-display: none;
+    --foot-passed-display: none;
+    --foot-width: 100%;
+    --foot-price-margin-bottom: 24px;
+    
+    --price-font: var(--mdx-sys-font-fix-label4);
+    --next-start-dates-label-color: var(--mdx-sys-color-neutral-bold1);
+    --next-start-dates-label-font: var(--mdx-sys-font-fix-body2);
+    --next-start-dates-font: var(--mdx-sys-font-flex-small-custom1);
+    --title-other-locations-color: var(--mdx-sys-color-neutral-bold4);
+    --title-other-locations-font: var(--mdx-sys-font-fix-label0);
+
+    --content-font-size-mobile: 20px;
+    --content-line-height-mobile: 110%;
+    --price-strong-font: 500 24px / 110% 'Graphik';
+
+    --button-secondary-font-size-mobile: 16px;
+    --button-secondary-padding-mobile: 12px 24px;
+
+
+
+
+    --tile-booking-wrap-padding: 16px 16px 24px 16px;
+
+    --tile-booking-background-color: var(--m-white, #fff);
+    --tile-booking-border-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
+    --tile-booking-overlay-backround-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
+    --tile-booking-icon-color: var(--icon-color-blue);
+    --tile-booking-icon-box-dimension: 1.625em;
+    --tile-booking-icon-box-color: var(--m-white, #fff);
+    --tile-booking-overlay-display: none;
+    --tile-booking-overlay-background-color: transparent;
+
+    --tile-booking-title-font-family: var(--mdx-sys-font-flex-large-headline3-font-family);
+    --tile-booking-title-font-size: 20px;
+    --tile-booking-title-line-height: 110%;
+    --tile-booking-title-font-weight: var(--mdx-sys-font-flex-large-headline3-font-weight);
+    --tile-booking-title-color-hover: var(--mdx-sys-color-primary-default);
+    
+    --tile-booking-body-display: block;
+    --tile-booking-next-date-color: var(--mdx-sys-color-neutral-bold4);
+    --tile-booking-next-date-font: 400 20px / 110% 'Graphik';
+    --tile-booking-next-date-margin-bottom: 24px;
+
+    --tile-booking-room-color: var(--mdx-sys-color-neutral-bold4);
+    --tile-booking-room-font: 400 16px / 130% 'Graphik';
+    --tile-booking-room-margin-top: 16px;
+
+    --tile-booking-foot-display: flex;
+    --tile-booking-foot-justify-content: right;
+    --tile-booking-foot-flex-direction: column-reverse;
+    --tile-booking-foot-align-items: center;
+    --tile-booking-foot-padding: 0;
+    --tile-booking-foot-right-display: none;
+    --tile-booking-foot-passed-display: none;
+    --tile-booking-foot-width: 100%;
+    --tile-booking-foot-price-margin-bottom: 24px;
+    
+    --tile-booking-price-font: var(--mdx-sys-font-fix-label4);
+    --tile-booking-next-start-dates-label-color: var(--mdx-sys-color-neutral-bold1);
+    --tile-booking-next-start-dates-label-font: var(--mdx-sys-font-fix-body2);
+    --tile-booking-next-start-dates-font: var(--mdx-sys-font-flex-small-custom1);
+    --tile-booking-title-other-locations-color: var(--mdx-sys-color-neutral-bold4);
+    --tile-booking-title-other-locations-font: var(--mdx-sys-font-fix-label0);
+
+    --tile-booking-content-font-size-mobile: 20px;
+    --tile-booking-content-line-height-mobile: 110%;
+    --tile-booking-price-strong-font: 500 24px / 110% 'Graphik';
+
+    --button-secondary-font-size-mobile: 16px;
+    --button-secondary-padding-mobile: 12px 24px;
+}
