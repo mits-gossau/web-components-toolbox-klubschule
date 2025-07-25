@@ -69,18 +69,17 @@ export default class Dashboard extends Index {
       :host .container.full-width {
         grid-template-columns: 1fr;
       }
-      :host #appointments .container .appointment-tile {
+      :host #appointments .container .appointment-tile,
+      :host .discover .container > * {
         grid-column: span 4;
       }
       :host #courses .container .course-event {
         grid-column: span 12;
       }
-      :host .discover .container > * {
-         grid-column: span 4;
-      }
       @media only screen and (max-width: _max-width_) {
         :host #appointments .container .appointment-tile,
-        :host #courses .container .course-event {
+        :host #courses .container .course-event,
+        :host .discover .container > * {
           grid-column: span 12;
         }
       }

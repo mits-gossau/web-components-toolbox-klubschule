@@ -70,7 +70,7 @@ export default class TileDiscover extends Shadow() {
         name: 'a-icon-mdx'
       }
     ])
-    
+
     this.html = /* html */`
       <div class="tile-discover">
         <div class="tile-discover__image">
