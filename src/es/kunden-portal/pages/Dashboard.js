@@ -75,10 +75,7 @@ export default class Dashboard extends Index {
       :host #courses .container .course-event {
         grid-column: span 12;
       }
-
-
-
-      :host #discover .container .tile {
+      :host .discover .container > * {
          grid-column: span 4;
       }
       :host .tile-discover {
@@ -107,13 +104,10 @@ export default class Dashboard extends Index {
         position: relative;
         top: 2px;
       }
-
-
-
       @media only screen and (max-width: _max-width_) {
         :host #appointments .container .appointment-tile,
         :host #courses .container .course-event,
-        :host #discover .container .tile {
+        :host .discover .container .tile {
           grid-column: span 12;
         }
       }
@@ -133,6 +127,10 @@ export default class Dashboard extends Index {
       {
         path: `${this.importMetaUrl}../../components/molecules/tile/Tile.js`,
         name: 'ks-m-tile'
+      },
+      {
+        path: `${this.importMetaUrl}../../components/molecules/tileDiscover/TileDiscover.js`,
+        name: 'ks-m-event'
       },
       {
         path: `${this.importMetaUrl}../../components/molecules/event/Event.js`,
@@ -158,37 +156,52 @@ export default class Dashboard extends Index {
           <div class="container"></div>
         </div>
         <ks-a-spacing type="m-flex"></ks-a-spacing>
-        <div id="discover">
+        <div class="discover">
           <h3><span>Unsere Kurse entdecken</span></h3>
           <div class="container">
-            <div class="tile tile-discover">
-              <div>
-                <img src="https://picsum.photos/40/40" height="40" width="40" />
-              </div>
-              <div>
-                <p class="label">Klubschule Kurse<p>
-                <p><a href="#">Kurse entdecken <a-icon-mdx icon-name="ExternalLink" size="1em"></a-icon-mdx></a><p>
-              </div>
-            </div>
-            <div class="tile tile-discover">
-              <div>
-                <img src="https://picsum.photos/40/40" height="40" width="40" />
-              </div>
-              <div>
-                <p class="label">Klubschule Pro Kurse<p>
-                <p><a href="#">Kurse entdecken <a-icon-mdx icon-name="ExternalLink" size="1em"></a-icon-mdx></a><p>
-              </div>
-            </div>
-            <div class="tile tile-discover">
-              <div>
-                <img src="https://picsum.photos/40/40" height="40" width="40" />
-              </div>
-              <div>
-                <p class="label">IBAW Kurse<p>
-                <p><a href="#">Kurse entdecken <a-icon-mdx icon-name="ExternalLink" size="1em"></a-icon-mdx></a><p>
-              </div>
-            </div>
+            <tile-discover
+              image-src="https://picsum.photos/40/40"
+              tile-label="Klubschule Kurse"
+              link-href="#"
+              link-text="Kurse entdecken">
+            </tile-discover>
+            <tile-discover
+              image-src="https://picsum.photos/40/40"
+              tile-label="Klubschule Pro Kurse"
+              link-href="#"
+              link-text="Kurse entdecken">
+            </tile-discover>
+            <tile-discover
+              image-src="https://picsum.photos/40/40"
+              tile-label="IBAW Kurse"
+              link-href="#"
+              link-text="Kurse entdecken">
+            </tile-discover>
           </div>
+        </div>
+        <ks-a-spacing type="m-flex"></ks-a-spacing>
+        <div class="discover">
+          <h3><span>Weitere Kurse entdecken</span></h3>
+          <div class="container">
+            <tile-discover
+              image-src="https://picsum.photos/40/40"
+              tile-label="Klubschule Kurse"
+              link-href="#"
+              link-text="Kurse entdecken">
+            </tile-discover>
+            <tile-discover
+              image-src="https://picsum.photos/40/40"
+              tile-label="Klubschule Pro Kurse"
+              link-href="#"
+              link-text="Kurse entdecken">
+            </tile-discover>
+            <tile-discover
+              image-src="https://picsum.photos/40/40"
+              tile-label="IBAW Kurse"
+              link-href="#"
+              link-text="Kurse entdecken">
+            </tile-discover>
+          </div>  
         </div>
       </div>
     `
