@@ -56,10 +56,18 @@ export default class Dashboard extends Index {
         position: relative;
         top: -4px;
       }
+      :host h3 {
+        color: var(--mdx-sys-color-neutral-bold4);
+        font: var(--mdx-sys-font-flex-large-headline3);
+      }
       :host .container {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         gap: var(--grid-12er-grid-gap, 1rem);
+      }
+      :host .container.no-results,
+      :host .container.full-width {
+        grid-template-columns: 1fr;
       }
       :host #appointments .container .appointment-tile {
         grid-column: span 4;
@@ -67,10 +75,45 @@ export default class Dashboard extends Index {
       :host #courses .container .course-event {
         grid-column: span 12;
       }
-      @media only screen and (max-width: _max-width_) {
 
+
+
+      :host #discover .container .tile {
+         grid-column: span 4;
+      }
+      :host .tile-discover {
+        display: grid;
+        grid-template-columns: fit-content(100%) 1fr;
+        gap: 24px;
+        background-color: white;
+        border: 1px solid #737373;
+        padding: 24px;
+      }
+      :host .tile-discover > div:last-child p {
+        margin: 0;
+        padding: 0;
+      }
+      :host .tile-discover > div:last-child p.label {
+        color: var(--mdx-sys-color-neutral-bold4);
+        font: var(--mdx-sys-font-fix-body1);
+      }
+      :host .tile-discover > div:last-child a {
+        color: #0053A6;
+        text-decoration: none;
+      }
+      :host .tile-discover > div:last-child a-icon-mdx {
+        color: #0053A6;
+        display: inline-block;
+        position: relative;
+        top: 2px;
+      }
+
+
+
+      @media only screen and (max-width: _max-width_) {
         :host #appointments .container .appointment-tile,
-        :host #courses .container .course-event {
+        :host #courses .container .course-event,
+        :host #discover .container .tile {
           grid-column: span 12;
         }
       }
@@ -94,6 +137,10 @@ export default class Dashboard extends Index {
       {
         path: `${this.importMetaUrl}../../components/molecules/event/Event.js`,
         name: 'ks-m-event'
+      },
+      {
+        path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
       }
     ]).then(() => {
       this.modulesLoaded = true
@@ -109,6 +156,39 @@ export default class Dashboard extends Index {
         <div id="courses">
           <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
           <div class="container"></div>
+        </div>
+        <ks-a-spacing type="m-flex"></ks-a-spacing>
+        <div id="discover">
+          <h3><span>Unsere Kurse entdecken</span></h3>
+          <div class="container">
+            <div class="tile tile-discover">
+              <div>
+                <img src="https://picsum.photos/40/40" height="40" width="40" />
+              </div>
+              <div>
+                <p class="label">Klubschule Kurse<p>
+                <p><a href="#">Kurse entdecken <a-icon-mdx icon-name="ExternalLink" size="1em"></a-icon-mdx></a><p>
+              </div>
+            </div>
+            <div class="tile tile-discover">
+              <div>
+                <img src="https://picsum.photos/40/40" height="40" width="40" />
+              </div>
+              <div>
+                <p class="label">Klubschule Pro Kurse<p>
+                <p><a href="#">Kurse entdecken <a-icon-mdx icon-name="ExternalLink" size="1em"></a-icon-mdx></a><p>
+              </div>
+            </div>
+            <div class="tile tile-discover">
+              <div>
+                <img src="https://picsum.photos/40/40" height="40" width="40" />
+              </div>
+              <div>
+                <p class="label">IBAW Kurse<p>
+                <p><a href="#">Kurse entdecken <a-icon-mdx icon-name="ExternalLink" size="1em"></a-icon-mdx></a><p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     `
@@ -230,16 +310,17 @@ export default class Dashboard extends Index {
       }
 
     } else {
-      appointmentsDiv.textContent = 'No Bookings'
+      appointmentsDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
+      appointmentsDiv.classList.add('no-results')
       sessionStorage.removeItem('appointmentsOffset')
     }
   }
 
   renderCourses() {
-    const bookingsDiv = this.shadowRoot.querySelector('#courses .container')
-    if (!bookingsDiv || !this.bookingsData) return
+    const coursesDiv = this.shadowRoot.querySelector('#courses .container')
+    if (!coursesDiv || !this.bookingsData) return
     
-    bookingsDiv.innerHTML = ''
+    coursesDiv.innerHTML = ''
 
     this.bookingsData.forEach(course => {
       // Format days entry from start and end date
@@ -278,11 +359,12 @@ export default class Dashboard extends Index {
       const event = new EventElement()
       event.setAttribute('class', 'course-event')
       event.setAttribute('data', JSON.stringify(courseData))
-      bookingsDiv.appendChild(event)
+      coursesDiv.appendChild(event)
     })
 
-    if (!bookingsDiv.hasChildNodes()) {
-      bookingsDiv.textContent = 'No Bookings'
+    if (!coursesDiv.hasChildNodes()) {
+      coursesDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
+      coursesDiv.classList.add('no-results')
       sessionStorage.removeItem('appointmentsOffset')
     }
   }
