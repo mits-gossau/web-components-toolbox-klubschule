@@ -74,6 +74,11 @@ export default class WithFacet extends WebWorker() {
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
     this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
 
+    // check if the page was refreshed
+    const navigationEntry = window.performance.getEntries().find(entry => entry.entryType === 'navigation')
+    // @ts-ignore
+    const isPageRefreshed = navigationEntry && navigationEntry.type === 'reload'
+
     this.fillStorage = storageType => {
       const isLocalStorageType = storageType === 'local'
       // update storage based on url
@@ -153,6 +158,13 @@ export default class WithFacet extends WebWorker() {
       this.updateURLParam('sorting', 2)
     }
     sessionStorage.setItem('currentPathname', window.location.pathname)
+    
+    // if performing a search query, always sort by relevance unless the page is refreshed
+    if (this.params.has('q') && isSearchPage && !isPageRefreshed) {
+      currentRequestObj.sorting = 1 // relevance
+      this.updateURLParam('sorting', 1)
+      sessionStorage.setItem('currentSorting', '1')
+    }
 
     this.requestWithFacetListener = async event => {
       // Reset PPage after filter Change / Reset
@@ -214,7 +226,7 @@ export default class WithFacet extends WebWorker() {
         this.filterOnly = true
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
-        const filterKey = event.detail.this.getAttribute('filter-key')
+        const filterKey = event.detail.this?.getAttribute?.('filter-key') || event.detail.filterKey
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
@@ -575,6 +587,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
     this.addEventListener('backdrop-clicked', this.handleBackdropClicked)
     this.addEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
+    window.addEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   disconnectedCallback() {
@@ -584,6 +597,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
     this.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
     this.removeEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
+    window.removeEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   handleBackdropClicked = () => {
