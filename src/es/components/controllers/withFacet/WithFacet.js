@@ -74,6 +74,11 @@ export default class WithFacet extends WebWorker() {
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
     this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
 
+    // check if the page was refreshed
+    const navigationEntry = window.performance.getEntries().find(entry => entry.entryType === 'navigation')
+    // @ts-ignore
+    const isPageRefreshed = navigationEntry && navigationEntry.type === 'reload'
+
     this.fillStorage = storageType => {
       const isLocalStorageType = storageType === 'local'
       // update storage based on url
@@ -153,6 +158,13 @@ export default class WithFacet extends WebWorker() {
       this.updateURLParam('sorting', 2)
     }
     sessionStorage.setItem('currentPathname', window.location.pathname)
+    
+    // if performing a search query, always sort by relevance unless the page is refreshed
+    if (this.params.has('q') && isSearchPage && !isPageRefreshed) {
+      currentRequestObj.sorting = 1 // relevance
+      this.updateURLParam('sorting', 1)
+      sessionStorage.setItem('currentSorting', '1')
+    }
 
     this.requestWithFacetListener = async event => {
       // Reset PPage after filter Change / Reset
