@@ -78,36 +78,9 @@ export default class Dashboard extends Index {
       :host .discover .container > * {
          grid-column: span 4;
       }
-      :host .tile-discover {
-        display: grid;
-        grid-template-columns: fit-content(100%) 1fr;
-        gap: 24px;
-        background-color: white;
-        border: 1px solid #737373;
-        padding: 24px;
-      }
-      :host .tile-discover > div:last-child p {
-        margin: 0;
-        padding: 0;
-      }
-      :host .tile-discover > div:last-child p.label {
-        color: var(--mdx-sys-color-neutral-bold4);
-        font: var(--mdx-sys-font-fix-body1);
-      }
-      :host .tile-discover > div:last-child a {
-        color: #0053A6;
-        text-decoration: none;
-      }
-      :host .tile-discover > div:last-child a-icon-mdx {
-        color: #0053A6;
-        display: inline-block;
-        position: relative;
-        top: 2px;
-      }
       @media only screen and (max-width: _max-width_) {
         :host #appointments .container .appointment-tile,
-        :host #courses .container .course-event,
-        :host .discover .container .tile {
+        :host #courses .container .course-event {
           grid-column: span 12;
         }
       }
@@ -130,15 +103,11 @@ export default class Dashboard extends Index {
       },
       {
         path: `${this.importMetaUrl}../../components/molecules/tileDiscover/TileDiscover.js`,
-        name: 'ks-m-event'
+        name: 'ks-m-tile-discover'
       },
       {
         path: `${this.importMetaUrl}../../components/molecules/event/Event.js`,
         name: 'ks-m-event'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-        name: 'a-icon-mdx'
       }
     ]).then(() => {
       this.modulesLoaded = true
@@ -146,63 +115,71 @@ export default class Dashboard extends Index {
 
     this.html = /* html */ `
       <div id="dashboard">
+
         <div id="appointments">
           <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
           <div class="container"></div>
         </div>
+
         <ks-a-spacing type="m-flex"></ks-a-spacing>
+
         <div id="courses">
           <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
           <div class="container"></div>
         </div>
+
         <ks-a-spacing type="m-flex"></ks-a-spacing>
+
         <div class="discover">
           <h3><span>Unsere Kurse entdecken</span></h3>
           <div class="container">
-            <tile-discover
+            <ks-m-tile-discover
               image-src="https://picsum.photos/40/40"
               tile-label="Klubschule Kurse"
               link-href="#"
               link-text="Kurse entdecken">
-            </tile-discover>
-            <tile-discover
+            </ks-m-tile-discover>
+            <ks-m-tile-discover
               image-src="https://picsum.photos/40/40"
               tile-label="Klubschule Pro Kurse"
               link-href="#"
               link-text="Kurse entdecken">
-            </tile-discover>
-            <tile-discover
+            </ks-m-tile-discover>
+            <ks-m-tile-discover
               image-src="https://picsum.photos/40/40"
               tile-label="IBAW Kurse"
               link-href="#"
               link-text="Kurse entdecken">
-            </tile-discover>
+            </ks-m-tile-discover>
           </div>
         </div>
+
         <ks-a-spacing type="m-flex"></ks-a-spacing>
+
         <div class="discover">
           <h3><span>Weitere Kurse entdecken</span></h3>
           <div class="container">
-            <tile-discover
+            <ks-m-tile-discover
               image-src="https://picsum.photos/40/40"
               tile-label="Klubschule Kurse"
               link-href="#"
               link-text="Kurse entdecken">
-            </tile-discover>
-            <tile-discover
+            </ks-m-tile-discover>
+            <ks-m-tile-discover
               image-src="https://picsum.photos/40/40"
               tile-label="Klubschule Pro Kurse"
               link-href="#"
               link-text="Kurse entdecken">
-            </tile-discover>
-            <tile-discover
+            </ks-m-tile-discover>
+            <ks-m-tile-discover
               image-src="https://picsum.photos/40/40"
               tile-label="IBAW Kurse"
               link-href="#"
               link-text="Kurse entdecken">
-            </tile-discover>
+            </ks-m-tile-discover>
           </div>  
         </div>
+
       </div>
     `
   }
@@ -239,6 +216,7 @@ export default class Dashboard extends Index {
 
     // slice for loading more appointments
     const visibleAppointments = allAppointments.slice(offset, offset + limit)
+    console.log('Visible Appointments:', visibleAppointments.length)
 
     if (visibleAppointments.length) {
       visibleAppointments.forEach(app => {
