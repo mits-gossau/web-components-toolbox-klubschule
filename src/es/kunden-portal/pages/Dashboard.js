@@ -338,8 +338,8 @@ export default class Dashboard extends Index {
     filtered.forEach(course => {
       const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
-      const formatDate = d => d ? `${abo ? 'Gültigkeitsdauer ' : ''}${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
-      const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
+      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+      const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
 
       const courseData = {
         course: {
