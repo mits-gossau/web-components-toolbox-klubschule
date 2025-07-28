@@ -680,6 +680,10 @@ export default class Event extends Shadow() {
       </div>
     `
 
+    const head = this.root.querySelector('.head')
+    const details = this.root.querySelector('.details')
+    if (head && details && getComputedStyle(details).display === 'none') head.style.gridTemplateColumns = 'auto'
+
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,

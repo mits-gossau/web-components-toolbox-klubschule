@@ -29,7 +29,18 @@ export default class TileDiscover extends Shadow() {
       :host {
         display: block;
       }
+      .tile-discover-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+      }
+      .tile-discover-link:focus,
+      .tile-discover-link:hover {
+        outline: 1px solid #0053A6;
+        outline-offset: 1px;
+      }
       .tile-discover {
+        cursor: pointer;
         display: grid;
         grid-template-columns: fit-content(100%) 1fr;
         gap: 24px;
@@ -72,20 +83,22 @@ export default class TileDiscover extends Shadow() {
     ])
 
     this.html = /* html */`
-      <div class="tile-discover">
-        <div class="tile-discover__image">
-          <img src="${this.getAttribute('image-src') || ''}" height="40" width="40" alt="" />
-        </div>
-        <div>
-          <p class="tile-discover__label">${this.getAttribute('tile-label') || ''}</p>
-          <p>
-            <a class="tile-discover__link" href="${this.getAttribute('link-href') || '#'}">
+      <a class="tile-discover-link" href="${this.getAttribute('link-href') || '#'}">
+        <div class="tile-discover">
+          <div class="tile-discover__image">
+            <img src="${this.getAttribute('image-src') || ''}" height="40" width="40" alt="" />
+          </div>
+          <div>
+            <p class="tile-discover__label">
+              ${this.getAttribute('tile-label') || ''}
+            </p>
+            <p class="tile-discover__link">
               ${this.getAttribute('link-text') || ''}
               <a-icon-mdx icon-name="ExternalLink" size="1em"></a-icon-mdx>
-            </a>
-          </p>
+            </p>
+          </div>
         </div>
-      </div>
+      </a>
     `
   }
 }

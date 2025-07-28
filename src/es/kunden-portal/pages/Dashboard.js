@@ -18,7 +18,9 @@ export default class Dashboard extends Index {
           this.bookingsData = data.bookings || []
           if (this.modulesLoaded) {
             setTimeout(() => this.renderAppointments(), 0)
-            setTimeout(() => this.renderCourses(), 0)
+            setTimeout(() => this.renderBookings({ id: '#courses', abo: false }), 0)
+            setTimeout(() => this.renderBookings({ id: '#abonnements', abo: true }), 0)
+            
           }
         })
         .catch(error => {
@@ -73,8 +75,18 @@ export default class Dashboard extends Index {
       :host .discover .container > * {
         grid-column: span 4;
       }
-      :host #courses .container .course-event {
+      :host #courses .container .course-event,
+      :host #abonnements .container .course-event {
         grid-column: span 12;
+      }
+      :host #abonnements a-icon-mdx::part(svg) {
+        border: 2px solid black;
+        border-radius: 4px;
+        padding: 5px;
+        margin-right: 5px;
+      }
+      :host #abonnements ks-m-event::part(head) {
+        grid-template-columns: auto;
       }
       @media only screen and (max-width: _max-width_) {
         :host #appointments .container .appointment-tile,
@@ -177,6 +189,13 @@ export default class Dashboard extends Index {
               link-text="Kurse entdecken">
             </ks-m-tile-discover>
           </div>  
+        </div>
+
+        <ks-a-spacing type="m-flex"></ks-a-spacing>
+
+        <div id="abonnements">
+          <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
+          <div class="container"></div>
         </div>
 
       </div>
@@ -306,17 +325,20 @@ export default class Dashboard extends Index {
     }
   }
 
-  renderCourses() {
-    const coursesDiv = this.shadowRoot.querySelector('#courses .container')
-    if (!coursesDiv || !this.bookingsData) return
-    
-    coursesDiv.innerHTML = ''
+  renderBookings({ id = '#courses', abo = false } = {}) {
+    const containerDiv = this.shadowRoot.querySelector(`${id} .container`)
+    if (!containerDiv || !this.bookingsData) return
 
-    this.bookingsData.forEach(course => {
-      // Format days entry from start and end date
+    containerDiv.innerHTML = ''
+
+    const filtered = this.bookingsData.filter(course =>
+      abo ? course.isSubscription : !course.isSubscription
+    )
+
+    filtered.forEach(course => {
       const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
-      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+      const formatDate = d => d ? `${abo ? 'Gültigkeitsdauer ' : ''}${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
       const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
 
       const courseData = {
@@ -329,19 +351,22 @@ export default class Dashboard extends Index {
             name: course.courseLocation,
             badge: course.roomDescription || ''
           },
-          state_of_booking: 'Gebucht',
-          logo_url: course.logoUrl,
           status: course.courseAppointmentStatus,
           status_label: course.courseAppointmentStatusText,
           buttons: [{
-            text: 'Detail ansehen',
+            text: abo ? 'Zum Aboportal' : 'Detail ansehen',
             typ: 'secondary',
             event: 'open-booking-detail',
-            link: `index.html#/booking?courseId=${course.courseId}`
+            link: abo ? `#`: `index.html#/booking?courseId=${course.courseId}`
           }],
           icons: [],
         },
         sprachid: 'd'
+      }
+
+      if (!abo) {
+        courseData.course.state_of_booking = 'Gebucht'
+        courseData.course.logo_url = course.logoUrl
       }
 
       const EventElement = customElements.get('ks-m-event')
@@ -349,13 +374,15 @@ export default class Dashboard extends Index {
       const event = new EventElement()
       event.setAttribute('class', 'course-event')
       event.setAttribute('data', JSON.stringify(courseData))
-      coursesDiv.appendChild(event)
+      containerDiv.appendChild(event)
     })
 
-    if (!coursesDiv.hasChildNodes()) {
-      coursesDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
-      coursesDiv.classList.add('no-results')
-      sessionStorage.removeItem('appointmentsOffset')
+    if (!containerDiv.hasChildNodes()) {
+      containerDiv.textContent = abo
+        ? 'Sie haben keine aktiven Abonnemente.'
+        : 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
+      containerDiv.classList.add('no-results')
+      if (!abo) sessionStorage.removeItem('appointmentsOffset')
     }
   }
 }
