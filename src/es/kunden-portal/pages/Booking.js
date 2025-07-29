@@ -16,7 +16,6 @@ export default class Booking extends Index {
       event.detail.fetch
         .then((data) => {
           this.bookingData = data || []
-          console.log(this.bookingData)
           if (this.modulesLoaded) {
             setTimeout(() => this.renderBooking(), 0)
           }
@@ -96,6 +95,10 @@ export default class Booking extends Index {
         name: 'ks-m-contact-row'
       },
       {
+        path: `${this.importMetaUrl}../../components/molecules/systemNotification/SystemNotification.js`,
+        name: 'ks-m-system-notification'
+      },
+      {
         path: `${this.importMetaUrl}../../components/organisms/bodySection/BodySection.js`,
         name: 'ks-o-body-section'
       },
@@ -126,14 +129,22 @@ export default class Booking extends Index {
             <section>
               <!-- details -->
               <ks-o-body-section content-width-var="100%" no-margin-y background-color="white"> 
+                <!-- notification -->
+                <ks-m-system-notification id="booking-notification" namespace="system-notification-default-" icon-name="Info" icon-size="1.5em" icon-plain is-closeable>
+                  <div slot="description">
+                    <p class="notification-title">Kursbestätigung ist verfügbar</p>
+                    <p class="notification-text">Sie finden alle Dokumente zum Kurs auf der Kursdetailseite oder unter Dokumente.</p>
+                  </div>
+                </ks-m-system-notification>
+                <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                <!-- booking details -->
                 <div id="booking-detail">
                   <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Kurs Details</span></h2>
                   <div class="container"></div>
                 </div>
               </ks-o-body-section>
-
               <!-- contact and options -->
-              <aside style="background-color: white"></aside>
+              <aside></aside>
             </section>
           </o-grid>
         </div>
@@ -151,6 +162,7 @@ export default class Booking extends Index {
 
     const center = this.bookingData.center || {}
 
+    // contact and options
     let aside = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('aside')
     if (!aside) {
       aside = document.createElement('aside')

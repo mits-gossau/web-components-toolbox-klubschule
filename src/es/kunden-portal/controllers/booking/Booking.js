@@ -17,10 +17,12 @@ export default class Booking extends HTMLElement {
 
   connectedCallback() {
     this.addEventListener('request-booking', this.requestBooking)
+    this.addEventListener('close-notification', this.handleNotification)
   }
 
   disconnectedCallback() {
     this.removeEventListener('request-booking', this.requestBooking)
+    this.removeEventListener('close-notification', this.handleNotification)
   }
 
   requestBooking = (event) => {
@@ -51,6 +53,15 @@ export default class Booking extends HTMLElement {
       cancelable: true,
       composed: true
     }))
+  }
+
+  handleNotification = (event) => {
+    console.log('Notification wurde geschlossen:', event)
+    setTimeout(() => {
+      const notification = this.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('p-booking')?.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('#booking-notification')
+      const spacing = this.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('p-booking')?.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('#notification-spacing')
+      if (notification && spacing) spacing.remove()
+    }, 0)
   }
 
   /**
