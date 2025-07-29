@@ -145,7 +145,7 @@ export default class Dashboard extends Index {
           <h3><span>Unsere Kurse entdecken</span></h3>
           <div class="container">
             <ks-m-tile-discover
-              image-src="https://picsum.photos/40/40"
+              image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
               tile-label="Klubschule Kurse"
               link-href="#"
               link-text="Kurse entdecken">
@@ -171,7 +171,7 @@ export default class Dashboard extends Index {
           <h3><span>Weitere Kurse entdecken</span></h3>
           <div class="container">
             <ks-m-tile-discover
-              image-src="https://picsum.photos/40/40"
+              image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
               tile-label="Klubschule Kurse"
               link-href="#"
               link-text="Kurse entdecken">
@@ -212,21 +212,24 @@ export default class Dashboard extends Index {
     const today = new Date()
     const allAppointments = []
     this.bookingsData.forEach(booking => {
-      (booking.appointments || []).forEach(appointment => {
+      const futureAppointments = (booking.appointments || []).filter(appointment => {
         const appointmentDate = new Date(appointment.appointmentDate)
         // @ts-ignore
-        if (appointmentDate >= today.setHours(0, 0, 0, 0)) {
-          allAppointments.push({
-            ...appointment,
-            courseTitle: booking.courseTitle,
-            courseId: booking.courseId,
-            courseLocation: booking.courseLocation,
-            roomDescription: booking.roomDescription,
-            logoUrl: booking.logoUrl,
-            price: booking.price,
-          })
-        }
+        return appointmentDate >= today.setHours(0, 0, 0, 0)
       })
+      if (futureAppointments.length) {
+        futureAppointments.sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
+        const next = futureAppointments[0]
+        allAppointments.push({
+          ...next,
+          courseTitle: booking.courseTitle,
+          courseId: booking.courseId,
+          courseLocation: booking.courseLocation,
+          roomDescription: booking.roomDescription,
+          logoUrl: booking.logoUrl,
+          price: booking.price,
+        })
+      }
     })
 
     // @ts-ignore, sort by appointmentDate ascending
@@ -234,7 +237,6 @@ export default class Dashboard extends Index {
 
     // slice for loading more appointments
     const visibleAppointments = allAppointments.slice(offset, offset + limit)
-    console.log('Visible Appointments:', visibleAppointments.length)
 
     if (visibleAppointments.length) {
       visibleAppointments.forEach(app => {
@@ -267,57 +269,6 @@ export default class Dashboard extends Index {
         }))
         appointmentsDiv.appendChild(tile)
       })
-
-      // load more
-      const container = this.shadowRoot.querySelector('#appointments')
-      let moreBtnWrapper = container.querySelector('.more-bookings-wrapper')
-      if (moreBtnWrapper) moreBtnWrapper.remove()
-
-      if (offset + limit < allAppointments.length) {
-        moreBtnWrapper = document.createElement('div')
-        moreBtnWrapper.className = 'more-bookings-wrapper'
-        moreBtnWrapper.style = 'text-align:center;margin-top:2rem;'
-
-        const moreBtn = document.createElement('span')
-        moreBtn.innerHTML = /* html */`
-          <ks-a-button namespace="button-primary-" color="secondary">
-            <span class="more-text">Weitere laden</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowDownRight" size="1em" class="icon-right"></a-icon-mdx>
-          </ks-a-button>
-        `
-        moreBtn.onclick = () => {
-          sessionStorage.setItem('appointmentsOffset', String(offset + limit))
-          this.renderAppointments(limit, offset + limit)
-        }
-        moreBtnWrapper.appendChild(moreBtn)
-        container.appendChild(moreBtnWrapper)
-      }
-
-      // load less
-      if (offset > 0) {
-        let lessBtnWrapper = container.querySelector('.less-bookings-wrapper')
-        if (lessBtnWrapper) lessBtnWrapper.remove()
-
-        lessBtnWrapper = document.createElement('div')
-        lessBtnWrapper.className = 'less-bookings-wrapper'
-        lessBtnWrapper.style = 'text-align:center;margin-top:1rem;'
-
-        const lessBtn = document.createElement('span')
-        lessBtn.innerHTML = /* html */`
-          <ks-a-button namespace="button-primary-" color="secondary">
-            <span class="less-text">Weniger anzeigen</span>
-            <a-icon-mdx namespace="icon-mdx-ks-" icon-name="ArrowUpRight" size="1em" class="icon-right"></a-icon-mdx>
-          </ks-a-button>
-        `
-        lessBtn.onclick = () => {
-          sessionStorage.removeItem('appointmentsOffset')
-          lessBtn.innerHTML = ''
-          this.renderAppointments(limit, 0)
-        }
-        lessBtnWrapper.appendChild(lessBtn)
-        container.appendChild(lessBtnWrapper)
-      }
-
     } else {
       appointmentsDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
       appointmentsDiv.classList.add('no-results')
