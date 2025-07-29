@@ -119,6 +119,10 @@ export default class Dashboard extends Index {
       {
         path: `${this.importMetaUrl}../../components/molecules/event/Event.js`,
         name: 'ks-m-event'
+      },
+      {
+        path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
       }
     ]).then(() => {
       this.modulesLoaded = true
@@ -167,6 +171,13 @@ export default class Dashboard extends Index {
 
         <ks-a-spacing type="m-flex"></ks-a-spacing>
 
+        <div id="continuation">
+          <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
+          <div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>
+        </div>
+
+        <ks-a-spacing type="m-flex"></ks-a-spacing>
+
         <div class="discover">
           <h3><span>Weitere Kurse entdecken</span></h3>
           <div class="container">
@@ -202,11 +213,11 @@ export default class Dashboard extends Index {
     `
   }
 
-  renderAppointments(limit = 6, offset = Number(sessionStorage.getItem('appointmentsOffset')) || 0) {
+  renderAppointments() {
     const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container')
     if (!appointmentsDiv || !this.bookingsData) return
 
-    if (offset === 0) appointmentsDiv.innerHTML = ''
+    appointmentsDiv.innerHTML = ''
 
     // future appointments with course info
     const today = new Date()
@@ -235,11 +246,8 @@ export default class Dashboard extends Index {
     // @ts-ignore, sort by appointmentDate ascending
     allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
 
-    // slice for loading more appointments
-    const visibleAppointments = allAppointments.slice(offset, offset + limit)
-
-    if (visibleAppointments.length) {
-      visibleAppointments.forEach(app => {
+    if (allAppointments.length) {
+      allAppointments.forEach(app => {
         const TileElement = customElements.get('ks-m-tile')
         // @ts-ignore
         const tile = new TileElement()
@@ -272,10 +280,10 @@ export default class Dashboard extends Index {
     } else {
       appointmentsDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
       appointmentsDiv.classList.add('no-results')
-      sessionStorage.removeItem('appointmentsOffset')
     }
   }
 
+  // render abonnements or booked courses
   renderBookings({ id = '#courses', abo = false } = {}) {
     const containerDiv = this.shadowRoot.querySelector(`${id} .container`)
     if (!containerDiv || !this.bookingsData) return
@@ -330,11 +338,9 @@ export default class Dashboard extends Index {
     })
 
     if (!containerDiv.hasChildNodes()) {
-      containerDiv.textContent = abo
-        ? 'Sie haben keine aktiven Abonnemente.'
-        : 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
+      if (abo) this.shadowRoot.querySelector('#abonnments').style.display = 'none'
+      containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
       containerDiv.classList.add('no-results')
-      if (!abo) sessionStorage.removeItem('appointmentsOffset')
     }
   }
 }

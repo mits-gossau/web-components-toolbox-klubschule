@@ -553,7 +553,6 @@ export default class Event extends Shadow() {
   renderHTML () {
     const warnMandatory = 'data attribute requires: '
     if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
-      console.log(this.data.state_of_booking, this.data.logo_url)
     const {
       bezeichnung,
       centerid,
