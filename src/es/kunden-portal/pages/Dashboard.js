@@ -338,7 +338,7 @@ export default class Dashboard extends Index {
     })
 
     if (!containerDiv.hasChildNodes()) {
-      if (abo) this.shadowRoot.querySelector('#abonnments').style.display = 'none'
+      if (abo) this.shadowRoot.querySelector('#abonnements').style.display = 'none'
       containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
       containerDiv.classList.add('no-results')
     }
