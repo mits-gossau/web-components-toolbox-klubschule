@@ -679,10 +679,11 @@ export default class Event extends Shadow() {
         </ks-c-checkout-overlay>
       </div>
     `
-
-    const head = this.root.querySelector('.head')
-    const details = this.root.querySelector('.details')
-    if (head && details && getComputedStyle(details).display === 'none') head.style.gridTemplateColumns = 'auto'
+    if (this.hasAttribute('abo-event')) {
+      const head = this.root.querySelector('.head')
+      const details = this.root.querySelector('.details')
+      if (head && details && getComputedStyle(details).display === 'none') head.style.gridTemplateColumns = 'auto'
+    }
 
     return this.fetchModules([
       {

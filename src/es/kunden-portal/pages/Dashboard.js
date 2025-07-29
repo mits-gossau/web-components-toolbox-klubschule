@@ -324,6 +324,7 @@ export default class Dashboard extends Index {
       // @ts-ignore
       const event = new EventElement()
       event.setAttribute('class', 'course-event')
+      if (abo) event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
     })
