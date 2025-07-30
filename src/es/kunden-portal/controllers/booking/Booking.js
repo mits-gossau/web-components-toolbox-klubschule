@@ -16,12 +16,12 @@ export default class Booking extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('request-booking', this.requestBooking)
+    document.addEventListener('request-booking', this.requestBooking)
     this.addEventListener('close-notification', this.handleNotification)
   }
 
   disconnectedCallback() {
-    this.removeEventListener('request-booking', this.requestBooking)
+    document.removeEventListener('request-booking', this.requestBooking)
     this.removeEventListener('close-notification', this.handleNotification)
   }
 
@@ -30,7 +30,11 @@ export default class Booking extends HTMLElement {
     this.abortControllerBooking = new AbortController()
 
     const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '')
-    const courseId = urlParams.get('courseId')
+    const courseId = urlParams.get('courseId') || event.detail.courseId
+    if (!courseId) {
+      console.error('Course ID is required for booking.')
+      return
+    }
 
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBooking}`

@@ -2,6 +2,78 @@
 import Index from './Index.js'
 
 /**
+ * @typedef {Object} Appointment
+ * @property {string} appointmentDate
+ * @property {string} appointmentStartTime
+ * @property {string} appointmentEndTime
+ * @property {number} weekday
+ * @property {string} weekdayText
+ * @property {number} lessonCount
+ * @property {string} remark
+ * @property {string} appointmentDateFormatted
+ * @property {boolean} isActive
+ * @property {boolean} isNext
+ * @property {string} participantStatus
+ * @property {string} participantStatusText
+ */
+
+/**
+ * @typedef {Object} Course
+ * @property {number} mandantId
+ * @property {string} courseType
+ * @property {number} courseId
+ * @property {string} courseTitle
+ * @property {string} courseDescription
+ * @property {string} courseStartDate
+ * @property {string} courseEndDate
+ * @property {number} coursePrice
+ * @property {string} currency
+ * @property {boolean} courseRealisationDecision
+ * @property {string} courseRealisationDecisionText
+ * @property {number} roomId
+ * @property {string} roomDescription
+ * @property {string} roomDescriptionShort
+ * @property {string} roomCategory
+ * @property {number} locationId
+ * @property {string} locationDescription
+ * @property {number} weekday
+ * @property {string} weekdayText
+ * @property {number} courseIdFollowUp
+ * @property {number} bookingType
+ * @property {string} documentType
+ * @property {string} documentKey
+ * @property {Appointment[]} appointments
+ * @property {boolean} isSubscription
+ * @property {boolean} isActive
+ * @property {string|null} courseFreeSeatFrom
+ * @property {string} bookingTypeText
+ */
+
+/**
+ * @typedef {Object} Center
+ * @property {number} centerId
+ * @property {string} short
+ * @property {string} text
+ * @property {string} name
+ * @property {string} locationStreet
+ * @property {string} locationStreetNumber
+ * @property {string} locationZipCode
+ * @property {string} locationCity
+ * @property {string} locationCountry
+ * @property {string} locationRegion
+ * @property {string} phoneNumber
+ * @property {string} email
+ */
+
+/**
+ * @typedef {Object} BookingApiResponse
+ * @property {Course} course
+ * @property {Center} center
+ * @property {number} statusCode
+ * @property {string} message
+ */
+
+/**
  * Booking
  *
  * @export
@@ -95,6 +167,10 @@ export default class Booking extends Index {
         name: 'ks-m-contact-row'
       },
       {
+        path: `${this.importMetaUrl}../../components/molecules/tileBookingDetails/TileBookingDetails.js`,
+        name: 'ks-m-tile-booking-details'
+      },
+      {
         path: `${this.importMetaUrl}../../components/molecules/systemNotification/SystemNotification.js`,
         name: 'ks-m-system-notification'
       },
@@ -138,10 +214,7 @@ export default class Booking extends Index {
                 </ks-m-system-notification>
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
                 <!-- booking details -->
-                <div id="booking-detail">
-                  <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Kurs Details</span></h2>
-                  <div class="container"></div>
-                </div>
+                <ks-m-tile-booking-details data="${this.bookingDetails}"></ks-m-tile-booking-details>
               </ks-o-body-section>
               <!-- contact and options -->
               <aside></aside>
@@ -154,24 +227,43 @@ export default class Booking extends Index {
 
   renderBooking() {
     const body = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('ks-o-body-section').shadowRoot
-    const container = body.querySelector('#booking-detail .container')
-    if (!container || !this.bookingData) return
+    if (!this.bookingData) return
 
-    container.innerHTML = ''
-    container.innerHTML = this.bookingData.course.courseTitle
+    // booking details
+    /**
+     * @type {Course}
+     */
+    const course = this.bookingData.course || {}
+    if (!course) return
 
-    const center = this.bookingData.center || {}
+    const start = new Date(course.courseStartDate)
+    const end = new Date(course.courseEndDate)
+    const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+    const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
+
+    this.bookingDetails = JSON.stringify({
+      bookingTypeText: this.bookingData.course.bookingTypeText || 'Gebucht',
+      courseTitle: this.bookingData.course.courseTitle || '',
+      locationDescription: this.bookingData.course.locationDescription || '',
+      daysEntry,
+      statusText: this.bookingData.course.courseRealisationDecisionText || 'Gestartet',
+      statusIcon: `${this.importMetaUrl}../../kunden-portal/images/icons/Status_Gestartet.svg` || ''
+    })
+    const tile = body.querySelector('ks-m-tile-booking-details')
+    if (tile) tile.setAttribute('data', this.bookingDetails)
 
     // contact and options
+    /**
+     * @type {Center}
+     */
+    const center = this.bookingData.center || {}
     let aside = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('aside')
     if (!aside) {
       aside = document.createElement('aside')
       aside.style.backgroundColor = 'white'
       body.appendChild(aside)
     }
-    aside.innerHTML = /* html */`
-      <ks-a-heading tag="h3">Kontakt</ks-a-heading>
-    `
+    aside.innerHTML = /* html */`<ks-a-heading tag="h3">Kontakt</ks-a-heading>`
 
     const address = document.createElement('ks-m-contact-row')
     address.setAttribute('icon-name', 'Home')

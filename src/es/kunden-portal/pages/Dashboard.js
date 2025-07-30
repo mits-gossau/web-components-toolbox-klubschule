@@ -17,10 +17,10 @@ export default class Dashboard extends Index {
         .then((data) => {
           this.bookingsData = data.bookings || []
           if (this.modulesLoaded) {
-            setTimeout(() => this.renderAppointments(), 0)
+            setTimeout(() => this.renderAppointments(3), 0)
             setTimeout(() => this.renderBookings({ id: '#courses', abo: false }), 0)
             setTimeout(() => this.renderBookings({ id: '#abonnements', abo: true }), 0)
-            
+            setTimeout(() => this.renderContinuationCourses(), 0)
           }
         })
         .catch(error => {
@@ -213,7 +213,7 @@ export default class Dashboard extends Index {
     `
   }
 
-  renderAppointments() {
+  renderAppointments(count = 3) {
     const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container')
     if (!appointmentsDiv || !this.bookingsData) return
 
@@ -246,8 +246,9 @@ export default class Dashboard extends Index {
     // @ts-ignore, sort by appointmentDate ascending
     allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
 
-    if (allAppointments.length) {
-      allAppointments.forEach(app => {
+    const nextAppointments = allAppointments.slice(0, count)
+    if (nextAppointments.length) {
+      nextAppointments.forEach(app => {
         const TileElement = customElements.get('ks-m-tile')
         // @ts-ignore
         const tile = new TileElement()
@@ -310,8 +311,8 @@ export default class Dashboard extends Index {
             name: course.courseLocation,
             badge: course.roomDescription || ''
           },
-          status: course.courseAppointmentStatus,
-          status_label: course.courseAppointmentStatusText,
+          status: course.courseStatus,
+          status_label: course.courseStatusText,
           buttons: [{
             text: abo ? 'Zum Aboportal' : 'Detail ansehen',
             typ: 'secondary',
@@ -343,4 +344,26 @@ export default class Dashboard extends Index {
       containerDiv.classList.add('no-results')
     }
   }
+
+  async renderContinuationCourses() {
+    const container = this.shadowRoot.querySelector('#continuation .container')
+    if (!container) return
+    container.innerHTML = ''
+
+    const followUpIds = Array.from(
+      new Set(
+        (this.bookingsData || [])
+          .map(b => b.courseIdFollowUp)
+          .filter(id => id && id > 0)
+      )
+    )
+
+    console.log('followUpIds:', followUpIds)
+
+    if (!followUpIds.length || !container.hasChildNodes()) {
+      container.textContent = 'Es finden keine Fortsetzungskurse statt.'
+      container.classList.add('no--results')
+    }
+  }
+
 }
