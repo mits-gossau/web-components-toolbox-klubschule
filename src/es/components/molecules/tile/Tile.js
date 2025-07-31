@@ -320,10 +320,10 @@ export default class Tile extends Shadow() {
           path: `${this.importMetaUrl}./passed-/passed-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }, ...styles])
-      case 'tile-booking-':
+      case 'tile-appointment-':
         return this.fetchCSS([
           {
-            path: `${this.importMetaUrl}./booking-/booking-.css`,
+            path: `${this.importMetaUrl}./appointment-/appointment-.css`,
             namespace: false,
           }, ...styles])
       default:
@@ -409,7 +409,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             ${this.hasAttribute('is-wish-list') && !this.isPassed && !this.hasAttribute('is-info-events') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? `${data.parentkey}${data.centerid ? `_${data.centerid}` : ''}` : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
-            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons ${this.hasAttribute('is-info-events') ? 'is-info-events' : '' } ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' ${this.getAttribute('namespace') === 'tile-booking-' ? '' : 'small'} ${this.hasAttribute('no-url-params') || this.hasAttribute('is-other-locations') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
+            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons ${this.hasAttribute('is-info-events') ? 'is-info-events' : '' } ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' ${this.getAttribute('namespace') === 'tile-appointment-' ? '' : 'small'} ${this.hasAttribute('no-url-params') || this.hasAttribute('is-other-locations') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">

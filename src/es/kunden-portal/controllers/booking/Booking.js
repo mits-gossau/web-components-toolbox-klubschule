@@ -16,11 +16,13 @@ export default class Booking extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('request-booking', this.requestBooking)
+    document.addEventListener('request-booking', this.requestBooking)
+    this.addEventListener('close-notification', this.handleNotification)
   }
 
   disconnectedCallback() {
-    this.removeEventListener('request-booking', this.requestBooking)
+    document.removeEventListener('request-booking', this.requestBooking)
+    this.removeEventListener('close-notification', this.handleNotification)
   }
 
   requestBooking = (event) => {
@@ -28,7 +30,11 @@ export default class Booking extends HTMLElement {
     this.abortControllerBooking = new AbortController()
 
     const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '')
-    const courseId = urlParams.get('courseId')
+    const courseId = urlParams.get('courseId') || event.detail.courseId
+    if (!courseId) {
+      console.error('Course ID is required for booking.')
+      return
+    }
 
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBooking}`
@@ -51,6 +57,15 @@ export default class Booking extends HTMLElement {
       cancelable: true,
       composed: true
     }))
+  }
+
+  handleNotification = (event) => {
+    console.log('Notification wurde geschlossen:', event)
+    setTimeout(() => {
+      const notification = this.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('p-booking')?.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('#booking-notification')
+      const spacing = this.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('p-booking')?.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('#notification-spacing')
+      if (notification && spacing) spacing.remove()
+    }, 0)
   }
 
   /**
