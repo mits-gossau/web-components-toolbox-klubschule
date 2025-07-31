@@ -7,3 +7,6 @@
 [submodule "src/es/customer-portal/event-driven-web-components-router"]
 	path = src/es/customer-portal/event-driven-web-components-router
 	url = https://github.com/Weedshaker/event-driven-web-components-router.git
+[submodule "src/es/kunden-portal/event-driven-web-components-router"]
+	path = src/es/kunden-portal/event-driven-web-components-router
+	url = https://github.com/Weedshaker/event-driven-web-components-router.git

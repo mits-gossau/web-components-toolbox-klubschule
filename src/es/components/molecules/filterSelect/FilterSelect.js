@@ -88,7 +88,7 @@ export default class FilterSelect extends Shadow() {
           request-event-name="${requestEventName}" 
           ${isTreeFilter ? `filter-type="tree"` : ''} 
           click-no-toggle-active
-        >
+        >      
           <span part="label1">${selectedFilter}</span>
           <span part="label2" dynamic></span>
         </ks-a-button>
@@ -97,7 +97,7 @@ export default class FilterSelect extends Shadow() {
           namespace="button-primary-" 
           color="tertiary" 
           justify-content="flex-start" 
-          request-event-name="reset-filter" 
+          request-event-name="reset-filter,reset-filter-pill"
           filter-key="${filterGroupUrlPara || filterItem.urlpara}" 
           filter-value="${selectedFilter}"
           ${isTreeFilter ? `filter-type="tree"` : ''}
@@ -194,7 +194,6 @@ export default class FilterSelect extends Shadow() {
             justify-content="flex-start" 
             request-event-name="${requestEventName}" 
             click-no-toggle-active
-            filter-type="${quickFilter.type}"
           >
             <style>
               :host,
