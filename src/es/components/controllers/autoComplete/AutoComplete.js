@@ -110,7 +110,7 @@ export default class AutoComplete extends Shadow() {
 
     this.requestWithFacet = event => {
       if (event.detail.type === 'enter' || event.detail.type === 'search-click' || event.detail.type === 'key' || event.detail.type === 'delete') {
-        return this.clickOnPredictionListener({ detail: { description: event.detail.value, type: event.detail.type }})
+        return this.clickOnPredictionListener({ detail: { description: event.detail.value, type: event.detail.type } })
       }
     }
 
@@ -184,6 +184,12 @@ export default class AutoComplete extends Shadow() {
   }
 
   clearAutocomplete() {
+    window.dispatchEvent(new CustomEvent('reset-filter', {
+      detail: { filterKey: 'q' },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
     this.dispatchEvent(new CustomEvent('auto-complete', {
       detail: {
         fetch: Promise.resolve({
@@ -210,84 +216,84 @@ export default class AutoComplete extends Shadow() {
           searchText: 'englisch',
           "contentItems": [
             {
-                "title": "Cambridge English",
-                "text": null,
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-pruefungsvorbereitung/cambridge-english/",
-                "image": null
+              "title": "Cambridge English",
+              "text": null,
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-pruefungsvorbereitung/cambridge-english/",
+              "image": null
             },
             {
-                "title": "<strong>Englisch</strong> Schwerpunkte",
-                "text": "Englisch Schwerpunkte lorem ipsum dolor amet lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame",
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-schwerpunkte/",
-                "image": null
+              "title": "<strong>Englisch</strong> Schwerpunkte",
+              "text": "Englisch Schwerpunkte lorem ipsum dolor amet lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame lorem ipsum dolor ame",
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-schwerpunkte/",
+              "image": null
             },
             {
-                "title": "<strong>Englisch</strong> Konversation",
-                "text": null,
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-schwerpunkte/englisch-konversation/",
-                "image": null
+              "title": "<strong>Englisch</strong> Konversation",
+              "text": null,
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-schwerpunkte/englisch-konversation/",
+              "image": null
             },
             {
-                "title": "<strong>Englisch</strong> Prüfungsvorbereitung",
-                "text": null,
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-pruefungsvorbereitung/",
-                "image": null
+              "title": "<strong>Englisch</strong> Prüfungsvorbereitung",
+              "text": null,
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-pruefungsvorbereitung/",
+              "image": null
             },
             {
-                "title": "telc <strong>Englisch</strong>",
-                "text": null,
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-einstufungstests-und-pruefungen/telc-englisch/",
-                "image": null
+              "title": "telc <strong>Englisch</strong>",
+              "text": null,
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-einstufungstests-und-pruefungen/telc-englisch/",
+              "image": null
             },
             {
-                "title": "<strong>Englisch</strong> Niveau A2",
-                "text": null,
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-niveau-a2/",
-                "image": null
+              "title": "<strong>Englisch</strong> Niveau A2",
+              "text": null,
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-niveau-a2/",
+              "image": null
             },
             {
-                "title": "<strong>Englisch</strong> Niveau B1",
-                "text": null,
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-niveau-b1/",
-                "image": null
+              "title": "<strong>Englisch</strong> Niveau B1",
+              "text": null,
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-niveau-b1/",
+              "image": null
             },
             {
-                "title": "<strong>Englisch</strong> Niveau B2",
-                "text": null,
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-niveau-b2/",
-                "image": null
+              "title": "<strong>Englisch</strong> Niveau B2",
+              "text": null,
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-niveau-b2/",
+              "image": null
             },
             {
-                "title": "<strong>Englisch</strong> Niveau C1/C2",
-                "text": null,
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-niveau-c1-c2/",
-                "image": null
+              "title": "<strong>Englisch</strong> Niveau C1/C2",
+              "text": null,
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-niveau-c1-c2/",
+              "image": null
             },
             {
-                "title": "<strong>Englisch</strong> Fast Track",
-                "text": null,
-                "term": null,
-                "typ": -1,
-                "link": "/sprachen/englischkurse/englisch-schwerpunkte/englisch-fast-track/",
-                "image": null
+              "title": "<strong>Englisch</strong> Fast Track",
+              "text": null,
+              "term": null,
+              "typ": -1,
+              "link": "/sprachen/englischkurse/englisch-schwerpunkte/englisch-fast-track/",
+              "image": null
             }
           ],
           items: [

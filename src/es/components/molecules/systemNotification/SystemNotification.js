@@ -29,7 +29,20 @@ export default class KsSystemNotification extends SystemNotification {
         padding: var(--item-padding);
         border-radius: var(--item-border-radius);
       }
+      :host .close-btn {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        line-height: 1;
+        color: var(--icon-color, #333);
+        cursor: pointer;
+        z-index: 2;
+      }
       :host .system-notification {
+        position: relative;
         display: flex;
         gap: var(--icon-spacing);
       }
@@ -66,6 +79,14 @@ export default class KsSystemNotification extends SystemNotification {
       }
       :host([icon-blue]) .icon a-icon-mdx svg {
         fill: var(--mdx-sys-color-primary-subtle1);
+      }
+      :host .description .notification-title {
+        font-weight: 500; 
+        font-size: 1.5rem; 
+        margin-bottom: 1rem;
+      }
+      :host .description .notification-text {
+        font-size: 1rem;
       }
     `
     return this.fetchTemplate()
@@ -144,26 +165,26 @@ export default class KsSystemNotification extends SystemNotification {
   }
 
   renderHTML () {
+    const isCloseable = this.hasAttribute('is-closeable')
+    const isIconPlain = this.hasAttribute('icon-plain')
     const iconName = this.getAttribute('icon-name') || ''
     const iconBadge = this.getAttribute('icon-badge') || ''
     const iconSize = this.getAttribute('icon-size') || '1em'
     const iconNamespace = this.hasAttribute('icon-blue') ? 'icon-mdx-ks-blue-' : 'icon-mdx-ks-'
     const description = this.innerHTML || ''
+
     this.html = /* html */ `
     <div class="system-notification" role="alert">
-      <div class="icon">
-        ${iconBadge ? (
-          /* html */ `<span>${iconBadge}</span>`
-      ) : ''}
-        ${iconName ? (
-          /* html */ `<a-icon-mdx namespace="${iconNamespace}" icon-name="${iconName}" size="${iconSize}" />`
-      ) : ''}
-      </div>
-      ${description ? /* html */ `
-        <div class="description">${description}</div>
-      ` : ''}
+      ${isCloseable ? /* html */ `<button class="close-btn" type="button" aria-label="Schliessen">&times;</button>` : ''}
+      ${isIconPlain ? /* html */ `<span><a-icon-mdx icon-name="${iconName}" size="${iconSize}" /></span>` : this.getIconHTML({ iconBadge, iconName, iconNamespace, iconSize })}
+      ${description ? /* html */ `<div class="description">${description}</div>` : ''}
     </div>
     `
+
+    setTimeout(() => {
+      const btn = this.root.querySelector('.close-btn')
+      if (btn) btn.addEventListener('click', () => {this.style.display = 'none', this.dispatchEvent(new CustomEvent('close-notification', { bubbles: true, composed: true }))})
+    }, 0)
 
     this.fetchModules([
       {
@@ -171,6 +192,16 @@ export default class KsSystemNotification extends SystemNotification {
         name: 'a-icon-mdx'
       }
     ])
+  }
+
+  getIconHTML({ iconBadge, iconName, iconNamespace, iconSize }) {
+    if (!iconBadge && !iconName) return ''
+    return /* html */`
+      <div class="icon">
+        ${iconBadge ? `<span>${iconBadge}</span>` : ''}
+        ${iconName ? `<a-icon-mdx namespace="${iconNamespace}" icon-name="${iconName}" size="${iconSize}" />` : ''}
+      </div>
+    `
   }
 
   get iconSize () {

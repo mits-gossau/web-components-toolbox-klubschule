@@ -74,6 +74,11 @@ export default class WithFacet extends WebWorker() {
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
     this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
 
+    // check if the page was refreshed
+    const navigationEntry = window.performance.getEntries().find(entry => entry.entryType === 'navigation')
+    // @ts-ignore
+    const isPageRefreshed = navigationEntry && navigationEntry.type === 'reload'
+
     this.fillStorage = storageType => {
       const isLocalStorageType = storageType === 'local'
       // update storage based on url
@@ -153,6 +158,13 @@ export default class WithFacet extends WebWorker() {
       this.updateURLParam('sorting', 2)
     }
     sessionStorage.setItem('currentPathname', window.location.pathname)
+    
+    // if performing a search query, always sort by relevance unless the page is refreshed
+    if (this.params.has('q') && isSearchPage && !isPageRefreshed) {
+      currentRequestObj.sorting = 1 // relevance
+      this.updateURLParam('sorting', 1)
+      sessionStorage.setItem('currentSorting', '1')
+    }
 
     this.requestWithFacetListener = async event => {
       // Reset PPage after filter Change / Reset
@@ -172,6 +184,20 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
+        // take the params from url
+        // check the key with the urlpara from filter in currentRequestObj.filter
+        // find filter with same id in initialRequestObj.filter
+        // remove filters with same id from initialRequestObj.filter
+        const filtersToRemove = []
+        currentRequestObj.filter.forEach(filter => {
+          if (filter.urlpara && this.params.has(filter.urlpara)) {
+            const idx = (initialRequestObj.filter || []).findIndex(f => f.id === filter.id)
+            if (idx !== -1) filtersToRemove.push(idx)
+          }
+        })
+        filtersToRemove.sort((a, b) => b - a).forEach(idx => initialRequestObj.filter.splice(idx, 1))
+        // exclude selected filters from initialRequestObj.filter that are not in URL params
+        const excludeIds = (initialRequestObj.filter || []).filter(f => f.selected && f.urlpara && !this.params.has(f.urlpara)).map(f => f.id)
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
         // keep quick filters
@@ -180,7 +206,18 @@ export default class WithFacet extends WebWorker() {
         if (isSearchPage) {
           currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]
         } else { 
-          currentRequestObj.filter = [...quickFilters, ...initialRequestObj.filter.filter(f => !quickFilters.some(qf => qf.id === f.id) || f.id === "7")]
+          // build currentRequestObj.filter:
+          // 1. first, keep all filters from initialRequestObj.filter whose ID is in excludeIds (untouched)
+          // 2. then, add quickFilters, but only if not already included above
+          // 3. finally, add all remaining filters from initialRequestObj.filter that are not in excludeIds and not in quickFilters
+          currentRequestObj.filter = [
+            ...initialRequestObj.filter.filter(f => excludeIds.includes(f.id)),
+            ...quickFilters.filter(qf => !excludeIds.includes(qf.id)),
+            ...initialRequestObj.filter.filter(f =>
+              !excludeIds.includes(f.id) &&
+              !quickFilters.some(qf => qf.id === f.id)
+            )
+          ]
         }
         // reset all other params
         delete currentRequestObj.searchText
@@ -189,7 +226,7 @@ export default class WithFacet extends WebWorker() {
         this.filterOnly = true
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
-        const filterKey = event.detail.this.getAttribute('filter-key')
+        const filterKey = event.detail.this?.getAttribute?.('filter-key') || event.detail.filterKey
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         currentCompleteFilterObj = result[0]
@@ -349,7 +386,7 @@ export default class WithFacet extends WebWorker() {
         if (isSearchPage) {
           currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         } else {
-          currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+          currentRequestObj.filter = [...result[1], ...(initialRequestObj.filter || []).filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         }
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         // check, if filter of initialRequestObj.filter with id="7" is selected
@@ -550,6 +587,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
     this.addEventListener('backdrop-clicked', this.handleBackdropClicked)
     this.addEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
+    window.addEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   disconnectedCallback() {
@@ -559,6 +597,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
     this.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
     this.removeEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
+    window.removeEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   handleBackdropClicked = () => {
