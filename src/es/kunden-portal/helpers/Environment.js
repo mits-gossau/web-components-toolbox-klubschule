@@ -51,6 +51,7 @@ self.Environment = {
     }
   },
   getEnvUrl: function () {
+    if (location.hostname === 'localhost') return 'https://dev.klubschule.ch'
     const url = window.location.href
     const urlObj = new URL(url)
     return urlObj.origin
@@ -59,8 +60,9 @@ self.Environment = {
     switch (type) {
       case 'kunden-portal': {
         return {
-          fakeMe: 'https://jsonplaceholder.typicode.com/posts',
-          apiSubscriptions: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/subscriptions`
+          myBooking: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/myBooking`,
+          myBookings: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/myBookings`,
+          subscriptions: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptions`,
         }
       }
       default:

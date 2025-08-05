@@ -6,42 +6,44 @@
 /* global self */
 
 /**
- * EXAMPLE!!!
- * @example ./pages/Dashboard.js
  * @class Dashboard
  * @type {CustomElementConstructor}
  */
 export default class Dashboard extends HTMLElement {
-  constructor () {
+  constructor() {
     super()
-    this.abortControllerDashboardFakeMe = null
+    this.abortControllerDashboard = null
   }
 
-  connectedCallback () {
-    this.addEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
+  connectedCallback() {
+    this.addEventListener('request-bookings', this.requestBookings)
   }
 
-  disconnectedCallback () {
-    this.removeEventListener('request-dashboard-fake-me', this.requestDashboardFakeMe)
+  disconnectedCallback() {
+    this.removeEventListener('request-bookings', this.requestBookings)
   }
 
   /**
-   * GET Example for a CustomEvent to request data for the dashboard
-   * Request FakeMe data for the dashboard.
-   * @param {CustomEventInit} event
+   * Sends a POST request to fetch user bookings for bookings.
+   * Dispatches the request to the API endpoint defined in Environment.
+   * @param {CustomEventInit} event - The event that triggered the request.
    */
-  requestDashboardFakeMe = async (event) => {
-    if (this.abortControllerDashboardFakeMe) this.abortControllerDashboardFakeMe.abort()
-    this.abortControllerDashboardFakeMe = new AbortController()
-    // const data = {}
+  requestBookings = (event) => {
+    if (this.abortControllerDashboard) this.abortControllerDashboard.abort()
+    this.abortControllerDashboard = new AbortController()
+
     // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').fakeMe}`
-    this.dispatchEvent(new CustomEvent('update-dashboard-fake-me', {
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBookings}`
+    const data = { language: 'de' }
+    const options = this.fetchPOSTOptions(data, this.abortControllerDashboard)
+
+    this.dispatchEvent(new CustomEvent('update-bookings', {
       detail: {
-        fetch: fetch(endpoint).then(async response => {
-          return await response.json()
-        }),
-        type: 'fake-me'
+        fetch: fetch(endpoint, options)
+          .then(async response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+            return await response.json()
+          })
       },
       bubbles: true,
       cancelable: true,
@@ -55,7 +57,7 @@ export default class Dashboard extends HTMLElement {
    * @param {AbortController} abortController - Abort Fetch requests
    * @returns {Object} An object is being returned to use as option object for api fetch
    */
-  fetchPOSTOptions (data, abortController) {
+  fetchPOSTOptions(data, abortController) {
     return {
       method: 'POST',
       headers: {

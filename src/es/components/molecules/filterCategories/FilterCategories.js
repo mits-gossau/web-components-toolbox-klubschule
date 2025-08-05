@@ -22,6 +22,11 @@ export default class FilterCategories extends Shadow() {
     this.firstTreeItem = null
     this.mainLevelNav = null
 
+    this.reset = false
+    this.resetFilterPill = false
+    this.resetFilterEventListener = event => { if (event?.type === 'reset-filter') this.reset = true }
+    this.resetFilterPillEventListener = (event) => { if (event?.type === 'reset-filter-pill') this.resetFilterPill = true }
+
     this.withFacetEventListener = event => this.renderHTML(event.detail.fetch)
 
     this.keepDialogOpenEventListener = event => {
@@ -42,6 +47,8 @@ export default class FilterCategories extends Shadow() {
     if (this.shouldRenderCSS()) this.renderCSS()
     this.eventListenerNode = this.hasAttribute('with-facet-target') ? FilterCategories.walksUpDomQueryMatches(this, "ks-o-offers-page") : document.body
     this.eventListenerNode.addEventListener('with-facet', this.withFacetEventListener)
+    this.eventListenerNode.addEventListener('reset-filter', this.resetFilterEventListener)
+    this.eventListenerNode.addEventListener('reset-filter-pill', this.resetFilterPillEventListener)
     this.dispatchEvent(new CustomEvent('request-with-facet', { bubbles: true, cancelable: true, composed: true }))
     this.addEventListener('click', this.keepDialogOpenEventListener)
     document.body.addEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
@@ -49,6 +56,8 @@ export default class FilterCategories extends Shadow() {
 
   disconnectedCallback () {
     this.eventListenerNode.removeEventListener('with-facet', this.withFacetEventListener)
+    this.eventListenerNode.removeEventListener('reset-filter', this.resetFilterEventListener)
+    this.eventListenerNode.removeEventListener('reset-filter-pill', this.resetFilterPillEventListener)
     this.removeEventListener('click', this.keepDialogOpenEventListener)
     document.body.removeEventListener('hide-all-sublevels', this.hideAllSublevelsEventListener)
   }
@@ -299,7 +308,7 @@ export default class FilterCategories extends Shadow() {
 
   generateNavLevelItem (response, parentItem, filterItem, mainNav, level) {
     const filterIdPrefix = 'filter-'
-    const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton
+    const shouldRemainOpen = filterIdPrefix + filterItem.id === this.lastId && !response.shouldResetAllFilters && !response.shouldResetFilterFromFilterSelectButton && !this.resetFilterPill
     const div = document.createElement('div')
     const navLevelItem = document.createElement('div')
     let selectedFilters = this.getSelectedFilters(filterItem)?.map(filter => filter.label.replace(/'/g, '’').replace(/"/g, '\"')).join(', ') || ''
@@ -340,11 +349,11 @@ export default class FilterCategories extends Shadow() {
         </div>
         <div class="dialog-content">
           ${this.hasAttribute('translation-key-reset') ? /* html */`<p class="reset-link">
-            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-key="${filterItem.urlpara}">
+            <a-button namespace="button-transparent-" request-event-name="reset-filter" filter-key="${filterItem.urlpara}" filter-type="${this.firstTreeItem ? this.firstTreeItem.typ : filterItem.typ}" id="reset-filter">
               ${this.getAttribute('translation-key-reset')}<a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
             </a-button>
           </p>` : ''}
-          <div class="sub-level sub-level-${filterItem.id} ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>       
+          <div class="sub-level sub-level-${filterItem.id} ${this.hasAttribute('translation-key-reset') ? 'margin-bottom' : 'margin-top-bottom'}"></div>
         </div>
         <div class="container dialog-footer">
           <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getAttribute('translation-key-close')}</a-button>
@@ -386,7 +395,15 @@ export default class FilterCategories extends Shadow() {
     let generatedNavLevelItem
     if (generatedNavLevelItem = this.generatedNavLevelItemMap.get(level + '_' + filterItem.id)) {
       generatedNavLevelItem.navLevelItem.style.display = filterItem.visible ? 'block' : 'none' // check if filter is visible
-      if (generatedNavLevelItem.navLevelItem.root.querySelector('dialog')) generatedNavLevelItem.navLevelItem.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = `${response.total.toString()} ${response.total_label}`
+      // update show all offers buttons 
+      if (generatedNavLevelItem.navLevelItem.root.querySelector('dialog')) {
+        const dialog = generatedNavLevelItem.navLevelItem.root.querySelector('dialog')
+        const total = `${response.total.toString()} ${response.total_label}`
+        dialog.querySelector('.dialog-content').querySelector('.sub-level').querySelectorAll('m-dialog').forEach(dialog => {
+          dialog.root.querySelector('dialog').querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = total
+        })
+        dialog.querySelector('.dialog-footer').querySelector('.button-show-all-offers').root.querySelector('button > span').textContent = total
+      }
       // update additional text with selected filter(s) only for the first level 
       if (level === 0) generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').setAttribute('namespace', filterItem.selected ? 'nav-level-item-active-' : 'nav-level-item-default-')
@@ -396,7 +413,7 @@ export default class FilterCategories extends Shadow() {
 
     if (!filterItem.visible) return
     if (!isTreeFilter && !isCenterFilter) generatedNavLevelItem.subLevel.innerHTML = ''
-    
+
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {
       // update total button / Avoid bug with uBlock not finding the dialog

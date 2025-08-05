@@ -24,7 +24,8 @@ export default class OffersPage extends Shadow() {
       Promise.resolve(event.detail.fetch).then((data) => {
         this.data = data
         this.hasCourses = data?.courses?.length > 0
-        this.searchTerm = data.searchText
+        const isSinglePage = !data || data.ppage === -1 || data.ppage === null
+
 
         let otherLocationsHeadline = ''
         if (this.hasAttribute('is-other-locations') && this.hasCourses){
@@ -33,9 +34,9 @@ export default class OffersPage extends Shadow() {
         }
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
         if (!this.isWishList || this.hasAttribute('is-info-events')) {
-          const pagination = bodySection.root.querySelector('#pagination')
-          pagination.style.display = !data || data.ppage === -1 ? 'none' : 'block'
-          pagination.nextElementSibling.style.display = !data || data.ppage === -1 ? 'none' : 'block'
+            const pagination = bodySection.root.querySelector('#pagination')
+            pagination.style.display = isSinglePage ? 'none' : 'block'
+            pagination.nextElementSibling.style.display = isSinglePage ? 'none' : 'block'
         }
 
         // Set headline for info events
@@ -90,7 +91,7 @@ export default class OffersPage extends Shadow() {
 
         // display pagination with load more button
         if (this.hasCourses) {
-          bodySection.root.querySelector('#pagination').style.display = !data || data.ppage === -1 ? 'none' : 'block'
+          bodySection.root.querySelector('#pagination').style.display = isSinglePage ? 'none' : 'block'
         }
       })
     }
@@ -121,11 +122,36 @@ export default class OffersPage extends Shadow() {
     })
     this.addEventListener('with-facet', this.withFacetListener)
     this.addEventListener('info-events-empty', this.infoEventsEmptyListener)
+
+    setTimeout(() => {
+      const allInputs = this.findSearchInputs(this.root)
+      allInputs.forEach(inputEl => {
+        if (inputEl.shadowRoot) {
+          const nativeInput = inputEl.shadowRoot.querySelector('input')
+          if (nativeInput) {
+            nativeInput.addEventListener('input', (e) => {
+              if (e.target.value === '') {
+                const withFacet = this.root.querySelector('ks-c-with-facet')
+                if (withFacet) withFacet.dispatchEvent(new CustomEvent('reset-filter', { detail: { filterKey: 'q', this: inputEl }, bubbles: true, cancelable: true, composed: true }))
+              }
+            })
+          }
+        }
+      })
+    }, 0)
   }
 
   disconnectedCallback() {
     this.removeEventListener('with-facet', this.withFacetListener)
     this.removeEventListener('info-events-empty', this.infoEventsEmptyListener)
+  }
+
+  findSearchInputs = (root) => {
+    let result = []
+    if (!root) return result
+    root.querySelectorAll('a-input[inputid="offers-page-input-search"]').forEach(el => result.push(el))
+    root.querySelectorAll('*').forEach(el => { if (el.shadowRoot) result = result.concat(this.findSearchInputs(el.shadowRoot)) })
+    return result
   }
 
   shouldRenderCSS() {
@@ -590,6 +616,8 @@ export default class OffersPage extends Shadow() {
           delete-listener
           autocomplete="off"
           search
+          request-event-name="reset-filter"
+          filter-key="q"
         >
         </a-input>
       </ks-c-auto-complete>
@@ -653,8 +681,8 @@ export default class OffersPage extends Shadow() {
                     </div>
                   </div>
                   <div class="container dialog-footer">
-                    <a-button id="close" namespace="button-tertiary-" no-pointer-events>${this.getTranslation('Filter.closeOverlayer')}</a-button>
-                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-a-number-of-offers-button>
+                    <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">${this.getTranslation('Filter.closeOverlayer')}</a-button>
+                    <ks-a-number-of-offers-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked" ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}></ks-a-number-of-offers-button>
                   </div>
                 </dialog>
               </m-dialog>

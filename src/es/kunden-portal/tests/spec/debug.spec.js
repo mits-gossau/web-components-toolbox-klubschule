@@ -59,6 +59,7 @@ test.describe('Debug Kunden Portal', () => {
     await page.waitForTimeout(3000)
 
     // Check if there's a dashboard now
+    await page.waitForSelector('p-dashboard', { timeout: 5000 })
     const dashboard = await page.locator('p-dashboard')
     const dashboardExists = await dashboard.count()
     console.log('Dashboard component count:', dashboardExists)
