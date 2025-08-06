@@ -10,16 +10,16 @@
  * @type {CustomElementConstructor}
  */
 export default class Dashboard extends HTMLElement {
-  constructor() {
+  constructor () {
     super()
     this.abortControllerDashboard = null
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.addEventListener('request-bookings', this.requestBookings)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.removeEventListener('request-bookings', this.requestBookings)
   }
 
@@ -57,7 +57,7 @@ export default class Dashboard extends HTMLElement {
    * @param {AbortController} abortController - Abort Fetch requests
    * @returns {Object} An object is being returned to use as option object for api fetch
    */
-  fetchPOSTOptions(data, abortController) {
+  fetchPOSTOptions (data, abortController) {
     return {
       method: 'POST',
       headers: {

@@ -10,17 +10,17 @@
  * @type {CustomElementConstructor}
  */
 export default class Booking extends HTMLElement {
-  constructor() {
+  constructor () {
     super()
     this.abortControllerBooking = null
   }
 
-  connectedCallback() {
+  connectedCallback () {
     document.addEventListener('request-booking', this.requestBooking)
     this.addEventListener('close-notification', this.handleNotification)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.removeEventListener('request-booking', this.requestBooking)
     this.removeEventListener('close-notification', this.handleNotification)
   }
@@ -38,10 +38,10 @@ export default class Booking extends HTMLElement {
 
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBooking}`
-    const data = { 
-        language: 'de',
-        courseType: 'E',
-        courseId: courseId
+    const data = {
+      language: 'de',
+      courseType: 'E',
+      courseId
     }
     const options = this.fetchPOSTOptions(data, this.abortControllerBooking)
 
@@ -74,7 +74,7 @@ export default class Booking extends HTMLElement {
    * @param {AbortController} abortController - Abort Fetch requests
    * @returns {Object} An object is being returned to use as option object for api fetch
    */
-  fetchPOSTOptions(data, abortController) {
+  fetchPOSTOptions (data, abortController) {
     return {
       method: 'POST',
       headers: {
