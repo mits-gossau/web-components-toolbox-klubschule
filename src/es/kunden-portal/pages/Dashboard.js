@@ -9,7 +9,7 @@ import Index from './Index.js'
  * @type {CustomElementConstructor}
  */
 export default class Dashboard extends Index {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.requestBookingsListener = (event) => {
@@ -29,26 +29,26 @@ export default class Dashboard extends Index {
     }
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('update-bookings', this.requestBookingsListener)
     if (!this.bookingsData) this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.body.removeEventListener('update-bookings', this.requestBookingsListener)
   }
 
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.root.querySelector('div#dashboard')
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host h2 {
         color: var(--mdx-sys-color-accent-6-onSubtle);
@@ -98,7 +98,7 @@ export default class Dashboard extends Index {
     `
   }
 
-  renderHTML() {
+  renderHTML () {
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../components/atoms/button/Button.js`,
@@ -213,7 +213,7 @@ export default class Dashboard extends Index {
     `
   }
 
-  renderAppointments(count = 3) {
+  renderAppointments (count = 3) {
     const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container')
     if (!appointmentsDiv || !this.bookingsData) return
 
@@ -238,7 +238,7 @@ export default class Dashboard extends Index {
           courseLocation: booking.courseLocation,
           roomDescription: booking.roomDescription,
           logoUrl: booking.logoUrl,
-          price: booking.price,
+          price: booking.price
         })
       }
     })
@@ -285,7 +285,7 @@ export default class Dashboard extends Index {
   }
 
   // render abonnements or booked courses
-  renderBookings({ id = '#courses', abo = false } = {}) {
+  renderBookings ({ id = '#courses', abo = false } = {}) {
     const containerDiv = this.shadowRoot.querySelector(`${id} .container`)
     if (!containerDiv || !this.bookingsData) return
 
@@ -298,7 +298,7 @@ export default class Dashboard extends Index {
     filtered.forEach(course => {
       const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
-      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
       const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
 
       const courseData = {
@@ -317,9 +317,9 @@ export default class Dashboard extends Index {
             text: abo ? 'Zum Aboportal' : 'Detail ansehen',
             typ: 'secondary',
             event: 'open-booking-detail',
-            link: abo ? `#`: `index.html#/booking?courseId=${course.courseId}`
+            link: abo ? '#' : `index.html#/booking?courseId=${course.courseId}`
           }],
-          icons: [],
+          icons: []
         },
         sprachid: 'd'
       }
@@ -345,7 +345,7 @@ export default class Dashboard extends Index {
     }
   }
 
-  async renderContinuationCourses() {
+  async renderContinuationCourses () {
     const container = this.shadowRoot.querySelector('#continuation .container')
     if (!container) return
     container.innerHTML = ''
@@ -365,5 +365,4 @@ export default class Dashboard extends Index {
       container.classList.add('no--results')
     }
   }
-
 }
