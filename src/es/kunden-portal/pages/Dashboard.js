@@ -12,32 +12,32 @@ export default class Dashboard extends Index {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.requestBookingsListener = (event) => {
-      event.detail.fetch
-        .then((data) => {
-          this.bookingsData = data.bookings || []
-          if (this.modulesLoaded) {
-            setTimeout(() => this.renderAppointments(3), 0)
-            setTimeout(() => this.renderBookings({ id: '#courses', abo: false }), 0)
-            setTimeout(() => this.renderBookings({ id: '#abonnements', abo: true }), 0)
-            setTimeout(() => this.renderContinuationCourses(), 0)
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching bookings:', error)
-        })
-    }
+    // this.requestBookingsListener = (event) => {
+    //   event.detail.fetch
+    //     .then((data) => {
+    //       this.bookingsData = data.bookings || []
+    //       if (this.modulesLoaded) {
+    //         setTimeout(() => this.renderAppointments(3), 0)
+    //         setTimeout(() => this.renderBookings({ id: '#courses', abo: false }), 0)
+    //         setTimeout(() => this.renderBookings({ id: '#abonnements', abo: true }), 0)
+    //         setTimeout(() => this.renderContinuationCourses(), 0)
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.error('Error fetching bookings:', error)
+    //     })
+    // }
   }
 
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
-    document.body.addEventListener('update-bookings', this.requestBookingsListener)
-    if (!this.bookingsData) this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
+    // document.body.addEventListener('update-bookings', this.requestBookingsListener)
+    // if (!this.bookingsData) this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('update-bookings', this.requestBookingsListener)
+    // document.body.removeEventListener('update-bookings', this.requestBookingsListener)
   }
 
   shouldRenderHTML () {
@@ -99,6 +99,12 @@ export default class Dashboard extends Index {
   }
 
   renderHTML () {
+    // this.fetchModules([{
+    //   path: `${this.importMetaUrl}../components/organisms/dashboard/Dashboard.js`,
+    //   name: 'kp-o-dashboard'
+    // }])
+
+    // this.html = /* html */'<kp-o-dashboard namespace="dashboard-default-"></kp-o-dashboard>'
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../components/atoms/button/Button.js`,
@@ -199,7 +205,7 @@ export default class Dashboard extends Index {
               link-href="#"
               link-text="Kurse entdecken">
             </ks-m-tile-discover>
-          </div>  
+          </div>
         </div>
 
         <ks-a-spacing type="m-flex"></ks-a-spacing>
@@ -213,156 +219,156 @@ export default class Dashboard extends Index {
     `
   }
 
-  renderAppointments (count = 3) {
-    const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container')
-    if (!appointmentsDiv || !this.bookingsData) return
+  // renderAppointments (count = 3) {
+  //   const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container')
+  //   if (!appointmentsDiv || !this.bookingsData) return
 
-    appointmentsDiv.innerHTML = ''
+  //   appointmentsDiv.innerHTML = ''
 
-    // future appointments with course info
-    const today = new Date()
-    const allAppointments = []
-    this.bookingsData.forEach(booking => {
-      const futureAppointments = (booking.appointments || []).filter(appointment => {
-        const appointmentDate = new Date(appointment.appointmentDate)
-        // @ts-ignore
-        return appointmentDate >= today.setHours(0, 0, 0, 0)
-      })
-      if (futureAppointments.length) {
-        futureAppointments.sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
-        const next = futureAppointments[0]
-        allAppointments.push({
-          ...next,
-          courseTitle: booking.courseTitle,
-          courseId: booking.courseId,
-          courseLocation: booking.courseLocation,
-          roomDescription: booking.roomDescription,
-          logoUrl: booking.logoUrl,
-          price: booking.price
-        })
-      }
-    })
+  //   // future appointments with course info
+  //   const today = new Date()
+  //   const allAppointments = []
+  //   this.bookingsData.forEach(booking => {
+  //     const futureAppointments = (booking.appointments || []).filter(appointment => {
+  //       const appointmentDate = new Date(appointment.appointmentDate)
+  //       // @ts-ignore
+  //       return appointmentDate >= today.setHours(0, 0, 0, 0)
+  //     })
+  //     if (futureAppointments.length) {
+  //       futureAppointments.sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
+  //       const next = futureAppointments[0]
+  //       allAppointments.push({
+  //         ...next,
+  //         courseTitle: booking.courseTitle,
+  //         courseId: booking.courseId,
+  //         courseLocation: booking.courseLocation,
+  //         roomDescription: booking.roomDescription,
+  //         logoUrl: booking.logoUrl,
+  //         price: booking.price
+  //       })
+  //     }
+  //   })
 
-    // @ts-ignore, sort by appointmentDate ascending
-    allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
+  //   // @ts-ignore, sort by appointmentDate ascending
+  //   allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
 
-    const nextAppointments = allAppointments.slice(0, count)
-    if (nextAppointments.length) {
-      nextAppointments.forEach(app => {
-        const TileElement = customElements.get('ks-m-tile')
-        // @ts-ignore
-        const tile = new TileElement()
-        tile.setAttribute('class', 'appointment-tile')
-        tile.setAttribute('namespace', 'tile-appointment-')
-        tile.setAttribute('data', JSON.stringify({
-          title: app.courseTitle,
-          nextAppointment: app.appointmentDateFormatted,
-          location: {
-            iconName: 'Location',
-            name: app.courseLocation
-          },
-          room: {
-            iconName: 'Monitor',
-            name: app.roomDescription || ''
-          },
-          icons: [],
-          buttons: [{
-            text: 'Detail ansehen',
-            typ: 'secondary',
-            event: 'open-booking-detail',
-            link: `index.html#/booking?courseId=${app.courseId}`
-          }],
-          price: {
-            amount: app.price?.amount || app.price || ''
-          }
-        }))
-        appointmentsDiv.appendChild(tile)
-      })
-    } else {
-      appointmentsDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
-      appointmentsDiv.classList.add('no-results')
-    }
-  }
+  //   const nextAppointments = allAppointments.slice(0, count)
+  //   if (nextAppointments.length) {
+  //     nextAppointments.forEach(app => {
+  //       const TileElement = customElements.get('ks-m-tile')
+  //       // @ts-ignore
+  //       const tile = new TileElement()
+  //       tile.setAttribute('class', 'appointment-tile')
+  //       tile.setAttribute('namespace', 'tile-appointment-')
+  //       tile.setAttribute('data', JSON.stringify({
+  //         title: app.courseTitle,
+  //         nextAppointment: app.appointmentDateFormatted,
+  //         location: {
+  //           iconName: 'Location',
+  //           name: app.courseLocation
+  //         },
+  //         room: {
+  //           iconName: 'Monitor',
+  //           name: app.roomDescription || ''
+  //         },
+  //         icons: [],
+  //         buttons: [{
+  //           text: 'Detail ansehen',
+  //           typ: 'secondary',
+  //           event: 'open-booking-detail',
+  //           link: `index.html#/booking?courseId=${app.courseId}`
+  //         }],
+  //         price: {
+  //           amount: app.price?.amount || app.price || ''
+  //         }
+  //       }))
+  //       appointmentsDiv.appendChild(tile)
+  //     })
+  //   } else {
+  //     appointmentsDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
+  //     appointmentsDiv.classList.add('no-results')
+  //   }
+  // }
 
   // render abonnements or booked courses
-  renderBookings ({ id = '#courses', abo = false } = {}) {
-    const containerDiv = this.shadowRoot.querySelector(`${id} .container`)
-    if (!containerDiv || !this.bookingsData) return
+  // renderBookings ({ id = '#courses', abo = false } = {}) {
+  //   const containerDiv = this.shadowRoot.querySelector(`${id} .container`)
+  //   if (!containerDiv || !this.bookingsData) return
 
-    containerDiv.innerHTML = ''
+  //   containerDiv.innerHTML = ''
 
-    const filtered = this.bookingsData.filter(course =>
-      abo ? course.isSubscription : !course.isSubscription
-    )
+  //   const filtered = this.bookingsData.filter(course =>
+  //     abo ? course.isSubscription : !course.isSubscription
+  //   )
 
-    filtered.forEach(course => {
-      const start = new Date(course.courseStartDate)
-      const end = new Date(course.courseEndDate)
-      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
-      const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
+  //   filtered.forEach(course => {
+  //     const start = new Date(course.courseStartDate)
+  //     const end = new Date(course.courseEndDate)
+  //     const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+  //     const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
 
-      const courseData = {
-        course: {
-          kurs_typ: course.courseType,
-          kurs_id: course.courseId,
-          datum_label: course.courseTitle,
-          days: [daysEntry],
-          location: {
-            name: course.courseLocation,
-            badge: course.roomDescription || ''
-          },
-          status: course.courseStatus,
-          status_label: course.courseStatusText,
-          buttons: [{
-            text: abo ? 'Zum Aboportal' : 'Detail ansehen',
-            typ: 'secondary',
-            event: 'open-booking-detail',
-            link: abo ? '#' : `index.html#/booking?courseId=${course.courseId}`
-          }],
-          icons: []
-        },
-        sprachid: 'd'
-      }
+  //     const courseData = {
+  //       course: {
+  //         kurs_typ: course.courseType,
+  //         kurs_id: course.courseId,
+  //         datum_label: course.courseTitle,
+  //         days: [daysEntry],
+  //         location: {
+  //           name: course.courseLocation,
+  //           badge: course.roomDescription || ''
+  //         },
+  //         status: course.courseStatus,
+  //         status_label: course.courseStatusText,
+  //         buttons: [{
+  //           text: abo ? 'Zum Aboportal' : 'Detail ansehen',
+  //           typ: 'secondary',
+  //           event: 'open-booking-detail',
+  //           link: abo ? '#' : `index.html#/booking?courseId=${course.courseId}`
+  //         }],
+  //         icons: []
+  //       },
+  //       sprachid: 'd'
+  //     }
 
-      if (!abo) {
-        courseData.course.state_of_booking = 'Gebucht'
-        courseData.course.logo_url = course.logoUrl
-      }
+  //     if (!abo) {
+  //       courseData.course.state_of_booking = 'Gebucht'
+  //       courseData.course.logo_url = course.logoUrl
+  //     }
 
-      const EventElement = customElements.get('ks-m-event')
-      // @ts-ignore
-      const event = new EventElement()
-      event.setAttribute('class', 'course-event')
-      if (abo) event.setAttribute('abo-event', '')
-      event.setAttribute('data', JSON.stringify(courseData))
-      containerDiv.appendChild(event)
-    })
+  //     const EventElement = customElements.get('ks-m-event')
+  //     // @ts-ignore
+  //     const event = new EventElement()
+  //     event.setAttribute('class', 'course-event')
+  //     if (abo) event.setAttribute('abo-event', '')
+  //     event.setAttribute('data', JSON.stringify(courseData))
+  //     containerDiv.appendChild(event)
+  //   })
 
-    if (!containerDiv.hasChildNodes()) {
-      if (abo) this.shadowRoot.querySelector('#abonnements').style.display = 'none'
-      containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
-      containerDiv.classList.add('no-results')
-    }
-  }
+  //   if (!containerDiv.hasChildNodes()) {
+  //     if (abo) this.shadowRoot.querySelector('#abonnements').style.display = 'none'
+  //     containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
+  //     containerDiv.classList.add('no-results')
+  //   }
+  // }
 
-  async renderContinuationCourses () {
-    const container = this.shadowRoot.querySelector('#continuation .container')
-    if (!container) return
-    container.innerHTML = ''
+  // async renderContinuationCourses () {
+  //   const container = this.shadowRoot.querySelector('#continuation .container')
+  //   if (!container) return
+  //   container.innerHTML = ''
 
-    const followUpIds = Array.from(
-      new Set(
-        (this.bookingsData || [])
-          .map(b => b.courseIdFollowUp)
-          .filter(id => id && id > 0)
-      )
-    )
+  //   const followUpIds = Array.from(
+  //     new Set(
+  //       (this.bookingsData || [])
+  //         .map(b => b.courseIdFollowUp)
+  //         .filter(id => id && id > 0)
+  //     )
+  //   )
 
-    console.log('followUpIds:', followUpIds)
+  //   console.log('followUpIds:', followUpIds)
 
-    if (!followUpIds.length || !container.hasChildNodes()) {
-      container.textContent = 'Es finden keine Fortsetzungskurse statt.'
-      container.classList.add('no--results')
-    }
-  }
+  //   if (!followUpIds.length || !container.hasChildNodes()) {
+  //     container.textContent = 'Es finden keine Fortsetzungskurse statt.'
+  //     container.classList.add('no--results')
+  //   }
+  // }
 }
