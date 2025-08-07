@@ -3,10 +3,10 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 
 /**
  * @export
- * @class Appointments
+ * @class NextAppointments
  * @type {CustomElementConstructor}
  */
-export default class Appointment extends Shadow() {
+export default class NextAppointments extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
@@ -49,7 +49,7 @@ export default class Appointment extends Shadow() {
       }
     ]
     switch (this.getAttribute('namespace')) {
-      case 'appointments-default-':
+      case 'next-appointments-default-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}./default-/default-.css`,
           namespace: false
@@ -63,8 +63,8 @@ export default class Appointment extends Shadow() {
     const fetchModules = this.fetchModules([])
     return Promise.all([fetchModules]).then((children) => {
       debugger
-      console.log('Appointments children:', children)
-      this.html = '<div id="appointments"><h1>Appointments</h1></div>'
+      console.log('ANEXT:::ppointments children:', children)
+      this.html = '<div id="appointments"><h1>NEXT Appointments Element 1</h1></div>'
     }).catch(e => {
       // TODO: Handle error
       console.error(e)

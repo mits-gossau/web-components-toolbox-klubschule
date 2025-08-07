@@ -60,8 +60,8 @@ self.Environment = {
     switch (type) {
       case 'kunden-portal': {
         return {
-          myBooking: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/myBooking`,
-          myBookings: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/myBookings`,
+          myBooking: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getMyBooking`,
+          myBookings: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getMyBookings`,
           subscriptions: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptions`
         }
       }

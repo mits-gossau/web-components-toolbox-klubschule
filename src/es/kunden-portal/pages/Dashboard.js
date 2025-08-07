@@ -30,8 +30,9 @@ export default class Dashboard extends Index {
   }
 
   connectedCallback () {
-    if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
+    // if (this.shouldRenderHTML()) this.renderHTML()
+    this.renderHTML()
     // document.body.addEventListener('update-bookings', this.requestBookingsListener)
     // if (!this.bookingsData) this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
   }
@@ -41,11 +42,16 @@ export default class Dashboard extends Index {
   }
 
   shouldRenderHTML () {
-    return !this.root.querySelector('div#dashboard')
+    console.log('--', this.dashboard)
+    return this.dashboard
   }
 
   shouldRenderCSS () {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
+  }
+
+  get dashboard () {
+    return !this.root.querySelector('kp-o-dashboard')
   }
 
   renderCSS () {
@@ -99,124 +105,125 @@ export default class Dashboard extends Index {
   }
 
   renderHTML () {
-    // this.fetchModules([{
-    //   path: `${this.importMetaUrl}../components/organisms/dashboard/Dashboard.js`,
-    //   name: 'kp-o-dashboard'
-    // }])
+    debugger
+    this.fetchModules([{
+      path: `${this.importMetaUrl}../components/organisms/dashboard/Dashboard.js`,
+      name: 'kp-o-dashboard'
+    }])
 
-    // this.html = /* html */'<kp-o-dashboard namespace="dashboard-default-"></kp-o-dashboard>'
-    this.fetchModules([
-      {
-        path: `${this.importMetaUrl}../../components/atoms/button/Button.js`,
-        name: 'ks-a-button'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/atoms/spacing/Spacing.js`,
-        name: 'ks-a-spacing'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/molecules/tile/Tile.js`,
-        name: 'ks-m-tile'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/molecules/tileDiscover/TileDiscover.js`,
-        name: 'ks-m-tile-discover'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/molecules/event/Event.js`,
-        name: 'ks-m-event'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-        name: 'a-icon-mdx'
-      }
-    ]).then(() => {
-      this.modulesLoaded = true
-    })
+    this.html = /* html */'<kp-o-dashboard namespace="dashboard-default-"></kp-o-dashboard>'
+    // this.fetchModules([
+    //   {
+    //     path: `${this.importMetaUrl}../../components/atoms/button/Button.js`,
+    //     name: 'ks-a-button'
+    //   },
+    //   {
+    //     path: `${this.importMetaUrl}../../components/atoms/spacing/Spacing.js`,
+    //     name: 'ks-a-spacing'
+    //   },
+    //   {
+    //     path: `${this.importMetaUrl}../../components/molecules/tile/Tile.js`,
+    //     name: 'ks-m-tile'
+    //   },
+    //   {
+    //     path: `${this.importMetaUrl}../../components/molecules/tileDiscover/TileDiscover.js`,
+    //     name: 'ks-m-tile-discover'
+    //   },
+    //   {
+    //     path: `${this.importMetaUrl}../../components/molecules/event/Event.js`,
+    //     name: 'ks-m-event'
+    //   },
+    //   {
+    //     path: `${this.importMetaUrl}../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+    //     name: 'a-icon-mdx'
+    //   }
+    // ]).then(() => {
+    //   this.modulesLoaded = true
+    // })
 
-    this.html = /* html */ `
-      <div id="dashboard">
+    // this.html = /* html */ `
+    //   <div id="dashboard">
 
-        <div id="appointments">
-          <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
-          <div class="container"></div>
-        </div>
+    //     <div id="appointments">
+    //       <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
+    //       <div class="container"></div>
+    //     </div>
 
-        <ks-a-spacing type="m-flex"></ks-a-spacing>
+    //     <ks-a-spacing type="m-flex"></ks-a-spacing>
 
-        <div id="courses">
-          <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
-          <div class="container"></div>
-        </div>
+    //     <div id="courses">
+    //       <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
+    //       <div class="container"></div>
+    //     </div>
 
-        <ks-a-spacing type="m-flex"></ks-a-spacing>
+    //     <ks-a-spacing type="m-flex"></ks-a-spacing>
 
-        <div class="discover">
-          <h3><span>Unsere Kurse entdecken</span></h3>
-          <div class="container">
-            <ks-m-tile-discover
-              image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
-              tile-label="Klubschule Kurse"
-              link-href="#"
-              link-text="Kurse entdecken">
-            </ks-m-tile-discover>
-            <ks-m-tile-discover
-              image-src="https://picsum.photos/40/40"
-              tile-label="Klubschule Pro Kurse"
-              link-href="#"
-              link-text="Kurse entdecken">
-            </ks-m-tile-discover>
-            <ks-m-tile-discover
-              image-src="https://picsum.photos/40/40"
-              tile-label="IBAW Kurse"
-              link-href="#"
-              link-text="Kurse entdecken">
-            </ks-m-tile-discover>
-          </div>
-        </div>
+    //     <div class="discover">
+    //       <h3><span>Unsere Kurse entdecken</span></h3>
+    //       <div class="container">
+    //         <ks-m-tile-discover
+    //           image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
+    //           tile-label="Klubschule Kurse"
+    //           link-href="#"
+    //           link-text="Kurse entdecken">
+    //         </ks-m-tile-discover>
+    //         <ks-m-tile-discover
+    //           image-src="https://picsum.photos/40/40"
+    //           tile-label="Klubschule Pro Kurse"
+    //           link-href="#"
+    //           link-text="Kurse entdecken">
+    //         </ks-m-tile-discover>
+    //         <ks-m-tile-discover
+    //           image-src="https://picsum.photos/40/40"
+    //           tile-label="IBAW Kurse"
+    //           link-href="#"
+    //           link-text="Kurse entdecken">
+    //         </ks-m-tile-discover>
+    //       </div>
+    //     </div>
 
-        <ks-a-spacing type="m-flex"></ks-a-spacing>
+    //     <ks-a-spacing type="m-flex"></ks-a-spacing>
 
-        <div id="continuation">
-          <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
-          <div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>
-        </div>
+    //     <div id="continuation">
+    //       <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
+    //       <div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>
+    //     </div>
 
-        <ks-a-spacing type="m-flex"></ks-a-spacing>
+    //     <ks-a-spacing type="m-flex"></ks-a-spacing>
 
-        <div class="discover">
-          <h3><span>Weitere Kurse entdecken</span></h3>
-          <div class="container">
-            <ks-m-tile-discover
-              image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
-              tile-label="Klubschule Kurse"
-              link-href="#"
-              link-text="Kurse entdecken">
-            </ks-m-tile-discover>
-            <ks-m-tile-discover
-              image-src="https://picsum.photos/40/40"
-              tile-label="Klubschule Pro Kurse"
-              link-href="#"
-              link-text="Kurse entdecken">
-            </ks-m-tile-discover>
-            <ks-m-tile-discover
-              image-src="https://picsum.photos/40/40"
-              tile-label="IBAW Kurse"
-              link-href="#"
-              link-text="Kurse entdecken">
-            </ks-m-tile-discover>
-          </div>
-        </div>
+    //     <div class="discover">
+    //       <h3><span>Weitere Kurse entdecken</span></h3>
+    //       <div class="container">
+    //         <ks-m-tile-discover
+    //           image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
+    //           tile-label="Klubschule Kurse"
+    //           link-href="#"
+    //           link-text="Kurse entdecken">
+    //         </ks-m-tile-discover>
+    //         <ks-m-tile-discover
+    //           image-src="https://picsum.photos/40/40"
+    //           tile-label="Klubschule Pro Kurse"
+    //           link-href="#"
+    //           link-text="Kurse entdecken">
+    //         </ks-m-tile-discover>
+    //         <ks-m-tile-discover
+    //           image-src="https://picsum.photos/40/40"
+    //           tile-label="IBAW Kurse"
+    //           link-href="#"
+    //           link-text="Kurse entdecken">
+    //         </ks-m-tile-discover>
+    //       </div>
+    //     </div>
 
-        <ks-a-spacing type="m-flex"></ks-a-spacing>
+    //     <ks-a-spacing type="m-flex"></ks-a-spacing>
 
-        <div id="abonnements">
-          <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
-          <div class="container"></div>
-        </div>
+    //     <div id="abonnements">
+    //       <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
+    //       <div class="container"></div>
+    //     </div>
 
-      </div>
-    `
+    //   </div>
+    // `
   }
 
   // renderAppointments (count = 3) {

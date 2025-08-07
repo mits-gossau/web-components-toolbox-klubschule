@@ -12,7 +12,7 @@
 export default class Dashboard extends HTMLElement {
   constructor () {
     super()
-    this.abortControllerDashboard = null
+    this.abortControllerRequestBookings = null
   }
 
   connectedCallback () {
@@ -23,27 +23,39 @@ export default class Dashboard extends HTMLElement {
     this.removeEventListener('request-bookings', this.requestBookings)
   }
 
+  abortController (abortController) {
+    if (abortController) {
+      abortController.abort()
+    }
+    abortController = new AbortController()
+    return abortController
+  }
+
   /**
    * Sends a POST request to fetch user bookings for bookings.
    * Dispatches the request to the API endpoint defined in Environment.
    * @param {CustomEventInit} event - The event that triggered the request.
    */
   requestBookings = (event) => {
-    if (this.abortControllerDashboard) this.abortControllerDashboard.abort()
-    this.abortControllerDashboard = new AbortController()
+    // if (this.abortControllerRequestBookings) this.abortControllerRequestBookings.abort()
+    // this.abortControllerRequestBookings = new AbortController()
+    this.abortControllerRequestBookings = this.abortController(this.abortControllerRequestBookings)
+    debugger
 
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBookings}`
     const data = { language: 'de' }
-    const options = this.fetchPOSTOptions(data, this.abortControllerDashboard)
+    const options = this.fetchPOSTOptions(data, this.abortControllerRequestBookings)
 
     this.dispatchEvent(new CustomEvent('update-bookings', {
       detail: {
-        fetch: fetch(endpoint, options)
-          .then(async response => {
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-            return await response.json()
-          })
+        fetch: fetch(endpoint, options).then(async response => {
+          // TODO: Improve error handling
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+          return await response.json()
+        })
       },
       bubbles: true,
       cancelable: true,
