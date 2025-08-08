@@ -82,10 +82,11 @@ export default class Dashboard extends Shadow() {
 
   renderHTML (fetch) {
     debugger
-    if (!fetch && !fetch?.then) return
 
-    // if (!this._rendered) {
-    const fetchModules = this.fetchModules([
+    if (!fetch && !fetch?.then) return
+    // this.html = this.renderArea('appointments') + this.renderArea('courses') + this.renderArea('nextAppointments') + this.renderArea('abonnements') + this.renderArea('continuations')
+
+    this.fetchModules([
       {
         path: `${this.importMetaUrl}'../../../../molecules/appointments/Appointments.js`,
         name: 'kp-m-appointments'
@@ -93,23 +94,77 @@ export default class Dashboard extends Shadow() {
       {
         path: `${this.importMetaUrl}'../../../../molecules/nextAppointments/NextAppointments.js`,
         name: 'kp-m-next-appointments'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+        name: 'o-grid'
       }
     ])
-    Promise.all([fetchModules]).then((children) => {
-      fetch.then(bookings => {
-        console.log('Dashboard children:', children, bookings)
-        this.html = /* html */`
-          <div id="dashboard" class="dashboard">
-            <h1>Organism Dashboard</h1>
-            <kp-m-appointments bookings="${JSON.stringify(bookings)}"></kp-m-appointments>  
-            <h1>Next Appointments</h1>
-            <kp-m-next-appointments bookings="${JSON.stringify(bookings)}"></kp-m-next-appointments>
-          </div>
+
+    const gridSkeleton = /* html */`
+      <o-grid namespace="grid-12er-">
+        <div col-lg="12" col-md="12" col-sm="12">
+          ${this.renderArea('nextAppointments')}
+        </div>
+        <div col-lg="12" col-md="12" col-sm="12">
+          ${this.renderArea('courses')}
+        </div>
+        <div col-lg="12" col-md="12" col-sm="12">
+          ${this.renderArea('continuations')}
+        </div>
+        <div col-lg="12" col-md="12" col-sm="12">
+          ${this.renderArea('abonnements')}
+        </div>
+      </o-grid>
+      
+         
           `
-      })
-      // debugger
-      // this._rendered = true
+
+    this.html = gridSkeleton
+
+    fetch.then(bookings => {
+      console.log('Dashboard children:', bookings, this.html)
+      // this.html = /* html */`
+
+      //     <div id="dashboard" class="dashboard">
+      //       <h1>Organism Dashboard</h1>
+      //       <kp-m-appointments bookings="${JSON.stringify(bookings)}"></kp-m-appointments>
+      //       <h1>Next Appointments</h1>
+      //       <kp-m-next-appointments bookings="${JSON.stringify(bookings)}"></kp-m-next-appointments>
+      //     </div>
+      //     `
     })
   }
-  // }
+
+  renderArea (area) {
+    switch (area) {
+      case 'nextAppointments':
+        return /* html */ ` 
+          <div id="appointments" class="daappointmentsshboard">
+            <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2 >
+        </div>`
+      case 'courses':
+        return /* html */ `
+          <div id="courses">
+            <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
+          </div>`
+      case 'continuations':
+        return /* html */ `
+          <div id="continuation">
+            <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
+            <div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>
+          </div>`
+      case 'abonnements':
+        return /* html */ `
+          <div id="abonnements">
+            <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
+          </div>`
+      default:
+        return ''
+    }
+  }
 }
