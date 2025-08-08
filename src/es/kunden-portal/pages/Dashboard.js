@@ -105,7 +105,6 @@ export default class Dashboard extends Index {
   }
 
   renderHTML () {
-    debugger
     this.fetchModules([{
       path: `${this.importMetaUrl}../components/organisms/dashboard/Dashboard.js`,
       name: 'kp-o-dashboard'

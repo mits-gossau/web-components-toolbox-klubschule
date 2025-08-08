@@ -40,7 +40,6 @@ export default class Dashboard extends HTMLElement {
     // if (this.abortControllerRequestBookings) this.abortControllerRequestBookings.abort()
     // this.abortControllerRequestBookings = new AbortController()
     this.abortControllerRequestBookings = this.abortController(this.abortControllerRequestBookings)
-    debugger
 
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBookings}`

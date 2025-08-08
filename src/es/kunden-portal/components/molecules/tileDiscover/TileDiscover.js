@@ -1,5 +1,5 @@
 // @ts-check
-import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /**
 * @export
@@ -7,24 +7,24 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 * @type {CustomElementConstructor}
 */
 export default class TileDiscover extends Shadow() {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
-  shouldRenderHTML() {
-    return !this.root.querySelector(`div.tile-discover`)
+  shouldRenderHTML () {
+    return !this.root.querySelector('div.tile-discover')
   }
 
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host {
         display: block;
@@ -74,7 +74,7 @@ export default class TileDiscover extends Shadow() {
     `
   }
 
-  renderHTML() {
+  renderHTML () {
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,

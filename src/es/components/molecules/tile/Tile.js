@@ -20,7 +20,7 @@ export default class Tile extends Shadow() {
       window.open(this.tileLink, '_self')
     }
   }
-  
+
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
@@ -32,9 +32,9 @@ export default class Tile extends Shadow() {
     this.tileTitle?.removeEventListener('click', this.openLink)
   }
 
-  static get observedAttributes() { return ['data'] }
+  static get observedAttributes () { return ['data'] }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback (name, oldValue, newValue) {
     if (name === 'data' && newValue) {
       try {
         this.tileData = JSON.parse(newValue)
@@ -324,7 +324,7 @@ export default class Tile extends Shadow() {
         return this.fetchCSS([
           {
             path: `${this.importMetaUrl}./appointment-/appointment-.css`,
-            namespace: false,
+            namespace: false
           }, ...styles])
       default:
         return this.fetchCSS(styles)
@@ -379,7 +379,7 @@ export default class Tile extends Shadow() {
             : ''
           }
         </div>
-        <div class="m-tile__body" ${this.hasAttribute('is-other-locations') ? `style="display:none;"` : ''}>
+        <div class="m-tile__body" ${this.hasAttribute('is-other-locations') ? 'style="display:none;"' : ''}>
           ${data.nextAppointment ? /* html */`<span class="m-tile__content m-tile__next-date">${data.nextAppointment}</span>` : ''}
           ${!this.hasAttribute('is-other-locations') && data.location?.name
             ? /* html */`
@@ -409,7 +409,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             ${this.hasAttribute('is-wish-list') && !this.isPassed && !this.hasAttribute('is-info-events') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? `${data.parentkey}${data.centerid ? `_${data.centerid}` : ''}` : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
-            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ?  '' : /* html */ `<ks-m-buttons ${this.hasAttribute('is-info-events') ? 'is-info-events' : '' } ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' ${this.getAttribute('namespace') === 'tile-appointment-' ? '' : 'small'} ${this.hasAttribute('no-url-params') || this.hasAttribute('is-other-locations') ? '' : 'keep-url-params="'+data.centerid+'"'} is-tile></ks-m-buttons>`}
+            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ? '' : /* html */ `<ks-m-buttons ${this.hasAttribute('is-info-events') ? 'is-info-events' : ''} ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' ${this.getAttribute('namespace') === 'tile-appointment-' ? '' : 'small'} ${this.hasAttribute('no-url-params') || this.hasAttribute('is-other-locations') ? '' : 'keep-url-params="' + data.centerid + '"'} is-tile></ks-m-buttons>`}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
@@ -426,7 +426,7 @@ export default class Tile extends Shadow() {
         </div>      
       </div>
       <div class="m-tile__foot-passed">
-        ${this.getAttribute("passed-message") ? /* html */`<span class="m-tile__passed-message">${this.getAttribute("passed-message")}</span>` : ''}
+        ${this.getAttribute('passed-message') ? /* html */`<span class="m-tile__passed-message">${this.getAttribute('passed-message')}</span>` : ''}
         <div class="m-tile__foot-left">
           ${this.hasAttribute('is-wish-list') && !this.hasAttribute('is-info-events') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? data.parentkey : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
         </div>
