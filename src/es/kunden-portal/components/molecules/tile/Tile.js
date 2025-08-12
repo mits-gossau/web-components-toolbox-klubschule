@@ -31,10 +31,18 @@ export default class AppointmentTile extends Tile {
   renderCSS () {
     super.renderCSS()
     this.css = /* css */`
+     
+
       :host > div {
-        background-color: blue;
         display: flex;
         flex-direction: column;
+      }
+      :host .parent-body, .parent-footer {
+        display: flex;
+        padding: 1.5em;
+      }
+      :host .parent-footer {
+        align-items: center;
       }
       
       @media only screen and (max-width: _max-width_) {
