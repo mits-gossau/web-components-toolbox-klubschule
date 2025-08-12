@@ -4,16 +4,16 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 /* global CustomEvent */
 
 export default class Dashboard extends Shadow() {
-  _rendered
+  _iappointmentsDivRendered
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    this._rendered = false
+    this._iappointmentsDivRendered = false
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    // if (this.shouldRenderHTML()) this.renderHTML()
-    this.renderHTML()
+    if (this.shouldRenderHTML()) this.renderHTML()
+    // this.renderHTML()
     // this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
     document.body.addEventListener('update-bookings', this.updatenBooknigsListener)
     this.dispatchEvent(new CustomEvent('request-bookings',
@@ -41,14 +41,16 @@ export default class Dashboard extends Shadow() {
   }
 
   shouldRenderHTML () {
-    return !this._rendered
+    return !this.root.querySelector('kp-o-dashboard')
+    // return !this.root.querySelector('#dashboard')
   }
 
   renderCSS () {
     this.css = /* css */`
-      :host {}
-      @media only screen and (max-width: _max-width_) {
-        :host {}
+    :host {
+      display: block;
+     }
+      @media only screen and (max-width: _max-width_) {}
       }
     `
     return this.fetchTemplate()
@@ -77,28 +79,21 @@ export default class Dashboard extends Shadow() {
   }
 
   renderHTML (fetch) {
-    debugger
-
     if (!fetch && !fetch?.then) return
 
-    // wait until fetch and modules are available
-    const waitForDependencies = () => {
-      return new Promise((resolve) => {
-        const checkAvailability = () => {
-          if (typeof window.fetch !== 'undefined' && this.fetchModules && typeof this.fetchModules === 'function') {
-            resolve()
-          } else {
-            // Warten und erneut prüfen
-            setTimeout(checkAvailability, 10)
-          }
-        }
-        checkAvailability()
-      })
-    }
-
-    return waitForDependencies().then(() => {
-      const gridSkeleton = /* html */`
+    const gridSkeleton = /* html */`
         <o-grid namespace="grid-12er-">
+          <style>
+           .container-appointments {
+              background-color: yellow;
+              display:flex;
+              gap:1em;
+            }
+            .container-discover {
+              display:flex;
+              gap: 1em;
+            }
+          </style>
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('nextAppointments')}
           </div>
@@ -113,138 +108,61 @@ export default class Dashboard extends Shadow() {
           </div>
         </o-grid>
       `
-      this.html = gridSkeleton
+    this.html = gridSkeleton
 
-      // load modules now and wait for fetch data at the same time
-      const modulePromise = this.fetchModules([
-        {
-          path: `${this.importMetaUrl}'../../../../molecules/appointments/Appointments.js`,
-          name: 'kp-m-appointments'
-        },
-        {
-          path: `${this.importMetaUrl}'../../../../molecules/nextAppointments/NextAppointments.js`,
-          name: 'kp-m-next-appointments'
-        },
-        {
-          path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-          name: 'a-icon-mdx'
-        },
-        {
-          path: `${this.importMetaUrl}'../../../../../../../../../src/es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
-          name: 'o-grid'
-        },
-        {
-          path: `${this.importMetaUrl}'../../../../molecules/tile/Tile.js`,
-          name: 'kp-m-tile'
-        }
-      ])
+    const modulePromise = this.fetchModules([
+      {
+        path: `${this.importMetaUrl}'../../../../molecules/appointments/Appointments.js`,
+        name: 'kp-m-appointments'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../molecules/nextAppointments/NextAppointments.js`,
+        name: 'kp-m-next-appointments'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../../../../src/es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+        name: 'o-grid'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../molecules/tile/Tile.js`,
+        name: 'kp-m-tile'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../molecules/event/Event.js`,
+        name: 'kp-m-event'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../molecules/tileDiscover/TileDiscover.js`,
+        name: 'kp-m-tile-discover'
+      }
+    ])
 
-      // waiting for both: modules AND fetch data
-      return Promise.all([modulePromise, fetch])
-    }).then(([modules, bookings]) => {
-      // nou now have access to BOTH modules AND bookings!
-      console.log('Loaded modules:', modules)
-      console.log('Loaded bookings:', bookings)
-
-      // find modules by name
-      const appointmentsModule = modules.find(m => m.name === 'kp-m-appointments')
-      const nextAppointmentsModule = modules.find(m => m.name === 'kp-m-next-appointments')
-      const iconModule = modules.find(m => m.name === 'a-icon-mdx')
-      const gridModule = modules.find(m => m.name === 'o-grid')
+    Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
       const tileModule = modules.find(m => m.name === 'kp-m-tile')
-
-      // save modules AND bookings for later access
-      this.loadedModules = {
-        appointments: appointmentsModule,
-        nextAppointments: nextAppointmentsModule,
-        icon: iconModule,
-        grid: gridModule,
-        tile: tileModule
+      const eventTileModule = modules.find(m => m.name === 'kp-m-event')
+      if (tileModule?.constructorClass && fetch) {
+        debugger
+        this.renderAppointments(tileModule, fetch, this.appointmentsDiv)
+        this.renderBookings({ id: '#courses', abo: false }, fetch, eventTileModule)
+        this.renderAbbonements({ id: '#abonnements', abo: true }, fetch, eventTileModule)
       }
-
-      this.bookingsData = bookings
-
-      // now you can use modules AND bookings!
-      if (appointmentsModule?.constructorClass && bookings) {
-        console.log('Creating appointments element with bookings:', bookings)
-        const appointmentsElement = new appointmentsModule.constructorClass()
-        appointmentsElement.setAttribute('bookings', JSON.stringify(bookings))
-        appointmentsElement.setAttribute('namespace', 'appointments-default-')
-
-        // add element to the DOM
-        const appointmentsDiv = this.root.querySelector('o-grid')?.root?.querySelector('div#appointments')
-        if (appointmentsDiv) {
-          appointmentsDiv.appendChild(appointmentsElement)
-        }
-      }
-
-      if (nextAppointmentsModule?.constructorClass && bookings) {
-        console.log('Creating next appointments element with bookings:', bookings)
-        const nextAppointmentsElement = new nextAppointmentsModule.constructorClass()
-        nextAppointmentsElement.setAttribute('bookings', JSON.stringify(bookings))
-        nextAppointmentsElement.setAttribute('namespace', 'next-appointments-default-')
-
-        // add element to the DOM
-        const appointmentsDiv = this.root.querySelector('o-grid')?.root?.querySelector('div#appointments')
-        if (appointmentsDiv) {
-          appointmentsDiv.appendChild(nextAppointmentsElement)
-        }
-      }
-
-      if (tileModule?.constructorClass && bookings) {
-        console.log('Tile module loaded, can create tiles with bookings')
-        // Erstelle Tiles für jede Buchung
-        bookings.forEach((appointment, index) => {
-          const tileElement = this.makeTileComponent(tileModule, appointment, null)
-          // Füge Tiles zu entsprechenden Bereichen hinzu
-        })
-      }
-
-      debugger
-    }).catch((e) => {
-      console.error('Error fetching modules or bookings:', e)
     })
-    // fetch.then(bookings => {
-    //   console.log('Dashboard children:', bookings, this.html)
-    //   const nextAppointments = this.renderNextAppointments(bookings)
-    //   console.log('Next Appointments HTML:', nextAppointments)
-    //   this.html = nextAppointments
-    //   debugger
-    //   // this.html = /* html */`
-
-    //   //     <div id="dashboard" class="dashboard">
-    //   //       <h1>Organism Dashboard</h1>
-    //   //       <kp-m-appointments bookings="${JSON.stringify(bookings)}"></kp-m-appointments>
-    //   //       <h1>Next Appointments</h1>
-    //   //       <kp-m-next-appointments bookings="${JSON.stringify(bookings)}"></kp-m-next-appointments>
-    //   //     </div>
-    //   //     `
-    // })
   }
 
-  renderNextAppointments (bookings) {
-    const div = this.root.querySelector('o-grid').root.querySelector('div#appointments')
-    if (!div) {
-      console.warn('No appointments div found in the grid.')
-      return ''
-    }
-    debugger
-    const tileElement = this.makeTileComponent()
-    // tileElement.setAttribute('bookings', JSON.stringify(bookings))
-    div.appendChild(tileElement)
-    return div.innerHTML
-  }
-
-  makeTileComponent (tile, appointment, selectedSubscription) {
-    // const appointmentData = this.cleanAndStringifyData(appointment)
-    // const selectedSubscriptionData = this.cleanAndStringifyData(selectedSubscription)
-    const tileComponent = new tile.constructorClass({ namespace: 'tile-course-appointment-' }) // eslint-disable-line
-    // tileComponent.setAttribute('data', `${appointmentData}`)
-    // tileComponent.setAttribute('data-id', `${makeUniqueCourseId(appointment)}`)
-    // tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
-    tileComponent.setAttribute('data-list-type', this.dataset.listType || '')
-    return tileComponent
-  }
+  // makeTileComponent (tile) {
+  //   // const appointmentData = this.cleanAndStringifyData(appointment)
+  //   // const selectedSubscriptionData = this.cleanAndStringifyData(selectedSubscription)
+  //   const tileComponent = new tile.constructorClass({ namespace: 'tile-appointment-' }) // eslint-disable-line
+  //   // tileComponent.setAttribute('data', `${appointmentData}`)
+  //   // tileComponent.setAttribute('data-id', `${makeUniqueCourseId(appointment)}`)
+  //   // tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
+  //   // tileComponent.setAttribute('data-list-type', this.dataset.listType || '')
+  //   return tileComponent
+  // }
 
   renderAreaWrapper (area) {
     switch (area) {
@@ -252,12 +170,16 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="appointments" class="appointments">
             <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2 >
+            <div class="container-appointments"></div>
         </div>`
       case 'courses':
         return /* html */ `
-          <div id="courses">
+          <div id="courses" class="courses">
             <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
-          </div>`
+            ${this.renderDiscoverTile()}
+            <div class="container-courses"></div>
+        </div>
+        </div>`
       case 'continuations':
         return /* html */ `
           <div id="continuation">
@@ -268,9 +190,194 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="abonnements">
             <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
+            <div class="container-abonnements"></div>
           </div>`
       default:
         return ''
     }
+  }
+
+  renderAbbonements ({ id = '#abonnements', abo = true } = {}, bookingsData, tileComponent) {
+
+  }
+
+  renderDiscoverTile () {
+    return /* html */ `
+      <div class="discover">
+        <h3><span>Unsere Kurse entdecken</span></h3>
+        <div class="container-discover">
+          <kp-m-tile-discover
+            image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
+            tile-label="Klubschule Kurse"
+            link-href="#"
+            link-text="Kurse entdecken">
+          </kp-m-tile-discover>
+          <kp-m-tile-discover
+            image-src="https://picsum.photos/40/40"
+            tile-label="Klubschule Pro Kurse"
+            link-href="#"
+            link-text="Kurse entdecken">
+          </kp-m-tile-discover>
+          <kp-m-tile-discover
+            image-src="https://picsum.photos/40/40"
+            tile-label="IBAW Kurse"
+            link-href="#"
+            link-text="Kurse entdecken">
+          </kp-m-tile-discover>
+        </div>
+      </div>`
+  }
+
+  renderAppointments (tileComponent, bookingsData, containerDiv, count = 3) {
+    if (!containerDiv || !bookingsData) return
+
+    // future appointments with course info
+    const today = new Date()
+    const allAppointments = []
+
+    bookingsData.bookings.forEach(booking => {
+      const futureAppointments = (booking.appointments || []).filter(appointment => {
+        const appointmentDate = new Date(appointment.appointmentDate)
+        // @ts-ignore
+        return appointmentDate >= today.setHours(0, 0, 0, 0)
+      })
+      if (futureAppointments.length) {
+        futureAppointments.sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
+        const next = futureAppointments[0]
+        allAppointments.push({
+          ...next,
+          courseTitle: booking.courseTitle,
+          courseId: booking.courseId,
+          courseLocation: booking.courseLocation,
+          roomDescription: booking.roomDescription,
+          logoUrl: booking.logoUrl,
+          price: booking.price
+        })
+      }
+    })
+
+    // @ts-ignore, sort by appointmentDate ascending
+    allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
+
+    const nextAppointments = allAppointments.slice(0, count)
+
+    if (nextAppointments.length) {
+      debugger
+      nextAppointments.forEach(app => {
+        debugger
+        // const TileElement = customElements.get('ks-m-tile')
+        const tile = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
+        // @ts-ignore
+        // const tile = new TileElement()
+        tile.setAttribute('class', 'appointment-tile')
+        tile.setAttribute('namespace', 'tile-appointment-')
+        tile.setAttribute('data', JSON.stringify({
+          type: 'appointment',
+          title: app.courseTitle,
+          nextAppointment: app.appointmentDateFormatted,
+          location: {
+            iconName: 'Location',
+            name: app.courseLocation
+          },
+          room: {
+            iconName: 'Monitor',
+            name: app.roomDescription || ''
+          },
+          icons: [],
+          buttons: [{
+            text: 'Detail ansehen',
+            typ: 'secondary',
+            event: 'open-booking-detail',
+            link: `index.html#/booking?courseId=${app.courseId}`
+          }],
+          price: {
+            amount: app.price?.amount || app.price || ''
+          }
+        }))
+        containerDiv.appendChild(tile)
+      })
+    } else {
+      containerDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
+      containerDiv.classList.add('no-results')
+    }
+    debugger
+    console.log('Appointments Div HTML:', containerDiv.innerHTML)
+    return containerDiv.innerHTML
+  }
+
+  // render abonnements or booked courses
+  renderBookings ({ id = '#courses', abo = false } = {}, bookingsData, eventTileComponent) {
+    // const containerDiv = this.shadowRoot.querySelector(`${id} .container`)
+    const containerDiv = this.coursesDiv
+    if (!containerDiv || !bookingsData) return
+
+    containerDiv.innerHTML = ''
+
+    debugger
+    const filtered = bookingsData.bookings.filter(course =>
+      abo ? course.isSubscription : !course.isSubscription
+    )
+
+    filtered.forEach(course => {
+      const start = new Date(course.courseStartDate)
+      const end = new Date(course.courseEndDate)
+      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+      const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
+
+      const courseData = {
+        course: {
+          kurs_typ: course.courseType,
+          kurs_id: course.courseId,
+          datum_label: course.courseTitle,
+          days: [daysEntry],
+          location: {
+            name: course.courseLocation,
+            badge: course.roomDescription || ''
+          },
+          status: course.courseStatus,
+          status_label: course.courseStatusText,
+          buttons: [{
+            text: abo ? 'Zum Aboportal' : 'Detail ansehen',
+            typ: 'secondary',
+            event: 'open-booking-detail',
+            link: abo ? '#' : `index.html#/booking?courseId=${course.courseId}`
+          }],
+          icons: []
+        },
+        sprachid: 'd'
+      }
+
+      if (!abo) {
+        courseData.course.state_of_booking = 'Gebucht'
+        courseData.course.logo_url = course.logoUrl
+      }
+
+      // const EventElement = customElements.get('ks-m-event')
+      // @ts-ignore
+      // const event = new EventElement()
+      const event = new eventTileComponent.constructorClass({ })
+      event.setAttribute('class', 'course-event')
+      if (abo) event.setAttribute('abo-event', '')
+      event.setAttribute('data', JSON.stringify(courseData))
+      debugger
+      containerDiv.appendChild(event)
+    })
+    debugger
+    if (!containerDiv.hasChildNodes()) {
+      if (abo) this.shadowRoot.querySelector('#abonnements').style.display = 'none'
+      containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
+      containerDiv.classList.add('no-results')
+    }
+  }
+
+  get appointmentsDiv () {
+    return this.root.querySelector('o-grid').root.querySelector('#appointments .container-appointments')
+    /* const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container')
+    const appointmentsDiv = this.shadowRoot.querySelector('o-grid').root.querySelector('#appointments .container-appointments') */
+  }
+
+  get coursesDiv () {
+    debugger
+    return this.root.querySelector('o-grid').root.querySelector('#courses .container-courses')
   }
 }

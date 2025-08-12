@@ -28,6 +28,8 @@ export default class TileDiscover extends Shadow() {
     this.css = /* css */`
       :host {
         display: block;
+        background:green;
+        width: 100%;
       }
       .tile-discover-link {
         display: block;
@@ -77,11 +79,11 @@ export default class TileDiscover extends Shadow() {
   renderHTML () {
     this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
       }
     ])
-
+    debugger
     this.html = /* html */`
       <a class="tile-discover-link" href="${this.getAttribute('link-href') || '#'}">
         <div class="tile-discover">

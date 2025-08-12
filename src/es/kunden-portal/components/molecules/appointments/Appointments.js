@@ -64,7 +64,7 @@ export default class Appointment extends Shadow() {
     return Promise.all([fetchModules]).then((children) => {
       debugger
       console.log('Appointments children:', children)
-      this.html = '<div id="appointments"><h1>Appointments</h1></div>'
+      this.html = '<div id="appointments"><h1>Molecule Nr 1. Appointments</h1></div>'
     }).catch(e => {
       // TODO: Handle error
       console.error(e)

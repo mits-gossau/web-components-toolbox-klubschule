@@ -42,13 +42,15 @@ export default class Dashboard extends HTMLElement {
     this.abortControllerRequestBookings = this.abortController(this.abortControllerRequestBookings)
 
     // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBookings}`
+    // const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBookings}`
+    const endpoint = '../../es/kunden-portal/controllers/dashboard/getMyBookings.json'
     const data = { language: 'de' }
     const options = this.fetchPOSTOptions(data, this.abortControllerRequestBookings)
 
     this.dispatchEvent(new CustomEvent('update-bookings', {
       detail: {
-        fetch: fetch(endpoint, options).then(async response => {
+        // fetch: fetch(endpoint, options).then(async response => {
+        fetch: fetch(endpoint).then(async response => {
           // TODO: Improve error handling
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`)
