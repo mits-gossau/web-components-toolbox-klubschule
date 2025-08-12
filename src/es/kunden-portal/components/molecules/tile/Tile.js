@@ -91,8 +91,8 @@ export default class AppointmentTile extends Tile {
         this.html = this.renderAppointment(data)
       } else if (data.type === 'course') {
         this.html = this.renderCourse(data)
-      } else if (data.type === 'abonnement') { 
-        this.html = renderAbonnements(data)
+      } else if (data.type === 'abonnement') {
+        this.html = this.renderAbbonements(data)
       } else {
         this.html = ''
       }
@@ -108,14 +108,23 @@ export default class AppointmentTile extends Tile {
 
   renderAbbonements (data) {
     debugger
-    return /* html */`
-    <div class="appointment-tile m-tile">
-      <h2>Abonnement: ${data.title}</h2>
-      <p>${data.description}</p>
-      <ks-a-button href="${data.link}">View Details</ks-a-button>
-    </div>
-     
-    `
+    return /* html */ `
+      <div class="m-tile">
+        <div class="parent-body">
+          <div class="course-info">
+            <div>
+              <span class="m-tile__title title">asdfasd</span>
+            </div>
+          </div>
+          <div>
+            <span class="m-tile__title date">gültigkeits von - bis </span>
+          </div>
+        </div>
+        <div class="parent-footer">
+          <ks-a-button
+            namespace="button-secondary-" color="secondary"> asfda</ks-a-button>
+        </div>
+    </div>`
   }
 
   renderAppointment (data) {

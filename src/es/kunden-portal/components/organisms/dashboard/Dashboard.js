@@ -4,17 +4,13 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 /* global CustomEvent */
 
 export default class Dashboard extends Shadow() {
-  _iappointmentsDivRendered
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    this._iappointmentsDivRendered = false
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    // this.renderHTML()
-    // this.dispatchEvent(new CustomEvent('request-bookings', { bubbles: true, cancelable: true, composed: true }))
     document.body.addEventListener('update-bookings', this.updatenBooknigsListener)
     this.dispatchEvent(new CustomEvent('request-bookings',
       {
@@ -92,6 +88,17 @@ export default class Dashboard extends Shadow() {
             .container-discover {
               display:flex;
               gap: 1em;
+              padding-bottom: 1em;
+            }
+            .container-courses {
+              display:flex;
+              flex-direction: column;
+              gap: 1em;
+            }
+            .container-abonnements {
+              display:flex;
+              flex-direction: column;
+              gap: 1em;
             }
           </style>
           <div col-lg="12" col-md="12" col-sm="12">
@@ -148,7 +155,7 @@ export default class Dashboard extends Shadow() {
         debugger
         this.renderAppointments(tileModule, fetch, this.appointmentsDiv)
         this.renderBookings({ id: '#courses', abo: false }, fetch, eventTileModule)
-        this.renderAbbonements({ id: '#abonnements', abo: true }, fetch, eventTileModule)
+        this.renderAbbonements({ id: '#abonnements', abo: true }, fetch, tileModule, this.abonnementsDiv)
       }
     })
   }
@@ -185,6 +192,7 @@ export default class Dashboard extends Shadow() {
           <div id="continuation">
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
             <div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>
+            ${this.renderDiscoverMoreTile()}
           </div>`
       case 'abonnements':
         return /* html */ `
@@ -197,8 +205,54 @@ export default class Dashboard extends Shadow() {
     }
   }
 
-  renderAbbonements ({ id = '#abonnements', abo = true } = {}, bookingsData, tileComponent) {
+  renderAbbonements ({ id = '#abonnements', abo = true } = {}, bookingsData, tileComponent, containerDiv) {
+    const abonnements = bookingsData.bookings.filter(course => course.isSubscription)
+    debugger
+    abonnements.forEach(course => {
+      const start = new Date(course.courseStartDate)
+      const end = new Date(course.courseEndDate)
+      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+      const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
 
+      const courseData = {
+        type: 'abonnement',
+        course: {
+          kurs_typ: course.courseType,
+          kurs_id: course.courseId,
+          datum_label: course.courseTitle,
+          days: [daysEntry],
+          location: {
+            name: course.courseLocation,
+            badge: course.roomDescription || ''
+          },
+          status: course.courseStatus,
+          status_label: course.courseStatusText,
+          buttons: [{
+            text: abo ? 'Zum Aboportal' : 'Detail ansehen',
+            typ: 'secondary',
+            event: 'open-booking-detail',
+            link: abo ? '#' : `index.html#/booking?courseId=${course.courseId}`
+          }],
+          icons: []
+        },
+        sprachid: 'd'
+      }
+
+      if (!abo) {
+        courseData.course.state_of_booking = 'Gebucht'
+        courseData.course.logo_url = course.logoUrl
+      }
+
+      // const EventElement = customElements.get('ks-m-event')
+      // @ts-ignore
+      // const event = new EventElement()
+      const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
+      // event.setAttribute('class', 'course-event')
+      event.setAttribute('abo-event', '')
+      event.setAttribute('data', JSON.stringify(courseData))
+      debugger
+      containerDiv.appendChild(event)
+    })
   }
 
   renderDiscoverTile () {
@@ -226,6 +280,34 @@ export default class Dashboard extends Shadow() {
           </kp-m-tile-discover>
         </div>
       </div>`
+  }
+
+  renderDiscoverMoreTile () {
+    return /* html */ `
+    <div class="discover">
+          <h3><span>Weitere Kurse entdecken</span></h3>
+          <div class="container-discover">
+            <kp-m-tile-discover
+              image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
+              tile-label="Klubschule Kurse"
+              link-href="#"
+              link-text="Kurse entdecken">
+            </kp-m-tile-discover>
+            <kp-m-tile-discover
+              image-src="https://picsum.photos/40/40"
+              tile-label="Klubschule Pro Kurse"
+              link-href="#"
+              link-text="Kurse entdecken">
+            </kp-m-tile-discover>
+            <kp-m-tile-discover
+              image-src="https://picsum.photos/40/40"
+              tile-label="IBAW Kurse"
+              link-href="#"
+              link-text="Kurse entdecken">
+            </kp-m-tile-discover>
+          </div>
+        </div>
+    `
   }
 
   renderAppointments (tileComponent, bookingsData, containerDiv, count = 3) {
@@ -262,9 +344,7 @@ export default class Dashboard extends Shadow() {
     const nextAppointments = allAppointments.slice(0, count)
 
     if (nextAppointments.length) {
-      debugger
       nextAppointments.forEach(app => {
-        debugger
         // const TileElement = customElements.get('ks-m-tile')
         const tile = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
         // @ts-ignore
@@ -300,7 +380,6 @@ export default class Dashboard extends Shadow() {
       containerDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
       containerDiv.classList.add('no-results')
     }
-    debugger
     console.log('Appointments Div HTML:', containerDiv.innerHTML)
     return containerDiv.innerHTML
   }
@@ -379,5 +458,9 @@ export default class Dashboard extends Shadow() {
   get coursesDiv () {
     debugger
     return this.root.querySelector('o-grid').root.querySelector('#courses .container-courses')
+  }
+
+  get abonnementsDiv () {
+    return this.root.querySelector('o-grid').root.querySelector('#abonnements .container-abonnements')
   }
 }

@@ -26,8 +26,11 @@ export default class EventTile extends Tile {
   }
 
   renderHTML () {
-    debugger
-    const parentHTML = super.renderHTML()
-    this.html = parentHTML
+    super.renderHTML()
+    // this.html = 'event'
+    // super.renderHTML().then(([data, parentHTML]) => {
+    //   debugger
+    //   this.html = parentHTML
+    // })
   }
 }
