@@ -136,7 +136,6 @@ export default class Dashboard extends Shadow() {
     ])
 
     Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
-      // const bookings = { bookings: fetch.bookings || [] }
       // get data for each area
       const nextAppointmensData = this.getNextAppointmentsData(fetch.bookings, 3)
       const appointmentsData = this.getAppointmensData(fetch.bookings)
@@ -148,9 +147,9 @@ export default class Dashboard extends Shadow() {
       const eventTileModule = modules.find(m => m.name === 'kp-m-event')
 
       if (tileModule?.constructorClass && eventTileModule?.constructorClass) {
-        // nächsten Termine
+        // nächste Termine
         this.renderNextAppointments(nextAppointmensData, tileModule, this.appointmentsDiv)
-        // meine Kurse/lehrgänge
+        // meine Kurse/Lehrgänge
         this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
         // meine Fortsetzungen
         this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
@@ -311,7 +310,7 @@ export default class Dashboard extends Shadow() {
     `
   }
 
-  renderNextAppointments (bookingsData, tileComponent, containerDiv, nextAppointmentsData, count = 3) {
+  renderNextAppointments (bookingsData, tileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
@@ -352,7 +351,6 @@ export default class Dashboard extends Shadow() {
     })
   }
 
-  // render abonnements or booked courses
   renderBookings (bookingsData, eventTileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
