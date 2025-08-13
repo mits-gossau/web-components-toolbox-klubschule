@@ -153,7 +153,7 @@ export default class Dashboard extends Shadow() {
         // nächsten Termine
         this.renderNextAppointments(tileModule, fetch, this.appointmentsDiv, nextAppointmensData)
         // meine Kurse/lehrgänge
-        this.renderBookings({ id: '#courses', abo: false }, appointments, eventTileModule, this.coursesDiv)
+        this.renderBookings(appointments, eventTileModule, this.coursesDiv)
         // meine Fortsetzungen
         this.renderContinuations(folowUpAppointments, eventTileModule, this.continuationsDiv)
         // meine Abonnements
@@ -222,7 +222,14 @@ export default class Dashboard extends Shadow() {
   }
 
   renderAbbonements ({ id = '#abonnements', abo = true } = {}, bookingsData, tileComponent, containerDiv, abonnements) {
-    // const abonnements = bookingsData.bookings.filter(course => course.isSubscription)
+    if (!containerDiv || !abonnements) return
+
+    if (abonnements.length === 0) {
+      containerDiv.textContent = 'Sie haben keine Abonnemente.'
+      containerDiv.classList.add('no-results')
+      return
+    }
+    
     abonnements.forEach(course => {
       const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
@@ -258,9 +265,7 @@ export default class Dashboard extends Shadow() {
         courseData.course.logo_url = course.logoUrl
       }
 
-      // const EventElement = customElements.get('ks-m-event')
       // @ts-ignore
-      // const event = new EventElement()
       const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
       // event.setAttribute('class', 'course-event')
       event.setAttribute('abo-event', '')
@@ -363,83 +368,10 @@ export default class Dashboard extends Shadow() {
       ))
       containerDiv.appendChild(event)
     })
-
-    // // future appointments with course info
-    // const today = new Date()
-    // const allAppointments = []
-
-    // bookingsData.bookings.forEach(booking => {
-    //   const futureAppointments = (booking.appointments || []).filter(appointment => {
-    //     const appointmentDate = new Date(appointment.appointmentDate)
-    //     // @ts-ignore
-    //     return appointmentDate >= today.setHours(0, 0, 0, 0)
-    //   })
-    //   if (futureAppointments.length) {
-    //     futureAppointments.sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
-    //     const next = futureAppointments[0]
-    //     allAppointments.push({
-    //       ...next,
-    //       courseTitle: booking.courseTitle,
-    //       courseId: booking.courseId,
-    //       courseLocation: booking.courseLocation,
-    //       roomDescription: booking.roomDescription,
-    //       logoUrl: booking.logoUrl,
-    //       price: booking.price
-    //     })
-    //   }
-    // })
-
-    // @ts-ignore, sort by appointmentDate ascending
-    // allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
-
-    // const nextAppointments = allAppointments.slice(0, count)
-
-    // if (nextAppointments.length) {
-    //   nextAppointments.forEach(app => {
-    //     // const TileElement = customElements.get('ks-m-tile')
-    //     const tile = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
-    //     // @ts-ignore
-    //     // const tile = new TileElement()
-    //     tile.setAttribute('class', 'appointment-tile')
-    //     tile.setAttribute('namespace', 'tile-appointment-')
-    //     tile.setAttribute('data', JSON.stringify({
-    //       type: 'appointment',
-    //       title: app.courseTitle,
-    //       nextAppointment: app.appointmentDateFormatted,
-    //       location: {
-    //         iconName: 'Location',
-    //         name: app.courseLocation
-    //       },
-    //       room: {
-    //         iconName: 'Monitor',
-    //         name: app.roomDescription || ''
-    //       },
-    //       icons: [],
-    //       buttons: [{
-    //         text: 'Detail ansehen',
-    //         typ: 'secondary',
-    //         event: 'open-booking-detail',
-    //         link: `index.html#/booking?courseId=${app.courseId}`
-    //       }],
-    //       price: {
-    //         amount: app.price?.amount || app.price || ''
-    //       }
-    //     }))
-    //     containerDiv.appendChild(tile)
-    //   })
-    // } else {
-    //   containerDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
-    //   containerDiv.classList.add('no-results')
-    // }
-    // console.log('Appointments Div HTML:', containerDiv.innerHTML)
-    // return containerDiv.innerHTML
   }
 
   // render abonnements or booked courses
-  renderBookings ({ id = '#courses', abo = false } = {}, bookingsData, eventTileComponent, containerDiv) {
-    // const containerDiv = this.shadowRoot.querySelector(`${id} .container`)
-    // const containerDiv = this.coursesDiv
-    debugger
+  renderBookings (bookingsData, eventTileComponent, containerDiv, abo = false) {
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
@@ -478,75 +410,20 @@ export default class Dashboard extends Shadow() {
         sprachid: 'd'
       }
 
+      // TODO: remove if not needed
       if (!abo) {
         courseData.course.state_of_booking = 'Gebucht'
         courseData.course.logo_url = course.logoUrl
       }
 
-      // const EventElement = customElements.get('ks-m-event')
       // @ts-ignore
-      // const event = new EventElement()
       const event = new eventTileComponent.constructorClass({})
       event.setAttribute('class', 'course-event')
+      // TODO: remove abo-event attribute if not needed
       if (abo) event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
     })
-
-    // containerDiv.innerHTML = ''
-
-    // const filtered = bookingsData.filter(course =>
-    //   abo ? course.isSubscription : !course.isSubscription
-    // )
-
-    // filtered.forEach(course => {
-    //   const start = new Date(course.courseStartDate)
-    //   const end = new Date(course.courseEndDate)
-    //   const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
-    //   const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
-
-    //   const courseData = {
-    //     course: {
-    //       kurs_typ: course.courseType,
-    //       kurs_id: course.courseId,
-    //       datum_label: course.courseTitle,
-    //       days: [daysEntry],
-    //       location: {
-    //         name: course.courseLocation,
-    //         badge: course.roomDescription || ''
-    //       },
-    //       status: course.courseStatus,
-    //       status_label: course.courseStatusText,
-    //       buttons: [{
-    //         text: abo ? 'Zum Aboportal' : 'Detail ansehen',
-    //         typ: 'secondary',
-    //         event: 'open-booking-detail',
-    //         link: abo ? '#' : `index.html#/booking?courseId=${course.courseId}`
-    //       }],
-    //       icons: []
-    //     },
-    //     sprachid: 'd'
-    //   }
-
-    //   if (!abo) {
-    //     courseData.course.state_of_booking = 'Gebucht'
-    //     courseData.course.logo_url = course.logoUrl
-    //   }
-
-    //   // const EventElement = customElements.get('ks-m-event')
-    //   // @ts-ignore
-    //   // const event = new EventElement()
-    //   const event = new eventTileComponent.constructorClass({ })
-    //   event.setAttribute('class', 'course-event')
-    //   if (abo) event.setAttribute('abo-event', '')
-    //   event.setAttribute('data', JSON.stringify(courseData))
-    //   containerDiv.appendChild(event)
-    // })
-    // if (!containerDiv.hasChildNodes()) {
-    //   if (abo) this.shadowRoot.querySelector('#abonnements').style.display = 'none'
-    //   containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
-    //   containerDiv.classList.add('no-results')
-    // }
   }
 
   nextAppointmentsData (bookingsData, count = 3) {
