@@ -138,40 +138,27 @@ export default class Dashboard extends Shadow() {
     Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
       // const bookings = { bookings: fetch.bookings || [] }
       // get data for each area
-      const nextAppointmensData = this.nextAppointmentsData(fetch.bookings, 3)
-      const appointments = this.appointmensData(fetch.bookings)
-      const folowUpAppointments = this.followUpData(fetch.bookings)
-      const abonnements = this.abonnementsData(fetch.bookings)
-      debugger
+      const nextAppointmensData = this.getNextAppointmentsData(fetch.bookings, 3)
+      const appointmentsData = this.getAppointmensData(fetch.bookings)
+      const continuationsData = this.getContinuationsData(fetch.bookings)
+      const abonnementsData = this.getAbonnementsData(fetch.bookings)
 
       // get needed modules
       const tileModule = modules.find(m => m.name === 'kp-m-tile')
       const eventTileModule = modules.find(m => m.name === 'kp-m-event')
 
       if (tileModule?.constructorClass && eventTileModule?.constructorClass) {
-        debugger
         // nächsten Termine
-        this.renderNextAppointments(tileModule, fetch, this.appointmentsDiv, nextAppointmensData)
+        this.renderNextAppointments(nextAppointmensData, tileModule, this.appointmentsDiv)
         // meine Kurse/lehrgänge
-        this.renderBookings(appointments, eventTileModule, this.coursesDiv)
+        this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
         // meine Fortsetzungen
-        this.renderContinuations(folowUpAppointments, eventTileModule, this.continuationsDiv)
+        this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
         // meine Abonnements
-        this.renderAbbonements({ id: '#abonnements', abo: true }, fetch, tileModule, this.abonnementsDiv, abonnements)
+        this.renderAbbonements({ id: '#abonnements', abo: true }, fetch, tileModule, this.abonnementsDiv, abonnementsData)
       }
     })
   }
-
-  // makeTileComponent (tile) {
-  //   // const appointmentData = this.cleanAndStringifyData(appointment)
-  //   // const selectedSubscriptionData = this.cleanAndStringifyData(selectedSubscription)
-  //   const tileComponent = new tile.constructorClass({ namespace: 'tile-appointment-' }) // eslint-disable-line
-  //   // tileComponent.setAttribute('data', `${appointmentData}`)
-  //   // tileComponent.setAttribute('data-id', `${makeUniqueCourseId(appointment)}`)
-  //   // tileComponent.setAttribute('data-selected-subscription', `${selectedSubscriptionData}`)
-  //   // tileComponent.setAttribute('data-list-type', this.dataset.listType || '')
-  //   return tileComponent
-  // }
 
   renderAreaWrapper (area) {
     switch (area) {
@@ -229,7 +216,7 @@ export default class Dashboard extends Shadow() {
       containerDiv.classList.add('no-results')
       return
     }
-    
+
     abonnements.forEach(course => {
       const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
@@ -267,7 +254,7 @@ export default class Dashboard extends Shadow() {
 
       // @ts-ignore
       const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
-      // event.setAttribute('class', 'course-event')
+      event.setAttribute('class', 'course-event')
       event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
@@ -329,16 +316,16 @@ export default class Dashboard extends Shadow() {
     `
   }
 
-  renderNextAppointments (tileComponent, bookingsData, containerDiv, nextAppointmentsData, count = 3) {
-    if (!containerDiv || !nextAppointmentsData) return
+  renderNextAppointments (bookingsData, tileComponent, containerDiv, nextAppointmentsData, count = 3) {
+    if (!containerDiv || !bookingsData) return
 
-    if (nextAppointmentsData.length === 0) {
+    if (bookingsData.length === 0) {
       containerDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
       containerDiv.classList.add('no-results')
       return
     }
 
-    nextAppointmentsData.forEach(app => {
+    bookingsData.forEach(app => {
       const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
       event.setAttribute('class', 'appointment-tile')
       event.setAttribute('namespace', 'tile-appointment-')
@@ -426,7 +413,7 @@ export default class Dashboard extends Shadow() {
     })
   }
 
-  nextAppointmentsData (bookingsData, count = 3) {
+  getNextAppointmentsData (bookingsData, count = 3) {
     const appointments = bookingsData.filter(course => course.appointments && course.appointments.length > 0)
     const dates = []
 
@@ -492,15 +479,15 @@ export default class Dashboard extends Shadow() {
     return nextAppointments
   }
 
-  appointmensData (bookingsData) {
+  getAppointmensData (bookingsData) {
     return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5) || []
   }
 
-  followUpData (bookingData) {
+  getContinuationsData (bookingData) {
     return bookingData.filter(course => course.bookingType === 3 && course.subscriptionType === 5) || []
   }
 
-  abonnementsData (bookingsData) {
+  getAbonnementsData (bookingsData) {
     return bookingsData.filter(course => course.courseType === '7A')
   }
 
