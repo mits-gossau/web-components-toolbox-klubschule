@@ -83,7 +83,6 @@ export default class TileDiscover extends Shadow() {
         name: 'a-icon-mdx'
       }
     ])
-    debugger
     this.html = /* html */`
       <a class="tile-discover-link" href="${this.getAttribute('link-href') || '#'}">
         <div class="tile-discover">

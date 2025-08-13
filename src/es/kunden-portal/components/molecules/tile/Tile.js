@@ -72,8 +72,6 @@ export default class AppointmentTile extends Tile {
   }
 
   renderHTML () {
-    debugger
-
     const fetchModules = this.fetchModules([
       {
         path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/molecules/loadTemplateTag/LoadTemplateTag.js`,
@@ -145,7 +143,6 @@ export default class AppointmentTile extends Tile {
   }
 
   renderCourse (data) {
-    debugger
     return /* html */`
     <div class="appointment-tile m-tile">
       <h2>Couse: ${data.title}</h2>

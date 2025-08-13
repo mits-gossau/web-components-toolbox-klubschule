@@ -13,13 +13,13 @@ export default class EventTile extends Tile {
     super({ ...options }, ...args)
   }
 
-  connectedCallback () {
-    super.connectedCallback()
-  }
+  //   connectedCallback () {
+  //     super.connectedCallback()
+  //   }
 
-  disconnectedCallback () {
-    super.disconnectedCallback()
-  }
+  //   disconnectedCallback () {
+  //     super.disconnectedCallback()
+  //   }
 
   renderCSS () {
     super.renderCSS()
@@ -27,7 +27,6 @@ export default class EventTile extends Tile {
 
   renderHTML () {
     super.renderHTML().then((data) => {
-      debugger
     })
     // this.html = 'event'
     // super.renderHTML().then(([data, parentHTML]) => {

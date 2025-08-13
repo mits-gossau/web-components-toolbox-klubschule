@@ -38,16 +38,15 @@ export default class Dashboard extends Shadow() {
 
   shouldRenderHTML () {
     return !this.root.querySelector('kp-o-dashboard')
-    // return !this.root.querySelector('#dashboard')
   }
 
   renderCSS () {
     this.css = /* css */`
-    :host {
-      display: block;
-     }
-      @media only screen and (max-width: _max-width_) {}
+      :host {
+        display: block;
       }
+      @media only screen and (max-width: _max-width_) {}
+    }
     `
     return this.fetchTemplate()
   }
@@ -114,22 +113,10 @@ export default class Dashboard extends Shadow() {
             ${this.renderAreaWrapper('abonnements')}
           </div>
         </o-grid>
-      `
+    `
     this.html = gridSkeleton
 
     const modulePromise = this.fetchModules([
-      {
-        path: `${this.importMetaUrl}'../../../../molecules/appointments/Appointments.js`,
-        name: 'kp-m-appointments'
-      },
-      {
-        path: `${this.importMetaUrl}'../../../../molecules/nextAppointments/NextAppointments.js`,
-        name: 'kp-m-next-appointments'
-      },
-      {
-        path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-        name: 'a-icon-mdx'
-      },
       {
         path: `${this.importMetaUrl}'../../../../../../../../../src/es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
         name: 'o-grid'
@@ -149,13 +136,28 @@ export default class Dashboard extends Shadow() {
     ])
 
     Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
+      // const bookings = { bookings: fetch.bookings || [] }
+      // get data for each area
+      const nextAppointmensData = this.nextAppointmentsData(fetch.bookings, 3)
+      const appointments = this.appointmensData(fetch.bookings)
+      const folowUpAppointments = this.followUpData(fetch.bookings)
+      const abonnements = this.abonnementsData(fetch.bookings)
+      debugger
+
+      // get needed modules
       const tileModule = modules.find(m => m.name === 'kp-m-tile')
       const eventTileModule = modules.find(m => m.name === 'kp-m-event')
-      if (tileModule?.constructorClass && fetch) {
+
+      if (tileModule?.constructorClass && eventTileModule?.constructorClass) {
         debugger
-        this.renderAppointments(tileModule, fetch, this.appointmentsDiv)
-        this.renderBookings({ id: '#courses', abo: false }, fetch, eventTileModule)
-        this.renderAbbonements({ id: '#abonnements', abo: true }, fetch, tileModule, this.abonnementsDiv)
+        // nächsten Termine
+        this.renderNextAppointments(tileModule, fetch, this.appointmentsDiv, nextAppointmensData)
+        // meine Kurse/lehrgänge
+        this.renderBookings({ id: '#courses', abo: false }, appointments, eventTileModule, this.coursesDiv)
+        // meine Fortsetzungen
+        this.renderContinuations(folowUpAppointments, eventTileModule, this.continuationsDiv)
+        // meine Abonnements
+        this.renderAbbonements({ id: '#abonnements', abo: true }, fetch, tileModule, this.abonnementsDiv, abonnements)
       }
     })
   }
@@ -176,7 +178,7 @@ export default class Dashboard extends Shadow() {
       case 'nextAppointments':
         return /* html */ `
           <div id="appointments" class="appointments">
-            <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2 >
+            <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
             <div class="container-appointments"></div>
         </div>`
       case 'courses':
@@ -191,7 +193,8 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="continuation">
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
-            <div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>
+            <!--<div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>-->
+            <div id="continuations" class="container-continuations"></div>
             ${this.renderDiscoverMoreTile()}
           </div>`
       case 'abonnements':
@@ -205,9 +208,21 @@ export default class Dashboard extends Shadow() {
     }
   }
 
-  renderAbbonements ({ id = '#abonnements', abo = true } = {}, bookingsData, tileComponent, containerDiv) {
-    const abonnements = bookingsData.bookings.filter(course => course.isSubscription)
-    debugger
+  renderContinuations (bookingsData, tileComponent, containerDiv) {
+    if (!containerDiv || !bookingsData) return
+
+    if (bookingsData.length === 0) {
+      containerDiv.textContent = 'Es finden keine Fortsetzungskurse statt.'
+      containerDiv.classList.add('no--results')
+      return
+    }
+    bookingsData.forEach(course => {
+      // TODO: render html for continuation courses
+    })
+  }
+
+  renderAbbonements ({ id = '#abonnements', abo = true } = {}, bookingsData, tileComponent, containerDiv, abonnements) {
+    // const abonnements = bookingsData.bookings.filter(course => course.isSubscription)
     abonnements.forEach(course => {
       const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
@@ -250,7 +265,6 @@ export default class Dashboard extends Shadow() {
       // event.setAttribute('class', 'course-event')
       event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
-      debugger
       containerDiv.appendChild(event)
     })
   }
@@ -310,94 +324,132 @@ export default class Dashboard extends Shadow() {
     `
   }
 
-  renderAppointments (tileComponent, bookingsData, containerDiv, count = 3) {
-    if (!containerDiv || !bookingsData) return
+  renderNextAppointments (tileComponent, bookingsData, containerDiv, nextAppointmentsData, count = 3) {
+    if (!containerDiv || !nextAppointmentsData) return
 
-    // future appointments with course info
-    const today = new Date()
-    const allAppointments = []
-
-    bookingsData.bookings.forEach(booking => {
-      const futureAppointments = (booking.appointments || []).filter(appointment => {
-        const appointmentDate = new Date(appointment.appointmentDate)
-        // @ts-ignore
-        return appointmentDate >= today.setHours(0, 0, 0, 0)
-      })
-      if (futureAppointments.length) {
-        futureAppointments.sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
-        const next = futureAppointments[0]
-        allAppointments.push({
-          ...next,
-          courseTitle: booking.courseTitle,
-          courseId: booking.courseId,
-          courseLocation: booking.courseLocation,
-          roomDescription: booking.roomDescription,
-          logoUrl: booking.logoUrl,
-          price: booking.price
-        })
-      }
-    })
-
-    // @ts-ignore, sort by appointmentDate ascending
-    allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
-
-    const nextAppointments = allAppointments.slice(0, count)
-
-    if (nextAppointments.length) {
-      nextAppointments.forEach(app => {
-        // const TileElement = customElements.get('ks-m-tile')
-        const tile = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
-        // @ts-ignore
-        // const tile = new TileElement()
-        tile.setAttribute('class', 'appointment-tile')
-        tile.setAttribute('namespace', 'tile-appointment-')
-        tile.setAttribute('data', JSON.stringify({
-          type: 'appointment',
-          title: app.courseTitle,
-          nextAppointment: app.appointmentDateFormatted,
-          location: {
-            iconName: 'Location',
-            name: app.courseLocation
-          },
-          room: {
-            iconName: 'Monitor',
-            name: app.roomDescription || ''
-          },
-          icons: [],
-          buttons: [{
-            text: 'Detail ansehen',
-            typ: 'secondary',
-            event: 'open-booking-detail',
-            link: `index.html#/booking?courseId=${app.courseId}`
-          }],
-          price: {
-            amount: app.price?.amount || app.price || ''
-          }
-        }))
-        containerDiv.appendChild(tile)
-      })
-    } else {
+    if (nextAppointmentsData.length === 0) {
       containerDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
       containerDiv.classList.add('no-results')
+      return
     }
-    console.log('Appointments Div HTML:', containerDiv.innerHTML)
-    return containerDiv.innerHTML
+
+    nextAppointmentsData.forEach(app => {
+      const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
+      event.setAttribute('class', 'appointment-tile')
+      event.setAttribute('namespace', 'tile-appointment-')
+      event.setAttribute('data', JSON.stringify({
+        type: 'appointment',
+        title: app.courseTitle,
+        nextAppointment: app.appointmentDateFormatted,
+        location: {
+          iconName: 'Location',
+          name: app.courseLocation
+        },
+        room: {
+          iconName: 'Monitor',
+          name: app.roomDescription || ''
+        },
+        icons: [],
+        buttons: [{
+          text: 'Detail ansehen',
+          typ: 'secondary',
+          event: 'open-booking-detail',
+          link: `index.html#/booking?courseId=${app.courseId}`
+        }],
+        price: {
+          amount: app.price?.amount || app.price || ''
+        }
+      }
+      ))
+      containerDiv.appendChild(event)
+    })
+
+    // // future appointments with course info
+    // const today = new Date()
+    // const allAppointments = []
+
+    // bookingsData.bookings.forEach(booking => {
+    //   const futureAppointments = (booking.appointments || []).filter(appointment => {
+    //     const appointmentDate = new Date(appointment.appointmentDate)
+    //     // @ts-ignore
+    //     return appointmentDate >= today.setHours(0, 0, 0, 0)
+    //   })
+    //   if (futureAppointments.length) {
+    //     futureAppointments.sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
+    //     const next = futureAppointments[0]
+    //     allAppointments.push({
+    //       ...next,
+    //       courseTitle: booking.courseTitle,
+    //       courseId: booking.courseId,
+    //       courseLocation: booking.courseLocation,
+    //       roomDescription: booking.roomDescription,
+    //       logoUrl: booking.logoUrl,
+    //       price: booking.price
+    //     })
+    //   }
+    // })
+
+    // @ts-ignore, sort by appointmentDate ascending
+    // allAppointments.sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
+
+    // const nextAppointments = allAppointments.slice(0, count)
+
+    // if (nextAppointments.length) {
+    //   nextAppointments.forEach(app => {
+    //     // const TileElement = customElements.get('ks-m-tile')
+    //     const tile = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
+    //     // @ts-ignore
+    //     // const tile = new TileElement()
+    //     tile.setAttribute('class', 'appointment-tile')
+    //     tile.setAttribute('namespace', 'tile-appointment-')
+    //     tile.setAttribute('data', JSON.stringify({
+    //       type: 'appointment',
+    //       title: app.courseTitle,
+    //       nextAppointment: app.appointmentDateFormatted,
+    //       location: {
+    //         iconName: 'Location',
+    //         name: app.courseLocation
+    //       },
+    //       room: {
+    //         iconName: 'Monitor',
+    //         name: app.roomDescription || ''
+    //       },
+    //       icons: [],
+    //       buttons: [{
+    //         text: 'Detail ansehen',
+    //         typ: 'secondary',
+    //         event: 'open-booking-detail',
+    //         link: `index.html#/booking?courseId=${app.courseId}`
+    //       }],
+    //       price: {
+    //         amount: app.price?.amount || app.price || ''
+    //       }
+    //     }))
+    //     containerDiv.appendChild(tile)
+    //   })
+    // } else {
+    //   containerDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
+    //   containerDiv.classList.add('no-results')
+    // }
+    // console.log('Appointments Div HTML:', containerDiv.innerHTML)
+    // return containerDiv.innerHTML
   }
 
   // render abonnements or booked courses
-  renderBookings ({ id = '#courses', abo = false } = {}, bookingsData, eventTileComponent) {
+  renderBookings ({ id = '#courses', abo = false } = {}, bookingsData, eventTileComponent, containerDiv) {
     // const containerDiv = this.shadowRoot.querySelector(`${id} .container`)
-    const containerDiv = this.coursesDiv
+    // const containerDiv = this.coursesDiv
+    debugger
     if (!containerDiv || !bookingsData) return
 
-    containerDiv.innerHTML = ''
+    if (bookingsData.length === 0) {
+      containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
+      containerDiv.classList.add('no-results')
+      return
+    }
 
-    debugger
-    const filtered = bookingsData.bookings.filter(course =>
-      abo ? course.isSubscription : !course.isSubscription
-    )
-
-    filtered.forEach(course => {
+    bookingsData.forEach(course => {
+      debugger
       const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
       const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
@@ -434,19 +486,145 @@ export default class Dashboard extends Shadow() {
       // const EventElement = customElements.get('ks-m-event')
       // @ts-ignore
       // const event = new EventElement()
-      const event = new eventTileComponent.constructorClass({ })
+      const event = new eventTileComponent.constructorClass({})
       event.setAttribute('class', 'course-event')
       if (abo) event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
-      debugger
       containerDiv.appendChild(event)
     })
-    debugger
-    if (!containerDiv.hasChildNodes()) {
-      if (abo) this.shadowRoot.querySelector('#abonnements').style.display = 'none'
-      containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
-      containerDiv.classList.add('no-results')
-    }
+
+    // containerDiv.innerHTML = ''
+
+    // const filtered = bookingsData.filter(course =>
+    //   abo ? course.isSubscription : !course.isSubscription
+    // )
+
+    // filtered.forEach(course => {
+    //   const start = new Date(course.courseStartDate)
+    //   const end = new Date(course.courseEndDate)
+    //   const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+    //   const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
+
+    //   const courseData = {
+    //     course: {
+    //       kurs_typ: course.courseType,
+    //       kurs_id: course.courseId,
+    //       datum_label: course.courseTitle,
+    //       days: [daysEntry],
+    //       location: {
+    //         name: course.courseLocation,
+    //         badge: course.roomDescription || ''
+    //       },
+    //       status: course.courseStatus,
+    //       status_label: course.courseStatusText,
+    //       buttons: [{
+    //         text: abo ? 'Zum Aboportal' : 'Detail ansehen',
+    //         typ: 'secondary',
+    //         event: 'open-booking-detail',
+    //         link: abo ? '#' : `index.html#/booking?courseId=${course.courseId}`
+    //       }],
+    //       icons: []
+    //     },
+    //     sprachid: 'd'
+    //   }
+
+    //   if (!abo) {
+    //     courseData.course.state_of_booking = 'Gebucht'
+    //     courseData.course.logo_url = course.logoUrl
+    //   }
+
+    //   // const EventElement = customElements.get('ks-m-event')
+    //   // @ts-ignore
+    //   // const event = new EventElement()
+    //   const event = new eventTileComponent.constructorClass({ })
+    //   event.setAttribute('class', 'course-event')
+    //   if (abo) event.setAttribute('abo-event', '')
+    //   event.setAttribute('data', JSON.stringify(courseData))
+    //   containerDiv.appendChild(event)
+    // })
+    // if (!containerDiv.hasChildNodes()) {
+    //   if (abo) this.shadowRoot.querySelector('#abonnements').style.display = 'none'
+    //   containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
+    //   containerDiv.classList.add('no-results')
+    // }
+  }
+
+  nextAppointmentsData (bookingsData, count = 3) {
+    const appointments = bookingsData.filter(course => course.appointments && course.appointments.length > 0)
+    const dates = []
+
+    // create a list of all appointments per course
+    // the list is sorted by appointment date (earliest first)
+    // only keep the appointment date, no other information
+    // this is done to find the next appointment (newest one in the future)
+    appointments.flatMap(course => {
+      const sortedAppointments = course.appointments
+        .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
+        .map(app => ({ appointmentDate: app.appointmentDate }))
+      dates.push({
+        courseId: course.courseId,
+        appointments: sortedAppointments
+      })
+    })
+
+    // find the next three upcoming appointments for each course
+    const newestAppointments = dates
+      .map(({ courseId, appointments }) => {
+        // find the first future appointment for the course
+        const upcomingAppointment = appointments.find(({ appointmentDate }) => new Date(appointmentDate) > new Date())
+        return { courseId, upcomingAppointment }
+      })
+      // filter out courses without upcoming appointments
+      .filter(({ upcomingAppointment }) => upcomingAppointment)
+      // sort by the soonest upcoming appointment date
+      .sort((a, b) => new Date(a.upcomingAppointment.appointmentDate).getTime() - new Date(b.upcomingAppointment.appointmentDate).getTime())
+      // limit the results to the top 3
+      .slice(0, count)
+
+    const nextAppointments = newestAppointments.map(entry => {
+      const courseId = entry.courseId
+      const course = bookingsData.find(course => course.courseId === courseId)
+      // filter only future appointments
+      const futureAppointments = course.appointments.filter(appointment => {
+        const appointmentDate = new Date(appointment.appointmentDate)
+        const today = new Date()
+        today.setHours(0, 0, 0, 0) // set today's date to the beginning of the day
+        return appointmentDate >= today // return true for future appointments
+      })
+      course.appointments = futureAppointments // update course appointments to only future ones
+      return course
+    }).sort((a, b) => {
+      // sort courses based on the next appointment date
+      const today = new Date()
+      today.setHours(0, 0, 0, 0) // normalize today to start of the day
+      // get the date of the first appointment for comparison
+      const appointmentDateA = new Date(a.appointments[0].appointmentDate)
+      const appointmentDateB = new Date(b.appointments[0].appointmentDate)
+      const diffA = appointmentDateA.getTime() - today.getTime()
+      const diffB = appointmentDateB.getTime() - today.getTime()
+      // if both appointments are in the past, sort by the most recent
+      if (diffA < 0 && diffB < 0) return diffB - diffA
+      // if A's appointment is in the past, B comes first
+      if (diffA < 0) return 1
+      // if B's appointment is in the past, A comes first
+      if (diffB < 0) return -1
+      // if both are in the future, sort by the closest
+      return diffA - diffB
+    })
+
+    return nextAppointments
+  }
+
+  appointmensData (bookingsData) {
+    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5) || []
+  }
+
+  followUpData (bookingData) {
+    return bookingData.filter(course => course.bookingType === 3 && course.subscriptionType === 5) || []
+  }
+
+  abonnementsData (bookingsData) {
+    return bookingsData.filter(course => course.courseType === '7A')
   }
 
   get appointmentsDiv () {
@@ -456,11 +634,14 @@ export default class Dashboard extends Shadow() {
   }
 
   get coursesDiv () {
-    debugger
     return this.root.querySelector('o-grid').root.querySelector('#courses .container-courses')
   }
 
   get abonnementsDiv () {
     return this.root.querySelector('o-grid').root.querySelector('#abonnements .container-abonnements')
+  }
+
+  get continuationsDiv () {
+    return this.root.querySelector('o-grid').root.querySelector('#continuations.container-continuations')
   }
 }
