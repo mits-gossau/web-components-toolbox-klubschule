@@ -57,8 +57,9 @@ export default class WithFacet extends WebWorker() {
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(self.location.search)
+    const isSearchPage = this.hasAttribute('search-page') || ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.startsWith(path))
     const isMocked = this.hasAttribute('mock')
-    const isMockedInfoEvents = this.hasAttribute('mock-info-events')    
+    const isMockedInfoEvents = this.hasAttribute('mock-info-events')
     let endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
@@ -72,7 +73,12 @@ export default class WithFacet extends WebWorker() {
     this.abortController = null
     this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
     this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
-    
+
+    // check if the page was refreshed
+    const navigationEntry = window.performance.getEntries().find(entry => entry.entryType === 'navigation')
+    // @ts-ignore
+    const isPageRefreshed = navigationEntry && navigationEntry.type === 'reload'
+
     this.fillStorage = storageType => {
       const isLocalStorageType = storageType === 'local'
       // update storage based on url
@@ -113,10 +119,15 @@ export default class WithFacet extends WebWorker() {
       this.updateURLParam('cname', dataFromStorage.cnameCoded)
       if (!this.params.has('sorting')) {
         if (sessionStorage.getItem('currentSorting')) {
-          this.updateURLParam('sorting', currentRequestObj.sorting)
+          this.updateURLParam('sorting', sessionStorage.getItem('currentSorting'))
         } else {
-          this.updateURLParam('sorting', 2)
-          sessionStorage.setItem('currentSorting', '2')
+          if (isSearchPage && currentRequestObj.clat) {
+            this.updateURLParam('sorting', 1)
+            sessionStorage.setItem('currentSorting', '1')
+          } else {
+            this.updateURLParam('sorting', 2)
+            sessionStorage.setItem('currentSorting', '2')
+          }
         }
       }
     }
@@ -134,11 +145,26 @@ export default class WithFacet extends WebWorker() {
     // intial sorting when page is refreshed
     if (!currentRequestObj.sorting) {
       currentRequestObj.sorting = 3 // alphabetic
-      if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 2 // distance
+      if (currentRequestObj.clat && currentRequestObj.clong && !currentRequestObj.searchText) currentRequestObj.sorting = 2 // distance
     }
 
     // If shared with active Sorting, keep param for other user
     if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
+
+    // if the user has a location search, set the sorting to distance, but not on page refresh
+    const isSamePath = sessionStorage.getItem('currentPathname') === window.location.pathname
+    if (this.params.has('clat') && !isSamePath && !currentRequestObj.searchText) {
+      currentRequestObj.sorting = 2
+      this.updateURLParam('sorting', 2)
+    }
+    sessionStorage.setItem('currentPathname', window.location.pathname)
+    
+    // if performing a search query, always sort by relevance unless the page is refreshed
+    if (this.params.has('q') && isSearchPage && !isPageRefreshed) {
+      currentRequestObj.sorting = 1 // relevance
+      this.updateURLParam('sorting', 1)
+      sessionStorage.setItem('currentSorting', '1')
+    }
 
     this.requestWithFacetListener = async event => {
       // Reset PPage after filter Change / Reset
@@ -160,23 +186,67 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
+        // take the params from url
+        // check the key with the urlpara from filter in currentRequestObj.filter
+        // find filter with same id in initialRequestObj.filter
+        // remove filters with same id from initialRequestObj.filter
+        const filtersToRemove = []
+        currentRequestObj.filter.forEach(filter => {
+          if (filter.urlpara && this.params.has(filter.urlpara)) {
+            const idx = (initialRequestObj.filter || []).findIndex(f => f.id === filter.id)
+            if (idx !== -1) filtersToRemove.push(idx)
+          }
+        })
+        filtersToRemove.sort((a, b) => b - a).forEach(idx => initialRequestObj.filter.splice(idx, 1))
+        // exclude selected filters from initialRequestObj.filter that are not in URL params
+        const excludeIds = (initialRequestObj.filter || []).filter(f => f.selected && f.urlpara && !this.params.has(f.urlpara)).map(f => f.id)
         // reset all filters
         this.deleteAllFiltersFromUrl(currentRequestObj.filter)
-        currentRequestObj = structuredClone(initialRequestObj)
+        // keep quick filters
+        let quickFilters = (currentRequestObj.filter || []).filter(f => f.isquick)
+        quickFilters = quickFilters.map(f => ({ ...f, selected: false, children: [] }))
+        if (isSearchPage) {
+          currentRequestObj.filter = [...quickFilters, ...(initialFilter || []).filter(f => f.isquick)]
+        } else { 
+          // build currentRequestObj.filter:
+          // 1. first, keep all filters from initialRequestObj.filter whose ID is in excludeIds (untouched)
+          // 2. then, add quickFilters, but only if not already included above
+          // 3. finally, add all remaining filters from initialRequestObj.filter that are not in excludeIds and not in quickFilters
+          currentRequestObj.filter = [
+            ...initialRequestObj.filter.filter(f => excludeIds.includes(f.id)),
+            ...quickFilters.filter(qf => !excludeIds.includes(qf.id)),
+            ...initialRequestObj.filter.filter(f =>
+              !excludeIds.includes(f.id) &&
+              !quickFilters.some(qf => qf.id === f.id)
+            )
+          ]
+        }
+        // reset all other params
         delete currentRequestObj.searchText
-        currentRequestObj.filter = initialRequestObj.filter || initialFilter || []
         currentRequestObj.sorting = 3
         if ((this.saveLocationDataInLocalStorage || this.saveLocationDataInSessionStorage) && this.params.has('cname')) currentRequestObj.sorting = 2
+        this.filterOnly = true
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
-        const filterKey = event.detail.this.getAttribute('filter-key')
+        const filterKey = event.detail.this?.getAttribute?.('filter-key') || event.detail.filterKey
         if (!currentRequestObj.filter?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        if (isSearchPage) {
+          currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        } else {
+          currentRequestObj.filter = [...result[1], ...initialRequestObj.filter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+          Array.from(this.params.keys()).forEach(paramKey => {
+            if (paramKey === filterKey) {
+              // check if filter has value in "isquick", then keep it, set "selected:false" and remove children []
+              // otherwise just remove it
+              currentRequestObj.filter = (currentRequestObj.filter || []).map(f => (f.urlpara === filterKey && f.isquick) ? { ...f, selected: false, children: [] } : f).filter(f => !(f.urlpara === filterKey && !f.isquick))
+              initialRequestObj.filter = (initialRequestObj.filter || []).map(f => (f.urlpara === filterKey && f.isquick) ? { ...f, selected: false, children: [] } : f).filter(f => !(f.urlpara === filterKey && !f.isquick))
+            }
+          })
+        }
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
-        // get the filter from initial request with id === 7 and find inside the children the selected filter
         if (isTree) {
           currentRequestObj.filter = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentRequestObj.filter, initialRequestObj.filter)
           currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
@@ -212,21 +282,15 @@ export default class WithFacet extends WebWorker() {
         const isStartTimeSelectedFromFilterPills = event.detail.selectedFilterId === '6'
         const isMulti = event.detail?.selectedFilterType === 'multi' || event.detail?.filterType === 'multi' || false
         const isTree = event.detail?.selectedFilterType === 'tree' || event.detail?.filterType === 'tree' || false
-        if (isTree) {
-          currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
-          // get the filter from initial request with id === 7 and find inside the children the selected filter
-        } else {
-          // take the current filter object (response from api), find the sector filter with id 7 and replace it entirely with initialSelectedSectorfilter
-          // this is needed because the api does not return the selected sector filter 
-          currentCompleteFilterObj = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentCompleteFilterObj, initialRequestObj.filter)
-        }
+        if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
         // find the selected filter item (not tree)
-        const selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
+        let selectedFilterItem = currentCompleteFilterObj.find((filter) => filter.id === event.detail.selectedFilterId)
         if (!selectedFilterItem) return
         selectedFilterItem.skipCountUpdate = true
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, selectedFilterItem.urlpara, selectedFilterItem.id, false, true, null, false, false, isMulti, isStartTimeSelectedFromFilterPills)
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
+        currentRequestObj.filter.forEach((filter) => { if (filter.id === selectedFilterItem.id) filter.skipCountUpdate = true })
         currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
@@ -241,12 +305,14 @@ export default class WithFacet extends WebWorker() {
         } else {
           this.updateURLParam(filterKey, filterValue, false)
         }
+
         // GTM Tracking of Filters
         if (event.detail?.target?.checked) this.dataLayerPush({
           'event': 'filterSelection',
           'filterName': event.detail.target.label, //the name of the clicked filter.
           'filterCategory': filterGroupName.attributes?.label ? filterGroupName.attributes.label.value : filterGroupName.label, //the category that this filter belongs to - IF there is one, if not we can remove this key
         })
+
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
@@ -265,7 +331,7 @@ export default class WithFacet extends WebWorker() {
           if (this.saveLocationDataInLocalStorage) this.updateStorageBasedEvent('local', event)
           if (this.saveLocationDataInSessionStorage) this.updateStorageBasedEvent('session', event)
           currentRequestObj.sorting = 2
-          this.updateURLParam('sorting', 2)
+          this.updateURLParam('sorting', currentRequestObj.sorting)
         } else {
           if (this.saveLocationDataInLocalStorage && localStorage.getItem('locationData')) this.updateUrlBasedStorage('local')
           else if (this.saveLocationDataInSessionStorage && sessionStorage.getItem('locationData')) this.updateUrlBasedStorage('session')
@@ -288,23 +354,27 @@ export default class WithFacet extends WebWorker() {
         if (event?.detail?.value) {
           this.updateURLParam('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
+          if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 1
         }
         if (event?.detail?.value === '') {
           delete currentRequestObj.searchText
           this.deleteParamFromUrl('q')
+          if (!currentRequestObj.clat) currentRequestObj.sorting = 3
         }
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filter = result[1]
 
-        currentRequestObj.sorting = 1 // relevance
-        if (event?.detail?.value === '' && !currentRequestObj.clat) {
-          delete currentRequestObj.searchText
-          currentRequestObj.sorting = 3 // alphabetic
-        }
-        if (event?.detail?.value !== '' && currentRequestObj.clat) {
-          currentRequestObj.sorting = 2 // distance
+        if (!this.params.has('sorting')) {
+          currentRequestObj.sorting = 1 // relevance
+          if (event?.detail?.value === '' && !currentRequestObj.clat) {
+            delete currentRequestObj.searchText
+            currentRequestObj.sorting = 3 // alphabetic
+          }
+          if (event?.detail?.value !== '' && currentRequestObj.clat) {
+            currentRequestObj.sorting = 2 // distance
+          }
         }
       } else if (event?.detail?.key === 'sorting' && !!event.detail.id) {
         // sorting
@@ -322,8 +392,19 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        if (isSearchPage) {
+          currentRequestObj.filter = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        } else {
+          currentRequestObj.filter = [...result[1], ...(initialRequestObj.filter || []).filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        }
         if (isTree) currentRequestObj.filter = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filter)
+        // check, if filter of initialRequestObj.filter with id="7" is selected
+        // if true, replace it with filter id="7" in currentRequestObj.filter
+        const initialSectorFilter = (initialRequestObj.filter || []).find(f => String(f.id) === "7" && f.selected)
+        if (initialSectorFilter) {
+          const idx = (currentRequestObj.filter || []).findIndex(f => String(f.id) === "7")
+          idx !== -1 ? currentRequestObj.filter[idx] = structuredClone(initialSectorFilter) : currentRequestObj.filter.push(structuredClone(initialSectorFilter))
+        }
       }
 
       // filter only
@@ -331,6 +412,8 @@ export default class WithFacet extends WebWorker() {
 
       // load more 
       event?.detail?.loadCoursesOnly ? currentRequestObj.onlycourse = true : delete currentRequestObj.onlycourse
+      // remove filter with id 30 from array currentRequestObj.filter, if onlycourse is true, to keep the filter on load more
+      if (currentRequestObj.onlycourse) currentRequestObj.filter = currentRequestObj.filter.filter(filter => filter.id !== "30")
 
       if (!currentRequestObj.filter.length) currentRequestObj.filter = initialFilter
 
@@ -343,7 +426,7 @@ export default class WithFacet extends WebWorker() {
       } else {
         currentRequestObj.psize = this.getAttribute('psize') || initialRequestObj.psize || 12
       }
-      
+
       if (isOtherLocations) {
         if (!endpoint.startsWith('http://') && !endpoint.startsWith('https://')) {
           endpoint = `${this.url.origin}${endpoint}`
@@ -397,7 +480,7 @@ export default class WithFacet extends WebWorker() {
             throw new Error(response.statusText)
           }).then(json => {
             // TODO/ERROR: Api answers with empty filter payload when using ppage (next page). Workaround for keeping filters when returned empty.
-            if (event?.detail?.ppage && !json.filters.length) json.filters = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : currentRequestObj.filter || initialFilter || []  
+            if (event?.detail?.ppage && !json.filters.length) json.filters = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : currentRequestObj.filter || initialFilter || []
             json.hasSelectedFilter = hasSelectedFilter
             // update filters with api response
             currentRequestObj.filter = currentCompleteFilterObj = json.filters
@@ -512,6 +595,8 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.addEventListener('reset-filter', this.requestWithFacetListener) : this.addEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
     this.addEventListener('backdrop-clicked', this.handleBackdropClicked)
+    this.addEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
+    window.addEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   disconnectedCallback() {
@@ -520,12 +605,21 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'reset-filter' ? self.removeEventListener('reset-filter', this.requestWithFacetListener) : this.removeEventListener('reset-filter', this.requestWithFacetListener)
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
     this.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
+    this.removeEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
+    window.removeEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   handleBackdropClicked = () => {
+    if (this.skipNextFacetRequest) {
+      this.skipNextFacetRequest = false
+      return
+    }
+
     this.filterOnly = false
     this.dispatchEvent(new CustomEvent('request-with-facet'))
   }
+
+  handleRequestAdvisoryTextApi = () => { this.skipNextFacetRequest = true }
 
   // always shake out the response filters to only include selected filters or selected in ancestry
   static updateFilters(filters, filterKey, filterValue, reset = false, zeroLevel = true, selectedParent = null, isSectorFilter = false, isTree = false, isMulti = false, isStartTimeSelectedFromFilterPills = false, hasSelectedFilter = false) {
@@ -550,7 +644,7 @@ export default class WithFacet extends WebWorker() {
           if (!filterItem.selected && isUrlpara) {
             filterItem.selected = true
           } else if (filterItem.selected && !isUrlpara) {
-            filterItem.selected = false 
+            filterItem.selected = false
           }
         } else if (filterItem.selected && isUrlpara && !isStartTimeSelectedFromFilterPills) {
           filterItem.selected = false // toggle filterItem if is is already selected, but not in tree
@@ -561,7 +655,7 @@ export default class WithFacet extends WebWorker() {
         } else if (isParentSelected) {
           // @ts-ignore
           selectedParent.selected = false // deselect filterItem if it is not selected
-        } 
+        }
       } else if (zeroLevel && isTree && isSectorFilter) {
         filterItem.skipCountUpdate = true
       }
@@ -700,7 +794,7 @@ export default class WithFacet extends WebWorker() {
    * Needs to be done, since Backend is writing filterqueries into the initial request, when the page is refreshed/ shared
    * For more Informations: https://jira.migros.net/browse/MIDUWEB-1452
    * @returns Array with Filter Objects, which are non editable by the user
-  */ 
+  */
   getInitialBaseFilters(filters) {
     return filters.filter(
       (filter) => {
@@ -742,7 +836,7 @@ export default class WithFacet extends WebWorker() {
     ]
   }
 
-  static getSectorFilterWithInitialFallback (currentFilter, initialFilter) {
+  static getSectorFilterWithInitialFallback(currentFilter, initialFilter) {
     const initialSectorFilter = initialFilter.find((filter) => Number(filter.id) === 7)
     let index = 0
     const sectorFilter = currentFilter.find((filter, i) => {
@@ -757,7 +851,7 @@ export default class WithFacet extends WebWorker() {
     return currentFilter
   }
 
-  dataLayerPush (value) {
+  dataLayerPush(value) {
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {
       try {

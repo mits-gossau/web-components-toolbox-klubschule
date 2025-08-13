@@ -31,7 +31,7 @@ self.Environment = {
       case 'fr':
         return {
           url: 'https://{env}.ecole-club.ch',
-          path: 'rechecher'
+          path: 'recherche'
         }
       case 'it-CH':
       case 'it':
@@ -55,21 +55,7 @@ self.Environment = {
   getEnvUrl: function () {
     const url = window.location.href
     const urlObj = new URL(url)
-    const subdomain = urlObj.hostname.split('.')[0]
-    switch (subdomain) {
-      case 'intadmin':
-        return 'https://intadmin.klubschule.ch/'
-      case 'int':
-        return 'https://int.klubschule.ch/'
-      case 'localhost':
-        return 'https://dev.klubschule.ch/'
-      case 'dev':
-        return 'https://dev.klubschule.ch/'
-      case 'devadmin':
-        return 'https://devadmin.klubschule.ch/'
-      default:
-        return 'https://www.klubschule.ch/'
-    }
+    return urlObj.origin
   },
   getApiBaseUrl: function (type) {
     switch (type) {
