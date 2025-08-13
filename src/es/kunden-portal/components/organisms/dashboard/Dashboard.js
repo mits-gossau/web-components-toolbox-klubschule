@@ -155,7 +155,7 @@ export default class Dashboard extends Shadow() {
         // meine Fortsetzungen
         this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
         // meine Abonnements
-        this.renderAbbonements({ id: '#abonnements', abo: true }, fetch, tileModule, this.abonnementsDiv, abonnementsData)
+        this.renderAbbonements(abonnementsData, tileModule, this.abonnementsDiv)
       }
     })
   }
@@ -208,20 +208,20 @@ export default class Dashboard extends Shadow() {
     })
   }
 
-  renderAbbonements ({ id = '#abonnements', abo = true } = {}, bookingsData, tileComponent, containerDiv, abonnements) {
-    if (!containerDiv || !abonnements) return
+  renderAbbonements (bookingsData, tileComponent, containerDiv) {
+    if (!containerDiv || !bookingsData) return
 
-    if (abonnements.length === 0) {
+    if (bookingsData.length === 0) {
       containerDiv.textContent = 'Sie haben keine Abonnemente.'
       containerDiv.classList.add('no-results')
       return
     }
 
-    abonnements.forEach(course => {
+    bookingsData.forEach(course => {
       const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
       const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
-      const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
+      const daysEntry = `Gültigkeitsdauer ${formatDate(start)} - ${formatDate(end)}`
 
       const courseData = {
         type: 'abonnement',
@@ -237,19 +237,14 @@ export default class Dashboard extends Shadow() {
           status: course.courseStatus,
           status_label: course.courseStatusText,
           buttons: [{
-            text: abo ? 'Zum Aboportal' : 'Detail ansehen',
+            text: 'Zum Aboportal',
             typ: 'secondary',
             event: 'open-booking-detail',
-            link: abo ? '#' : `index.html#/booking?courseId=${course.courseId}`
+            link: '#'
           }],
           icons: []
         },
         sprachid: 'd'
-      }
-
-      if (!abo) {
-        courseData.course.state_of_booking = 'Gebucht'
-        courseData.course.logo_url = course.logoUrl
       }
 
       // @ts-ignore
@@ -358,7 +353,7 @@ export default class Dashboard extends Shadow() {
   }
 
   // render abonnements or booked courses
-  renderBookings (bookingsData, eventTileComponent, containerDiv, abo = false) {
+  renderBookings (bookingsData, eventTileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
@@ -368,11 +363,12 @@ export default class Dashboard extends Shadow() {
     }
 
     bookingsData.forEach(course => {
-      debugger
       const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
       const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
-      const daysEntry = `${abo ? 'Gültigkeitsdauer ' : ''}${formatDate(start)} - ${formatDate(end)}`
+
+      // TODO: format date to dd.mm.yy ? Neet to check if this is needed
+      const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
 
       const courseData = {
         course: {
@@ -387,27 +383,23 @@ export default class Dashboard extends Shadow() {
           status: course.courseStatus,
           status_label: course.courseStatusText,
           buttons: [{
-            text: abo ? 'Zum Aboportal' : 'Detail ansehen',
+            text: 'Detail ansehen',
             typ: 'secondary',
             event: 'open-booking-detail',
-            link: abo ? '#' : `index.html#/booking?courseId=${course.courseId}`
+            link: `index.html#/booking?courseId=${course.courseId}`
           }],
-          icons: []
+          icons: [],
+          state_of_booking: 'Gebucht',
+          logo_url: course.logoUrl || 'https://www.klubschule.ch/_campuslogo/logo-de.png'
         },
         sprachid: 'd'
-      }
-
-      // TODO: remove if not needed
-      if (!abo) {
-        courseData.course.state_of_booking = 'Gebucht'
-        courseData.course.logo_url = course.logoUrl
       }
 
       // @ts-ignore
       const event = new eventTileComponent.constructorClass({})
       event.setAttribute('class', 'course-event')
       // TODO: remove abo-event attribute if not needed
-      if (abo) event.setAttribute('abo-event', '')
+      // if (abo) event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
     })
