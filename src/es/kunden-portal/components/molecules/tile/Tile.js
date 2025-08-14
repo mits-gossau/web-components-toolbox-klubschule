@@ -25,7 +25,6 @@ export default class AppointmentTile extends Tile {
     this.css = /* css */`
       /* TODO: check this width stuff */
       :host .next-appointment {
-        background: pink !important;
         width: 30vw;
         max-width: 350px;
         display: flex;

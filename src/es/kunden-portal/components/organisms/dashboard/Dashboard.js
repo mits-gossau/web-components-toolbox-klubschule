@@ -84,7 +84,6 @@ export default class Dashboard extends Shadow() {
               gap: 1em;
             }
            :host .container-appointments {
-              background-color: yellow;
               width: 100%;
             }
             .container-discover {
@@ -100,7 +99,6 @@ export default class Dashboard extends Shadow() {
             }
             @media only screen and (max-width:${this.mobileBreakpoint}) {
               :host .container-appointments {
-                background-color: blue !important;
                 flex-direction: column;
               }
             }
@@ -222,12 +220,6 @@ export default class Dashboard extends Shadow() {
     }
 
     abonnements.forEach(abonnement => {
-      // const start = new Date(abonnement.courseStartDate)
-      // const end = new Date(abonnement.courseEndDate)
-      // const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
-      // const daysEntry = `Gültigkeitsdauer ${formatDate(start)} - ${formatDate(end)}`
-
-      // TODO: Check this looks wrong
       const courseData = {
         data: abonnement,
         type: 'abonnement',
