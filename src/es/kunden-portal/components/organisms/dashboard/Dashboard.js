@@ -1,6 +1,5 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
-import { escapeForHtml } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 
@@ -80,10 +79,12 @@ export default class Dashboard extends Shadow() {
     const gridSkeleton = /* html */`
         <o-grid namespace="grid-12er-">
           <style>
-           :host .container-appointments {
-              background-color: yellow;
+            :host .container {
               display:flex;
               gap: 1em;
+            }
+           :host .container-appointments {
+              background-color: yellow;
               width: 100%;
             }
             .container-discover {
@@ -91,15 +92,11 @@ export default class Dashboard extends Shadow() {
               gap: 1em;
               padding-bottom: 1em;
             }
-            .container-courses {
-              display: flex;
+            :host .container-courses {
               flex-direction: column;
-              gap: 1em;
             }
-            .container-abonnements {
-              display: flex;
+            :host .container-abonnements {
               flex-direction: column;
-              gap: 1em;
             }
             @media only screen and (max-width:${this.mobileBreakpoint}) {
               :host .container-appointments {
@@ -107,8 +104,6 @@ export default class Dashboard extends Shadow() {
                 flex-direction: column;
               }
             }
-            
-            
           </style>
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('nextAppointments')}
@@ -175,29 +170,29 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="appointments" class="appointments">
             <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
-            <div class="container-appointments"></div>
+            <div class="container-appointments container"></div>
         </div>`
       case 'courses':
         return /* html */ `
           <div id="courses" class="courses">
             <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
             ${this.renderDiscoverTile()}
-            <div class="container-courses"></div>
+            <div class="container-courses container"></div>
         </div>
         </div>`
       case 'continuations':
         return /* html */ `
-          <div id="continuation">
+          <div id="continuation" class="continuation">
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
             <!--<div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>-->
-            <div id="continuations" class="container-continuations"></div>
+            <div id="continuations" class="container-continuations container"></div>
             ${this.renderDiscoverMoreTile()}
           </div>`
       case 'abonnements':
         return /* html */ `
-          <div id="abonnements">
+          <div id="abonnements" class="abonnements">
             <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
-            <div class="container-abonnements"></div>
+            <div id="abonnements" class="container-abonnements container"></div>
           </div>`
       default:
         return ''
@@ -217,48 +212,30 @@ export default class Dashboard extends Shadow() {
     })
   }
 
-  renderAbbonements (bookingsData, tileComponent, containerDiv) {
-    if (!containerDiv || !bookingsData) return
+  renderAbbonements (abonnements, tileComponent, containerDiv) {
+    if (!containerDiv || !abonnements) return
 
-    if (bookingsData.length === 0) {
+    if (abonnements.length === 0) {
       containerDiv.textContent = 'Sie haben keine Abonnemente.'
       containerDiv.classList.add('no-results')
       return
     }
 
-    bookingsData.forEach(course => {
-      const start = new Date(course.courseStartDate)
-      const end = new Date(course.courseEndDate)
-      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
-      const daysEntry = `Gültigkeitsdauer ${formatDate(start)} - ${formatDate(end)}`
+    abonnements.forEach(abonnement => {
+      // const start = new Date(abonnement.courseStartDate)
+      // const end = new Date(abonnement.courseEndDate)
+      // const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+      // const daysEntry = `Gültigkeitsdauer ${formatDate(start)} - ${formatDate(end)}`
 
       // TODO: Check this looks wrong
       const courseData = {
+        data: abonnement,
         type: 'abonnement',
-        course: {
-          kurs_typ: course.courseType,
-          kurs_id: course.courseId,
-          datum_label: course.courseTitle,
-          days: [daysEntry],
-          location: {
-            name: course.courseLocation,
-            badge: course.roomDescription || ''
-          },
-          status: course.courseStatus,
-          status_label: course.courseStatusText,
-          buttons: [{
-            text: 'Zum Aboportal',
-            typ: 'secondary',
-            event: 'open-booking-detail',
-            link: '#'
-          }],
-          icons: []
-        },
         sprachid: 'd'
       }
 
       // @ts-ignore
-      const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
+      const event = new tileComponent.constructorClass({ namespace: 'tile-abonnement-' })
       event.setAttribute('class', 'course-event')
       event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
@@ -334,7 +311,6 @@ export default class Dashboard extends Shadow() {
       const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
       event.setAttribute('class', 'appointment-tile') // TODO: Check if this is needed
       event.setAttribute('namespace', 'tile-appointment-')
-      event.setAttribute('data-content', escapeForHtml(JSON.stringify(app)))
       event.setAttribute('data', JSON.stringify({
         data: app,
         type: 'next-appointment',
@@ -343,21 +319,8 @@ export default class Dashboard extends Shadow() {
         },
         room: {
           iconName: 'Monitor'
-        },
-        icons: [],
-        button: [
-          {
-            detailsButton: {
-              text: 'Detail ansehen',
-              typ: 'secondary',
-              namespace: 'button-secondary-',
-              event: 'open-booking-detail',
-              link: `index.html#/booking?courseId=${app.courseId}`
-            }
-          }
-        ]
-      }
-      ))
+        }
+      }))
       containerDiv.appendChild(event)
     })
   }
@@ -493,8 +456,6 @@ export default class Dashboard extends Shadow() {
 
   get appointmentsDiv () {
     return this.root.querySelector('o-grid').root.querySelector('#appointments .container-appointments')
-    /* const appointmentsDiv = this.shadowRoot.querySelector('#appointments .container')
-    const appointmentsDiv = this.shadowRoot.querySelector('o-grid').root.querySelector('#appointments .container-appointments') */
   }
 
   get coursesDiv () {
@@ -506,6 +467,6 @@ export default class Dashboard extends Shadow() {
   }
 
   get continuationsDiv () {
-    return this.root.querySelector('o-grid').root.querySelector('#continuations.container-continuations')
+    return this.root.querySelector('o-grid').root.querySelector('#continuations .container-continuations')
   }
 }
