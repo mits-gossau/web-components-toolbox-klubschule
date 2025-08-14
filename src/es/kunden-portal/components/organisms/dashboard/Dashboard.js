@@ -1,5 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import { escapeForHtml } from '../../../helpers/Shared.js'
 
 /* global CustomEvent */
 
@@ -222,6 +223,7 @@ export default class Dashboard extends Shadow() {
       const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
       const daysEntry = `Gültigkeitsdauer ${formatDate(start)} - ${formatDate(end)}`
 
+      // TODO: Check this looks wrong
       const courseData = {
         type: 'abonnement',
         course: {
@@ -321,30 +323,30 @@ export default class Dashboard extends Shadow() {
 
     bookingsData.forEach(app => {
       const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
-      event.setAttribute('class', 'appointment-tile')
+      event.setAttribute('class', 'appointment-tile') // TODO: Check if this is needed
       event.setAttribute('namespace', 'tile-appointment-')
+      event.setAttribute('data-content', escapeForHtml(JSON.stringify(app)))
       event.setAttribute('data', JSON.stringify({
-        type: 'appointment',
-        title: app.courseTitle,
-        nextAppointment: app.appointmentDateFormatted,
+        data: app,
+        type: 'next-appointment',
         location: {
-          iconName: 'Location',
-          name: app.courseLocation
+          iconName: 'Location'
         },
         room: {
-          iconName: 'Monitor',
-          name: app.roomDescription || ''
+          iconName: 'Monitor'
         },
         icons: [],
-        buttons: [{
-          text: 'Detail ansehen',
-          typ: 'secondary',
-          event: 'open-booking-detail',
-          link: `index.html#/booking?courseId=${app.courseId}`
-        }],
-        price: {
-          amount: app.price?.amount || app.price || ''
-        }
+        button: [
+          {
+            detailsButton: {
+              text: 'Detail ansehen',
+              typ: 'secondary',
+              namespace: 'button-secondary-',
+              event: 'open-booking-detail',
+              link: `index.html#/booking?courseId=${app.courseId}`
+            }
+          }
+        ]
       }
       ))
       containerDiv.appendChild(event)
@@ -368,6 +370,7 @@ export default class Dashboard extends Shadow() {
       // TODO: format date to dd.mm.yy ? Neet to check if this is needed
       const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
 
+      // TODO: Check this looks wrong
       const courseData = {
         course: {
           kurs_typ: course.courseType,
@@ -396,8 +399,6 @@ export default class Dashboard extends Shadow() {
       // @ts-ignore
       const event = new eventTileComponent.constructorClass({})
       event.setAttribute('class', 'course-event')
-      // TODO: remove abo-event attribute if not needed
-      // if (abo) event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
     })
