@@ -32,21 +32,20 @@ export default class AppointmentTile extends Tile {
   renderCSS () {
     super.renderCSS()
     this.css = /* css */`
-      :host > div {
-        background:pink;
+      /* TODO: check this width stuff */
+      :host .next-appointment {
+        background: pink !important;
+        width: 30vw;
+        max-width: 350px;
         display: flex;
         flex-direction: column;
       }
-      :host .parent-body, .parent-footer {
-        display: flex;
-        padding: 1.5em;
-      }
-      :host .parent-footer {
-        align-items: center;
-      }
-      
       @media only screen and (max-width: _max-width_) {
-       
+        :host .next-appointment {
+          flex-direction: row;
+          width: 100%;
+          max-width: 100%;
+        }
       }
     `
   }
@@ -145,10 +144,10 @@ export default class AppointmentTile extends Tile {
           <div class="m-tile__head"></div>
       </div>
     </div>-->
-    <div class="m-tile">
+    <div class="m-tile next-appointment">
       <div class="m-tile__wrap">
         <div class="course-info m-tile__body">
-          <div>
+          <div class="m-tile__head">
             <span class="m-tile__title title">${courseTitle}</span>
           </div>
           <div class="m-tile__body">

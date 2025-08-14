@@ -80,26 +80,35 @@ export default class Dashboard extends Shadow() {
     const gridSkeleton = /* html */`
         <o-grid namespace="grid-12er-">
           <style>
-           .container-appointments {
+           :host .container-appointments {
               background-color: yellow;
               display:flex;
-              gap:1em;
+              gap: 1em;
+              width: 100%;
             }
             .container-discover {
-              display:flex;
+              display: flex;
               gap: 1em;
               padding-bottom: 1em;
             }
             .container-courses {
-              display:flex;
+              display: flex;
               flex-direction: column;
               gap: 1em;
             }
             .container-abonnements {
-              display:flex;
+              display: flex;
               flex-direction: column;
               gap: 1em;
             }
+            @media only screen and (max-width:${this.mobileBreakpoint}) {
+              :host .container-appointments {
+                background-color: blue !important;
+                flex-direction: column;
+              }
+            }
+            
+            
           </style>
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('nextAppointments')}
