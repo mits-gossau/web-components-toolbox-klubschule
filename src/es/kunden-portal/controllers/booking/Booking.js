@@ -59,6 +59,8 @@ export default class Booking extends HTMLElement {
     }))
   }
 
+  // TODO: Remove this
+  // No query selector in controllers
   handleNotification = (event) => {
     console.log('Notification wurde geschlossen:', event)
     setTimeout(() => {
