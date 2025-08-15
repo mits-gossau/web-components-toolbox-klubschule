@@ -1,8 +1,6 @@
 // @ts-check
 import Tile from '../../../../components/molecules/event/Event.js'
 
-/* global self */
-
 /**
  * @export
  * @class EventTile
