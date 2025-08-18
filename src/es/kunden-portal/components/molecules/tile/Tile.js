@@ -26,7 +26,6 @@ export default class AppointmentTile extends Tile {
       :host {
         width: 100%;
       }
-      /* TODO: check this width stuff */
       :host .next-appointment {
         display: flex;
         flex-direction: column;
@@ -46,17 +45,17 @@ export default class AppointmentTile extends Tile {
 
   fetchTemplate () {
     switch (this.getAttribute('namespace')) {
-      case 'tile-appointment-':
+      case 'tile-next-appointment-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}../../../../es/components/molecules/tile/default-/default-.css`, // path to ks project
           namespace: false,
           replaces: [{
             pattern: '--tile-default-',
             flags: 'g',
-            replacement: '--tile-appointment-'
+            replacement: '--tile-next-appointment-'
           }]
         }, {
-          path: `${this.importMetaUrl}./appointment-/appointment-.css`, // apply namespace since it is specific and no fallback
+          path: `${this.importMetaUrl}../../../../es/kunden-portal/components/molecules/tile/next-appointment-/next-appointment-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }], false)
       case 'tile-abonnement-':
@@ -86,10 +85,6 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/components/atoms/button/Button.js`,
         name: 'ks-a-button'
-      },
-      {
-        path: `${this.importMetaUrl}'../../../../../../es/components/atoms/heading/Heading.js`,
-        name: 'ks-a-heading'
       },
       {
         path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
@@ -154,7 +149,7 @@ export default class AppointmentTile extends Tile {
     return /* html */`
     <div class="m-tile next-appointment">
       <div class="m-tile__wrap">
-        <div class="course-info m-tile__body">
+        <div class="course-info">
           <div class="m-tile__head">
             <span class="m-tile__title title">${courseTitle}</span>
           </div>

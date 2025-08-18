@@ -300,9 +300,9 @@ export default class Dashboard extends Shadow() {
     }
 
     bookingsData.forEach(app => {
-      const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
+      const event = new tileComponent.constructorClass({ namespace: 'tile-next-appointment-' })
       event.setAttribute('class', 'appointment-tile') // TODO: Check if this is needed
-      event.setAttribute('namespace', 'tile-appointment-')
+      // event.setAttribute('namespace', 'tile-appointment-')
       event.setAttribute('data', JSON.stringify({
         data: app,
         type: 'next-appointment',

@@ -320,12 +320,12 @@ export default class Tile extends Shadow() {
           path: `${this.importMetaUrl}./passed-/passed-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }, ...styles])
-      case 'tile-appointment-':
-        return this.fetchCSS([
-          {
-            path: `${this.importMetaUrl}./appointment-/appointment-.css`,
-            namespace: false
-          }, ...styles])
+      // case 'tile-appointment-':
+      //   return this.fetchCSS([
+      //     {
+      //       path: `${this.importMetaUrl}./appointment-/appointment-.css`,
+      //       namespace: false
+      //     }, ...styles])
       default:
         return this.fetchCSS(styles)
     }
