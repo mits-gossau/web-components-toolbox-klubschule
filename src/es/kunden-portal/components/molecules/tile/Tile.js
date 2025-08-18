@@ -118,6 +118,11 @@ export default class AppointmentTile extends Tile {
     const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
     // TODO: check this - looks shitty
     return /* html */ `
+      <style>
+        :host .m-tile__body {
+          padding-bottom: 1.5em;
+        }
+      </style>
       <div class="m-tile abonnements">
         <div class="m-tile__wrap">
           <div class="course-info">
