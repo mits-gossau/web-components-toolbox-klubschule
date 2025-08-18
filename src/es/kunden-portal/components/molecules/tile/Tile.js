@@ -154,6 +154,8 @@ export default class AppointmentTile extends Tile {
     return /* html */ `
       <style>
         :host .m-tile__body {
+          align-items: flex-start;
+          flex-direction: column;
           padding-bottom: 1.5em;
         }
       </style>
