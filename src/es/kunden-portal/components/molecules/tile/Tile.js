@@ -23,10 +23,11 @@ export default class AppointmentTile extends Tile {
   renderCSS () {
     super.renderCSS()
     this.css = /* css */`
+      :host {
+        width: 100%;
+      }
       /* TODO: check this width stuff */
       :host .next-appointment {
-        width: 30vw;
-        max-width: 350px;
         display: flex;
         flex-direction: column;
       }
