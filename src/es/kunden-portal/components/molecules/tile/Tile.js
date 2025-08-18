@@ -146,40 +146,45 @@ export default class AppointmentTile extends Tile {
     const { appointmentDateFormatted, roomDescription } = data.data.appointments[0] || {}
     const { courseTitle, courseLocation, courseId } = data.data || {}
     const link = `index.html#/booking?courseId=${courseId}`
-    return /* html */`
-    <div class="m-tile next-appointment">
-      <div class="m-tile__wrap">
-        <div class="course-info">
-          <div class="m-tile__head">
-            <span class="m-tile__title title">${courseTitle}</span>
-          </div>
-          <div class="m-tile__body">
-            <div>
-              <span class="m-tile__content m-tile__next-date">${appointmentDateFormatted || ''}</span>
-            </div>  
-            <div>
-              <a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>
-              <span class="m-tile__content">${courseLocation}</span>
+    return /* html */ `
+      <style>
+        :host .m-tile__body {
+          padding-bottom: 1.5em;
+        }
+      </style>
+      <div class="m-tile next-appointment">
+        <div class="m-tile__wrap">
+          <div class="course-info">
+            <div class="m-tile__head">
+              <span class="m-tile__title title">${courseTitle}</span>
             </div>
-            <div class="m-tile__room">
-              <a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>
-              <span class="m-tile__content">Raum ${roomDescription}</span>
+            <div class="m-tile__body">
+              <div>
+                <span class="m-tile__content m-tile__next-date">${appointmentDateFormatted || ''}</span>
+              </div>  
+              <div>
+                <a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>
+                <span class="m-tile__content">${courseLocation}</span>
+              </div>
+              <div class="m-tile__room">
+                <a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>
+                <span class="m-tile__content">Raum ${roomDescription}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="m-tile__foot">
-          <div class="m-tile__foot-left">
-            <ks-a-button
-              href="${link}" 
-              namespace="button-secondary-" 
-              color="secondary"
-            >
-              <span>Details ansehen</span>
-            </ks-a-button>
+          <div class="m-tile__foot">
+            <div class="m-tile__foot-left">
+              <ks-a-button
+                href="${link}" 
+                namespace="button-secondary-" 
+                color="secondary"
+              >
+                <span>Details ansehen</span>
+              </ks-a-button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     `
   }
 
