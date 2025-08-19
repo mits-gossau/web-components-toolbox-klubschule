@@ -236,6 +236,8 @@ export default class Dashboard extends Shadow() {
   renderAbbonements (abonnements, tileComponent, containerDiv) {
     if (!containerDiv || !abonnements) return
 
+    containerDiv.innerHTML = ''
+
     if (abonnements.length === 0) {
       containerDiv.textContent = 'Sie haben keine Abonnemente.'
       containerDiv.classList.add('no-results')
@@ -293,6 +295,8 @@ export default class Dashboard extends Shadow() {
   renderNextAppointments (bookingsData, tileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
+    containerDiv.innerHTML = ''
+
     if (bookingsData.length === 0) {
       containerDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
       containerDiv.classList.add('no-results')
@@ -319,6 +323,8 @@ export default class Dashboard extends Shadow() {
 
   renderBookings (bookingsData, eventTileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
+
+    containerDiv.innerHTML = ''
 
     if (bookingsData.length === 0) {
       containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
