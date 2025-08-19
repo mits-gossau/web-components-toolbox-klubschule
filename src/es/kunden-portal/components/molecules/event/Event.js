@@ -15,7 +15,7 @@ export default class EventTile extends Tile {
     super.renderCSS()
     this.css += /* css */`
       :host .top {
-        min-height: 64px;
+        min-height: 48px;
       }
       :host .top .logo {
         height: 40px;
