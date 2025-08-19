@@ -44,6 +44,9 @@ export default class Dashboard extends Shadow() {
     this.css = /* css */`
       :host {
         display: block;
+        /* critical styles for LCP optimization */
+        min-height: 50vh;
+        contain: layout style paint;
       }
       @media only screen and (max-width: _max-width_) {}
     }
@@ -224,6 +227,9 @@ export default class Dashboard extends Shadow() {
       return
     }
 
+    // use DocumentFragment for batched DOM operations
+    const fragment = document.createDocumentFragment()
+
     abonnements.forEach(abonnement => {
       const courseData = {
         data: abonnement,
@@ -233,11 +239,12 @@ export default class Dashboard extends Shadow() {
 
       // @ts-ignore
       const event = new tileComponent.constructorClass({ namespace: 'tile-abonnement-' })
-      // event.setAttribute('class', 'course-event')
-      // event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
-      containerDiv.appendChild(event)
+      fragment.appendChild(event)
     })
+
+    // single DOM update
+    containerDiv.appendChild(fragment)
   }
 
   renderDiscoverTile () {
@@ -304,6 +311,9 @@ export default class Dashboard extends Shadow() {
       return
     }
 
+    // use DocumentFragment to batch DOM operations and reduce reflows
+    const fragment = document.createDocumentFragment()
+
     bookingsData.forEach(app => {
       const event = new tileComponent.constructorClass({ namespace: 'tile-next-appointment-' })
       // event.setAttribute('class', 'next-appointment-tile') // TODO: Check if this is needed
@@ -318,8 +328,11 @@ export default class Dashboard extends Shadow() {
           iconName: 'Monitor'
         }
       }))
-      containerDiv.appendChild(event)
+      fragment.appendChild(event)
     })
+
+    // single DOM update
+    containerDiv.appendChild(fragment)
   }
 
   renderBookings (bookingsData, eventTileComponent, containerDiv) {
