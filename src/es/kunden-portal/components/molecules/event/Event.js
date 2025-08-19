@@ -17,12 +17,6 @@ export default class EventTile extends Tile {
       :host .top {
         min-height: 48px;
       }
-      :host .top .logo {
-        height: 40px;
-        display: grid;
-        align-content: center;
-        justify-items: end;
-      }
     `
   }
 
