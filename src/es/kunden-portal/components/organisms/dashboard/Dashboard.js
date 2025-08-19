@@ -257,57 +257,34 @@ export default class Dashboard extends Shadow() {
   }
 
   renderDiscoverTile () {
-    return /* html */ `
-      <div class="discover discover-more-courses">
-        <h3><span>Unsere Kurse entdecken</span></h3>
-        <div class="container-discover">
-          <kp-m-tile-discover
-            image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
-            tile-label="Klubschule Kurse"
-            link-href="#"
-            link-text="Kurse entdecken">
-          </kp-m-tile-discover>
-          <kp-m-tile-discover
-            image-src="https://www.klubschule.ch/media/oz0je4nv/logo-pro-s-neu.png"
-            tile-label="Klubschule Pro Kurse"
-            link-href="#"
-            link-text="Kurse entdecken">
-          </kp-m-tile-discover>
-          <kp-m-tile-discover
-            image-src="https://www.klubschule.ch/_campuslogo/logoibaw_zone.png"
-            tile-label="IBAW Kurse"
-            link-href="#"
-            link-text="Kurse entdecken">
-          </kp-m-tile-discover>
-        </div>
-      </div>`
+    return this.renderDiscoverSection({
+      title: 'Unsere Kurse entdecken',
+      className: 'discover-more-courses'
+    })
   }
 
   renderDiscoverMoreTile () {
+    return this.renderDiscoverSection({
+      title: 'Weitere Kurse entdecken',
+      className: ''
+    })
+  }
+
+  renderDiscoverSection({ title, className }) {
     return /* html */ `
-    <div class="discover">
-          <h3><span>Weitere Kurse entdecken</span></h3>
-          <div class="container-discover">
+      <div class="discover${className ? ' ' + className : ''}">
+        <h3><span>${title}</span></h3>
+        <div class="container-discover">
+          ${this.discoverTiles.map((tile, i) => /* html */`
             <kp-m-tile-discover
-              image-src="https://www.klubschule.ch/_campuslogo/logo-de.png"
-              tile-label="Klubschule Kurse"
-              link-href="#"
+              image-src="${tile.imageSrc}"
+              tile-label="${tile.label}"
+              link-href="${tile.href}"
               link-text="Kurse entdecken">
             </kp-m-tile-discover>
-            <kp-m-tile-discover
-              image-src="https://www.klubschule.ch/media/oz0je4nv/logo-pro-s-neu.png"
-              tile-label="Klubschule Pro Kurse"
-              link-href="#"
-              link-text="Kurse entdecken">
-            </kp-m-tile-discover>
-            <kp-m-tile-discover
-              image-src="https://www.klubschule.ch/_campuslogo/logoibaw_zone.png"
-              tile-label="IBAW Kurse"
-              link-href="#"
-              link-text="Kurse entdecken">
-            </kp-m-tile-discover>
-          </div>
+          `).join('')}
         </div>
+      </div>
     `
   }
 
@@ -387,6 +364,26 @@ export default class Dashboard extends Shadow() {
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
     })
+  }
+
+  get discoverTiles() {
+    return [
+      {
+        imageSrc: 'https://www.klubschule.ch/_campuslogo/logo-de.png',
+        label: 'Klubschule Kurse',
+        href: 'https://www.klubschule.ch/suche/'
+      },
+      {
+        imageSrc: 'https://www.klubschule.ch/media/oz0je4nv/logo-pro-s-neu.png',
+        label: 'Klubschule Pro Kurse',
+        href: 'https://www.klubschule-pro.ch/suche/'
+      },
+      {
+        imageSrc: 'https://www.klubschule.ch/_campuslogo/logoibaw_zone.png',
+        label: 'IBAW Kurse',
+        href: 'https://www.ibaw.ch/suche/'
+      }
+    ]
   }
 
   getNextAppointmentsData (bookingsData, count = 3) {
@@ -482,4 +479,5 @@ export default class Dashboard extends Shadow() {
   get continuationsDiv () {
     return this.root.querySelector('o-grid').root.querySelector('#continuations .container-continuations')
   }
+
 }
