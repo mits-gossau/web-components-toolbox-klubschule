@@ -23,10 +23,10 @@ export default class AppointmentTile extends Tile {
   renderCSS () {
     super.renderCSS()
     this.css = /* css */`
-      /* TODO: check this width stuff */
+      :host {
+        width: 100%;
+      }
       :host .next-appointment {
-        width: 30vw;
-        max-width: 350px;
         display: flex;
         flex-direction: column;
       }
@@ -45,17 +45,17 @@ export default class AppointmentTile extends Tile {
 
   fetchTemplate () {
     switch (this.getAttribute('namespace')) {
-      case 'tile-appointment-':
+      case 'tile-next-appointment-':
         return this.fetchCSS([{
           path: `${this.importMetaUrl}../../../../es/components/molecules/tile/default-/default-.css`, // path to ks project
           namespace: false,
           replaces: [{
             pattern: '--tile-default-',
             flags: 'g',
-            replacement: '--tile-appointment-'
+            replacement: '--tile-next-appointment-'
           }]
         }, {
-          path: `${this.importMetaUrl}./appointment-/appointment-.css`, // apply namespace since it is specific and no fallback
+          path: `${this.importMetaUrl}../../../../es/kunden-portal/components/molecules/tile/next-appointment-/next-appointment-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }], false)
       case 'tile-abonnement-':
@@ -85,10 +85,6 @@ export default class AppointmentTile extends Tile {
       {
         path: `${this.importMetaUrl}'../../../../../../es/components/atoms/button/Button.js`,
         name: 'ks-a-button'
-      },
-      {
-        path: `${this.importMetaUrl}'../../../../../../es/components/atoms/heading/Heading.js`,
-        name: 'ks-a-heading'
       },
       {
         path: `${this.importMetaUrl}'../../../../../../es/components/web-components-toolbox/src/es/components/atoms/translation/Translation.js`,
@@ -122,6 +118,11 @@ export default class AppointmentTile extends Tile {
     const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
     // TODO: check this - looks shitty
     return /* html */ `
+      <style>
+        :host .m-tile__body {
+          padding-bottom: 1.5em;
+        }
+      </style>
       <div class="m-tile abonnements">
         <div class="m-tile__wrap">
           <div class="course-info">
@@ -150,40 +151,47 @@ export default class AppointmentTile extends Tile {
     const { appointmentDateFormatted, roomDescription } = data.data.appointments[0] || {}
     const { courseTitle, courseLocation, courseId } = data.data || {}
     const link = `index.html#/booking?courseId=${courseId}`
-    return /* html */`
-    <div class="m-tile next-appointment">
-      <div class="m-tile__wrap">
-        <div class="course-info m-tile__body">
-          <div class="m-tile__head">
-            <span class="m-tile__title title">${courseTitle}</span>
-          </div>
-          <div class="m-tile__body">
-            <div>
-              <span class="m-tile__content m-tile__next-date">${appointmentDateFormatted || ''}</span>
-            </div>  
-            <div>
-              <a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>
-              <span class="m-tile__content">${courseLocation}</span>
+    return /* html */ `
+      <style>
+        :host .m-tile__body {
+          align-items: flex-start;
+          flex-direction: column;
+          padding-bottom: 1.5em;
+        }
+      </style>
+      <div class="m-tile next-appointment">
+        <div class="m-tile__wrap">
+          <div class="course-info">
+            <div class="m-tile__head">
+              <span class="m-tile__title title">${courseTitle}</span>
             </div>
-            <div class="m-tile__room">
-              <a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>
-              <span class="m-tile__content">Raum ${roomDescription}</span>
+            <div class="m-tile__body">
+              <div>
+                <span class="m-tile__content m-tile__next-date">${appointmentDateFormatted || ''}</span>
+              </div>  
+              <div>
+                <a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>
+                <span class="m-tile__content">${courseLocation}</span>
+              </div>
+              <div class="m-tile__room">
+                <a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>
+                <span class="m-tile__content">Raum ${roomDescription}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="m-tile__foot">
-          <div class="m-tile__foot-left">
-            <ks-a-button
-              href="${link}" 
-              namespace="button-secondary-" 
-              color="secondary"
-            >
-              <span>Details ansehen</span>
-            </ks-a-button>
+          <div class="m-tile__foot">
+            <div class="m-tile__foot-left">
+              <ks-a-button
+                href="${link}" 
+                namespace="button-secondary-" 
+                color="secondary"
+              >
+                <span>Details ansehen</span>
+              </ks-a-button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     `
   }
 

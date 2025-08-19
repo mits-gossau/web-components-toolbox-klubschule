@@ -1,5 +1,6 @@
 :host {
-    --wrap-padding: 16px 16px 24px 16px;
+    --tile-abonnement-wrap-padding: 1.5em;
+    /*--wrap-padding: 16px 16px 24px 16px;
     --background-color: var(--m-white, #fff);
     --border-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
     --overlay-backround-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));
@@ -80,4 +81,5 @@
     --tile-abonnement-price-strong-font: 500 24px / 110% 'Graphik';
     --button-secondary-font-size-mobile: 16px;
     --button-secondary-padding-mobile: 12px 24px;
+    */
 }

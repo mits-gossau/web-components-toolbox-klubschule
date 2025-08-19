@@ -77,31 +77,36 @@ export default class Dashboard extends Shadow() {
     if (!fetch && !fetch?.then) return
 
     const gridSkeleton = /* html */`
-        <o-grid namespace="grid-12er-">
-          <style>
-            :host .container {
-              display:flex;
-              gap: 1em;
-            }
-           :host .container-appointments {
-              width: 100%;
-            }
-            .container-discover {
-              display: flex;
-              gap: 1em;
-              padding-bottom: 1em;
-            }
-            :host .container-courses {
+      <o-grid namespace="grid-12er-">
+        <style>
+          :host .container {
+            display:flex;
+            gap: 1em;
+          }
+          :host > section > div {
+            padding-bottom: 5em;
+          }
+          :host .container-next-appointments {
+            width: 100%;
+          }
+          .container-discover {
+            display: flex;
+            gap: 1em;
+          }
+          :host .container-courses {
+            flex-direction: column;
+          }
+          :host .container-abonnements {
+            flex-direction: column;
+          }
+          :host .discover-more-courses {
+            padding-bottom: 1.5em;
+          }
+          @media only screen and (max-width:${this.mobileBreakpoint}) {
+            :host .container-appointments {
               flex-direction: column;
             }
-            :host .container-abonnements {
-              flex-direction: column;
-            }
-            @media only screen and (max-width:${this.mobileBreakpoint}) {
-              :host .container-appointments {
-                flex-direction: column;
-              }
-            }
+          }
           </style>
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('nextAppointments')}
@@ -150,13 +155,13 @@ export default class Dashboard extends Shadow() {
       const eventTileModule = modules.find(m => m.name === 'kp-m-event')
 
       if (tileModule?.constructorClass && eventTileModule?.constructorClass) {
-        // nächste Termine
-        this.renderNextAppointments(nextAppointmensData, tileModule, this.appointmentsDiv)
-        // meine Kurse/Lehrgänge
+        // next appointments
+        this.renderNextAppointments(nextAppointmensData, tileModule, this.nextAppointmentsDiv)
+        // my courses
         this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
-        // meine Fortsetzungen
+        // my continuations
         this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
-        // meine Abonnements
+        // my abbonements
         this.renderAbbonements(abonnementsData, tileModule, this.abonnementsDiv)
       }
     })
@@ -166,9 +171,9 @@ export default class Dashboard extends Shadow() {
     switch (area) {
       case 'nextAppointments':
         return /* html */ `
-          <div id="appointments" class="appointments">
+          <div id="next-appointments" class="next-appointments">
             <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
-            <div class="container-appointments container"></div>
+            <div class="container-next-appointments container"></div>
         </div>`
       case 'courses':
         return /* html */ `
@@ -228,8 +233,8 @@ export default class Dashboard extends Shadow() {
 
       // @ts-ignore
       const event = new tileComponent.constructorClass({ namespace: 'tile-abonnement-' })
-      event.setAttribute('class', 'course-event')
-      event.setAttribute('abo-event', '')
+      // event.setAttribute('class', 'course-event')
+      // event.setAttribute('abo-event', '')
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
     })
@@ -237,7 +242,7 @@ export default class Dashboard extends Shadow() {
 
   renderDiscoverTile () {
     return /* html */ `
-      <div class="discover">
+      <div class="discover discover-more-courses">
         <h3><span>Unsere Kurse entdecken</span></h3>
         <div class="container-discover">
           <kp-m-tile-discover
@@ -300,9 +305,9 @@ export default class Dashboard extends Shadow() {
     }
 
     bookingsData.forEach(app => {
-      const event = new tileComponent.constructorClass({ namespace: 'tile-appointment-' })
-      event.setAttribute('class', 'appointment-tile') // TODO: Check if this is needed
-      event.setAttribute('namespace', 'tile-appointment-')
+      const event = new tileComponent.constructorClass({ namespace: 'tile-next-appointment-' })
+      // event.setAttribute('class', 'next-appointment-tile') // TODO: Check if this is needed
+      // event.setAttribute('namespace', 'tile-appointment-')
       event.setAttribute('data', JSON.stringify({
         data: app,
         type: 'next-appointment',
@@ -446,8 +451,8 @@ export default class Dashboard extends Shadow() {
     return bookingsData.filter(course => course.courseType === '7A')
   }
 
-  get appointmentsDiv () {
-    return this.root.querySelector('o-grid').root.querySelector('#appointments .container-appointments')
+  get nextAppointmentsDiv () {
+    return this.root.querySelector('o-grid').root.querySelector('#next-appointments .container-next-appointments')
   }
 
   get coursesDiv () {
