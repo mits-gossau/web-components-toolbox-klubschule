@@ -89,7 +89,7 @@ export default class Dashboard extends Shadow() {
           :host .container-next-appointments {
             width: 100%;
           }
-          .container-discover {
+          :host .container-discover {
             display: flex;
             gap: 1em;
           }
@@ -119,7 +119,9 @@ export default class Dashboard extends Shadow() {
             margin-right: 6px;
           }
           @media only screen and (max-width:${this.mobileBreakpoint}) {
-            :host .container-appointments {
+            :host .container-discover,
+            :host .container-appointments,
+            :host .container-next-appointments {
               flex-direction: column;
             }
           }
