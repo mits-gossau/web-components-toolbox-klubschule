@@ -76,6 +76,8 @@ export default class Dashboard extends Shadow() {
   renderHTML (fetch) {
     if (!fetch && !fetch?.then) return
 
+    this.html = ''
+
     const gridSkeleton = /* html */`
       <o-grid namespace="grid-12er-">
         <style>
