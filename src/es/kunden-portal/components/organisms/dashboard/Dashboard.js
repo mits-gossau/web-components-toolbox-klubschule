@@ -268,7 +268,7 @@ export default class Dashboard extends Shadow() {
             link-text="Kurse entdecken">
           </kp-m-tile-discover>
           <kp-m-tile-discover
-            image-src="https://www.klubschule-pro.ch/media/sudljogx/test-logo-klubschule-pro.svg"
+            image-src="https://www.klubschule.ch/media/oz0je4nv/logo-pro-s-neu.png"
             tile-label="Klubschule Pro Kurse"
             link-href="#"
             link-text="Kurse entdecken">
@@ -295,7 +295,7 @@ export default class Dashboard extends Shadow() {
               link-text="Kurse entdecken">
             </kp-m-tile-discover>
             <kp-m-tile-discover
-              image-src="https://www.klubschule-pro.ch/media/sudljogx/test-logo-klubschule-pro.svg"
+              image-src="https://www.klubschule.ch/media/oz0je4nv/logo-pro-s-neu.png"
               tile-label="Klubschule Pro Kurse"
               link-href="#"
               link-text="Kurse entdecken">
