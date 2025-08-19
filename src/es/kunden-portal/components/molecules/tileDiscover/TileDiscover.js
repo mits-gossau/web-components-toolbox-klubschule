@@ -87,7 +87,7 @@ export default class TileDiscover extends Shadow() {
       <a class="tile-discover-link" href="${this.getAttribute('link-href') || '#'}">
         <div class="tile-discover">
           <div class="tile-discover__image">
-            <img src="${this.getAttribute('image-src') || ''}" height="40" width="40" alt="" />
+            <img src="${this.getAttribute('image-src') || ''}" height="auto" width="40" alt="" />
           </div>
           <div>
             <p class="tile-discover__label">

@@ -252,13 +252,13 @@ export default class Dashboard extends Shadow() {
             link-text="Kurse entdecken">
           </kp-m-tile-discover>
           <kp-m-tile-discover
-            image-src="https://picsum.photos/40/40"
+            image-src="https://www.klubschule-pro.ch/media/sudljogx/test-logo-klubschule-pro.svg"
             tile-label="Klubschule Pro Kurse"
             link-href="#"
             link-text="Kurse entdecken">
           </kp-m-tile-discover>
           <kp-m-tile-discover
-            image-src="https://picsum.photos/40/40"
+            image-src="https://www.klubschule.ch/_campuslogo/logoibaw_zone.png"
             tile-label="IBAW Kurse"
             link-href="#"
             link-text="Kurse entdecken">
@@ -279,13 +279,13 @@ export default class Dashboard extends Shadow() {
               link-text="Kurse entdecken">
             </kp-m-tile-discover>
             <kp-m-tile-discover
-              image-src="https://picsum.photos/40/40"
+              image-src="https://www.klubschule-pro.ch/media/sudljogx/test-logo-klubschule-pro.svg"
               tile-label="Klubschule Pro Kurse"
               link-href="#"
               link-text="Kurse entdecken">
             </kp-m-tile-discover>
             <kp-m-tile-discover
-              image-src="https://picsum.photos/40/40"
+              image-src="https://www.klubschule.ch/_campuslogo/logoibaw_zone.png"
               tile-label="IBAW Kurse"
               link-href="#"
               link-text="Kurse entdecken">
