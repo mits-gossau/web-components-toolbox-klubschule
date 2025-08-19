@@ -102,6 +102,22 @@ export default class Dashboard extends Shadow() {
           :host .discover-more-courses {
             padding-bottom: 1.5em;
           }
+          :host h2 > a-icon-mdx {
+            display: inline-block;
+            position: relative;
+            top: 4px;
+            margin-right: 4px;
+          }
+          :host h2 > a-icon-mdx[icon-name="AboPlus"] {
+            border: 2px solid #262626;
+            border-radius: 3.5px;
+            height: 32px;
+            width: 32px;
+            line-height: 26px;
+            text-align: center;
+            top: -2px;
+            margin-right: 6px;
+          }
           @media only screen and (max-width:${this.mobileBreakpoint}) {
             :host .container-appointments {
               flex-direction: column;
