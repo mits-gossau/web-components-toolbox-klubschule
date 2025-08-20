@@ -72,6 +72,23 @@ export default class TileBookingDetails extends Shadow() {
       :host #course-metadata .status img {
         vertical-align: middle;
       }
+      :host #course-cta-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: flex-start;
+      }
+      :host #course-cta-buttons ks-a-button {
+        flex: 0 1 auto;
+      }
+      :host #course-cta-buttons ks-a-button > a-icon-mdx {
+        margin-left: 4px;
+      }
+      @media only screen and (max-width:${this.mobileBreakpoint}) {
+        :host #course-metadata {
+          flex-direction: column;
+        }
+      }
     `
   }
 
@@ -84,6 +101,10 @@ export default class TileBookingDetails extends Shadow() {
       {
         path: `${this.importMetaUrl}../../atoms/button/Button.js`,
         name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../atoms/spacing/Spacing.js`,
+        name: 'ks-a-spacing'
       },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
@@ -105,7 +126,10 @@ export default class TileBookingDetails extends Shadow() {
       daysEntry = '',
       locationDescription = '',
       statusText = '',
-      statusIcon = ''
+      statusIcon = '',
+      linkLms = '',
+      linkTeams = '',
+      linkDownload = '',
     } = parsed
 
     this.html = /* html */`
@@ -118,9 +142,11 @@ export default class TileBookingDetails extends Shadow() {
             <span class="date"><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>${daysEntry}</span></span>
             <span class="status"><img src="${statusIcon}" height="24" width="24" /> <span>${statusText}</span></span>
           </div>
+          <ks-a-spacing type="xs-flex"></ks-a-spacing>
           <div id="course-cta-buttons">
-            <ks-a-button namespace="button-primary-" href="/booking/${parsed.bookingId}">Zur Buchung</ks-a-button>
-            <ks-a-button namespace="button-secondary-" href="/courses/${parsed.courseId}">Zur Kursübersicht</ks-a-button>
+            ${linkLms ? /* html */`<ks-a-button namespace="button-primary-" href="${linkLms}"><span>Lernumgebung (Moodle)</span> <a-icon-mdx icon-name="ExternalLink" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>` : ''}
+            ${linkTeams ? /* html */`<ks-a-button namespace="button-primary-" href="${linkTeams}"><span>Microsoft Teams</span> <a-icon-mdx icon-name="ExternalLink" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>` : ''}
+            ${linkDownload ? /* html */`<ks-a-button namespace="button-secondary-" href="${linkDownload}"><span>Angebotsdetails</span> <a-icon-mdx icon-name="Download" size="1em" class="icon-right"></a-icon-mdx></ks-a-button>` : ''}
           </div>
         </div>
       </div>

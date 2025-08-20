@@ -247,7 +247,10 @@ export default class Booking extends Index {
       locationDescription: this.bookingData.course.locationDescription || '',
       daysEntry,
       statusText: this.bookingData.course.courseRealisationDecisionText || 'Gestartet',
-      statusIcon: `${this.importMetaUrl}../../kunden-portal/images/icons/Status_Gestartet.svg` || ''
+      statusIcon: `${this.importMetaUrl}../../kunden-portal/images/icons/Status_Gestartet.svg` || '',
+      linkLms: this.bookingData.course.linkLms || '',
+      linkTeams: this.bookingData.course.linkTeams || '',
+      linkDownload: '', // TODO: to define
     })
     const tile = body.querySelector('ks-m-tile-booking-details')
     if (tile) tile.setAttribute('data', this.bookingDetails)
