@@ -28,21 +28,20 @@ export default class TileDiscover extends Shadow() {
     this.css = /* css */`
       :host {
         display: block;
-        background: green;
         width: 100%;
       }
-      .tile-discover-link {
+      :host .tile-discover-link {
         display: block;
         text-decoration: none;
         color: inherit;
         height: 100%;
       }
-      .tile-discover-link:focus,
-      .tile-discover-link:hover {
+      :host .tile-discover-link:focus,
+      :host .tile-discover-link:hover {
         outline: 1px solid #0053A6;
         outline-offset: 1px;
       }
-      .tile-discover {
+      :host .tile-discover {
         cursor: pointer;
         display: grid;
         grid-template-columns: fit-content(100%) 1fr;
@@ -53,24 +52,24 @@ export default class TileDiscover extends Shadow() {
         height: calc(100% - 48px);
         align-content: center;
       }
-      .tile-discover > div:last-child p {
+      :host .tile-discover > div:last-child p {
         margin: 0;
         padding: 0;
       }
-      .tile-discover__image {
+      :host .tile-discover__image {
         display: flex;
         align-items: center;
         justify-content: center;
       }
-      .tile-discover__label {
+      :host .tile-discover__label {
         color: var(--mdx-sys-color-neutral-bold4, #333);
         font: var(--mdx-sys-font-fix-body1, inherit);
       }
-      .tile-discover__link {
+      :host .tile-discover__link {
         color: #0053A6;
         text-decoration: none;
       }
-      .tile-discover__link a-icon-mdx {
+      :host .tile-discover__link a-icon-mdx {
         color: #0053A6;
         display: inline-block;
         position: relative;
