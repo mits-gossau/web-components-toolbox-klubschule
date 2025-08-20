@@ -28,13 +28,14 @@ export default class TileDiscover extends Shadow() {
     this.css = /* css */`
       :host {
         display: block;
-        background:green;
+        background: green;
         width: 100%;
       }
       .tile-discover-link {
         display: block;
         text-decoration: none;
         color: inherit;
+        height: 100%;
       }
       .tile-discover-link:focus,
       .tile-discover-link:hover {
@@ -49,6 +50,8 @@ export default class TileDiscover extends Shadow() {
         background-color: white;
         border: 1px solid #737373;
         padding: 24px;
+        height: calc(100% - 48px);
+        align-content: center;
       }
       .tile-discover > div:last-child p {
         margin: 0;
