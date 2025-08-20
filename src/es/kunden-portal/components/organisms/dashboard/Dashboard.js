@@ -134,15 +134,6 @@ export default class Dashboard extends Shadow() {
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('nextAppointments')}
           </div>
-          <div col-lg="12" col-md="12" col-sm="12">
-            ${this.renderAreaWrapper('courses')}
-          </div>
-          <div col-lg="12" col-md="12" col-sm="12">
-            ${this.renderAreaWrapper('continuations')}
-          </div>
-          <div col-lg="12" col-md="12" col-sm="12">
-            ${this.renderAreaWrapper('abonnements')}
-          </div>
         </o-grid>
     `
     this.html = gridSkeleton
