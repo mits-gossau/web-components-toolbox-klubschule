@@ -215,6 +215,34 @@ export default class Booking extends Index {
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
                 <!-- booking details -->
                 <ks-m-tile-booking-details data="${this.bookingDetails}"></ks-m-tile-booking-details>
+                <ks-a-spacing id="notification-spacing" type="m-flex"></ks-a-spacing>
+                <div id="offer-details">
+                  <h3><a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1em"></a-icon-mdx> <span>Angebotsdetails</span></h3>
+                  <table></table>
+                  <style>
+                    :host #offer-details table {
+                      width: 100%;
+                      border-collapse: collapse;
+                      background: #fff;
+                      border-bottom: 1px solid #000;
+                      font-size: 14px;
+                    }
+                    :host #offer-details tr {
+                      background: #fff;
+                      border-top: 1px solid #000;
+                    }
+                    :host #offer-details td {
+                      padding: 8px 0;
+                      border: none;
+                    }
+                    :host #offer-details td:first-child {
+                      padding-right: 8px;
+                    }
+                    :host #offer-details strong {
+                      font-weight: 500;
+                    }
+                  </style>
+                </div>
               </ks-o-body-section>
               <!-- contact and options -->
               <aside></aside>
@@ -251,9 +279,25 @@ export default class Booking extends Index {
       linkLms: this.bookingData.course.linkLms || '',
       linkTeams: this.bookingData.course.linkTeams || '',
       linkDownload: '', // TODO: to define
+      details: [
+        { label: 'Teilnehmerstatus', text: this.bookingData.course.bookingTypeText},
+        { label: 'Nummer', text: this.bookingData.course.courseType + '_' + String(this.bookingData.course.courseId)},
+        { label: 'Zeitraum', text: daysEntry},
+        { label: 'Ort', text: this.bookingData.course.locationDescription},
+        { label: 'Unterrichtssprache', text: this.bookingData.course.courseLanguage},
+        { label: 'Max. Teilnehmer', text: this.bookingData.course.capacity},
+        { label: 'Dauer', text: `${this.bookingData.course.numberOfAppointments} Kurstag(e)<br />Total ${this.bookingData.course.lessions} Lektion(en) zu ${this.bookingData.course.lessionDuration} Min.`},
+      ]
     })
     const tile = body.querySelector('ks-m-tile-booking-details')
     if (tile) tile.setAttribute('data', this.bookingDetails)
+
+    // details (Angebotsdetails)
+    const offerDetailsTable = body.querySelector('#offer-details table')
+    if (offerDetailsTable && this.bookingDetails) {
+      let details = JSON.parse(this.bookingDetails).details || []
+      offerDetailsTable.innerHTML = details.map(d => `<tr><td><strong>${d.label}</strong></td><td>${d.text}</td></tr>`).join('')
+    }
 
     // contact and options
     /**

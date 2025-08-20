@@ -39,10 +39,6 @@ export default class TileBookingDetails extends Shadow() {
       :host {
         display: block;
       }
-      :host #booking-detail {
-        padding: 0 0 1.5rem 0;
-      }
-      :host #booking-tile {}
       :host #booking-type-text span {
         display: inline-block;
         border-radius: 3px;
