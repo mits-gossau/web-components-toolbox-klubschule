@@ -255,11 +255,11 @@ export default class Dashboard extends Shadow() {
     abonnements.forEach(abonnement => {
       const courseData = {
         data: abonnement,
-        type: 'abonnement',
-        sprachid: 'd'
+        type: 'abonnement'
       }
 
       // @ts-ignore
+      // eslint-disable-next-line new-cap
       const event = new tileComponent.constructorClass({ namespace: 'tile-abonnement-' })
       event.setAttribute('data', JSON.stringify(courseData))
       fragment.appendChild(event)
@@ -316,6 +316,8 @@ export default class Dashboard extends Shadow() {
     const fragment = document.createDocumentFragment()
 
     bookingsData.forEach(app => {
+      // @ts-ignore
+      // eslint-disable-next-line new-cap
       const event = new tileComponent.constructorClass({ namespace: 'tile-next-appointment-' })
       // event.setAttribute('class', 'next-appointment-tile') // TODO: Check if this is needed
       // event.setAttribute('namespace', 'tile-appointment-')
@@ -382,6 +384,7 @@ export default class Dashboard extends Shadow() {
       }
 
       // @ts-ignore
+      // eslint-disable-next-line new-cap
       const event = new eventTileComponent.constructorClass({})
       event.setAttribute('class', 'course-event')
       event.setAttribute('data', JSON.stringify(courseData))
