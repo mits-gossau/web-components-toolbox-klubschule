@@ -11,25 +11,20 @@ export default class EventTile extends Tile {
     super({ ...options }, ...args)
   }
 
-  //   connectedCallback () {
-  //     super.connectedCallback()
-  //   }
-
-  //   disconnectedCallback () {
-  //     super.disconnectedCallback()
-  //   }
-
   renderCSS () {
     super.renderCSS()
+    this.css += /* css */`
+      :host .top {
+        min-height: 48px;
+      }
+    `
   }
 
   renderHTML () {
-    super.renderHTML().then((data) => {
-    })
-    // this.html = 'event'
-    // super.renderHTML().then(([data, parentHTML]) => {
-    //   debugger
-    //   this.html = parentHTML
-    // })
+    super.renderHTML().then((data) => {})
+  }
+
+  getLogoHTML(logo_url) {
+    return `<img src="${logo_url}" height="auto" width="40" />`
   }
 }
