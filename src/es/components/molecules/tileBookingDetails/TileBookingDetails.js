@@ -39,11 +39,11 @@ export default class TileBookingDetails extends Shadow() {
       :host {
         display: block;
       }
-      #booking-detail {
+      :host #booking-detail {
         padding: 0 0 1.5rem 0;
       }
-      #booking-tile {}
-      #booking-type-text span {
+      :host #booking-tile {}
+      :host #booking-type-text span {
         display: inline-block;
         border-radius: 3px;
         border: 1px solid var(--mdx-sys-color-neutral-bold4, #262626);
@@ -51,25 +51,25 @@ export default class TileBookingDetails extends Shadow() {
         font: var(--mdx-sys-font-fix-body2);
         padding: var(--mdx-sys-spacing-fix-3xs) var(--mdx-sys-spacing-fix-2xs);
       }
-      #course-title {
+      :host #course-title {
         color: var(--mdx-sys-color-accent-6-onSubtle, #262626);
         font: var(--mdx-sys-font-flex-large-headline2);
         margin: 16px 0 26px 0;
       }
-      #course-metadata {
+      :host #course-metadata {
         display: flex;
         flex-wrap: wrap;
         gap: 24px;
         color: var(--mdx-sys-color-neutral-bold4, #262626);
         font: 400 16px/130% 'Graphik';
       }
-      #course-metadata .location,
-      #course-metadata .date,
-      #course-metadata .status {
+      :host #course-metadata .location,
+      :host #course-metadata .date,
+      :host #course-metadata .status {
         display: flex;
         gap: 0.3em;
       }
-      #course-metadata .status img {
+      :host #course-metadata .status img {
         vertical-align: middle;
       }
     `
@@ -77,10 +77,15 @@ export default class TileBookingDetails extends Shadow() {
 
   renderHTML() {
     this.html = ''
-    const dataAttr = this.getAttribute('data')
-    if (!dataAttr) return
+    const data = this.getAttribute('data')
+    if (!data) return
+    console.log(JSON.parse(data))
 
     this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
+        name: 'ks-a-button'
+      },
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
@@ -90,11 +95,11 @@ export default class TileBookingDetails extends Shadow() {
     const {
       bookingTypeText = '',
       courseTitle = '',
-      locationDescription = '',
       daysEntry = '',
+      locationDescription = '',
       statusText = '',
       statusIcon = ''
-    } = JSON.parse(dataAttr)
+    } = JSON.parse(data)
 
     this.html = /* html */`
       <div id="booking-detail">
@@ -105,6 +110,9 @@ export default class TileBookingDetails extends Shadow() {
             <span class="location"><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> <span>${locationDescription}</span></span>
             <span class="date"><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>${daysEntry}</span></span>
             <span class="status"><img src="${statusIcon}" height="24" width="24" /> <span>${statusText}</span></span>
+          </div>
+          <div id="course-cta-buttons">
+
           </div>
         </div>
       </div>
