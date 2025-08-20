@@ -283,7 +283,7 @@ export default class Dashboard extends Shadow() {
     })
   }
 
-  renderDiscoverSection({ title, className }) {
+  renderDiscoverSection ({ title, className }) {
     return /* html */ `
       <div class="discover${className ? ' ' + className : ''}">
         <h3><span>${title}</span></h3>
@@ -389,7 +389,7 @@ export default class Dashboard extends Shadow() {
     })
   }
 
-  get discoverTiles() {
+  get discoverTiles () {
     return [
       {
         imageSrc: 'https://www.klubschule.ch/_campuslogo/logo-de.png',
@@ -417,7 +417,7 @@ export default class Dashboard extends Shadow() {
     // the list is sorted by appointment date (earliest first)
     // only keep the appointment date, no other information
     // this is done to find the next appointment (newest one in the future)
-    appointments.flatMap(course => {
+    appointments.forEach(course => {
       const sortedAppointments = course.appointments
         .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
         .map(app => ({ appointmentDate: app.appointmentDate }))
@@ -502,5 +502,4 @@ export default class Dashboard extends Shadow() {
   get continuationsDiv () {
     return this.root.querySelector('o-grid').root.querySelector('#continuations .container-continuations')
   }
-
 }

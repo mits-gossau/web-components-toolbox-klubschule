@@ -11,3 +11,7 @@ export const escapeForHtml = htmlString => {
     .replaceAll(/"/g, '&quot;')
     .replaceAll(/'/g, '&#39;')
 }
+
+export const formatDateForRender = d => {
+  return d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+}
