@@ -97,17 +97,33 @@ export default class Booking extends Index {
           setTimeout(() => this.renderNoResult(), 0)
         })
     }
+
+    this.requestFollowUpListener = (event) => {
+      event.detail.fetch
+        .then((data) => {
+          this.followUpData = data || []
+          if (this.modulesLoaded) {
+            setTimeout(() => this.renderFollowUp(), 0)
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching followUp:', error)
+          setTimeout(() => this.renderNoResult(), 0)
+        })
+    }
   }
 
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('update-booking', this.requestBookingListener)
+    document.body.addEventListener('update-followup', this.requestFollowUpListener)
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
   }
 
   disconnectedCallback () {
     document.body.removeEventListener('update-booking', this.requestBookingListener)
+    document.body.removeEventListener('update-followup', this.requestFollowUpListener)
   }
 
   shouldRenderHTML () {
@@ -201,7 +217,7 @@ export default class Booking extends Index {
           <a-icon-mdx icon-name="ArrowLeft" size="1em" color="white"></a-icon-mdx> Meine Kurse / Lehrgänge
         </div>
         <div id="body-stage">
-          <o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" count-section-children="2">
+          <o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" count-section-children="2" style="display:none;">
             <section>
               <!-- details -->
               <ks-o-body-section content-width-var="100%" no-margin-y background-color="white"> 
@@ -224,6 +240,7 @@ export default class Booking extends Index {
                     <style>
                       :host .accordion a {
                         font-size: 18px;
+                        font-weight: 500;
                         display: inline-flex;
                         align-items: center;
                       }
@@ -259,11 +276,21 @@ export default class Booking extends Index {
                   </div>
                   <a href="#" class="hide-accordion-content-link" style="display:none;">Kurs Details ausblenden <a-icon-mdx icon-name="ChevronUp" size="1em"></a-icon-mdx></a>
                 </div>
+                <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> Kurs Termin(e)</h2>
+                <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="FileText" size="1em"></a-icon-mdx> Dokumente</h2>
+                <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
               </ks-o-body-section>
               <!-- contact and options -->
               <aside></aside>
             </section>
           </o-grid>
+          <ks-o-body-section content-width-var="100%" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" has-background>
+            <div id="continuation-course" style="width: var(--body-section-default-width, 86.666%);">
+              <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> Fortsetzungskurs</h2>
+            <div>
+          </ks-o-body-section>
         </div>
       </div>
     `
@@ -307,6 +334,11 @@ export default class Booking extends Index {
     })
     const tile = body.querySelector('ks-m-tile-booking-details')
     if (tile) tile.setAttribute('data', this.bookingDetails)
+    
+    // request follow up course
+    if (this.bookingData.course.courseIdFollowUp) {
+      this.dispatchEvent(new CustomEvent('request-followup', { detail: { courseIdFollowUp: this.bookingData.course.courseIdFollowUp}, bubbles: true, cancelable: true, composed: true }))
+    }
 
     // details (Angebotsdetails)
     const offerDetailsTable = body.querySelector('#offer-details table')
@@ -385,11 +417,17 @@ export default class Booking extends Index {
     })
   }
 
+  renderFollowUp () {
+    if (!this.followUpData) return
+
+    console.log('followUp data:', this.followUpData)
+  }
+
   renderNoResult () {
     const container = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('ks-o-body-section').shadowRoot.querySelector('#booking-detail .container')
     console.log(container)
     if (container) {
-      container.innerHTML = `
+      container.innerHTML = /* html */`
         <div class="booking-error" style="color: red; font-weight: bold; margin: 2rem 0;">
           Es gibt keinen Kurs mit dieser ID.<br>
           Bitte prüfen Sie Ihre Auswahl oder versuchen Sie es später erneut.

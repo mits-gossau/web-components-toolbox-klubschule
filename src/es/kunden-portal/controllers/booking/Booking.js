@@ -17,11 +17,13 @@ export default class Booking extends HTMLElement {
 
   connectedCallback () {
     document.addEventListener('request-booking', this.requestBooking)
+    document.addEventListener('request-followup', this.requestFollowUp)
     this.addEventListener('close-notification', this.handleNotification)
   }
 
   disconnectedCallback () {
     document.removeEventListener('request-booking', this.requestBooking)
+    document.removeEventListener('request-followup', this.requestFollowUp)
     this.removeEventListener('close-notification', this.handleNotification)
   }
 
@@ -46,6 +48,35 @@ export default class Booking extends HTMLElement {
     const options = this.fetchPOSTOptions(data, this.abortControllerBooking)
 
     this.dispatchEvent(new CustomEvent('update-booking', {
+      detail: {
+        fetch: fetch(endpoint, options)
+          .then(async response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+            return await response.json()
+          })
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+
+  requestFollowUp = (event) => {
+    if (this.abortControllerBooking) this.abortControllerBooking.abort()
+    this.abortControllerBooking = new AbortController()
+
+    if (!event.detail.courseIdFollowUp) return
+
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBooking}`
+    const data = {
+      language: 'de',
+      courseType: 'E',
+      courseId: event.detail.courseIdFollowUp
+    }
+    const options = this.fetchPOSTOptions(data, this.abortControllerBooking)
+
+    this.dispatchEvent(new CustomEvent('update-followup', {
       detail: {
         fetch: fetch(endpoint, options)
           .then(async response => {
