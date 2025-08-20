@@ -78,8 +78,7 @@ export default class TileBookingDetails extends Shadow() {
   renderHTML() {
     this.html = ''
     const data = this.getAttribute('data')
-    if (!data) return
-    console.log(JSON.parse(data))
+    if (!data || data === 'undefined') return 
 
     this.fetchModules([
       {
@@ -92,6 +91,14 @@ export default class TileBookingDetails extends Shadow() {
       }
     ])
 
+    let parsed
+    try {
+      parsed = JSON.parse(data)
+    } catch (e) {
+      console.warn('TileBookingDetails: Attribute "data" is no valid JSON:', data)
+      return
+    }
+
     const {
       bookingTypeText = '',
       courseTitle = '',
@@ -99,7 +106,7 @@ export default class TileBookingDetails extends Shadow() {
       locationDescription = '',
       statusText = '',
       statusIcon = ''
-    } = JSON.parse(data)
+    } = parsed
 
     this.html = /* html */`
       <div id="booking-detail">
@@ -112,7 +119,8 @@ export default class TileBookingDetails extends Shadow() {
             <span class="status"><img src="${statusIcon}" height="24" width="24" /> <span>${statusText}</span></span>
           </div>
           <div id="course-cta-buttons">
-
+            <ks-a-button namespace="button-primary-" href="/booking/${parsed.bookingId}">Zur Buchung</ks-a-button>
+            <ks-a-button namespace="button-secondary-" href="/courses/${parsed.courseId}">Zur Kursübersicht</ks-a-button>
           </div>
         </div>
       </div>
