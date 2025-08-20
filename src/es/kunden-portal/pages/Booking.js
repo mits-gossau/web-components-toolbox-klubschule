@@ -216,32 +216,48 @@ export default class Booking extends Index {
                 <!-- booking details -->
                 <ks-m-tile-booking-details data="${this.bookingDetails}"></ks-m-tile-booking-details>
                 <ks-a-spacing id="notification-spacing" type="m-flex"></ks-a-spacing>
-                <div id="offer-details">
-                  <h3><a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1em"></a-icon-mdx> <span>Angebotsdetails</span></h3>
-                  <table></table>
-                  <style>
-                    :host #offer-details table {
-                      width: 100%;
-                      border-collapse: collapse;
-                      background: #fff;
-                      border-bottom: 1px solid #000;
-                      font-size: 14px;
-                    }
-                    :host #offer-details tr {
-                      background: #fff;
-                      border-top: 1px solid #000;
-                    }
-                    :host #offer-details td {
-                      padding: 8px 0;
-                      border: none;
-                    }
-                    :host #offer-details td:first-child {
-                      padding-right: 8px;
-                    }
-                    :host #offer-details strong {
-                      font-weight: 500;
-                    }
-                  </style>
+                <div class="accordion">
+                  <a href="#" class="show-accordion-content-link">Kurs Details anzeigen <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx></a>
+                  <div id="offer-details" class="accordion-content" style="display:none;">
+                    <h3><a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1em"></a-icon-mdx> <span>Angebotsdetails</span></h3>
+                    <table></table>
+                    <style>
+                      :host .accordion a {
+                        font-size: 18px;
+                        display: inline-flex;
+                        align-items: center;
+                      }
+                      :host .accordion h3 {
+                        display: flex;
+                        gap: 10px;
+                      }
+                      :host .accordion-content {
+                        margin-bottom: 24px !important;
+                      }
+                      :host .accordion-content table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        background: #fff;
+                        border-bottom: 1px solid #000;
+                        font-size: 14px;
+                      }
+                      :host .accordion-content tr {
+                        background: #fff !important;
+                        border-top: 1px solid #000;
+                      }
+                      :host .accordion-content td {
+                        padding: 8px 0;
+                        border: none;
+                      }
+                      :host .accordion-content td:first-child {
+                        padding-right: 8px;
+                      }
+                      :host .accordion-content strong {
+                        font-weight: 500;
+                      }
+                    </style>
+                  </div>
+                  <a href="#" class="hide-accordion-content-link" style="display:none;">Kurs Details ausblenden <a-icon-mdx icon-name="ChevronUp" size="1em"></a-icon-mdx></a>
                 </div>
               </ks-o-body-section>
               <!-- contact and options -->
@@ -345,6 +361,28 @@ export default class Booking extends Index {
     edit.setAttribute('name', 'Meine Buchungen verwalten')
     edit.setAttribute('href', '#')
     aside.appendChild(edit)
+
+    // Accordions
+    const accordions = body.querySelectorAll('.accordion')
+    accordions.forEach(accordion => {
+      const showLink = accordion.querySelector('.show-accordion-content-link')
+      const hideLink = accordion.querySelector('.hide-accordion-content-link')
+      const accordionContent = accordion.querySelector('.accordion-content')
+      if (showLink && hideLink && accordionContent) {
+        showLink.onclick = (e) => {
+          e.preventDefault()
+          accordionContent.style.display = ''
+          showLink.style.display = 'none'
+          hideLink.style.display = ''
+        }
+        hideLink.onclick = (e) => {
+          e.preventDefault()
+          accordionContent.style.display = 'none'
+          showLink.style.display = ''
+          hideLink.style.display = 'none'
+        }
+      }
+    })
   }
 
   renderNoResult () {
