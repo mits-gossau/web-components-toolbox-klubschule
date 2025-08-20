@@ -1,0 +1,109 @@
+{
+  "bookings": [
+    {
+      "courseId": "12345",
+      "courseTitle": "German Language Course A1",
+      "courseType": "3A",
+      "courseStartDate": "2024-09-01T09:00:00Z",
+      "courseEndDate": "2024-12-15T11:00:00Z",
+      "courseLocation": "Zürich",
+      "roomDescription": "Room 201",
+      "courseStatus": "active",
+      "courseStatusText": "Active",
+      "bookingType": 1,
+      "subscriptionType": 1,
+      "logoUrl": "https://www.klubschule.ch/_campuslogo/logo-de.png",
+      "appointments": [
+        {
+          "appointmentId": "apt001",
+          "appointmentDate": "2024-08-21T09:00:00Z",
+          "duration": 120,
+          "room": "Room 201",
+          "instructor": "Maria Schmidt"
+        },
+        {
+          "appointmentId": "apt002",
+          "appointmentDate": "2024-08-23T09:00:00Z",
+          "duration": 120,
+          "room": "Room 201",
+          "instructor": "Maria Schmidt"
+        },
+        {
+          "appointmentId": "apt003",
+          "appointmentDate": "2024-08-26T09:00:00Z",
+          "duration": 120,
+          "room": "Room 201",
+          "instructor": "Maria Schmidt"
+        }
+      ]
+    },
+    {
+      "courseId": "12346",
+      "courseTitle": "Business English B2",
+      "courseType": "2B",
+      "courseStartDate": "2024-08-15T18:30:00Z",
+      "courseEndDate": "2024-11-30T20:30:00Z",
+      "courseLocation": "Basel",
+      "roomDescription": "Conference Room A",
+      "courseStatus": "active",
+      "courseStatusText": "Active",
+      "bookingType": 2,
+      "subscriptionType": 2,
+      "logoUrl": "https://www.klubschule.ch/_campuslogo/logo-de.png",
+      "appointments": [
+        {
+          "appointmentId": "apt004",
+          "appointmentDate": "2024-08-22T18:30:00Z",
+          "duration": 90,
+          "room": "Conference Room A",
+          "instructor": "John Taylor"
+        },
+        {
+          "appointmentId": "apt005",
+          "appointmentDate": "2024-08-24T18:30:00Z",
+          "duration": 90,
+          "room": "Conference Room A",
+          "instructor": "John Taylor"
+        }
+      ]
+    },
+    {
+      "courseId": "12347",
+      "courseTitle": "Fitness Abonnement Premium",
+      "courseType": "7A",
+      "courseStartDate": "2024-01-01T06:00:00Z",
+      "courseEndDate": "2024-12-31T22:00:00Z",
+      "courseLocation": "Bern",
+      "roomDescription": "Fitness Center",
+      "courseStatus": "active",
+      "courseStatusText": "Active",
+      "bookingType": 3,
+      "subscriptionType": 5,
+      "logoUrl": "https://www.klubschule.ch/_campuslogo/logo-de.png",
+      "appointments": []
+    },
+    {
+      "courseId": "12348",
+      "courseTitle": "Photography Basics - Continuation",
+      "courseType": "4C",
+      "courseStartDate": "2024-09-15T14:00:00Z",
+      "courseEndDate": "2024-12-01T16:00:00Z",
+      "courseLocation": "Luzern",
+      "roomDescription": "Studio 3",
+      "courseStatus": "registered",
+      "courseStatusText": "Registered",
+      "bookingType": 3,
+      "subscriptionType": 5,
+      "logoUrl": "https://www.klubschule.ch/_campuslogo/logo-de.png",
+      "appointments": [
+        {
+          "appointmentId": "apt006",
+          "appointmentDate": "2024-09-15T14:00:00Z",
+          "duration": 180,
+          "room": "Studio 3",
+          "instructor": "Peter Müller"
+        }
+      ]
+    }
+  ]
+}
