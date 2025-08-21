@@ -81,7 +81,7 @@ import Index from './Index.js'
  * @type {CustomElementConstructor}
  */
 export default class Booking extends Index {
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.requestBookingListener = (event) => {
@@ -99,26 +99,26 @@ export default class Booking extends Index {
     }
   }
 
-  connectedCallback() {
+  connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('update-booking', this.requestBookingListener)
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.body.removeEventListener('update-booking', this.requestBookingListener)
   }
 
-  shouldRenderHTML() {
+  shouldRenderHTML () {
     return !this.root.querySelector('div#booking')
   }
 
-  shouldRenderCSS() {
+  shouldRenderCSS () {
     return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
   }
 
-  renderCSS() {
+  renderCSS () {
     this.css = /* css */`
       :host #detail-page {
         position: absolute;
@@ -148,7 +148,7 @@ export default class Booking extends Index {
     `
   }
 
-  renderHTML() {
+  renderHTML () {
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../components/atoms/button/Button.js`,
@@ -225,7 +225,7 @@ export default class Booking extends Index {
     `
   }
 
-  renderBooking() {
+  renderBooking () {
     const body = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('ks-o-body-section').shadowRoot
     if (!this.bookingData) return
 
@@ -238,7 +238,7 @@ export default class Booking extends Index {
 
     const start = new Date(course.courseStartDate)
     const end = new Date(course.courseEndDate)
-    const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+    const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
     const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
 
     this.bookingDetails = JSON.stringify({
@@ -263,7 +263,7 @@ export default class Booking extends Index {
       aside.style.backgroundColor = 'white'
       body.appendChild(aside)
     }
-    aside.innerHTML = /* html */`<ks-a-heading tag="h3">Kontakt</ks-a-heading>`
+    aside.innerHTML = /* html */'<ks-a-heading tag="h3">Kontakt</ks-a-heading>'
 
     const address = document.createElement('ks-m-contact-row')
     address.setAttribute('icon-name', 'Home')
@@ -287,7 +287,7 @@ export default class Booking extends Index {
     aside.appendChild(mail)
 
     const heading2 = document.createElement('div')
-    heading2.innerHTML =  /* html */`
+    heading2.innerHTML = /* html */`
       <ks-a-spacing type="m-flex"></ks-a-spacing>
       <ks-a-heading tag="h3">Weitere Optionen</ks-a-heading>
     `
@@ -300,7 +300,7 @@ export default class Booking extends Index {
     aside.appendChild(edit)
   }
 
-  renderNoResult() {
+  renderNoResult () {
     const container = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('ks-o-body-section').shadowRoot.querySelector('#booking-detail .container')
     console.log(container)
     if (container) {
