@@ -134,7 +134,7 @@ export default class Dashboard extends Shadow() {
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('nextAppointments')}
           </div>
-          <div col-lg="12" col-md="12" col-sm="12">
+          <!--<div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('courses')}
           </div>
           <div col-lg="12" col-md="12" col-sm="12">
@@ -142,7 +142,7 @@ export default class Dashboard extends Shadow() {
           </div>
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('abonnements')}
-          </div>
+          </div>-->
         </o-grid>
     `
     this.html = gridSkeleton
@@ -181,11 +181,11 @@ export default class Dashboard extends Shadow() {
         // next appointments
         this.renderNextAppointments(nextAppointmensData, tileModule, this.nextAppointmentsDiv)
         // my courses
-        this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
+        // this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
         // my continuations
-        this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
+        // this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
         // my abbonements
-        this.renderAbbonements(abonnementsData, tileModule, this.abonnementsDiv)
+        // this.renderAbbonements(abonnementsData, tileModule, this.abonnementsDiv)
       }
     })
   }
@@ -212,12 +212,12 @@ export default class Dashboard extends Shadow() {
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
             <!--<div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>-->
             <div id="continuations" class="container-continuations container"></div>
-            ${this.renderDiscoverMoreTile()}
+            <!--${this.renderDiscoverMoreTile()}-->
           </div>`
       case 'abonnements':
         return /* html */ `
           <div id="abonnements" class="abonnements">
-            <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
+            <!--<h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>-->
             <div id="abonnements" class="container-abonnements container"></div>
           </div>`
       default:
