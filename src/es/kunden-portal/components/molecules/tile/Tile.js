@@ -1,5 +1,6 @@
 // @ts-check
 import Tile from '../../../../components/molecules/tile/Tile.js'
+import { formatDateForRender } from '../../../helpers/Shared.js'
 
 /**
  * @export
@@ -115,7 +116,7 @@ export default class AppointmentTile extends Tile {
     const { courseTitle, courseStartDate, courseEndDate } = data.data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
-    const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+
     // TODO: check this - looks shitty
     return /* html */ `
       <m-load-template-tag mode="false">
@@ -132,7 +133,7 @@ export default class AppointmentTile extends Tile {
                   <span class="m-tile__title title">${courseTitle}</span>
                 </div>
                 <div>
-                  <div class="m-tile__body"><span class="m-tile__content m-tile__next-date">Gültigkeitsdauer ${formatDate(start)} - ${formatDate(end)}</span></div>
+                  <div class="m-tile__body"><span class="m-tile__content m-tile__next-date">Gültigkeitsdauer ${formatDateForRender(start)} - ${formatDateForRender(end)}</span></div>
                   <div>
                     <ks-a-button
                       href="" 
@@ -152,9 +153,18 @@ export default class AppointmentTile extends Tile {
   }
 
   renderNextAppointment (data) {
-    const { appointmentDateFormatted, roomDescription } = data.data.appointments[0] || {}
-    const { courseTitle, courseLocation, courseId } = data.data || {}
-    const link = `index.html#/booking?courseId=${courseId}`
+    const { appointmentDateFormatted, roomDescription, appointmentCourseId, appointmentCourseTitle } = data.data.appointments[0] || {}
+    const { courseType, courseTitle, courseLocation, courseId } = data.data || {}
+    let courseIdLink = courseId
+    let title = ''
+    if (courseType === '1K') {
+      courseIdLink = appointmentCourseId
+      title = appointmentCourseTitle
+    }
+    const link = `index.html#/booking?courseId=${courseIdLink}`
+
+    const renderTitle = title ? `<span class="m-tile__subtitle subtitle">${courseTitle}</span><span class="m-tile__title title">${title}</span>` : `<span class="m-tile__title title">${courseTitle}</span>`
+
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
@@ -164,13 +174,15 @@ export default class AppointmentTile extends Tile {
               flex-direction: column;
               padding-bottom: 1.5em;
             }
+            :host .m-tile__head {
+              flex-direction: column;
+              align-items: flex-start;
+            }
           </style>
           <div class="m-tile next-appointment">
             <div class="m-tile__wrap">
               <div class="course-info">
-                <div class="m-tile__head">
-                  <span class="m-tile__title title">${courseTitle}</span>
-                </div>
+                <div class="m-tile__head">${renderTitle}</div>
                 <div class="m-tile__body">
                   <div>
                     <span class="m-tile__content m-tile__next-date">${appointmentDateFormatted || ''}</span>

@@ -134,6 +134,15 @@ export default class Dashboard extends Shadow() {
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('nextAppointments')}
           </div>
+          <!--<div col-lg="12" col-md="12" col-sm="12">
+            ${this.renderAreaWrapper('courses')}
+          </div>
+          <div col-lg="12" col-md="12" col-sm="12">
+            ${this.renderAreaWrapper('continuations')}
+          </div>
+          <div col-lg="12" col-md="12" col-sm="12">
+            ${this.renderAreaWrapper('abonnements')}
+          </div>-->
         </o-grid>
     `
     this.html = gridSkeleton
@@ -172,11 +181,11 @@ export default class Dashboard extends Shadow() {
         // next appointments
         this.renderNextAppointments(nextAppointmensData, tileModule, this.nextAppointmentsDiv)
         // my courses
-        this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
+        // this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
         // my continuations
-        this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
+        // this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
         // my abbonements
-        this.renderAbbonements(abonnementsData, tileModule, this.abonnementsDiv)
+        // this.renderAbbonements(abonnementsData, tileModule, this.abonnementsDiv)
       }
     })
   }
@@ -203,12 +212,12 @@ export default class Dashboard extends Shadow() {
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
             <!--<div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>-->
             <div id="continuations" class="container-continuations container"></div>
-            ${this.renderDiscoverMoreTile()}
+            <!--${this.renderDiscoverMoreTile()}-->
           </div>`
       case 'abonnements':
         return /* html */ `
           <div id="abonnements" class="abonnements">
-            <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
+            <!--<h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>-->
             <div id="abonnements" class="container-abonnements container"></div>
           </div>`
       default:
@@ -246,11 +255,11 @@ export default class Dashboard extends Shadow() {
     abonnements.forEach(abonnement => {
       const courseData = {
         data: abonnement,
-        type: 'abonnement',
-        sprachid: 'd'
+        type: 'abonnement'
       }
 
       // @ts-ignore
+      // eslint-disable-next-line new-cap
       const event = new tileComponent.constructorClass({ namespace: 'tile-abonnement-' })
       event.setAttribute('data', JSON.stringify(courseData))
       fragment.appendChild(event)
@@ -274,7 +283,7 @@ export default class Dashboard extends Shadow() {
     })
   }
 
-  renderDiscoverSection({ title, className }) {
+  renderDiscoverSection ({ title, className }) {
     return /* html */ `
       <div class="discover${className ? ' ' + className : ''}">
         <h3><span>${title}</span></h3>
@@ -307,6 +316,8 @@ export default class Dashboard extends Shadow() {
     const fragment = document.createDocumentFragment()
 
     bookingsData.forEach(app => {
+      // @ts-ignore
+      // eslint-disable-next-line new-cap
       const event = new tileComponent.constructorClass({ namespace: 'tile-next-appointment-' })
       // event.setAttribute('class', 'next-appointment-tile') // TODO: Check if this is needed
       // event.setAttribute('namespace', 'tile-appointment-')
@@ -373,6 +384,7 @@ export default class Dashboard extends Shadow() {
       }
 
       // @ts-ignore
+      // eslint-disable-next-line new-cap
       const event = new eventTileComponent.constructorClass({})
       event.setAttribute('class', 'course-event')
       event.setAttribute('data', JSON.stringify(courseData))
@@ -380,7 +392,7 @@ export default class Dashboard extends Shadow() {
     })
   }
 
-  get discoverTiles() {
+  get discoverTiles () {
     return [
       {
         imageSrc: 'https://www.klubschule.ch/_campuslogo/logo-de.png',
@@ -408,7 +420,7 @@ export default class Dashboard extends Shadow() {
     // the list is sorted by appointment date (earliest first)
     // only keep the appointment date, no other information
     // this is done to find the next appointment (newest one in the future)
-    appointments.flatMap(course => {
+    appointments.forEach(course => {
       const sortedAppointments = course.appointments
         .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
         .map(app => ({ appointmentDate: app.appointmentDate }))
@@ -493,5 +505,4 @@ export default class Dashboard extends Shadow() {
   get continuationsDiv () {
     return this.root.querySelector('o-grid').root.querySelector('#continuations .container-continuations')
   }
-
 }
