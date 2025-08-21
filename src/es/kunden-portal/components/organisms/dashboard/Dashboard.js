@@ -149,7 +149,7 @@ export default class Dashboard extends Shadow() {
 
     const modulePromise = this.fetchModules([
       {
-        path: `${this.importMetaUrl}'../../../../../../../../../src/es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+        path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
         name: 'o-grid'
       },
       {
