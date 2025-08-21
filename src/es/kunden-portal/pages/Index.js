@@ -13,7 +13,7 @@ export default class Index extends Shadow() {
    * @param options
    * @param {any} args
    */
-  constructor(options = {}, ...args) {
+  constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
 }

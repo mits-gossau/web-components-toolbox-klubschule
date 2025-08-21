@@ -583,7 +583,7 @@ export default class Event extends Shadow() {
       <div class="event${this.isWishList ? " wishlist" : ""}${this.isWishList && this.isPassed ? " passed" : ""}">
          ${state_of_booking || logo_url ? /* html */`<div class="top">
             <div class="state-of-booking"><span>${state_of_booking ? state_of_booking : ''}</span></div>
-            <div class="logo">${logo_url ? /* html */`<img src="${logo_url}" height="40" width="40" />` : ''}</div>
+            <div class="logo">${logo_url ? this.getLogoHTML(logo_url) : ''}</div>
         </div>` : ''}
         <div class="head">
           <div class="dates">
@@ -841,6 +841,10 @@ export default class Event extends Shadow() {
     const centerId = data.centerid ? `_${data.centerid}` : ''
     const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
     return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
+  }
+
+  getLogoHTML(logo_url) {
+    return `<img src="${logo_url}" height="40" width="40" />`
   }
 
   get mockData () {

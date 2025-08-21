@@ -296,15 +296,26 @@
       url: './src/es/kunden-portal/event-driven-web-components-router/src/Router.js'
     },
     {
+      selector: 'kp-a-',
+      separateFolder: true,
+      url: './src/es/kunden-portal/components/atoms/'
+    },
+    {
       selector: 'kp-m-',
       separateFolder: true,
       url: './src/es/kunden-portal/components/molecules/'
+    },
+    {
+      selector: 'kp-o-',
+      separateFolder: true,
+      url: './src/es/kunden-portal/components/organisms/'
     },
     {
       selector: 'kp-c-',
       separateFolder: true,
       url: './src/es/kunden-portal/controllers/'
     }
+
   ] // directories
   // ↑↑↑ adjustable ↑↑↑
 )

@@ -10,17 +10,25 @@
  * @type {CustomElementConstructor}
  */
 export default class Dashboard extends HTMLElement {
-  constructor() {
+  constructor () {
     super()
-    this.abortControllerDashboard = null
+    this.abortControllerRequestBookings = null
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.addEventListener('request-bookings', this.requestBookings)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.removeEventListener('request-bookings', this.requestBookings)
+  }
+
+  abortController (abortController) {
+    if (abortController) {
+      abortController.abort()
+    }
+    abortController = new AbortController()
+    return abortController
   }
 
   /**
@@ -29,21 +37,26 @@ export default class Dashboard extends HTMLElement {
    * @param {CustomEventInit} event - The event that triggered the request.
    */
   requestBookings = (event) => {
-    if (this.abortControllerDashboard) this.abortControllerDashboard.abort()
-    this.abortControllerDashboard = new AbortController()
+    // if (this.abortControllerRequestBookings) this.abortControllerRequestBookings.abort()
+    // this.abortControllerRequestBookings = new AbortController()
+    this.abortControllerRequestBookings = this.abortController(this.abortControllerRequestBookings)
 
     // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBookings}`
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').getMyBookings}`
+    // const endpointLocalTest = '../../es/kunden-portal/controllers/dashboard/getMyBookings.json'
     const data = { language: 'de' }
-    const options = this.fetchPOSTOptions(data, this.abortControllerDashboard)
+    const options = this.fetchPOSTOptions(data, this.abortControllerRequestBookings)
 
     this.dispatchEvent(new CustomEvent('update-bookings', {
       detail: {
-        fetch: fetch(endpoint, options)
-          .then(async response => {
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-            return await response.json()
-          })
+        fetch: fetch(endpoint, options).then(async response => {
+        // fetch: fetch(endpoint).then(async response => {
+          // TODO: Improve error handling
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+          return await response.json()
+        })
       },
       bubbles: true,
       cancelable: true,
@@ -57,7 +70,7 @@ export default class Dashboard extends HTMLElement {
    * @param {AbortController} abortController - Abort Fetch requests
    * @returns {Object} An object is being returned to use as option object for api fetch
    */
-  fetchPOSTOptions(data, abortController) {
+  fetchPOSTOptions (data, abortController) {
     return {
       method: 'POST',
       headers: {
