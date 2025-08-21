@@ -84,33 +84,19 @@ export default class Booking extends Index {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.requestBookingListener = (event) => {
-      event.detail.fetch
-        .then((data) => {
-          this.bookingData = data || []
-          if (this.modulesLoaded) {
-            setTimeout(() => this.renderBooking(), 0)
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching bookings:', error)
-          setTimeout(() => this.renderNoResult(), 0)
-        })
-    }
+    this.requestBookingListener = this.createRequestListener(
+      data => { this.bookingData = data || []; if (this.modulesLoaded) setTimeout(() => this.renderBooking(), 0) },
+      error => { console.error('Error fetching bookings:', error); setTimeout(() => this.renderNoResult(), 0) }
+    )
 
-    this.requestFollowUpListener = (event) => {
-      event.detail.fetch
-        .then((data) => {
-          this.followUpData = data || []
-          if (this.modulesLoaded) {
-            setTimeout(() => this.renderFollowUp(), 0)
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching followUp:', error)
-          setTimeout(() => this.renderNoResult(), 0)
-        })
-    }
+    this.requestFollowUpListener = this.createRequestListener(
+      data => { this.followUpData = data || []; if (this.modulesLoaded) setTimeout(() => this.renderFollowUp(), 0) },
+      error => { console.error('Error fetching followUp:', error); setTimeout(() => this.renderNoResult(), 0) }
+    )
+  }
+
+  createRequestListener(onSuccess, onError) {
+    return (event) => { event.detail.fetch.then(onSuccess).catch(onError)}
   }
 
   connectedCallback () {
@@ -166,6 +152,10 @@ export default class Booking extends Index {
 
   renderHTML () {
     this.fetchModules([
+      {
+        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/event/Event.js`,
+        name: 'kp-m-event'
+      },
       {
         path: `${this.importMetaUrl}../../components/atoms/button/Button.js`,
         name: 'ks-a-button'
@@ -289,6 +279,7 @@ export default class Booking extends Index {
           <ks-o-body-section content-width-var="100%" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" has-background>
             <div id="continuation-course" style="width: var(--body-section-default-width, 86.666%);">
               <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> Fortsetzungskurs</h2>
+              <div class="container-followup container"></div>
             <div>
           </ks-o-body-section>
         </div>
@@ -419,8 +410,61 @@ export default class Booking extends Index {
 
   renderFollowUp () {
     if (!this.followUpData) return
-
     console.log('followUp data:', this.followUpData)
+
+    const containerDiv = this.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('.container-followup')
+    if (!containerDiv) return
+
+    containerDiv.innerHTML = ''
+
+    const course = this.followUpData.course
+    if (!course) return
+
+    const start = new Date(course.courseStartDate)
+      const end = new Date(course.courseEndDate)
+      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+
+      // TODO: format date to dd.mm.yy ? Neet to check if this is needed
+      const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
+
+      // TODO: Check this looks wrong
+      const courseData = {
+        course: {
+          kurs_typ: course.courseType,
+          kurs_id: course.courseId,
+          datum_label: course.courseTitle,
+          days: [daysEntry],
+          location: {
+            name: course.locationDescription,
+            badge: course.roomDescription || ''
+          },
+          status: course.courseStatus,
+          status_label: course.courseStatusText,
+          buttons: [{
+            text: 'Jetzt bestätigen',
+            typ: 'primary',
+            event: 'confirm-reservation',
+            link: '#'
+          },{
+            text: 'Detail ansehen',
+            typ: 'secondary',
+            event: 'open-booking-detail',
+            link: `index.html#/booking?courseId=${course.courseId}`
+          }],
+          icons: [],
+          state_of_booking: 'Reserviert',
+          logo_url: course.logoUrl || ''
+        },
+        sprachid: 'd'
+      }
+
+      const FollowUpTile = customElements.get('kp-m-event')
+      if (!FollowUpTile) return
+
+      const event = new FollowUpTile()
+      event.setAttribute('class', 'course-event')
+      event.setAttribute('data', JSON.stringify(courseData))
+      containerDiv.appendChild(event)
   }
 
   renderNoResult () {

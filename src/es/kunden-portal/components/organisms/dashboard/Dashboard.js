@@ -134,7 +134,7 @@ export default class Dashboard extends Shadow() {
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('nextAppointments')}
           </div>
-          <!--<div col-lg="12" col-md="12" col-sm="12">
+          <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('courses')}
           </div>
           <div col-lg="12" col-md="12" col-sm="12">
@@ -142,7 +142,7 @@ export default class Dashboard extends Shadow() {
           </div>
           <div col-lg="12" col-md="12" col-sm="12">
             ${this.renderAreaWrapper('abonnements')}
-          </div>-->
+          </div>
         </o-grid>
     `
     this.html = gridSkeleton
@@ -181,11 +181,11 @@ export default class Dashboard extends Shadow() {
         // next appointments
         this.renderNextAppointments(nextAppointmensData, tileModule, this.nextAppointmentsDiv)
         // my courses
-        // this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
+        this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
         // my continuations
-        // this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
+        this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
         // my abbonements
-        // this.renderAbbonements(abonnementsData, tileModule, this.abonnementsDiv)
+        this.renderAbbonements(abonnementsData, tileModule, this.abonnementsDiv)
       }
     })
   }
