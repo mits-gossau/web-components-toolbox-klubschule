@@ -105,11 +105,31 @@ export default class Booking extends Index {
     document.body.addEventListener('update-booking', this.requestBookingListener)
     document.body.addEventListener('update-followup', this.requestFollowUpListener)
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
+
+    // intersection observer for followUp section
+    const followupWrapper = this.shadowRoot?.querySelector('#followup-observer-anchor')
+    if (followupWrapper) {
+      this.followupObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && this.bookingData?.course?.courseIdFollowUp && !this.followupRequested) {
+            this.followupRequested = true
+            this.dispatchEvent(new CustomEvent('request-followup', {
+              detail: { courseIdFollowUp: this.bookingData.course.courseIdFollowUp },
+              bubbles: true,
+              cancelable: true,
+              composed: true
+            }))
+          }
+        })
+      }, { threshold: 0.1, rootMargin: '200px 0px 200px 0px' })
+      this.followupObserver.observe(followupWrapper)
+    }
   }
 
   disconnectedCallback () {
     document.body.removeEventListener('update-booking', this.requestBookingListener)
     document.body.removeEventListener('update-followup', this.requestFollowUpListener)
+    if (this.followupObserver) { this.followupObserver.disconnect(); this.followupObserver = null }
   }
 
   shouldRenderHTML () {
@@ -155,6 +175,10 @@ export default class Booking extends Index {
       {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/event/Event.js`,
         name: 'kp-m-event'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/tileDiscover/TileDiscover.js`,
+        name: 'kp-m-tile-discover'
       },
       {
         path: `${this.importMetaUrl}../../components/atoms/button/Button.js`,
@@ -207,7 +231,7 @@ export default class Booking extends Index {
           <a-icon-mdx icon-name="ArrowLeft" size="1em" color="white"></a-icon-mdx> Meine Kurse / Lehrgänge
         </div>
         <div id="body-stage">
-          <o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" count-section-children="2" style="display:none;">
+          <o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" count-section-children="2">
             <section>
               <!-- details -->
               <ks-o-body-section content-width-var="100%" no-margin-y background-color="white"> 
@@ -221,10 +245,11 @@ export default class Booking extends Index {
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
                 <!-- booking details -->
                 <ks-m-tile-booking-details data="${this.bookingDetails}"></ks-m-tile-booking-details>
-                <ks-a-spacing id="notification-spacing" type="m-flex"></ks-a-spacing>
+                <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
                 <div class="accordion">
                   <a href="#" class="show-accordion-content-link">Kurs Details anzeigen <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx></a>
                   <div id="offer-details" class="accordion-content" style="display:none;">
+                    <ks-a-spacing id="notification-spacing" type="m-flex"></ks-a-spacing>
                     <h3><a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1em"></a-icon-mdx> <span>Angebotsdetails</span></h3>
                     <table></table>
                     <style>
@@ -276,11 +301,36 @@ export default class Booking extends Index {
               <aside></aside>
             </section>
           </o-grid>
+          <div id="followup-observer-anchor"></div>
           <ks-o-body-section content-width-var="100%" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" has-background>
-            <div id="continuation-course" style="width: var(--body-section-default-width, 86.666%);">
-              <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> Fortsetzungskurs</h2>
-              <div class="container-followup container"></div>
-            <div>
+            <div id="followup-wrapper" style="display:none;">
+              <div id="continuation-course" style="width: var(--body-section-default-width, 86.666%); margin: 0 auto;">
+                <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> Fortsetzungskurs</h2>
+                <div class="container-followup container"></div>
+              <div>
+            </div>
+            <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
+            <div class="container-discover">
+              <style>
+                :host .container-discover {
+                  display: flex;
+                  gap: var(--mdx-sys-spacing-flex-xs, 24px);
+                }
+                @media only screen and (max-width:${this.mobileBreakpoint}) {
+                  :host .container-discover {
+                    flex-direction: column;
+                  }
+                }
+              </style>
+              ${this.discoverTiles.map((tile, i) => /* html */`
+                <kp-m-tile-discover
+                  image-src="${tile.imageSrc}"
+                  tile-label="${tile.label}"
+                  link-href="${tile.href}"
+                  link-text="Kurse entdecken">
+                </kp-m-tile-discover>
+              `).join('')}
+            </div>
           </ks-o-body-section>
         </div>
       </div>
@@ -325,11 +375,6 @@ export default class Booking extends Index {
     })
     const tile = body.querySelector('ks-m-tile-booking-details')
     if (tile) tile.setAttribute('data', this.bookingDetails)
-    
-    // request follow up course
-    if (this.bookingData.course.courseIdFollowUp) {
-      this.dispatchEvent(new CustomEvent('request-followup', { detail: { courseIdFollowUp: this.bookingData.course.courseIdFollowUp}, bubbles: true, cancelable: true, composed: true }))
-    }
 
     // details (Angebotsdetails)
     const offerDetailsTable = body.querySelector('#offer-details table')
@@ -410,9 +455,9 @@ export default class Booking extends Index {
 
   renderFollowUp () {
     if (!this.followUpData) return
-    console.log('followUp data:', this.followUpData)
 
-    const containerDiv = this.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('.container-followup')
+    const followUpSection = this.shadowRoot?.querySelector('ks-o-body-section')
+    const containerDiv = followUpSection?.shadowRoot?.querySelector('.container-followup')
     if (!containerDiv) return
 
     containerDiv.innerHTML = ''
@@ -465,6 +510,8 @@ export default class Booking extends Index {
       event.setAttribute('class', 'course-event')
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
+
+      followUpSection.shadowRoot.querySelector('#followup-wrapper').style.display = 'block'
   }
 
   renderNoResult () {
@@ -478,5 +525,25 @@ export default class Booking extends Index {
         </div>
       `
     }
+  }
+
+  get discoverTiles () {
+    return [
+      {
+        imageSrc: 'https://www.klubschule.ch/_campuslogo/logo-de.png',
+        label: 'Klubschule Kurse',
+        href: 'https://www.klubschule.ch/suche/'
+      },
+      {
+        imageSrc: 'https://www.klubschule.ch/media/oz0je4nv/logo-pro-s-neu.png',
+        label: 'Klubschule Pro Kurse',
+        href: 'https://www.klubschule-pro.ch/suche/'
+      },
+      {
+        imageSrc: 'https://www.klubschule.ch/_campuslogo/logoibaw_zone.png',
+        label: 'IBAW Kurse',
+        href: 'https://www.ibaw.ch/suche/'
+      }
+    ]
   }
 }
