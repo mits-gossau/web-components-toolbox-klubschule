@@ -358,6 +358,7 @@ export default class Dashboard extends Shadow() {
 
       // TODO: Check this looks wrong
       const courseData = {
+        data: course,
         course: {
           kurs_typ: course.courseType,
           kurs_id: course.courseId,
