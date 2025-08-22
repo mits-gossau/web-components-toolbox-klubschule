@@ -282,6 +282,8 @@ export default class Dashboard extends Shadow() {
   }
 
   renderDiscoverSection ({ title, className }) {
+    // example of translation
+    // <a-translation data-trans-key="CP.cpLowAppointmentBalance"></a-translation>
     return /* html */ `
       <div class="discover${className ? ' ' + className : ''}">
         <h3><span>${title}</span></h3>
