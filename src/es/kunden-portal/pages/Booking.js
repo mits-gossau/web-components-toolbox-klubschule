@@ -296,6 +296,57 @@ export default class Booking extends Index {
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
                 <!-- documents -->
                 <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="FileText" size="1em"></a-icon-mdx> Dokumente</h2>
+                <div id="booking-documents">
+                  <table>
+                    <tr><td><strong>Angebotsdetails</strong></td><td><span>PDF</span><a href="#" alt=""><a-icon-mdx icon-name="Download" size="1.5em" color="0053a6"></a-icon-mdx></a></td></tr>
+                    <tr><td><strong>Rechnung</strong></td><td><span>PDF</span><a href="#" alt=""><a-icon-mdx icon-name="Download" size="1.5em" color="0053a6"></a-icon-mdx></a></td></tr>
+                    <tr><td><strong>Zahlungsbestätigung</strong></td><td><span>PDF</span><a href="#" alt=""><a-icon-mdx icon-name="Download" size="1.5em" color="0053a6"></a-icon-mdx></a></td></tr>
+                    <tr><td><strong>Kursbestätigung anfordern</strong><br /><small>Eine Kursbestätigung kann erst nacht Abschluss des Kurses beantragt werden.</small></td><td><div><a href="#" alt="">Anfragen</a></div></td></tr>
+                  </table>
+                  <style>
+                    :host #booking-documents table {
+                      width: calc(100% - 8px);
+                      border-collapse: collapse;
+                      background: #fff;
+                      border-bottom: 1px solid #000;
+                      font-size: 14px;
+                    }
+                    :host #booking-documents tr {
+                      background: #fff !important;
+                      border-top: 1px solid #000;
+                    }
+                    :host #booking-documents td {
+                      padding: 8px 0;
+                      border: none;
+                      vertical-align: middle;
+                    }
+                    :host #booking-documents td:first-child {
+                      padding-right: 8px;
+                    }
+                    :host #booking-documents td:nth-child(2) {
+                      text-align: right;
+                    }
+                    :host #booking-documents td:nth-child(2):not(:has(div)) {
+                      display: flex;
+                      align-items: center;
+                      gap: 8px;
+                      justify-content: flex-end;
+                      height: 100%;        
+                    }
+                    :host #booking-documents td:nth-child(2) a {
+                      margin-left: 8px;
+                      display: inline-block;
+                      margin: 0 -8px 0 0;
+                      padding: 0 8px;
+                    }
+                    :host #booking-documents td:nth-child(2) div {
+                      height: 100%;
+                    }
+                    :host #booking-documents strong {
+                      font-weight: 500;
+                    }
+                  </style>
+                </div>
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
               </ks-o-body-section>
               <!-- contact -->
