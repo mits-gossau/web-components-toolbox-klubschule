@@ -229,8 +229,7 @@ export default class Dashboard extends Shadow() {
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
-      containerDiv.textContent = 'Es finden keine Fortsetzungskurse statt.'
-      containerDiv.classList.add('no--results')
+      this.renderEmptyMessage(containerDiv, 'Es finden keine Fortsetzungskurse statt.', 'no--results')
       return
     }
     bookingsData.forEach(course => {
@@ -244,8 +243,7 @@ export default class Dashboard extends Shadow() {
     containerDiv.innerHTML = ''
 
     if (abonnements.length === 0) {
-      containerDiv.textContent = 'Sie haben keine Abonnemente.'
-      containerDiv.classList.add('no-results')
+      this.renderEmptyMessage(containerDiv, 'Sie haben keine Abonnemente.')
       return
     }
 
@@ -307,8 +305,7 @@ export default class Dashboard extends Shadow() {
     containerDiv.innerHTML = ''
 
     if (bookingsData.length === 0) {
-      containerDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
-      containerDiv.classList.add('no-results')
+      this.renderEmptyMessage(containerDiv, 'Sie haben keine offenen oder bevorstehenden Termine.')
       return
     }
 
@@ -344,8 +341,8 @@ export default class Dashboard extends Shadow() {
     containerDiv.innerHTML = ''
 
     if (bookingsData.length === 0) {
-      containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
-      containerDiv.classList.add('no-results')
+      // TODO: Translation
+      this.renderEmptyMessage(containerDiv, 'Sie haben keine gebuchten Kurse oder Lehrgangen.')
       return
     }
 
@@ -390,6 +387,13 @@ export default class Dashboard extends Shadow() {
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
     })
+  }
+
+  renderEmptyMessage (divEl, message, errorCssClass = 'no-results') {
+    if (!divEl) return
+    // TODO: Translation
+    divEl.textContent = message
+    divEl.classList.add(errorCssClass)
   }
 
   get discoverTiles () {
