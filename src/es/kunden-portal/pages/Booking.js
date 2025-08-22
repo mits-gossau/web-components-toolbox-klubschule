@@ -233,7 +233,6 @@ export default class Booking extends Index {
         <div id="body-stage">
           <o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" count-section-children="2">
             <section>
-              <!-- details -->
               <ks-o-body-section content-width-var="100%" no-margin-y background-color="white"> 
                 <!-- notification -->
                 <ks-m-system-notification id="booking-notification" namespace="system-notification-default-" icon-name="Info" icon-size="1.5em" icon-plain is-closeable>
@@ -243,13 +242,13 @@ export default class Booking extends Index {
                   </div>
                 </ks-m-system-notification>
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
-                <!-- booking details -->
+                <!-- details -->
                 <ks-m-tile-booking-details data="${this.bookingDetails}"></ks-m-tile-booking-details>
                 <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
                 <div class="accordion">
                   <a href="#" class="show-accordion-content-link">Kurs Details anzeigen <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx></a>
                   <div id="offer-details" class="accordion-content" style="display:none;">
-                    <ks-a-spacing id="notification-spacing" type="m-flex"></ks-a-spacing>
+                    <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
                     <h3><a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1em"></a-icon-mdx> <span>Angebotsdetails</span></h3>
                     <table></table>
                     <style>
@@ -292,15 +291,18 @@ export default class Booking extends Index {
                   <a href="#" class="hide-accordion-content-link" style="display:none;">Kurs Details ausblenden <a-icon-mdx icon-name="ChevronUp" size="1em"></a-icon-mdx></a>
                 </div>
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                <!-- appointments -->
                 <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> Kurs Termin(e)</h2>
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                <!-- documents -->
                 <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="FileText" size="1em"></a-icon-mdx> Dokumente</h2>
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
               </ks-o-body-section>
-              <!-- contact and options -->
+              <!-- contact -->
               <aside></aside>
             </section>
           </o-grid>
+          <!-- followup -->
           <div id="followup-observer-anchor"></div>
           <ks-o-body-section content-width-var="100%" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" has-background>
             <div id="followup-wrapper" style="display:none;">
@@ -310,6 +312,7 @@ export default class Booking extends Index {
               <div>
             </div>
             <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
+            <!-- discover -->
             <div class="container-discover">
               <style>
                 :host .container-discover {
