@@ -136,7 +136,19 @@ export default class PartnerSearch extends Shadow() {
           margin-right: auto;
         }
         :host .partner-result-wrapper {
-          flex-direction: column;
+          gap: 0.5em;
+          margin-left: -0.5em;
+          overflow-x: scroll;
+          width: 100dvw;
+        }
+        :host .partner-result-wrapper > *:first-child {
+          margin-left: 0.5em;
+        }
+        :host .partner-result-wrapper > *:last-child {
+          margin-right: 0.5em;
+        }
+        :host .partner-result-item-wrapper .button-wrapper {
+          min-width: calc(13.75em - 2.5rem);
         }
       }
     `
@@ -217,6 +229,7 @@ export default class PartnerSearch extends Shadow() {
               `, '')}
           </div>
         `)
+        if (!this.hasAttribute('has-selected-filter')) this.scrollIntoView()
       } else {
         partnerResultsSection?.setAttribute('hidden', '')
       }
