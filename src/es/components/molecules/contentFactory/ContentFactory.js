@@ -11,7 +11,7 @@ export default class ContentFactory extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
-    this.withFacetEventNameListener = event => this.renderHTML(event.detail.fetch)
+    this.withFacetEventNameListener = event => this.renderHTML(event.detail)
     this.hiddenMessages = this.hiddenSectionsPartnerSearch
   }
 
@@ -79,12 +79,12 @@ export default class ContentFactory extends Shadow() {
 
   /**
   * renderHTML
-  * @param {any} fetch - An array of course fetch objects.
+  * @param {any} detail - An array of course detail objects.
   * @returns {Promise<void>} The function `renderHTML` returns a Promise.
   */
-  async renderHTML (fetch) {
+  async renderHTML (detail) {
     return Promise.all([
-      fetch,
+      detail.fetch,
       this.fetchModules([
         {
           path: `${this.importMetaUrl}../contentSearchItem/ContentSearchItem.js`,
@@ -136,8 +136,8 @@ export default class ContentFactory extends Shadow() {
         `),
       '<section>'
       ) + '</section>'
-      if (!data.contentItems.length && this.section) this.section.innerHTML = /* html */`
-      <ks-o-partner-search search-text="${data.searchText}"${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''} tab="2">
+      if (!data.contentItems.length && this.section && !detail.onlyfaceted) this.section.innerHTML = /* html */`
+      <ks-o-partner-search search-text="${data.searchText}"${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''} tab="2"${data.hasSelectedFilter ? ' has-selected-filter' : ''}>
         ${this.hiddenMessages.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
       </ks-o-partner-search>
       `
