@@ -73,6 +73,13 @@ self.Environment = {
           coursePDF: `${this.getEnvUrl()}/umbraco/api/CustomerPortalApi/coursepdf`
         }
       }
+      case 'kunden-portal': {
+        return {
+          getMyBookings: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getMyBookings`,
+          myBooking: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getMyBooking`,
+          subscriptions: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptions`
+        }
+      }
       default:
         return ''
     }

@@ -149,7 +149,7 @@ export default class Dashboard extends Shadow() {
 
     const modulePromise = this.fetchModules([
       {
-        path: `${this.importMetaUrl}'../../../../../../../../../src/es/components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+        path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
         name: 'o-grid'
       },
       {
@@ -210,14 +210,14 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="continuation" class="continuation">
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
-            <!--<div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>-->
+            <div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>
             <div id="continuations" class="container-continuations container"></div>
-            <!--${this.renderDiscoverMoreTile()}-->
+            ${this.renderDiscoverMoreTile()}
           </div>`
       case 'abonnements':
         return /* html */ `
           <div id="abonnements" class="abonnements">
-            <!--<h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>-->
+            <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
             <div id="abonnements" class="container-abonnements container"></div>
           </div>`
       default:
@@ -229,8 +229,7 @@ export default class Dashboard extends Shadow() {
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
-      containerDiv.textContent = 'Es finden keine Fortsetzungskurse statt.'
-      containerDiv.classList.add('no--results')
+      this.renderEmptyMessage(containerDiv, 'Es finden keine Fortsetzungskurse statt.', 'no--results')
       return
     }
     bookingsData.forEach(course => {
@@ -244,8 +243,7 @@ export default class Dashboard extends Shadow() {
     containerDiv.innerHTML = ''
 
     if (abonnements.length === 0) {
-      containerDiv.textContent = 'Sie haben keine Abonnemente.'
-      containerDiv.classList.add('no-results')
+      this.renderEmptyMessage(containerDiv, 'Sie haben keine Abonnemente.')
       return
     }
 
@@ -284,6 +282,8 @@ export default class Dashboard extends Shadow() {
   }
 
   renderDiscoverSection ({ title, className }) {
+    // example of translation
+    // <a-translation data-trans-key="CP.cpLowAppointmentBalance"></a-translation>
     return /* html */ `
       <div class="discover${className ? ' ' + className : ''}">
         <h3><span>${title}</span></h3>
@@ -307,8 +307,7 @@ export default class Dashboard extends Shadow() {
     containerDiv.innerHTML = ''
 
     if (bookingsData.length === 0) {
-      containerDiv.textContent = 'Sie haben keine offenen oder bevorstehenden Termine.'
-      containerDiv.classList.add('no-results')
+      this.renderEmptyMessage(containerDiv, 'Sie haben keine offenen oder bevorstehenden Termine.')
       return
     }
 
@@ -344,8 +343,8 @@ export default class Dashboard extends Shadow() {
     containerDiv.innerHTML = ''
 
     if (bookingsData.length === 0) {
-      containerDiv.textContent = 'Sie haben keine gebuchten Kurse oder Lehrgänge.'
-      containerDiv.classList.add('no-results')
+      // TODO: Translation
+      this.renderEmptyMessage(containerDiv, 'Sie haben keine gebuchten Kurse oder Lehrgangen.')
       return
     }
 
@@ -359,6 +358,7 @@ export default class Dashboard extends Shadow() {
 
       // TODO: Check this looks wrong
       const courseData = {
+        data: course,
         course: {
           kurs_typ: course.courseType,
           kurs_id: course.courseId,
@@ -390,6 +390,13 @@ export default class Dashboard extends Shadow() {
       event.setAttribute('data', JSON.stringify(courseData))
       containerDiv.appendChild(event)
     })
+  }
+
+  renderEmptyMessage (divEl, message, errorCssClass = 'no-results') {
+    if (!divEl) return
+    // TODO: Translation
+    divEl.textContent = message
+    divEl.classList.add(errorCssClass)
   }
 
   get discoverTiles () {
@@ -434,7 +441,15 @@ export default class Dashboard extends Shadow() {
     const newestAppointments = dates
       .map(({ courseId, appointments }) => {
         // find the first future appointment for the course
-        const upcomingAppointment = appointments.find(({ appointmentDate }) => new Date(appointmentDate) > new Date())
+        const today = new Date()
+        today.setHours(0, 0, 0, 0) // set today's date to the beginning of the day
+        const todayAppointments = appointments.filter(appointment => {
+          const appointmentDate = new Date(appointment.appointmentDate)
+          return appointmentDate.setHours(0, 0, 0, 0) === today.getTime()
+        })
+        const upcomingAppointment = todayAppointments.length > 0
+          ? todayAppointments[0]
+          : appointments.find(({ appointmentDate }) => new Date(appointmentDate) > today)
         return { courseId, upcomingAppointment }
       })
       // filter out courses without upcoming appointments
@@ -479,7 +494,7 @@ export default class Dashboard extends Shadow() {
   }
 
   getAppointmensData (bookingsData) {
-    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5) || []
+    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A') || []
   }
 
   getContinuationsData (bookingData) {
