@@ -230,8 +230,8 @@ export default class Booking extends Index {
         name: 'kp-m-documents'
       },
       {
-        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/event/Event.js`,
-        name: 'kp-m-event'
+        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/followUp/FollowUp.js`,
+        name: 'kp-m-followup'
       },
       {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/tileBookingDetails/TileBookingDetails.js`,
@@ -505,7 +505,7 @@ export default class Booking extends Index {
         sprachid: 'd'
       }
 
-      const FollowUpTile = customElements.get('kp-m-event')
+      const FollowUpTile = customElements.get('kp-m-followup')
       if (!FollowUpTile) return
 
       const event = new FollowUpTile()
