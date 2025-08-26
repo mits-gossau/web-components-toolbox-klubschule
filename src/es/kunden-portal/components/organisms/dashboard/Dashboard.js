@@ -498,7 +498,7 @@ export default class Dashboard extends Shadow() {
   }
 
   getContinuationsData (bookingData) {
-    return bookingData.filter(course => course.bookingType === 3 && course.subscriptionType === 5) || []
+    return bookingData.filter(course => (course.bookingType === 3 || course.bookingType === 1) && course.subscriptionType === 5) || []
   }
 
   getAbonnementsData (bookingsData) {
