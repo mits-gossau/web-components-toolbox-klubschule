@@ -145,22 +145,22 @@
   width: fit-content;
   padding-left: var(--mdx-sys-spacing-fix-2xs);
   padding-right: calc(var(--mdx-sys-spacing-fix-2xs) + 8px);
-  color: var(--mdx-base-color-grey-0);
-  background: var(--color-${this.getAttribute('color')}, #00A2AD);
 }
 
 /* color exception ibaw-turquoise */
-:host([brand=ibaw][inverse][color=ibaw-turquoise]),
 :host([brand=ibaw][inverse][color=secondary]) {
   --pretitle-color: var(--mdx-base-color-ibaw-light-blue-600, #32DED5);
   --background-color: var(--mdx-base-color-ibaw-light-blue-600, #32DED5);
-  --text-color: var(--mdx-sys-color-neutral-bold4);
-  --text-color-hover: var(--mdx-sys-color-neutral-bold4);
 }
-:host(:not([inverse])[brand=ibaw][color=ibaw-turquoise]),
+:host([brand=ibaw][inverse][color=ibaw-turquoise]) {
+  --pretitle-color: var(--mdx-base-color-ibaw-turquoise-600, #00a2ad);
+  --background-color: var(--mdx-base-color-ibaw-turquoise-600, #00a2ad);
+}
 :host(:not([inverse])[brand=ibaw][color=secondary]) {
   --pretitle-color-hover: var(--mdx-base-color-ibaw-light-blue-600, #32DED5);
   --background-color-hover: var(--mdx-base-color-ibaw-light-blue-600, #32DED5);
-  --text-color: var(--mdx-sys-color-neutral-bold4);
-  --text-color-hover: var(--mdx-sys-color-neutral-bold4);
+}
+:host(:not([inverse])[brand=ibaw][color=ibaw-turquoise]) {
+  --pretitle-color-hover: var(--mdx-base-color-ibaw-turquoise-600, #00a2ad);
+  --background-color-hover: var(--mdx-base-color-ibaw-turquoise-600, #00a2ad);
 }
