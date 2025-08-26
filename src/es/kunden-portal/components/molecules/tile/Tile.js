@@ -97,12 +97,6 @@ export default class AppointmentTile extends Tile {
         case 'next-appointment':
           this.html = this.renderNextAppointment(this.tileData)
           break
-        // case 'appointment':
-        //   this.html = this.renderAppointment(this.tileData)
-        //   break
-        // case 'course':
-        //   this.html = this.renderCourse(this.tileData)
-        //   break
         case 'abonnement':
           this.html = this.renderAbbonements(this.tileData)
           break
@@ -157,6 +151,7 @@ export default class AppointmentTile extends Tile {
     const { courseType, courseTitle, courseLocation, courseId } = data.data || {}
     let courseIdLink = courseId
     let title = ''
+    // TODO: check this
     if (courseType === '1K') {
       courseIdLink = appointmentCourseId
       title = appointmentCourseTitle
@@ -212,22 +207,6 @@ export default class AppointmentTile extends Tile {
           </div>
         </template>
       </m-load-template-tag>
-    `
-  }
-
-  renderAppointment (data) {
-    return /* html */`
-    <div class="appointment-tile m-tile">
-      <h2>Appointment: ${data.title}</h2>
-    </div>
-    `
-  }
-
-  renderCourse (data) {
-    return /* html */`
-    <div class="appointment-tile m-tile">
-      <h2>Couse: ${data.title}</h2>
-    </div>
     `
   }
 }

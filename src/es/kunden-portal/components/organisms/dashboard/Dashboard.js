@@ -104,6 +104,9 @@ export default class Dashboard extends Shadow() {
           :host .container-abonnements {
             flex-direction: column;
           }
+          :host .container-continuations {
+            flex-direction: column;
+          }
           :host .discover-more-courses {
             padding-bottom: 1.5em;
           }
@@ -208,10 +211,10 @@ export default class Dashboard extends Shadow() {
         </div>`
       case 'continuations':
         return /* html */ `
-          <div id="continuation" class="continuation">
+          <div id="continuations" class="continuations">
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
-            <div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>
-            <div id="continuations" class="container-continuations container"></div>
+            <!--<div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>-->
+            <div class="container-continuations container"></div>
             ${this.renderDiscoverMoreTile()}
           </div>`
       case 'abonnements':
@@ -225,7 +228,7 @@ export default class Dashboard extends Shadow() {
     }
   }
 
-  renderContinuations (bookingsData, tileComponent, containerDiv) {
+  renderContinuations (bookingsData, eventTileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
@@ -233,7 +236,14 @@ export default class Dashboard extends Shadow() {
       return
     }
     bookingsData.forEach(course => {
-      // TODO: render html for continuation courses
+      // @ts-ignore
+      // eslint-disable-next-line new-cap
+      const event = new eventTileComponent.constructorClass({})
+      event.setAttribute('data', JSON.stringify({
+        data: course,
+        type: 'continuation'
+      }))
+      containerDiv.appendChild(event)
     })
   }
 
@@ -349,45 +359,49 @@ export default class Dashboard extends Shadow() {
     }
 
     bookingsData.forEach(course => {
-      const start = new Date(course.courseStartDate)
-      const end = new Date(course.courseEndDate)
-      const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
+      // const start = new Date(course.courseStartDate)
+      // const end = new Date(course.courseEndDate)
+      // const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
 
       // TODO: format date to dd.mm.yy ? Neet to check if this is needed
-      const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
+      // const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
 
       // TODO: Check this looks wrong
-      const courseData = {
-        data: course,
-        course: {
-          kurs_typ: course.courseType,
-          kurs_id: course.courseId,
-          datum_label: course.courseTitle,
-          days: [daysEntry],
-          location: {
-            name: course.courseLocation,
-            badge: course.roomDescription || ''
-          },
-          status: course.courseStatus,
-          status_label: course.courseStatusText,
-          buttons: [{
-            text: 'Detail ansehen',
-            typ: 'secondary',
-            event: 'open-booking-detail',
-            link: `index.html#/booking?courseId=${course.courseId}`
-          }],
-          icons: [],
-          state_of_booking: 'Gebucht',
-          logo_url: course.logoUrl || 'https://www.klubschule.ch/_campuslogo/logo-de.png'
-        },
-        sprachid: 'd'
-      }
+
+      // const courseData = {
+      //   data: course,
+      //   course: {
+      //     kurs_typ: course.courseType,
+      //     kurs_id: course.courseId,
+      //     datum_label: course.courseTitle,
+      //     days: [daysEntry],
+      //     location: {
+      //       name: course.courseLocation,
+      //       badge: course.roomDescription || ''
+      //     },
+      //     status: course.courseStatus,
+      //     status_label: course.courseStatusText,
+      //     buttons: [{
+      //       text: 'Detail ansehen',
+      //       typ: 'secondary',
+      //       event: 'open-booking-detail',
+      //       link: `index.html#/booking?courseId=${course.courseId}`
+      //     }],
+      //     icons: [],
+      //     state_of_booking: 'Gebucht',
+      //     logo_url: course.logoUrl || 'https://www.klubschule.ch/_campuslogo/logo-de.png'
+      //   },
+      //   sprachid: 'd'
+      // }
 
       // @ts-ignore
       // eslint-disable-next-line new-cap
       const event = new eventTileComponent.constructorClass({})
-      event.setAttribute('class', 'course-event')
-      event.setAttribute('data', JSON.stringify(courseData))
+      // event.setAttribute('class', 'course-event')
+      event.setAttribute('data', JSON.stringify({
+        data: course,
+        type: 'course'
+      }))
       containerDiv.appendChild(event)
     })
   }
@@ -518,6 +532,7 @@ export default class Dashboard extends Shadow() {
   }
 
   get continuationsDiv () {
+    debugger
     return this.root.querySelector('o-grid').root.querySelector('#continuations .container-continuations')
   }
 }

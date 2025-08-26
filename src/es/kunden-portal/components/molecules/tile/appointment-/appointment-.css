@@ -38,7 +38,6 @@
     --content-font-size-mobile: 20px;
     --content-line-height-mobile: 110%;
     --price-strong-font: 500 24px / 110% 'Graphik';
-
     --tile-appointment-wrap-padding: 16px 16px 24px 16px;
     --tile-appointment-background-color: var(--m-white, #fff);
     --tile-appointment-border-color: var(--m-gray-700, var(--mdx-sys-color-neutral-bold1));

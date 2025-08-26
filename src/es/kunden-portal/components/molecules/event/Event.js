@@ -1,5 +1,5 @@
 // @ts-check
-import Tile from '../../../../components/molecules/event/Event.js'
+import Event from '../../../../components/molecules/event/Event.js'
 import { formatDateForRender } from '../../../helpers/Shared.js'
 
 /**
@@ -7,13 +7,14 @@ import { formatDateForRender } from '../../../helpers/Shared.js'
  * @class EventTile
  * @type {CustomElementConstructor}
  */
-export default class EventTile extends Tile {
+export default class EventTile extends Event {
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
   }
 
   connectedCallback () {
     super.connectedCallback()
+    this.eventData = Event.parseAttribute(this.getAttribute('data'))
   }
 
   disconnectedCallback () {
@@ -26,15 +27,31 @@ export default class EventTile extends Tile {
       :host .top {
         min-height: 48px;
       }
+     
     `
   }
 
   renderHTML () {
-    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate, bookingTypeText } = this.data.data
+    return Promise.all([]).then((_) => {
+      switch (this.eventData.type) {
+        case 'course':
+          this.html = this.renderCourseTile(this.eventData.data)
+          break
+        case 'continuation':
+          this.html = this.renderContinuationTile(this.eventData.data)
+          break
+        default:
+          this.html = ''
+      }
+    })
+  }
+
+  renderCourseTile (data) {
+    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate, bookingTypeText } = data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
     const link = `index.html#/booking?courseId=${courseId}`
-    this.html = /* HTML */`
+    return /* HTML */`
       <div class="event">
         <div class="top">
           <div class="state-of-booking"><span>${bookingTypeText}</span></div>
@@ -69,6 +86,62 @@ export default class EventTile extends Tile {
             >
               <span>Details ansehen</span>
             </ks-a-button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  renderContinuationTile (data) {
+    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate, bookingTypeText } = data
+    const start = new Date(courseStartDate)
+    const end = new Date(courseEndDate)
+    const linkBooking = `index.html#/booking?courseId=${courseId}`
+    return /* HTML */`
+      <div class="event">
+        <div class="top">
+          <div class="state-of-booking"><span>${bookingTypeText}</span></div>
+          <div class="logo">${this.getLogoHTML(logoUrl)}</div>
+        </div>
+        <div class="head">
+          <div class="dates">
+            <span class="date">${courseTitle}</span>
+            <div class="time">
+              <span class="days">${formatDateForRender(start)} - ${formatDateForRender(end)}</span>
+            </div>
+          </div>
+          <ul class="meta">
+              <li>
+                <div>
+                  <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(courseStatus)}" size="1.5em"></a-icon-mdx>
+                </div>
+                <span>${courseStatusText}</span>
+              </li>
+              <li>
+                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
+                <span>${courseLocation}</span>
+              </li>
+          </ul>      
+        </div>
+        <div class="controls">
+          <div class="controls-left">
+            <ks-a-button
+                href="${linkBooking}" 
+                namespace="button-primary-" 
+                color="secondary"
+            >
+              <span>Jetzt buchen</span>
+            </ks-a-button>
+            <ks-a-button
+               href="${linkBooking}" 
+               namespace="button-secondary-" 
+               color="secondary"
+            >
+              <span>Details ansehen</span>
+            </ks-a-button>
+          </div>
+          <div class="controls-right">
+            <span class="price"><strong>1000.00 CHF</strong></span>
           </div>
         </div>
       </div>
