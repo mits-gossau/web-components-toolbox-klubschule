@@ -13,17 +13,21 @@ export default class Booking extends HTMLElement {
   constructor () {
     super()
     this.abortControllerBooking = null
+    this.abortControllerFollowUp = null
+    this.abortControllerDocument = null
   }
 
   connectedCallback () {
     document.addEventListener('request-booking', this.requestBooking)
     document.addEventListener('request-followup', this.requestFollowUp)
+    document.addEventListener('request-document', this.requestDocument)
     this.addEventListener('close-notification', this.handleNotification)
   }
 
   disconnectedCallback () {
     document.removeEventListener('request-booking', this.requestBooking)
     document.removeEventListener('request-followup', this.requestFollowUp)
+    document.removeEventListener('request-document', this.requestDocument)
     this.removeEventListener('close-notification', this.handleNotification)
   }
 
@@ -62,8 +66,8 @@ export default class Booking extends HTMLElement {
   }
 
   requestFollowUp = (event) => {
-    if (this.abortControllerBooking) this.abortControllerBooking.abort()
-    this.abortControllerBooking = new AbortController()
+    if (this.abortControllerFollowUp) this.abortControllerFollowUp.abort()
+    this.abortControllerFollowUp = new AbortController()
 
     if (!event.detail.courseIdFollowUp) return
 
@@ -74,7 +78,7 @@ export default class Booking extends HTMLElement {
       courseType: 'E',
       courseId: event.detail.courseIdFollowUp
     }
-    const options = this.fetchPOSTOptions(data, this.abortControllerBooking)
+    const options = this.fetchPOSTOptions(data, this.abortControllerFollowUp)
 
     this.dispatchEvent(new CustomEvent('update-followup', {
       detail: {
@@ -88,6 +92,65 @@ export default class Booking extends HTMLElement {
       cancelable: true,
       composed: true
     }))
+  }
+
+  requestDocument = (event) => {
+    if (this.abortControllerDocument) this.abortControllerDocument.abort()
+    this.abortControllerDocument = new AbortController()
+
+    if (!event.detail.documentKey) return
+
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').getMyDocument}`
+    const data = {
+      language: 'de',
+      courseType: event.detail.courseType,
+      courseId: event.detail.courseId,
+      documentType: event.detail.documentType,
+      documentKey: event.detail.documentKey,
+    }
+    const options = this.fetchPOSTOptions(data, this.abortControllerDocument)
+
+    // this.dispatchEvent(new CustomEvent('update-document', {
+    //   detail: {
+    //     fetch: fetch(endpoint, options)
+    //       .then(async response => {
+    //         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+    //         return await response.json()
+    //       })
+    //   },
+    //   bubbles: true,
+    //   cancelable: true,
+    //   composed: true
+    // }))
+
+     fetch(endpoint, options)
+      .then(async response => {
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        // check content type
+        const contentType = response.headers.get('content-type')
+        if (contentType && contentType.includes('application/pdf')) {
+          return await response.blob()
+        }
+        // fallback json
+        return await response.json()
+      })
+      .then(data => {
+        this.dispatchEvent(new CustomEvent('update-document', {
+          detail: { fetch: Promise.resolve(data) },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      })
+      .catch(error => {
+        this.dispatchEvent(new CustomEvent('update-document', {
+          detail: { fetch: Promise.reject(error) },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+      })
   }
 
   // TODO: Remove this

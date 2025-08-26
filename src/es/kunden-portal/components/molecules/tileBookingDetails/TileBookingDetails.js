@@ -1,5 +1,5 @@
 // @ts-check
-import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /**
 * @export
@@ -80,12 +80,63 @@ export default class TileBookingDetails extends Shadow() {
       :host #course-cta-buttons ks-a-button > a-icon-mdx {
         margin-left: 4px;
       }
+      :host .accordion a {
+        font-size: 18px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+      }
+      :host .accordion h3 {
+        display: flex;
+        gap: 10px;
+      }
+      :host .accordion-content {
+        margin-bottom: 24px !important;
+      }
+      :host .accordion-content table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-bottom: 1px solid #000;
+        font-size: 14px;
+      }
+      :host .accordion-content tr {
+        background: #fff !important;
+        border-top: 1px solid #000;
+      }
+      :host .accordion-content td {
+        padding: 8px 0;
+        border: none;
+      }
+      :host .accordion-content td:first-child {
+        padding-right: 8px;
+      }
+      :host .accordion-content strong {
+        font-weight: 500;
+      }
       @media only screen and (max-width:${this.mobileBreakpoint}) {
         :host #course-metadata {
           flex-direction: column;
         }
       }
     `
+
+    return this.fetchTemplate()
+  }
+
+  fetchTemplate () {
+    const styles = [
+      {
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/reset.css`,
+        namespace: false
+      },
+      {
+        path: `${this.importMetaUrl}../../../../../es/components/web-components-toolbox/src/css/style.css`,
+        namespaceFallback: true
+      }
+    ]
+
+    return this.fetchCSS(styles)
   }
 
   renderHTML() {
@@ -95,15 +146,15 @@ export default class TileBookingDetails extends Shadow() {
 
     this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../atoms/button/Button.js`,
+        path: `${this.importMetaUrl}../../../../components/atoms/button/Button.js`,
         name: 'ks-a-button'
       },
       {
-        path: `${this.importMetaUrl}../../atoms/spacing/Spacing.js`,
+        path: `${this.importMetaUrl}../../../../components/atoms/spacing/Spacing.js`,
         name: 'ks-a-spacing'
       },
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        path: `${this.importMetaUrl}'../../../../../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
       }
     ])
@@ -115,6 +166,8 @@ export default class TileBookingDetails extends Shadow() {
       console.warn('TileBookingDetails: Attribute "data" is no valid JSON:', data)
       return
     }
+
+    let details = JSON.parse(data).details || []
 
     const {
       bookingTypeText = '',
@@ -146,6 +199,38 @@ export default class TileBookingDetails extends Shadow() {
           </div>
         </div>
       </div>
+      <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
+      <div class="accordion">
+        <a href="#" class="show-accordion-content-link">Kurs Details anzeigen <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx></a>
+        <div id="offer-details" class="accordion-content" style="display:none;">
+          <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
+          <h3><a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1em"></a-icon-mdx> <span>Angebotsdetails</span></h3>
+          <table>
+            ${details.map(d => `<tr><td><strong>${d.label}</strong></td><td>${d.text}</td></tr>`).join('')}
+          </table>
+        </div>
+        <a href="#" class="hide-accordion-content-link" style="display:none;">Kurs Details ausblenden <a-icon-mdx icon-name="ChevronUp" size="1em"></a-icon-mdx></a>
+      </div>
     `
+
+    // Accordion
+    const accordion = this.root.querySelector('.accordion')
+    const showLink = accordion.querySelector('.show-accordion-content-link')
+    const hideLink = accordion.querySelector('.hide-accordion-content-link')
+    const accordionContent = accordion.querySelector('.accordion-content')
+    if (showLink && hideLink && accordionContent) {
+      showLink.onclick = (e) => {
+        e.preventDefault()
+        accordionContent.style.display = ''
+        showLink.style.display = 'none'
+        hideLink.style.display = ''
+      }
+      hideLink.onclick = (e) => {
+        e.preventDefault()
+        accordionContent.style.display = 'none'
+        showLink.style.display = ''
+        hideLink.style.display = 'none'
+      }
+    }
   }
 }

@@ -85,13 +85,59 @@ export default class Booking extends Index {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.requestBookingListener = this.createRequestListener(
-      data => { this.bookingData = data || []; if (this.modulesLoaded) setTimeout(() => this.renderBooking(), 0) },
+      data => { 
+        this.bookingData = data || []
+        if (this.modulesLoaded) setTimeout(() => this.renderBooking(), 0) 
+        // request followup
+        if (this.bookingData?.course?.courseIdFollowUp && !this.followupRequested) {
+          this.followupRequested = true
+          this.dispatchEvent(new CustomEvent('request-followup', {
+            detail: { courseIdFollowUp: this.bookingData.course.courseIdFollowUp },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+        }
+        // request document
+        if (this.bookingData?.course.documentKey && this.bookingData?.course.documentType) {
+          this.dispatchEvent(new CustomEvent('request-document', {
+            detail: {
+              courseType: this.bookingData.course.courseType,
+              courseId: this.bookingData.course.courseId,
+              documentKey: this.bookingData.course.documentKey,
+              documentType: this.bookingData.course.documentType
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+        }
+      },
       error => { console.error('Error fetching bookings:', error); setTimeout(() => this.renderNoResult(), 0) }
     )
 
     this.requestFollowUpListener = this.createRequestListener(
       data => { this.followUpData = data || []; if (this.modulesLoaded) setTimeout(() => this.renderFollowUp(), 0) },
       error => { console.error('Error fetching followUp:', error); setTimeout(() => this.renderNoResult(), 0) }
+    )
+
+    this.requestDocumentListener = this.createRequestListener(
+      data => {
+        if (data instanceof Blob) {
+          const url = URL.createObjectURL(data)
+          this.documentData = [{ label: 'Rechnung', type: 'PDF', url }]
+        } else {
+          this.documentData = data || []
+        }
+        if (this.modulesLoaded) {
+          const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
+          const documentsSection = body?.querySelector('#booking-documents')
+          if (documentsSection) documentsSection.style.display = (this.documentData && this.documentData.length > 0) ? 'block' : 'none'
+          const documents = body?.querySelector('kp-m-documents')
+          if (documents) documents.setAttribute('documents', JSON.stringify(this.documentData))
+        }
+      },
+      error => { console.error('Error fetching document:', error) }
     )
   }
 
@@ -104,31 +150,14 @@ export default class Booking extends Index {
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('update-booking', this.requestBookingListener)
     document.body.addEventListener('update-followup', this.requestFollowUpListener)
+    document.body.addEventListener('update-document', this.requestDocumentListener)
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
-
-    // intersection observer for followUp section
-    const followupWrapper = this.shadowRoot?.querySelector('#followup-observer-anchor')
-    if (followupWrapper) {
-      this.followupObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && this.bookingData?.course?.courseIdFollowUp && !this.followupRequested) {
-            this.followupRequested = true
-            this.dispatchEvent(new CustomEvent('request-followup', {
-              detail: { courseIdFollowUp: this.bookingData.course.courseIdFollowUp },
-              bubbles: true,
-              cancelable: true,
-              composed: true
-            }))
-          }
-        })
-      }, { threshold: 0.1, rootMargin: '200px 0px 200px 0px' })
-      this.followupObserver.observe(followupWrapper)
-    }
   }
 
   disconnectedCallback () {
     document.body.removeEventListener('update-booking', this.requestBookingListener)
     document.body.removeEventListener('update-followup', this.requestFollowUpListener)
+    document.body.removeEventListener('update-document', this.requestDocumentListener)
     if (this.followupObserver) { this.followupObserver.disconnect(); this.followupObserver = null }
   }
 
@@ -168,13 +197,38 @@ export default class Booking extends Index {
         top: -4px;
       }
     `
+
+    return this.fetchTemplate()
+  }
+
+  fetchTemplate () {
+    const styles = [
+      {
+        path: `${this.importMetaUrl}../../../es/components/web-components-toolbox/src/css/reset.css`,
+        namespace: false
+      },
+      {
+        path: `${this.importMetaUrl}../../../es/components/web-components-toolbox/src/css/style.css`,
+        namespaceFallback: true
+      }
+    ]
+
+    return this.fetchCSS(styles)
   }
 
   renderHTML () {
     this.fetchModules([
       {
+        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/documents/Documents.js`,
+        name: 'kp-m-documents'
+      },
+      {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/event/Event.js`,
         name: 'kp-m-event'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/tileBookingDetails/TileBookingDetails.js`,
+        name: 'kp-m-tile-booking-details'
       },
       {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/tileDiscover/TileDiscover.js`,
@@ -195,10 +249,6 @@ export default class Booking extends Index {
       {
         path: `${this.importMetaUrl}../../components/molecules/contactRow/ContactRow.js`,
         name: 'ks-m-contact-row'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/molecules/tileBookingDetails/TileBookingDetails.js`,
-        name: 'ks-m-tile-booking-details'
       },
       {
         path: `${this.importMetaUrl}../../components/molecules/systemNotification/SystemNotification.js`,
@@ -243,111 +293,18 @@ export default class Booking extends Index {
                 </ks-m-system-notification>
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
                 <!-- details -->
-                <ks-m-tile-booking-details data="${this.bookingDetails}"></ks-m-tile-booking-details>
-                <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
-                <div class="accordion">
-                  <a href="#" class="show-accordion-content-link">Kurs Details anzeigen <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx></a>
-                  <div id="offer-details" class="accordion-content" style="display:none;">
-                    <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
-                    <h3><a-icon-mdx icon-url="../../../../../../../img/icons/event-list.svg" size="1em"></a-icon-mdx> <span>Angebotsdetails</span></h3>
-                    <table></table>
-                    <style>
-                      :host .accordion a {
-                        font-size: 18px;
-                        font-weight: 500;
-                        display: inline-flex;
-                        align-items: center;
-                      }
-                      :host .accordion h3 {
-                        display: flex;
-                        gap: 10px;
-                      }
-                      :host .accordion-content {
-                        margin-bottom: 24px !important;
-                      }
-                      :host .accordion-content table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        background: #fff;
-                        border-bottom: 1px solid #000;
-                        font-size: 14px;
-                      }
-                      :host .accordion-content tr {
-                        background: #fff !important;
-                        border-top: 1px solid #000;
-                      }
-                      :host .accordion-content td {
-                        padding: 8px 0;
-                        border: none;
-                      }
-                      :host .accordion-content td:first-child {
-                        padding-right: 8px;
-                      }
-                      :host .accordion-content strong {
-                        font-weight: 500;
-                      }
-                    </style>
-                  </div>
-                  <a href="#" class="hide-accordion-content-link" style="display:none;">Kurs Details ausblenden <a-icon-mdx icon-name="ChevronUp" size="1em"></a-icon-mdx></a>
-                </div>
-                <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                <section id="booking-details" style="display:none;">
+                  <kp-m-tile-booking-details data="${this.bookingDetails || ''}"></kp-m-tile-booking-details>
+                  <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                </section>
                 <!-- appointments -->
                 <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> Kurs Termin(e)</h2>
                 <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
                 <!-- documents -->
-                <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="FileText" size="1em"></a-icon-mdx> Dokumente</h2>
-                <div id="booking-documents">
-                  <table>
-                    <tr><td><strong>Angebotsdetails</strong></td><td><span>PDF</span><a href="#" alt=""><a-icon-mdx icon-name="Download" size="1.5em" color="0053a6"></a-icon-mdx></a></td></tr>
-                    <tr><td><strong>Rechnung</strong></td><td><span>PDF</span><a href="#" alt=""><a-icon-mdx icon-name="Download" size="1.5em" color="0053a6"></a-icon-mdx></a></td></tr>
-                    <tr><td><strong>Zahlungsbestätigung</strong></td><td><span>PDF</span><a href="#" alt=""><a-icon-mdx icon-name="Download" size="1.5em" color="0053a6"></a-icon-mdx></a></td></tr>
-                    <tr><td><strong>Kursbestätigung anfordern</strong><br /><small>Eine Kursbestätigung kann erst nacht Abschluss des Kurses beantragt werden.</small></td><td><div><a href="#" alt="">Anfragen</a></div></td></tr>
-                  </table>
-                  <style>
-                    :host #booking-documents table {
-                      width: calc(100% - 8px);
-                      border-collapse: collapse;
-                      background: #fff;
-                      border-bottom: 1px solid #000;
-                      font-size: 14px;
-                    }
-                    :host #booking-documents tr {
-                      background: #fff !important;
-                      border-top: 1px solid #000;
-                    }
-                    :host #booking-documents td {
-                      padding: 8px 0;
-                      border: none;
-                      vertical-align: middle;
-                    }
-                    :host #booking-documents td:first-child {
-                      padding-right: 8px;
-                    }
-                    :host #booking-documents td:nth-child(2) {
-                      text-align: right;
-                    }
-                    :host #booking-documents td:nth-child(2):not(:has(div)) {
-                      display: flex;
-                      align-items: center;
-                      gap: 8px;
-                      justify-content: flex-end;
-                      height: 100%;        
-                    }
-                    :host #booking-documents td:nth-child(2) a {
-                      margin-left: 8px;
-                      display: inline-block;
-                      margin: 0 -8px 0 0;
-                      padding: 0 8px;
-                    }
-                    :host #booking-documents td:nth-child(2) div {
-                      height: 100%;
-                    }
-                    :host #booking-documents strong {
-                      font-weight: 500;
-                    }
-                  </style>
-                </div>
-                <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                <section id="booking-documents" style="display:none;">
+                  <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="FileText" size="1em"></a-icon-mdx> Dokumente</h2>
+                  <kp-m-documents documents="${JSON.stringify(this.documentData)}"></kp-m-documents>
+                </section>
               </ks-o-body-section>
               <!-- contact -->
               <aside></aside>
@@ -427,15 +384,12 @@ export default class Booking extends Index {
         { label: 'Dauer', text: `${this.bookingData.course.numberOfAppointments} Kurstag(e)<br />Total ${this.bookingData.course.lessions} Lektion(en) zu ${this.bookingData.course.lessionDuration} Min.`},
       ]
     })
-    const tile = body.querySelector('ks-m-tile-booking-details')
+
+    const tile = body.querySelector('kp-m-tile-booking-details')
     if (tile) tile.setAttribute('data', this.bookingDetails)
 
-    // details (Angebotsdetails)
-    const offerDetailsTable = body.querySelector('#offer-details table')
-    if (offerDetailsTable && this.bookingDetails) {
-      let details = JSON.parse(this.bookingDetails).details || []
-      offerDetailsTable.innerHTML = details.map(d => `<tr><td><strong>${d.label}</strong></td><td>${d.text}</td></tr>`).join('')
-    }
+    const bookingDetailsSection = body.querySelector('#booking-details')
+    if (bookingDetailsSection) bookingDetailsSection.style.display = 'block'
 
     // contact and options
     /**
@@ -483,28 +437,6 @@ export default class Booking extends Index {
     edit.setAttribute('name', 'Meine Buchungen verwalten')
     edit.setAttribute('href', '#')
     aside.appendChild(edit)
-
-    // Accordions
-    const accordions = body.querySelectorAll('.accordion')
-    accordions.forEach(accordion => {
-      const showLink = accordion.querySelector('.show-accordion-content-link')
-      const hideLink = accordion.querySelector('.hide-accordion-content-link')
-      const accordionContent = accordion.querySelector('.accordion-content')
-      if (showLink && hideLink && accordionContent) {
-        showLink.onclick = (e) => {
-          e.preventDefault()
-          accordionContent.style.display = ''
-          showLink.style.display = 'none'
-          hideLink.style.display = ''
-        }
-        hideLink.onclick = (e) => {
-          e.preventDefault()
-          accordionContent.style.display = 'none'
-          showLink.style.display = ''
-          hideLink.style.display = 'none'
-        }
-      }
-    })
   }
 
   renderFollowUp () {
