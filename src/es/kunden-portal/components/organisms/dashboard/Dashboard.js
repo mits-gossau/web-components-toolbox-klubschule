@@ -441,7 +441,15 @@ export default class Dashboard extends Shadow() {
     const newestAppointments = dates
       .map(({ courseId, appointments }) => {
         // find the first future appointment for the course
-        const upcomingAppointment = appointments.find(({ appointmentDate }) => new Date(appointmentDate) > new Date())
+        const today = new Date()
+        today.setHours(0, 0, 0, 0) // set today's date to the beginning of the day
+        const todayAppointments = appointments.filter(appointment => {
+          const appointmentDate = new Date(appointment.appointmentDate)
+          return appointmentDate.setHours(0, 0, 0, 0) === today.getTime()
+        })
+        const upcomingAppointment = todayAppointments.length > 0
+          ? todayAppointments[0]
+          : appointments.find(({ appointmentDate }) => new Date(appointmentDate) > today)
         return { courseId, upcomingAppointment }
       })
       // filter out courses without upcoming appointments
@@ -486,7 +494,7 @@ export default class Dashboard extends Shadow() {
   }
 
   getAppointmensData (bookingsData) {
-    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5) || []
+    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A') || []
   }
 
   getContinuationsData (bookingData) {

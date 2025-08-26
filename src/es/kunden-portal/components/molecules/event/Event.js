@@ -1,5 +1,6 @@
 // @ts-check
 import Tile from '../../../../components/molecules/event/Event.js'
+import { formatDateForRender } from '../../../helpers/Shared.js'
 
 /**
  * @export
@@ -29,92 +30,68 @@ export default class EventTile extends Tile {
   }
 
   renderHTML () {
-    const warnMandatory = 'data attribute requires: '
-    if (!this.data) return console.error('Data json attribute is missing or corrupted!', this)
-    const {
-      bezeichnung,
-      centerid,
-      datum_label,
-      detail_label_less,
-      detail_label_more,
-      days,
-      icons,
-      ist_abokurs_offen,
-      kurs_id,
-      kurs_typ,
-      lektionen_label,
-      location,
-      buttons,
-      parentkey,
-      price,
-      status,
-      status_label,
-      zusatztitel,
-      state_of_booking,
-      logo_url
-    } = this.data.course
-    debugger
+    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate } = this.data.data
+    const start = new Date(courseStartDate)
+    const end = new Date(courseEndDate)
+    const link = `index.html#/booking?courseId=${courseId}`
     this.html = /* HTML */`
       <div class="event">
         <div class="top">
-          <div class="state-of-booking"><span>${state_of_booking || ''}</span></div>
-          <div class="logo">${logo_url ? this.getLogoHTML(logo_url) : ''}</div>
+          <div class="state-of-booking"><span>Gebucht</span></div>
+          <div class="logo">${this.getLogoHTML(logoUrl)}</div>
         </div>
         <div class="head">
           <div class="dates">
-            <span class="date">${datum_label}</span>
+            <span class="date">${courseTitle}</span>
             <div class="time">
-              <span class="days">${days.join(', ')}</span>
-              ${zusatztitel ? /* html */ `<div class="badge">${zusatztitel}</div>` : ''}
+              <span class="days">${formatDateForRender(start)} - ${formatDateForRender(end)}</span>
             </div>
           </div>
           <ul class="meta">
-            ${status && status > 0 && !(this.isWishList && this.isPassed) ? /* html */`
               <li>
                 <div>
-                  <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(this.data.course)}" size="1.5em"></a-icon-mdx>
+                  <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(courseStatus)}" size="1.5em"></a-icon-mdx>
                 </div>
-                <span>${status_label}</span>
-            </li>
-            ` : ''}           
-
-            ${location?.name && !(this.isWishList && this.isPassed) ? /* html */ `<li>
-              <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
-              <span>${location.name}</span>
-            </li>` : ''}
+                <span>${courseStatusText}</span>
+              </li>
+              <li>
+                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
+                <span>${courseLocation}</span>
+              </li>
           </ul>      
         </div>
-            <div class="controls">
-              <div class="controls-left">
-              <ks-a-button
-                    href="${kurs_id}" 
-                    namespace="button-secondary-" 
-                    color="secondary"
-                  >
-                    <span>Details ansehen</span>
-                  </ks-a-button>
-                  
-                  <!--<ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'${this.isWishList ? ' is-wish-list' : ''}></ks-m-buttons>-->
-              </div>
-            </div>
+        <div class="controls">
+          <div class="controls-left">
+            <ks-a-button
+              href="${link}" 
+              namespace="button-secondary-" 
+              color="secondary"
+            >
+              <span>Details ansehen</span>
+            </ks-a-button>
+          </div>
+        </div>
       </div>
     `
-
-    return this.fetchModules([
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-        name: 'a-icon-mdx'
-      },
-      {
-        path: `${this.importMetaUrl}../../atoms/buttons/Buttons.js`,
-        name: 'ks-a-buttons'
-      }
-    ])
   }
 
-  renderHTML_old () {
-    super.renderHTML().then((data) => {
-    })
+  // renderHTML_old () {
+  //   super.renderHTML().then((data) => {
+  //   })
+  // }
+
+  setIconUrl (data) {
+    let iconName = ''
+    if (data === 1) {
+      iconName = 'garanteed'
+    } else if (data === 2) {
+      iconName = 'started'
+    } else if (data === 3) {
+      iconName = 'await'
+    } else if (data === 4) {
+      iconName = 'almost'
+    }
+    return `../../../../../../../img/icons/event-state-${iconName}.svg`
   }
 
   getLogoHTML (logoUrl) {

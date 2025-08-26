@@ -28,7 +28,6 @@ export default class TileDiscover extends Shadow() {
     this.css = /* css */`
       :host {
         display: block;
-        background:green;
         width: 100%;
       }
       .tile-discover-link {
