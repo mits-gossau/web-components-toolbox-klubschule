@@ -30,14 +30,14 @@ export default class EventTile extends Tile {
   }
 
   renderHTML () {
-    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate } = this.data.data
+    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate, bookingTypeText } = this.data.data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
     const link = `index.html#/booking?courseId=${courseId}`
     this.html = /* HTML */`
       <div class="event">
         <div class="top">
-          <div class="state-of-booking"><span>Gebucht</span></div>
+          <div class="state-of-booking"><span>${bookingTypeText}</span></div>
           <div class="logo">${this.getLogoHTML(logoUrl)}</div>
         </div>
         <div class="head">
@@ -74,11 +74,6 @@ export default class EventTile extends Tile {
       </div>
     `
   }
-
-  // renderHTML_old () {
-  //   super.renderHTML().then((data) => {
-  //   })
-  // }
 
   setIconUrl (data) {
     let iconName = ''
