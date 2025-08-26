@@ -84,9 +84,12 @@ export default class Booking extends Index {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.appointmentsData = []
+
     this.requestBookingListener = this.createRequestListener(
       data => { 
-        this.bookingData = data || []
+        this.bookingData = data || {}
+        this.appointmentsData = (this.bookingData.course && Array.isArray(this.bookingData.course.appointments)) ? this.bookingData.course.appointments : []
         if (this.modulesLoaded) setTimeout(() => this.renderBooking(), 0) 
         // request followup
         if (this.bookingData?.course?.courseIdFollowUp && !this.followupRequested) {
@@ -219,6 +222,10 @@ export default class Booking extends Index {
   renderHTML () {
     this.fetchModules([
       {
+        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/appointments/Appointments.js`,
+        name: 'kp-m-appointments'
+      },
+      {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/documents/Documents.js`,
         name: 'kp-m-documents'
       },
@@ -298,8 +305,11 @@ export default class Booking extends Index {
                   <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
                 </section>
                 <!-- appointments -->
-                <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> Kurs Termin(e)</h2>
-                <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                <section id="booking-appointments" style="display:none;">
+                  <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> Kurs Termin(e)</h2>
+                  <kp-m-appointments appointments='${JSON.stringify(this.appointmentsData)}'></kp-m-appointments>
+                  <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                </section>
                 <!-- documents -->
                 <section id="booking-documents" style="display:none;">
                   <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="FileText" size="1em"></a-icon-mdx> Dokumente</h2>
@@ -390,6 +400,12 @@ export default class Booking extends Index {
 
     const bookingDetailsSection = body.querySelector('#booking-details')
     if (bookingDetailsSection) bookingDetailsSection.style.display = 'block'
+
+    // appointments
+    const appointments = body.querySelector('kp-m-appointments')
+    if (appointments) appointments.setAttribute('appointments', JSON.stringify(this.appointmentsData || []))
+    const appointmentsSection = body.querySelector('#booking-appointments')
+    if (appointmentsSection) appointmentsSection.style.display = 'block'
 
     // contact and options
     /**

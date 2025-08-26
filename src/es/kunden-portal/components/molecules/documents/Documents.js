@@ -92,15 +92,15 @@ export default class Documents extends Shadow() {
     this.html = /* html */`
       <div id="documents">
         <table>
-          ${this.documents.map(doc => `
+          ${this.documents.map(doc => /* html */`
             <tr>
-            <td><strong>${doc.label || ''}</strong></td>
-            <td>
-              <span>${doc.type || ''}</span>
-              ${doc.url ? `<a href="${doc.url}" target="_blank" rel="noopener">
-              <a-icon-mdx icon-name="Download" size="1.5em" color="0053a6"></a-icon-mdx>
-              </a>` : ''}
-            </td>
+              <td><strong>${doc.label || ''}</strong></td>
+              <td>
+                <span>${doc.type || ''}</span>
+                ${doc.url ? /* html */`<a href="${doc.url}" target="_blank" rel="noopener">
+                  <a-icon-mdx icon-name="Download" size="1.5em" color="0053a6"></a-icon-mdx>
+                </a>` : ''}
+              </td>
             </tr>
           `).join('')}
         </table>
