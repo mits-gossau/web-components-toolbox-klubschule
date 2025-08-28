@@ -147,23 +147,47 @@ export default class AppointmentTile extends Tile {
   }
 
   renderNextAppointment (data) {
-    const { appointmentDateFormatted, roomDescription, appointmentCourseId, appointmentCourseTitle } = data.data.appointments[0] || {}
-    const { courseType, courseTitle, courseLocation, courseId } = data.data || {}
-    let courseIdLink = courseId
-    let title = ''
-    // TODO: check this
-    if (courseType === '1K') {
-      courseIdLink = appointmentCourseId
-      title = appointmentCourseTitle
-    }
-    const link = `index.html#/booking?courseId=${courseIdLink}`
+    const {
+      appointmentDateFormatted,
+      roomDescription,
+      appointmentCourseId,
+      appointmentCourseTitle,
+      courseType,
+      courseTitle,
+      courseLocation,
+      courseId,
+      isSubscriptionCourse
+    } = data.data || {}
 
-    const renderTitle = title ? `<span class="m-tile__subtitle subtitle">${courseTitle}</span><span class="m-tile__title title">${title}</span>` : `<span class="m-tile__title title">${courseTitle}</span>`
+    let buttonText = 'Details ansehen'
+    let link = `index.html#/booking?courseId=${courseId}`
+    if (isSubscriptionCourse) {
+      buttonText = 'Zum Aboportal'
+      link = '/mein-konto/abokurse/?page=booked#/'
+    }
+
+    if (courseType === '1K') {
+      link = `index.html#/booking?courseId=${appointmentCourseId}`
+    }
+
+    // const link = isSubscriptionCourse ? '/mein-konto/abokurse/?page=booked#/' : `index.html#/booking?courseId=${courseIdLink}`
+
+    const renderTitle = appointmentCourseTitle !== '' ? `<span class="m-tile__subtitle subtitle">${courseTitle}</span><span class="m-tile__title title">${appointmentCourseTitle}</span>` : `<span class="m-tile__title title">${courseTitle}</span>`
+
+    const renderRoomDescription = roomDescription !== ''
+      ? /* html */ `
+        <a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>
+        <span class="m-tile__content">Raum ${roomDescription}</span>
+      `
+      : ''
 
     return /* html */ `
       <m-load-template-tag mode="false">
         <template>
           <style>
+            :host {
+              --tile-next-appointment-foot-justify-content: flex-end;
+            }
             :host .m-tile__body {
               align-items: flex-start;
               flex-direction: column;
@@ -177,7 +201,8 @@ export default class AppointmentTile extends Tile {
           <div class="m-tile next-appointment">
             <div class="m-tile__wrap">
               <div class="course-info">
-                <div class="m-tile__head">${renderTitle}</div>
+                <div class="m-tile__head">
+                  ${renderTitle}</div>
                 <div class="m-tile__body">
                   <div>
                     <span class="m-tile__content m-tile__next-date">${appointmentDateFormatted || ''}</span>
@@ -187,8 +212,7 @@ export default class AppointmentTile extends Tile {
                     <span class="m-tile__content">${courseLocation}</span>
                   </div>
                   <div class="m-tile__room">
-                    <a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>
-                    <span class="m-tile__content">Raum ${roomDescription}</span>
+                    ${renderRoomDescription}
                   </div>
                 </div>
               </div>
@@ -199,7 +223,7 @@ export default class AppointmentTile extends Tile {
                     namespace="button-secondary-" 
                     color="secondary"
                   >
-                    <span>Details ansehen</span>
+                    <span>${buttonText}</span>
                   </ks-a-button>
                 </div>
               </div>

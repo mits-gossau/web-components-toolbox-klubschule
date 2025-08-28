@@ -1,4 +1,5 @@
 :host {
     --tile-next-appointment-room-margin-top: 1em;
     --tile-next-appointment-next-date-margin-bottom: 1.5em;
+    --tile-next-appointment-foot-justify-content: flex-end;
 }

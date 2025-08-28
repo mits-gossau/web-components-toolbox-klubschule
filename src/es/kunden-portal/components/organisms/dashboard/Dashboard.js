@@ -171,7 +171,13 @@ export default class Dashboard extends Shadow() {
 
     Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
       // get data for each area
-      const nextAppointmensData = this.getNextAppointmentsData(fetch.bookings, 3)
+      // const nextAppointmensDataX = this.getNextAppointmentsData(fetch.bookings, 3)
+      // const nextAppointmensData = fetch.nextAppointments?.slice(0, 3) || []
+      const nextAppointmensData = fetch.nextAppointments?.slice(0, 3).map(appointment => {
+        const courseData = fetch.bookings.find(booking => booking.courseId === appointment.courseId) || []
+        appointment.isSubscriptionCourse = courseData.isSubscriptionCourse
+        return appointment
+      })
       const appointmentsData = this.getAppointmensData(fetch.bookings)
       const continuationsData = this.getContinuationsData(fetch.bookings)
       const abonnementsData = this.getAbonnementsData(fetch.bookings)
@@ -359,45 +365,9 @@ export default class Dashboard extends Shadow() {
     }
 
     bookingsData.forEach(course => {
-      // const start = new Date(course.courseStartDate)
-      // const end = new Date(course.courseEndDate)
-      // const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
-
-      // TODO: format date to dd.mm.yy ? Neet to check if this is needed
-      // const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
-
-      // TODO: Check this looks wrong
-
-      // const courseData = {
-      //   data: course,
-      //   course: {
-      //     kurs_typ: course.courseType,
-      //     kurs_id: course.courseId,
-      //     datum_label: course.courseTitle,
-      //     days: [daysEntry],
-      //     location: {
-      //       name: course.courseLocation,
-      //       badge: course.roomDescription || ''
-      //     },
-      //     status: course.courseStatus,
-      //     status_label: course.courseStatusText,
-      //     buttons: [{
-      //       text: 'Detail ansehen',
-      //       typ: 'secondary',
-      //       event: 'open-booking-detail',
-      //       link: `index.html#/booking?courseId=${course.courseId}`
-      //     }],
-      //     icons: [],
-      //     state_of_booking: 'Gebucht',
-      //     logo_url: course.logoUrl || 'https://www.klubschule.ch/_campuslogo/logo-de.png'
-      //   },
-      //   sprachid: 'd'
-      // }
-
       // @ts-ignore
       // eslint-disable-next-line new-cap
       const event = new eventTileComponent.constructorClass({})
-      // event.setAttribute('class', 'course-event')
       event.setAttribute('data', JSON.stringify({
         data: course,
         type: 'course'
@@ -433,6 +403,7 @@ export default class Dashboard extends Shadow() {
     ]
   }
 
+  // OBSOLETE - kept for reference
   getNextAppointmentsData (bookingsData, count = 3) {
     const appointments = bookingsData.filter(course => course.appointments && course.appointments.length > 0)
     const dates = []
@@ -503,7 +474,6 @@ export default class Dashboard extends Shadow() {
       // if both are in the future, sort by the closest
       return diffA - diffB
     })
-
     return nextAppointments
   }
 
@@ -532,7 +502,6 @@ export default class Dashboard extends Shadow() {
   }
 
   get continuationsDiv () {
-    debugger
     return this.root.querySelector('o-grid').root.querySelector('#continuations .container-continuations')
   }
 }
