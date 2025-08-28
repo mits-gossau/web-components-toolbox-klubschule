@@ -156,30 +156,29 @@ export default class AppointmentTile extends Tile {
       courseTitle,
       courseLocation,
       courseId,
-      isSubscriptionCourse
+      isSubscriptionCourse,
+      participantEnrolled
     } = data.data || {}
 
-    let buttonText = 'Details ansehen'
-    let link = `index.html#/booking?courseId=${courseId}`
-    if (isSubscriptionCourse) {
-      buttonText = 'Zum Aboportal'
-      link = '/mein-konto/abokurse/?page=booked#/'
-    }
+    // let buttonText = 'Details ansehen'
+    // let link = `index.html#/booking?courseId=${courseId}`
+    // if (isSubscriptionCourse) {
+    //   buttonText = 'Zum Aboportal'
+    //   link = '/mein-konto/abokurse/?page=booked#/'
+    // }
 
-    if (courseType === '1K') {
-      link = `index.html#/booking?courseId=${appointmentCourseId}`
-    }
-
-    // const link = isSubscriptionCourse ? '/mein-konto/abokurse/?page=booked#/' : `index.html#/booking?courseId=${courseIdLink}`
+    // if (courseType === '1K') {
+    //   link = `index.html#/booking?courseId=${appointmentCourseId}`
+    // }
 
     const renderTitle = appointmentCourseTitle !== '' ? `<span class="m-tile__subtitle subtitle">${courseTitle}</span><span class="m-tile__title title">${appointmentCourseTitle}</span>` : `<span class="m-tile__title title">${courseTitle}</span>`
 
-    const renderRoomDescription = roomDescription !== ''
-      ? /* html */ `
-        <a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>
-        <span class="m-tile__content">Raum ${roomDescription}</span>
-      `
-      : ''
+    // const renderRoomDescription = roomDescription !== ''
+    //   ? /* html */ `
+    //     <a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>
+    //     <span class="m-tile__content">Raum ${roomDescription}</span>
+    //   `
+    //   : ''
 
     return /* html */ `
       <m-load-template-tag mode="false">
@@ -197,34 +196,28 @@ export default class AppointmentTile extends Tile {
               flex-direction: column;
               align-items: flex-start;
             }
+            :host .strikethrough {
+              text-decoration: line-through;
+            }
           </style>
           <div class="m-tile next-appointment">
             <div class="m-tile__wrap">
               <div class="course-info">
                 <div class="m-tile__head">
-                  ${renderTitle}</div>
+                  ${renderTitle}
+                </div>
                 <div class="m-tile__body">
                   <div>
-                    <span class="m-tile__content m-tile__next-date">${appointmentDateFormatted || ''}</span>
-                  </div>  
-                  <div>
-                    <a-icon-mdx icon-name="${data.location.iconName}" size="1em"></a-icon-mdx>
-                    <span class="m-tile__content">${courseLocation}</span>
+                    <span class="m-tile__content m-tile__next-date">${appointmentDateFormatted}</span>
                   </div>
-                  <div class="m-tile__room">
-                    ${renderRoomDescription}
-                  </div>
+                  ${this.renderNextAppointmentsMetaData(participantEnrolled, data.room.iconName, roomDescription, data.location.iconName, courseLocation)}
+                  <!--${this.renderNextAppointmentsLocation(data.location.iconName, courseLocation)}
+                  ${this.renderNextAppointmentsRoomDescription(data.room.iconName, roomDescription)}-->
                 </div>
               </div>
               <div class="m-tile__foot">
                 <div class="m-tile__foot-left">
-                  <ks-a-button
-                    href="${link}" 
-                    namespace="button-secondary-" 
-                    color="secondary"
-                  >
-                    <span>${buttonText}</span>
-                  </ks-a-button>
+                  ${this.renderNextAppointmentsButton(isSubscriptionCourse, courseType, courseId, appointmentCourseId)}
                 </div>
               </div>
             </div>
@@ -232,5 +225,58 @@ export default class AppointmentTile extends Tile {
         </template>
       </m-load-template-tag>
     `
+  }
+
+  renderNextAppointmentsMetaData (participantEnrolled, iconRoom, roomDescription, iconLocation, locationDescription) {
+    if (participantEnrolled) {
+      return /* html */ ` 
+          ${this.renderNextAppointmentsRoomDescription(iconRoom, roomDescription)}
+          ${this.renderNextAppointmentsLocation(iconLocation, locationDescription)}
+      `
+    } else {
+      return /* html */ `
+      sorry!
+      `
+    }
+  }
+
+  renderNextAppointmentsRoomDescription (icon, room) {
+    if (room === '') return '<div class="m-tile__room"></div>'
+    return /* html */ `
+    <div class="m-tile__room">
+      <a-icon-mdx icon-name="${icon}" size="1em"></a-icon-mdx>
+      <span class="m-tile__content">Raum ${room}</span>
+    </div>
+    `
+  }
+
+  renderNextAppointmentsLocation (icon, location) {
+    return /* html */ ` 
+      <div>
+        <a-icon-mdx icon-name="${icon}" size="1em"></a-icon-mdx>
+        <span class="m-tile__content">${location}</span>
+      </div>  
+    `
+  }
+
+  renderNextAppointmentsButton (isSubscriptionCourse, courseType, courseId, appointmentCourseId, namespace = 'button-secondary-', color = 'secondary') {
+    let text = 'Details ansehen'
+    let link = `index.html#/booking?courseId=${courseId}`
+    if (isSubscriptionCourse) {
+      text = 'Zum Aboportal'
+      link = '/mein-konto/abokurse/?page=booked#/'
+    }
+
+    if (courseType === '1K') {
+      link = `index.html#/booking?courseId=${appointmentCourseId}`
+    }
+    return /* html */ `
+      <ks-a-button
+        href="${link}" 
+        namespace="${namespace}" 
+        color="${color}"
+      >
+      <span>${text}</span>
+    </ks-a-button>`
   }
 }

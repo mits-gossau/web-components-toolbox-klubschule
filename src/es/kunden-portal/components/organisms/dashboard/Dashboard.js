@@ -334,8 +334,6 @@ export default class Dashboard extends Shadow() {
       // @ts-ignore
       // eslint-disable-next-line new-cap
       const event = new tileComponent.constructorClass({ namespace: 'tile-next-appointment-' })
-      // event.setAttribute('class', 'next-appointment-tile') // TODO: Check if this is needed
-      // event.setAttribute('namespace', 'tile-appointment-')
       event.setAttribute('data', JSON.stringify({
         data: app,
         type: 'next-appointment',
