@@ -90,7 +90,9 @@ export default class Booking extends Index {
       data => { 
         this.followupRequested = false
         this.bookingData = data || {}
-        this.appointmentsData = (this.bookingData.course && Array.isArray(this.bookingData.course.appointments)) ? this.bookingData.course.appointments : []
+        // this.appointmentsData = (this.bookingData.course && Array.isArray(this.bookingData.course.appointments)) ? this.bookingData.course.appointments : []
+        const course = this.bookingData.course || {}
+        this.appointmentsData = Array.isArray(course.appointments) ? course.appointments.map(appt => ({ ...appt, appointmentCourseTitle: course.courseShortTitle || '' })) : []
         if (this.modulesLoaded) setTimeout(() => this.renderBooking(), 0) 
         // request followup
         if (this.bookingData?.course?.courseIdFollowUp && !this.followupRequested) {

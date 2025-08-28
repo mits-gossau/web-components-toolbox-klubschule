@@ -40,6 +40,17 @@ export default class Appointments extends Shadow() {
 
   renderCSS() {
     this.css = /* css */`
+      :host .appointments-meta {
+        display: flex;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+      :host .appointments-meta a {
+        display: inline-flex;
+        margin: 0;
+        gap: 6px;
+        font-weight: 500;
+      }
       :host .appointments-accordion {
         width: calc(100% - 8px);
         border-collapse: collapse;
@@ -80,13 +91,16 @@ export default class Appointments extends Shadow() {
       :host .spacing-24 {
         height: 24px;
       }
-      :host .appointments-accordion a {
+      :host .appointments-accordion > a {
         font-size: 18px;
         font-weight: 500;
         display: inline-flex;
         align-items: center;
       }
       @media only screen and (max-width: _max-width_) {
+        :host .appointments-meta {
+          flex-direction: column;
+        }
         :host .appointment-details > div {
           width: 100%;
         }
@@ -123,6 +137,7 @@ export default class Appointments extends Shadow() {
 
     this.html = ''
     this.html = /* html */`
+      <div class="appointments-meta"><a href="${this.getICalAllLink()}" download="${this.getICalAllFilename()}"><a-icon-mdx icon-name="Calendar" size="1em" color="var(--color-secondary)"></a-icon-mdx> Alle Termine zu Kalender hinzufügen</a> <a href="#"><a-icon-mdx icon-name="UserX" size="1em" color="var(--color-secondary)"></a-icon-mdx> Abwesenheiten verwalten</a></div>
       <div class="appointments-accordion">
         ${visibleAppointments.map((appt, i) => /* html */`
           <div class="appointment-item">
@@ -130,15 +145,15 @@ export default class Appointments extends Shadow() {
               <span>${appt.appointmentDateFormatted}</span>
               <a-icon-mdx icon-name="${i === 0 ? 'ChevronUp' : 'ChevronDown'}" size="1em"></a-icon-mdx>
             </div>
-            <div class="appointment-body" style="display:${i === 0 ? 'block' : 'none'};">
+            <div class="appointment-body" style="display:none;">
               ${appt.participantEnrolled === false && appt.participantStatusText
                 ? /* html */`<div class="appointment-status">${appt.participantStatusText || ''}. Sie können Ihre Abwesenheit jederzeit via “Abwesenheiten verwalten” anpassen.</div>`
                 : ''}
               <div class="appointment-details">
                 <div><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> ${appt.appointmentLocation || ''}</div>
-                <div><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> Termin zu Kalender hinzufügen</div>
+                <div><a href="${this.getICalLink(appt)}" download="${this.getICalFilename(appt)}"><a-icon-mdx icon-name="Calendar" size="1em" color="var(--color-secondary)"></a-icon-mdx> Termin zu Kalender hinzufügen</a></div>
                 <div><a-icon-mdx icon-name="Home" size="1em"></a-icon-mdx> Raum ${appt.roomDescription || ''}</div>
-                <div><a-icon-mdx icon-name="UserX" size="1em"></a-icon-mdx> Abwesenheiten verwalten</div>
+                <div><a href="#"><a-icon-mdx icon-name="UserX" size="1em" color="var(--color-secondary)"></a-icon-mdx> Abwesenheiten verwalten</a></div>
               </div>
             </div>
           </div>
@@ -178,6 +193,71 @@ export default class Appointments extends Shadow() {
         this.renderHTML()
       }
     }
+  }
+
+  getICalLink(appt) {
+    // example "Sa, 31.05.2025 10:00 - 11:50"
+    const match = appt.appointmentDateFormatted.match(/(\d{2}\.\d{2}\.\d{4}) (\d{2}:\d{2}) - (\d{2}:\d{2})/)
+    if (!match) return '#'
+    const [ , date, start, end ] = match
+    // format for iCal: YYYYMMDDTHHMMSSZ (UTC)
+    const [day, month, year] = date.split('.')
+    const startDate = `${year}${month}${day}T${start.replace(':','')}00`
+    const endDate = `${year}${month}${day}T${end.replace(':','')}00`
+    const title = encodeURIComponent(appt.appointmentCourseTitle || 'Kurstermin')
+    const location = encodeURIComponent(appt.appointmentLocation || '')
+    const description = encodeURIComponent('Kurstermin')
+    return `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:${title}
+DTSTART:${startDate}
+DTEND:${endDate}
+LOCATION:${location}
+DESCRIPTION:${description}
+END:VEVENT
+END:VCALENDAR`.replace(/\n/g, '\r\n')
+  }
+
+  getICalAllLink() {
+    if (!this.appointments || !Array.isArray(this.appointments) || this.appointments.length === 0) return '#'
+    const events = this.appointments.map(appt => {
+      const match = appt.appointmentDateFormatted.match(/(\d{2}\.\d{2}\.\d{4}) (\d{2}:\d{2}) - (\d{2}:\d{2})/)
+      if (!match) return ''
+      const [ , date, start, end ] = match
+      const [day, month, year] = date.split('.')
+      const startDate = `${year}${month}${day}T${start.replace(':','')}00`
+      const endDate = `${year}${month}${day}T${end.replace(':','')}00`
+      const title = encodeURIComponent(appt.appointmentCourseTitle || 'Kurstermin')
+      const location = encodeURIComponent(appt.appointmentLocation || '')
+      const description = encodeURIComponent('Kurstermin')
+      return `BEGIN:VEVENT
+SUMMARY:${title}
+DTSTART:${startDate}
+DTEND:${endDate}
+LOCATION:${location}
+DESCRIPTION:${description}
+END:VEVENT`
+    }).join('\r\n')
+    return `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
+VERSION:2.0
+${events}
+END:VCALENDAR`.replace(/\n/g, '\r\n')
+  }
+
+  getICalFilename(appt) {
+    const match = appt.appointmentDateFormatted.match(/(\d{2})\.(\d{2})\.(\d{4})/)
+    const date = match ? `${match[3]}-${match[2]}-${match[1]}` : 'termin'
+    const title = (appt.appointmentCourseTitle || 'Kurstermin').replace(/[^a-z0-9]+/gi, '-')
+    return `${date}_${title}.ics`
+  }
+
+  getICalAllFilename() {
+    if (this.appointments && this.appointments.length > 0) {
+      const title = (this.appointments[0].appointmentCourseTitle || 'termine').replace(/[^a-z0-9]+/gi, '-')
+      return `${title}.ics`
+    }
+    return 'termine.ics'
   }
 
   set appointmentsData(val) {
