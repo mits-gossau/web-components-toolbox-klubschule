@@ -154,6 +154,7 @@ export default class Booking extends Index {
     document.body.addEventListener('update-booking', this.requestBookingListener)
     document.body.addEventListener('update-followup', this.requestFollowUpListener)
     document.body.addEventListener('update-document', this.requestDocumentListener)
+    window.addEventListener('hashchange', this.handleHashChange)
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
   }
 
@@ -161,7 +162,26 @@ export default class Booking extends Index {
     document.body.removeEventListener('update-booking', this.requestBookingListener)
     document.body.removeEventListener('update-followup', this.requestFollowUpListener)
     document.body.removeEventListener('update-document', this.requestDocumentListener)
+    window.removeEventListener('hashchange', this.handleHashChange)
     if (this.followupObserver) { this.followupObserver.disconnect(); this.followupObserver = null }
+  }
+
+  handleHashChange = () => {
+    const courseId = this.getCourseIdFromHash()
+    if (courseId && courseId !== this.currentCourseId) {
+      this.currentCourseId = courseId
+      this.dispatchEvent(new CustomEvent('request-booking', {
+        detail: { courseId },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }
+  }
+
+  getCourseIdFromHash() {
+    const match = window.location.hash.match(/courseId=(\d+)/)
+    return match ? match[1] : null
   }
 
   shouldRenderHTML () {
@@ -453,6 +473,9 @@ export default class Booking extends Index {
     edit.setAttribute('name', 'Meine Buchungen verwalten')
     edit.setAttribute('href', '#')
     aside.appendChild(edit)
+
+    // go to top
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }
 
   renderFollowUp () {

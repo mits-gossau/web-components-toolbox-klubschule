@@ -89,7 +89,7 @@ export default class FollowUp extends Tile {
         </div>
         <div class="controls">
           <div class="controls-left">
-            ${buttons.map(btn => `
+            ${buttons.map(btn => /* html */`
               <ks-a-button
                 href="${btn.link || '#'}"
                 namespace="button-${btn.typ}-"
