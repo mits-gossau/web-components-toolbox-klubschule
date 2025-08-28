@@ -88,6 +88,7 @@ export default class Booking extends Index {
 
     this.requestBookingListener = this.createRequestListener(
       data => { 
+        this.followupRequested = false
         this.bookingData = data || {}
         this.appointmentsData = (this.bookingData.course && Array.isArray(this.bookingData.course.appointments)) ? this.bookingData.course.appointments : []
         if (this.modulesLoaded) setTimeout(() => this.renderBooking(), 0) 
@@ -154,7 +155,7 @@ export default class Booking extends Index {
     document.body.addEventListener('update-booking', this.requestBookingListener)
     document.body.addEventListener('update-followup', this.requestFollowUpListener)
     document.body.addEventListener('update-document', this.requestDocumentListener)
-    window.addEventListener('hashchange', this.handleHashChange)
+    window.addEventListener('hashchange', this.handleCourseIdChange)
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
   }
 
@@ -162,12 +163,12 @@ export default class Booking extends Index {
     document.body.removeEventListener('update-booking', this.requestBookingListener)
     document.body.removeEventListener('update-followup', this.requestFollowUpListener)
     document.body.removeEventListener('update-document', this.requestDocumentListener)
-    window.removeEventListener('hashchange', this.handleHashChange)
+    window.removeEventListener('hashchange', this.handleCourseIdChange)
     if (this.followupObserver) { this.followupObserver.disconnect(); this.followupObserver = null }
   }
 
-  handleHashChange = () => {
-    const courseId = this.getCourseIdFromHash()
+  handleCourseIdChange = () => {
+    const courseId = this.getCourseIdFromUrl()
     if (courseId && courseId !== this.currentCourseId) {
       this.currentCourseId = courseId
       this.dispatchEvent(new CustomEvent('request-booking', {
@@ -177,11 +178,6 @@ export default class Booking extends Index {
         composed: true
       }))
     }
-  }
-
-  getCourseIdFromHash() {
-    const match = window.location.hash.match(/courseId=(\d+)/)
-    return match ? match[1] : null
   }
 
   shouldRenderHTML () {
@@ -550,6 +546,11 @@ export default class Booking extends Index {
         </div>
       `
     }
+  }
+
+  getCourseIdFromUrl() {
+    const match = window.location.hash.match(/courseId=(\d+)/)
+    return match ? match[1] : null
   }
 
   get discoverTiles () {

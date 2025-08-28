@@ -110,20 +110,6 @@ export default class Booking extends HTMLElement {
       documentKey: event.detail.documentKey,
     }
     const options = this.fetchPOSTOptions(data, this.abortControllerDocument)
-
-    // this.dispatchEvent(new CustomEvent('update-document', {
-    //   detail: {
-    //     fetch: fetch(endpoint, options)
-    //       .then(async response => {
-    //         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    //         return await response.json()
-    //       })
-    //   },
-    //   bubbles: true,
-    //   cancelable: true,
-    //   composed: true
-    // }))
-
      fetch(endpoint, options)
       .then(async response => {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
