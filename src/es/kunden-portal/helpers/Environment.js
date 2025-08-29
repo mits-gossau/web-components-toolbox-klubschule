@@ -62,6 +62,7 @@ self.Environment = {
         return {
           getMyBookings: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getMyBookings`,
           myBooking: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getMyBooking`,
+          getMyDocument: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/getMyDocument`,
           subscriptions: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptions`
         }
       }
