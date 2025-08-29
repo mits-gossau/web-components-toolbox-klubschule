@@ -115,6 +115,8 @@ export default class FollowUp extends Tile {
       iconName = 'await'
     } else if (data === 4) {
       iconName = 'almost'
+    } else {
+      return '../../../../../../../img/icons/icon-folder.svg'
     }
     return `../../../../../../../img/icons/event-state-${iconName}.svg`
   }

@@ -532,7 +532,6 @@ export default class Dashboard extends Shadow() {
   }
 
   get continuationsDiv () {
-    debugger
     return this.root.querySelector('o-grid').root.querySelector('#continuations .container-continuations')
   }
 }

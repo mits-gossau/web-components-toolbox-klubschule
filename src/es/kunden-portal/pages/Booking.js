@@ -88,6 +88,10 @@ export default class Booking extends Index {
 
     this.requestBookingListener = this.createRequestListener(
       data => { 
+        if (!data || !data.course) {
+          setTimeout(() => this.renderNoResult(data?.message), 0)
+          return
+        }
         this.followupRequested = false
         this.bookingData = data || {}
         // this.appointmentsData = (this.bookingData.course && Array.isArray(this.bookingData.course.appointments)) ? this.bookingData.course.appointments : []
@@ -308,15 +312,12 @@ export default class Booking extends Index {
         <div id="body-stage">
           <o-grid namespace="grid-2columns-content-section-" first-container-vertical first-column-with="66%" with-border width="100%" count-section-children="2">
             <section>
-              <ks-o-body-section content-width-var="100%" no-margin-y background-color="white"> 
+              <ks-o-body-section content-width-var="100%" no-margin-y background-color="white">
                 <!-- notification -->
-                <ks-m-system-notification id="booking-notification" namespace="system-notification-default-" icon-name="Info" icon-size="1.5em" icon-plain is-closeable>
-                  <div slot="description">
-                    <p class="notification-title">Kursbestätigung ist verfügbar</p>
-                    <p class="notification-text">Sie finden alle Dokumente zum Kurs auf der Kursdetailseite oder unter Dokumente.</p>
-                  </div>
-                </ks-m-system-notification>
-                <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                <section id="booking-notification" style="display:none;">
+                  <div class="notification-wrapper"></div>
+                  <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
+                </section>
                 <!-- details -->
                 <section id="booking-details" style="display:none;">
                   <kp-m-tile-booking-details data="${this.bookingDetails || ''}"></kp-m-tile-booking-details>
@@ -339,37 +340,31 @@ export default class Booking extends Index {
             </section>
           </o-grid>
           <!-- followup -->
-          <div id="followup-observer-anchor"></div>
           <ks-o-body-section content-width-var="100%" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" has-background>
-            <div id="followup-wrapper" style="display:none;">
-              <div id="continuation-course" style="width: var(--body-section-default-width, 86.666%); margin: 0 auto;">
-                <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> Fortsetzungskurs</h2>
-                <div class="container-followup container"></div>
-              <div>
-            </div>
-            <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
-            <!-- discover -->
-            <div class="container-discover">
-              <style>
-                :host .container-discover {
-                  display: flex;
-                  gap: var(--mdx-sys-spacing-flex-xs, 24px);
-                }
-                @media only screen and (max-width:${this.mobileBreakpoint}) {
-                  :host .container-discover {
-                    flex-direction: column;
-                  }
-                }
-              </style>
-              ${this.discoverTiles.map((tile, i) => /* html */`
-                <kp-m-tile-discover
-                  image-src="${tile.imageSrc}"
-                  tile-label="${tile.label}"
-                  link-href="${tile.href}"
-                  link-text="Kurse entdecken">
-                </kp-m-tile-discover>
-              `).join('')}
-            </div>
+            <section style="width: var(--body-section-default-width, 86.666%); margin: 0 auto;">
+              <div id="followup-wrapper" style="display:none;">
+                <div id="continuation-course">
+                  <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> Fortsetzungskurs</h2>
+                  <div class="container-followup container"></div>
+                </div>
+                <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
+              </div>
+              <!-- discover -->
+              <div class="container-discover">
+                <style>
+                  :host .container-discover { display: flex; gap: var(--mdx-sys-spacing-flex-xs, 24px); }
+                  @media only screen and (max-width:${this.mobileBreakpoint}) { :host .container-discover { flex-direction: column; } }
+                </style>
+                ${this.discoverTiles.map((tile, i) => /* html */`
+                  <kp-m-tile-discover
+                    image-src="${tile.imageSrc}"
+                    tile-label="${tile.label}"
+                    link-href="${tile.href}"
+                    link-text="Kurse entdecken">
+                  </kp-m-tile-discover>
+                `).join('')}
+              </div>
+            </section>
           </ks-o-body-section>
         </div>
       </div>
@@ -377,8 +372,14 @@ export default class Booking extends Index {
   }
 
   renderBooking () {
-    const body = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('ks-o-body-section').shadowRoot
     if (!this.bookingData) return
+    const body = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('ks-o-body-section').shadowRoot
+
+    // remove notification
+    const notificationSection = body.querySelector('#booking-notification')
+    const wrapper = body.querySelector('.notification-wrapper')
+    if (wrapper) wrapper.innerHTML = ''
+    if (notificationSection) notificationSection.style.display = 'none'
 
     // booking details
     /**
@@ -391,6 +392,15 @@ export default class Booking extends Index {
     const end = new Date(course.courseEndDate)
     const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
     const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
+    const details = [
+      { label: 'Teilnehmerstatus', text: this.bookingData.course.bookingTypeText },
+      { label: 'Nummer', text: this.bookingData.course.courseType + '_' + String(this.bookingData.course.courseId) },
+      { label: 'Zeitraum', text: daysEntry },
+      { label: 'Ort', text: this.bookingData.course.locationDescription },
+      { label: 'Unterrichtssprache', text: this.bookingData.course.courseLanguage },
+      { label: 'Max. Teilnehmer', text: this.bookingData.course.capacity },
+      { label: 'Dauer', text: `${this.bookingData.course.numberOfAppointments} Kurstag(e)<br />Total ${this.bookingData.course.lessions} Lektion(en) zu ${this.bookingData.course.lessionDuration} Min.` },
+    ].filter(item => item.text && item.text !== 'undefined' && item.text !== 'null') // only show details with value
 
     this.bookingDetails = JSON.stringify({
       bookingTypeText: this.bookingData.course.bookingTypeText || 'Gebucht',
@@ -402,15 +412,7 @@ export default class Booking extends Index {
       linkLms: this.bookingData.course.linkLms || '',
       linkTeams: this.bookingData.course.linkTeams || '',
       linkDownload: '', // TODO: to define
-      details: [
-        { label: 'Teilnehmerstatus', text: this.bookingData.course.bookingTypeText},
-        { label: 'Nummer', text: this.bookingData.course.courseType + '_' + String(this.bookingData.course.courseId)},
-        { label: 'Zeitraum', text: daysEntry},
-        { label: 'Ort', text: this.bookingData.course.locationDescription},
-        { label: 'Unterrichtssprache', text: this.bookingData.course.courseLanguage},
-        { label: 'Max. Teilnehmer', text: this.bookingData.course.capacity},
-        { label: 'Dauer', text: `${this.bookingData.course.numberOfAppointments} Kurstag(e)<br />Total ${this.bookingData.course.lessions} Lektion(en) zu ${this.bookingData.course.lessionDuration} Min.`},
-      ]
+      details
     })
 
     const tile = body.querySelector('kp-m-tile-booking-details')
@@ -537,16 +539,28 @@ export default class Booking extends Index {
       followUpSection.shadowRoot.querySelector('#followup-wrapper').style.display = 'block'
   }
 
-  renderNoResult () {
-    const container = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('ks-o-body-section').shadowRoot.querySelector('#booking-detail .container')
-    console.log(container)
-    if (container) {
-      container.innerHTML = /* html */`
-        <div class="booking-error" style="color: red; font-weight: bold; margin: 2rem 0;">
-          Es gibt keinen Kurs mit dieser ID.<br>
-          Bitte prüfen Sie Ihre Auswahl oder versuchen Sie es später erneut.
-        </div>
+  renderNoResult(apiMessage) {
+    const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
+    const notificationSection = body?.querySelector('#booking-notification')
+    const wrapper = body?.querySelector('.notification-wrapper')
+    let errorMsg = 'Es gibt keinen Kurs mit dieser ID.<br>Bitte prüfen Sie Ihre Auswahl oder versuchen Sie es später erneut.'
+    if (apiMessage) {
+      try {
+        const msgObj = JSON.parse(apiMessage)
+        if (msgObj.errorMsg) errorMsg = msgObj.errorMsg
+      } catch {}
+    }
+    if (wrapper) {
+      const notification = /* html */`
+        <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle" icon-size="1.5em">
+          <div slot="description">
+            <p class="notification-title">Kein Kurs gefunden</p>
+            <p class="notification-text">${errorMsg}</p>
+          </div>
+        </ks-m-system-notification>
       `
+      wrapper.innerHTML = notification
+      notificationSection.style.display = ''
     }
   }
 
