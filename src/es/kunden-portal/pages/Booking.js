@@ -519,7 +519,7 @@ export default class Booking extends Index {
             text: 'Detail ansehen',
             typ: 'secondary',
             event: 'open-booking-detail',
-            link: `index.html#/booking?courseId=${course.courseId}`
+            link: `#/booking?courseId=${course.courseId}`
           }],
           icons: [],
           state_of_booking: 'Reserviert',
