@@ -196,12 +196,6 @@ export default class Booking extends Index {
 
   renderCSS () {
     this.css = /* css */`
-      :host #detail-page {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-      }
       :host #top-stage {
         cursor: pointer;
         background-color: var(--mdx-sys-color-primary-default);
@@ -336,7 +330,7 @@ export default class Booking extends Index {
                 </section>
               </ks-o-body-section>
               <!-- contact -->
-              <aside></aside>
+              <aside style="background-color: white;"></aside>
             </section>
           </o-grid>
           <!-- followup -->

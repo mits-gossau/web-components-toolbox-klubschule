@@ -89,7 +89,9 @@ export default class Dashboard extends Shadow() {
             gap: 1em;
           }
           :host > section > div {
-            padding-bottom: 5em;
+            padding: 5em 0;
+            width: var(--body-section-default-width, 86.666%);
+            margin: 0 auto;
           }
           :host .container-next-appointments {
             width: 100%;
