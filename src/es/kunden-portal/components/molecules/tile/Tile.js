@@ -107,6 +107,8 @@ export default class AppointmentTile extends Tile {
   }
 
   renderAbbonements (data) {
+    // @ts-ignore
+    const url = Environment.getEnvUrl() + '/mein-konto/abokurse/?page=subscriptions#/'
     const { courseTitle, courseStartDate, courseEndDate } = data.data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
@@ -130,7 +132,7 @@ export default class AppointmentTile extends Tile {
                   <div class="m-tile__body"><span class="m-tile__content m-tile__next-date">Gültigkeitsdauer ${formatDateForRender(start)} - ${formatDateForRender(end)}</span></div>
                   <div>
                     <ks-a-button
-                      href="" 
+                      href="${url}" 
                       namespace="button-secondary-" 
                       color=""
                     >
@@ -160,25 +162,7 @@ export default class AppointmentTile extends Tile {
       participantEnrolled
     } = data.data || {}
 
-    // let buttonText = 'Details ansehen'
-    // let link = `#/booking?courseId=${courseId}`
-    // if (isSubscriptionCourse) {
-    //   buttonText = 'Zum Aboportal'
-    //   link = '/mein-konto/abokurse/?page=booked#/'
-    // }
-
-    // if (courseType === '1K') {
-    //   link = `#/booking?courseId=${appointmentCourseId}`
-    // }
-
-    const renderTitle = appointmentCourseTitle !== '' ? `<span class="m-tile__subtitle subtitle">${courseTitle}</span><span class="m-tile__title title">${appointmentCourseTitle}</span>` : `<span class="m-tile__title title">${courseTitle}</span>`
-
-    // const renderRoomDescription = roomDescription !== ''
-    //   ? /* html */ `
-    //     <a-icon-mdx icon-name="${data.room.iconName}" size="1em"></a-icon-mdx>
-    //     <span class="m-tile__content">Raum ${roomDescription}</span>
-    //   `
-    //   : ''
+    const renderTitle = appointmentCourseTitle !== '' ? `<span class="m-tile__subtitle subtitle ${participantEnrolled ? '' : 'strikethrough'}">${courseTitle}</span><span class="m-tile__title title ${participantEnrolled ? '' : 'strikethrough'}">${appointmentCourseTitle}</span>` : `<span class="m-tile__title title ${participantEnrolled ? '' : 'strikethrough'}">${courseTitle}</span>`
 
     return /* html */ `
       <m-load-template-tag mode="false">
@@ -199,6 +183,9 @@ export default class AppointmentTile extends Tile {
             :host .strikethrough {
               text-decoration: line-through;
             }
+            :host .location {
+              padding-top: 1em;
+            }
           </style>
           <div class="m-tile next-appointment">
             <div class="m-tile__wrap">
@@ -208,11 +195,9 @@ export default class AppointmentTile extends Tile {
                 </div>
                 <div class="m-tile__body">
                   <div>
-                    <span class="m-tile__content m-tile__next-date">${appointmentDateFormatted}</span>
+                    <span class="m-tile__content m-tile__next-date ${participantEnrolled ? '' : 'strikethrough'}">${appointmentDateFormatted}</span>
                   </div>
                   ${this.renderNextAppointmentsMetaData(participantEnrolled, data.room.iconName, roomDescription, data.location.iconName, courseLocation)}
-                  <!--${this.renderNextAppointmentsLocation(data.location.iconName, courseLocation)}
-                  ${this.renderNextAppointmentsRoomDescription(data.room.iconName, roomDescription)}-->
                 </div>
               </div>
               <div class="m-tile__foot">
@@ -235,7 +220,10 @@ export default class AppointmentTile extends Tile {
       `
     } else {
       return /* html */ `
-      sorry!
+        <div class="m-tile__room">
+          <a-icon-mdx icon-name="UserX" size="1em"></a-icon-mdx>
+          <span class="m-tile__content">Sie haben sich abgemeldet</span>
+        </div>
       `
     }
   }
@@ -252,7 +240,7 @@ export default class AppointmentTile extends Tile {
 
   renderNextAppointmentsLocation (icon, location) {
     return /* html */ ` 
-      <div>
+      <div class="location">
         <a-icon-mdx icon-name="${icon}" size="1em"></a-icon-mdx>
         <span class="m-tile__content">${location}</span>
       </div>  
@@ -264,7 +252,7 @@ export default class AppointmentTile extends Tile {
     let link = `#/booking?courseId=${courseId}`
     if (isSubscriptionCourse) {
       text = 'Zum Aboportal'
-      link = '/mein-konto/abokurse/?page=booked#/'
+      link = Environment.getEnvUrl() + '/mein-konto/abokurse/?page=booked#/'
     }
 
     if (courseType === '1K') {
