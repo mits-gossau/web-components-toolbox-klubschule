@@ -126,6 +126,9 @@ export default class Dashboard extends Shadow() {
             top: -2px;
             margin-right: 6px;
           }
+          :host .no-results {
+            padding-bottom: 2em;
+          }
           @media only screen and (max-width:${this.mobileBreakpoint}) {
             :host .container-discover,
             :host .container-appointments,
@@ -219,7 +222,6 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="continuations" class="continuations">
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
-            <!--<div class="container no-results">Es finden keine Fortsetzungskurse statt.</div>-->
             <div class="container-continuations container"></div>
             ${this.renderDiscoverMoreTile()}
           </div>`
@@ -238,7 +240,7 @@ export default class Dashboard extends Shadow() {
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
-      this.renderEmptyMessage(containerDiv, 'Es finden keine Fortsetzungskurse statt.', 'no--results')
+      this.renderEmptyMessage(containerDiv, 'Es finden keine Fortsetzungskurse statt.', 'no-results')
       return
     }
     bookingsData.forEach(course => {

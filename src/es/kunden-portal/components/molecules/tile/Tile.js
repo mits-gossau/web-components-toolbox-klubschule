@@ -34,6 +34,12 @@ export default class AppointmentTile extends Tile {
       :host .abonnements-footer-button {
         align-items: flex-start;
       }
+      :host .m-tile__title {
+        cursor: auto;
+      }
+      :host .m-tile__title:hover {
+        color: inherit;
+      }
       @media only screen and (max-width: _max-width_) {
         :host .next-appointment {
           flex-direction: row;
