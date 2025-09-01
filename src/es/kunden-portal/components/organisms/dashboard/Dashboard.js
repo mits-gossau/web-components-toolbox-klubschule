@@ -88,8 +88,13 @@ export default class Dashboard extends Shadow() {
             display:flex;
             gap: 1em;
           }
+
+          :host > section > div:first-child {
+            padding-top: 5em;
+          }
+          
           :host > section > div {
-            padding: 5em 0;
+            padding-bottom: 5em;
             width: var(--body-section-default-width, 86.666%);
             margin: 0 auto;
           }
