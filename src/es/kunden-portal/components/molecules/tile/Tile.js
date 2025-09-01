@@ -161,14 +161,14 @@ export default class AppointmentTile extends Tile {
     } = data.data || {}
 
     // let buttonText = 'Details ansehen'
-    // let link = `index.html#/booking?courseId=${courseId}`
+    // let link = `#/booking?courseId=${courseId}`
     // if (isSubscriptionCourse) {
     //   buttonText = 'Zum Aboportal'
     //   link = '/mein-konto/abokurse/?page=booked#/'
     // }
 
     // if (courseType === '1K') {
-    //   link = `index.html#/booking?courseId=${appointmentCourseId}`
+    //   link = `#/booking?courseId=${appointmentCourseId}`
     // }
 
     const renderTitle = appointmentCourseTitle !== '' ? `<span class="m-tile__subtitle subtitle">${courseTitle}</span><span class="m-tile__title title">${appointmentCourseTitle}</span>` : `<span class="m-tile__title title">${courseTitle}</span>`
@@ -261,14 +261,14 @@ export default class AppointmentTile extends Tile {
 
   renderNextAppointmentsButton (isSubscriptionCourse, courseType, courseId, appointmentCourseId, namespace = 'button-secondary-', color = 'secondary') {
     let text = 'Details ansehen'
-    let link = `index.html#/booking?courseId=${courseId}`
+    let link = `#/booking?courseId=${courseId}`
     if (isSubscriptionCourse) {
       text = 'Zum Aboportal'
       link = '/mein-konto/abokurse/?page=booked#/'
     }
 
     if (courseType === '1K') {
-      link = `index.html#/booking?courseId=${appointmentCourseId}`
+      link = `#/booking?courseId=${appointmentCourseId}`
     }
     return /* html */ `
       <ks-a-button

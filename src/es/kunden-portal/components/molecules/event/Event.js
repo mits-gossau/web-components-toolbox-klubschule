@@ -50,7 +50,7 @@ export default class EventTile extends Event {
     const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate, bookingTypeText } = data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
-    const link = `index.html#/booking?courseId=${courseId}`
+    const link = `#/booking?courseId=${courseId}`
     return /* HTML */`
       <div class="event">
         <div class="top">
@@ -96,7 +96,7 @@ export default class EventTile extends Event {
     const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate, bookingTypeText } = data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
-    const linkBooking = `index.html#/booking?courseId=${courseId}`
+    const linkBooking = `#/booking?courseId=${courseId}`
     return /* HTML */`
       <div class="event">
         <div class="top">
