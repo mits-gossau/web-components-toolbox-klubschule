@@ -52,43 +52,47 @@ export default class EventTile extends Event {
     const end = new Date(courseEndDate)
     const link = `#/booking?courseId=${courseId}`
     return /* HTML */`
-      <div class="event">
-        <div class="top">
-          <div class="state-of-booking"><span>${bookingTypeText}</span></div>
-          <div class="logo">${this.getLogoHTML(logoUrl)}</div>
-        </div>
-        <div class="head">
-          <div class="dates">
-            <span class="date">${courseTitle}</span>
-            <div class="time">
-              <span class="days">${formatDateForRender(start)} - ${formatDateForRender(end)}</span>
+      <m-load-template-tag mode="false">
+        <template>
+        <div class="event">
+          <div class="top">
+            <div class="state-of-booking"><span>${bookingTypeText}</span></div>
+            <div class="logo">${this.getLogoHTML(logoUrl)}</div>
+          </div>
+          <div class="head">
+            <div class="dates">
+              <span class="date">${courseTitle}</span>
+              <div class="time">
+                <span class="days">${formatDateForRender(start)} - ${formatDateForRender(end)}</span>
+              </div>
+            </div>
+            <ul class="meta">
+                <li>
+                  <div>
+                    <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(courseStatus)}" size="1.5em"></a-icon-mdx>
+                  </div>
+                  <span>${courseStatusText}</span>
+                </li>
+                <li>
+                  <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
+                  <span>${courseLocation}</span>
+                </li>
+            </ul>      
+          </div>
+          <div class="controls">
+            <div class="controls-left">
+              <ks-a-button
+                href="${link}" 
+                namespace="button-secondary-" 
+                color="secondary"
+              >
+                <span>Details ansehen</span>
+              </ks-a-button>
             </div>
           </div>
-          <ul class="meta">
-              <li>
-                <div>
-                  <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(courseStatus)}" size="1.5em"></a-icon-mdx>
-                </div>
-                <span>${courseStatusText}</span>
-              </li>
-              <li>
-                <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
-                <span>${courseLocation}</span>
-              </li>
-          </ul>      
         </div>
-        <div class="controls">
-          <div class="controls-left">
-            <ks-a-button
-              href="${link}" 
-              namespace="button-secondary-" 
-              color="secondary"
-            >
-              <span>Details ansehen</span>
-            </ks-a-button>
-          </div>
-        </div>
-      </div>
+        </template> 
+      </m-load-template-tag>
     `
   }
 
