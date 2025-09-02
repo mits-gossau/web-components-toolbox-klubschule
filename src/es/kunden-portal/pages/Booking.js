@@ -158,6 +158,7 @@ export default class Booking extends Index {
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
+    this.changeParentBackgroundColor()
     document.body.addEventListener('update-booking', this.requestBookingListener)
     document.body.addEventListener('update-followup', this.requestFollowUpListener)
     document.body.addEventListener('update-document', this.requestDocumentListener)
@@ -166,6 +167,7 @@ export default class Booking extends Index {
   }
 
   disconnectedCallback () {
+    this.changeBackParentBackgroundColor()
     document.body.removeEventListener('update-booking', this.requestBookingListener)
     document.body.removeEventListener('update-followup', this.requestFollowUpListener)
     document.body.removeEventListener('update-document', this.requestDocumentListener)
@@ -363,6 +365,17 @@ export default class Booking extends Index {
         </div>
       </div>
     `
+  }
+
+  changeParentBackgroundColor() {
+    const bodySection = this.getRootNode().host
+    console.log('bodySection', bodySection)
+    if (bodySection) bodySection.setAttribute('background-color', 'white')
+  }
+
+  changeBackParentBackgroundColor() {
+    const bodySection = this.getRootNode().host
+     if (bodySection) bodySection.setAttribute('background-color', 'var(--mdx-sys-color-accent-6-subtle1)')
   }
 
   renderBooking () {
