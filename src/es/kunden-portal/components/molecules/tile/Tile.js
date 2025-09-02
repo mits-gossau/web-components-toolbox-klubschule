@@ -221,8 +221,8 @@ export default class AppointmentTile extends Tile {
   renderNextAppointmentsMetaData (participantEnrolled, iconRoom, roomDescription, iconLocation, locationDescription) {
     if (participantEnrolled) {
       return /* html */ ` 
-          ${this.renderNextAppointmentsRoomDescription(iconRoom, roomDescription)}
           ${this.renderNextAppointmentsLocation(iconLocation, locationDescription)}
+          ${this.renderNextAppointmentsRoomDescription(iconRoom, roomDescription)}
       `
     } else {
       return /* html */ `
