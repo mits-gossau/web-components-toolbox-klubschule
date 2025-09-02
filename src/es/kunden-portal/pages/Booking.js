@@ -175,10 +175,11 @@ export default class Booking extends Index {
 
   handleCourseIdChange = () => {
     const courseId = this.getCourseIdFromUrl()
+    const courseType = this.getCourseTypeFromUrl()
     if (courseId && courseId !== this.currentCourseId) {
       this.currentCourseId = courseId
       this.dispatchEvent(new CustomEvent('request-booking', {
-        detail: { courseId },
+        detail: { courseId, courseType },
         bubbles: true,
         cancelable: true,
         composed: true
@@ -364,7 +365,7 @@ export default class Booking extends Index {
       </div>
     `
   }
-  
+
   renderBooking () {
     if (!this.bookingData) return
     const body = this.shadowRoot?.querySelector('o-grid').shadowRoot.querySelector('ks-o-body-section').shadowRoot
@@ -513,7 +514,7 @@ export default class Booking extends Index {
             text: 'Detail ansehen',
             typ: 'secondary',
             event: 'open-booking-detail',
-            link: `#/booking?courseId=${course.courseId}`
+            link: `#/booking?courseId=${course.courseId}&courseType=${course.courseType}`
           }],
           icons: [],
           state_of_booking: 'Reserviert',
@@ -560,6 +561,11 @@ export default class Booking extends Index {
 
   getCourseIdFromUrl() {
     const match = window.location.hash.match(/courseId=(\d+)/)
+    return match ? match[1] : null
+  }
+
+  getCourseTypeFromUrl() {
+    const match = window.location.hash.match(/coursetype=(\d+)/)
     return match ? match[1] : null
   }
 

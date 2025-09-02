@@ -37,6 +37,7 @@ export default class Booking extends HTMLElement {
 
     const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '')
     const courseId = urlParams.get('courseId') || event.detail.courseId
+    const courseType = urlParams.get('courseType') || event.detail.courseType
     if (!courseId) {
       console.error('Course ID is required for booking.')
       return
@@ -46,7 +47,7 @@ export default class Booking extends HTMLElement {
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBooking}`
     const data = {
       language: 'de',
-      courseType: 'E',
+      courseType,
       courseId
     }
     const options = this.fetchPOSTOptions(data, this.abortControllerBooking)
