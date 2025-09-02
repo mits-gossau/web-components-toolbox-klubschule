@@ -92,7 +92,7 @@ export default class Dashboard extends Shadow() {
           :host > section > div:first-child {
             padding-top: 5em;
           }
-          
+
           :host > section > div {
             padding-bottom: 5em;
             width: var(--body-section-default-width, 86.666%);
@@ -114,8 +114,11 @@ export default class Dashboard extends Shadow() {
           :host .container-continuations {
             flex-direction: column;
           }
-          :host .discover-more-courses {
+          :host .discover-our-courses {
             padding-bottom: 1.5em;
+          }
+          :host .discover-more-courses {
+            padding-top: 1.5em;
           }
           :host h2 > a-icon-mdx {
             display: inline-block;
@@ -132,9 +135,6 @@ export default class Dashboard extends Shadow() {
             text-align: center;
             top: -2px;
             margin-right: 6px;
-          }
-          :host .no-results {
-            padding-bottom: 2em;
           }
           @media only screen and (max-width:${this.mobileBreakpoint}) {
             :host .container-discover,
@@ -251,6 +251,7 @@ export default class Dashboard extends Shadow() {
   }
 
   renderContinuations (bookingsData, eventTileComponent, containerDiv) {
+    debugger
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
@@ -305,14 +306,14 @@ export default class Dashboard extends Shadow() {
   renderDiscoverTile () {
     return this.renderDiscoverSection({
       title: 'Unsere Kurse entdecken',
-      className: 'discover-more-courses'
+      className: 'discover-our-courses'
     })
   }
 
   renderDiscoverMoreTile () {
     return this.renderDiscoverSection({
       title: 'Weitere Kurse entdecken',
-      className: ''
+      className: 'discover-more-courses'
     })
   }
 
@@ -434,86 +435,12 @@ export default class Dashboard extends Shadow() {
     ]
   }
 
-  // OBSOLETE - kept for reference
-  getNextAppointmentsData (bookingsData, count = 3) {
-    const appointments = bookingsData.filter(course => course.appointments && course.appointments.length > 0)
-    const dates = []
-
-    // create a list of all appointments per course
-    // the list is sorted by appointment date (earliest first)
-    // only keep the appointment date, no other information
-    // this is done to find the next appointment (newest one in the future)
-    appointments.forEach(course => {
-      const sortedAppointments = course.appointments
-        .sort((a, b) => new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime())
-        .map(app => ({ appointmentDate: app.appointmentDate }))
-      dates.push({
-        courseId: course.courseId,
-        appointments: sortedAppointments
-      })
-    })
-
-    // find the next three upcoming appointments for each course
-    const newestAppointments = dates
-      .map(({ courseId, appointments }) => {
-        // find the first future appointment for the course
-        const today = new Date()
-        today.setHours(0, 0, 0, 0) // set today's date to the beginning of the day
-        const todayAppointments = appointments.filter(appointment => {
-          const appointmentDate = new Date(appointment.appointmentDate)
-          return appointmentDate.setHours(0, 0, 0, 0) === today.getTime()
-        })
-        const upcomingAppointment = todayAppointments.length > 0
-          ? todayAppointments[0]
-          : appointments.find(({ appointmentDate }) => new Date(appointmentDate) > today)
-        return { courseId, upcomingAppointment }
-      })
-      // filter out courses without upcoming appointments
-      .filter(({ upcomingAppointment }) => upcomingAppointment)
-      // sort by the soonest upcoming appointment date
-      .sort((a, b) => new Date(a.upcomingAppointment.appointmentDate).getTime() - new Date(b.upcomingAppointment.appointmentDate).getTime())
-      // limit the results to the top 3
-      .slice(0, count)
-
-    const nextAppointments = newestAppointments.map(entry => {
-      const courseId = entry.courseId
-      const course = bookingsData.find(course => course.courseId === courseId)
-      // filter only future appointments
-      const futureAppointments = course.appointments.filter(appointment => {
-        const appointmentDate = new Date(appointment.appointmentDate)
-        const today = new Date()
-        today.setHours(0, 0, 0, 0) // set today's date to the beginning of the day
-        return appointmentDate >= today // return true for future appointments
-      })
-      course.appointments = futureAppointments // update course appointments to only future ones
-      return course
-    }).sort((a, b) => {
-      // sort courses based on the next appointment date
-      const today = new Date()
-      today.setHours(0, 0, 0, 0) // normalize today to start of the day
-      // get the date of the first appointment for comparison
-      const appointmentDateA = new Date(a.appointments[0].appointmentDate)
-      const appointmentDateB = new Date(b.appointments[0].appointmentDate)
-      const diffA = appointmentDateA.getTime() - today.getTime()
-      const diffB = appointmentDateB.getTime() - today.getTime()
-      // if both appointments are in the past, sort by the most recent
-      if (diffA < 0 && diffB < 0) return diffB - diffA
-      // if A's appointment is in the past, B comes first
-      if (diffA < 0) return 1
-      // if B's appointment is in the past, A comes first
-      if (diffB < 0) return -1
-      // if both are in the future, sort by the closest
-      return diffA - diffB
-    })
-    return nextAppointments
-  }
-
   getAppointmensData (bookingsData) {
     return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A') || []
   }
 
   getContinuationsData (bookingData) {
-    return bookingData.filter(course => (course.bookingType === 3 || course.bookingType === 1) && course.subscriptionType === 5) || []
+    return bookingData.filter(course => course.bookingType === 3 && course.subscriptionType === 5) || []
   }
 
   getAbonnementsData (bookingsData) {
