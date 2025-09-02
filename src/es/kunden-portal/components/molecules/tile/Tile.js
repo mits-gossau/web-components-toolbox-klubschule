@@ -189,9 +189,7 @@ export default class AppointmentTile extends Tile {
             :host .strikethrough {
               text-decoration: line-through;
             }
-            :host .location {
-              padding-top: 1em;
-            }
+
           </style>
           <div class="m-tile next-appointment">
             <div class="m-tile__wrap">
