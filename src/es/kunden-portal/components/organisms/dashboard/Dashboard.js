@@ -176,6 +176,10 @@ export default class Dashboard extends Shadow() {
       {
         path: `${this.importMetaUrl}'../../../../molecules/tileDiscover/TileDiscover.js`,
         name: 'kp-m-tile-discover'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../../../../../src/css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
+        name: 'mdx-component'
       }
     ])
 
@@ -215,6 +219,7 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="next-appointments" class="next-appointments">
             <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
+            <div class="loading-next-appointments">${this.renderLoading()}</div>
             <div class="container-next-appointments container"></div>
         </div>`
       case 'courses':
@@ -222,6 +227,7 @@ export default class Dashboard extends Shadow() {
           <div id="courses" class="courses">
             <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
             ${this.renderDiscoverTile()}
+            <div class="loading-courses">${this.renderLoading()}</div>
             <div class="container-courses container"></div>
         </div>
         </div>`
@@ -236,6 +242,7 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="abonnements" class="abonnements">
             <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
+            <div class="loading-abonnements">${this.renderLoading()}</div>
             <div id="abonnements" class="container-abonnements container"></div>
           </div>`
       default:
@@ -288,6 +295,9 @@ export default class Dashboard extends Shadow() {
       fragment.appendChild(event)
     })
 
+    // remove loading indicator if present
+    this.abonnementsLoadingDiv?.remove()
+
     // single DOM update
     containerDiv.appendChild(fragment)
   }
@@ -326,6 +336,14 @@ export default class Dashboard extends Shadow() {
     `
   }
 
+  renderLoading () {
+    return /* html */`
+      <mdx-component>
+          <mdx-loading-bar></mdx-loading-bar>
+      </mdx-component>
+    `
+  }
+
   renderNextAppointments (bookingsData, tileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
@@ -356,6 +374,9 @@ export default class Dashboard extends Shadow() {
       fragment.appendChild(event)
     })
 
+    // remove loading indicator if present
+    this.nextAppointmentsLoadingDiv?.remove()
+
     // single DOM update
     containerDiv.appendChild(fragment)
   }
@@ -381,6 +402,9 @@ export default class Dashboard extends Shadow() {
       }))
       containerDiv.appendChild(event)
     })
+
+    // remove loading indicator if present
+    this.coursesLoadingDiv?.remove()
   }
 
   renderEmptyMessage (divEl, message, errorCssClass = 'no-results') {
@@ -510,5 +534,17 @@ export default class Dashboard extends Shadow() {
 
   get continuationsDiv () {
     return this.root.querySelector('o-grid').root.querySelector('#continuations .container-continuations')
+  }
+
+  get nextAppointmentsLoadingDiv () {
+    return this.root.querySelector('o-grid').root.querySelector('.loading-next-appointments')
+  }
+
+  get coursesLoadingDiv () {
+    return this.root.querySelector('o-grid').root.querySelector('.loading-courses')
+  }
+
+  get abonnementsLoadingDiv () {
+    return this.root.querySelector('o-grid').root.querySelector('.loading-abonnements')
   }
 }
