@@ -253,14 +253,15 @@ export default class AppointmentTile extends Tile {
 
   renderNextAppointmentsButton (isSubscriptionCourse, courseType, courseId, appointmentCourseId, namespace = 'button-secondary-', color = 'secondary') {
     let text = 'Details ansehen'
-    let link = `#/booking?courseId=${courseId}`
+    let link = `#/booking?courseId=${courseId}&courseType=${courseType}`
     if (isSubscriptionCourse) {
       text = 'Zum Aboportal'
+      // @ts-ignore
       link = Environment.getEnvUrl() + '/mein-konto/abokurse/?page=booked#/'
     }
 
     if (courseType === '1K') {
-      link = `#/booking?courseId=${appointmentCourseId}`
+      link = `#/booking?courseId=${appointmentCourseId}&courseType=${courseType}`
     }
     return /* html */ `
       <ks-a-button

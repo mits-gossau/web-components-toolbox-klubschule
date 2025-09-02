@@ -47,10 +47,10 @@ export default class EventTile extends Event {
   }
 
   renderCourseTile (data) {
-    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate, bookingTypeText } = data
+    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseType, courseStartDate, courseEndDate, bookingTypeText } = data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
-    const link = `#/booking?courseId=${courseId}`
+    const link = `#/booking?courseId=${courseId}&courseType=${courseType}`
     return /* HTML */`
       <m-load-template-tag mode="false">
         <template>
@@ -97,10 +97,10 @@ export default class EventTile extends Event {
   }
 
   renderContinuationTile (data) {
-    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseStartDate, courseEndDate, bookingTypeText } = data
+    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseType, courseStartDate, courseEndDate, bookingTypeText } = data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
-    const linkBooking = `#/booking?courseId=${courseId}`
+    const linkBooking = `#/booking?courseId=${courseId}&courseType=${courseType}`
     return /* HTML */`
       <div class="event">
         <div class="top">
