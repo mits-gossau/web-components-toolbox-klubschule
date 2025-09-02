@@ -436,11 +436,11 @@ export default class Dashboard extends Shadow() {
   }
 
   getAppointmensData (bookingsData) {
-    return bookingsData.filter(course => course.bookingType !== 3 && course.subcripionType !== 5 && course.courseType !== '7A') || []
+    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A') || []
   }
 
   getContinuationsData (bookingData) {
-    return bookingData.filter(course => course.bookingType === 3 && course.subcripionType === 5) || []
+    return bookingData.filter(course => course.bookingType === 3 && course.subscriptionType === 5) || []
   }
 
   getAbonnementsData (bookingsData) {
