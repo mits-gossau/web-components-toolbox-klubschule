@@ -101,6 +101,8 @@ export default class EventTile extends Event {
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
     const linkBooking = `#/booking?courseId=${courseId}&courseType=${courseType}`
+    // TODO: Change linkCheckout when checkout page is ready
+    const linkCheckout = `#/booking?courseId=${courseId}&courseType=${courseType}`
     return /* HTML */`
       <div class="event">
         <div class="top">
@@ -130,7 +132,7 @@ export default class EventTile extends Event {
         <div class="controls">
           <div class="controls-left">
             <ks-a-button
-                href="${linkBooking}" 
+                href="${linkCheckout}" 
                 namespace="button-primary-" 
                 color="secondary"
             >
