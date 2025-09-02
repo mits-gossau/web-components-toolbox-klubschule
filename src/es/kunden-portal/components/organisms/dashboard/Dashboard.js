@@ -92,7 +92,7 @@ export default class Dashboard extends Shadow() {
           :host > section > div:first-child {
             padding-top: 5em;
           }
-          
+
           :host > section > div {
             padding-bottom: 5em;
             width: var(--body-section-default-width, 86.666%);
@@ -114,8 +114,11 @@ export default class Dashboard extends Shadow() {
           :host .container-continuations {
             flex-direction: column;
           }
-          :host .discover-more-courses {
+          :host .discover-our-courses {
             padding-bottom: 1.5em;
+          }
+          :host .discover-more-courses {
+            padding-top: 1.5em;
           }
           :host h2 > a-icon-mdx {
             display: inline-block;
@@ -132,9 +135,6 @@ export default class Dashboard extends Shadow() {
             text-align: center;
             top: -2px;
             margin-right: 6px;
-          }
-          :host .no-results {
-            padding-bottom: 2em;
           }
           @media only screen and (max-width:${this.mobileBreakpoint}) {
             :host .container-discover,
@@ -251,6 +251,7 @@ export default class Dashboard extends Shadow() {
   }
 
   renderContinuations (bookingsData, eventTileComponent, containerDiv) {
+    debugger
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
@@ -305,14 +306,14 @@ export default class Dashboard extends Shadow() {
   renderDiscoverTile () {
     return this.renderDiscoverSection({
       title: 'Unsere Kurse entdecken',
-      className: 'discover-more-courses'
+      className: 'discover-our-courses'
     })
   }
 
   renderDiscoverMoreTile () {
     return this.renderDiscoverSection({
       title: 'Weitere Kurse entdecken',
-      className: ''
+      className: 'discover-more-courses'
     })
   }
 
@@ -435,11 +436,11 @@ export default class Dashboard extends Shadow() {
   }
 
   getAppointmensData (bookingsData) {
-    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A') || []
+    return bookingsData.filter(course => course.bookingType !== 3 && course.subcripionType !== 5 && course.courseType !== '7A') || []
   }
 
   getContinuationsData (bookingData) {
-    return bookingData.filter(course => (course.bookingType === 3 || course.bookingType === 1) && course.subscriptionType === 5) || []
+    return bookingData.filter(course => course.bookingType === 3 && course.subcripionType === 5) || []
   }
 
   getAbonnementsData (bookingsData) {
