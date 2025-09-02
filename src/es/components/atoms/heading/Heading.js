@@ -8,7 +8,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 */
 export default class Heading extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, tabindex: 'no-tabindex', ...options }, ...args)
 
     this.tag = this.getAttribute('tag') || 'h1'
     this.styleAs = this.getAttribute('style-as')
@@ -26,6 +26,7 @@ export default class Heading extends Shadow() {
         this.heading.setAttribute(attrib.name, attrib.value)
       }
     }
+    this.heading.setAttribute('tabindex', '0')
   }
 
   connectedCallback () {
