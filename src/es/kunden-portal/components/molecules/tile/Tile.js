@@ -259,7 +259,7 @@ export default class AppointmentTile extends Tile {
       // @ts-ignore
       link = Environment.getEnvUrl() + '/mein-konto/abokurse/?page=booked#/'
     }
-    
+
     return /* html */ `
       <ks-a-button
         href="${link}" 

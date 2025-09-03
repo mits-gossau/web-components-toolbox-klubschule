@@ -251,7 +251,6 @@ export default class Dashboard extends Shadow() {
   }
 
   renderContinuations (bookingsData, eventTileComponent, containerDiv) {
-    debugger
     if (!containerDiv || !bookingsData) return
 
     if (bookingsData.length === 0) {
