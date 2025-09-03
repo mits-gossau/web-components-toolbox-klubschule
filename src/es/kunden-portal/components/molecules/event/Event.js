@@ -27,7 +27,6 @@ export default class EventTile extends Event {
       :host .top {
         min-height: 48px;
       }
-     
     `
   }
 
