@@ -97,7 +97,7 @@ export default class EventTile extends Event {
   }
 
   renderContinuationTile (data) {
-    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseType, courseStartDate, courseEndDate, bookingTypeText } = data
+    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseType, courseStartDate, courseEndDate, bookingTypeText, coursePrice, currency } = data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
     const linkBooking = `#/booking?courseId=${courseId}&courseType=${courseType}`
@@ -147,7 +147,7 @@ export default class EventTile extends Event {
             </ks-a-button>
           </div>
           <div class="controls-right">
-            <span class="price"><strong>1000.00 CHF</strong></span>
+            <span class="price"><strong>${parseFloat(coursePrice).toFixed(2)} ${currency}</strong></span>
           </div>
         </div>
       </div>
@@ -157,8 +157,7 @@ export default class EventTile extends Event {
   setIconUrl (data) {
     let iconName = ''
     if (data === 1) {
-      // TODO: This is wrong! Icon should be cancelled
-      iconName = 'await'
+      iconName = 'cancel'
     } else if (data === 2) {
       iconName = 'garanteed'
     } else if (data === 3) {
