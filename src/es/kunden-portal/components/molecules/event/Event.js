@@ -51,6 +51,11 @@ export default class EventTile extends Event {
     const end = new Date(courseEndDate)
     const link = `#/booking?courseId=${courseId}&courseType=${courseType}`
     return /* HTML */`
+      <style>
+        :host .meta li:last-of-type {
+          margin-top: 0;
+        }
+      </style>
       <m-load-template-tag mode="false">
         <template>
         <div class="event">
