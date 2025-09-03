@@ -261,10 +261,7 @@ export default class AppointmentTile extends Tile {
       // @ts-ignore
       link = Environment.getEnvUrl() + '/mein-konto/abokurse/?page=booked#/'
     }
-
-    if (courseType === '1K') {
-      link = `#/booking?courseId=${appointmentCourseId}&courseType=${courseType}`
-    }
+    
     return /* html */ `
       <ks-a-button
         href="${link}" 
