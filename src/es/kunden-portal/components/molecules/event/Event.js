@@ -157,8 +157,7 @@ export default class EventTile extends Event {
   setIconUrl (data) {
     let iconName = ''
     if (data === 1) {
-      // TODO: This is wrong! Icon should be cancelled
-      iconName = 'await'
+      iconName = 'cancel'
     } else if (data === 2) {
       iconName = 'garanteed'
     } else if (data === 3) {
