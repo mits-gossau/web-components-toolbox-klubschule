@@ -16,11 +16,6 @@ export default class Dashboard extends Index {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
-    // this.renderHTML()
-  }
-
-  disconnectedCallback () {
-    // document.body.removeEventListener('update-bookings', this.requestBookingsListener)
   }
 
   shouldRenderHTML () {

@@ -235,6 +235,7 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="continuations" class="continuations">
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
+            <div class="loading-continuations">${this.renderLoading()}</div>
             <div class="container-continuations container"></div>
             ${this.renderDiscoverMoreTile()}
           </div>`
@@ -267,6 +268,8 @@ export default class Dashboard extends Shadow() {
       }))
       containerDiv.appendChild(event)
     })
+    // remove loading indicator if present
+    this.continuationsLoadingDiv?.remove()
   }
 
   renderAbbonements (abonnements, tileComponent, containerDiv) {
@@ -472,5 +475,9 @@ export default class Dashboard extends Shadow() {
 
   get abonnementsLoadingDiv () {
     return this.root.querySelector('o-grid').root.querySelector('.loading-abonnements')
+  }
+
+  get continuationsLoadingDiv () {
+    return this.root.querySelector('o-grid').root.querySelector('.loading-continuations')
   }
 }
