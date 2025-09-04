@@ -6,29 +6,57 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 export default class Dashboard extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    this.cachedData = null
+    this.cacheTimestamp = null
+    this.cacheExpiryTime = 5 * 60 * 1000
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('update-bookings', this.updatenBooknigsListener)
-    this.dispatchEvent(new CustomEvent('request-bookings',
-      {
-        detail: {
-          log: 'Requesting bookings from Dashboard component'
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }
-    ))
+
+    if (this.isCacheEnabled && this.hasCachedData()) {
+      if (this.shouldRenderHTML()) this.renderHTML()
+      this.renderWithCachedData()
+    } else {
+      if (this.shouldRenderHTML()) this.renderHTML()
+      document.body.addEventListener('update-bookings', this.updatenBooknigsListener)
+      this.dispatchEvent(new CustomEvent('request-bookings',
+        {
+          detail: {
+            log: 'Requesting bookings from Dashboard component'
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }
+      ))
+    }
   }
 
   disconnectedCallback () {
     document.body.removeEventListener('update-bookings', this.updatenBooknigsListener)
   }
 
+  hasCachedData () {
+    if (!this.isCacheEnabled) return false
+
+    if (!this.cachedData || !this.cacheTimestamp) return false
+
+    const now = Date.now()
+    return (now - this.cacheTimestamp) < this.cacheExpiryTime
+  }
+
+  renderWithCachedData () {
+    if (!this.cachedData) return
+
+    this.renderHTML(Promise.resolve(this.cachedData))
+  }
+
   updatenBooknigsListener = (event) => {
+    if (this.isCacheEnabled) {
+      this.cachedData = event.detail.fetch
+      this.cacheTimestamp = Date.now()
+    }
     this.renderHTML(event.detail.fetch)
   }
 
@@ -80,13 +108,11 @@ export default class Dashboard extends Shadow() {
     if (!fetch && !fetch?.then) return
 
     this.html = /* html */`
-      <div id="dashboard-loading" style="padding: 2rem; text-align: center;">
-        ${this.renderLoading()}
-      </div>
+      <kp-m-loading text="Dashboard wird geladen..." size="large"></k-m-loading>
     `
 
     const gridSkeleton = /* html */`
-      <o-grid namespace="grid-12er-">
+      <o-grid namespace="grid-12er-" style="display: none;">
         <style>
           :host .container {
             display:flex;
@@ -170,6 +196,10 @@ export default class Dashboard extends Shadow() {
         name: 'o-grid'
       },
       {
+        path: `${this.importMetaUrl}'../../../../molecules/loading/Loading.js`,
+        name: 'kp-m-loading'
+      },
+      {
         path: `${this.importMetaUrl}'../../../../molecules/tile/Tile.js`,
         name: 'kp-m-tile'
       },
@@ -188,11 +218,13 @@ export default class Dashboard extends Shadow() {
     ])
 
     Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
-      const loadingDiv = this.root.querySelector('#dashboard-loading')
+      const loadingElement = this.root.querySelector('kp-m-loading')
       const grid = this.root.querySelector('o-grid')
-      
-      if (loadingDiv) loadingDiv.remove()
+
+      if (loadingElement) loadingElement.remove()
       if (grid) grid.style.display = 'block'
+
+      if (!grid) this.html += gridSkeleton
 
       const nextAppointmensData = fetch.nextAppointments?.slice(0, 3).map(appointment => {
         const courseData = fetch.bookings.find(booking => booking.courseId === appointment.courseId) || []
@@ -383,14 +415,6 @@ export default class Dashboard extends Shadow() {
     containerDiv.appendChild(fragment)
   }
 
-  renderLoading () {
-    return /* html */`
-      <mdx-component>
-          <mdx-loading-bar></mdx-loading-bar>
-      </mdx-component>
-    `
-  }
-
   renderEmptyMessage (divEl, message, errorCssClass = 'no-results') {
     if (!divEl) return
     // TODO: Translation
@@ -453,7 +477,7 @@ export default class Dashboard extends Shadow() {
   }
 
   getAppointmensData (bookingsData) {
-    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A') || []
+    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A' && !course.isSingleAppointmentBooking) || []
   }
 
   getContinuationsData (bookingData) {
@@ -494,5 +518,9 @@ export default class Dashboard extends Shadow() {
 
   get continuationsLoadingDiv () {
     return this.root.querySelector('o-grid').root.querySelector('.loading-continuations')
+  }
+
+  get isCacheEnabled () {
+    return !this.hasAttribute('disable-cache')
   }
 }
