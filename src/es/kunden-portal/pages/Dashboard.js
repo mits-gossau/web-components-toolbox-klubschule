@@ -37,6 +37,7 @@ export default class Dashboard extends Index {
       path: `${this.importMetaUrl}../components/organisms/dashboard/Dashboard.js`,
       name: 'kp-o-dashboard'
     }])
+    this.html = ''
     this.html = /* html */ '<kp-o-dashboard namespace="dashboard-default-"></kp-o-dashboard>'
   }
 }
