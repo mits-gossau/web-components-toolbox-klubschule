@@ -6,29 +6,51 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 export default class Dashboard extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    this.cachedData = null
+    this.cacheTimestamp = null
+    this.cacheExpiryTime = 5 * 60 * 1000
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-    if (this.shouldRenderHTML()) this.renderHTML()
-    document.body.addEventListener('update-bookings', this.updatenBooknigsListener)
-    this.dispatchEvent(new CustomEvent('request-bookings',
-      {
-        detail: {
-          log: 'Requesting bookings from Dashboard component'
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }
-    ))
+
+    if (this.isCacheEnabled && this.hasCachedData()) {
+      if (this.shouldRenderHTML()) this.renderHTML()
+      this.renderWithCachedData()
+    } else {
+      if (this.shouldRenderHTML()) this.renderHTML()
+      document.body.addEventListener('update-bookings', this.updatenBooknigsListener)
+      this.dispatchEvent(new CustomEvent('request-bookings',
+        {
+          detail: {
+            log: 'Requesting bookings from Dashboard component'
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }
+      ))
+    }
   }
 
   disconnectedCallback () {
     document.body.removeEventListener('update-bookings', this.updatenBooknigsListener)
   }
 
+  hasCachedData() {
+    if (!this.isCacheEnabled) return false
+    
+    if (!this.cachedData || !this.cacheTimestamp) return false
+    
+    const now = Date.now()
+    return (now - this.cacheTimestamp) < this.cacheExpiryTime
+  }
+
   updatenBooknigsListener = (event) => {
+    if (this.isCacheEnabled) {
+      this.cachedData = event.detail.fetch
+      this.cacheTimestamp = Date.now()
+    }
     this.renderHTML(event.detail.fetch)
   }
 
@@ -494,5 +516,9 @@ export default class Dashboard extends Shadow() {
 
   get continuationsLoadingDiv () {
     return this.root.querySelector('o-grid').root.querySelector('.loading-continuations')
+  }
+
+   get isCacheEnabled() {
+    return !this.hasAttribute('disable-cache')
   }
 }
