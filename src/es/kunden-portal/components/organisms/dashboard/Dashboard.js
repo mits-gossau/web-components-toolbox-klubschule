@@ -46,6 +46,12 @@ export default class Dashboard extends Shadow() {
     return (now - this.cacheTimestamp) < this.cacheExpiryTime
   }
 
+  renderWithCachedData() {
+    if (!this.cachedData) return
+    
+    this.renderHTML(Promise.resolve(this.cachedData))
+  }
+
   updatenBooknigsListener = (event) => {
     if (this.isCacheEnabled) {
       this.cachedData = event.detail.fetch
@@ -102,13 +108,11 @@ export default class Dashboard extends Shadow() {
     if (!fetch && !fetch?.then) return
 
     this.html = /* html */`
-      <div id="dashboard-loading" style="padding: 2rem; text-align: center;">
-        ${this.renderLoading()}
-      </div>
+      <kp-m-loading text="Dashboard wird geladen..." size="large"></k-m-loading>
     `
 
     const gridSkeleton = /* html */`
-      <o-grid namespace="grid-12er-">
+      <o-grid namespace="grid-12er-" style="display: none;">
         <style>
           :host .container {
             display:flex;
@@ -192,6 +196,10 @@ export default class Dashboard extends Shadow() {
         name: 'o-grid'
       },
       {
+        path: `${this.importMetaUrl}'../../../../molecules/loading/Loading.js`,
+        name: 'kp-m-loading'
+      },
+      {
         path: `${this.importMetaUrl}'../../../../molecules/tile/Tile.js`,
         name: 'kp-m-tile'
       },
@@ -210,11 +218,13 @@ export default class Dashboard extends Shadow() {
     ])
 
     Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
-      const loadingDiv = this.root.querySelector('#dashboard-loading')
+      const loadingElement = this.root.querySelector('kp-m-loading')
       const grid = this.root.querySelector('o-grid')
       
-      if (loadingDiv) loadingDiv.remove()
+      if (loadingElement) loadingElement.remove()
       if (grid) grid.style.display = 'block'
+
+      if (!grid) this.html += gridSkeleton
 
       const nextAppointmensData = fetch.nextAppointments?.slice(0, 3).map(appointment => {
         const courseData = fetch.bookings.find(booking => booking.courseId === appointment.courseId) || []
@@ -403,14 +413,6 @@ export default class Dashboard extends Shadow() {
 
     // single DOM update
     containerDiv.appendChild(fragment)
-  }
-
-  renderLoading () {
-    return /* html */`
-      <mdx-component>
-          <mdx-loading-bar></mdx-loading-bar>
-      </mdx-component>
-    `
   }
 
   renderEmptyMessage (divEl, message, errorCssClass = 'no-results') {
