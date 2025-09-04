@@ -420,7 +420,7 @@ export default class Booking extends Index {
     const appointments = body.querySelector('kp-m-appointments')
     if (appointments) appointments.setAttribute('appointments', JSON.stringify(this.appointmentsData || []))
     const appointmentsSection = body.querySelector('#booking-appointments')
-    if (appointmentsSection) appointmentsSection.style.display = 'block'
+    if (this.appointmentsData.length && appointmentsSection) appointmentsSection.style.display = 'block'
 
     // contact and options
     /**
