@@ -13,7 +13,7 @@ export default class Documents extends Shadow() {
   }
 
   static get observedAttributes() {
-    return ['documents']
+    return ['documents', 'request-confirmation']
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -23,6 +23,9 @@ export default class Documents extends Shadow() {
       } catch {
         this.documents = []
       }
+      this.renderHTML()
+    } else if (name === 'request-confirmation') {
+      this.html = ''
       this.renderHTML()
     }
   }
@@ -42,12 +45,17 @@ export default class Documents extends Shadow() {
 
   renderCSS() {
     this.css = /* css */`
+      :host #documents a {
+        color: var(--a-color, #0053a6);
+        text-decoration: var(--a-text-decoration, none);
+        font-size: 14px;
+      }
       :host #documents table {
         width: calc(100% - 8px);
         border-collapse: collapse;
         background: #fff;
         border-bottom: 1px solid #000;
-        font-size: 14px;
+        font-size: 16px;
       }
       :host #documents tr {
         background: #fff !important;
@@ -68,6 +76,11 @@ export default class Documents extends Shadow() {
         gap: 8px;
         justify-content: flex-end;
         height: 100%;
+        font-size: 14px;
+      }
+      :host #documents td.confirmation {
+        display: table-cell;
+        vertical-align: middle;
       }
       :host #documents td:nth-child(2) a {
         margin-left: 8px;
@@ -81,18 +94,38 @@ export default class Documents extends Shadow() {
       :host #documents strong {
         font-weight: 500;
       }
+      :host #documents small {
+        font-size: 12px;
+      }
     `
   }
 
   renderHTML() {
+    if (!this.modulesLoaded) {
+      this.fetchModules([
+        {
+          path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+          name: 'a-icon-mdx'
+        },
+      ]).then(() => {
+        this.modulesLoaded = true
+        this.renderHTML()
+      })
+
+      return 
+    }
+    
+    const hasRequestConfirmation = this.hasAttribute('request-confirmation')
+
     if (!this.documents || !Array.isArray(this.documents) || this.documents.length === 0) {
       this.html = ''
       return
     }
+
     this.html = /* html */`
       <div id="documents">
         <table>
-          ${this.documents.map(doc => /* html */`
+          ${this.documents && Array.isArray(this.documents) && this.documents.length > 0 ? this.documents.map(doc => /* html */`
             <tr>
               <td><strong>${doc.label || ''}</strong></td>
               <td>
@@ -102,7 +135,18 @@ export default class Documents extends Shadow() {
                 </a>` : ''}
               </td>
             </tr>
-          `).join('')}
+          `).join('') : ''}
+          ${hasRequestConfirmation ? /* html */`
+          <tr>
+            <td>
+              <strong>Kursbestätigung anfordern</strong><br />
+              <small>Eine Kursbestätigung kann erst nach Abschluss des Kurses beantragt werden.</small>
+            </td>
+            <td class="confirmation">
+              <div><a href="#" alt="">Anfragen</a></div>
+            </td>
+          </tr>
+        ` : ''}
         </table>
       </div>
     `
