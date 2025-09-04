@@ -84,20 +84,34 @@ export default class Booking extends Index {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
+    this.bookingData = null
     this.appointmentsData = []
+    this.documentData = []
+    this.followUpData = null
+    this.bookingDetails = null
+    this.currentCourseId = null
+    this.modulesLoaded = false
+    this.followupRequested = false
+    this.documentRequested = false
 
     this.requestBookingListener = this.createRequestListener(
       data => { 
         if (!data || !data.course) {
+          if (this.modulesLoaded) this.renderBookingContent()
           setTimeout(() => this.renderNoResult(data?.message), 0)
           return
         }
         this.followupRequested = false
         this.bookingData = data || {}
-        // this.appointmentsData = (this.bookingData.course && Array.isArray(this.bookingData.course.appointments)) ? this.bookingData.course.appointments : []
+
         const course = this.bookingData.course || {}
         this.appointmentsData = Array.isArray(course.appointments) ? course.appointments.map(appt => ({ ...appt, appointmentCourseTitle: course.courseShortTitle || '' })) : []
-        if (this.modulesLoaded) setTimeout(() => this.renderBooking(), 0) 
+        
+        if (this.modulesLoaded) {
+          this.renderBookingContent()
+          setTimeout(() => this.renderBooking(), 0)
+        }
+
         // request followup
         if (this.bookingData?.course?.courseIdFollowUp && !this.followupRequested) {
           this.followupRequested = true
@@ -108,6 +122,7 @@ export default class Booking extends Index {
             composed: true
           }))
         }
+
         // request document
         if (this.bookingData?.course.documentKey && this.bookingData?.course.documentType) {
           this.dispatchEvent(new CustomEvent('request-document', {
@@ -158,6 +173,59 @@ export default class Booking extends Index {
     return (event) => { event.detail.fetch.then(onSuccess).catch(onError)}
   }
 
+  handleCourseIdChange = () => {    
+    const urlParams = new URLSearchParams(window.location.search)
+    const newCourseId = urlParams.get('courseId')
+    
+    if (newCourseId && newCourseId !== this.currentCourseId) {
+      this.resetBookingData()
+      
+      this.showLoading()
+      
+      this.currentCourseId = newCourseId
+      this.dispatchEvent(new CustomEvent('request-booking', { 
+        bubbles: true, 
+        cancelable: true, 
+        composed: true 
+      }))
+    }
+  }
+
+  resetBookingData() {
+    this.bookingData = null
+    this.appointmentsData = []
+    this.documentData = []
+    this.followUpData = null
+    this.bookingDetails = null
+    
+    if (this.modulesLoaded) {
+      const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
+      if (body) {
+        const sections = ['#booking-details', '#booking-appointments', '#booking-documents', '#booking-notification']
+        sections.forEach(selector => {
+          const section = body.querySelector(selector)
+          if (section) section.style.display = 'none'
+        })
+        
+        const followUpSection = this.shadowRoot?.querySelector('ks-o-body-section')
+        const followupWrapper = followUpSection?.shadowRoot?.querySelector('#followup-wrapper')
+        if (followupWrapper) followupWrapper.style.display = 'none'
+      }
+    }
+  }
+
+  showLoading() {
+    if (this.modulesLoaded) {
+      const existingContent = this.root.querySelector('#detail-page')
+      const existingLoading = this.root.querySelector('ks-m-loading')
+      
+      if (existingContent) existingContent.remove()
+      if (!existingLoading) {
+        this.html = /* html */`<ks-m-loading text="Kursdaten werden geladen..." color="#0053A6"></ks-m-loading>`
+      }
+    }
+  }
+
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
@@ -165,6 +233,8 @@ export default class Booking extends Index {
     document.body.addEventListener('update-followup', this.requestFollowUpListener)
     document.body.addEventListener('update-document', this.requestDocumentListener)
     window.addEventListener('hashchange', this.handleCourseIdChange)
+    const urlParams = new URLSearchParams(window.location.search)
+    this.currentCourseId = urlParams.get('courseId')
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
   }
 
@@ -174,20 +244,6 @@ export default class Booking extends Index {
     document.body.removeEventListener('update-document', this.requestDocumentListener)
     window.removeEventListener('hashchange', this.handleCourseIdChange)
     if (this.followupObserver) { this.followupObserver.disconnect(); this.followupObserver = null }
-  }
-
-  handleCourseIdChange = () => {
-    const courseId = this.getCourseIdFromUrl()
-    const courseType = this.getCourseTypeFromUrl()
-    if (courseId && courseId !== this.currentCourseId) {
-      this.currentCourseId = courseId
-      this.dispatchEvent(new CustomEvent('request-booking', {
-        detail: { courseId, courseType },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
-    }
   }
 
   shouldRenderHTML () {
@@ -240,6 +296,17 @@ export default class Booking extends Index {
   }
 
   renderHTML () {
+    this.bookingData = null
+    this.appointmentsData = []
+    this.documentData = []
+    this.followUpData = null
+    this.bookingDetails = null
+
+    this.html = ''
+    this.html = /* html */`
+      <kp-m-loading text="Kursdaten werden geladen..." color="#0053A6"></kp-m-loading>
+    `
+
     this.fetchModules([
       {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/appointments/Appointments.js`,
@@ -252,6 +319,10 @@ export default class Booking extends Index {
       {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/followUp/FollowUp.js`,
         name: 'kp-m-followup'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/loading/Loading.js`,
+        name: 'kp-m-loading'
       },
       {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/tileBookingDetails/TileBookingDetails.js`,
@@ -299,7 +370,18 @@ export default class Booking extends Index {
       }
     ]).then(() => {
       this.modulesLoaded = true
+
+      console.log(this.bookingData)
+      if (this.bookingData) {
+        this.renderBookingContent()
+        this.renderBooking()
+      }
     })
+  }
+
+  renderBookingContent() {
+    const loadingElement = this.root.querySelector('kp-m-loading')
+    if (loadingElement) loadingElement.remove()
 
     this.html = ''
     this.html = /* html */`
@@ -560,6 +642,23 @@ export default class Booking extends Index {
       wrapper.innerHTML = notification
       notificationSection.style.display = ''
     }
+  }
+
+  renderLoading() {
+    return /* html */`
+      <div style="display: flex; justify-content: center; align-items: center; min-height: 200px;">
+        <div style="text-align: center;">
+          <div style="border: 4px solid #f3f3f3; border-top: 4px solid #0053A6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+          <p>Kursdaten werden geladen...</p>
+        </div>
+      </div>
+      <style>
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
+    `
   }
 
   showRequestConfirmationNotification() {
