@@ -37,18 +37,18 @@ export default class Dashboard extends Shadow() {
     document.body.removeEventListener('update-bookings', this.updatenBooknigsListener)
   }
 
-  hasCachedData() {
+  hasCachedData () {
     if (!this.isCacheEnabled) return false
-    
+
     if (!this.cachedData || !this.cacheTimestamp) return false
-    
+
     const now = Date.now()
     return (now - this.cacheTimestamp) < this.cacheExpiryTime
   }
 
-  renderWithCachedData() {
+  renderWithCachedData () {
     if (!this.cachedData) return
-    
+
     this.renderHTML(Promise.resolve(this.cachedData))
   }
 
@@ -220,7 +220,7 @@ export default class Dashboard extends Shadow() {
     Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
       const loadingElement = this.root.querySelector('kp-m-loading')
       const grid = this.root.querySelector('o-grid')
-      
+
       if (loadingElement) loadingElement.remove()
       if (grid) grid.style.display = 'block'
 
@@ -477,7 +477,7 @@ export default class Dashboard extends Shadow() {
   }
 
   getAppointmensData (bookingsData) {
-    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A') || []
+    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A' && !course.isSingleAppointmentBooking) || []
   }
 
   getContinuationsData (bookingData) {
@@ -520,7 +520,7 @@ export default class Dashboard extends Shadow() {
     return this.root.querySelector('o-grid').root.querySelector('.loading-continuations')
   }
 
-   get isCacheEnabled() {
+  get isCacheEnabled () {
     return !this.hasAttribute('disable-cache')
   }
 }
