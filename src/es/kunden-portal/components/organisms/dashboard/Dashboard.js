@@ -79,7 +79,11 @@ export default class Dashboard extends Shadow() {
   renderHTML (fetch) {
     if (!fetch && !fetch?.then) return
 
-    this.html = ''
+    this.html = /* html */`
+      <div id="dashboard-loading" style="padding: 2rem; text-align: center;">
+        ${this.renderLoading()}
+      </div>
+    `
 
     const gridSkeleton = /* html */`
       <o-grid namespace="grid-12er-">
@@ -184,9 +188,12 @@ export default class Dashboard extends Shadow() {
     ])
 
     Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
-      // get data for each area
-      // const nextAppointmensDataX = this.getNextAppointmentsData(fetch.bookings, 3)
-      // const nextAppointmensData = fetch.nextAppointments?.slice(0, 3) || []
+      const loadingDiv = this.root.querySelector('#dashboard-loading')
+      const grid = this.root.querySelector('o-grid')
+      
+      if (loadingDiv) loadingDiv.remove()
+      if (grid) grid.style.display = 'block'
+
       const nextAppointmensData = fetch.nextAppointments?.slice(0, 3).map(appointment => {
         const courseData = fetch.bookings.find(booking => booking.courseId === appointment.courseId) || []
         appointment.isSubscriptionCourse = courseData.isSubscriptionCourse
@@ -196,18 +203,14 @@ export default class Dashboard extends Shadow() {
       const continuationsData = this.getContinuationsData(fetch.bookings)
       const abonnementsData = this.getAbonnementsData(fetch.bookings)
 
-      // get needed modules
       const tileModule = modules.find(m => m.name === 'kp-m-tile')
       const eventTileModule = modules.find(m => m.name === 'kp-m-event')
 
       if (tileModule?.constructorClass && eventTileModule?.constructorClass) {
-        // next appointments
+        this.html += gridSkeleton
         this.renderNextAppointments(nextAppointmensData, tileModule, this.nextAppointmentsDiv)
-        // my courses
         this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
-        // my continuations
         this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
-        // my abbonements
         this.renderAbbonements(abonnementsData, tileModule, this.abonnementsDiv)
       }
     })
@@ -217,33 +220,29 @@ export default class Dashboard extends Shadow() {
     switch (area) {
       case 'nextAppointments':
         return /* html */ `
-          <div id="next-appointments" class="next-appointments">
+          <div id="next-appointments" class="next-appointments" style="display:none;">
             <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> <span>Meine nächsten Termine</span></h2>
-            <div class="loading-next-appointments">${this.renderLoading()}</div>
             <div class="container-next-appointments container"></div>
         </div>`
       case 'courses':
         return /* html */ `
-          <div id="courses" class="courses">
+          <div id="courses" class="courses" style="display:none;">
             <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
             ${this.renderDiscoverTile()}
-            <div class="loading-courses">${this.renderLoading()}</div>
             <div class="container-courses container"></div>
         </div>
         </div>`
       case 'continuations':
         return /* html */ `
-          <div id="continuations" class="continuations">
+          <div id="continuations" class="continuations" style="display:none;">
             <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> <span>Fortsetzungskurse</span></h2>
-            <div class="loading-continuations">${this.renderLoading()}</div>
             <div class="container-continuations container"></div>
             ${this.renderDiscoverMoreTile()}
           </div>`
       case 'abonnements':
         return /* html */ `
-          <div id="abonnements" class="abonnements">
+          <div id="abonnements" class="abonnements" style="display:none;">
             <h2><a-icon-mdx icon-name="AboPlus" size="0.5em"></a-icon-mdx> <span>Meine Abonnemente</span></h2>
-            <div class="loading-abonnements">${this.renderLoading()}</div>
             <div id="abonnements" class="container-abonnements container"></div>
           </div>`
       default:
@@ -251,13 +250,88 @@ export default class Dashboard extends Shadow() {
     }
   }
 
+  renderNextAppointments (bookingsData, tileComponent, containerDiv) {
+    if (!containerDiv || !bookingsData) return
+
+    const nextAppointmentsSection = this.root.querySelector('o-grid').root.querySelector('#next-appointments')
+
+    if (bookingsData.length === 0) {
+      if (nextAppointmentsSection) nextAppointmentsSection.style.display = 'none'
+      return
+    }
+
+    if (nextAppointmentsSection) nextAppointmentsSection.style.display = 'block'
+
+    containerDiv.innerHTML = ''
+
+    // use DocumentFragment to batch DOM operations and reduce reflows
+    const fragment = document.createDocumentFragment()
+
+    bookingsData.forEach(app => {
+      // @ts-ignore
+      // eslint-disable-next-line new-cap
+      const event = new tileComponent.constructorClass({ namespace: 'tile-next-appointment-' })
+      event.setAttribute('data', JSON.stringify({
+        data: app,
+        type: 'next-appointment',
+        location: {
+          iconName: 'Location'
+        },
+        room: {
+          iconName: 'Monitor'
+        }
+      }))
+      fragment.appendChild(event)
+    })
+
+    // remove loading indicator if present
+    this.nextAppointmentsLoadingDiv?.remove()
+
+    // single DOM update
+    containerDiv.appendChild(fragment)
+  }
+
+  renderBookings (bookingsData, eventTileComponent, containerDiv) {
+    if (!containerDiv || !bookingsData) return
+
+    const coursesSection = this.root.querySelector('o-grid').root.querySelector('#courses')
+
+    if (bookingsData.length === 0) {
+      if (coursesSection) coursesSection.style.display = 'none'
+      return
+    }
+
+    if (coursesSection) coursesSection.style.display = 'block'
+
+    containerDiv.innerHTML = ''
+
+    bookingsData.forEach(course => {
+      // @ts-ignore
+      // eslint-disable-next-line new-cap
+      const event = new eventTileComponent.constructorClass({})
+      event.setAttribute('data', JSON.stringify({
+        data: course,
+        type: 'course'
+      }))
+      containerDiv.appendChild(event)
+    })
+
+    // remove loading indicator if present
+    this.coursesLoadingDiv?.remove()
+  }
+
   renderContinuations (bookingsData, eventTileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
+    const continuationsSection = this.root.querySelector('o-grid').root.querySelector('#continuations')
+
     if (bookingsData.length === 0) {
-      this.renderEmptyMessage(containerDiv, 'Es finden keine Fortsetzungskurse statt.', 'no-results')
+      if (continuationsSection) continuationsSection.style.display = 'none'
       return
     }
+
+    if (continuationsSection) continuationsSection.style.display = 'block'
+
     bookingsData.forEach(course => {
       // @ts-ignore
       // eslint-disable-next-line new-cap
@@ -275,12 +349,16 @@ export default class Dashboard extends Shadow() {
   renderAbbonements (abonnements, tileComponent, containerDiv) {
     if (!containerDiv || !abonnements) return
 
-    containerDiv.innerHTML = ''
+    const abonnementsSection = this.root.querySelector('o-grid').root.querySelector('#abonnements')
 
     if (abonnements.length === 0) {
-      this.renderEmptyMessage(containerDiv, 'Sie haben keine Abonnemente.')
+      if (abonnementsSection) abonnementsSection.style.display = 'none'
       return
     }
+
+    if (abonnementsSection) abonnementsSection.style.display = 'block'
+
+    containerDiv.innerHTML = ''
 
     // use DocumentFragment for batched DOM operations
     const fragment = document.createDocumentFragment()
@@ -303,6 +381,21 @@ export default class Dashboard extends Shadow() {
 
     // single DOM update
     containerDiv.appendChild(fragment)
+  }
+
+  renderLoading () {
+    return /* html */`
+      <mdx-component>
+          <mdx-loading-bar></mdx-loading-bar>
+      </mdx-component>
+    `
+  }
+
+  renderEmptyMessage (divEl, message, errorCssClass = 'no-results') {
+    if (!divEl) return
+    // TODO: Translation
+    divEl.textContent = message
+    divEl.classList.add(errorCssClass)
   }
 
   renderDiscoverTile () {
@@ -337,84 +430,6 @@ export default class Dashboard extends Shadow() {
         </div>
       </div>
     `
-  }
-
-  renderLoading () {
-    return /* html */`
-      <mdx-component>
-          <mdx-loading-bar></mdx-loading-bar>
-      </mdx-component>
-    `
-  }
-
-  renderNextAppointments (bookingsData, tileComponent, containerDiv) {
-    if (!containerDiv || !bookingsData) return
-
-    containerDiv.innerHTML = ''
-
-    if (bookingsData.length === 0) {
-      this.renderEmptyMessage(containerDiv, 'Sie haben keine offenen oder bevorstehenden Termine.')
-      return
-    }
-
-    // use DocumentFragment to batch DOM operations and reduce reflows
-    const fragment = document.createDocumentFragment()
-
-    bookingsData.forEach(app => {
-      // @ts-ignore
-      // eslint-disable-next-line new-cap
-      const event = new tileComponent.constructorClass({ namespace: 'tile-next-appointment-' })
-      event.setAttribute('data', JSON.stringify({
-        data: app,
-        type: 'next-appointment',
-        location: {
-          iconName: 'Location'
-        },
-        room: {
-          iconName: 'Monitor'
-        }
-      }))
-      fragment.appendChild(event)
-    })
-
-    // remove loading indicator if present
-    this.nextAppointmentsLoadingDiv?.remove()
-
-    // single DOM update
-    containerDiv.appendChild(fragment)
-  }
-
-  renderBookings (bookingsData, eventTileComponent, containerDiv) {
-    if (!containerDiv || !bookingsData) return
-
-    containerDiv.innerHTML = ''
-
-    if (bookingsData.length === 0) {
-      // TODO: Translation
-      this.renderEmptyMessage(containerDiv, 'Sie haben keine gebuchten Kurse oder Lehrgangen.')
-      return
-    }
-
-    bookingsData.forEach(course => {
-      // @ts-ignore
-      // eslint-disable-next-line new-cap
-      const event = new eventTileComponent.constructorClass({})
-      event.setAttribute('data', JSON.stringify({
-        data: course,
-        type: 'course'
-      }))
-      containerDiv.appendChild(event)
-    })
-
-    // remove loading indicator if present
-    this.coursesLoadingDiv?.remove()
-  }
-
-  renderEmptyMessage (divEl, message, errorCssClass = 'no-results') {
-    if (!divEl) return
-    // TODO: Translation
-    divEl.textContent = message
-    divEl.classList.add(errorCssClass)
   }
 
   get discoverTiles () {

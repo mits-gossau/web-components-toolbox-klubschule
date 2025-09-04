@@ -140,11 +140,14 @@ export default class Booking extends Index {
           this.documentData = data || []
         }
         if (this.modulesLoaded) {
+          const hasRequestConfirmation = this.documentData.length
           const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
           const documentsSection = body?.querySelector('#booking-documents')
           if (documentsSection) documentsSection.style.display = (this.documentData && this.documentData.length > 0) ? 'block' : 'none'
           const documents = body?.querySelector('kp-m-documents')
           if (documents) documents.setAttribute('documents', JSON.stringify(this.documentData))
+          if (hasRequestConfirmation) documents.setAttribute('request-confirmation', '')
+          if (hasRequestConfirmation) this.showRequestConfirmationNotification()
         }
       },
       error => { console.error('Error fetching document:', error) }
@@ -420,7 +423,7 @@ export default class Booking extends Index {
     const appointments = body.querySelector('kp-m-appointments')
     if (appointments) appointments.setAttribute('appointments', JSON.stringify(this.appointmentsData || []))
     const appointmentsSection = body.querySelector('#booking-appointments')
-    if (appointmentsSection) appointmentsSection.style.display = 'block'
+    if (this.appointmentsData.length && appointmentsSection) appointmentsSection.style.display = 'block'
 
     // contact and options
     /**
@@ -551,6 +554,25 @@ export default class Booking extends Index {
           <div slot="description">
             <p class="notification-title">Kein Kurs gefunden</p>
             <p class="notification-text">${errorMsg}</p>
+          </div>
+        </ks-m-system-notification>
+      `
+      wrapper.innerHTML = notification
+      notificationSection.style.display = ''
+    }
+  }
+
+  showRequestConfirmationNotification() {
+    const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
+    const notificationSection = body?.querySelector('#booking-notification')
+    const wrapper = body?.querySelector('.notification-wrapper')
+    
+    if (wrapper) {
+      const notification = /* html */`
+        <ks-m-system-notification id="" namespace="system-notification-default-" icon-name="Info" icon-size="1.5em" icon-plain is-closeable>
+          <div slot="description">
+            <p class="notification-title">Kursbestätigung ist verfügbar</p>
+            <p class="notification-text">Sie finden alle Dokumente zum Kurs auf der Kursdetailseite oder unter Dokumente.</p>
           </div>
         </ks-m-system-notification>
       `
