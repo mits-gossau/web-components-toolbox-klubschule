@@ -462,6 +462,7 @@ export default class Dashboard extends Shadow() {
   }
 
   getNextAppointmensData (bookingsData, nextAppointments) {
+    //
     return nextAppointments?.slice(0, 3).map(appointment => {
       const courseData = bookingsData.find(booking => booking.courseId === appointment.courseId) || []
       appointment.isSubscriptionCourse = courseData.isSubscriptionCourse
