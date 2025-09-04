@@ -159,10 +159,12 @@ export default class Booking extends Index {
           const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
           const documentsSection = body?.querySelector('#booking-documents')
           if (documentsSection) documentsSection.style.display = (this.documentData && this.documentData.length > 0) ? 'block' : 'none'
-          const documents = body?.querySelector('kp-m-documents')
-          if (documents) documents.setAttribute('documents', JSON.stringify(this.documentData))
-          if (hasRequestConfirmation) documents.setAttribute('request-confirmation', '')
-          if (hasRequestConfirmation) this.showRequestConfirmationNotification()
+          const documentsComponent = body?.querySelector('kp-m-documents')
+          if (hasRequestConfirmation) {
+            if (documentsComponent) documentsComponent.setAttribute('documents', JSON.stringify(this.documentData))
+            documentsComponent.setAttribute('request-confirmation', '')
+            this.showRequestConfirmationNotification()
+          }
         }
       },
       error => { console.error('Error fetching document:', error) }
@@ -371,7 +373,6 @@ export default class Booking extends Index {
     ]).then(() => {
       this.modulesLoaded = true
 
-      console.log(this.bookingData)
       if (this.bookingData) {
         this.renderBookingContent()
         this.renderBooking()
