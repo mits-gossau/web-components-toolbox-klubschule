@@ -162,10 +162,10 @@ export default class AppointmentTile extends Tile {
       appointmentCourseTitle,
       courseType,
       courseTitle,
-      courseLocation,
       courseId,
       isSubscriptionCourse,
-      participantEnrolled
+      participantEnrolled,
+      appointmentLocation
     } = data.data || {}
 
     const renderTitle = appointmentCourseTitle !== '' ? `<span class="m-tile__subtitle subtitle ${participantEnrolled ? '' : 'strikethrough'}">${courseTitle}</span><span class="m-tile__title title ${participantEnrolled ? '' : 'strikethrough'}">${appointmentCourseTitle}</span>` : `<span class="m-tile__title title ${participantEnrolled ? '' : 'strikethrough'}">${courseTitle}</span>`
@@ -201,7 +201,7 @@ export default class AppointmentTile extends Tile {
                   <div>
                     <span class="m-tile__content m-tile__next-date ${participantEnrolled ? '' : 'strikethrough'}">${appointmentDateFormatted}</span>
                   </div>
-                  ${this.renderNextAppointmentsMetaData(participantEnrolled, data.room.iconName, roomDescription, data.location.iconName, courseLocation)}
+                  ${this.renderNextAppointmentsMetaData(participantEnrolled, data.room.iconName, roomDescription, data.location.iconName, appointmentLocation)}
                 </div>
               </div>
               <div class="m-tile__foot">
