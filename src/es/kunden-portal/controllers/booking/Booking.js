@@ -102,9 +102,7 @@ export default class Booking extends HTMLElement {
     if (!event.detail.documentKey) return
 
     // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').getMyDocument}`
-    if (!endpoint || endpoint === 'undefined') return
-
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').getMyDocument}` || 'https://dev.klubschule.ch/umbraco/api/CpStudentAPI/getMyDocument'
     const data = {
       language: 'de',
       documentType: event.detail.documentType,
