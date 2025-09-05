@@ -103,10 +103,10 @@ export default class Booking extends HTMLElement {
 
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').getMyDocument}`
+    if (!endpoint || endpoint === 'undefined') return
+
     const data = {
       language: 'de',
-      courseType: event.detail.courseType,
-      courseId: event.detail.courseId,
       documentType: event.detail.documentType,
       documentKey: event.detail.documentKey,
     }

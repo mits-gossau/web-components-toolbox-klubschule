@@ -127,8 +127,6 @@ export default class Booking extends Index {
         if (this.bookingData?.course.documentKey && this.bookingData?.course.documentType) {
           this.dispatchEvent(new CustomEvent('request-document', {
             detail: {
-              courseType: this.bookingData.course.courseType,
-              courseId: this.bookingData.course.courseId,
               documentKey: this.bookingData.course.documentKey,
               documentType: this.bookingData.course.documentType
             },
