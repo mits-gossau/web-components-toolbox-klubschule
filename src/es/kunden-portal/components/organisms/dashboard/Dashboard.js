@@ -13,7 +13,6 @@ export default class Dashboard extends Shadow() {
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
-
     if (this.isCacheEnabled && this.hasCachedData()) {
       if (this.shouldRenderHTML()) this.renderHTML()
       this.renderWithCachedData()
@@ -37,18 +36,18 @@ export default class Dashboard extends Shadow() {
     document.body.removeEventListener('update-bookings', this.updatenBooknigsListener)
   }
 
-  hasCachedData() {
+  hasCachedData () {
     if (!this.isCacheEnabled) return false
-    
+
     if (!this.cachedData || !this.cacheTimestamp) return false
-    
+
     const now = Date.now()
     return (now - this.cacheTimestamp) < this.cacheExpiryTime
   }
 
-  renderWithCachedData() {
+  renderWithCachedData () {
     if (!this.cachedData) return
-    
+
     this.renderHTML(Promise.resolve(this.cachedData))
   }
 
@@ -112,17 +111,16 @@ export default class Dashboard extends Shadow() {
     `
 
     const gridSkeleton = /* html */`
+      <kp-m-header namespace="header-default-" style="display: none;"></kp-m-header>
       <o-grid namespace="grid-12er-" style="display: none;">
         <style>
           :host .container {
             display:flex;
             gap: 1em;
           }
-
           :host > section > div:first-child {
-            padding-top: 5em;
+            padding-top: 3em;
           }
-
           :host > section > div {
             padding-bottom: 5em;
             width: var(--body-section-default-width, 86.666%);
@@ -214,23 +212,19 @@ export default class Dashboard extends Shadow() {
       {
         path: `${this.importMetaUrl}'../../../../../../../../src/css/web-components-toolbox-migros-design-experience/src/es/components/organisms/MdxComponent.js`,
         name: 'mdx-component'
+      },
+      {
+        path: `${this.importMetaUrl}'../../../../molecules/header/Header.js`,
+        name: 'kp-m-header'
       }
     ])
 
     Promise.all([modulePromise, fetch]).then(([modules, fetch]) => {
-      const loadingElement = this.root.querySelector('kp-m-loading')
-      const grid = this.root.querySelector('o-grid')
-      
-      if (loadingElement) loadingElement.remove()
-      if (grid) grid.style.display = 'block'
+      if (this.loading) this.loading.remove()
+      this.grid.style.display = 'block'
+      this.header.style.display = 'block'
 
-      if (!grid) this.html += gridSkeleton
-
-      const nextAppointmensData = fetch.nextAppointments?.slice(0, 3).map(appointment => {
-        const courseData = fetch.bookings.find(booking => booking.courseId === appointment.courseId) || []
-        appointment.isSubscriptionCourse = courseData.isSubscriptionCourse
-        return appointment
-      })
+      const nextAppointmensData = this.getNextAppointmensData(fetch.bookings, fetch.nextAppointments)
       const appointmentsData = this.getAppointmensData(fetch.bookings)
       const continuationsData = this.getContinuationsData(fetch.bookings)
       const abonnementsData = this.getAbonnementsData(fetch.bookings)
@@ -239,7 +233,6 @@ export default class Dashboard extends Shadow() {
       const eventTileModule = modules.find(m => m.name === 'kp-m-event')
 
       if (tileModule?.constructorClass && eventTileModule?.constructorClass) {
-        this.html += gridSkeleton
         this.renderNextAppointments(nextAppointmensData, tileModule, this.nextAppointmentsDiv)
         this.renderBookings(appointmentsData, eventTileModule, this.coursesDiv)
         this.renderContinuations(continuationsData, eventTileModule, this.continuationsDiv)
@@ -285,14 +278,12 @@ export default class Dashboard extends Shadow() {
   renderNextAppointments (bookingsData, tileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
-    const nextAppointmentsSection = this.root.querySelector('o-grid').root.querySelector('#next-appointments')
-
     if (bookingsData.length === 0) {
-      if (nextAppointmentsSection) nextAppointmentsSection.style.display = 'none'
+      this.hideSection(this.nextAppointmentsSection)
       return
     }
 
-    if (nextAppointmentsSection) nextAppointmentsSection.style.display = 'block'
+    if (this.nextAppointmentsSection) this.showSection(this.nextAppointmentsSection)
 
     containerDiv.innerHTML = ''
 
@@ -326,14 +317,12 @@ export default class Dashboard extends Shadow() {
   renderBookings (bookingsData, eventTileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
-    const coursesSection = this.root.querySelector('o-grid').root.querySelector('#courses')
-
     if (bookingsData.length === 0) {
-      if (coursesSection) coursesSection.style.display = 'none'
+      this.hideSection(this.courseSection)
       return
     }
 
-    if (coursesSection) coursesSection.style.display = 'block'
+    if (this.courseSection) this.showSection(this.courseSection)
 
     containerDiv.innerHTML = ''
 
@@ -355,14 +344,12 @@ export default class Dashboard extends Shadow() {
   renderContinuations (bookingsData, eventTileComponent, containerDiv) {
     if (!containerDiv || !bookingsData) return
 
-    const continuationsSection = this.root.querySelector('o-grid').root.querySelector('#continuations')
-
     if (bookingsData.length === 0) {
-      if (continuationsSection) continuationsSection.style.display = 'none'
+      this.hideSection(this.continuationsSection)
       return
     }
 
-    if (continuationsSection) continuationsSection.style.display = 'block'
+    if (this.continuationsSection) this.showSection(this.continuationsSection)
 
     bookingsData.forEach(course => {
       // @ts-ignore
@@ -381,14 +368,12 @@ export default class Dashboard extends Shadow() {
   renderAbbonements (abonnements, tileComponent, containerDiv) {
     if (!containerDiv || !abonnements) return
 
-    const abonnementsSection = this.root.querySelector('o-grid').root.querySelector('#abonnements')
-
     if (abonnements.length === 0) {
-      if (abonnementsSection) abonnementsSection.style.display = 'none'
+      this.hideSection(this.abbonementsSection)
       return
     }
 
-    if (abonnementsSection) abonnementsSection.style.display = 'block'
+    if (this.abbonementsSection) this.showSection(this.abbonementsSection)
 
     containerDiv.innerHTML = ''
 
@@ -476,8 +461,17 @@ export default class Dashboard extends Shadow() {
     ]
   }
 
+  getNextAppointmensData (bookingsData, nextAppointments) {
+    //
+    return nextAppointments?.slice(0, 3).map(appointment => {
+      const courseData = bookingsData.find(booking => booking.courseId === appointment.courseId) || []
+      appointment.isSubscriptionCourse = courseData.isSubscriptionCourse
+      return appointment
+    })
+  }
+
   getAppointmensData (bookingsData) {
-    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A') || []
+    return bookingsData.filter(course => course.bookingType !== 3 && course.subscriptionType !== 5 && course.courseType !== '7A' && !course.isSingleAppointmentBooking) || []
   }
 
   getContinuationsData (bookingData) {
@@ -486,6 +480,42 @@ export default class Dashboard extends Shadow() {
 
   getAbonnementsData (bookingsData) {
     return bookingsData.filter(course => course.courseType === '7A')
+  }
+
+  hideSection (divEl) {
+    divEl.style.display = 'none'
+  }
+
+  showSection (divEl) {
+    divEl.style.display = 'block'
+  }
+
+  get grid () {
+    return this.root.querySelector('o-grid')
+  }
+
+  get header () {
+    return this.root.querySelector('kp-m-header')
+  }
+
+  get loading () {
+    return this.root.querySelector('kp-m-loading')
+  }
+
+  get nextAppointmentsSection () {
+    return this.root.querySelector('o-grid').root.querySelector('#next-appointments')
+  }
+
+  get courseSection () {
+    return this.root.querySelector('o-grid').root.querySelector('#courses')
+  }
+
+  get continuationsSection () {
+    return this.root.querySelector('o-grid').root.querySelector('#continuations')
+  }
+
+  get abbonementsSection () {
+    return this.root.querySelector('o-grid').root.querySelector('#abonnements')
   }
 
   get nextAppointmentsDiv () {
@@ -520,7 +550,7 @@ export default class Dashboard extends Shadow() {
     return this.root.querySelector('o-grid').root.querySelector('.loading-continuations')
   }
 
-   get isCacheEnabled() {
+  get isCacheEnabled () {
     return !this.hasAttribute('disable-cache')
   }
 }

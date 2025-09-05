@@ -50,6 +50,8 @@ export default class EventTile extends Event {
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
     const link = `#/booking?courseId=${courseId}&courseType=${courseType}`
+    const startBefore = courseStatus === 3 ? `Durchführung offen, definitiver Entscheid spätestens am ${formatDateForRender(new Date(start.getTime() - 7 * 24 * 60 * 60 * 1000))}` : ''
+    const statusText = startBefore || courseStatusText
     return /* HTML */`
       <style>
         :host .meta li:last-of-type {
@@ -75,7 +77,7 @@ export default class EventTile extends Event {
                   <div>
                     <a-icon-mdx namespace="icon-mdx-ks-" icon-url="${this.setIconUrl(courseStatus)}" size="1.5em"></a-icon-mdx>
                   </div>
-                  <span>${courseStatusText}</span>
+                  <span>${statusText}</span>
                 </li>
                 <li>
                   <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
