@@ -147,9 +147,6 @@ export default class Dashboard extends Shadow() {
           :host .discover-our-courses {
             padding-bottom: 1.5em;
           }
-          :host .discover-more-courses {
-            padding-top: 1.5em;
-          }
           :host h2 > a-icon-mdx {
             display: inline-block;
             position: relative;
