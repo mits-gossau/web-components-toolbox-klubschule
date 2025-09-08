@@ -429,7 +429,7 @@ export default class Dashboard extends Shadow() {
     return /* html */ `
       <div class="discover${className ? ' ' + className : ''}">
         <h3><span>${title}</span></h3>
-        <div class="container-discover">
+        <div class="container-discover container">
           ${this.discoverTiles.map((tile, i) => /* html */`
             <kp-m-tile-discover
               image-src="${tile.imageSrc}"
