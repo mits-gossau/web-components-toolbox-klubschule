@@ -255,7 +255,6 @@ export default class Dashboard extends Shadow() {
         return /* html */ `
           <div id="courses" class="courses" style="display:none;">
             <h2><a-icon-mdx icon-name="ShoppingList" size="1em"></a-icon-mdx> <span>Meine Kurse/Lehrgänge</span></h2>
-            ${this.renderDiscoverTile()}
             <div class="container-courses container"></div>
         </div>
         </div>`
@@ -327,6 +326,10 @@ export default class Dashboard extends Shadow() {
     if (this.courseSection) this.showSection(this.courseSection)
 
     containerDiv.innerHTML = ''
+
+    // sort by date ascending
+    // deep clone to avoid mutating original data
+    bookingsData = this.sortByDateAsc(JSON.parse(JSON.stringify(bookingsData)))
 
     bookingsData.forEach(course => {
       // @ts-ignore
@@ -490,6 +493,32 @@ export default class Dashboard extends Shadow() {
 
   showSection (divEl) {
     divEl.style.display = 'block'
+  }
+
+  sortByDateAsc (bookings) {
+    return bookings.sort((a, b) => {
+      const dateA = new Date(a.courseStartDate)
+      const dateB = new Date(b.courseStartDate)
+
+      const timeA = a.courseStartTime.split(':').map(Number)
+      const timeB = b.courseStartTime.split(':').map(Number)
+
+      if (dateA < dateB) return -1
+      if (dateA > dateB) return 1
+
+      if (dateA.getTime() === dateB.getTime()) {
+        if (timeA[0] < timeB[0]) return -1
+        if (timeA[0] > timeB[0]) return 1
+
+        if (timeA[1] < timeB[1]) return -1
+        if (timeA[1] > timeB[1]) return 1
+
+        if (a.courseStartTime < b.courseStartTime) return -1
+        if (a.courseStartTime > b.courseStartTime) return 1
+      }
+
+      return 0
+    })
   }
 
   get grid () {
