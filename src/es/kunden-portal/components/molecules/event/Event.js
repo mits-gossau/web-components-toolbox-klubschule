@@ -107,8 +107,8 @@ export default class EventTile extends Event {
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
     const linkBooking = `#/booking?courseId=${courseId}&courseType=${courseType}`
-    // TODO: Change linkCheckout when checkout page is ready
-    const linkCheckout = `#/booking?courseId=${courseId}&courseType=${courseType}`
+    // TODO: 2688 is hardcoded - replace with real value from backend (centerId)
+    const linkCheckout = Environment.getEnvUrl() + `/kurs/kp--${courseType}_${courseId}_2668/Configuration`
     return /* HTML */`
       <div class="event">
         <div class="top">
