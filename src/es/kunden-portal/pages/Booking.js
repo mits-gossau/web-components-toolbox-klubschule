@@ -459,10 +459,7 @@ export default class Booking extends Index {
 
     setTimeout(() => {
       const topStage = this.root.querySelector('#top-stage')
-      if (topStage) {
-        topStage.addEventListener('click', this.goToDashboard)
-        topStage.style.cursor = 'pointer'
-      }
+      if (topStage) topStage.addEventListener('click', this.goToDashboard)
     }, 0)
   }
 

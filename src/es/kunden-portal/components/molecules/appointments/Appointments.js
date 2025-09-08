@@ -70,6 +70,9 @@ export default class Appointments extends Shadow() {
         cursor: pointer;
         padding: 16px 0;
       }
+      :host .appointment-header-date-title {
+        display: flex;
+      }
       :host .appointment-header-date {
         min-width: 320px;
       }
@@ -110,6 +113,12 @@ export default class Appointments extends Shadow() {
         :host .appointment-details > div {
           width: 100%;
         }
+        :host .appointment-header-date-title {
+          flex-direction: column;
+        }
+        :host .appointment-header-date {
+          margin-bottom: 10px;
+        }
       }
     `
 
@@ -148,7 +157,10 @@ export default class Appointments extends Shadow() {
         ${visibleAppointments.map((appt, i) => /* html */`
           <div class="appointment-item">
             <div class="appointment-header" data-index="${i}">
-              <span class="appointment-header-date">${appt.appointmentDateFormatted}</span> <span class="appointment-header-title">${appt.appointmentCourseTitle}</span>
+              <span class="appointment-header-date-title" >
+                <span class="appointment-header-date">${appt.appointmentDateFormatted}</span>
+                <span class="appointment-header-title">${appt.appointmentCourseTitle}</span>
+              </span>
               <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx>
             </div>
             <div class="appointment-body" style="display:none;">
@@ -156,9 +168,9 @@ export default class Appointments extends Shadow() {
                 ? /* html */`<div class="appointment-status">${appt.participantStatusText || ''}. Sie können Ihre Abwesenheit jederzeit via “Abwesenheiten verwalten” anpassen.</div>`
                 : ''}
               <div class="appointment-details">
-                <div><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> ${appt.appointmentLocation || ''}</div>
+                ${appt.appointmentLocation ? /* html */`<div><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx> ${appt.appointmentLocation || ''}</div>` : ''}
                 <div><a href="${this.getICalLink(appt)}" download="${this.getICalFilename(appt)}"><a-icon-mdx icon-name="Calendar" size="1em" color="var(--color-secondary)"></a-icon-mdx> Termin zu Kalender hinzufügen</a></div>
-                <div><a-icon-mdx icon-name="Home" size="1em"></a-icon-mdx> Raum ${appt.roomDescription || ''}</div>
+                ${appt.roomDescription ? /* html */`<div><a-icon-mdx icon-name="Home" size="1em"></a-icon-mdx> Raum ${appt.roomDescription || ''}</div>` : ''}
                 <div><a href="#"><a-icon-mdx icon-name="UserX" size="1em" color="var(--color-secondary)"></a-icon-mdx> Abwesenheiten verwalten</a></div>
               </div>
             </div>
