@@ -163,6 +163,10 @@ export default class Dashboard extends Shadow() {
             top: -2px;
             margin-right: 6px;
           }
+          :host .link-completet-courses {
+            font-weight: 500;
+            font-size: 1.125em;
+          }
           @media only screen and (max-width:${this.mobileBreakpoint}) {
             :host .container-discover,
             :host .container-appointments,
@@ -339,8 +343,23 @@ export default class Dashboard extends Shadow() {
       containerDiv.appendChild(event)
     })
 
+    const href = this.appendLinkToAllCourses({ link: 'https://www.klubschule.ch/mein-konto/meine-kurse/', target: '_self', text: 'Meine abgeschlossenen Kurse', className: 'link-completet-courses' })
+    containerDiv.appendChild(href)
+
     // remove loading indicator if present
     this.coursesLoadingDiv?.remove()
+  }
+
+  appendLinkToAllCourses ({ link, target, text, className }) {
+    const divWrapper = document.createElement('div')
+    const href = document.createElement('a')
+    href.href = link
+    href.target = target
+    href.rel = 'noopener'
+    href.textContent = text
+    href.classList.add(className)
+    divWrapper.appendChild(href)
+    return divWrapper
   }
 
   renderContinuations (bookingsData, eventTileComponent, containerDiv) {
