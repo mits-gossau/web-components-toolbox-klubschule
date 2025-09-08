@@ -70,6 +70,12 @@ export default class Appointments extends Shadow() {
         cursor: pointer;
         padding: 16px 0;
       }
+      :host .appointment-header-date {
+        min-width: 320px;
+      }
+      :host .appointment-header-title {
+        font-weight: 400;
+      }
       :host .appointment-status {
         padding-top: 16px;
       }
@@ -142,8 +148,8 @@ export default class Appointments extends Shadow() {
         ${visibleAppointments.map((appt, i) => /* html */`
           <div class="appointment-item">
             <div class="appointment-header" data-index="${i}">
-              <span>${appt.appointmentDateFormatted}</span>
-              <a-icon-mdx icon-name="${i === 0 ? 'ChevronUp' : 'ChevronDown'}" size="1em"></a-icon-mdx>
+              <span class="appointment-header-date">${appt.appointmentDateFormatted}</span> <span class="appointment-header-title">${appt.appointmentCourseTitle}</span>
+              <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx>
             </div>
             <div class="appointment-body" style="display:none;">
               ${appt.participantEnrolled === false && appt.participantStatusText

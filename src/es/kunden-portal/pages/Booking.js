@@ -90,6 +90,7 @@ export default class Booking extends Index {
     this.followUpData = null
     this.bookingDetails = null
     this.currentCourseId = null
+    this.currentCourseType = null
     this.modulesLoaded = false
     this.followupRequested = false
     this.documentRequested = false
@@ -173,16 +174,22 @@ export default class Booking extends Index {
     return (event) => { event.detail.fetch.then(onSuccess).catch(onError)}
   }
 
-  handleCourseIdChange = () => {    
-    const urlParams = new URLSearchParams(window.location.search)
+  handleCourseIdChange = () => {
+    const hash = window.location.hash
+    const searchParams = hash.includes('?') ? hash.split('?')[1] : ''
+    const urlParams = new URLSearchParams(searchParams)
     const newCourseId = urlParams.get('courseId')
+    const newCourseType = urlParams.get('courseType')
     
-    if (newCourseId && newCourseId !== this.currentCourseId) {
+    if ((newCourseId && newCourseId !== this.currentCourseId) || 
+      (newCourseType && newCourseType !== this.currentCourseType)) {
+
       this.resetBookingData()
-      
       this.showLoading()
       
       this.currentCourseId = newCourseId
+      this.currentCourseType = newCourseType
+
       this.dispatchEvent(new CustomEvent('request-booking', { 
         bubbles: true, 
         cancelable: true, 
@@ -235,6 +242,7 @@ export default class Booking extends Index {
     window.addEventListener('hashchange', this.handleCourseIdChange)
     const urlParams = new URLSearchParams(window.location.search)
     this.currentCourseId = urlParams.get('courseId')
+    this.currentCourseType = urlParams.get('courseType')
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
   }
 
@@ -385,7 +393,7 @@ export default class Booking extends Index {
     this.html = ''
     this.html = /* html */`
       <div id="detail-page">
-        <div id="top-stage" onclick="window.history.back()">
+        <div id="top-stage">
           <a-icon-mdx icon-name="ArrowLeft" size="1em" color="white"></a-icon-mdx> Meine Kurse / Lehrgänge
         </div>
         <div id="body-stage">
@@ -448,6 +456,14 @@ export default class Booking extends Index {
         </div>
       </div>
     `
+
+    setTimeout(() => {
+      const topStage = this.root.querySelector('#top-stage')
+      if (topStage) {
+        topStage.addEventListener('click', this.goToDashboard)
+        topStage.style.cursor = 'pointer'
+      }
+    }, 0)
   }
 
   renderBooking () {
@@ -658,6 +674,10 @@ export default class Booking extends Index {
         }
       </style>
     `
+  }
+
+  goToDashboard() {
+    window.location.hash = '#/'
   }
 
   showRequestConfirmationNotification() {
