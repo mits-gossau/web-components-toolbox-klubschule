@@ -45,7 +45,7 @@ export default class WithFacet extends WebWorker() {
     // NOTE: The api has on payload filter and on response filters. Now both are filters, below if is for fixing old payloads as initial request objects.
     if (initialRequestObj.filter) {
       initialRequestObj.filters = initialRequestObj.filter
-      delete initialRequestObj.filters
+      delete initialRequestObj.filter
     }
     // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
     let currentRequestObj = structuredClone(initialRequestObj)
@@ -189,7 +189,7 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filters = [...result[1], ...initialFilter.filters(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        currentRequestObj.filters = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
         // take the params from url
         // check the key with the urlpara from filter in currentRequestObj.filters
@@ -239,7 +239,7 @@ export default class WithFacet extends WebWorker() {
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         if (isSearchPage) {
-          currentRequestObj.filters = [...result[1], ...initialFilter.filters(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+          currentRequestObj.filters = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         } else {
           currentRequestObj.filters = [...result[1], ...initialRequestObj.filters.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
           Array.from(this.params.keys()).forEach(paramKey => {
@@ -296,7 +296,7 @@ export default class WithFacet extends WebWorker() {
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         currentRequestObj.filters.forEach((filter) => { if (filter.id === selectedFilterItem.id) filter.skipCountUpdate = true })
-        currentRequestObj.filters = [...result[1], ...initialFilter.filters(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        currentRequestObj.filters = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         this.filterOnly = true
       } else if ((filterGroupName = event?.detail?.wrapper?.filterItem) && (filterId = event.detail?.target?.getAttribute?.('filter-id') || event.detail?.target?.filterId)) {
         // current filter click/touch
@@ -321,7 +321,7 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, filterValue, false, true, null, false, isTree)
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filters = [...result[1], ...initialFilter.filters(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        currentRequestObj.filters = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         if (isTree) currentRequestObj.filters = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filters)
         this.filterOnly = true
       } else if (event?.detail?.key === 'location-search') {
@@ -353,7 +353,7 @@ export default class WithFacet extends WebWorker() {
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
-        currentRequestObj.filters = [...result[1], ...initialFilter.filters(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        currentRequestObj.filters = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.detail?.key === 'input-search') {
         // text field search
         if (event?.detail?.value) {
@@ -398,7 +398,7 @@ export default class WithFacet extends WebWorker() {
         hasSelectedFilter = result[2]
         currentCompleteFilterObj = result[0]
         if (isSearchPage) {
-          currentRequestObj.filters = [...result[1], ...initialFilter.filters(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+          currentRequestObj.filters = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         } else {
           currentRequestObj.filters = [...result[1], ...(initialRequestObj.filters || []).filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         }
@@ -466,7 +466,7 @@ export default class WithFacet extends WebWorker() {
           },
           mode: 'cors',
           body: JSON.stringify({
-            ...WithFacet.cleanRequest(structuredClone(currentRequestObj)),
+            ...structuredClone(currentRequestObj),
             searchcontent: !this.hasAttribute('no-search-tab')
           }),
           signal: this.abortController.signal
@@ -560,7 +560,7 @@ export default class WithFacet extends WebWorker() {
       }
 
       let body = `{
-        "filter": ${JSON.stringify(subLevelFilter)},
+        "filters": ${JSON.stringify(subLevelFilter)},
         "MandantId": ${mandantId},
         "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || currentRequestObj.PortalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
@@ -697,12 +697,6 @@ export default class WithFacet extends WebWorker() {
     })
 
     return filterItems
-  }
-
-  static cleanRequest(requestObj) {
-    // Bad API needs filter for payload but responses with filters
-    if (requestObj.filters) delete requestObj.filters
-    return requestObj
   }
 
   updatePpage(endpointUrl, currentPpage) {
