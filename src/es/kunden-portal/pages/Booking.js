@@ -127,20 +127,6 @@ export default class Booking extends Index {
           }))
         }
 
-        // request documents
-        if (!this.documentsRequested) {
-          this.documentsRequested = true
-          this.dispatchEvent(new CustomEvent('request-documents', {
-            detail: {
-              courseId: this.currentCourseId,
-              courseType: this.currentCourseType
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }))
-        }
-
         // request document
         if (this.bookingData?.course.documentKey && this.bookingData?.course.documentType) {
           this.dispatchEvent(new CustomEvent('request-document', {
