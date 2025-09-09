@@ -15,20 +15,21 @@ export default class Booking extends HTMLElement {
     this.abortControllerBooking = null
     this.abortControllerFollowUp = null
     this.abortControllerDocument = null
+    this.abortControllerSendMessage = null
   }
 
   connectedCallback () {
     document.addEventListener('request-booking', this.requestBooking)
     document.addEventListener('request-followup', this.requestFollowUp)
     document.addEventListener('request-document', this.requestDocument)
-    this.addEventListener('close-notification', this.handleNotification)
+    document.addEventListener('request-send-message', this.requestSendMessage)
   }
 
   disconnectedCallback () {
     document.removeEventListener('request-booking', this.requestBooking)
     document.removeEventListener('request-followup', this.requestFollowUp)
     document.removeEventListener('request-document', this.requestDocument)
-    this.removeEventListener('close-notification', this.handleNotification)
+    document.removeEventListener('request-send-message', this.requestSendMessage)
   }
 
   requestBooking = (event) => {
@@ -137,17 +138,39 @@ export default class Booking extends HTMLElement {
       })
   }
 
-  // TODO: Remove this
-  // No query selector in controllers
-  handleNotification = (event) => {
-    console.log('Notification wurde geschlossen:', event)
-    setTimeout(() => {
-      const notification = this.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('p-booking')?.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('#booking-notification')
-      const spacing = this.querySelector('o-body')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('p-booking')?.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot?.querySelector('#notification-spacing')
-      if (notification && spacing) spacing.remove()
-    }, 0)
-  }
+  requestSendMessage = (event) => {
+    if (this.abortControllerSendMessage) this.abortControllerSendMessage.abort()
+    this.abortControllerSendMessage = new AbortController()
 
+    if (!event.detail.courseId || !event.detail.courseType || event.detail.mailNumber === undefined) {
+      console.error('CourseId, courseType and mailNumber are required for sendMessage.')
+      return
+    }
+
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').sendMessage}`
+    const data = {
+      language: event.detail.language || 'de',
+      courseType: event.detail.courseType,
+      courseId: parseInt(event.detail.courseId),
+      mailNumber: event.detail.mailNumber
+    }
+    const options = this.fetchPOSTOptions(data, this.abortControllerSendMessage)
+
+    this.dispatchEvent(new CustomEvent('update-send-message', {
+      detail: {
+        fetch: fetch(endpoint, options)
+          .then(async response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+            return await response.json()
+          })
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+  
   /**
    * Returns an object with request method, http headers, body, and signal properties for making a POST request with fetch.
    * @param {Object} data - The data that you want to send in the POST request. This data should be in a format that can be converted to JSON.
