@@ -16,10 +16,27 @@ export default class Header extends Shadow() {
     const showPromises = []
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
     if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-    Promise.all(showPromises).then(() => (this.hidden = false))
+
+    Promise.all(showPromises).then(() => {
+      this.hidden = false
+      if (this.topStage) {
+        this.topStage.addEventListener('click', this.topStateLink())
+      }
+    })
   }
 
-  disconnectedCallback () {}
+  disconnectedCallback () {
+    if (this.topStage) {
+      this.topStage.removeEventListener('click', this.topStateLink())
+    }
+  }
+
+  topStateLink () {
+    // TODO: use attribute to define link action
+    return () => {
+      window.history.back()
+    }
+  }
 
   /**
    * evaluates if a render is necessary
@@ -44,10 +61,31 @@ export default class Header extends Shadow() {
    * @returns Promise<void>
    */
   renderCSS () {
+    // TODO: set correct mdx stuff
     this.css = /* css */`
       :host {
         display: block;
       }
+      :host #top-stage {
+        cursor: pointer;
+        background-color: #0053A6;
+        color: white;
+        padding: 24px 96px 24px 24px;
+      }
+      :host #top-stage > a-icon-mdx {
+        display: inline-block;
+        position: relative;
+        top: 2px;
+      }
+      :host h2 {
+        color: var(--mdx-sys-color-accent-6-onSubtle);
+        font: var(--mdx-sys-font-flex-large-headline2);
+      }
+      :host h2 > span {
+        position: relative;
+        top: -4px;
+      }
+    
       @media only screen and (max-width: _max-width_) {
         :host {}
       }
@@ -75,6 +113,11 @@ export default class Header extends Shadow() {
           path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }, ...styles], false) // using showPromises @connectedCallback makes hide action inside Shadow.fetchCSS obsolete, so second argument hide = false
+      case 'header-bookings-booked-':
+        return this.fetchCSS([{
+          path: `${this.importMetaUrl}./bookings-booked-/bookings-booked-.css`, // apply namespace since it is specific and no fallback
+          namespace: false
+        }, ...styles], false) // using showPromises @connectedCallback makes hide action inside Shadow.fetchCSS obsolete, so second argument hide = false
       default:
         return this.fetchCSS(styles)
     }
@@ -85,7 +128,44 @@ export default class Header extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
-    this.html = /* html */ `
+    this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../../../components/organisms/bodySection/BodySection.js`,
+        name: 'ks-o-body-section'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
+        name: 'o-grid'
+      }
+    ])
+    const namespace = this.getAttribute('namespace') || 'header-default-'
+    switch (namespace) {
+      case 'header-default-':
+        this.html = this.renderHeaderDefault()
+        break
+      case 'header-bookings-booked-':
+        this.html = this.renderHeaderBookingsBooked()
+        break
+      default:
+        this.html = this.renderHeaderDefault()
+        break
+    }
+  }
+
+  renderHeaderBookingsBooked () {
+    return /* html */ `
+      <div id="top-stage">
+        <a-icon-mdx icon-name="ArrowLeft" size="1em" color="white"></a-icon-mdx> Meine Kurse / Lehrgänge
+      </div>
+    `
+  }
+
+  renderHeaderDefault () {
+    return /* html */ `
       <ks-o-body-section variant="default" no-margin-y="" background-color="#0053A6">
         <o-grid namespace="grid-12er-">
           <style>
@@ -124,5 +204,9 @@ export default class Header extends Shadow() {
 
   get div () {
     return this.root.querySelector('ks-o-body-section')
+  }
+
+  get topStage () {
+    return this.root.querySelector('#top-stage')
   }
 }
