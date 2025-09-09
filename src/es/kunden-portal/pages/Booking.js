@@ -106,7 +106,7 @@ export default class Booking extends Index {
         this.bookingData = data || {}
 
         const course = this.bookingData.course || {}
-        this.appointmentsData = Array.isArray(course.appointments) ? course.appointments.map(appt => ({ ...appt, appointmentCourseTitle: course.courseShortTitle || '' })) : []
+        this.appointmentsData = Array.isArray(course.appointments) ? course.appointments.map(appt => ({ ...appt })) : []
         
         if (this.modulesLoaded) {
           this.renderBookingContent()
@@ -117,7 +117,10 @@ export default class Booking extends Index {
         if (this.bookingData?.course?.courseIdFollowUp && !this.followupRequested) {
           this.followupRequested = true
           this.dispatchEvent(new CustomEvent('request-followup', {
-            detail: { courseIdFollowUp: this.bookingData.course.courseIdFollowUp },
+            detail: { 
+              courseIdFollowUp: this.bookingData.course.courseIdFollowUp, 
+              courseTypeFollowUp: this.bookingData.course.courseType 
+            },
             bubbles: true,
             cancelable: true,
             composed: true
@@ -154,19 +157,35 @@ export default class Booking extends Index {
           this.documentData = data || []
         }
         if (this.modulesLoaded) {
-          const hasRequestConfirmation = this.documentData.length
+          // const hasRequestConfirmation = this.documentData.length
           const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
           const documentsSection = body?.querySelector('#booking-documents')
           if (documentsSection) documentsSection.style.display = (this.documentData && this.documentData.length > 0) ? 'block' : 'none'
           const documentsComponent = body?.querySelector('kp-m-documents')
-          if (hasRequestConfirmation) {
+          // if (hasRequestConfirmation) {
             if (documentsComponent) documentsComponent.setAttribute('documents', JSON.stringify(this.documentData))
             documentsComponent.setAttribute('request-confirmation', '')
-            this.showRequestConfirmationNotification()
-          }
+            // this.showRequestConfirmationNotification()
+          // }
         }
       },
       error => { console.error('Error fetching document:', error) }
+    )
+
+    this.courseConfirmationListener = (event) => this.requestCourseConfirmation()
+
+    this.sendMessageResponseListener = this.createRequestListener(
+      data => {
+        if (data && data.statusCode === 0) { // 200
+          this.showRequestConfirmationNotification('success')
+        } else {
+          this.showRequestConfirmationNotification('error')
+        }
+      },
+      error => {
+        console.error('Error sending message:', error)
+        this.showRequestConfirmationNotification('error')
+      }
     )
   }
 
@@ -239,8 +258,12 @@ export default class Booking extends Index {
     document.body.addEventListener('update-booking', this.requestBookingListener)
     document.body.addEventListener('update-followup', this.requestFollowUpListener)
     document.body.addEventListener('update-document', this.requestDocumentListener)
+    document.body.addEventListener('request-course-confirmation', this.courseConfirmationListener)
+    document.body.addEventListener('update-send-message', this.sendMessageResponseListener)
     window.addEventListener('hashchange', this.handleCourseIdChange)
-    const urlParams = new URLSearchParams(window.location.search)
+    const hash = window.location.hash
+    const searchParams = hash.includes('?') ? hash.split('?')[1] : ''
+    const urlParams = new URLSearchParams(searchParams)
     this.currentCourseId = urlParams.get('courseId')
     this.currentCourseType = urlParams.get('courseType')
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
@@ -250,6 +273,8 @@ export default class Booking extends Index {
     document.body.removeEventListener('update-booking', this.requestBookingListener)
     document.body.removeEventListener('update-followup', this.requestFollowUpListener)
     document.body.removeEventListener('update-document', this.requestDocumentListener)
+    document.body.removeEventListener('request-course-confirmation', this.courseConfirmationListener)
+    document.body.removeEventListener('update-send-message', this.sendMessageResponseListener)
     window.removeEventListener('hashchange', this.handleCourseIdChange)
     if (this.followupObserver) { this.followupObserver.disconnect(); this.followupObserver = null }
   }
@@ -419,7 +444,7 @@ export default class Booking extends Index {
                 <!-- documents -->
                 <section id="booking-documents" style="display:none;">
                   <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="FileText" size="1em"></a-icon-mdx> Dokumente</h2>
-                  <kp-m-documents documents="${JSON.stringify(this.documentData)}"></kp-m-documents>
+                  <kp-m-documents documents="${JSON.stringify(this.documentData)}" course-id="${this.currentCourseId}" course-type="${this.currentCourseType}"></kp-m-documents>
                 </section>
               </ks-o-body-section>
               <!-- contact -->
@@ -579,7 +604,7 @@ export default class Booking extends Index {
 
     containerDiv.innerHTML = ''
 
-    const course = this.followUpData.course
+    const course = this.followUpData.followUp
     if (!course) return
 
     const start = new Date(course.courseStartDate)
@@ -653,6 +678,10 @@ export default class Booking extends Index {
       `
       wrapper.innerHTML = notification
       notificationSection.style.display = ''
+      setTimeout(() => { 
+        this.addNotificationCloseListener(notificationSection)
+        this.scrollToNotification() 
+      }, 100)
     }
   }
 
@@ -677,22 +706,103 @@ export default class Booking extends Index {
     window.location.hash = '#/'
   }
 
-  showRequestConfirmationNotification() {
+  requestCourseConfirmation() {
+    if (!this.currentCourseId || !this.currentCourseType) {
+      console.error('CourseId or CourseType missing for confirmation request')
+      return
+    }
+
+    this.dispatchEvent(new CustomEvent('request-send-message', {
+      detail: {
+        language: 'de',
+        courseType: this.currentCourseType,
+        courseId: parseInt(this.currentCourseId),
+        mailNumber: 3 
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+
+  showRequestConfirmationNotification(status) {
     const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
     const notificationSection = body?.querySelector('#booking-notification')
     const wrapper = body?.querySelector('.notification-wrapper')
     
     if (wrapper) {
+      let iconName = 'Info'
+      let namespace = 'system-notification-default-'
+      let title = 'Kursbestätigung ist verfügbar'
+      let message = 'Sie finden alle Dokumente zum Kurs auf der Kursdetailseite oder unter Dokumente.'
+      
+      if (status === 'success') {
+        iconName = 'CheckCircle'
+        namespace = 'system-notification-default-'
+        title = 'Erfolgreich'
+        message = 'Ihre Anfrage für eine Kursbestätigung wurde erfolgreich übermittelt.'
+      } else if (status === 'error') {
+        iconName = 'AlertTriangle'
+        namespace = 'system-notification-error-'
+        title = 'Fehler'
+        message = 'Fehler beim Senden der Anfrage. Bitte versuchen Sie es später erneut.'
+      }
+      
       const notification = /* html */`
-        <ks-m-system-notification id="" namespace="system-notification-default-" icon-name="Info" icon-size="1.5em" icon-plain is-closeable>
+        <ks-m-system-notification 
+          namespace="${namespace}" 
+          icon-name="${iconName}" 
+          icon-size="1.5em" 
+          icon-plain 
+          is-closeable>
           <div slot="description">
-            <p class="notification-title">Kursbestätigung ist verfügbar</p>
-            <p class="notification-text">Sie finden alle Dokumente zum Kurs auf der Kursdetailseite oder unter Dokumente.</p>
+            <p class="notification-title">${title}</p>
+            <p class="notification-text">${message}</p>
           </div>
         </ks-m-system-notification>
       `
       wrapper.innerHTML = notification
-      notificationSection.style.display = ''
+      notificationSection.style.display = 'block'
+      setTimeout(() => { 
+        this.addNotificationCloseListener(notificationSection)
+        this.scrollToNotification() 
+      }, 100)
+    }
+  }
+
+  scrollToNotification() {
+    const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
+    const notificationSection = body?.querySelector('#booking-notification')
+    
+    if (notificationSection) {
+      const rect = notificationSection.getBoundingClientRect()
+      const offsetTop = window.pageYOffset + rect.top - 20 // 20px Abstand vom oberen Rand
+      
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  addNotificationCloseListener(notificationSection) {
+    const systemNotification = notificationSection?.querySelector('ks-m-system-notification')
+    if (systemNotification) {
+      const handleNotificationClick = (event) => {
+        const clickedElement = event.target
+        if (systemNotification.shadowRoot) {
+          const closeBtn = systemNotification.shadowRoot.querySelector('.close-btn')
+          if (closeBtn && (clickedElement === closeBtn || closeBtn.contains(clickedElement))) {
+            notificationSection.style.display = 'none'
+            systemNotification.removeEventListener('click', handleNotificationClick)
+          }
+        }
+      }
+      systemNotification.addEventListener('click', handleNotificationClick)
+      if (systemNotification.shadowRoot) {
+        const closeBtn = systemNotification.shadowRoot.querySelector('.close-btn')
+        if (closeBtn) closeBtn.addEventListener('click', () => { notificationSection.style.display = 'none' })
+      }
     }
   }
 

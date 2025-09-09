@@ -13,22 +13,17 @@ export default class Dashboard extends HTMLElement {
   constructor () {
     super()
     this.abortControllerRequestBookings = null
+    this.abortControllerRequestBookingsBooked = null
   }
 
   connectedCallback () {
     this.addEventListener('request-bookings', this.requestBookings)
+    this.addEventListener('request-bookings-booked', this.requestBookingsBooked)
   }
 
   disconnectedCallback () {
     this.removeEventListener('request-bookings', this.requestBookings)
-  }
-
-  abortController (abortController) {
-    if (abortController) {
-      abortController.abort()
-    }
-    abortController = new AbortController()
-    return abortController
+    this.removeEventListener('request-bookings-booked', this.requestBookingsBooked)
   }
 
   /**
@@ -37,26 +32,50 @@ export default class Dashboard extends HTMLElement {
    * @param {CustomEventInit} event - The event that triggered the request.
    */
   requestBookings = (event) => {
-    // if (this.abortControllerRequestBookings) this.abortControllerRequestBookings.abort()
-    // this.abortControllerRequestBookings = new AbortController()
-    this.abortControllerRequestBookings = this.abortController(this.abortControllerRequestBookings)
+    if (this.abortControllerRequestBookings) this.abortControllerRequestBookings.abort()
+    this.abortControllerRequestBookings = new AbortController()
+    const completed = event?.detail?.completed || false
 
     // @ts-ignore
     const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').getMyBookings}`
-    // const endpointLocalTest = '../../es/kunden-portal/controllers/dashboard/getMyBookings.json'
-    const data = { language: 'de' }
+    const data = { language: 'de', completed }
     const options = this.fetchPOSTOptions(data, this.abortControllerRequestBookings)
 
     this.dispatchEvent(new CustomEvent('update-bookings', {
       detail: {
         fetch: fetch(endpoint, options).then(async response => {
-        // fetch: fetch(endpoint).then(async response => {
-          // TODO: Improve error handling
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`)
           }
           return await response.json()
-        })
+        }),
+        completed
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+
+  requestBookingsBooked = (event) => {
+    if (this.abortControllerRequestBookingsBooked) this.abortControllerRequestBookingsBooked.abort()
+    this.abortControllerRequestBookingsBooked = new AbortController()
+    const completed = event?.detail?.completed || false
+
+    // @ts-ignore
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').getMyBookings}`
+    const data = { language: 'de', completed }
+    const options = this.fetchPOSTOptions(data, this.abortControllerRequestBookingsBooked)
+
+    this.dispatchEvent(new CustomEvent('update-bookings-booked', {
+      detail: {
+        fetch: fetch(endpoint, options).then(async response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+          }
+          return await response.json()
+        }),
+        completed
       },
       bubbles: true,
       cancelable: true,

@@ -52,14 +52,12 @@ export default class EventTile extends Event {
     const link = `#/booking?courseId=${courseId}&courseType=${courseType}`
     const startBefore = courseStatus === 3 ? `Durchführung offen, definitiver Entscheid spätestens am ${formatDateForRender(new Date(start.getTime() - 7 * 24 * 60 * 60 * 1000))}` : ''
     const statusText = startBefore || courseStatusText
-    return /* HTML */`
+    return /* HTML */ `
       <style>
         :host .meta li:last-of-type {
           margin-top: 0;
         }
       </style>
-      <m-load-template-tag mode="false">
-        <template>
         <div class="event">
           <div class="top">
             <div class="state-of-booking"><span>${bookingTypeText}</span></div>
@@ -97,8 +95,6 @@ export default class EventTile extends Event {
             </div>
           </div>
         </div>
-        </template> 
-      </m-load-template-tag>
     `
   }
 
@@ -170,6 +166,10 @@ export default class EventTile extends Event {
       iconName = 'await'
     } else if (data === 4) {
       iconName = 'almost'
+    } else if (data === 5) {
+      // TODO: change this icon if weslam is ready
+      // 5 = booked
+      iconName = 'garanteed'
     }
     return `../../../../../../../img/icons/event-state-${iconName}.svg`
   }

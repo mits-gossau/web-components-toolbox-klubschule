@@ -72,6 +72,7 @@ export default class Appointments extends Shadow() {
       }
       :host .appointment-header-date-title {
         display: flex;
+        align-items: center;
       }
       :host .appointment-header-date {
         min-width: 320px;
@@ -115,9 +116,10 @@ export default class Appointments extends Shadow() {
         }
         :host .appointment-header-date-title {
           flex-direction: column;
+          align-items: flex-start;
         }
-        :host .appointment-header-date {
-          margin-bottom: 10px;
+        :host .appointment-header-title {
+          margin-top: 10px;
         }
       }
     `
@@ -159,7 +161,7 @@ export default class Appointments extends Shadow() {
             <div class="appointment-header" data-index="${i}">
               <span class="appointment-header-date-title" >
                 <span class="appointment-header-date">${appt.appointmentDateFormatted}</span>
-                <span class="appointment-header-title">${appt.appointmentCourseTitle}</span>
+                ${appt.appointmentCourseType === 'E' && appt.appointmentCourseTitle !== '' ? /* html */`<span class="appointment-header-title">${appt.appointmentCourseTitle}</span>` : ''}
               </span>
               <a-icon-mdx icon-name="ChevronDown" size="1em"></a-icon-mdx>
             </div>
