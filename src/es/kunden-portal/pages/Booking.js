@@ -106,7 +106,7 @@ export default class Booking extends Index {
         this.bookingData = data || {}
 
         const course = this.bookingData.course || {}
-        this.appointmentsData = Array.isArray(course.appointments) ? course.appointments.map(appt => ({ ...appt, appointmentCourseTitle: course.courseShortTitle || '' })) : []
+        this.appointmentsData = Array.isArray(course.appointments) ? course.appointments.map(appt => ({ ...appt })) : []
         
         if (this.modulesLoaded) {
           this.renderBookingContent()
@@ -117,7 +117,10 @@ export default class Booking extends Index {
         if (this.bookingData?.course?.courseIdFollowUp && !this.followupRequested) {
           this.followupRequested = true
           this.dispatchEvent(new CustomEvent('request-followup', {
-            detail: { courseIdFollowUp: this.bookingData.course.courseIdFollowUp },
+            detail: { 
+              courseIdFollowUp: this.bookingData.course.courseIdFollowUp, 
+              courseTypeFollowUp: this.bookingData.course.courseType 
+            },
             bubbles: true,
             cancelable: true,
             composed: true
@@ -240,7 +243,9 @@ export default class Booking extends Index {
     document.body.addEventListener('update-followup', this.requestFollowUpListener)
     document.body.addEventListener('update-document', this.requestDocumentListener)
     window.addEventListener('hashchange', this.handleCourseIdChange)
-    const urlParams = new URLSearchParams(window.location.search)
+    const hash = window.location.hash
+    const searchParams = hash.includes('?') ? hash.split('?')[1] : ''
+    const urlParams = new URLSearchParams(searchParams)
     this.currentCourseId = urlParams.get('courseId')
     this.currentCourseType = urlParams.get('courseType')
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
@@ -579,7 +584,7 @@ export default class Booking extends Index {
 
     containerDiv.innerHTML = ''
 
-    const course = this.followUpData.course
+    const course = this.followUpData.followUp
     if (!course) return
 
     const start = new Date(course.courseStartDate)
