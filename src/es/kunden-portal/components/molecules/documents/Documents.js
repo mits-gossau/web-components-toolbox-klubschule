@@ -10,10 +10,12 @@ export default class Documents extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.documents = []
+    this.courseId = null
+    this.courseType = null
   }
 
   static get observedAttributes() {
-    return ['documents', 'request-confirmation']
+    return ['documents', 'request-confirmation',]
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -33,6 +35,11 @@ export default class Documents extends Shadow() {
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
+  }
+
+  requestConfirmation(event) {
+    event.preventDefault()
+    this.dispatchEvent(new CustomEvent('request-course-confirmation', { bubbles: true, cancelable: true, composed: true }))
   }
 
   shouldRenderCSS () {
@@ -143,13 +150,19 @@ export default class Documents extends Shadow() {
               <small>Eine Kursbestätigung kann erst nach Abschluss des Kurses beantragt werden.</small>
             </td>
             <td class="confirmation">
-              <div><a href="#" alt="">Anfragen</a></div>
+              <div><a href="#" class="request-confirmation" alt="">Anfragen</a></div>
             </td>
           </tr>
         ` : ''}
         </table>
       </div>
     `
+
+    // event listener for Anfragen-button
+    if (hasRequestConfirmation) {
+      const requestButton = this.root.querySelector('.request-confirmation')
+      if (requestButton) requestButton.addEventListener('click', this.requestConfirmation.bind(this))
+    }
   }
 
   set documentsData(val) {
