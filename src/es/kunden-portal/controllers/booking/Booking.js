@@ -44,7 +44,7 @@ export default class Booking extends HTMLElement {
     }
 
     // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBooking}`
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').getMyBooking}`
     const data = {
       language: 'de',
       courseType,
@@ -69,14 +69,13 @@ export default class Booking extends HTMLElement {
   requestFollowUp = (event) => {
     if (this.abortControllerFollowUp) this.abortControllerFollowUp.abort()
     this.abortControllerFollowUp = new AbortController()
-
-    if (!event.detail.courseIdFollowUp) return
+    if (!event.detail.courseIdFollowUp || !event.detail.courseTypeFollowUp) return
 
     // @ts-ignore
-    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').myBooking}`
+    const endpoint = `${self.Environment.getApiBaseUrl('kunden-portal').getFollowUp}`
     const data = {
       language: 'de',
-      courseType: 'E',
+      courseType: event.detail.courseTypeFollowUp,
       courseId: event.detail.courseIdFollowUp
     }
     const options = this.fetchPOSTOptions(data, this.abortControllerFollowUp)

@@ -87,6 +87,7 @@ export default class Booking extends Index {
     this.bookingData = null
     this.appointmentsData = []
     this.documentData = []
+    this.documentsData = []
     this.followUpData = null
     this.bookingDetails = null
     this.currentCourseId = null
@@ -94,6 +95,7 @@ export default class Booking extends Index {
     this.modulesLoaded = false
     this.followupRequested = false
     this.documentRequested = false
+    this.documentsRequested = false
 
     this.requestBookingListener = this.createRequestListener(
       data => { 
@@ -106,7 +108,7 @@ export default class Booking extends Index {
         this.bookingData = data || {}
 
         const course = this.bookingData.course || {}
-        this.appointmentsData = Array.isArray(course.appointments) ? course.appointments.map(appt => ({ ...appt, appointmentCourseTitle: course.courseShortTitle || '' })) : []
+        this.appointmentsData = Array.isArray(course.appointments) ? course.appointments.map(appt => ({ ...appt })) : []
         
         if (this.modulesLoaded) {
           this.renderBookingContent()
@@ -117,7 +119,24 @@ export default class Booking extends Index {
         if (this.bookingData?.course?.courseIdFollowUp && !this.followupRequested) {
           this.followupRequested = true
           this.dispatchEvent(new CustomEvent('request-followup', {
-            detail: { courseIdFollowUp: this.bookingData.course.courseIdFollowUp },
+            detail: { 
+              courseIdFollowUp: this.bookingData.course.courseIdFollowUp, 
+              courseTypeFollowUp: this.bookingData.course.courseType 
+            },
+            bubbles: true,
+            cancelable: true,
+            composed: true
+          }))
+        }
+
+        // request documents
+        if (!this.documentsRequested) {
+          this.documentsRequested = true
+          this.dispatchEvent(new CustomEvent('request-documents', {
+            detail: {
+              courseId: this.currentCourseId,
+              courseType: this.currentCourseType
+            },
             bubbles: true,
             cancelable: true,
             composed: true
@@ -168,6 +187,52 @@ export default class Booking extends Index {
       },
       error => { console.error('Error fetching document:', error) }
     )
+
+    this.requestDocumentsListener = this.createRequestListener(
+      data => {
+        this.documentsData = data?.documents || []
+        
+        if (this.modulesLoaded) {
+          const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
+          const documentsSection = body?.querySelector('#booking-documents')
+          const documentsComponent = body?.querySelector('kp-m-documents')
+          
+          if (this.documentsData.length > 0) {
+            const transformedDocuments = this.transformDocumentsForComponent(this.documentsData)
+            
+            if (documentsComponent) {
+              documentsComponent.setAttribute('documents', JSON.stringify(transformedDocuments))
+              documentsComponent.setAttribute('request-confirmation', '')
+            }
+            
+            if (documentsSection) documentsSection.style.display = 'block'
+            
+            this.showRequestConfirmationNotification()
+          } else {
+            if (documentsComponent) {
+              documentsComponent.setAttribute('documents', '[]')
+              documentsComponent.setAttribute('request-confirmation', '')
+            }
+            if (documentsSection) documentsSection.style.display = 'block'
+          }
+        }
+      },
+      error => { 
+        console.error('Error fetching documents:', error)
+        
+        if (this.modulesLoaded) {
+          const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
+          const documentsSection = body?.querySelector('#booking-documents')
+          const documentsComponent = body?.querySelector('kp-m-documents')
+          
+          if (documentsComponent) {
+            documentsComponent.setAttribute('documents', '[]')
+            documentsComponent.setAttribute('request-confirmation', '')
+          }
+          if (documentsSection) documentsSection.style.display = 'block'
+        }
+      }
+    )
   }
 
   createRequestListener(onSuccess, onError) {
@@ -202,6 +267,7 @@ export default class Booking extends Index {
     this.bookingData = null
     this.appointmentsData = []
     this.documentData = []
+    this.documentsData = []
     this.followUpData = null
     this.bookingDetails = null
     
@@ -233,14 +299,29 @@ export default class Booking extends Index {
     }
   }
 
+  transformDocumentsForComponent(documents) {
+    return documents.map(doc => ({
+      label: this.getDocumentLabel(doc),
+      type: this.getDocumentType(doc.documentType),
+      url: this.getDocumentUrl(doc),
+      status: doc.invoiceStatusText,
+      amount: doc.invoiceAmount,
+      dueDate: doc.invoiceDueDate,
+      courseTitle: doc.courseTitle
+    })).filter(doc => doc.url)
+  }
+
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
     document.body.addEventListener('update-booking', this.requestBookingListener)
     document.body.addEventListener('update-followup', this.requestFollowUpListener)
     document.body.addEventListener('update-document', this.requestDocumentListener)
+    // document.body.addEventListener('update-documents', this.requestDocumentsListener)
     window.addEventListener('hashchange', this.handleCourseIdChange)
-    const urlParams = new URLSearchParams(window.location.search)
+    const hash = window.location.hash
+    const searchParams = hash.includes('?') ? hash.split('?')[1] : ''
+    const urlParams = new URLSearchParams(searchParams)
     this.currentCourseId = urlParams.get('courseId')
     this.currentCourseType = urlParams.get('courseType')
     this.dispatchEvent(new CustomEvent('request-booking', { bubbles: true, cancelable: true, composed: true }))
@@ -250,6 +331,7 @@ export default class Booking extends Index {
     document.body.removeEventListener('update-booking', this.requestBookingListener)
     document.body.removeEventListener('update-followup', this.requestFollowUpListener)
     document.body.removeEventListener('update-document', this.requestDocumentListener)
+    // document.body.removeEventListener('update-documents', this.requestDocumentsListener)
     window.removeEventListener('hashchange', this.handleCourseIdChange)
     if (this.followupObserver) { this.followupObserver.disconnect(); this.followupObserver = null }
   }
@@ -579,7 +661,7 @@ export default class Booking extends Index {
 
     containerDiv.innerHTML = ''
 
-    const course = this.followUpData.course
+    const course = this.followUpData.followUp
     if (!course) return
 
     const start = new Date(course.courseStartDate)
@@ -724,5 +806,44 @@ export default class Booking extends Index {
         href: 'https://www.ibaw.ch/suche/'
       }
     ]
+  }
+
+  getDocumentLabel(doc) {
+    const labels = {
+      1000: 'Rechnung',
+      1015: 'Storno',
+      1020: 'Quittung', 
+      1025: 'Teilnehmerausweis',
+      1110: 'Kursbestätigung',
+      1120: 'Attest',
+      1130: 'Begleitbrief',
+      1140: 'Zahlungsbestätigung'
+    }
+    
+    let label = labels[doc.referenceType] || doc.referenceTypeText || 'Dokument'
+    
+    if (doc.invoiceDueDate && (doc.referenceType === 1000 || doc.referenceType === 1140)) {
+      const date = new Date(doc.invoiceDueDate)
+      const formattedDate = date.toLocaleDateString('de-CH')
+      label += ` (${formattedDate})`
+    }
+    
+    return label
+  }
+
+  getDocumentType(documentType) {
+    const types = {
+      'P004': 'PDF',
+      'Z001': 'PDF', 
+      'Z002': 'PDF',
+      '0043': 'PDF'
+    }
+    return types[documentType] || 'PDF'
+  }
+
+  getDocumentUrl(doc) {
+    if (!doc.documentKey || !doc.documentType) return null
+    
+    return `/api/documents/download?key=${doc.documentKey}&type=${doc.documentType}`
   }
 }
