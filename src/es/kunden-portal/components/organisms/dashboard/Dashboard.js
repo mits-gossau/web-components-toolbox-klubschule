@@ -22,7 +22,8 @@ export default class Dashboard extends Shadow() {
       this.dispatchEvent(new CustomEvent('request-bookings',
         {
           detail: {
-            log: 'Requesting bookings from Dashboard component'
+            log: 'Requesting bookings from Dashboard component',
+            completed: false
           },
           bubbles: true,
           cancelable: true,
@@ -343,7 +344,7 @@ export default class Dashboard extends Shadow() {
       containerDiv.appendChild(event)
     })
 
-    const href = this.appendLinkToAllCourses({ link: 'https://www.klubschule.ch/mein-konto/meine-kurse/', target: '_self', text: 'Meine abgeschlossenen Kurse', className: 'link-completet-courses' })
+    const href = this.appendLinkToAllCourses({ link: '#dashboard?completed', target: '_self', text: 'Meine abgeschlossenen Kurse', className: 'link-completet-courses' })
     containerDiv.appendChild(href)
 
     // remove loading indicator if present
@@ -358,6 +359,18 @@ export default class Dashboard extends Shadow() {
     href.rel = 'noopener'
     href.textContent = text
     href.classList.add(className)
+    href.addEventListener('click', (e) => {
+      this.dispatchEvent(new CustomEvent('request-bookings-booked', {
+        detail: {
+          log: 'Requesting booked bookings from Dashboard component',
+          completed: true
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+      // e.preventDefault()
+    })
     divWrapper.appendChild(href)
     return divWrapper
   }
