@@ -358,6 +358,10 @@ export default class Booking extends Index {
         name: 'kp-m-loading'
       },
       {
+        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/systemNotification/SystemNotification.js`,
+        name: 'kp-m-system-notification'
+      },
+      {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/tileBookingDetails/TileBookingDetails.js`,
         name: 'kp-m-tile-booking-details'
       },
@@ -380,10 +384,6 @@ export default class Booking extends Index {
       {
         path: `${this.importMetaUrl}../../components/molecules/contactRow/ContactRow.js`,
         name: 'ks-m-contact-row'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/molecules/systemNotification/SystemNotification.js`,
-        name: 'ks-m-system-notification'
       },
       {
         path: `${this.importMetaUrl}../../components/organisms/bodySection/BodySection.js`,
@@ -669,12 +669,12 @@ export default class Booking extends Index {
     }
     if (wrapper) {
       const notification = /* html */`
-        <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle" icon-size="1.5em">
+        <kp-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle" icon-size="1.5em">
           <div slot="description">
             <p class="notification-title">Kein Kurs gefunden</p>
             <p class="notification-text">${errorMsg}</p>
           </div>
-        </ks-m-system-notification>
+        </kp-m-system-notification>
       `
       wrapper.innerHTML = notification
       notificationSection.style.display = ''
@@ -749,7 +749,7 @@ export default class Booking extends Index {
       }
       
       const notification = /* html */`
-        <ks-m-system-notification 
+        <kp-m-system-notification 
           namespace="${namespace}" 
           icon-name="${iconName}" 
           icon-size="1.5em" 
@@ -759,7 +759,7 @@ export default class Booking extends Index {
             <p class="notification-title">${title}</p>
             <p class="notification-text">${message}</p>
           </div>
-        </ks-m-system-notification>
+        </kp-m-system-notification>
       `
       wrapper.innerHTML = notification
       notificationSection.style.display = 'block'
@@ -786,7 +786,7 @@ export default class Booking extends Index {
   }
 
   addNotificationCloseListener(notificationSection) {
-    const systemNotification = notificationSection?.querySelector('ks-m-system-notification')
+    const systemNotification = notificationSection?.querySelector('kp-m-system-notification')
     if (systemNotification) {
       const handleNotificationClick = (event) => {
         const clickedElement = event.target
