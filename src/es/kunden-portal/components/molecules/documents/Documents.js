@@ -158,7 +158,6 @@ export default class Documents extends Shadow() {
       </div>
     `
 
-    // event listener for Anfragen-button
     if (hasRequestConfirmation) {
       const requestButton = this.root.querySelector('.request-confirmation')
       if (requestButton) requestButton.addEventListener('click', this.requestConfirmation.bind(this))

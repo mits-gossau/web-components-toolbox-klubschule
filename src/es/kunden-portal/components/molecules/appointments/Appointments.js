@@ -67,15 +67,17 @@ export default class Appointments extends Shadow() {
         display: flex; 
         align-items: center; 
         justify-content: space-between; 
+        gap: 10px;
         cursor: pointer;
         padding: 16px 0;
       }
       :host .appointment-header-date-title {
         display: flex;
         align-items: center;
+        gap: 10px;
       }
       :host .appointment-header-date {
-        min-width: 320px;
+        min-width: 280px;
       }
       :host .appointment-header-title {
         font-weight: 400;
@@ -117,6 +119,7 @@ export default class Appointments extends Shadow() {
         :host .appointment-header-date-title {
           flex-direction: column;
           align-items: flex-start;
+          gap: 0;
         }
         :host .appointment-header-title {
           margin-top: 10px;
