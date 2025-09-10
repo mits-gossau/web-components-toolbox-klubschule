@@ -192,7 +192,6 @@ export default class EventTile extends Event {
   }
 
   getLogoHTML (logoUrl) {
-    // TODO: Check inline style
     return `<img src="${logoUrl}" height="auto" width="40" />`
   }
 }
