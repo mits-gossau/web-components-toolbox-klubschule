@@ -99,16 +99,33 @@ export default class EventTile extends Event {
   }
 
   renderContinuationTile (data) {
-    const { logoUrl, courseTitle, courseStatus, courseStatusText, courseLocation, courseId, courseType, courseStartDate, courseEndDate, bookingTypeText, coursePrice, currency } = data
+    const {
+      logoUrl,
+      courseTitle,
+      courseStatus,
+      courseStatusText,
+      courseLocation,
+      courseId,
+      courseType,
+      courseStartDate,
+      courseEndDate,
+      bookingTypeText,
+      coursePrice,
+      currency,
+      bookingType,
+      courseFreeSeatFrom
+    } = data
     const start = new Date(courseStartDate)
     const end = new Date(courseEndDate)
     const linkBooking = `#/booking?courseId=${courseId}&courseType=${courseType}`
-    // TODO: 2688 is hardcoded - replace with real value from backend (centerId)
+    // TODO: 2688 is hardcoded - replace with real value from api (centerId)
     const linkCheckout = Environment.getEnvUrl() + `/kurs/kp--${courseType}_${courseId}_2668/Configuration`
+    const reservationUntilDate = bookingType === 3 ? new Date(courseFreeSeatFrom) : null
+    const bookingText = reservationUntilDate ? `${bookingTypeText} bis am ${formatDateForRender(reservationUntilDate)}` : bookingTypeText
     return /* HTML */`
       <div class="event">
         <div class="top">
-          <div class="state-of-booking"><span>${bookingTypeText}</span></div>
+          <div class="state-of-booking"><span>${bookingText}</span></div>
           <div class="logo">${this.getLogoHTML(logoUrl)}</div>
         </div>
         <div class="head">
@@ -175,7 +192,6 @@ export default class EventTile extends Event {
   }
 
   getLogoHTML (logoUrl) {
-    // TODO: Check inline style
     return `<img src="${logoUrl}" height="auto" width="40" />`
   }
 }

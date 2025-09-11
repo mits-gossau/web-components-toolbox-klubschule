@@ -303,6 +303,8 @@ export default class Booking extends Index {
       :host h2 {
         color: var(--mdx-sys-color-accent-6-onSubtle);
         font: var(--mdx-sys-font-flex-large-headline2);
+        display:flex; 
+        gap:10px;
       }
       :host h2 > span {
         position: relative;
@@ -358,6 +360,10 @@ export default class Booking extends Index {
         name: 'kp-m-loading'
       },
       {
+        path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/systemNotification/SystemNotification.js`,
+        name: 'kp-m-system-notification'
+      },
+      {
         path: `${this.importMetaUrl}'../../../../kunden-portal/components/molecules/tileBookingDetails/TileBookingDetails.js`,
         name: 'kp-m-tile-booking-details'
       },
@@ -380,10 +386,6 @@ export default class Booking extends Index {
       {
         path: `${this.importMetaUrl}../../components/molecules/contactRow/ContactRow.js`,
         name: 'ks-m-contact-row'
-      },
-      {
-        path: `${this.importMetaUrl}../../components/molecules/systemNotification/SystemNotification.js`,
-        name: 'ks-m-system-notification'
       },
       {
         path: `${this.importMetaUrl}../../components/organisms/bodySection/BodySection.js`,
@@ -437,13 +439,13 @@ export default class Booking extends Index {
                 </section>
                 <!-- appointments -->
                 <section id="booking-appointments" style="display:none;">
-                  <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> Kurs Termin(e)</h2>
+                  <h2><a-icon-mdx icon-name="Calendar" size="1em"></a-icon-mdx> Kurs Termin(e)</h2>
                   <kp-m-appointments appointments='${JSON.stringify(this.appointmentsData)}'></kp-m-appointments>
                   <ks-a-spacing id="notification-spacing" type="l-flex"></ks-a-spacing>
                 </section>
                 <!-- documents -->
                 <section id="booking-documents" style="display:none;">
-                  <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="FileText" size="1em"></a-icon-mdx> Dokumente</h2>
+                  <h2><a-icon-mdx icon-name="FileText" size="1em"></a-icon-mdx> Dokumente</h2>
                   <kp-m-documents documents="${JSON.stringify(this.documentData)}" course-id="${this.currentCourseId}" course-type="${this.currentCourseType}"></kp-m-documents>
                 </section>
               </ks-o-body-section>
@@ -456,7 +458,7 @@ export default class Booking extends Index {
             <section style="width: var(--body-section-default-width, 86.666%); margin: 0 auto;">
               <div id="followup-wrapper" style="display:none;">
                 <div id="continuation-course">
-                  <h2 style="display:flex; gap:10px;"><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> Fortsetzungskurs</h2>
+                  <h2><a-icon-mdx icon-name="AddToList" size="1em"></a-icon-mdx> Fortsetzungskurs</h2>
                   <div class="container-followup container"></div>
                 </div>
                 <ks-a-spacing id="notification-spacing" type="xs-flex"></ks-a-spacing>
@@ -669,12 +671,12 @@ export default class Booking extends Index {
     }
     if (wrapper) {
       const notification = /* html */`
-        <ks-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle" icon-size="1.5em">
+        <kp-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle" icon-size="1.5em">
           <div slot="description">
             <p class="notification-title">Kein Kurs gefunden</p>
             <p class="notification-text">${errorMsg}</p>
           </div>
-        </ks-m-system-notification>
+        </kp-m-system-notification>
       `
       wrapper.innerHTML = notification
       notificationSection.style.display = ''
@@ -749,7 +751,7 @@ export default class Booking extends Index {
       }
       
       const notification = /* html */`
-        <ks-m-system-notification 
+        <kp-m-system-notification 
           namespace="${namespace}" 
           icon-name="${iconName}" 
           icon-size="1.5em" 
@@ -759,7 +761,7 @@ export default class Booking extends Index {
             <p class="notification-title">${title}</p>
             <p class="notification-text">${message}</p>
           </div>
-        </ks-m-system-notification>
+        </kp-m-system-notification>
       `
       wrapper.innerHTML = notification
       notificationSection.style.display = 'block'
@@ -786,7 +788,7 @@ export default class Booking extends Index {
   }
 
   addNotificationCloseListener(notificationSection) {
-    const systemNotification = notificationSection?.querySelector('ks-m-system-notification')
+    const systemNotification = notificationSection?.querySelector('kp-m-system-notification')
     if (systemNotification) {
       const handleNotificationClick = (event) => {
         const clickedElement = event.target
