@@ -142,6 +142,9 @@ export default class PartnerSearch extends Shadow() {
       :host .partner-result-item-wrapper .button-wrapper {
         margin: var(--mdx-sys-spacing-fix-2xs) 0 0;
       }
+      :host .partner-result-item-wrapper .button-wrapper ks-a-button::part(button) {
+        white-space: nowrap;
+      }
       :host .partner-result-item-wrapper span {
         font: var(--mdx-sys-font-fix-body3);
         margin-bottom: auto;
@@ -174,6 +177,9 @@ export default class PartnerSearch extends Shadow() {
         }
         :host .partner-result-wrapper > *:last-child {
           margin-right: 0.5em;
+        }
+        :host .partner-result-item-wrapper {
+          min-width: 220px;
         }
         :host .partner-result-item-wrapper .button-wrapper {
           min-width: calc(13.75em - 2.5rem);
