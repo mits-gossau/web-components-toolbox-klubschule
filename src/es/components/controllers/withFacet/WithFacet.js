@@ -667,7 +667,7 @@ export default class WithFacet extends WebWorker() {
 
       let treeShookFilterItem = structuredClone(filterItem)
 
-      if (!hasSelectedFilter && filterItem.selected) hasSelectedFilter = true
+      if (!hasSelectedFilter && filterItem.selected && !filterItem.disabled) hasSelectedFilter = true
       if (reset && isMatchingKey) {
         treeShookFilterItem.children = []
       } else if (filterItem.children && !isMulti) {
