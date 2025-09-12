@@ -1,5 +1,6 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import { CalendarHelper } from '../../../helpers/Calendar.js'
 
 /**
 * @export
@@ -10,11 +11,16 @@ export default class Appointments extends Shadow() {
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
     this.appointments = []
+    this.language = this.getAttribute('language') || CalendarHelper.getLanguage()
   }
 
-  static get observedAttributes() { return ['appointments'] }
+  static get observedAttributes() { return ['appointments', 'show-all', 'language'] }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'language') {
+      this.language = newValue
+      this.renderHTML()
+    }
     if (name === 'appointments') {
       try {
         this.appointments = JSON.parse(newValue)
@@ -216,71 +222,60 @@ export default class Appointments extends Shadow() {
         this.renderHTML()
       }
     }
+
+    const downloadAllLink = this.root.querySelector('a[href="#download-all-calendar"]')
+    if (downloadAllLink) {
+      downloadAllLink.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.downloadAllCalendarEvents()
+      })
+    }
+
+    this.root.querySelectorAll('a[href="#download-calendar"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault()
+        const apptIndex = link.closest('.appointment-item').querySelector('.appointment-header').dataset.index
+        this.downloadCalendarEvent(this.appointments[apptIndex])
+      })
+    })
   }
 
   getICalLink(appt) {
-    // example "Sa, 31.05.2025 10:00 - 11:50"
-    const match = appt.appointmentDateFormatted.match(/(\d{2}\.\d{2}\.\d{4}) (\d{2}:\d{2}) - (\d{2}:\d{2})/)
-    if (!match) return '#'
-    const [ , date, start, end ] = match
-    // format for iCal: YYYYMMDDTHHMMSSZ (UTC)
-    const [day, month, year] = date.split('.')
-    const startDate = `${year}${month}${day}T${start.replace(':','')}00`
-    const endDate = `${year}${month}${day}T${end.replace(':','')}00`
-    const title = encodeURIComponent(appt.appointmentCourseTitle || 'Kurstermin')
-    const location = encodeURIComponent(appt.appointmentLocation || '')
-    const description = encodeURIComponent('Kurstermin')
-    return `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-SUMMARY:${title}
-DTSTART:${startDate}
-DTEND:${endDate}
-LOCATION:${location}
-DESCRIPTION:${description}
-END:VEVENT
-END:VCALENDAR`.replace(/\n/g, '\r\n')
+    if (CalendarHelper.shouldUseWebcal()) {
+      return CalendarHelper.getWebcalLink(appt, this.language)
+    } else {
+      return '#download-calendar'
+    }
   }
 
   getICalAllLink() {
     if (!this.appointments || !Array.isArray(this.appointments) || this.appointments.length === 0) return '#'
-    const events = this.appointments.map(appt => {
-      const match = appt.appointmentDateFormatted.match(/(\d{2}\.\d{2}\.\d{4}) (\d{2}:\d{2}) - (\d{2}:\d{2})/)
-      if (!match) return ''
-      const [ , date, start, end ] = match
-      const [day, month, year] = date.split('.')
-      const startDate = `${year}${month}${day}T${start.replace(':','')}00`
-      const endDate = `${year}${month}${day}T${end.replace(':','')}00`
-      const title = encodeURIComponent(appt.appointmentCourseTitle || 'Kurstermin')
-      const location = encodeURIComponent(appt.appointmentLocation || '')
-      const description = encodeURIComponent('Kurstermin')
-      return `BEGIN:VEVENT
-SUMMARY:${title}
-DTSTART:${startDate}
-DTEND:${endDate}
-LOCATION:${location}
-DESCRIPTION:${description}
-END:VEVENT`
-    }).join('\r\n')
-    return `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
-VERSION:2.0
-${events}
-END:VCALENDAR`.replace(/\n/g, '\r\n')
+    
+    if (CalendarHelper.shouldUseWebcal()) {
+      return CalendarHelper.getWebcalAllLink(this.appointments, this.language)
+    } else {
+      return '#download-all-calendar'
+    }
+  }
+
+  downloadCalendarEvent(appt) {
+    const icsContent = CalendarHelper.generateIcsContent(appt, this.language)
+    const filename = CalendarHelper.generateFilename(appt, this.language)
+    CalendarHelper.downloadBlobCalendar(icsContent, filename)
+  }
+
+  downloadAllCalendarEvents() {
+    const icsContent = CalendarHelper.generateMultipleIcsContent(this.appointments, this.language)
+    const filename = CalendarHelper.generateAllFilename(this.appointments, this.language)
+    CalendarHelper.downloadBlobCalendar(icsContent, filename)
   }
 
   getICalFilename(appt) {
-    const match = appt.appointmentDateFormatted.match(/(\d{2})\.(\d{2})\.(\d{4})/)
-    const date = match ? `${match[3]}-${match[2]}-${match[1]}` : 'termin'
-    const title = (appt.appointmentCourseTitle || 'Kurstermin').replace(/[^a-z0-9]+/gi, '-')
-    return `${date}_${title}.ics`
+    return CalendarHelper.generateFilename(appt, this.language)
   }
 
   getICalAllFilename() {
-    if (this.appointments && this.appointments.length > 0) {
-      const title = (this.appointments[0].appointmentCourseTitle || 'termine').replace(/[^a-z0-9]+/gi, '-')
-      return `${title}.ics`
-    }
-    return 'termine.ics'
+    return CalendarHelper.generateAllFilename(this.appointments, this.language)
   }
 
   set appointmentsData(val) {
