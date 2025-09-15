@@ -1,0 +1,7 @@
+:host {
+    --system-notification-warning-background-color: #FFDAC2;
+    --system-notification-warning-icon-border-color: transparent;
+    --icon-mdx-ks-color: var(--mdx-sys-color-neutral-default);
+    --icon-mdx-ks-svg-height: 1.5em;
+    --icon-mdx-ks-svg-width: 1.5em;
+}

@@ -1,7 +1,7 @@
 // @ts-check
 import SystemNotification from '../../../../components/web-components-toolbox/src/es/components/molecules/systemNotification/SystemNotification.js'
 
-export default class KsSystemNotification extends SystemNotification {
+export default class KpSystemNotification extends SystemNotification {
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
   }
@@ -24,6 +24,10 @@ export default class KsSystemNotification extends SystemNotification {
   renderCSS () {
     this.css = /* css */ `
       :host {
+        --font-size: 1.25em;
+        --font-weight: 500;
+        --p-margin: 0 0 1em 0;
+        --icon-margin: 0;
         background-color: var(--background-color);
         display: block;
         padding: var(--item-padding);
@@ -49,13 +53,15 @@ export default class KsSystemNotification extends SystemNotification {
       :host .description {
         margin: auto 0;
       }
-      :host .description,
-      :host .description p,
       :host .icon span {
         font: var(--typography);
       }
+      :host .description p {
+        font-size: var(--font-size);
+        font-weight: var(--font-weight, normal);
+      }
       :host .icon {
-        margin: auto 0;
+        margin: var(--icon-margin, auto 0);
         height: var(--icon-size);
         width: var(--icon-size);
         box-sizing: content-box;
@@ -107,7 +113,7 @@ export default class KsSystemNotification extends SystemNotification {
     switch (this.getAttribute('namespace')) {
       case 'system-notification-default-':
         allStyles = [{
-          path: `${this.importMetaUrl}../../../../../../molecules/systemNotification/default-/default-.css`,
+          path: `${this.importMetaUrl}../../../../../../../../es/kunden-portal/components/molecules/systemNotification/default-/default-.css`,
           namespace: false
         }, ...baseStyles]
 
@@ -118,7 +124,7 @@ export default class KsSystemNotification extends SystemNotification {
       case 'system-notification-error-':
         allStyles = [
           {
-            path: `${this.importMetaUrl}../../../../../../molecules/systemNotification/default-/default-.css`, // apply namespace since it is specific and no fallback
+            path: `${this.importMetaUrl}../../../../../../../../es/kunden-portal/components/molecules/systemNotification/default-/default-.css`, // apply namespace since it is specific and no fallback
             namespace: false,
             replaces: [{
               pattern: '--system-notification-default-',
@@ -127,12 +133,33 @@ export default class KsSystemNotification extends SystemNotification {
             }]
           },
           {
-            path: `${this.importMetaUrl}../../../../../../molecules/systemNotification/error-/error-.css`,
+            path: `${this.importMetaUrl}../../../../../../../../es/kunden-portal/components/molecules/systemNotification/error-/error-.css`,
             namespace: false
           },
           ...baseStyles
         ]
 
+        return this.fetchCSS(allStyles).then(fetchCSSParams => {
+          // make template ${code} accessible aka. set the variables in the literal string
+          fetchCSSParams[0].styleNode.textContent = eval('`' + fetchCSSParams[0].style + '`')// eslint-disable-line no-eval
+        })
+      case 'system-notification-warning-':
+        allStyles = [
+          {
+            path: `${this.importMetaUrl}../../../../../../../../es/kunden-portal/components/molecules/systemNotification/default-/default-.css`, // apply namespace since it is specific and no fallback
+            namespace: false,
+            replaces: [{
+              pattern: '--system-notification-default-',
+              flags: 'g',
+              replacement: '--system-notification-warning-'
+            }]
+          },
+          {
+            path: `${this.importMetaUrl}../../../../../../../../es/kunden-portal/components/molecules/systemNotification/warning-/warning-.css`,
+            namespace: false
+          },
+          ...baseStyles
+        ]
         return this.fetchCSS(allStyles).then(fetchCSSParams => {
           // make template ${code} accessible aka. set the variables in the literal string
           fetchCSSParams[0].styleNode.textContent = eval('`' + fetchCSSParams[0].style + '`')// eslint-disable-line no-eval
@@ -154,7 +181,6 @@ export default class KsSystemNotification extends SystemNotification {
           },
           ...baseStyles
         ]
-
         return this.fetchCSS(allStyles).then(fetchCSSParams => {
           // make template ${code} accessible aka. set the variables in the literal string
           fetchCSSParams[0].styleNode.textContent = eval('`' + fetchCSSParams[0].style + '`')// eslint-disable-line no-eval
@@ -175,7 +201,7 @@ export default class KsSystemNotification extends SystemNotification {
 
     this.html = /* html */ `
     <div class="system-notification" role="alert">
-      ${isCloseable ? /* html */ `<button class="close-btn" type="button" aria-label="Schliessen">&times;</button>` : ''}
+      ${isCloseable ? /* html */ '<button class="close-btn" type="button" aria-label="Schliessen">&times;</button>' : ''}
       ${isIconPlain ? /* html */ `<span><a-icon-mdx icon-name="${iconName}" size="${iconSize}" /></span>` : this.getIconHTML({ iconBadge, iconName, iconNamespace, iconSize })}
       ${description ? /* html */ `<div class="description">${description}</div>` : ''}
     </div>
@@ -183,7 +209,7 @@ export default class KsSystemNotification extends SystemNotification {
 
     setTimeout(() => {
       const btn = this.root.querySelector('.close-btn')
-      if (btn) btn.addEventListener('click', () => {this.style.display = 'none', this.dispatchEvent(new CustomEvent('close-notification', { bubbles: true, composed: true }))})
+      if (btn) btn.addEventListener('click', () => { this.style.display = 'none', this.dispatchEvent(new CustomEvent('close-notification', { bubbles: true, composed: true })) })
     }, 0)
 
     this.fetchModules([
@@ -194,7 +220,7 @@ export default class KsSystemNotification extends SystemNotification {
     ])
   }
 
-  getIconHTML({ iconBadge, iconName, iconNamespace, iconSize }) {
+  getIconHTML ({ iconBadge, iconName, iconNamespace, iconSize }) {
     if (!iconBadge && !iconName) return ''
     return /* html */`
       <div class="icon">

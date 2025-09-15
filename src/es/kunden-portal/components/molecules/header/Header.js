@@ -1,6 +1,8 @@
 // @ts-check
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
+/* global CustomEvent */
+
 /**
 * @export
 * @class Header
@@ -19,16 +21,53 @@ export default class Header extends Shadow() {
 
     Promise.all(showPromises).then(() => {
       this.hidden = false
-      if (this.topStage) {
-        this.topStage.addEventListener('click', this.topStateLink())
-      }
+      if (this.topStage) this.topStage.addEventListener('click', this.topStateLink())
+      document.body.addEventListener('update-status-monitor', this.updatenStatusMonitorListener)
+      this.dispatchEvent(new CustomEvent('request-status-monitor',
+        {
+          detail: {
+            log: 'Requesting status-monitor from Header component',
+            comppleted: false
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }
+      ))
     })
   }
 
   disconnectedCallback () {
-    if (this.topStage) {
-      this.topStage.removeEventListener('click', this.topStateLink())
+    if (this.topStage) this.topStage.removeEventListener('click', this.topStateLink())
+    document.body.removeEventListener('update-status-monitor', this.updatenStatusMonitorListener)
+  }
+
+  updatenStatusMonitorListener = (event) => {
+    this.renderNotifications(event.detail.fetch)
+  }
+
+  renderNotifications (fetch) {
+    if (!fetch && !fetch?.then) return
+    if (this.notificationsWrapper) {
+      fetch.then(data => {
+        this.notificationsWrapper.innerHTML = data.statusmessages.map(notification => this.renderNotificationItem(notification))
+      })
     }
+  }
+
+  renderNotificationItem (data) {
+    const { courseTitle, courseId, courseType } = data
+    const link = `#/booking?courseId=${courseId}&courseType=${courseType}`
+    return /* html */ `
+      <kp-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle" >
+        <div slot="description">
+          <p>${courseTitle}</p>
+          <a-link namespace="underline-" >
+            <a href="${link}">Details ansehen</a>
+          </a-link>
+        </div>
+      </kp-m-system-notification>
+    `
   }
 
   topStateLink () {
@@ -53,7 +92,7 @@ export default class Header extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML () {
-    return !this.div
+    return !this.bodySectionWrapper
   }
 
   /**
@@ -140,6 +179,14 @@ export default class Header extends Shadow() {
       {
         path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/organisms/grid/Grid.js`,
         name: 'o-grid'
+      },
+      {
+        path: `${this.importMetaUrl}../systemNotification/SystemNotification.js`,
+        name: 'kp-m-system-notification'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../components/web-components-toolbox/src/es/components/atoms/link/Link.js`,
+        name: 'a-link'
       }
     ])
     const namespace = this.getAttribute('namespace') || 'header-default-'
@@ -179,10 +226,32 @@ export default class Header extends Shadow() {
             :host > section > div {
               padding-top: 2.5em;
             }
+            :host kp-m-system-notification {
+              margin-bottom: 1em;
+            }
           </style>
           <div col-lg="12" col-md="12" col-sm="12">
             <h1>${this.getGreeting()} Uservorname Usernachname</h1>
             <p>Hier können Sie Ihre Kurse verwalten und erhalten alle relevanten Informationen.</p>
+            <div id="notifications">
+              <!--<kp-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle" >
+              <div slot="description">
+                <p>System Notification Default (Primary) No Border</p>
+                <a-link namespace="underline-">
+                  <a>asdf  Mehr erfahren </a>
+                </a-link>
+              </div>
+            </kp-m-system-notification>-->
+            </div>
+            <br>
+            <kp-m-system-notification namespace="system-notification-warning-" icon-name="AlertTriangle" no-border is-closeable>
+              <div slot="description">
+                <p>System Notification Default (Primary) No Borderww </p>
+                <a-link namespace="underline-">
+                  <a> Mehr erfahren </a>
+                </a-link>
+              </div>
+            </kp-m-system-notification>
           </div>
         </o-grid>
       </ks-o-body-section>
@@ -202,11 +271,15 @@ export default class Header extends Shadow() {
     }
   }
 
-  get div () {
+  get bodySectionWrapper () {
     return this.root.querySelector('ks-o-body-section')
   }
 
   get topStage () {
     return this.root.querySelector('#top-stage')
+  }
+
+  get notificationsWrapper () {
+    return this.root.querySelector('ks-o-body-section').root.querySelector('o-grid').root.querySelector('#notifications')
   }
 }

@@ -69,18 +69,18 @@ self.Environment = {
           getStatusmonitor: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getStatusmonitor`,
           setAttendance: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/setAttendance`,
           setStatusmonitor: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/setStatusmonitor`,
-          
+
           // CpCourseAPI
           generateCoursePdf: `${this.getEnvUrl()}/umbraco/api/CpCourseAPI/generateCoursePdf`,
           getCoursePdf: `${this.getEnvUrl()}/umbraco/api/CpCourseAPI/getCoursePdf`,
-          
+
           // CpStudentAPI
           generateDocument: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/generateDocument`,
           getMyBalance: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/getMyBalance`,
           getMyDocument: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/getMyDocument`,
           getMyDocuments: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/getMyDocuments`,
           sendMessage: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/sendMessage`,
-          
+
           // CpSubscriptionAPI
           bookedSubscriptionCourseAppointments: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/bookedSubscriptionCourseAppointments`,
           checkUser: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/checkUser`,

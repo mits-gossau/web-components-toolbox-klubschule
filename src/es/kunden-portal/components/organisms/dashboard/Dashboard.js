@@ -373,6 +373,8 @@ export default class Dashboard extends Shadow() {
 
     if (this.continuationsSection) this.showSection(this.continuationsSection)
 
+    containerDiv.innerHTML = ''
+
     bookingsData.forEach(course => {
       // @ts-ignore
       // eslint-disable-next-line new-cap
