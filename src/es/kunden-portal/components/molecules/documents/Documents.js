@@ -2,15 +2,32 @@
 import { Shadow } from '../../../../components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /**
+ * @typedef {Object} DocumentItem
+ * @property {string} [label] - The label of the document
+ * @property {string} [type] - The type of the document
+ * @property {string} [url] - The URL of the document
+ */
+
+/**
 * @export
 * @class Documents
 * @type {CustomElementConstructor}
 */
 export default class Documents extends Shadow() {
+  /**
+   * @param {object} [options={}]
+   * @param {...any} args
+   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    
+    /** @type {DocumentItem[]} */
     this.documents = []
+    
+    /** @type {string | null} */
     this.courseId = null
+    
+    /** @type {string | null} */
     this.courseType = null
   }
 
@@ -18,6 +35,11 @@ export default class Documents extends Shadow() {
     return ['documents', 'request-confirmation',]
   }
 
+  /**
+   * @param {string} name
+   * @param {string | null} oldValue
+   * @param {string | null} newValue
+   */
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'documents') {
       try {
@@ -37,6 +59,9 @@ export default class Documents extends Shadow() {
     if (this.shouldRenderHTML()) this.renderHTML()
   }
 
+  /**
+   * @param {Event} event
+   */
   requestConfirmation(event) {
     event.preventDefault()
     this.dispatchEvent(new CustomEvent('request-course-confirmation', { bubbles: true, cancelable: true, composed: true }))
