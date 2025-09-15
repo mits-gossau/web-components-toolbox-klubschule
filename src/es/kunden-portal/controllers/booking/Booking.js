@@ -19,20 +19,24 @@ export default class Booking extends HTMLElement {
   }
 
   connectedCallback () {
-    document.addEventListener('request-booking', this.requestBooking)
-    document.addEventListener('request-followup', this.requestFollowUp)
-    document.addEventListener('request-document', this.requestDocument)
-    document.addEventListener('request-send-message', this.requestSendMessage)
+    document.addEventListener('request-booking', (event) => this.requestBooking(/** @type {CustomEvent} */ (event)))
+    document.addEventListener('request-followup', (event) => this.requestFollowUp(/** @type {CustomEvent} */ (event)))
+    document.addEventListener('request-document', (event) => this.requestDocument(/** @type {CustomEvent} */ (event)))
+    document.addEventListener('request-send-message', (event) => this.requestSendMessage(/** @type {CustomEvent} */ (event)))
   }
 
   disconnectedCallback () {
-    document.removeEventListener('request-booking', this.requestBooking)
-    document.removeEventListener('request-followup', this.requestFollowUp)
-    document.removeEventListener('request-document', this.requestDocument)
-    document.removeEventListener('request-send-message', this.requestSendMessage)
+    document.removeEventListener('request-booking', (event) => this.requestBooking(/** @type {CustomEvent} */ (event)))
+    document.removeEventListener('request-followup', (event) => this.requestFollowUp(/** @type {CustomEvent} */ (event)))
+    document.removeEventListener('request-document', (event) => this.requestDocument(/** @type {CustomEvent} */ (event)))
+    document.removeEventListener('request-send-message', (event) => this.requestSendMessage(/** @type {CustomEvent} */ (event)))
   }
 
-  // @ts-ignore
+  /**
+   * Sends a booking request to the API
+   * @param {CustomEvent} event - Das Event mit den Kursdaten im Detail.
+   * @returns {void}
+   */
   requestBooking = (event) => {
     if (this.abortControllerBooking) this.abortControllerBooking.abort()
     this.abortControllerBooking = new AbortController()
@@ -68,7 +72,11 @@ export default class Booking extends HTMLElement {
     }))
   }
 
-  // @ts-ignore
+  /**
+   * Sends a follow-up request for a course
+   * @param {CustomEvent} event - The event containing courseIdFollowUp and courseTypeFollowUp.
+   * @returns {void}
+   */
   requestFollowUp = (event) => {
     if (this.abortControllerFollowUp) this.abortControllerFollowUp.abort()
     this.abortControllerFollowUp = new AbortController()
@@ -97,7 +105,11 @@ export default class Booking extends HTMLElement {
     }))
   }
 
-  // @ts-ignore
+  /**
+   * Requests a document (PDF or JSON) for the user
+   * @param {CustomEvent} event - The event containing documentKey and documentType.
+   * @returns {void}
+   */
   requestDocument = (event) => {
     if (this.abortControllerDocument) this.abortControllerDocument.abort()
     this.abortControllerDocument = new AbortController()
@@ -141,7 +153,11 @@ export default class Booking extends HTMLElement {
       })
   }
 
-  // @ts-ignore
+  /**
+   * Sends a message (e.g., cancellation or confirmation) to the API
+   * @param {CustomEvent} event - The event containing courseId, courseType, mailNumber, and optional cancellation info.
+   * @returns {void}
+   */
   requestSendMessage = (event) => {
     if (this.abortControllerSendMessage) this.abortControllerSendMessage.abort()
     this.abortControllerSendMessage = new AbortController()
@@ -178,7 +194,7 @@ export default class Booking extends HTMLElement {
   }
   
   /**
-   * Returns an object with request method, http headers, body, and signal properties for making a POST request with fetch.
+   * Returns an object with request method, http headers, body, and signal properties for making a POST request with fetch
    * @param {Object} data - The data that you want to send in the POST request. This data should be in a format that can be converted to JSON.
    * @param {AbortController} abortController - Abort Fetch requests
    * @returns {Object} An object is being returned to use as option object for api fetch
