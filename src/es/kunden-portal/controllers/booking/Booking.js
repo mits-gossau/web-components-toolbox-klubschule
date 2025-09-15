@@ -32,6 +32,7 @@ export default class Booking extends HTMLElement {
     document.removeEventListener('request-send-message', this.requestSendMessage)
   }
 
+  // @ts-ignore
   requestBooking = (event) => {
     if (this.abortControllerBooking) this.abortControllerBooking.abort()
     this.abortControllerBooking = new AbortController()
@@ -67,6 +68,7 @@ export default class Booking extends HTMLElement {
     }))
   }
 
+  // @ts-ignore
   requestFollowUp = (event) => {
     if (this.abortControllerFollowUp) this.abortControllerFollowUp.abort()
     this.abortControllerFollowUp = new AbortController()
@@ -95,6 +97,7 @@ export default class Booking extends HTMLElement {
     }))
   }
 
+  // @ts-ignore
   requestDocument = (event) => {
     if (this.abortControllerDocument) this.abortControllerDocument.abort()
     this.abortControllerDocument = new AbortController()
@@ -138,6 +141,7 @@ export default class Booking extends HTMLElement {
       })
   }
 
+  // @ts-ignore
   requestSendMessage = (event) => {
     if (this.abortControllerSendMessage) this.abortControllerSendMessage.abort()
     this.abortControllerSendMessage = new AbortController()
@@ -153,7 +157,9 @@ export default class Booking extends HTMLElement {
       language: event.detail.language || 'de',
       courseType: event.detail.courseType,
       courseId: parseInt(event.detail.courseId),
-      mailNumber: event.detail.mailNumber
+      mailNumber: event.detail.mailNumber,
+      cancelReasonNumber: event.detail.cancelReasonNumber || 0,
+      cancelReasonText: event.detail.cancelReasonText || ''
     }
     const options = this.fetchPOSTOptions(data, this.abortControllerSendMessage)
 

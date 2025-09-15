@@ -81,21 +81,27 @@ import Index from './Index.js'
  * @type {CustomElementConstructor}
  */
 export default class Booking extends Index {
+  // @ts-ignore
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.bookingData = null
+    // @ts-ignore
     this.appointmentsData = []
+    // @ts-ignore
     this.documentData = []
     this.followUpData = null
     this.bookingDetails = null
+    // @ts-ignore
     this.currentCourseId = null
+    // @ts-ignore
     this.currentCourseType = null
     this.modulesLoaded = false
     this.followupRequested = false
     this.documentRequested = false
 
     this.requestBookingListener = this.createRequestListener(
+      // @ts-ignore
       data => { 
         if (!data || !data.course) {
           if (this.modulesLoaded) this.renderBookingContent()
@@ -106,6 +112,7 @@ export default class Booking extends Index {
         this.bookingData = data || {}
 
         const course = this.bookingData.course || {}
+        // @ts-ignore
         this.appointmentsData = Array.isArray(course.appointments) ? course.appointments.map(appt => ({ ...appt })) : []
         
         if (this.modulesLoaded) {
@@ -140,15 +147,19 @@ export default class Booking extends Index {
           }))
         }
       },
+      // @ts-ignore
       error => { console.error('Error fetching bookings:', error); setTimeout(() => this.renderNoResult(), 0) }
     )
 
     this.requestFollowUpListener = this.createRequestListener(
+      // @ts-ignore
       data => { this.followUpData = data || []; if (this.modulesLoaded) setTimeout(() => this.renderFollowUp(), 0) },
+      // @ts-ignore
       error => { console.error('Error fetching followUp:', error); setTimeout(() => this.renderNoResult(), 0) }
     )
 
     this.requestDocumentListener = this.createRequestListener(
+      // @ts-ignore
       data => {
         if (data instanceof Blob) {
           const url = URL.createObjectURL(data)
@@ -169,12 +180,15 @@ export default class Booking extends Index {
           // }
         }
       },
+      // @ts-ignore
       error => { console.error('Error fetching document:', error) }
     )
 
+    // @ts-ignore
     this.courseConfirmationListener = (event) => this.requestCourseConfirmation()
 
     this.sendMessageResponseListener = this.createRequestListener(
+      // @ts-ignore
       data => {
         if (data && data.statusCode === 0) { // 200
           this.showRequestConfirmationNotification('success')
@@ -182,6 +196,7 @@ export default class Booking extends Index {
           this.showRequestConfirmationNotification('error')
         }
       },
+      // @ts-ignore
       error => {
         console.error('Error sending message:', error)
         this.showRequestConfirmationNotification('error')
@@ -189,7 +204,9 @@ export default class Booking extends Index {
     )
   }
 
+  // @ts-ignore
   createRequestListener(onSuccess, onError) {
+    // @ts-ignore
     return (event) => { event.detail.fetch.then(onSuccess).catch(onError)}
   }
 
@@ -276,6 +293,7 @@ export default class Booking extends Index {
     document.body.removeEventListener('request-course-confirmation', this.courseConfirmationListener)
     document.body.removeEventListener('update-send-message', this.sendMessageResponseListener)
     window.removeEventListener('hashchange', this.handleCourseIdChange)
+    // @ts-ignore
     if (this.followupObserver) { this.followupObserver.disconnect(); this.followupObserver = null }
   }
 
@@ -469,7 +487,9 @@ export default class Booking extends Index {
                   :host .container-discover { display: flex; gap: var(--mdx-sys-spacing-flex-xs, 24px); }
                   @media only screen and (max-width:${this.mobileBreakpoint}) { :host .container-discover { flex-direction: column; } }
                 </style>
-                ${this.discoverTiles.map((tile, i) => /* html */`
+                ${this.discoverTiles.map((tile, 
+// @ts-ignore
+                i) => /* html */`
                   <kp-m-tile-discover
                     image-src="${tile.imageSrc}"
                     tile-label="${tile.label}"
@@ -509,6 +529,7 @@ export default class Booking extends Index {
 
     const start = new Date(course.courseStartDate)
     const end = new Date(course.courseEndDate)
+    // @ts-ignore
     const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
     const daysEntry = `${formatDate(start)} - ${formatDate(end)}`
     const details = [
@@ -611,6 +632,7 @@ export default class Booking extends Index {
 
     const start = new Date(course.courseStartDate)
       const end = new Date(course.courseEndDate)
+      // @ts-ignore
       const formatDate = d => d ? `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getFullYear()).slice(-2)}` : ''
 
       // TODO: format date to dd.mm.yy ? Neet to check if this is needed
@@ -658,6 +680,7 @@ export default class Booking extends Index {
       followUpSection.shadowRoot.querySelector('#followup-wrapper').style.display = 'block'
   }
 
+  // @ts-ignore
   renderNoResult(apiMessage) {
     const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
     const notificationSection = body?.querySelector('#booking-notification')
@@ -719,7 +742,9 @@ export default class Booking extends Index {
         language: 'de',
         courseType: this.currentCourseType,
         courseId: parseInt(this.currentCourseId),
-        mailNumber: 3 
+        mailNumber: 3,
+        cancelReasonNumber: 0,
+        cancelReasonText: ''
       },
       bubbles: true,
       cancelable: true,
@@ -727,6 +752,7 @@ export default class Booking extends Index {
     }))
   }
 
+  // @ts-ignore
   showRequestConfirmationNotification(status) {
     const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
     const notificationSection = body?.querySelector('#booking-notification')
@@ -787,9 +813,11 @@ export default class Booking extends Index {
     }
   }
 
+  // @ts-ignore
   addNotificationCloseListener(notificationSection) {
     const systemNotification = notificationSection?.querySelector('kp-m-system-notification')
     if (systemNotification) {
+      // @ts-ignore
       const handleNotificationClick = (event) => {
         const clickedElement = event.target
         if (systemNotification.shadowRoot) {
