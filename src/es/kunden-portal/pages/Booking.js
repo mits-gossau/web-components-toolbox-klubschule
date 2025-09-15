@@ -18,6 +18,13 @@ import Index from './Index.js'
  */
 
 /**
+ * @typedef {Object} Document
+ * @property {string} label
+ * @property {string} type
+ * @property {string} url
+ */
+
+/**
  * @typedef {Object} Course
  * @property {number} mandantId
  * @property {string} courseType
@@ -81,20 +88,23 @@ import Index from './Index.js'
  * @type {CustomElementConstructor}
  */
 export default class Booking extends Index {
-  // @ts-ignore
+  /**
+   * @param {object} [options={}]
+   * @param {...any} args
+   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.bookingData = null
-    // @ts-ignore
+    /** @type {Appointment[]} */
     this.appointmentsData = []
-    // @ts-ignore
+    /** @type {Document[]} */
     this.documentData = []
     this.followUpData = null
     this.bookingDetails = null
-    // @ts-ignore
+    /** @type {string | null} */
     this.currentCourseId = null
-    // @ts-ignore
+    /** @type {string | null} */
     this.currentCourseType = null
     this.modulesLoaded = false
     this.followupRequested = false
@@ -204,9 +214,13 @@ export default class Booking extends Index {
     )
   }
 
-  // @ts-ignore
+  /**
+   * @template T
+   * @param {(data: T) => void} onSuccess
+   * @param {(error: Error) => void} onError
+   * @returns {(event: CustomEvent<{fetch: Promise<T>}>) => void}
+   */
   createRequestListener(onSuccess, onError) {
-    // @ts-ignore
     return (event) => { event.detail.fetch.then(onSuccess).catch(onError)}
   }
 
@@ -272,11 +286,11 @@ export default class Booking extends Index {
   connectedCallback () {
     if (this.shouldRenderHTML()) this.renderHTML()
     if (this.shouldRenderCSS()) this.renderCSS()
-    document.body.addEventListener('update-booking', this.requestBookingListener)
-    document.body.addEventListener('update-followup', this.requestFollowUpListener)
-    document.body.addEventListener('update-document', this.requestDocumentListener)
-    document.body.addEventListener('request-course-confirmation', this.courseConfirmationListener)
-    document.body.addEventListener('update-send-message', this.sendMessageResponseListener)
+    document.body.addEventListener('update-booking', (event) => this.requestBookingListener(/** @type {CustomEvent} */ (event)))
+    document.body.addEventListener('update-followup', (event) => this.requestFollowUpListener(/** @type {CustomEvent} */ (event)))
+    document.body.addEventListener('update-document', (event) => this.requestDocumentListener(/** @type {CustomEvent} */ (event)))
+    document.body.addEventListener('request-course-confirmation', (event) => this.courseConfirmationListener(/** @type {CustomEvent} */ (event)))
+    document.body.addEventListener('update-send-message', (event) => this.sendMessageResponseListener(/** @type {CustomEvent} */ (event)))
     window.addEventListener('hashchange', this.handleCourseIdChange)
     const hash = window.location.hash
     const searchParams = hash.includes('?') ? hash.split('?')[1] : ''
@@ -287,11 +301,11 @@ export default class Booking extends Index {
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('update-booking', this.requestBookingListener)
-    document.body.removeEventListener('update-followup', this.requestFollowUpListener)
-    document.body.removeEventListener('update-document', this.requestDocumentListener)
-    document.body.removeEventListener('request-course-confirmation', this.courseConfirmationListener)
-    document.body.removeEventListener('update-send-message', this.sendMessageResponseListener)
+    document.body.removeEventListener('update-booking', (event) => this.requestBookingListener(/** @type {CustomEvent} */ (event)))
+    document.body.removeEventListener('update-followup', (event) => this.requestFollowUpListener(/** @type {CustomEvent} */ (event)))
+    document.body.removeEventListener('update-document', (event) => this.requestDocumentListener(/** @type {CustomEvent} */ (event)))
+    document.body.removeEventListener('request-course-confirmation', (event) => this.courseConfirmationListener(/** @type {CustomEvent} */ (event)))
+    document.body.removeEventListener('update-send-message', (event) => this.sendMessageResponseListener(/** @type {CustomEvent} */ (event)))
     window.removeEventListener('hashchange', this.handleCourseIdChange)
     // @ts-ignore
     if (this.followupObserver) { this.followupObserver.disconnect(); this.followupObserver = null }
@@ -487,9 +501,7 @@ export default class Booking extends Index {
                   :host .container-discover { display: flex; gap: var(--mdx-sys-spacing-flex-xs, 24px); }
                   @media only screen and (max-width:${this.mobileBreakpoint}) { :host .container-discover { flex-direction: column; } }
                 </style>
-                ${this.discoverTiles.map((tile, 
-// @ts-ignore
-                i) => /* html */`
+                ${this.discoverTiles.map((tile, i) => /* html */`
                   <kp-m-tile-discover
                     image-src="${tile.imageSrc}"
                     tile-label="${tile.label}"
@@ -578,7 +590,7 @@ export default class Booking extends Index {
       aside.style.backgroundColor = 'white'
       body.appendChild(aside)
     }
-    aside.innerHTML = /* html */'<ks-a-heading tag="h3">Kontakt</ks-a-heading>'
+    aside.innerHTML = /* html */`<ks-a-heading tag="h3">Kontakt</ks-a-heading>`
 
     const address = document.createElement('ks-m-contact-row')
     address.setAttribute('icon-name', 'Home')
@@ -680,19 +692,31 @@ export default class Booking extends Index {
       followUpSection.shadowRoot.querySelector('#followup-wrapper').style.display = 'block'
   }
 
-  // @ts-ignore
+  /**
+   * @typedef {Object} ErrorMessage
+   * @property {string} errorMsg
+   */
+
+  /**
+   * @param {string | undefined} apiMessage
+   */
   renderNoResult(apiMessage) {
     const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
+    /** @type {HTMLElement | null} */
     const notificationSection = body?.querySelector('#booking-notification')
+    /** @type {HTMLElement | null} */
     const wrapper = body?.querySelector('.notification-wrapper')
+    /** @type {string} */
     let errorMsg = 'Es gibt keinen Kurs mit dieser ID.<br>Bitte prüfen Sie Ihre Auswahl oder versuchen Sie es später erneut.'
     if (apiMessage) {
       try {
+        /** @type {ErrorMessage} */
         const msgObj = JSON.parse(apiMessage)
         if (msgObj.errorMsg) errorMsg = msgObj.errorMsg
       } catch {}
     }
     if (wrapper) {
+      /** @type {string} */
       const notification = /* html */`
         <kp-m-system-notification namespace="system-notification-error-" icon-name="AlertTriangle" icon-size="1.5em">
           <div slot="description">
@@ -702,7 +726,7 @@ export default class Booking extends Index {
         </kp-m-system-notification>
       `
       wrapper.innerHTML = notification
-      notificationSection.style.display = ''
+      if (notificationSection) notificationSection.style.display = ''
       setTimeout(() => { 
         this.addNotificationCloseListener(notificationSection)
         this.scrollToNotification() 
@@ -752,45 +776,70 @@ export default class Booking extends Index {
     }))
   }
 
-  // @ts-ignore
+  /**
+   * @typedef {'success' | 'error' | undefined} NotificationStatus
+   */
+
+  /**
+   * @typedef {Object} NotificationConfig
+   * @property {string} iconName
+   * @property {string} namespace
+   * @property {string} title
+   * @property {string} message
+   */
+
+  /**
+   * Shows a request confirmation notification
+   * @param {NotificationStatus} status - The status of the notification
+   */
   showRequestConfirmationNotification(status) {
     const body = this.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-o-body-section')?.shadowRoot
+    /** @type {HTMLElement | null} */
     const notificationSection = body?.querySelector('#booking-notification')
+    /** @type {HTMLElement | null} */
     const wrapper = body?.querySelector('.notification-wrapper')
     
     if (wrapper) {
-      let iconName = 'Info'
-      let namespace = 'system-notification-default-'
-      let title = 'Kursbestätigung ist verfügbar'
-      let message = 'Sie finden alle Dokumente zum Kurs auf der Kursdetailseite oder unter Dokumente.'
-      
-      if (status === 'success') {
-        iconName = 'CheckCircle'
-        namespace = 'system-notification-default-'
-        title = 'Erfolgreich'
-        message = 'Ihre Anfrage für eine Kursbestätigung wurde erfolgreich übermittelt.'
-      } else if (status === 'error') {
-        iconName = 'AlertTriangle'
-        namespace = 'system-notification-error-'
-        title = 'Fehler'
-        message = 'Fehler beim Senden der Anfrage. Bitte versuchen Sie es später erneut.'
+      /** @type {NotificationConfig} */
+      let config = {
+        iconName: 'Info',
+        namespace: 'system-notification-default-',
+        title: 'Kursbestätigung ist verfügbar',
+        message: 'Sie finden alle Dokumente zum Kurs auf der Kursdetailseite oder unter Dokumente.'
       }
       
+      if (status === 'success') {
+        config = {
+          iconName: 'CheckCircle',
+          namespace: 'system-notification-default-',
+          title: 'Erfolgreich',
+          message: 'Ihre Anfrage für eine Kursbestätigung wurde erfolgreich übermittelt.'
+        }
+      } else if (status === 'error') {
+        config = {
+          iconName: 'AlertTriangle',
+          namespace: 'system-notification-error-',
+          title: 'Fehler',
+          message: 'Fehler beim Senden der Anfrage. Bitte versuchen Sie es später erneut.'
+        }
+      }
+      
+      /** @type {string} */
       const notification = /* html */`
         <kp-m-system-notification 
-          namespace="${namespace}" 
-          icon-name="${iconName}" 
+          namespace="${config.namespace}" 
+          icon-name="${config.iconName}" 
           icon-size="1.5em" 
           icon-plain 
           is-closeable>
           <div slot="description">
-            <p class="notification-title">${title}</p>
-            <p class="notification-text">${message}</p>
+            <p class="notification-title">${config.title}</p>
+            <p class="notification-text">${config.message}</p>
           </div>
         </kp-m-system-notification>
       `
       wrapper.innerHTML = notification
-      notificationSection.style.display = 'block'
+      if (notificationSection) notificationSection.style.display = 'block'
       setTimeout(() => { 
         this.addNotificationCloseListener(notificationSection)
         this.scrollToNotification() 
@@ -813,17 +862,45 @@ export default class Booking extends Index {
     }
   }
 
-  // @ts-ignore
+  /**
+   * @typedef {Object} SystemNotificationShadowRoot
+   * @property {(selector: string) => Element | null} querySelector
+   */
+
+  /**
+   * @typedef {Object} SystemNotificationElement
+   * @property {SystemNotificationShadowRoot | null} shadowRoot
+   * @property {(eventName: string, handler: EventListener) => void} addEventListener
+   * @property {(eventName: string, handler: EventListener) => void} removeEventListener
+   */
+
+  /**
+   * @typedef {Object} NotificationSectionElement
+   * @property {CSSStyleDeclaration} style
+   * @property {(selector: string) => SystemNotificationElement | null} querySelector
+   */
+
+  /**
+   * @typedef {Object} NotificationClickEvent
+   * @property {EventTarget | null} target
+   */
+
+  /**
+   * Adds a close listener to the notification section
+   * @param {NotificationSectionElement | null} notificationSection - The notification section element
+   */
   addNotificationCloseListener(notificationSection) {
     const systemNotification = notificationSection?.querySelector('kp-m-system-notification')
     if (systemNotification) {
-      // @ts-ignore
+      /**
+       * @param {NotificationClickEvent} event
+       */
       const handleNotificationClick = (event) => {
         const clickedElement = event.target
-        if (systemNotification.shadowRoot) {
+        if (systemNotification.shadowRoot && clickedElement instanceof Element) {
           const closeBtn = systemNotification.shadowRoot.querySelector('.close-btn')
           if (closeBtn && (clickedElement === closeBtn || closeBtn.contains(clickedElement))) {
-            notificationSection.style.display = 'none'
+            if (notificationSection) notificationSection.style.display = 'none'
             systemNotification.removeEventListener('click', handleNotificationClick)
           }
         }
@@ -831,7 +908,7 @@ export default class Booking extends Index {
       systemNotification.addEventListener('click', handleNotificationClick)
       if (systemNotification.shadowRoot) {
         const closeBtn = systemNotification.shadowRoot.querySelector('.close-btn')
-        if (closeBtn) closeBtn.addEventListener('click', () => { notificationSection.style.display = 'none' })
+        if (closeBtn) closeBtn.addEventListener('click', () => { if (notificationSection) notificationSection.style.display = 'none' })
       }
     }
   }
