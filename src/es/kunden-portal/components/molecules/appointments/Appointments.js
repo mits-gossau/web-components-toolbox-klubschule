@@ -3,19 +3,46 @@ import { Shadow } from '../../../../components/web-components-toolbox/src/es/com
 import { CalendarHelper } from '../../../helpers/Calendar.js'
 
 /**
+ * @typedef {Object} Appointment
+ * @property {string} appointmentDateFormatted
+ * @property {string} appointmentCourseType
+ * @property {string} appointmentCourseTitle
+ * @property {boolean} participantEnrolled
+ * @property {string} participantStatusText
+ * @property {string} appointmentLocation
+ * @property {string} roomDescription
+ */
+
+/**
+ * @typedef {Object} AppointmentsOptions
+ * @property {string} [importMetaUrl]
+ */
+
+/**
 * @export
 * @class Appointments
 * @type {CustomElementConstructor}
 */
 export default class Appointments extends Shadow() {
+  /**
+   * @param {AppointmentsOptions} [options={}]
+   * @param {...any} args
+   */
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    /** @type {Appointment[]} */
     this.appointments = []
     this.language = this.getAttribute('language') || CalendarHelper.getLanguage()
   }
 
   static get observedAttributes() { return ['appointments', 'show-all', 'language'] }
 
+  /**
+   * @param {string} name
+   * @param {string | null} oldValue
+   * @param {string | null} newValue
+   */
+  // @ts-ignore
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'language') {
       this.language = newValue
@@ -23,7 +50,7 @@ export default class Appointments extends Shadow() {
     }
     if (name === 'appointments') {
       try {
-        this.appointments = JSON.parse(newValue)
+        this.appointments = newValue ? JSON.parse(newValue) : []
       } catch {
         this.appointments = []
       }
@@ -193,19 +220,36 @@ export default class Appointments extends Shadow() {
       </div>
     `
 
+    /** @type {NodeListOf<HTMLElement>} */
     const headers = this.root.querySelectorAll('.appointment-header')
     headers.forEach(header => {
       header.onclick = () => {
+        /** @type {string|null} */
         const idx = header.getAttribute('data-index')
-        this.root.querySelectorAll('.appointment-body').forEach((body, i) => {
-          body.style.display = (i == idx && body.style.display !== 'block') ? 'block' : 'none'
+        /** @type {NodeListOf<HTMLElement>} */
+        const appointmentBodies = this.root.querySelectorAll('.appointment-body')
+    
+        appointmentBodies.forEach((body, i) => {
+          body.style.display = (i == parseInt(idx || '0') && body.style.display !== 'block') ? 'block' : 'none'
         })
-        this.root.querySelectorAll('.appointment-header a-icon-mdx').forEach((icon, i) => {
-          icon.setAttribute('icon-name', (i == idx && headers[i].nextElementSibling.style.display === 'block') ? 'ChevronUp' : 'ChevronDown')
+        /** @type {NodeListOf<HTMLElement>} */
+        const icons = this.root.querySelectorAll('.appointment-header a-icon-mdx')
+    
+        icons.forEach((icon, i) => {
+          /** @type {HTMLElement|null} */
+          const correspondingHeader = headers[i]
+          /** @type {Element|null} */
+          const nextSibling = correspondingHeader?.nextElementSibling
+          
+          if (nextSibling && nextSibling instanceof HTMLElement) {
+            const iconName = (i == parseInt(idx || '0') && nextSibling.style.display === 'block') ? 'ChevronUp' : 'ChevronDown'
+            icon.setAttribute('icon-name', iconName)
+          }
         })
       }
     })
 
+    /** @type {HTMLElement|null} */
     const showAllLink = this.root.querySelector('.show-more-appointments-link')
     if (showAllLink) {
       showAllLink.onclick = e => {
@@ -214,6 +258,7 @@ export default class Appointments extends Shadow() {
         this.renderHTML()
       }
     }
+    /** @type {HTMLElement|null} */
     const hideAllLink = this.root.querySelector('.hide-more-appointments-link')
     if (hideAllLink) {
       hideAllLink.onclick = e => {
@@ -223,6 +268,7 @@ export default class Appointments extends Shadow() {
       }
     }
 
+    /** @type {HTMLElement|null} */
     const downloadAllLink = this.root.querySelector('a[href="#download-all-calendar"]')
     if (downloadAllLink) {
       downloadAllLink.addEventListener('click', (e) => {
@@ -231,7 +277,9 @@ export default class Appointments extends Shadow() {
       })
     }
 
+    // @ts-ignore
     this.root.querySelectorAll('a[href="#download-calendar"]').forEach(link => {
+      // @ts-ignore
       link.addEventListener('click', (e) => {
         e.preventDefault()
         const apptIndex = link.closest('.appointment-item').querySelector('.appointment-header').dataset.index
@@ -240,6 +288,11 @@ export default class Appointments extends Shadow() {
     })
   }
 
+  /**
+   * Get the iCal link for a single appointment
+   * @param {Appointment} appt - The appointment to get link for
+   * @returns {string} The generated link
+   */
   getICalLink(appt) {
     if (CalendarHelper.shouldUseWebcal()) {
       return CalendarHelper.getWebcalLink(appt, this.language)
@@ -258,6 +311,10 @@ export default class Appointments extends Shadow() {
     }
   }
 
+  /**
+   * Downloads a single calendar event
+   * @param {Appointment} appt - The appointment to download
+   */
   downloadCalendarEvent(appt) {
     const icsContent = CalendarHelper.generateIcsContent(appt, this.language)
     const filename = CalendarHelper.generateFilename(appt, this.language)
@@ -270,6 +327,11 @@ export default class Appointments extends Shadow() {
     CalendarHelper.downloadBlobCalendar(icsContent, filename)
   }
 
+  /**
+   * Get the filename for a single iCal appointment
+   * @param {Appointment} appt - The appointment to get filename for
+   * @returns {string} The generated filename
+   */
   getICalFilename(appt) {
     return CalendarHelper.generateFilename(appt, this.language)
   }
