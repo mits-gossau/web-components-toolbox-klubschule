@@ -15,6 +15,16 @@ export default class PartnerSearch extends Shadow() {
     this.hiddenMessages = this.hiddenSectionsPartnerSearch
     this.searchText = this.getAttribute('search-text')
     this.tab = this.getAttribute('tab')
+    // partner-search-with-result (template prefilled with items)
+    if (this.root.querySelector('template#data')) {
+      try {
+        this.fetch = Promise.resolve(JSON.parse(this.root.querySelector('template#data').content.textContent))
+      } catch (e) {
+        console.warn('Could not parse template data. JSON corrupted:', this, e)
+        this.fetch = undefined
+      }
+    }
+
     this.partnerSearchListener = event => this.renderHTML(event.detail.fetch)
 
     this.partnerResultItemWrappersClickEventListener = event => {
@@ -65,15 +75,25 @@ export default class PartnerSearch extends Shadow() {
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
       Promise.all(showPromises).then(() => {
         this.hidden = false
-        if (!this.hasAttribute('no-partner-search') && this.searchText.length) {
-          this.dispatchEvent(new CustomEvent('request-partner-search', {
-            detail: {
-              searchText: this.searchText
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }))
+        if (!this.hasAttribute('no-partner-search')) {
+          // partner-search-with-result (template prefilled with items), we can trigger render directly through the default partnerSearch api event listener
+          if (this.fetch) {
+            this.partnerSearchListener({ detail: { fetch: this.fetch }})
+          } else if (this.searchText.length) {
+            this.dispatchEvent(new CustomEvent('request-partner-search', {
+              detail: {
+                searchText: this.searchText
+              },
+              bubbles: true,
+              cancelable: true,
+              composed: true
+            }))
+          } else {
+            this.renderHTML(Promise.resolve(() => ({
+              items: [],
+              success: false
+            })))
+          }
         } else {
           this.renderHTML(Promise.resolve(() => ({
             items: [],
@@ -82,13 +102,13 @@ export default class PartnerSearch extends Shadow() {
         }
       })
     })
-
-    document.body.addEventListener('partner-search', this.partnerSearchListener)
-
+    // partner-search-with-result (template prefilled with items), so we don't need the partnerSearch api event listener
+    if (!this.fetch) document.body.addEventListener('partner-search', this.partnerSearchListener)
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('partner-search', this.partnerSearchListener)
+    // partner-search-with-result (template prefilled with items), so we don't need the partnerSearch api event listener
+    if (!this.fetch) document.body.removeEventListener('partner-search', this.partnerSearchListener)
     this.partnerResultItemWrappers.forEach(partnerResultItemWrapper => partnerResultItemWrapper.removeEventListener('click', this.partnerResultItemWrappersClickEventListener))
   }
 
@@ -235,9 +255,14 @@ export default class PartnerSearch extends Shadow() {
       }
       let headline
       if ((headline = this.root.querySelector('#partner-results')?.querySelector("h2"))) {
-        let headlineText = headline.innerText
-        headlineText = headlineText.replace("{0}", this.searchText)
-        headline.textContent = headlineText
+        if (data.label) {
+          // partner-search-with-result (template prefilled with items) delivered from withFacet call includes label property
+          headline.textContent = data.label
+        } else {
+          let headlineText = headline.innerText
+          headlineText = headlineText.replace("{0}", this.searchText)
+          headline.textContent = headlineText
+        }
       }
 
       const partnerResultsSection = this.root.querySelector("#partner-results")
@@ -264,7 +289,8 @@ export default class PartnerSearch extends Shadow() {
               `, '')}
           </div>
         `)
-        if (!this.hasAttribute('has-selected-filter')) this.scrollIntoView()
+        // don't scroll to this module, when it has filters or it is partner-search-with-result (template prefilled with items)
+        if (!this.hasAttribute('has-selected-filter') && !this.fetch) this.scrollIntoView()
       } else {
         partnerResultsSection?.setAttribute('hidden', '')
       }
