@@ -111,7 +111,6 @@ export default class Booking extends Index {
     this.documentRequested = false
 
     this.requestBookingListener = this.createRequestListener(
-      // @ts-ignore
       data => { 
         if (!data || !data.course) {
           if (this.modulesLoaded) this.renderBookingContent()
