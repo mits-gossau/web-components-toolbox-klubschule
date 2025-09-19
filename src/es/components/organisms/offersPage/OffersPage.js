@@ -97,7 +97,7 @@ export default class OffersPage extends Shadow() {
         }
 
         // partner search which shows even with results and is delivered in the withfacet call on data.partnerSearchfds
-        if (this.partnerSearchWithResult && data.partnerSearch) {
+        if (this.partnerSearchWithResult && data.partnerSearch && data.courses.length) {
           this.partnerSearchWithResult.innerHTML = /* html */`<ks-o-partner-search id=partner-search-with-result search-text="${data.searchText}"${data.courses.length ? ' has-courses' : ''} tab="1"${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}>
             ${this.hiddenSectionsPartnerSearch.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
             <template id=data>${JSON.stringify(data.partnerSearch)}</template>
