@@ -487,6 +487,16 @@ export default class WithFacet extends WebWorker() {
             // TODO/ERROR: Api answers with empty filter payload when using ppage (next page). Workaround for keeping filters when returned empty.
             if (event?.detail?.ppage && !json.filters.length) json.filters = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : currentRequestObj.filters || initialFilter || []
             json.hasSelectedFilter = hasSelectedFilter
+
+            // sort courses by start date (ascending) 
+            if (json.courses && Array.isArray(json.courses)) {
+              json.courses.sort((a, b) => {
+                const dateA = new Date(a.gueltig_ab)
+                const dateB = new Date(b.gueltig_ab)
+                return dateA - dateB
+              })
+            }
+
             // update filters with api response
             currentRequestObj.filters = currentCompleteFilterObj = json.filters
 
