@@ -96,7 +96,7 @@ export default class OffersPage extends Shadow() {
           bodySection.root.querySelector('#pagination').style.display = isSinglePage ? 'none' : 'block'
         }
 
-        // partner search which shows even with results and is delivered in the withfacet call on data.partnerSearch
+        // partner search which shows even with results and is delivered in the withfacet call on data.partnerSearchfds
         if (this.partnerSearchWithResult && data.partnerSearch) {
           this.partnerSearchWithResult.innerHTML = /* html */`<ks-o-partner-search id=partner-search-with-result search-text="${data.searchText}"${data.courses.length ? ' has-courses' : ''} tab="1"${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}>
             ${this.hiddenSectionsPartnerSearch.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
@@ -790,7 +790,7 @@ export default class OffersPage extends Shadow() {
                   </div>
                 </ks-m-badge-legend>`}
           ${!this.hasAttribute('no-partner-search-with-result')
-        ? '<div id=partner-search-with-result></div>'
+        ? '<div class="spacer-four"></div><div id=partner-search-with-result></div>'
         : ''
       }
           </ks-o-body-section>

@@ -244,7 +244,8 @@ export default class PartnerSearch extends Shadow() {
       const data = this.lastData = await fetch
       this.html = ''
       this.html = this.hiddenMessages
-      if (!this.hasAttribute('has-courses')) {
+      // partner-search-with-result (template prefilled with items) can not show no results message
+      if (!this.hasAttribute('has-courses') && !this.fetch) {
         if(this.tab == 1) {
           this.root.querySelector('#empty-courses')?.removeAttribute('hidden')
         } else if (this.tab == 2) {
