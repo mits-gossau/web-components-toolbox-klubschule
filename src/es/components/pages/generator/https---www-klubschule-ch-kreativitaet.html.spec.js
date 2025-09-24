@@ -22,7 +22,7 @@
         await page.waitForTimeout(WAITING_TIMEOUT)
         await page.evaluate(() => window.scrollTo(0, 0))
         await page.waitForTimeout(WAITING_TIMEOUT)
-        expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(`${PROJECT_NAME}.png`)
+        expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(`${PROJECT_NAME || 'snapshot'}.png`)
       }
     })
   
