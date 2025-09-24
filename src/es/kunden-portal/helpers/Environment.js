@@ -60,9 +60,40 @@ self.Environment = {
     switch (type) {
       case 'kunden-portal': {
         return {
-          myBooking: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/myBooking`,
-          myBookings: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/myBookings`,
-          subscriptions: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptions`,
+          // CpBookingAPI
+          cancelReservation: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/cancelReservation`,
+          cancelReservationReasons: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/cancelReservationReasons`,
+          getFollowUp: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getFollowUp`,
+          getMyBooking: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getMyBooking`,
+          getMyBookings: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getMyBookings`,
+          getStatusmonitor: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/getStatusmonitor`,
+          setAttendance: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/setAttendance`,
+          setStatusmonitor: `${this.getEnvUrl()}/umbraco/api/CpBookingAPI/setStatusmonitor`,
+          
+          // CpCourseAPI
+          generateCoursePdf: `${this.getEnvUrl()}/umbraco/api/CpCourseAPI/generateCoursePdf`,
+          getCoursePdf: `${this.getEnvUrl()}/umbraco/api/CpCourseAPI/getCoursePdf`,
+          
+          // CpStudentAPI
+          generateDocument: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/generateDocument`,
+          getMyBalance: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/getMyBalance`,
+          getMyDocument: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/getMyDocument`,
+          getMyDocuments: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/getMyDocuments`,
+          sendMessage: `${this.getEnvUrl()}/umbraco/api/CpStudentAPI/sendMessage`,
+          
+          // CpSubscriptionAPI
+          bookedSubscriptionCourseAppointments: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/bookedSubscriptionCourseAppointments`,
+          checkUser: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/checkUser`,
+          courselistFilterSettings: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/courselistFilterSettings`,
+          getcourselistFilterSettings: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/getcourselistFilterSettings`,
+          subscription: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscription`,
+          subscriptionActivation: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptionActivation`,
+          subscriptionCourseAppointmentBooking: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptionCourseAppointmentBooking`,
+          subscriptionCourseAppointmentDetail: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptionCourseAppointmentDetail`,
+          subscriptionCourseAppointmentReversal: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptionCourseAppointmentReversal`,
+          subscriptionCourseAppointments: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptionCourseAppointments`,
+          subscriptionpdf: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptionpdf`,
+          subscriptions: `${this.getEnvUrl()}/umbraco/api/CpSubscriptionAPI/subscriptions`
         }
       }
       default:

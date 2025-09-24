@@ -28,15 +28,15 @@ export default class OffersPage extends Shadow() {
 
 
         let otherLocationsHeadline = ''
-        if (this.hasAttribute('is-other-locations') && this.hasCourses){
+        if (this.hasAttribute('is-other-locations') && this.hasCourses) {
           const contentStageTitle = document.querySelector('o-body')?.shadowRoot?.querySelector('o-grid')?.shadowRoot?.querySelector('ks-a-heading[content-stage]')?.shadowRoot?.querySelector('h1')?.innerHTML || ''
           otherLocationsHeadline = this.getTranslation('CourseList.LabelOtherLocations').replace('{course_title}', contentStageTitle)
         }
         const bodySection = this.eventDetailURL || !this.ksMTab || this.isWishList ? this.root.querySelector('ks-o-body-section') : this.ksMTab.root.querySelector('ks-o-body-section')
-        if (!this.isWishList || this.hasAttribute('is-info-events')) {
-            const pagination = bodySection.root.querySelector('#pagination')
-            pagination.style.display = isSinglePage ? 'none' : 'block'
-            pagination.nextElementSibling.style.display = isSinglePage ? 'none' : 'block'
+        if (!this.isWishList || this.hasAttribute('is-info-events')) {
+          const pagination = bodySection.root.querySelector('#pagination')
+          pagination.style.display = isSinglePage ? 'none' : 'block'
+          pagination.nextElementSibling.style.display = isSinglePage ? 'none' : 'block'
         }
 
         // Set headline for info events
@@ -73,15 +73,17 @@ export default class OffersPage extends Shadow() {
               ${data.label}
             </li>
           `, '')
-          sort.innerHTML = /* html */ `
-            <ks-m-sort namespace="sort-right-" with-facet>
-              ${this.data?.sort?.items?.length ? /* html */ `
-                <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort)?.label || ''}">
-                  ${listElements}
-                </ul>
-              ` : ''}
-            </ks-m-sort>
-          `
+          sort.innerHTML = this.data.courses.length
+            ? /* html */ `
+              <ks-m-sort namespace="sort-right-" with-facet>
+                ${this.data?.sort?.items?.length ? /* html */ `
+                  <ul main-text="${this.data.sort.items.find(item => item.id === this.data.sort.sort)?.label || ''}">
+                    ${listElements}
+                  </ul>
+                ` : ''}
+              </ks-m-sort>
+            `
+            : ''
           // adjust load more button text depending the sort option
           let moreText
           if ((moreText = bodySection.root.querySelector('ks-a-with-facet-pagination')?.querySelector('ks-a-button')?.root.querySelector('.more-text'))) {
@@ -92,6 +94,15 @@ export default class OffersPage extends Shadow() {
         // display pagination with load more button
         if (this.hasCourses) {
           bodySection.root.querySelector('#pagination').style.display = isSinglePage ? 'none' : 'block'
+        }
+
+        // partner search which shows even with results and is delivered in the withfacet call on data.partnerSearchfds
+        if (this.partnerSearchWithResult && data.partnerSearch && data.courses.length) {
+          this.partnerSearchWithResult.innerHTML = /* html */`<div class="spacer-four"></div>
+          <ks-o-partner-search id=partner-search-with-result search-text="${data.searchText}"${data.courses.length ? ' has-courses' : ''} tab="1"${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}>
+            ${this.hiddenSectionsPartnerSearch.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
+            <template id=data>${JSON.stringify(data.partnerSearch)}</template>
+          </ks-o-partner-search>`
         }
       })
     }
@@ -407,6 +418,10 @@ export default class OffersPage extends Shadow() {
       {
         path: `${this.importMetaUrl}../../molecules/badge/Badge.js`,
         name: 'ks-m-badge'
+      },
+      {
+        path: `${this.importMetaUrl}../../organisms/partnerSearch/PartnerSearch.js`,
+        name: 'ks-o-partner-search'
       }
     ])
   }
@@ -633,7 +648,7 @@ export default class OffersPage extends Shadow() {
             ${this.hasAttribute('is-info-events') ? '' : this.hasAttribute('is-other-locations') ? `background-color="white"` : `background-color="var(--mdx-sys-color-accent-6-subtle1)"`} 
             id="with-facet-body-section"
           >
-            ${this.hasAttribute('headless') 
+            ${this.hasAttribute('headless')
         ? ''
         : /* html */`
               <o-grid namespace="grid-12er-">
@@ -775,6 +790,10 @@ export default class OffersPage extends Shadow() {
                     <span>${this.getTranslation('Badge.Legend.PercentPlaceholder')}</span>
                   </div>
                 </ks-m-badge-legend>`}
+          ${!this.hasAttribute('no-partner-search-with-result')
+        ? '<div id=partner-search-with-result></div>'
+        : ''
+      }
           </ks-o-body-section>
         ${this.eventDetailURL ? /* html */'</ks-c-event-detail>' : ''}
     `
@@ -803,6 +822,10 @@ export default class OffersPage extends Shadow() {
     return this.root.querySelector('ks-m-tab')
   }
 
+  get partnerSearchWithResult() {
+    return this.root.querySelector('ks-m-tab')?.root.querySelector('#content1 > ks-o-body-section')?.root.querySelector('#partner-search-with-result')
+  }
+
   get eventDetailURL() {
     return this.hasAttribute('event-detail-url') ? this.getAttribute('event-detail-url') : null
   }
@@ -811,13 +834,13 @@ export default class OffersPage extends Shadow() {
     return this.hasAttribute('is-wish-list')
   }
 
-  get hiddenSectionsPartnerSearch () {
+  get hiddenSectionsPartnerSearch() {
     let result = Array.from(this.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
     if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
     return result
   }
 
-  get templateTroublemaker () {
+  get templateTroublemaker() {
     let result = Array.from(this.querySelectorAll('template[slot=troublemaker]'))
     if (!result.length) result = Array.from(this.root.querySelectorAll('template[slot=troublemaker]'))
     return result

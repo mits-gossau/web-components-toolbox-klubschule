@@ -15,7 +15,44 @@ export default class PartnerSearch extends Shadow() {
     this.hiddenMessages = this.hiddenSectionsPartnerSearch
     this.searchText = this.getAttribute('search-text')
     this.tab = this.getAttribute('tab')
+    // partner-search-with-result (template prefilled with items)
+    if (this.root.querySelector('template#data')) {
+      try {
+        this.fetch = Promise.resolve(JSON.parse(this.root.querySelector('template#data').content.textContent))
+      } catch (e) {
+        console.warn('Could not parse template data. JSON corrupted:', this, e)
+        this.fetch = undefined
+      }
+    }
+
     this.partnerSearchListener = event => this.renderHTML(event.detail.fetch)
+
+    this.partnerResultItemWrappersClickEventListener = event => {
+      let template
+      if ((template = event.composedPath().find(node => node.classList?.contains('partner-result-item-wrapper'))?.querySelector('template'))) {
+        try {
+          const itemData = JSON.parse(template.content.textContent)
+          this.dataLayerPush({
+            event: 'partner_teaser_click',
+            partner_name: itemData.link.includes('klubschule-pro')
+              ? 'pro'
+              : itemData.link.includes('ibaw')
+                ? 'ibaw'
+                : 'klubschule',
+            partner_url: itemData.link,
+            search_query: this.searchText,
+            search_origin: location.host.includes('klubschule-pro')
+              ? 'pro'
+              : location.host.includes('ibaw')
+                ? 'ibaw'
+                : 'klubschule',
+            teaser_type: this.hasAttribute('has-courses') ? 'list_results_teaser' : 'zero_results_teaser'
+          })
+        } catch (e) {
+          return console.warn('dataLayer.push failed, data corrupted:', e)
+        }
+      }
+    }
   }
 
   connectedCallback(){
@@ -38,15 +75,25 @@ export default class PartnerSearch extends Shadow() {
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
       Promise.all(showPromises).then(() => {
         this.hidden = false
-        if (!this.hasAttribute('no-partner-search') && this.searchText.length) {
-          this.dispatchEvent(new CustomEvent('request-partner-search', {
-            detail: {
-              searchText: this.searchText
-            },
-            bubbles: true,
-            cancelable: true,
-            composed: true
-          }))
+        if (!this.hasAttribute('no-partner-search')) {
+          // partner-search-with-result (template prefilled with items), we can trigger render directly through the default partnerSearch api event listener
+          if (this.fetch) {
+            this.partnerSearchListener({ detail: { fetch: this.fetch }})
+          } else if (this.searchText.length) {
+            this.dispatchEvent(new CustomEvent('request-partner-search', {
+              detail: {
+                searchText: this.searchText
+              },
+              bubbles: true,
+              cancelable: true,
+              composed: true
+            }))
+          } else {
+            this.renderHTML(Promise.resolve(() => ({
+              items: [],
+              success: false
+            })))
+          }
         } else {
           this.renderHTML(Promise.resolve(() => ({
             items: [],
@@ -55,13 +102,14 @@ export default class PartnerSearch extends Shadow() {
         }
       })
     })
-
-    document.body.addEventListener('partner-search', this.partnerSearchListener)
-
+    // partner-search-with-result (template prefilled with items), so we don't need the partnerSearch api event listener
+    if (!this.fetch) document.body.addEventListener('partner-search', this.partnerSearchListener)
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('partner-search', this.partnerSearchListener)
+    // partner-search-with-result (template prefilled with items), so we don't need the partnerSearch api event listener
+    if (!this.fetch) document.body.removeEventListener('partner-search', this.partnerSearchListener)
+    this.partnerResultItemWrappers.forEach(partnerResultItemWrapper => partnerResultItemWrapper.removeEventListener('click', this.partnerResultItemWrappersClickEventListener))
   }
 
   /**
@@ -114,6 +162,9 @@ export default class PartnerSearch extends Shadow() {
       :host .partner-result-item-wrapper .button-wrapper {
         margin: var(--mdx-sys-spacing-fix-2xs) 0 0;
       }
+      :host .partner-result-item-wrapper .button-wrapper ks-a-button::part(button) {
+        white-space: nowrap;
+      }
       :host .partner-result-item-wrapper span {
         font: var(--mdx-sys-font-fix-body3);
         margin-bottom: auto;
@@ -136,7 +187,22 @@ export default class PartnerSearch extends Shadow() {
           margin-right: auto;
         }
         :host .partner-result-wrapper {
-          flex-direction: column;
+          gap: 0.5em;
+          margin-left: -0.5em;
+          overflow-x: scroll;
+          width: 100dvw;
+        }
+        :host .partner-result-wrapper > *:first-child {
+          margin-left: 0.5em;
+        }
+        :host .partner-result-wrapper > *:last-child {
+          margin-right: 0.5em;
+        }
+        :host .partner-result-item-wrapper {
+          min-width: 220px;
+        }
+        :host .partner-result-item-wrapper .button-wrapper {
+          min-width: calc(13.75em - 2.5rem);
         }
       }
     `
@@ -189,9 +255,14 @@ export default class PartnerSearch extends Shadow() {
       }
       let headline
       if ((headline = this.root.querySelector('#partner-results')?.querySelector("h2"))) {
-        let headlineText = headline.innerText
-        headlineText = headlineText.replace("{0}", this.searchText)
-        headline.textContent = headlineText
+        if (data.label) {
+          // partner-search-with-result (template prefilled with items) delivered from withFacet call includes label property
+          headline.textContent = data.label
+        } else {
+          let headlineText = headline.innerText
+          headlineText = headlineText.replace("{0}", this.searchText)
+          headline.textContent = headlineText
+        }
       }
 
       const partnerResultsSection = this.root.querySelector("#partner-results")
@@ -205,6 +276,7 @@ export default class PartnerSearch extends Shadow() {
             ${filteredItems.reduce((acc, item) => 
               acc + /* html */ `
                   <div class="partner-result-item-wrapper">
+                    <template>${JSON.stringify(item)}</template>
                     <a-picture namespace="picture-teaser-" alt="${item.label}" picture-load defaultsource="${item.logo}" ></a-picture>
                     <span>${item.text}</span>
                     <div class="button-wrapper">
@@ -217,9 +289,12 @@ export default class PartnerSearch extends Shadow() {
               `, '')}
           </div>
         `)
+        // don't scroll to this module, when it has filters or it is partner-search-with-result (template prefilled with items)
+        if (!this.hasAttribute('has-selected-filter') && !this.fetch) this.scrollIntoView()
       } else {
         partnerResultsSection?.setAttribute('hidden', '')
       }
+      this.partnerResultItemWrappers.forEach(partnerResultItemWrapper => partnerResultItemWrapper.addEventListener('click', this.partnerResultItemWrappersClickEventListener))
     }
 
     return this.fetchModules([
@@ -262,5 +337,21 @@ export default class PartnerSearch extends Shadow() {
     let result = Array.from(this.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
     if (!result.length) result = Array.from(this.root.querySelectorAll('section[hidden]:not([slot=troublemaker])'))
     return result
+  }
+
+  get partnerResultItemWrappers () {
+    return Array.from(this.root.querySelectorAll('.partner-result-item-wrapper'))
+  }
+
+  dataLayerPush(value) {
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(value)
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
   }
 }

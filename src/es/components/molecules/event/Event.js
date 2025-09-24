@@ -97,6 +97,25 @@ export default class Event extends Shadow() {
       :host .event.wishlist .dates a-button {
         width: fit-content;
       }
+      
+      :host .top {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: space-between;
+      }
+
+      :host .top .state-of-booking span {
+        border: 1px solid var(--mdx-sys-color-primary-default);
+        border-radius: 3px;
+        color: var(--mdx-sys-color-primary-default);
+        font: var(--mdx-sys-font-fix-body2);
+        padding: 4px 8px;
+      }
+
+      :host .top .logo {
+        text-align: right;
+        margin-bottom: 0.5rem;
+      }
 
       :host .head {
         display: grid;
@@ -437,11 +456,12 @@ export default class Event extends Shadow() {
 
       @media only screen and (max-width: _max-width_) {
         :host .event {
-          padding: 1rem 0.5rem;
+          padding: 16px;
+          padding-bottom: 24px;
         }
 
         :host .event.passed {
-          padding: 1rem 0.5rem 0;
+          padding-bottom: 0;
         }
 
         :host .head {
@@ -551,7 +571,9 @@ export default class Event extends Shadow() {
       price,
       status,
       status_label,
-      zusatztitel
+      zusatztitel,
+      state_of_booking,
+      logo_url
     } = this.data.course
     // don't wait for fetchModules to resolve if using "shouldRenderHTML" checks for this.badge it has to be sync
     // NOTE: the replace ".replace(/'/g, '’')" avoids the dom to close the attribute string unexpectedly. This replace is also ISO 10646 conform as the character ’ (U+2019) is the preferred character for apostrophe. See: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html + https://www.compart.com/de/unicode/U+2019
@@ -559,6 +581,10 @@ export default class Event extends Shadow() {
 
     this.html = /* HTML */`
       <div class="event${this.isWishList ? " wishlist" : ""}${this.isWishList && this.isPassed ? " passed" : ""}">
+         ${state_of_booking || logo_url ? /* html */`<div class="top">
+            <div class="state-of-booking"><span>${state_of_booking ? state_of_booking : ''}</span></div>
+            <div class="logo">${logo_url ? this.getLogoHTML(logo_url) : ''}</div>
+        </div>` : ''}
         <div class="head">
           <div class="dates">
             ${this.isWishList
@@ -602,7 +628,7 @@ export default class Event extends Shadow() {
               <a-icon-mdx namespace="icon-mdx-ks-event-" icon-name="Location" size="1.5em"></a-icon-mdx>
               <span>${location.name}</span>
             </li>` : ''}
-            ${!(this.isWishList && this.isPassed) ? /* html */ `<li>
+            ${detail_label_more && !(this.isWishList && this.isPassed) ? /* html */ `<li>
               <button class="link-more expand">
                 <span class="more show">${this, detail_label_more}</span>
                 <span class="less">${this, detail_label_less}</span>
@@ -652,6 +678,11 @@ export default class Event extends Shadow() {
         </ks-c-checkout-overlay>
       </div>
     `
+    if (this.hasAttribute('abo-event')) {
+      const head = this.root.querySelector('.head')
+      const details = this.root.querySelector('.details')
+      if (head && details && getComputedStyle(details).display === 'none') head.style.gridTemplateColumns = 'auto'
+    }
 
     return this.fetchModules([
       {
@@ -810,6 +841,10 @@ export default class Event extends Shadow() {
     const centerId = data.centerid ? `_${data.centerid}` : ''
     const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
     return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
+  }
+
+  getLogoHTML(logo_url) {
+    return `<img src="${logo_url}" height="40" width="40" />`
   }
 
   get mockData () {

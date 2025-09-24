@@ -1,0 +1,5 @@
+:host {
+    --system-notification-neutral-background-color: var(--mdx-sys-color-neutral-subtle1);
+    --system-notification-neutral-icon-border-color: var(--mdx-sys-color-neutral-bold4);
+    --icon-mdx-ks-color: var(--mdx-sys-color-neutral-default);
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 56 56"><path stroke-width="3.5" d="M51.333 44.333A4.667 4.667 0 0 1 46.667 49H9.333a4.667 4.667 0 0 1-4.666-4.667V11.667A4.667 4.667 0 0 1 9.333 7H21l4.667 7h21a4.667 4.667 0 0 1 4.666 4.667v25.666Z"/><script type="text/javascript">//   &lt;-- For SVG support
+	if (&apos;WebSocket&apos; in window) {
+		(function() {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName(&quot;link&quot;));
+				var head = document.getElementsByTagName(&quot;head&quot;)[0];
+				for (var i = 0; i &lt; sheets.length; ++i) {
+					var elem = sheets[i];
+					head.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href &amp;&amp; typeof rel != &quot;string&quot; || rel.length == 0 || rel.toLowerCase() == &quot;stylesheet&quot;) {
+						var url = elem.href.replace(/(&amp;|\?)_cacheOverride=\d+/, &apos;&apos;);
+						elem.href = url + (url.indexOf(&apos;?&apos;) &gt;= 0 ? &apos;&amp;&apos; : &apos;?&apos;) + &apos;_cacheOverride=&apos; + (new Date().valueOf());
+					}
+					head.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === &apos;http:&apos; ? &apos;ws://&apos; : &apos;wss://&apos;;
+			var address = protocol + window.location.host + window.location.pathname + &apos;/ws&apos;;
+			var socket = new WebSocket(address);
+			socket.onmessage = function(msg) {
+				if (msg.data == &apos;reload&apos;) window.location.reload();
+				else if (msg.data == &apos;refreshcss&apos;) refreshCSS();
+			};
+			console.log(&apos;Live reload enabled.&apos;);
+		})();
+	}
+	//</script></svg>
