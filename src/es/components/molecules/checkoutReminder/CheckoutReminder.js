@@ -90,6 +90,13 @@ export default class CheckoutReminder extends Dialog {
     const result = super.renderCSS()
     // has not namespace
     this.setCss(/* css */`
+      :host {
+        display: contents !important;
+      }
+      :host([page='confirmation']) {
+        --show: none;
+        display: none !important;
+      }
       :host > dialog::backdrop {
         cursor: initial;
         pointer-events: none;
