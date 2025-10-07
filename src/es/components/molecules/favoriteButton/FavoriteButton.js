@@ -32,7 +32,7 @@ export default class FavoriteButton extends Shadow() {
     this.resizeListener = event => {
       clearTimeout(timeout)
       timeout = setTimeout(() => {
-        if (this.isMobile) {
+        if (this.isMobile && !this.hasAttribute('no-mobile-view')) {
           this.button?.setAttribute('round', '')
         } else {
           this.button?.removeAttribute('round')
@@ -139,11 +139,11 @@ export default class FavoriteButton extends Shadow() {
   renderCSS () {
     this.css = /* css */`
       @media only screen and (max-width: _max-width_) {
-        :host {
+        :host(:not([no-mobile-view])) {
           --button-secondary-icon-left-margin: 0;
           --button-tertiary-icon-left-margin: 0;
         }
-        :host > ks-a-button::part(text){
+        :host(:not([no-mobile-view])) > ks-a-button::part(text){
           display: none;
         }
       }
@@ -158,7 +158,7 @@ export default class FavoriteButton extends Shadow() {
   renderHTML () {
     this.html = ''
     const div = document.createElement('div')
-    div.innerHTML = `<ks-a-button ${this.hasAttribute("small") ? 'small' : ''} namespace="${this.hasAttribute("button-typ") ? this.getAttribute("button-typ") : "button-tertiary-"}" color="secondary"></ks-a-button>`
+    div.innerHTML = `<ks-a-button part="ks-a-button" ${this.hasAttribute("small") ? 'small' : ''} namespace="${this.hasAttribute("button-typ") ? this.getAttribute("button-typ") : "button-tertiary-"}" color="secondary"></ks-a-button>`
     this.button = div.children[0]
     div.innerHTML = '<a-icon-mdx icon-name="Heart" size="1em" class="icon-left"></a-icon-mdx>'
     this.icon = div.children[0]

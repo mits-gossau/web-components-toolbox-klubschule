@@ -56,13 +56,54 @@ export default class CheckoutReminder extends Dialog {
         console.log('****CheckoutReminder - any page*****', this)
         // TODO: only when desktop and page === any not for mobile, that is showModal. Also, switch at resize with closing and show or showModal again
         // allowing interaction with content outside of the dialog // https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/show
-        this.dialogPromise.then(dialog => (dialog.textContent = '****CheckoutReminder - any page*****'))
+        this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
+          <h3>****CheckoutReminder - any page*****</h3>
+        `))
         this.show('show')
         Promise.all(showPromises).then(() => (this.hidden = false))
         break
       case 'checkout':
         console.log('****CheckoutReminder - checkout page*****', this)
-        this.dialogPromise.then(dialog => (dialog.textContent = '****CheckoutReminder - checkout page*****'))
+        this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
+          <h3><a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-title') ?? 'Checkout.Reminder.Cancel.Title'}"></a-translation></h3>
+          <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-text') ?? 'Checkout.Reminder.Cancel.Text'}"></a-translation></p>
+          <section>
+            <ks-m-favorite-button
+              no-mobile-view
+              button-typ="button-secondary-"
+              ${this.hasAttribute('course')
+                ? `course="${this.hasAttribute('course')}"`
+                : ''
+              }
+              ${this.hasAttribute('course-type')
+                ? `course-type="${this.hasAttribute('course-type')}"`
+                : ''
+              }
+              ${this.hasAttribute('course-id')
+                ? `course-id="${this.hasAttribute('course-id')}"`
+                : ''
+              }
+              ${this.hasAttribute('center-id')
+                ? `center-id="${this.hasAttribute('center-id')}"`
+                : ''
+              }
+              ${this.hasAttribute('event-data')
+                ? `event-data="${this.hasAttribute('event-data')}"`
+                : ''
+              }
+              ${this.hasAttribute('course-data')
+                ? `course-data="${this.hasAttribute('course-data')}"`
+                : ''
+              }
+            ></ks-m-favorite-button>
+            <ks-a-button namespace="button-primary-">
+              <a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue') ?? 'Checkout.Reminder.Continue'}"></a-translation>
+            </ks-a-button>
+          </section>
+          <a href=# class=center>
+            <a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel') ?? 'Checkout.Reminder.Cancel'}"></a-translation>
+          </a>
+        `))
         this.show('showModal')
         Promise.all(showPromises).then(() => (this.hidden = false))
         break
@@ -97,12 +138,79 @@ export default class CheckoutReminder extends Dialog {
         --show: none;
         display: none !important;
       }
+      :host > dialog {
+        border: 0;
+        padding: 0;
+        width: 52.6dvw;
+      }
       :host > dialog::backdrop {
         cursor: initial;
         pointer-events: none;
+        background-color: var(--dialog-background-color, rgb(0 0 0 / 0));
+        backdrop-filter: var(--dialog-backdrop-filter, none);
+        transition:
+          display var(--dialog-transition-duration, 0.3s) allow-discrete,
+          overlay var(--dialog-transition-duration, 0.3s) allow-discrete,
+          background-color var(--dialog-transition-duration, 0.3s),
+          backdrop-filter var(--dialog-transition-duration, 0.3s);
+      }
+      :host > dialog[open]::backdrop {
+        background-color: var(--dialog-background-color-open, var(--dialog-background-color, rgb(0 0 0 / 0.5)));
+        backdrop-filter: var(--dialog-backdrop-filter-open, var(--dialog-backdrop-filter, none));
+      }
+      :host > dialog > *:first-child {
+        padding-top: var(--mdx-sys-spacing-flex-large-xs);
+      }
+      :host > dialog > * {
+        padding-left: var(--mdx-sys-spacing-flex-large-xs) !important;
+        padding-right: var(--mdx-sys-spacing-flex-large-xs) !important;
+      }
+      :host > dialog > *:last-child {
+        padding-bottom: var(--mdx-sys-spacing-fix-l);
+      }
+      :host > dialog > h3 {
+        --h3-text-align: center;
+        border-bottom: 1px solid #E0E0E0;
+        margin-bottom: var(--mdx-sys-spacing-flex-large-xs);
+        padding-bottom: var(--mdx-sys-spacing-flex-large-xs);
+      }
+      :host > dialog > section {
+        --button-primary-width: 100%;
+        --button-secondary-width: 100%;
+        display: flex;
+        gap: var(--mdx-sys-spacing-flex-large-xs);
+      }
+      :host > dialog > section > * {
+        flex: 1;
+      }
+      :host > dialog > section > ks-m-favorite-button::part(ks-a-button) {
+        --button-secondary-not-label-flex-grow: 0;
+        width: 100%;
+      }
+      :host > dialog > a {
+        --a-margin: var(--mdx-sys-spacing-fix-l) 0 0;
+        --any-a-display: block;
+      }
+      :host > dialog > a > a-translation {
+        text-decoration: underline;
       }
       @media only screen and (max-width: _max-width_) {
-        :host {}
+        :host > dialog {
+          bottom: 0;
+          margin: 0;
+          max-width: inherit;
+          top: auto;
+          width: 100dvw;
+        }
+        :host > dialog > section {
+          flex-direction: column;
+        }
+        :host > dialog > section > ks-m-favorite-button::part(text) {
+          display: block;
+        }
+        :host > dialog > a {
+          --a-margin: var(--mdx-sys-spacing-flex-large-xs) 0 0;
+        }
       }
     `, undefined, false)
     return result
@@ -118,6 +226,14 @@ export default class CheckoutReminder extends Dialog {
       {
         path: `${this.importMetaUrl}../../../../../../atoms/button/Button.js`,
         name: 'ks-a-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../../../../../molecules/favoriteButton/FavoriteButton.js`,
+        name: 'ks-m-favorite-button'
+      },
+      {
+        path: `${this.importMetaUrl}../../atoms/translation/Translation.js`,
+        name: 'a-translation'
       }
     ])
   }
