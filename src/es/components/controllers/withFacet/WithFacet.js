@@ -408,7 +408,7 @@ export default class WithFacet extends WebWorker() {
         const initialSectorFilter = (initialRequestObj.filters || []).find(f => String(f.id) === "7" && f.selected)
         if (initialSectorFilter) {
           const idx = (currentRequestObj.filters || []).findIndex(f => String(f.id) === "7")
-          idx !== -1 ? currentRequestObj.filters[idx] = structuredClone(initialSectorFilter) : currentRequestObj.filters.push(structuredClone(initialSectorFilter))
+          idx !== -1 && !isSearchPage ? currentRequestObj.filters[idx] = structuredClone(initialSectorFilter) : currentRequestObj.filters.push(structuredClone(initialSectorFilter))
         }
       }
 
