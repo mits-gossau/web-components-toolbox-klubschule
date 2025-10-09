@@ -37,12 +37,13 @@ export default class CheckoutReminder extends Dialog {
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
 
-    
-    if (this.getAttribute('page') === 'any') {
-      
-      this.setAttribute('command-show', 'show')
-    } else {
-      this.setAttribute('command-show', 'show-modal')
+    this.setAttribute('no-backdrop-close', '')
+    this.updateCommandShow()
+
+    let timeout = null
+    this.resizeListener = event => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => this.updateCommandShow(true), 200)
     }
   }
 
@@ -57,9 +58,15 @@ export default class CheckoutReminder extends Dialog {
         // TODO: only when desktop and page === any not for mobile, that is showModal. Also, switch at resize with closing and show or showModal again
         // allowing interaction with content outside of the dialog // https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/show
         this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
-          <h3>****CheckoutReminder - any page*****</h3>
+          <h3><a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-title') ?? 'Checkout.Reminder.Continue.Title'}"></a-translation></h3>
+          <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+          <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-text') ?? 'Checkout.Reminder.Continue.Text'}"></a-translation></p>
+          <p>api course text</p>
+          <ks-a-button namespace="button-primary-">
+            <a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-return') ?? 'Checkout.Reminder.Cancel.Return'}"></a-translation>
+          </ks-a-button>
         `))
-        this.show('show')
+        this.show(this.getAttribute('command-show'))
         Promise.all(showPromises).then(() => (this.hidden = false))
         break
       case 'checkout':
@@ -97,21 +104,27 @@ export default class CheckoutReminder extends Dialog {
               }
             ></ks-m-favorite-button>
             <ks-a-button namespace="button-primary-">
-              <a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue') ?? 'Checkout.Reminder.Continue'}"></a-translation>
+              <a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-continue') ?? 'Checkout.Reminder.Cancel.Continue'}"></a-translation>
             </ks-a-button>
           </section>
           <a href=# class=center>
-            <a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel') ?? 'Checkout.Reminder.Cancel'}"></a-translation>
+            <a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-cancel') ?? 'Checkout.Reminder.Cancel.Cancel'}"></a-translation>
           </a>
         `))
-        this.show('showModal')
+        this.show(this.getAttribute('command-show'))
         Promise.all(showPromises).then(() => (this.hidden = false))
         break
       case 'confirmation':
         console.log('****CheckoutReminder - confirmation page*****', this)
         break
     }
+    self.addEventListener('resize', this.resizeListener)
     return showPromises
+  }
+
+  disconnectedCallback () {
+    super.disconnectedCallback()
+    self.removeEventListener('resize', this.resizeListener)
   }
 
   /**
@@ -140,8 +153,27 @@ export default class CheckoutReminder extends Dialog {
       }
       :host > dialog {
         border: 0;
+        box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.25); /* should be: var(--box-shadow); */
         padding: 0;
         width: 52.6dvw;
+      }
+      :host([page='any'][command-show='show']) > dialog {
+        bottom: var(--mdx-sys-spacing-flex-large-xs);
+        left: auto;
+        position: fixed;
+        right: var(--mdx-sys-spacing-flex-large-xs);
+        top: auto;
+        z-index: 1000000000;
+      }
+      :host([page='any']) > dialog > p:first-of-type {
+        --p-margin: 0 auto 1rem;
+      }
+      :host([page='any']) > dialog > ks-a-button {
+        width: 100%;
+      }
+      :host([page='any'][command-show='show-modal']) > dialog {
+        --button-primary-width: 100%;
+        --button-secondary-width: 100%;
       }
       :host > dialog::backdrop {
         cursor: initial;
@@ -174,6 +206,15 @@ export default class CheckoutReminder extends Dialog {
         margin-bottom: var(--mdx-sys-spacing-flex-large-xs);
         padding-bottom: var(--mdx-sys-spacing-flex-large-xs);
       }
+      :host > dialog > a-icon-mdx {
+        bottom: auto;
+        display: block;
+        left: auto;
+        padding: 0 !important;
+        position: absolute;
+        right: calc(var(--mdx-sys-spacing-flex-large-xs) - 5px);
+        top: calc(var(--mdx-sys-spacing-flex-large-xs) - 5px);
+      }
       :host > dialog > section {
         --button-primary-width: 100%;
         --button-secondary-width: 100%;
@@ -195,6 +236,20 @@ export default class CheckoutReminder extends Dialog {
         text-decoration: underline;
       }
       @media only screen and (max-width: _max-width_) {
+        :host > dialog > *:first-child {
+          padding-top: var(--mdx-sys-spacing-flex-small-xs);
+        }
+        :host > dialog > * {
+          padding-left: var(--mdx-sys-spacing-flex-small-xs) !important;
+          padding-right: var(--mdx-sys-spacing-flex-small-xs) !important;
+        }
+        :host > dialog > a-icon-mdx {
+          right: calc(var(--mdx-sys-spacing-flex-small-xs) - 5px);
+          top: calc(var(--mdx-sys-spacing-flex-small-xs) - 5px);
+        }
+        :host > dialog > h3 {
+          padding-bottom: var(--mdx-sys-spacing-flex-small-xs);
+        }
         :host > dialog {
           bottom: 0;
           margin: 0;
@@ -234,7 +289,26 @@ export default class CheckoutReminder extends Dialog {
       {
         path: `${this.importMetaUrl}../../atoms/translation/Translation.js`,
         name: 'a-translation'
+      },
+      {
+        path: `${this.importMetaUrl}../../atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
       }
     ])
+  }
+
+  updateCommandShow (updateCommand = false) {
+    if (this.getAttribute('page') === 'any' && !this.isMobile) {
+      this.setAttribute('command-show', 'show')
+    } else {
+      this.setAttribute('command-show', 'show-modal')
+    }
+    if (updateCommand) this.dialogPromise.then(dialog => {
+      if (dialog.hasAttribute('open')) this.close().then(() => this.show(this.getAttribute('command-show')))
+    })
+  }
+
+  get isMobile () {
+    return self.matchMedia(`(max-width: ${this.mobileBreakpoint})`).matches
   }
 }
