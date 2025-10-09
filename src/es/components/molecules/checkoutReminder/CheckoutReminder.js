@@ -42,8 +42,32 @@ export default class CheckoutReminder extends Dialog {
 
     let timeout = null
     this.resizeListener = event => {
+      this.hidden = true
       clearTimeout(timeout)
-      timeout = setTimeout(() => this.updateCommandShow(true), 200)
+      timeout = setTimeout(() => {
+        this.updateCommandShow(true)
+        this.updateDraggable()
+        this.hidden = false
+      }, 200)
+    }
+
+    let offsetX, offsetY
+    this.dragStartEventListener = event => {
+      const rect = this.dialog.getBoundingClientRect()
+      offsetX = event.clientX - rect.x
+      offsetY = event.clientY - rect.y
+      event.dataTransfer.setDragImage(this.dialog, offsetX, offsetY)
+    }
+    this.dragEndEventListener = event => {
+      this.customStyle.textContent = /* css */`
+        :host([page='any'][command-show='show']) > dialog:has(>h3[draggable]) {
+          top: ${event.clientY - offsetY}px;
+          right: auto;
+          bottom: auto;
+          left: ${event.clientX - offsetX}px;
+        }
+      `
+      
     }
   }
 
@@ -57,21 +81,24 @@ export default class CheckoutReminder extends Dialog {
         console.log('****CheckoutReminder - any page*****', this)
         // TODO: only when desktop and page === any not for mobile, that is showModal. Also, switch at resize with closing and show or showModal again
         // allowing interaction with content outside of the dialog // https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/show
-        this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
-          <h3><a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-title') ?? 'Checkout.Reminder.Continue.Title'}"></a-translation></h3>
+        showPromises.push(this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
+          <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-title') ?? 'Checkout.Reminder.Continue.Title'}"></a-translation></h3>
           <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
           <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-text') ?? 'Checkout.Reminder.Continue.Text'}"></a-translation></p>
           <p>api course text</p>
           <ks-a-button namespace="button-primary-">
             <a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-return') ?? 'Checkout.Reminder.Cancel.Return'}"></a-translation>
           </ks-a-button>
-        `))
-        this.show(this.getAttribute('command-show'))
-        Promise.all(showPromises).then(() => (this.hidden = false))
+        `)))
+        Promise.all(showPromises).then(() => {
+          this.updateDraggable()
+          this.hidden = false
+          this.show(this.getAttribute('command-show'))
+        })
         break
       case 'checkout':
         console.log('****CheckoutReminder - checkout page*****', this)
-        this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
+        showPromises.push(this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
           <h3><a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-title') ?? 'Checkout.Reminder.Cancel.Title'}"></a-translation></h3>
           <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-text') ?? 'Checkout.Reminder.Cancel.Text'}"></a-translation></p>
           <section>
@@ -110,9 +137,11 @@ export default class CheckoutReminder extends Dialog {
           <a href=# class=center>
             <a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-cancel') ?? 'Checkout.Reminder.Cancel.Cancel'}"></a-translation>
           </a>
-        `))
-        this.show(this.getAttribute('command-show'))
-        Promise.all(showPromises).then(() => (this.hidden = false))
+        `)))
+        Promise.all(showPromises).then(() => {
+          this.hidden = false
+          this.show(this.getAttribute('command-show'))
+        })
         break
       case 'confirmation':
         console.log('****CheckoutReminder - confirmation page*****', this)
@@ -125,6 +154,10 @@ export default class CheckoutReminder extends Dialog {
   disconnectedCallback () {
     super.disconnectedCallback()
     self.removeEventListener('resize', this.resizeListener)
+    if (this.h3) {
+      this.h3.removeEventListener('dragstart', this.dragStartEventListener)
+      document.body.removeEventListener('dragend', this.dragEndEventListener)
+    }
   }
 
   /**
@@ -164,6 +197,9 @@ export default class CheckoutReminder extends Dialog {
         right: var(--mdx-sys-spacing-flex-large-xs);
         top: auto;
         z-index: 1000000000;
+      }
+      :host([page='any'][command-show='show']) > dialog > h3 {
+        cursor: pointer;
       }
       :host([page='any']) > dialog > p:first-of-type {
         --p-margin: 0 auto 1rem;
@@ -308,7 +344,35 @@ export default class CheckoutReminder extends Dialog {
     })
   }
 
+  updateDraggable () {
+    if (this.h3?.hasAttribute('draggable')) {
+      if (this.isMobile) {
+        this.h3.removeEventListener('dragstart', this.dragStartEventListener)
+        document.body.removeEventListener('dragend', this.dragEndEventListener)
+        this.customStyle.remove()
+      } else {
+        this.h3.addEventListener('dragstart', this.dragStartEventListener)
+        document.body.addEventListener('dragend', this.dragEndEventListener)
+        this.html = this.customStyle
+      }
+    }
+  }
+
+  get h3 () {
+    return this.root.querySelector(':host > dialog > h3')
+  }
+
   get isMobile () {
     return self.matchMedia(`(max-width: ${this.mobileBreakpoint})`).matches
+  }
+  get customStyle () {
+    return (
+      this._customStyle ||
+        (this._customStyle = (() => {
+          const style = document.createElement('style')
+          style.setAttribute('_css', '')
+          return style
+        })())
+    )
   }
 }
