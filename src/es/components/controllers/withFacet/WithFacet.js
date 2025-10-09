@@ -489,7 +489,7 @@ export default class WithFacet extends WebWorker() {
             json.hasSelectedFilter = hasSelectedFilter
 
             // sort courses by start date (ascending) 
-            if (this.hasAttribute('no-search-tab') && json.courses && Array.isArray(json.courses)) {
+            if (this.hasAttribute('no-search-tab') && json.courses && Array.isArray(json.courses) && !this.params.has('sorting')) {
               json.courses.sort((a, b) => {
                 const dateA = new Date(a.gueltig_ab)
                 const dateB = new Date(b.gueltig_ab)

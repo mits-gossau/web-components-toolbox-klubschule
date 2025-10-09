@@ -103,6 +103,8 @@ export default class OffersPage extends Shadow() {
             ${this.hiddenSectionsPartnerSearch.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
             <template id=data>${JSON.stringify(data.partnerSearch)}</template>
           </ks-o-partner-search>`
+        } else {
+          this.partnerSearchWithResult.innerHTML = ''
         }
       })
     }
