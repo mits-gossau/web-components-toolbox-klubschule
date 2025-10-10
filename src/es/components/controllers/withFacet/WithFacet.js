@@ -147,6 +147,14 @@ export default class WithFacet extends WebWorker() {
     if (this.params.has('clat')) currentRequestObj.clat = this.params.get('clat')
     if (this.params.has('clong')) currentRequestObj.clong = this.params.get('clong')
 
+    // check if URL contains course detail pattern (e.g., D_88579_2674_225) with cname and sorting=2
+    // if so, remove sorting=2 from URL and payload
+    const courseDetailPattern = /[A-Z]_\d+_\d+_\d+/
+    if (this.params.has('cname') && this.params.get('sorting') === '2' && courseDetailPattern.test(window.location.pathname)) {
+      this.deleteParamFromUrl('sorting')
+      delete currentRequestObj.sorting
+    }
+
     // intial sorting when page is refreshed
     if (!currentRequestObj.sorting) {
       currentRequestObj.sorting = 3 // alphabetic
