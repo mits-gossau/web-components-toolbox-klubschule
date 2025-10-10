@@ -411,13 +411,6 @@ export default class WithFacet extends WebWorker() {
           currentRequestObj.filters = [...result[1], ...(initialRequestObj.filters || []).filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         }
         if (isTree) currentRequestObj.filters = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filters)
-        // check, if filter of initialRequestObj.filters with id="7" is selected
-        // if true, replace it with filter id="7" in currentRequestObj.filters
-        const initialSectorFilter = (initialRequestObj.filters || []).find(f => String(f.id) === "7" && f.selected)
-        if (initialSectorFilter) {
-          const idx = (currentRequestObj.filters || []).findIndex(f => String(f.id) === "7")
-          idx !== -1 && !isSearchPage ? currentRequestObj.filters[idx] = structuredClone(initialSectorFilter) : currentRequestObj.filters.push(structuredClone(initialSectorFilter))
-        }
       }
 
       // filter only
