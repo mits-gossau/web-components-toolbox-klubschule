@@ -147,6 +147,14 @@ export default class WithFacet extends WebWorker() {
     if (this.params.has('clat')) currentRequestObj.clat = this.params.get('clat')
     if (this.params.has('clong')) currentRequestObj.clong = this.params.get('clong')
 
+    // check if URL contains course detail pattern (e.g., D_88579_2674_225) with cname and sorting=2
+    // if so, remove sorting=2 from URL and payload
+    const courseDetailPattern = /[A-Z]_\d+_\d+_\d+/
+    if (this.params.has('cname') && this.params.get('sorting') === '2' && courseDetailPattern.test(window.location.pathname)) {
+      this.deleteParamFromUrl('sorting')
+      delete currentRequestObj.sorting
+    }
+
     // intial sorting when page is refreshed
     if (!currentRequestObj.sorting) {
       currentRequestObj.sorting = 3 // alphabetic
@@ -403,13 +411,6 @@ export default class WithFacet extends WebWorker() {
           currentRequestObj.filters = [...result[1], ...(initialRequestObj.filters || []).filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
         }
         if (isTree) currentRequestObj.filters = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filters)
-        // check, if filter of initialRequestObj.filters with id="7" is selected
-        // if true, replace it with filter id="7" in currentRequestObj.filters
-        const initialSectorFilter = (initialRequestObj.filters || []).find(f => String(f.id) === "7" && f.selected)
-        if (initialSectorFilter) {
-          const idx = (currentRequestObj.filters || []).findIndex(f => String(f.id) === "7")
-          idx !== -1 ? currentRequestObj.filters[idx] = structuredClone(initialSectorFilter) : currentRequestObj.filters.push(structuredClone(initialSectorFilter))
-        }
       }
 
       // filter only
