@@ -148,6 +148,7 @@ export default class CheckoutReminder extends Dialog {
         break
     }
     self.addEventListener('resize', this.resizeListener)
+    // TODO: addClickListeners
     return showPromises
   }
 
