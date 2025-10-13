@@ -80,12 +80,11 @@ export default class CheckoutReminder extends Dialog {
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
     switch (this.getAttribute('page')) {
       case 'any':
-        console.log('****CheckoutReminder - any page*****', this)
         showPromises.push(this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
           <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-title') ?? 'Checkout.Reminder.Any.Title'}"></a-translation></h3>
           <a-icon-mdx id=checkout-reminder-any-cancel icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
           <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-text') ?? 'Checkout.Reminder.Any.Text'}"></a-translation></p>
-          <p>api course text</p>
+          <p>Veranstaltung: Italienisch Niveau A1 -<br>Erhöhtes Lerntempo<br>Zürich Limmatstrasse 152</p>
           <ks-a-button id=checkout-reminder-any-return namespace="button-primary-">
             <a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-return') ?? 'Checkout.Reminder.Any.Return'}"></a-translation>
           </ks-a-button>
@@ -102,7 +101,6 @@ export default class CheckoutReminder extends Dialog {
         })
         break
       case 'checkout':
-        console.log('****CheckoutReminder - checkout page*****', this)
         this.setAttribute('no-backdrop-close', '')
         showPromises.push(this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
           <h3><a-translation data-trans-key="${this.getAttribute('checkout-reminder-checkout-title') ?? 'Checkout.Reminder.Checkout.Title'}"></a-translation></h3>
@@ -152,9 +150,6 @@ export default class CheckoutReminder extends Dialog {
           this.hidden = false
           this.show(this.getAttribute('command-show'))
         })
-        break
-      case 'confirmation':
-        console.log('****CheckoutReminder - confirmation page*****', this)
         break
     }
     self.addEventListener('resize', this.resizeListener)
