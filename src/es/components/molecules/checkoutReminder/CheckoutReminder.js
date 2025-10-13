@@ -48,10 +48,20 @@ export default class CheckoutReminder extends Dialog {
       }, 200)
     }
 
-    this.checkoutReminderAnyCancelEventListener = event => console.log('checkoutReminderAnyCancel', event)
-    this.checkoutReminderAnyReturnEventListener = event => console.log('checkoutReminderAnyReturn', event)
-    this.checkoutReminderCheckoutContinueEventListener = event => console.log('checkoutReminderCheckoutContinue', event)
-    this.checkoutReminderCheckoutCancelEventListener = event => console.log('checkoutReminderCheckoutCancel', event)
+    this.checkoutReminderAnyCancelEventListener = event => {
+      console.log('checkoutReminderAnyCancel - TODO: GTM', event)
+      this.close()
+      this.fetch('Clear')
+    }
+    this.checkoutReminderAnyReturnEventListener = event => console.log('checkoutReminderAnyReturn - TODO: GTM', event)
+    this.checkoutReminderCheckoutContinueEventListener = event => {
+      console.log('checkoutReminderCheckoutContinue - TODO: GTM', event)
+      this.close()
+    }
+    this.checkoutReminderCheckoutCancelEventListener = event => {
+      console.log('checkoutReminderCheckoutCancel - TODO: GTM', event)
+      event.stopPropagation()
+    }
 
     let offsetX, offsetY
     this.dragStartEventListener = event => {
@@ -80,16 +90,33 @@ export default class CheckoutReminder extends Dialog {
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
     switch (this.getAttribute('page')) {
       case 'any':
-        showPromises.push(this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
-          <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-title') ?? 'Checkout.Reminder.Any.Title'}"></a-translation></h3>
-          <a-icon-mdx id=checkout-reminder-any-cancel icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
-          <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-text') ?? 'Checkout.Reminder.Any.Text'}"></a-translation></p>
-          <p>Veranstaltung: Italienisch Niveau A1 -<br>Erhöhtes Lerntempo<br>Zürich Limmatstrasse 152</p>
-          <ks-a-button id=checkout-reminder-any-return namespace="button-primary-">
-            <a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-return') ?? 'Checkout.Reminder.Any.Return'}"></a-translation>
-          </ks-a-button>
-        `)))
-        Promise.all(showPromises).then(() => {
+        showPromises.push(this.dialogPromise.then(dialog => this.fetch('Check').then(json => {
+          /*
+            STATUS Message
+            ---- Veranstaltung ----
+            – 10=Verfügbar (E/1K noch vorhanden) 
+            – 11=Alternativkurs an gleichem Standort (anderes E/1K) 
+            – 12=Auf Anfrage (nur D/0K vorhanden)
+            – 13=Alternativkurs wieder verfügbar (D/0K hat wieder Veranstaltungen) 
+            ---- Angebot ----
+            – 20=Verfügbar (D/0K)
+            ---- Abonnement ----
+            – 30=Verfügbar (6A)
+          */
+          dialog.innerHTML = /* html */`
+            <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-title') ?? 'Checkout.Reminder.Any.Title'}"></a-translation></h3>
+            <a-icon-mdx id=checkout-reminder-any-cancel icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+            <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-text') ?? `Checkout.Reminder.Any.Text${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation></p>
+            <p>${json.message || ''}</p>
+            <ks-a-button id=checkout-reminder-any-return namespace="button-primary-" href="${json.uncompletedOrder?.kursUrl || ''}">
+              <a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-return') ?? 'Checkout.Reminder.Any.Return'}"></a-translation>
+            </ks-a-button>
+          `
+          return json
+        })))
+        Promise.all(showPromises).then(data => {
+          // TODO: Also check if API handles at same browser session requirement
+          if (!data.find(json => json.uncompletedOrderExists)) return
           this.updateDraggable()
           if (this.isConnected) {
             this.checkoutReminderAnyCancel.addEventListener('click', this.checkoutReminderAnyCancelEventListener)
@@ -102,7 +129,7 @@ export default class CheckoutReminder extends Dialog {
         break
       case 'checkout':
         this.setAttribute('no-backdrop-close', '')
-        showPromises.push(this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
+        showPromises.push(this.dialogPromise.then(dialog => dialog.innerHTML = /* html */`
           <h3><a-translation data-trans-key="${this.getAttribute('checkout-reminder-checkout-title') ?? 'Checkout.Reminder.Checkout.Title'}"></a-translation></h3>
           <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-checkout-text') ?? 'Checkout.Reminder.Checkout.Text'}"></a-translation></p>
           <section>
@@ -141,14 +168,29 @@ export default class CheckoutReminder extends Dialog {
           <a id=checkout-reminder-checkout-cancel href=# class=center>
             <a-translation data-trans-key="${this.getAttribute('checkout-reminder-checkout-cancel') ?? 'Checkout.Reminder.Checkout.Cancel'}"></a-translation>
           </a>
-        `)))
+        `))
         Promise.all(showPromises).then(() => {
           if (this.isConnected) {
             this.checkoutReminderCheckoutContinue.addEventListener('click', this.checkoutReminderCheckoutContinueEventListener)
             this.checkoutReminderCheckoutCancel.addEventListener('click', this.checkoutReminderCheckoutCancelEventListener)
           }
-          this.hidden = false
-          this.show(this.getAttribute('command-show'))
+          document.body.addEventListener('click', event => {
+            // @ts-ignore
+            const link = event.composedPath().find(node => typeof node.hasAttribute === 'function' && node.getAttribute('href') && (!node.hasAttribute('target') || node.getAttribute('target') !== '_blank'))
+            if (link) {
+              // @ts-ignore
+              const url = new URL(link.getAttribute('href'), location.origin)
+              // check if the page would stay inside the course checkout route. Expl.: https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/loginmethod becomes through the regex https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442 which is included in https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/registration, etc.
+              if (!url.pathname.includes(location.pathname.replace(/(.*)(\/.*)/, '$1'))) {
+                event.preventDefault()
+                // @ts-ignore
+                this.checkoutReminderCheckoutCancel.setAttribute('href', link.getAttribute('href'))
+                this.hidden = false
+                this.show(this.getAttribute('command-show'))
+              }
+            }
+          })
+          self.addEventListener('beforeunload', event => console.log('****TODO: beforeunload*****'))
         })
         break
     }
@@ -210,6 +252,9 @@ export default class CheckoutReminder extends Dialog {
       }
       :host([page='any'][command-show='show']) > dialog > h3 {
         cursor: pointer;
+      }
+      :host([page='any']) > dialog > p:empty {
+        display: none;
       }
       :host([page='any']) > dialog > p:first-of-type {
         --p-margin: 0 auto 1rem;
@@ -365,6 +410,30 @@ export default class CheckoutReminder extends Dialog {
         this.html = this.customStyle
       }
     }
+  }
+
+  fetch (route) {
+    const successCode = 0
+    return fetch(`${this.getAttribute('endpoint') || 'https://int.klubschule.ch/umbraco/api/UncompletedOrderApi/'}${route}`, {
+      method: 'GET',
+    }).then(response => {
+      if (response.status >= 200 && response.status <= 299) return route === 'Check' ? response.json() : true
+      throw new Error(response.statusText)
+    }).then(json => {
+      if (json === true) return json
+      if (json.code === successCode) {
+        if (json.uncompletedOrder) {
+          // attributes used at ks-m-favorite-button and gtm
+          this.setAttribute('course-id', json.uncompletedOrder.kursId)
+          this.setAttribute('course-type', json.uncompletedOrder.kursTyp)
+          this.setAttribute('course-url', json.uncompletedOrder.kursUrl)
+          this.setAttribute('center-id', json.uncompletedOrder.centerId)
+        }
+        return json
+      } else {
+        throw new Error(json.errors)
+      }
+    })
   }
 
   get h3 () {
