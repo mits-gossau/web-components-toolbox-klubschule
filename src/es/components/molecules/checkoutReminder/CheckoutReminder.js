@@ -37,19 +37,21 @@ export default class CheckoutReminder extends Dialog {
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
 
-    this.setAttribute('no-backdrop-close', '')
     this.updateCommandShow()
 
     let timeout = null
     this.resizeListener = event => {
-      this.hidden = true
       clearTimeout(timeout)
       timeout = setTimeout(() => {
         this.updateCommandShow(true)
         this.updateDraggable()
-        this.hidden = false
       }, 200)
     }
+
+    this.checkoutReminderAnyCancelEventListener = event => console.log('checkoutReminderAnyCancel', event)
+    this.checkoutReminderAnyReturnEventListener = event => console.log('checkoutReminderAnyReturn', event)
+    this.checkoutReminderCheckoutContinueEventListener = event => console.log('checkoutReminderCheckoutContinue', event)
+    this.checkoutReminderCheckoutCancelEventListener = event => console.log('checkoutReminderCheckoutCancel', event)
 
     let offsetX, offsetY
     this.dragStartEventListener = event => {
@@ -67,40 +69,44 @@ export default class CheckoutReminder extends Dialog {
           left: ${event.clientX - offsetX}px;
         }
       `
-      
     }
   }
 
   connectedCallback () {
     this.hidden = true
-    if (this.shouldRenderCustomHTML()) this.renderCustomHTML()
-    const showPromises = super.connectedCallback()
+    const showPromises = []
+    if (this.shouldRenderCustomHTML()) showPromises.push(this.renderCustomHTML())
+    showPromises.concat(super.connectedCallback())
     if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
     switch (this.getAttribute('page')) {
       case 'any':
         console.log('****CheckoutReminder - any page*****', this)
-        // TODO: only when desktop and page === any not for mobile, that is showModal. Also, switch at resize with closing and show or showModal again
-        // allowing interaction with content outside of the dialog // https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/show
         showPromises.push(this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
-          <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-title') ?? 'Checkout.Reminder.Continue.Title'}"></a-translation></h3>
-          <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
-          <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-text') ?? 'Checkout.Reminder.Continue.Text'}"></a-translation></p>
+          <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-title') ?? 'Checkout.Reminder.Any.Title'}"></a-translation></h3>
+          <a-icon-mdx id=checkout-reminder-any-cancel icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+          <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-text') ?? 'Checkout.Reminder.Any.Text'}"></a-translation></p>
           <p>api course text</p>
-          <ks-a-button namespace="button-primary-">
-            <a-translation data-trans-key="${this.getAttribute('checkout-reminder-continue-return') ?? 'Checkout.Reminder.Cancel.Return'}"></a-translation>
+          <ks-a-button id=checkout-reminder-any-return namespace="button-primary-">
+            <a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-return') ?? 'Checkout.Reminder.Any.Return'}"></a-translation>
           </ks-a-button>
         `)))
         Promise.all(showPromises).then(() => {
           this.updateDraggable()
+          if (this.isConnected) {
+            this.checkoutReminderAnyCancel.addEventListener('click', this.checkoutReminderAnyCancelEventListener)
+            this.addEventListener(this.getAttribute('backdrop-clicked') || 'backdrop-clicked', this.checkoutReminderAnyCancelEventListener)
+            this.checkoutReminderAnyReturn.addEventListener('click', this.checkoutReminderAnyReturnEventListener)
+          }
           this.hidden = false
           this.show(this.getAttribute('command-show'))
         })
         break
       case 'checkout':
         console.log('****CheckoutReminder - checkout page*****', this)
+        this.setAttribute('no-backdrop-close', '')
         showPromises.push(this.dialogPromise.then(dialog => (dialog.innerHTML = /* html */`
-          <h3><a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-title') ?? 'Checkout.Reminder.Cancel.Title'}"></a-translation></h3>
-          <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-text') ?? 'Checkout.Reminder.Cancel.Text'}"></a-translation></p>
+          <h3><a-translation data-trans-key="${this.getAttribute('checkout-reminder-checkout-title') ?? 'Checkout.Reminder.Checkout.Title'}"></a-translation></h3>
+          <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-checkout-text') ?? 'Checkout.Reminder.Checkout.Text'}"></a-translation></p>
           <section>
             <ks-m-favorite-button
               no-mobile-view
@@ -130,15 +136,19 @@ export default class CheckoutReminder extends Dialog {
                 : ''
               }
             ></ks-m-favorite-button>
-            <ks-a-button namespace="button-primary-">
-              <a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-continue') ?? 'Checkout.Reminder.Cancel.Continue'}"></a-translation>
+            <ks-a-button id=checkout-reminder-checkout-continue namespace="button-primary-">
+              <a-translation data-trans-key="${this.getAttribute('checkout-reminder-checkout-continue') ?? 'Checkout.Reminder.Checkout.Continue'}"></a-translation>
             </ks-a-button>
           </section>
-          <a href=# class=center>
-            <a-translation data-trans-key="${this.getAttribute('checkout-reminder-cancel-cancel') ?? 'Checkout.Reminder.Cancel.Cancel'}"></a-translation>
+          <a id=checkout-reminder-checkout-cancel href=# class=center>
+            <a-translation data-trans-key="${this.getAttribute('checkout-reminder-checkout-cancel') ?? 'Checkout.Reminder.Checkout.Cancel'}"></a-translation>
           </a>
         `)))
         Promise.all(showPromises).then(() => {
+          if (this.isConnected) {
+            this.checkoutReminderCheckoutContinue.addEventListener('click', this.checkoutReminderCheckoutContinueEventListener)
+            this.checkoutReminderCheckoutCancel.addEventListener('click', this.checkoutReminderCheckoutCancelEventListener)
+          }
           this.hidden = false
           this.show(this.getAttribute('command-show'))
         })
@@ -148,13 +158,17 @@ export default class CheckoutReminder extends Dialog {
         break
     }
     self.addEventListener('resize', this.resizeListener)
-    // TODO: addClickListeners
     return showPromises
   }
 
   disconnectedCallback () {
     super.disconnectedCallback()
     self.removeEventListener('resize', this.resizeListener)
+    if (this.checkoutReminderAnyCancel) this.checkoutReminderAnyCancel.addEventListener('click', this.checkoutReminderAnyCancelEventListener)
+    this.addEventListener(this.getAttribute('backdrop-clicked') || 'backdrop-clicked', this.checkoutReminderAnyCancelEventListener)
+    if (this.checkoutReminderAnyReturn) this.checkoutReminderAnyReturn.addEventListener('click', this.checkoutReminderAnyReturnEventListener)
+    if (this.checkoutReminderCheckoutContinue) this.checkoutReminderCheckoutContinue.addEventListener('click', this.checkoutReminderCheckoutContinueEventListener)
+    if (this.checkoutReminderCheckoutCancel) this.checkoutReminderCheckoutCancel.addEventListener('click', this.checkoutReminderCheckoutCancelEventListener)
     if (this.h3) {
       this.h3.removeEventListener('dragstart', this.dragStartEventListener)
       document.body.removeEventListener('dragend', this.dragEndEventListener)
@@ -214,7 +228,6 @@ export default class CheckoutReminder extends Dialog {
       }
       :host > dialog::backdrop {
         cursor: initial;
-        pointer-events: none;
         background-color: var(--dialog-background-color, rgb(0 0 0 / 0));
         backdrop-filter: var(--dialog-backdrop-filter, none);
         transition:
@@ -361,6 +374,26 @@ export default class CheckoutReminder extends Dialog {
 
   get h3 () {
     return this.root.querySelector(':host > dialog > h3')
+  }
+
+  // returns the page === any close icon
+  get checkoutReminderAnyCancel () {
+    return this.root.querySelector('#checkout-reminder-any-cancel')
+  }
+
+  // returns the page === any return to checkout button
+  get checkoutReminderAnyReturn () {
+    return this.root.querySelector('#checkout-reminder-any-return')
+  }
+
+  // returns the page === checkout continue at checkout button
+  get checkoutReminderCheckoutContinue () {
+    return this.root.querySelector('#checkout-reminder-checkout-continue')
+  }
+
+  // returns the page === checkout cancel checkout link
+  get checkoutReminderCheckoutCancel () {
+    return this.root.querySelector('#checkout-reminder-checkout-cancel')
   }
 
   get isMobile () {
