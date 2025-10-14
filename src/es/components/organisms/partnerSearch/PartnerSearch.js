@@ -34,18 +34,10 @@ export default class PartnerSearch extends Shadow() {
           const itemData = JSON.parse(template.content.textContent)
           this.dataLayerPush({
             event: 'partner_teaser_click',
-            partner_name: itemData.link.includes('klubschule-pro')
-              ? 'pro'
-              : itemData.link.includes('ibaw')
-                ? 'ibaw'
-                : 'klubschule',
+            partner_name: this.getPartnerNameFromLink(itemData.link),
             partner_url: itemData.link,
             search_query: this.searchText,
-            search_origin: location.host.includes('klubschule-pro')
-              ? 'pro'
-              : location.host.includes('ibaw')
-                ? 'ibaw'
-                : 'klubschule',
+            search_origin: this.getPartnerNameFromLink(location.host),
             teaser_type: this.hasAttribute('has-courses') ? 'list_results_teaser' : 'zero_results_teaser'
           })
         } catch (e) {
@@ -267,7 +259,23 @@ export default class PartnerSearch extends Shadow() {
 
       const partnerResultsSection = this.root.querySelector("#partner-results")
 
-      const filteredItems = data?.items?.filter(item  => item.count > 0)
+      // filter and add utm parameters to link
+      const filteredItems = data?.items?.filter(item  => {
+        if (item.link) {
+          try {
+            const url = new URL(item.link)
+            url.searchParams.set('utm_source', this.getPartnerNameFromLink(location.host))
+            // partner-search-with-result is the second
+            url.searchParams.set('utm_medium', this.getAttribute('id') === 'partner-search-with-result' ? 'list_results_click' : 'zero_results_click')
+            url.searchParams.set('utm_campaign', 'teaser_click')
+            url.searchParams.set('utm_term', this.searchText.replaceAll(' ', '_'))
+            item.link = url.href
+          } catch (error) {
+            console.warn('Failed to add utm parameters:', this, error)
+          }
+        }
+        return item.count > 0
+      })
 
       if (this.tab == 1 && filteredItems?.length) {
         this.root.querySelector('#partner-results')?.removeAttribute('hidden')
@@ -341,6 +349,14 @@ export default class PartnerSearch extends Shadow() {
 
   get partnerResultItemWrappers () {
     return Array.from(this.root.querySelectorAll('.partner-result-item-wrapper'))
+  }
+
+  getPartnerNameFromLink (link) {
+    return link.includes('klubschule-pro')
+      ? 'pro'
+      : link.includes('ibaw')
+        ? 'ibaw'
+        : 'klubschule'
   }
 
   dataLayerPush(value) {
