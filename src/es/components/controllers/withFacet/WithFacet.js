@@ -260,7 +260,7 @@ export default class WithFacet extends WebWorker() {
           })
         }
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
-        if (isTree) {
+        if (isTree && !isSearchPage) {
           currentRequestObj.filters = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentRequestObj.filters, initialRequestObj.filters)
           currentRequestObj.filters = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filters)
         }
