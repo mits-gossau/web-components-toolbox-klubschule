@@ -34,6 +34,7 @@ import Dialog from '../../web-components-toolbox/src/es/components/molecules/dia
 * @type {CustomElementConstructor}
 */
 export default class CheckoutReminder extends Dialog {
+  #selfOpen
   constructor (options = {}, ...args) {
     super({ ...options }, ...args)
 
@@ -46,21 +47,6 @@ export default class CheckoutReminder extends Dialog {
         this.updateCommandShow(true)
         this.updateDraggable()
       }, 200)
-    }
-
-    this.checkoutReminderAnyCancelEventListener = event => {
-      console.log('checkoutReminderAnyCancel - TODO: GTM', event)
-      this.close()
-      this.fetch('Clear')
-    }
-    this.checkoutReminderAnyReturnEventListener = event => console.log('checkoutReminderAnyReturn - TODO: GTM', event)
-    this.checkoutReminderCheckoutContinueEventListener = event => {
-      console.log('checkoutReminderCheckoutContinue - TODO: GTM', event)
-      this.close()
-    }
-    this.checkoutReminderCheckoutCancelEventListener = event => {
-      console.log('checkoutReminderCheckoutCancel - TODO: GTM', event)
-      event.stopPropagation()
     }
 
     let offsetX, offsetY
@@ -79,6 +65,113 @@ export default class CheckoutReminder extends Dialog {
           left: ${event.clientX - offsetX}px;
         }
       `
+    }
+
+    this.clickEventListener = event => event.stopPropagation()
+
+    this.checkoutReminderAnyCancelEventListener = event => {
+      this.dataLayerPush({
+        'event': 'popup_click',
+        'popup_name': 'Bestellfortsatz',
+        'popup_type': 'Website',
+        'button_name': 'close',
+        'logged_in': this.hasAttribute('is-logged-in')
+      })
+      this.close()
+      this.fetch('Clear')
+    }
+    this.checkoutReminderAnyReturnEventListener = event => {
+      this.dataLayerPush({
+        'event': 'popup_click',
+        'popup_name': 'Bestellfortsatz',
+        'popup_type': 'Website',
+        'button_name': 'to_course_details',
+        'logged_in': this.hasAttribute('is-logged-in')
+      })
+      this.close()
+    }
+    this.checkoutReminderAddToWishListEventListener = event => {
+      this.dataLayerPush({
+        'event': 'popup_click',
+        'popup_name': 'Bestellabbruch',
+        'popup_type': 'Website',
+        'button_name': 'add_to_wishlist',
+        'logged_in': this.hasAttribute('is-logged-in')
+      })
+    }
+    this.checkoutReminderCheckoutContinueEventListener = event => {
+      this.dataLayerPush({
+        'event': 'popup_click',
+        'popup_name': 'Bestellabbruch',
+        'popup_type': 'Website',
+        'button_name': 'continue_checkout',
+        'logged_in': this.hasAttribute('is-logged-in')
+      })
+      this.close()
+    }
+    this.checkoutReminderCheckoutCancelEventListener = event => {
+      this.dataLayerPush({
+        'event': 'popup_click',
+        'popup_name': 'Bestellabbruch',
+        'popup_type': 'Website',
+        'button_name': 'stop_checkout',
+        'logged_in': this.hasAttribute('is-logged-in')
+      })
+      self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+      this.close()
+    }
+
+    this.beforeunloadEventListener = event => {
+      this.dataLayerPush({
+        'event': 'popup_view',
+        'popup_name': 'Bestellabbruch',
+        'popup_type': 'Browser',
+        'logged_in': this.hasAttribute('is-logged-in')
+      })
+      let beforeunloadTimeout = null
+      // this event is triggered when page is not unloaded (cancel) as well as when it is unloaded. visibilitychange is triggered slightly after, which is the clear indication for unload and that will cancel the timeout in this event.
+      const focusEventListener = event => {
+        beforeunloadTimeout = setTimeout(() => {
+          this.dataLayerPush({
+            'event': 'popup_click',
+            'popup_name': 'Bestellabbruch',
+            'popup_type': 'Browser',
+            'button_name': 'continue_checkout',
+            'logged_in': this.hasAttribute('is-logged-in')
+          })
+          document.removeEventListener('visibilitychange', visibilitychangeEventListener)
+        }, 200);
+      }
+      self.addEventListener('focus', focusEventListener, { once: true })
+      // this event is triggered when page is unloaded (leave)
+      const visibilitychangeEventListener = event => {
+        if (document.visibilityState === 'hidden') {
+          this.dataLayerPush({
+            'event': 'popup_click',
+            'popup_name': 'Bestellabbruch',
+            'popup_type': 'Browser',
+            'button_name': 'stop_checkout',
+            'logged_in': this.hasAttribute('is-logged-in')
+          })
+          self.removeEventListener('focus', focusEventListener)
+          clearTimeout(beforeunloadTimeout)
+        }
+      }
+      document.addEventListener('visibilitychange', visibilitychangeEventListener, { once: true })
+      event.preventDefault()
+      event.returnValue = true
+    }
+
+    this.documentBodyClickEventListener = event => {
+      let link
+      if ((link = event.composedPath().find(node => typeof node.getAttribute === 'function' && node.getAttribute('href')))) {
+        if (this.preventDefaultNavigation(link.getAttribute('href'), link.getAttribute('target'))) {
+          event.stopPropagation()
+          event.preventDefault()
+        } else {
+          self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+        }
+      } 
     }
   }
 
@@ -104,12 +197,12 @@ export default class CheckoutReminder extends Dialog {
             – 30=Verfügbar (6A)
           */
           dialog.innerHTML = /* html */`
-            <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-title') ?? 'Checkout.Reminder.Any.Title'}"></a-translation></h3>
+            <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-title') ?? `Checkout.Reminder.Any.Title${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation></h3>
             <a-icon-mdx id=checkout-reminder-any-cancel icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
             <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-text') ?? `Checkout.Reminder.Any.Text${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation></p>
             <p>${json.message || ''}</p>
             <ks-a-button id=checkout-reminder-any-return namespace="button-primary-" href="${json.uncompletedOrder?.kursUrl || ''}">
-              <a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-return') ?? 'Checkout.Reminder.Any.Return'}"></a-translation>
+              <a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-return') ?? `Checkout.Reminder.Any.Return${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation>
             </ks-a-button>
           `
           return json
@@ -123,6 +216,12 @@ export default class CheckoutReminder extends Dialog {
             this.addEventListener(this.getAttribute('backdrop-clicked') || 'backdrop-clicked', this.checkoutReminderAnyCancelEventListener)
             this.checkoutReminderAnyReturn.addEventListener('click', this.checkoutReminderAnyReturnEventListener)
           }
+          this.dataLayerPush({
+            'event': 'popup_view',
+            'popup_name': 'Bestellfortsatz',
+            'popup_type': 'Website',
+            'logged_in': this.hasAttribute('is-logged-in')
+          })
           this.hidden = false
           this.show(this.getAttribute('command-show'))
         })
@@ -169,47 +268,55 @@ export default class CheckoutReminder extends Dialog {
             <a-translation data-trans-key="${this.getAttribute('checkout-reminder-checkout-cancel') ?? 'Checkout.Reminder.Checkout.Cancel'}"></a-translation>
           </a>
         `))
+        // NOTE: Listening to popstate does not work, since the history routes were not set by the history js functions
+        self.addEventListener('beforeunload', this.beforeunloadEventListener)
+        document.body.addEventListener('click', this.documentBodyClickEventListener)
+        // overwrite self.open, since that is used at MultiLevelNavigation to open links
+        this.#selfOpen = self.open
+        // @ts-ignore
+        self.open = (url, target, features) => {
+          if (!this.preventDefaultNavigation(url, target)) {
+            self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+            this.#selfOpen(url, target, features)
+          }
+        }
         Promise.all(showPromises).then(() => {
           if (this.isConnected) {
             this.checkoutReminderCheckoutContinue.addEventListener('click', this.checkoutReminderCheckoutContinueEventListener)
             this.checkoutReminderCheckoutCancel.addEventListener('click', this.checkoutReminderCheckoutCancelEventListener)
+            this.checkoutReminderAddToWishList.addEventListener('add-to-wish-list', this.checkoutReminderAddToWishListEventListener)
           }
-          document.body.addEventListener('click', event => {
-            // @ts-ignore
-            const link = event.composedPath().find(node => typeof node.hasAttribute === 'function' && node.getAttribute('href') && (!node.hasAttribute('target') || node.getAttribute('target') !== '_blank'))
-            if (link) {
-              // @ts-ignore
-              const url = new URL(link.getAttribute('href'), location.origin)
-              // check if the page would stay inside the course checkout route. Expl.: https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/loginmethod becomes through the regex https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442 which is included in https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/registration, etc.
-              if (!url.pathname.includes(location.pathname.replace(/(.*)(\/.*)/, '$1'))) {
-                event.preventDefault()
-                // @ts-ignore
-                this.checkoutReminderCheckoutCancel.setAttribute('href', link.getAttribute('href'))
-                this.hidden = false
-                this.show(this.getAttribute('command-show'))
-              }
-            }
-          })
-          self.addEventListener('beforeunload', event => console.log('****TODO: beforeunload*****'))
         })
         break
     }
+    this.addEventListener('click', this.clickEventListener)
     self.addEventListener('resize', this.resizeListener)
     return showPromises
   }
 
   disconnectedCallback () {
     super.disconnectedCallback()
-    self.removeEventListener('resize', this.resizeListener)
-    if (this.checkoutReminderAnyCancel) this.checkoutReminderAnyCancel.addEventListener('click', this.checkoutReminderAnyCancelEventListener)
-    this.addEventListener(this.getAttribute('backdrop-clicked') || 'backdrop-clicked', this.checkoutReminderAnyCancelEventListener)
-    if (this.checkoutReminderAnyReturn) this.checkoutReminderAnyReturn.addEventListener('click', this.checkoutReminderAnyReturnEventListener)
-    if (this.checkoutReminderCheckoutContinue) this.checkoutReminderCheckoutContinue.addEventListener('click', this.checkoutReminderCheckoutContinueEventListener)
-    if (this.checkoutReminderCheckoutCancel) this.checkoutReminderCheckoutCancel.addEventListener('click', this.checkoutReminderCheckoutCancelEventListener)
     if (this.h3) {
       this.h3.removeEventListener('dragstart', this.dragStartEventListener)
       document.body.removeEventListener('dragend', this.dragEndEventListener)
     }
+    switch (this.getAttribute('page')) {
+      case 'any':
+        if (this.checkoutReminderAnyCancel) this.checkoutReminderAnyCancel.removeEventListener('click', this.checkoutReminderAnyCancelEventListener)
+        this.removeEventListener(this.getAttribute('backdrop-clicked') || 'backdrop-clicked', this.checkoutReminderAnyCancelEventListener)
+        if (this.checkoutReminderAnyReturn) this.checkoutReminderAnyReturn.removeEventListener('click', this.checkoutReminderAnyReturnEventListener)
+        break
+      case 'checkout':
+        self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+        document.body.removeEventListener('click', this.documentBodyClickEventListener)
+        self.open = this.#selfOpen
+        if (this.checkoutReminderCheckoutContinue) this.checkoutReminderCheckoutContinue.removeEventListener('click', this.checkoutReminderCheckoutContinueEventListener)
+        if (this.checkoutReminderCheckoutCancel) this.checkoutReminderCheckoutCancel.removeEventListener('click', this.checkoutReminderCheckoutCancelEventListener)
+        if (this.checkoutReminderAddToWishList) this.checkoutReminderAddToWishList.removeEventListener('add-to-wish-list', this.checkoutReminderAddToWishListEventListener)
+        break
+    }
+    this.removeEventListener('click', this.clickEventListener)
+    self.removeEventListener('resize', this.resizeListener)
   }
 
   /**
@@ -436,6 +543,52 @@ export default class CheckoutReminder extends Dialog {
     })
   }
 
+  /**
+   * Prevent link navigation default behavior by showing the dialog
+   * 
+   * @param {string | URL | undefined} href
+   * @param {string | undefined} target
+   * @returns {boolean}
+   */
+  preventDefaultNavigation (href, target) {
+    if (target  === '_blank') return false
+    let url
+    if (href instanceof URL) {
+      url = href
+    } else if(typeof href === 'string') {
+      try {
+        url = new URL(href, location.origin)
+      } catch (error) {}
+    }
+    // check if the page would stay inside the course checkout route. Expl.: https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/loginmethod becomes through the regex https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442 which is included in https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/registration, etc.
+    if (url) {
+      if (url.origin.includes('login.migros')) return false
+      if (url.pathname.includes(location.pathname.replace(/(.*)(\/.*)/, '$1'))) return false
+    }
+    this.dataLayerPush({
+      'event': 'popup_view',
+      'popup_name': 'Bestellabbruch',
+      'popup_type': 'Website',
+      'logged_in': this.hasAttribute('is-logged-in')
+    })
+    this.checkoutReminderCheckoutCancel.setAttribute('href', href)
+    this.hidden = false
+    this.show(this.getAttribute('command-show'))
+    return true
+  }
+
+  dataLayerPush (value) {
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      try {
+        // @ts-ignore
+        window.dataLayer.push(value)
+      } catch (err) {
+        console.error('Failed to push event data:', err)
+      }
+    }
+  }
+
   get h3 () {
     return this.root.querySelector(':host > dialog > h3')
   }
@@ -448,6 +601,11 @@ export default class CheckoutReminder extends Dialog {
   // returns the page === any return to checkout button
   get checkoutReminderAnyReturn () {
     return this.root.querySelector('#checkout-reminder-any-return')
+  }
+
+  // returns the page === checkout favorite at checkout button
+  get checkoutReminderAddToWishList () {
+    return this.root.querySelector('ks-m-favorite-button')
   }
 
   // returns the page === checkout continue at checkout button
@@ -463,6 +621,7 @@ export default class CheckoutReminder extends Dialog {
   get isMobile () {
     return self.matchMedia(`(max-width: ${this.mobileBreakpoint})`).matches
   }
+
   get customStyle () {
     return (
       this._customStyle ||
