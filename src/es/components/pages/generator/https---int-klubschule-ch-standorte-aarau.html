@@ -1455,7 +1455,7 @@
 												value="Q2ZESjhDcUxuSjlncHlWSWx6YlpGdlFiWVBkUmdwWkFsTDNfRTBoREZZYm5ucmNQbDZVR1dxcWhNNU9CYzR0bTNzcDRvNHE5SlFNR1BDcDhsVnFUREVnYUVYVlpGZTRhVlVGT3BtbmxDb1pSZ2pLd2JKR2QxcVM2YTdqOF80czFDeVIzRUE="
 												https://int.klubschule.ch />
 											<div class=umbraco-forms-page id=eaa8e894-cd2e-4e02-b828-f162febdf4db>
-												<fieldset class=umbraco-forms-fieldset
+												<!--<fieldset class=umbraco-forms-fieldset
 													id=b5e128a7-ba1b-4028-afed-309cfcbe2719>
 													<legend><ks-a-heading tag=h3> Angaben zu Ihrer Veranstaltung
 														</ks-a-heading></legend><o-grid namespace=grid-12er-
@@ -1677,7 +1677,7 @@
 															</div>
 														</section>
 													</o-grid>
-												</fieldset>
+												</fieldset>-->
 												<fieldset class=umbraco-forms-fieldset
 													id=e8fb4958-45b7-48d1-f64f-53c7e93f1725>
 													<legend><ks-a-heading tag=h3> An welchen Tagen findet Ihre
@@ -1695,8 +1695,10 @@
 																	<div class=umbraco-forms-field-wrapper>
 																		<div
 																			id=date-multiple-35b3bc19-a808-4b42-ae8a-c4d6b1711c94>
-																			<div class=js-date-container><template
-																					class=js-date-template><o-grid
+																			<div class=js-date-container>
+																				<template class=js-date-template>
+																					
+																					<o-grid
 																						namespace=grid-x- mode=false>
 																						<section>
 																							<div col-lg=5 col-md=15
@@ -1772,7 +1774,46 @@
 																								</ks-a-input>
 																							</div>
 																						</section>
-																					</o-grid></template></div>
+																					</o-grid>
+																				</template>
+
+
+																				<o-grid namespace="grid-x-" mode="false" count-section-children="4">
+																					<section>
+																						<div col-lg="5" col-md="15" col-sm="13" order-lg="1" order-md="1" order-sm="1">
+																							<ks-a-input mode="false">
+																								<div class="wrap">
+																									<label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_date"> Datum </label> 
+																									<input live-input-validation="true" name="datumZeit_date" id="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_date" type="date" placeholder="DD.MM.JJJJ">
+																								</div>
+																							</ks-a-input>
+																						</div>
+																						<div col-lg="1" col-md="1" col-sm="3" order-lg="4" order-md="2" order-sm="2" vertical-align-bottom="">
+																							<div>
+																								<ks-a-button namespace="button-secondary-" type="button" class="js-date-delete"> </ks-a-button>
+																							</div>
+																						</div>
+																						<div col-lg="5" col-md="8" col-sm="8" order-lg="2" order-md="3" order-sm="3">
+																							<ks-a-input mode="false">
+																								<div class="wrap">
+																									<label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_from"> Von </label> 
+																									<input live-input-validation="true" name="datumZeit_time_from" id="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_from" type="time" placeholder="09:00">
+																								</div>
+																							</ks-a-input>
+																						</div>
+																						<div col-lg="5" col-md="8" col-sm="8" order-lg="3" order-md="4" order-sm="4">
+																							<ks-a-input mode="false">
+																								<div class="wrap">
+																									<label for="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_to"> Bis </label> 
+																									<input live-input-validation="true" name="datumZeit_time_to" id="35b3bc19-a808-4b42-ae8a-c4d6b1711c94_time_to" type="time" placeholder="17:00">
+																								</div>
+																							</ks-a-input>
+																						</div>
+																					</section>
+																				</o-grid>
+
+
+																			</div>
 																			<div class=spacing-l-flex></div><ks-a-button
 																				namespace=button-secondary- type=button
 																				class=js-date-add>&#x2B; Weiteres Datum
