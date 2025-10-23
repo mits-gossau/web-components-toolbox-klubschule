@@ -1,7 +1,7 @@
 // @ts-check
 import Dialog from '../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js'
 
-/** @typedef {'any' | 'checkout' | 'confirmation'} page */
+/** @typedef {'any' | 'checkout'} page */
 
 /**
  * This component covers MIDUWEB-2127/2128/2129 and is a complete component handling all checkout reminder functionality
@@ -11,32 +11,20 @@ import Dialog from '../../web-components-toolbox/src/es/components/molecules/dia
  *  2. MIDUWEB-2128 - Cancellation Checkout Confirm "pop-up"
  *  3. MIDUWEB-2129 - Continue Checkout Dialog
  * 
- * Functionalities:
- *  a. Component is placed on base template and triggers different behaviors regarding the page context:
- *    a1. ['any'] Any page - fetch api - has checkout in progress && is new session (has not "checkout is in progress"):
- *      .yes - show: 3. MIDUWEB-2129 - Continue Checkout Dialog
- *    a2. ['checkout'] Any checkout page except confirmation checkout page
- *      a2.1. fetch post api - info to api "checkout is in progress" && session save "checkout is in progress"
- *      a2.2. user navigates away to other page but checkout* by on-page link
- *        .yes - show: 1. MIDUWEB-2127 - Cancellation Checkout Dialog
- *      a2.3. user navigates away to other page but checkout* by closing tab or navigate browser history (forward/back)
- *        .yes - show: 2. MIDUWEB-2128 - Cancellation Checkout Confirm "pop-up"
- *    a3. ['confirmation'] Confirmation checkout page
- *      a3.1. fetch post api - into to api "checkout is completed"
- *    
- *  *other page but checkout: when attribute === 'checkout' then any route but depth https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/[registration], will be considered as other. Exception: https://login.migros.ch/
+ * TODO: readme and comments
+ * TODO: linter
  * 
  * Status:
- *  @attribute {page} [page='any'] possible values: 'any' | 'checkout' | 'confirmation'
+ *  @attribute {page} [page='any'] possible values: 'any' | 'checkout'
  * 
-* @export
-* @class CheckoutReminder
-* @type {CustomElementConstructor}
+ * @export
+ * @class CheckoutReminder
+ * @type {CustomElementConstructor}
 */
 export default class CheckoutReminder extends Dialog {
   #selfOpen
   constructor (options = {}, ...args) {
-    super({ ...options }, ...args)
+    super({ namespace: 'checkout-reminder-default-', tabindex: 'no-tabindex', ...options }, ...args)
 
     this.updateCommandShow()
 
@@ -139,11 +127,12 @@ export default class CheckoutReminder extends Dialog {
             'button_name': 'continue_checkout',
             'logged_in': this.hasAttribute('is-logged-in')
           })
+          if (this.dialog?.hasAttribute('open')) this.checkoutReminderCheckoutContinueEventListener()
           document.removeEventListener('visibilitychange', visibilitychangeEventListener)
         }, 200);
       }
       self.addEventListener('focus', focusEventListener, { once: true })
-      // this event is triggered when page is unloaded (leave)
+      // this event is triggered when page is unloaded (cancel)
       const visibilitychangeEventListener = event => {
         if (document.visibilityState === 'hidden') {
           this.dataLayerPush({
@@ -153,6 +142,7 @@ export default class CheckoutReminder extends Dialog {
             'button_name': 'stop_checkout',
             'logged_in': this.hasAttribute('is-logged-in')
           })
+          if (this.dialog?.hasAttribute('open')) this.checkoutReminderCheckoutCancelEventListener()
           self.removeEventListener('focus', focusEventListener)
           clearTimeout(beforeunloadTimeout)
         }
@@ -209,7 +199,7 @@ export default class CheckoutReminder extends Dialog {
         })))
         Promise.all(showPromises).then(data => {
           // TODO: Also check if API handles at same browser session requirement
-          if (!data.find(json => json.uncompletedOrderExists)) return
+          if (!data.find(json => json.uncompletedOrderExists && !json.uncompletedOrderSameSession)) return
           this.updateDraggable()
           if (this.isConnected) {
             this.checkoutReminderAnyCancel.addEventListener('click', this.checkoutReminderAnyCancelEventListener)
@@ -338,10 +328,6 @@ export default class CheckoutReminder extends Dialog {
     this.setCss(/* css */`
       :host {
         display: contents !important;
-      }
-      :host([page='confirmation']) {
-        --show: none;
-        display: none !important;
       }
       :host > dialog {
         border: 0;
