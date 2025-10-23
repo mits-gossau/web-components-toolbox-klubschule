@@ -63,6 +63,26 @@ export default class Input extends Shadow() {
     if (this.counter && this.textarea) {
       this.textarea.addEventListener('input', this.textareaEventListener)
     }
+
+    this.addInputIcon('date', 'mdx-icon-calendar', 'date-icon')
+    this.addInputIcon('time', 'mdx-icon-clock', 'time-icon')
+  }
+
+  addInputIcon (inputType, iconElement, iconClass) {
+    if (this.input && this.input.type === inputType) {
+      if (this.root.querySelector(`.${iconClass}`)) return
+
+      const originalType = inputType
+      this.input.type = 'text'
+      this.input.addEventListener('focus', () => { this.input.type = originalType })
+      this.input.addEventListener('blur', () => { if (!this.input.value) this.input.type = 'text' })
+
+      const icon = document.createElement(iconElement)
+      icon.setAttribute('size', 'sm')
+      icon.classList.add(iconClass)
+
+      this.input.parentNode.insertBefore(icon, this.input.nextSibling)
+    }
   }
 
   disconnectedCallback () {
@@ -89,6 +109,12 @@ export default class Input extends Shadow() {
    */
   renderCSS () {
     this.css = /* css */`
+      :host {
+        interpolate-size: allow-keywords;
+        @supports (width: -moz-available) { --stretch: -moz-available; }
+        @supports (width: -webkit-fill-available) { --stretch: -webkit-fill-available; }
+        @supports (width: stretch) { --stretch: stretch; }
+      }
       :host > div {
         display: flex;
         flex-direction: column;
@@ -146,7 +172,7 @@ export default class Input extends Shadow() {
         font: var(--mdx-comp-inputfield-font-default);
         margin-top: var(--mdx-comp-inputfield-gap-label-inputfield);
         outline: none;
-        width: 100%;
+        width: var(--stretch, 100%);
         box-sizing: border-box;
         color: var(--mdx-comp-inputfield-input-color-default);
 
@@ -155,6 +181,16 @@ export default class Input extends Shadow() {
 
         /* for constant height of type=date and type=time */
         height: 3.25rem; /* 52px */
+      }
+
+      :host textarea {
+        min-height: var(--mdx-comp-inputfield-textarea-min-height, 6.5rem);
+        height: auto;
+        max-height: var(--mdx-comp-inputfield-textarea-max-height, 12rem);
+        resize: vertical;
+        overflow-y: auto;        
+        height: var(--mdx-comp-inputfield-textarea-height, auto) !important;
+        font-weight: 400;
       }
 
       :host input::placeholder,
@@ -177,6 +213,62 @@ export default class Input extends Shadow() {
 
       :host input[type="date"]::-webkit-date-and-time-value {
         text-align: left;
+      }
+
+      :host .time-icon {
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        pointer-events: none;
+        color: var(--mdx-comp-inputfield-placeholder-color-default);
+        z-index: 10;
+      }
+
+      :host .date-icon {
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        pointer-events: none;
+        color: var(--mdx-comp-inputfield-placeholder-color-default);
+        z-index: 10;
+      }
+
+      :host .wrap:has(input) {
+        position: relative;
+      }
+
+      :host input[type="time"] {
+        padding-right: 3rem;
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+      }
+
+      :host input[type="date"] {
+        padding-right: 3rem; /* Make space for custom icon */
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+      }
+
+      :host input[type="time"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+      }
+
+      :host input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+      }
+
+      :host input[type="time"]::-webkit-inner-spin-button,
+      :host input[type="time"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      :host input[type="date"]::-webkit-inner-spin-button,
+      :host input[type="date"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
       }
 
       :host input:focus,
