@@ -127,6 +127,17 @@ export default class Login extends Shadow() {
       :host > section > m-dialog {
         margin-left: calc(var(--content-spacing, 1em) * -1.5);
       }
+      .sr-only {
+          position: absolute !important;
+          width: 1px !important;
+          height: 1px !important;
+          padding: 0 !important;
+          margin: -1px !important;
+          overflow: hidden !important;
+          clip: rect(0, 0, 0, 0) !important;
+          white-space: nowrap !important;
+          border: 0 !important;
+      }
       @media only screen and (max-width: _max-width_) {
         :host,
         :host > section {
