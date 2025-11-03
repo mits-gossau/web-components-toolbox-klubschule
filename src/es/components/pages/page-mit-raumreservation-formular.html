@@ -939,7 +939,7 @@
 	 data-disable-validation-dependency-check="false"></div>
 
 
-<script defer="defer" src="/App_Plugins/UmbracoForms/Assets/themes/default/umbracoforms.min.js?v=13.4.1" type="application/javascript"></script>
+<script defer="defer" src="/App_Plugins/UmbracoForms/Assets/themes/default/umbracoforms.min.js?v=13.4.1" type="application/javascript" class="template-script"></script>
 
 
                         <ks-m-contact-row id="show-modal"
@@ -1317,7 +1317,7 @@
 		 data-weekdays="Sonntag,Montag,Dienstag,Mittwoch,Donnerstag,Freitag,Samstag"
 		 data-weekdays-short="So,Mo,Di,Mi,Do,Fr,Sa"></div>
 
-<script defer="defer" src="/App_Plugins/UmbracoForms/Assets/moment/min/moment-with-locales.min.js?v=13.4.1" type="application/javascript"></script><script defer="defer" src="/App_Plugins/UmbracoForms/Assets/pikaday/pikaday.min.js?v=13.4.1" type="application/javascript"></script><script defer="defer" src="/App_Plugins/UmbracoForms/Assets/datepicker.init.min.js?v=13.4.1" type="application/javascript"></script>
+<script defer="defer" src="/App_Plugins/UmbracoForms/Assets/moment/min/moment-with-locales.min.js?v=13.4.1" type="application/javascript" class="template-script"></script><script defer="defer" src="/App_Plugins/UmbracoForms/Assets/pikaday/pikaday.min.js?v=13.4.1" type="application/javascript" class="template-script"></script><script defer="defer" src="/App_Plugins/UmbracoForms/Assets/datepicker.init.min.js?v=13.4.1" type="application/javascript" class="template-script"></script>
 <link href="/App_Plugins/UmbracoForms/Assets/pikaday/pikaday.min.css?v=13.4.1" rel="stylesheet" />
 
                                         <a onclick="this.dispatchEvent(new CustomEvent('open-form-f0fd7747-c927-4881-b671-af5ca86c4177', { bubbles: true, cancelable: true, composed: true, detail: { command: 'show-modal' } }))">
@@ -1345,7 +1345,7 @@
 											'RequestVerificationToken': 'CfDJ8JQe1m4aIf9LkMjsl3lxHZNrCb-nA7yUSd7lm-X41VLZq0kcgQk4JI9rxVbhKJ4XGj-mveLYc7EL-ghiwLRK395vC3cWpaITZ5XUO6GJvPTIU15WbTKPtLV2hnG4G1TM2mPb1rv9Q6v_faxDqjhC6jw'
 										   }"
         schema="{
-											'values': {&#x27;titelDerVeranstaltung&#x27;:&#x27;&#x27;,&#x27;anzahlTeilnehmer&#x27;:&#x27;&#x27;,&#x27;center&#x27;:&#x27;&#x27;,&#x27;datumZeit&#x27;:&#x27;&#x27;,&#x27;anmerkungen&#x27;:&#x27;&#x27;,&#x27;anrede&#x27;:&#x27;&#x27;,&#x27;vorname&#x27;:&#x27;&#x27;,&#x27;nachname&#x27;:&#x27;&#x27;,&#x27;firma&#x27;:&#x27;&#x27;,&#x27;strasseNr&#x27;:&#x27;&#x27;,&#x27;pLZ&#x27;:&#x27;&#x27;,&#x27;ort&#x27;:&#x27;&#x27;,&#x27;land&#x27;:&#x27;&#x27;,&#x27;telefon&#x27;:&#x27;&#x27;,&#x27;eMail&#x27;:&#x27;&#x27;,&#x27;dataConsent&#x27;:&#x27;&#x27;,&#x27;_datumZeit_von&#x27;:&#x27;&#x27;,&#x27;_datumZeit_bis&#x27;:&#x27;&#x27;},
+											'values': {&#x27;titelDerVeranstaltung&#x27;:&#x27;&#x27;,&#x27;anzahlTeilnehmer&#x27;:&#x27;&#x27;,&#x27;center&#x27;:&#x27;&#x27;,&#x27;datumZeit&#x27;:&#x5B;&#x5D;,&#x27;anmerkungen&#x27;:&#x27;&#x27;,&#x27;anrede&#x27;:&#x27;&#x27;,&#x27;vorname&#x27;:&#x27;&#x27;,&#x27;nachname&#x27;:&#x27;&#x27;,&#x27;firma&#x27;:&#x27;&#x27;,&#x27;strasseNr&#x27;:&#x27;&#x27;,&#x27;pLZ&#x27;:&#x27;&#x27;,&#x27;ort&#x27;:&#x27;&#x27;,&#x27;land&#x27;:&#x27;&#x27;,&#x27;telefon&#x27;:&#x27;&#x27;,&#x27;eMail&#x27;:&#x27;&#x27;,&#x27;dataConsent&#x27;:&#x27;&#x27;,&#x27;datumZeit_von&#x27;:&#x5B;&#x5D;,&#x27;datumZeit_bis&#x27;:&#x5B;&#x5D;},
 											'contentId': '87843772-4fd6-4a37-a5f9-f551d27fc739',
 											'culture': 'de-CH'
 										   }"
@@ -1537,7 +1537,7 @@
             --grid-12er-ul-li-font-size: 16px;
 		}
 	</style>
-	<script type="text/javascript">
+	<script type="text/javascript" class="template-script">
 		function showInfoText(select, texts) {
 			const option = select.children[select.selectedIndex];
 			texts.forEach(text => {
@@ -1641,24 +1641,36 @@ Datum/Zeit                                                        </label>
 
 </div>
 
-<script type="text/javascript">
-	function createEntry(template, container) {
+<script type="text/javascript" class="template-script">
+    const root = document.querySelector('#date-multiple-35b3bc19-a808-4b42-ae8a-c4d6b1711c94');
+	const add = root.querySelector('.js-date-add');
+    const container = root.querySelector('.js-date-container');
+	const template = root.querySelector('.js-date-template');
+    let counter = 0
+	const createEntry = (event, first = false) => {
 		const clone = template.cloneNode(true);
 		const node = clone.content.children[0];
 		container.appendChild(node);
 		node.querySelector('.js-date-delete').addEventListener('click', () => removeRow(node), { once: true })
+        if (first) node.querySelector('.js-date-delete').setAttribute('style', 'display:none;')
+        if (counter > 8) {
+            add.hidden = true
+            add.removeEventListener('click', createEntry);
+        }
+        counter++
 	}
 
-	function removeRow(node) {
+	const removeRow = (node) => {
+        if (counter < 11) {
+            add.hidden = false
+            add.addEventListener('click', createEntry);
+        }
+        counter--
 		node.remove();
 	}
-
-	const root = document.querySelector('#date-multiple-35b3bc19-a808-4b42-ae8a-c4d6b1711c94');
-	const add = root.querySelector('.js-date-add');
-	const container = root.querySelector('.js-date-container');
-	const template = root.querySelector('.js-date-template');
-	add.addEventListener('click', () => createEntry(template, container));
-	createEntry(template, container);
+	
+	add.addEventListener('click', createEntry);
+	createEntry(undefined, true);
 </script>
 
 
