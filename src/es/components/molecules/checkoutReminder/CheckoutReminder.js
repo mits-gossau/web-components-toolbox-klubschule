@@ -226,27 +226,27 @@ export default class CheckoutReminder extends Dialog {
               no-mobile-view
               button-typ="button-secondary-"
               ${this.hasAttribute('course')
-                ? `course="${this.hasAttribute('course')}"`
+                ? `course="${this.getAttribute('course')}"`
                 : ''
               }
               ${this.hasAttribute('course-type')
-                ? `course-type="${this.hasAttribute('course-type')}"`
+                ? `course-type="${this.getAttribute('course-type')}"`
                 : ''
               }
               ${this.hasAttribute('course-id')
-                ? `course-id="${this.hasAttribute('course-id')}"`
+                ? `course-id="${this.getAttribute('course-id')}"`
                 : ''
               }
               ${this.hasAttribute('center-id')
-                ? `center-id="${this.hasAttribute('center-id')}"`
+                ? `center-id="${this.getAttribute('center-id')}"`
                 : ''
               }
               ${this.hasAttribute('event-data')
-                ? `event-data="${this.hasAttribute('event-data')}"`
+                ? `event-data="${this.getAttribute('event-data')}"`
                 : ''
               }
               ${this.hasAttribute('course-data')
-                ? `course-data="${this.hasAttribute('course-data')}"`
+                ? `course-data="${this.getAttribute('course-data')}"`
                 : ''
               }
             ></ks-m-favorite-button>
@@ -548,8 +548,7 @@ export default class CheckoutReminder extends Dialog {
     }
     // check if the page would stay inside the course checkout route. Expl.: https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/loginmethod becomes through the regex https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442 which is included in https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/registration, etc.
     if (url) {
-      if (url.origin.includes(this.getAttribute('allowed-default-navigation-origin') || 'login.migros')) return false
-      if (url.pathname.includes(this.getAttribute('allowed-default-navigation-pathname') || 'LoginCheck')) return false
+      if (url.origin.includes('login.migros')) return false
       if (url.pathname.includes(location.pathname.replace(/(.*)(\/.*)/, '$1'))) return false
     }
     this.dataLayerPush({
