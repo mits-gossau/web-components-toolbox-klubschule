@@ -9,6 +9,8 @@ self.Environment = {
   language: currentScriptUrl.searchParams.get('language') || document.documentElement.getAttribute('lang') || 'de',
   mcsBaseUrl: currentScriptUrl.searchParams.get('mcsBaseUrl') || 'https://digital-campaign-factory.migros.ch',
   mcsVersion: currentScriptUrl.searchParams.get('mcsVersion'), /* || 'v1.112.3', // the newest version gets fetched if this parameter is not set */
+  msrcBaseUrl: currentScriptUrl.searchParams.get('msrcBaseUrl') || 'https://cdn.migros.ch',
+  msrcVersion: currentScriptUrl.searchParams.get('msrcVersion'), /* || '20221205123932', // the newest version gets fetched if this parameter is not set */
   mobileBreakpoint: ({ constructor, tagName, namespace } = {}) => {
     switch (true) {
       case constructor && typeof constructor.includes === 'function' && constructor.includes('Header'):
