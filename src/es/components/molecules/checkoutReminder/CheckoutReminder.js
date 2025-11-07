@@ -163,6 +163,8 @@ export default class CheckoutReminder extends Dialog {
         }
       } 
     }
+
+    this.formSubmitEventListener = event => self.removeEventListener('beforeunload', this.beforeunloadEventListener)
   }
 
   connectedCallback () {
@@ -261,6 +263,7 @@ export default class CheckoutReminder extends Dialog {
         // NOTE: Listening to popstate does not work, since the history routes were not set by the history js functions
         self.addEventListener('beforeunload', this.beforeunloadEventListener)
         document.body.addEventListener('click', this.documentBodyClickEventListener)
+        document.body.addEventListener('form-submit', this.formSubmitEventListener)
         // overwrite self.open, since that is used at MultiLevelNavigation to open links
         this.#selfOpen = self.open
         // @ts-ignore
@@ -299,6 +302,7 @@ export default class CheckoutReminder extends Dialog {
       case 'checkout':
         self.removeEventListener('beforeunload', this.beforeunloadEventListener)
         document.body.removeEventListener('click', this.documentBodyClickEventListener)
+        document.body.removeEventListener('form-submit', this.formSubmitEventListener)
         self.open = this.#selfOpen
         if (this.checkoutReminderCheckoutContinue) this.checkoutReminderCheckoutContinue.removeEventListener('click', this.checkoutReminderCheckoutContinueEventListener)
         if (this.checkoutReminderCheckoutCancel) this.checkoutReminderCheckoutCancel.removeEventListener('click', this.checkoutReminderCheckoutCancelEventListener)
@@ -548,7 +552,12 @@ export default class CheckoutReminder extends Dialog {
     }
     // check if the page would stay inside the course checkout route. Expl.: https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/loginmethod becomes through the regex https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442 which is included in https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/registration, etc.
     if (url) {
-      if (url.origin.includes('login.migros')) return false
+      if (this.hasAttribute('inside-route') && this.getAttribute('inside-route').some(str => url.origin.includes(str.trim()))) {
+        return false
+      } else {
+        if (url.origin.includes('login.migros')) return false
+        if (url.origin.includes('datatrans.com')) return false
+      }
       if (url.pathname.includes(location.pathname.replace(/(.*)(\/.*)/, '$1'))) return false
     }
     this.dataLayerPush({

@@ -5,6 +5,303 @@
 <a href="https://login.migros.ch/login/email">login.migros</a>
 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum minus aspernatur repellat, accusantium exercitationem ut quaerat fugiat ullam consequuntur repellendus expedita quas doloremque veniam perspiciatis! Sunt dolor ipsam accusamus exercitationem.</p>
 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum minus aspernatur repellat, accusantium exercitationem ut quaerat fugiat ullam consequuntur repellendus expedita quas doloremque veniam perspiciatis! Sunt dolor ipsam accusamus exercitationem.</p>
+<m-simple-form-validation no-validation-error-css namespace=simple-form-miduweb- mode=false>
+    <form id=registrationForm action=/sprachen/englischkurse/englisch-niveau-a2/kurs/englisch-niveau-a2--E_1805249_2671_324/payment method=post>
+        <input type=hidden data-val=true data-val-required="The SessionKey field is required." id=Meta_SessionKey name=Meta.SessionKey value=E_1805249_2671_111 /> <input type=hidden data-val=true data-val-required="The MandantId field is required." id=Meta_MandantId name=Meta.MandantId value=111 /> <input type=hidden data-val=true data-val-required="The PortalId field is required." id=Meta_PortalId name=Meta.PortalId value=29 /> <input type=hidden data-val=true data-val-required="The SpracheId field is required." id=Meta_SpracheId name=Meta.SpracheId value=d /> <input type=hidden data-val=true data-val-required="The KursTyp field is required." id=Meta_KursTyp name=Meta.KursTyp value=E /> <input type=hidden data-val=true data-val-required="The KursId field is required." id=Meta_KursId name=Meta.KursId value=1805249 /> <input type=hidden data-val=true data-val-required="The CenterId field is required." id=Meta_CenterId name=Meta.CenterId value=2671 /> <input type=hidden data-val=true data-val-required="The WarenkorbTyp field is required." id=Meta_WarenkorbTyp name=Meta.WarenkorbTyp value=MIDUCA /> <ks-o-checkout mode=false> <ks-o-checkout-layout>
+            <section id=top>
+                <ks-a-back-link href=/sprachen/englischkurse/englisch-niveau-a2/kurs/englisch-niveau-a2--E_1805249_2671_324/loginmethod icon=ArrowLeft tabindex=0>Zur&#xFC;ck</ks-a-back-link> <ks-m-checkout-stepper steps="[{&#34;label&#34;:&#34;Anmeldedaten&#34;,&#34;status&#34;:&#34;current&#34;,&#34;link&#34;:&#34;/sprachen/englischkurse/englisch-niveau-a2/kurs/englisch-niveau-a2--E_1805249_2671_324/registration&#34;},{&#34;label&#34;:&#34;Zahlung&#34;,&#34;status&#34;:&#34;default&#34;,&#34;link&#34;:&#34;/sprachen/englischkurse/englisch-niveau-a2/kurs/englisch-niveau-a2--E_1805249_2671_324/payment&#34;},{&#34;label&#34;:&#34;Abschluss&#34;,&#34;status&#34;:&#34;default&#34;,&#34;link&#34;:&#34;/sprachen/englischkurse/englisch-niveau-a2/kurs/englisch-niveau-a2--E_1805249_2671_324/confirm&#34;}]">
+                    
+                </ks-m-checkout-stepper>
+            </section>
+            <section id=main>
+                <ks-a-heading tag=h2 style-as=h1 tabindex=0>Teilnehmerdaten</ks-a-heading>
+                <div>
+                    <label>Anrede*</label> <ks-a-radio row mode=false>
+                        <div class=wrap>
+                            <label for=Data_Registration_AnredeCode_1>Herr</label> <input type=radio value=1 id=Data_Registration_AnredeCode_1 required error-message-reference-point-changed=true no-error-text-p error-text-tag-name=span data-m-v-rules='{"required":{"error-message":"Bitte wählen Sie eine Anrede"}}' data-val=true data-val-required="The AnredeCode field is required." name=Data.Registration.AnredeCode />
+                            <div class=box>
+                                
+                            </div>
+                        </div>
+                        <div class=wrap>
+                            <label for=Data_Registration_AnredeCode_2>Frau</label> <input type=radio value=2 id=Data_Registration_AnredeCode_2 required error-message-reference-point-changed=true no-error-text-p error-text-tag-name=span data-m-v-rules='{"required":{"error-message":"Bitte wählen Sie eine Anrede"}}' checked name=Data.Registration.AnredeCode />
+                            <div class=box>
+                                
+                            </div>
+                        </div>
+                        <div class=message>
+                            <a-icon-mdx namespace=icon-mdx-ks-forms- icon-name=AlertCircle size=var(--ks-error-icon-size) rotate=0 class=icon-left new-error-message-reference-point=true>
+                                
+                            </a-icon-mdx>
+                        </div>
+                    </ks-a-radio>
+                </div>
+                <br/> <o-grid namespace=grid-12er- mobile-breakpoint=600px tablet-breakpoint=1300px mode=false id=checkout-bewilliger-grid-name-vorname count-section-children=2>
+                    <section>
+                        <div col-lg=6 col-md=6 col-sm=12>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_Vorname>Vorname*</label> <input type=text required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihren Vornamen an"}}' data-val=true data-val-length="The field Vorname must be a string with a maximum length of 40." data-val-length-max=40 data-val-required="The Vorname field is required." id=Data_Registration_Vorname maxlength=40 name=Data.Registration.Vorname value=dfsa />
+                                </div>
+                            </ks-a-input>
+                        </div>
+                        <div col-lg=6 col-md=6 col-sm=12>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_Nachname>Name*</label> <input type=text required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihren Namen an"}}' data-val=true data-val-length="The field Nachname must be a string with a maximum length of 40." data-val-length-max=40 data-val-required="The Nachname field is required." id=Data_Registration_Nachname maxlength=40 name=Data.Registration.Nachname value=fdsa />
+                                </div>
+                            </ks-a-input>
+                        </div>
+                    </section>
+                </o-grid> <br/>
+                <div>
+                    <ks-a-input mode=false>
+                        <div class=wrap>
+                            <label for=Data_Registration_Strasse>Strasse und Nr.*</label> <input type=text required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihre Strasse an"}}' data-val=true data-val-length="The field Strasse must be a string with a maximum length of 50." data-val-length-max=50 data-val-required="The Strasse field is required." id=Data_Registration_Strasse maxlength=50 name=Data.Registration.Strasse value=dfsa />
+                        </div>
+                    </ks-a-input>
+                </div>
+                <br/>
+                <div>
+                    <ks-a-input mode=false>
+                        <div class=wrap>
+                            <label for=Data_Registration_Zusatz>Zusatz</label> <input type=text data-val=true data-val-length="The field Zusatz must be a string with a maximum length of 40." data-val-length-max=40 id=Data_Registration_Zusatz maxlength=40 name=Data.Registration.Zusatz />
+                        </div>
+                    </ks-a-input>
+                </div>
+                <br/> <o-grid namespace=grid-12er- mobile-breakpoint=600px tablet-breakpoint=1300px mode=false id=checkout-bewilliger-grid-plz-ort count-section-children=2>
+                    <section>
+                        <div col-lg=4 col-md=4 col-sm=12>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_Plz>PLZ*</label> <input type=tel required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihre Postleitzahl an"},"min-length":{"value":"4","error-message":"Bitte geben Sie Ihre Postleitzahl an"},"pattern":{"pattern-value":"^[0-9]*$","error-message":"Bitte geben Sie eine korrekte Postleitzahl ein"}}' data-val=true data-val-length="The field Plz must be a string with a minimum length of 4 and a maximum length of 5." data-val-length-max=5 data-val-length-min=4 data-val-required="The Plz field is required." id=Data_Registration_Plz maxlength=5 name=Data.Registration.Plz value=5345 />
+                                </div>
+                            </ks-a-input>
+                        </div>
+                        <div col-lg=8 col-md=8 col-sm=12>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_Ort>Ort*</label> <input type=text required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihren Ort an"}}' data-val=true data-val-length="The field Ort must be a string with a maximum length of 40." data-val-length-max=40 data-val-required="The Ort field is required." id=Data_Registration_Ort maxlength=40 name=Data.Registration.Ort value=fdsa />
+                                </div>
+                            </ks-a-input>
+                        </div>
+                    </section>
+                </o-grid> <br/>
+                <div>
+                    <ks-m-select mode=false>
+                        <div class=wrap>
+                            <label for=Data_Registration_Land>Land*</label> <select required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihr Land an"}}' data-val=true data-val-length="The field Land must be a string with a maximum length of 2." data-val-length-max=2 data-val-required="The Land field is required." id=Data_Registration_Land name=Data.Registration.Land>
+                                <option value=CH selected>Schweiz</option>
+                                <option value=DE>Deutschland</option>
+                                <option value=FR>Frankreich</option>
+                                <option value=IT>Italien</option>
+                                <option value=LI>Liechtenstein</option>
+                                <option value=AT>&#xD6;sterreich</option>
+                            </select>
+                        </div>
+                    </ks-m-select>
+                </div>
+                <br/>
+                <div>
+                    <ks-a-input mode=false>
+                        <div class=wrap>
+                            <label for=Data_Registration_Telefon>Telefon*</label> <input type=tel required data-m-v-rules='{"required":{"error-message":"Bitte gültige Telefonnummer eingeben"},"min-length":{"value":"10","error-message":"Bitte geben Sie eine gültige Telefonnummer ein."},"pattern":{"pattern-value":"(^(0041|041|\\+41|\\+\\+41)\\s?(0|\\(0\\))?([1-9]\\d{1})\\s?(\\d{3})\\s?(\\d{2})\\s?(\\d{2})$)|(^0([1-9]\\d{2}\\s?([0-9\\s]*))|((^(0049|049|\\+49|\\+\\+49)\\s?\\d*)|(^(0043|043|\\+43|\\+\\+43)\\s?([0-9\\s]*)))|(^(0042|042|\\+42|\\+\\+42)\\s?\\d*)|(^(0039|039|\\+39|\\+\\+39)\\s?([0-9\\s]*))|(^(0033|033|\\+33|\\+\\+33)\\s?([0-9\\s]*))$)","error-message":"Bitte geben Sie eine gültige Telefonnummer ein."}}' data-val=true data-val-length="The field Telefon must be a string with a minimum length of 10 and a maximum length of 30." data-val-length-max=30 data-val-length-min=10 data-val-required="The Telefon field is required." id=Data_Registration_Telefon maxlength=30 name=Data.Registration.Telefon value=0798909898 />
+                            <div class=hint>
+                                <span>Landesvorwahl eingeben, z.B. &quot;&#x2B;41&quot;</span>
+                            </div>
+                        </div>
+                    </ks-a-input>
+                </div>
+                <br/>
+                <div>
+                    <ks-a-input mode=false>
+                        <div class=wrap>
+                            <label for=Data_Registration_Email>E-Mail*</label> <input type=email required live-input-validation=true data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihre E-Mail Adresse an"},"email":{"error-message":"Geben Sie eine gültige E-Mail Adresse ein."}}' data-val=true data-val-length="The field Email must be a string with a maximum length of 70." data-val-length-max=70 data-val-required="The Email field is required." id=Data_Registration_Email maxlength=70 name=Data.Registration.Email value=fda@fdas.com />
+                        </div>
+                    </ks-a-input>
+                </div>
+                <br/>
+                <div>
+                    <ks-a-input mode=false>
+                        <div class=wrap>
+                            <label for=Data_Registration_Geburtsdatum>Geburtstag*</label> <input type=date max=2025-11-07 required live-input-validation=true data-m-v-rules='{"required":{"error-message":"Bitte geben Sie ein gültiges Datum ein (tt.mm.jjjj)"},"min-date-value":{"value":"1902-11-07","error-message":"Bitte geben Sie ein gültiges Datum ein (tt.mm.jjjj)"},"max-date-value":{"value":"2025-11-07","error-message":"Bitte geben Sie ein korrektes Geburtsdatum ein"}}' id=Data_Registration_Geburtsdatum name=Data.Registration.Geburtsdatum value=2000-09-09 />
+                            <input name=__Invariant type=hidden value=Data.Registration.Geburtsdatum />
+                        </div>
+                    </ks-a-input>
+                </div>
+                <br/>
+                <div>
+                    <div>
+                        <ks-a-checkbox mode=false namespace=checkbox-default->
+                            <div class=wrap>
+                                <div class=control>
+                                    <label for=Data_Registration_AlsGeschenk>Ich m&#xF6;chte den Kurs der oben angegebenen Person schenken.</label> <input type=checkbox trigger data-val=true data-val-required="The AlsGeschenk field is required." id=Data_Registration_AlsGeschenk name=Data.Registration.AlsGeschenk value=true />
+                                    <div class=box>
+                                        <a-icon-mdx icon-name=Check size=1.25em rotate=0 tabindex=0>
+                                            
+                                        </a-icon-mdx>
+                                    </div>
+                                </div>
+                            </div>
+                        </ks-a-checkbox>
+                        <section hidden inset visible-by=Data_Registration_AlsGeschenk visible-condition=true>
+                            <p>Bitte geben Sie an, ab wann wir den/die Teilnehmer/in kontaktieren dürfen.</p>
+                            <p>Um das Geschenk als Überraschung zu halten, wird folgende Korrespondenz statt an die beschenkte Person direkt an Sie als Rechnungsempfänger geleitet: Anmeldebestätigung, Rechnung, Teilnehmerausweis und symbolischer Geschenkgutschein. Bitte wählen Sie jedoch ein Datum, ab wann die beschenkte Person jegliche weitere Kommunikation erhalten darf.</p>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_AlsGeschenkAb>Datum</label> <input type=date min=2025-11-07 required live-input-validation=true data-m-v-rules='{"required":{"error-message":"Bitte wählen Sie jedoch ein Datum, ab wann die beschenkte Person jegliche weitere Kommunikation erhalten darf."},"min-date-value":{"value":"2025-11-07","error-message":"Bitte geben Sie ein zukünftiges Datum ein."},"max-date-value":{"value":"9999-12-31","error-message":"Bitte wählen Sie jedoch ein Datum, ab wann die beschenkte Person jegliche weitere Kommunikation erhalten darf."}}' id=Data_Registration_AlsGeschenkAb name=Data.Registration.AlsGeschenkAb />
+                                    <input name=__Invariant type=hidden value=Data.Registration.AlsGeschenkAb />
+                                </div>
+                            </ks-a-input>
+                        </section>
+                    </div>
+                </div>
+                <br/>
+                <div>
+                    <div>
+                        <ks-a-checkbox mode=false namespace=checkbox-default->
+                            <div class=wrap>
+                                <div class=control>
+                                    <label for=Data_Registration_RechnungsempfaengerAbweichend>Rechnung an abweichende Adresse</label> <input type=checkbox triggered-by=Data_Registration_AlsGeschenk data-val=true data-val-required="The RechnungsempfaengerAbweichend field is required." id=Data_Registration_RechnungsempfaengerAbweichend name=Data.Registration.RechnungsempfaengerAbweichend value=true />
+                                    <div class=box>
+                                        <a-icon-mdx icon-name=Check size=1.25em rotate=0 tabindex=0>
+                                            
+                                        </a-icon-mdx>
+                                    </div>
+                                </div>
+                            </div>
+                        </ks-a-checkbox>
+                    </div>
+                    <section hidden inset visible-by=Data_Registration_RechnungsempfaengerAbweichend visible-condition=true>
+                        <br/>
+                        <ks-a-heading tag=h2 style-as=h1 tabindex=0>Rechnungsadresse</ks-a-heading> <br/>
+                        <div>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_RechnungsempfaengerFirma>Firma</label> <input type=text data-val=true data-val-length="The field RechnungsempfaengerFirma must be a string with a maximum length of 50." data-val-length-max=50 data-val-required="The RechnungsempfaengerFirma field is required." id=Data_Registration_RechnungsempfaengerFirma maxlength=50 name=Data.Registration.RechnungsempfaengerFirma />
+                                </div>
+                            </ks-a-input>
+                        </div>
+                        <br/>
+                        <div>
+                            <label>Anrede*</label> <ks-a-radio row mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_RechnungsempfaengerAnredeCode_1>Herr</label> <input type=radio value=1 required error-message-reference-point-changed=true no-error-text-p error-text-tag-name=span id=Data_Registration_RechnungsempfaengerAnredeCode_1 data-m-v-rules='{"required":{"error-message":"Bitte wählen Sie eine Anrede"}}' data-val=true data-val-required="The RechnungsempfaengerAnredeCode field is required." name=Data.Registration.RechnungsempfaengerAnredeCode />
+                                    <div class=box>
+                                        
+                                    </div>
+                                </div>
+                                <div class=wrap>
+                                    <label for=Data_Registration_RechnungsempfaengerAnredeCode_2>Frau</label> <input type=radio value=2 required error-message-reference-point-changed=true no-error-text-p error-text-tag-name=span id=Data_Registration_RechnungsempfaengerAnredeCode_2 data-m-v-rules='{"required":{"error-message":"Bitte wählen Sie eine Anrede"}}' name=Data.Registration.RechnungsempfaengerAnredeCode />
+                                    <div class=box>
+                                        
+                                    </div>
+                                </div>
+                                <div class=message>
+                                    <a-icon-mdx namespace=icon-mdx-ks-forms- icon-name=AlertCircle size=var(--ks-error-icon-size) rotate=0 class=icon-left new-error-message-reference-point=true>
+                                        
+                                    </a-icon-mdx>
+                                </div>
+                            </ks-a-radio>
+                        </div>
+                        <br/> <o-grid namespace=grid-12er- mobile-breakpoint=600px tablet-breakpoint=1300px mode=false id=checkout-bewilliger-grid-re-name-vorname count-section-children=2>
+                            <section>
+                                <div col-lg=6 col-md=6 col-sm=12>
+                                    <ks-a-input mode=false>
+                                        <div class=wrap>
+                                            <label for=Data_Registration_RechnungsempfaengerVorname>Vorname*</label> <input type=text required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihren Vornamen an"}}' data-val=true data-val-length="The field RechnungsempfaengerVorname must be a string with a maximum length of 40." data-val-length-max=40 data-val-required="The RechnungsempfaengerVorname field is required." id=Data_Registration_RechnungsempfaengerVorname maxlength=40 name=Data.Registration.RechnungsempfaengerVorname />
+                                        </div>
+                                    </ks-a-input>
+                                </div>
+                                <div col-lg=6 col-md=6 col-sm=12>
+                                    <ks-a-input mode=false>
+                                        <div class=wrap>
+                                            <label for=Data_Registration_RechnungsempfaengerNachname>Name*</label> <input type=text required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihren Namen an"}}' data-val=true data-val-length="The field RechnungsempfaengerNachname must be a string with a maximum length of 40." data-val-length-max=40 data-val-required="The RechnungsempfaengerNachname field is required." id=Data_Registration_RechnungsempfaengerNachname maxlength=40 name=Data.Registration.RechnungsempfaengerNachname />
+                                        </div>
+                                    </ks-a-input>
+                                </div>
+                            </section>
+                        </o-grid> <br/>
+                        <div>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_RechnungsempfaengerStrasse>Strasse und Nr.*</label> <input type=text required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihre Strasse an"}}' data-val=true data-val-length="The field RechnungsempfaengerStrasse must be a string with a maximum length of 50." data-val-length-max=50 data-val-required="The RechnungsempfaengerStrasse field is required." id=Data_Registration_RechnungsempfaengerStrasse maxlength=50 name=Data.Registration.RechnungsempfaengerStrasse />
+                                </div>
+                            </ks-a-input>
+                        </div>
+                        <br/>
+                        <div>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_RechnungsempfaengerZusatz>Zusatz</label> <input type=text data-val=true data-val-length="The field RechnungsempfaengerZusatz must be a string with a maximum length of 40." data-val-length-max=40 data-val-required="The RechnungsempfaengerZusatz field is required." id=Data_Registration_RechnungsempfaengerZusatz maxlength=40 name=Data.Registration.RechnungsempfaengerZusatz />
+                                </div>
+                            </ks-a-input>
+                        </div>
+                        <br/> <o-grid namespace=grid-12er- mobile-breakpoint=600px tablet-breakpoint=1300px mode=false id=checkout-bewilliger-grid-re-plz-ort count-section-children=2>
+                            <section>
+                                <div col-lg=4 col-md=4 col-sm=12>
+                                    <ks-a-input mode=false>
+                                        <div class=wrap>
+                                            <label for=Data_Registration_RechnungsempfaengerPlz>PLZ*</label> <input type=tel required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihre Postleitzahl an"},"min-length":{"value":"4","error-message":"Bitte geben Sie Ihre Postleitzahl an"},"pattern":{"pattern-value":"^[0-9]*$","error-message":"Bitte geben Sie eine korrekte Postleitzahl ein"}}' data-val=true data-val-length="The field RechnungsempfaengerPlz must be a string with a minimum length of 4 and a maximum length of 5." data-val-length-max=5 data-val-length-min=4 data-val-required="The RechnungsempfaengerPlz field is required." id=Data_Registration_RechnungsempfaengerPlz maxlength=5 name=Data.Registration.RechnungsempfaengerPlz />
+                                        </div>
+                                    </ks-a-input>
+                                </div>
+                                <div col-lg=8 col-md=8 col-sm=12>
+                                    <ks-a-input mode=false>
+                                        <div class=wrap>
+                                            <label for=Data_Registration_RechnungsempfaengerOrt>Ort*</label> <input type=text required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihren Ort an"}}' data-val=true data-val-length="The field RechnungsempfaengerOrt must be a string with a maximum length of 40." data-val-length-max=40 data-val-required="The RechnungsempfaengerOrt field is required." id=Data_Registration_RechnungsempfaengerOrt maxlength=40 name=Data.Registration.RechnungsempfaengerOrt />
+                                        </div>
+                                    </ks-a-input>
+                                </div>
+                            </section>
+                        </o-grid> <br/>
+                        <div>
+                            <ks-m-select mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_RechnungsempfaengerLand>Land*</label> <select required data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihr Land an"}}' data-val=true data-val-length="The field RechnungsempfaengerLand must be a string with a maximum length of 2." data-val-length-max=2 data-val-required="The RechnungsempfaengerLand field is required." id=Data_Registration_RechnungsempfaengerLand name=Data.Registration.RechnungsempfaengerLand>
+                                        <option value=CH>Schweiz</option>
+                                        <option value=DE>Deutschland</option>
+                                        <option value=FR>Frankreich</option>
+                                        <option value=IT>Italien</option>
+                                        <option value=LI>Liechtenstein</option>
+                                        <option value=AT>&#xD6;sterreich</option>
+                                    </select>
+                                </div>
+                            </ks-m-select>
+                        </div>
+                        <br/>
+                        <div>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_RechnungsempfaengerTelefon>Telefon*</label> <input type=tel required data-m-v-rules='{"required":{"error-message":"Bitte gültige Telefonnummer eingeben"},"min-length":{"value":"10","error-message":"Bitte geben Sie eine gültige Telefonnummer ein."},"pattern":{"pattern-value":"(^(0041|041|\\+41|\\+\\+41)\\s?(0|\\(0\\))?([1-9]\\d{1})\\s?(\\d{3})\\s?(\\d{2})\\s?(\\d{2})$)|(^0([1-9]\\d{2}\\s?([0-9\\s]*))|((^(0049|049|\\+49|\\+\\+49)\\s?\\d*)|(^(0043|043|\\+43|\\+\\+43)\\s?([0-9\\s]*)))|(^(0042|042|\\+42|\\+\\+42)\\s?\\d*)|(^(0039|039|\\+39|\\+\\+39)\\s?([0-9\\s]*))|(^(0033|033|\\+33|\\+\\+33)\\s?([0-9\\s]*))$)","error-message":"Bitte geben Sie eine gültige Telefonnummer ein."}}' data-val=true data-val-length="The field RechnungsempfaengerTelefon must be a string with a minimum length of 10 and a maximum length of 30." data-val-length-max=30 data-val-length-min=10 id=Data_Registration_RechnungsempfaengerTelefon maxlength=30 name=Data.Registration.RechnungsempfaengerTelefon />
+                                    <div class=hint>
+                                        <span>Landesvorwahl eingeben, z.B. &quot;&#x2B;41&quot;</span>
+                                    </div>
+                                </div>
+                            </ks-a-input>
+                        </div>
+                        <br/>
+                        <div>
+                            <ks-a-input mode=false>
+                                <div class=wrap>
+                                    <label for=Data_Registration_RechnungsempfaengerEmail>E-Mail*</label> <input type=email required live-input-validation=true data-m-v-rules='{"required":{"error-message":"Bitte geben Sie Ihre E-Mail Adresse an"},"email":{"error-message":"Geben Sie eine gültige E-Mail Adresse ein."}}' data-val=true data-val-length="The field RechnungsempfaengerEmail must be a string with a maximum length of 70." data-val-length-max=70 data-val-required="The RechnungsempfaengerEmail field is required." id=Data_Registration_RechnungsempfaengerEmail maxlength=70 name=Data.Registration.RechnungsempfaengerEmail />
+                                </div>
+                            </ks-a-input>
+                        </div>
+                    </section>
+                </div>
+            </section>
+            <section id=sidebar>
+                <ks-m-checkout-booked-offer headline="Sie haben sich für folgendes Angebot entschieden" name="Englisch Niveau A2" status="{&#34;code&#34;:&#34;2&#34;,&#34;label&#34;:&#34;Gestartet, Einstieg möglich&#34;}" date="19.08.2025 - 25.11.2025" time="Di, 20:00 - 21:50" street="Rue de Genève 33" city=1003&amp;nbsp;Lausanne course-price="649.50 CHF" initial-configuration-price-data="{&#34;annulationskostenversicherungPreis&#34;:&#34;&#34;,&#34;lehrmittelPreis&#34;:&#34;75.00 CHF&#34;,&#34;materialPreis&#34;:&#34;&#34;,&#34;totalPreis&#34;:&#34;724.50 CHF&#34;}" price-labels="{&#34;coursePrice&#34;:&#34;Kursgeld&#34;,&#34;insurance&#34;:&#34;Annullationskostenversicherung&#34;,&#34;teachingAids&#34;:&#34;Lehrmittel&#34;,&#34;material&#34;:&#34;Materialkosten&#34;,&#34;total&#34;:&#34;Total&#34;,&#34;tax&#34;:&#34;inkl. allfälliger MWST&#34;}" tabindex=0> </ks-m-checkout-booked-offer>
+            </section>
+            <section id=bottom>
+                <ks-m-back-forward back-label=Zurück back-link=/sprachen/englischkurse/englisch-niveau-a2/kurs/englisch-niveau-a2--E_1805249_2671_324/loginmethod forward-label="Weiter zur Zahlung" submit>
+                </ks-m-back-forward>
+            </section>
+        </ks-o-checkout-layout> </ks-o-checkout> <input name=Data.Registration.AlsGeschenk type=hidden value=false />
+        <input name=Data.Registration.RechnungsempfaengerAbweichend type=hidden value=false />
+    </form>
+</m-simple-form-validation>
 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum minus aspernatur repellat, accusantium exercitationem ut quaerat fugiat ullam consequuntur repellendus expedita quas doloremque veniam perspiciatis! Sunt dolor ipsam accusamus exercitationem.</p>
 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum minus aspernatur repellat, accusantium exercitationem ut quaerat fugiat ullam consequuntur repellendus expedita quas doloremque veniam perspiciatis! Sunt dolor ipsam accusamus exercitationem.</p>
 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum minus aspernatur repellat, accusantium exercitationem ut quaerat fugiat ullam consequuntur repellendus expedita quas doloremque veniam perspiciatis! Sunt dolor ipsam accusamus exercitationem.</p>
