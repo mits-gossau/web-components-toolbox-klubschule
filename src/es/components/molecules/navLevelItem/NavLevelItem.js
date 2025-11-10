@@ -6,7 +6,7 @@ export default class NavLevelItem extends Shadow() {
     return ['namespace']
   }
   constructor (options = {}, ...args) {
-    super({ keepCloneOutsideShadowRoot: true, importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ keepCloneOutsideShadowRoot: true, importMetaUrl: import.meta.url, tabindex: 'no-tabindex-style', ...options }, ...args)
 
     this.clickListener = event => {
       if (this.getAttribute('request-event-name')) {
