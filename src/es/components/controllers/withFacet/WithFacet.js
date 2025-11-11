@@ -68,6 +68,7 @@ export default class WithFacet extends WebWorker() {
     //   initialFilter = this.getNullFilter()
     // }
 
+    /* ###[url]### */
     /* ### gets sent intially to the api to start or reset the session with initialRequestObj  ### */
     /* ### case: history push when api returns new url params  ### */
     // this url is not changed but used for url history push stuff
@@ -134,6 +135,7 @@ export default class WithFacet extends WebWorker() {
     //   isLocalStorageType ? localStorage.setItem("locationData", JSON.stringify(locationData)) : sessionStorage.setItem("locationData", JSON.stringify(locationData))
     // }
 
+    /* ### on userinteraction specific api call ### */
     /* ### sorting has to be managed by api session ### */
     /* ### on userinteraction navigator coordinates make call to api "/coordinates:rawCor" ### */
     // this.updateUrlBasedStorage = storageType => {
@@ -162,66 +164,79 @@ export default class WithFacet extends WebWorker() {
     // }
 
     // @ts-ignore
-    if (this.saveLocationDataInLocalStorage) this.fillStorage('local')
+    // if (this.saveLocationDataInLocalStorage) this.fillStorage('local')
 
     // @ts-ignore
-    if (this.saveLocationDataInSessionStorage) this.fillStorage('session')
+    // if (this.saveLocationDataInSessionStorage) this.fillStorage('session')
 
-    if (this.params.has('q')) currentRequestObj.searchText = this.params.get('q')
-    if (this.params.has('clat')) currentRequestObj.clat = this.params.get('clat')
-    if (this.params.has('clong')) currentRequestObj.clong = this.params.get('clong')
+    /* ###see Line 71 ### */
+    /* ###[url]### */
+    // if (this.params.has('q')) currentRequestObj.searchText = this.params.get('q')
+    // if (this.params.has('clat')) currentRequestObj.clat = this.params.get('clat')
+    // if (this.params.has('clong')) currentRequestObj.clong = this.params.get('clong')
 
+    /* ### see comments above regarding sorting and coordinates ### */
+    /* ### who communicates with google map api? if FE, this cname must stay ### */
     // check if URL contains course detail pattern (e.g., D_88579_2674_225) with cname and sorting=2
     // if so, remove sorting=2 from URL and payload
-    const courseDetailPattern = /[A-Z]_\d+_\d+_\d+/
-    if (this.params.has('cname') && this.params.get('sorting') === '2' && courseDetailPattern.test(window.location.pathname)) {
-      this.deleteParamFromUrl('sorting')
-      delete currentRequestObj.sorting
-    }
+    // const courseDetailPattern = /[A-Z]_\d+_\d+_\d+/
+    // if (this.params.has('cname') && this.params.get('sorting') === '2' && courseDetailPattern.test(window.location.pathname)) {
+    //   this.deleteParamFromUrl('sorting')
+    //   delete currentRequestObj.sorting
+    // }
 
+    /* ### see comments above regarding sorting and coordinates ### */
     // intial sorting when page is refreshed
-    if (!currentRequestObj.sorting) {
-      currentRequestObj.sorting = 3 // alphabetic
-      if (currentRequestObj.clat && currentRequestObj.clong && !currentRequestObj.searchText) currentRequestObj.sorting = 2 // distance
-    }
+    // if (!currentRequestObj.sorting) {
+    //   currentRequestObj.sorting = 3 // alphabetic
+    //   if (currentRequestObj.clat && currentRequestObj.clong && !currentRequestObj.searchText) currentRequestObj.sorting = 2 // distance
+    // }
 
+    /* ### see comments above regarding sorting and coordinates ### */
     // If shared with active Sorting, keep param for other user
-    if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
+    //if (this.params.has('sorting')) currentRequestObj.sorting = Number(this.params.get('sorting'))
 
+    /* ### see comments above regarding sorting and coordinates ### */
     // if the user has a location search, set the sorting to distance, but not on page refresh
-    const isSamePath = sessionStorage.getItem('currentPathname') === window.location.pathname
-    if (this.params.has('clat') && !isSamePath && !currentRequestObj.searchText) {
-      currentRequestObj.sorting = 2
-      this.updateURLParam('sorting', 2)
-    }
-    sessionStorage.setItem('currentPathname', window.location.pathname)
+    // const isSamePath = sessionStorage.getItem('currentPathname') === window.location.pathname
+    // if (this.params.has('clat') && !isSamePath && !currentRequestObj.searchText) {
+    //   currentRequestObj.sorting = 2
+    //   this.updateURLParam('sorting', 2)
+    // }
+    // sessionStorage.setItem('currentPathname', window.location.pathname)
     
+    /* ### see comments above regarding sorting and coordinates ### */
     // if performing a search query, always sort by relevance unless the page is refreshed
-    if (this.params.has('q') && isSearchPage && !isPageRefreshed) {
-      currentRequestObj.sorting = 1 // relevance
-      this.updateURLParam('sorting', 1)
-      sessionStorage.setItem('currentSorting', '1')
-    }
+    // if (this.params.has('q') && isSearchPage && !isPageRefreshed) {
+    //   currentRequestObj.sorting = 1 // relevance
+    //   this.updateURLParam('sorting', 1)
+    //   sessionStorage.setItem('currentSorting', '1')
+    // }
 
     this.requestWithFacetListener = async event => {
+      /* ### ppage is managed in api session. userinteraction on load more triggers specific api call. ### */
       // Reset PPage after filter Change / Reset
-      currentRequestObj.ppage = 0
+      //currentRequestObj.ppage = 0
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
       if (this.abortController) this.abortController.abort()
       this.abortController = new AbortController()
 
       let filterId = null
-      let filterGroupName = null
-      let hasSelectedFilter = false
+
+      /* ### no more managing selected filters nor groups ### */
+      //let filterGroupName = null
+      //let hasSelectedFilter = false
       if (event?.detail?.ppage) {
+        /* ### ppage is one api call triggered by userinteraction ### */
+        /* ### Expl: fetch("endpoint/update-ppage", payload: { value: userInteractionPpage }) ### */
         // ppage reuse last request
-        currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
-        if (!currentRequestObj.filters?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
-        const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
-        hasSelectedFilter = result[2]
-        currentCompleteFilterObj = result[0]
-        currentRequestObj.filters = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
+        // currentRequestObj = Object.assign(currentRequestObj, { ppage: event.detail.ppage })
+        // if (!currentRequestObj.filters?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
+        // const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, undefined, undefined)
+        // hasSelectedFilter = result[2]
+        // currentCompleteFilterObj = result[0]
+        // currentRequestObj.filters = [...result[1], ...initialFilter.filter(filter => !result[1].find(resultFilterItem => resultFilterItem.id === filter.id))]
       } else if (event?.type === 'reset-all-filters') {
         // take the params from url
         // check the key with the urlpara from filter in currentRequestObj.filters
