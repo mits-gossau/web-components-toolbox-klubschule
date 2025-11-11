@@ -36,106 +36,130 @@ export default class WithFacet extends WebWorker() {
       ...options
     }, ...args)
 
-    this.filterOnly = false
+    /* ### withfacet 2.0 ### */
+    /* ### possible flag in new api ### */
+    //this.filterOnly = false
 
     let timeoutId = null
-    const coordinatesToTerm = new Map()
+
+    /* ### on userinteraction navigator coordinates make call to api "/coordinates:rawCor" ### */
+    //const coordinatesToTerm = new Map()
+    /* ### gets sent intially to the api to start or reset the session with url ### */
     // the initial request object received through the attribute, never changes and is always included
     const initialRequestObj = JSON.parse(this.getAttribute('initial-request')) || {}
-    // NOTE: The api has on payload filter and on response filters. Now both are filters, below if is for fixing old payloads as initial request objects.
-    if (initialRequestObj.filter) {
-      initialRequestObj.filters = initialRequestObj.filter
-      delete initialRequestObj.filter
-    }
-    // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
-    let currentRequestObj = structuredClone(initialRequestObj)
-    // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filters, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
-    let currentCompleteFilterObj = currentRequestObj.filters || []
-    // base request nullFilter
-    let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
-    // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
-    if (initialFilter.length < 1) {
-      this.filterOnly = false
-      initialFilter = this.getNullFilter()
-    }
 
+    /* ### simply keep the initial filter and never change it! ### */
+    // NOTE: The api has on payload filter and on response filters. Now both are filters, below if is for fixing old payloads as initial request objects.
+    // if (initialRequestObj.filter) {
+    //   initialRequestObj.filters = initialRequestObj.filter
+    //   delete initialRequestObj.filter
+    // }
+
+    /* ### only initial request obj is kept, the user/filter session is managed by the api ### */
+    // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
+    // let currentRequestObj = structuredClone(initialRequestObj)
+    // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filters, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
+    // let currentCompleteFilterObj = currentRequestObj.filters || []
+    // base request nullFilter
+    // let initialFilter = this.getInitialBaseFilters(currentCompleteFilterObj)
+    // Set "null" Filter as base Filter, if no prefiltering is happening. e.g. "Sprachen"
+    // if (initialFilter.length < 1) {
+    //   this.filterOnly = false
+    //   initialFilter = this.getNullFilter()
+    // }
+
+    /* ### gets sent intially to the api to start or reset the session with initialRequestObj  ### */
+    /* ### case: history push when api returns new url params  ### */
     // this url is not changed but used for url history push stuff
-    this.url = new URL(self.location.href)
-    this.params = new URLSearchParams(self.location.search)
-    const isSearchPage = this.hasAttribute('search-page') || ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.startsWith(path))
+    //this.url = new URL(self.location.href)
+    //this.params = new URLSearchParams(self.location.search)
+
+    /* ### api decides this internally by knowing the url on intial api call with url and initialRequstObj ### */
+    //const isSearchPage = this.hasAttribute('search-page') || ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.startsWith(path))
+    
     const isMocked = this.hasAttribute('mock')
     const isMockedInfoEvents = this.hasAttribute('mock-info-events')
     let endpoint = isMocked
       ? `${this.importMetaUrl}./mock/default.json`
       : `${this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Search'}`
+
+    /* ### does this require separate endpoints? ### */
     const isInfoEvents = this.hasAttribute('endpoint-info-events')
     const isOtherLocations = this.hasAttribute('is-other-locations')
     let endpointInfoEvents = this.getAttribute('endpoint-info-events') || 'https://dev.klubschule.ch/Umbraco/Api/CourseApi/Informationevent'
-    if (!endpointInfoEvents.startsWith('http://') && !endpointInfoEvents.startsWith('https://')) {
-      endpointInfoEvents = `${this.url.origin}${endpointInfoEvents}`
-    }
+    // if (!endpointInfoEvents.startsWith('http://') && !endpointInfoEvents.startsWith('https://')) {
+    //   endpointInfoEvents = `${this.url.origin}${endpointInfoEvents}`
+    // }
     if (isMockedInfoEvents) endpoint = new URL('./mock/info-events.json', import.meta.url).href
     this.abortController = null
-    this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
-    this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
 
+    /* ### on userinteraction navigator coordinates make call to api "/coordinates:rawCor" ### */
+    /* ### cordinates session management is at api ### */
+    //this.saveLocationDataInLocalStorage = this.hasAttribute('save-location-local-storage')
+    //this.saveLocationDataInSessionStorage = this.hasAttribute('save-location-session-storage')
+
+    /* ### can be tracked by the api session. intial request === pageIsRefreshed ### */
     // check if the page was refreshed
-    const navigationEntry = window.performance.getEntries().find(entry => entry.entryType === 'navigation')
+    //const navigationEntry = window.performance.getEntries().find(entry => entry.entryType === 'navigation')
     // @ts-ignore
-    const isPageRefreshed = navigationEntry && navigationEntry.type === 'reload'
+    //const isPageRefreshed = navigationEntry && navigationEntry.type === 'reload'
 
-    this.fillStorage = storageType => {
-      const isLocalStorageType = storageType === 'local'
-      // update storage based on url
-      if (this.params.has('clat') && this.params.has('clong') && this.params.get('cname')) {
-        let locationData = {
-          clat: this.params.get('clat'),
-          clong: this.params.get('clong'),
-          cnameDecoded: decodeURIComponent(this.params.get('cname') || ''),
-          cnameCoded: this.params.get('cname')
-        }
-        // @ts-ignore
-        isLocalStorageType ? localStorage.setItem("locationData", JSON.stringify(locationData)) : sessionStorage.setItem("locationData", JSON.stringify(locationData))
-      } // update url based storage 
-      else if (isLocalStorageType ? localStorage.getItem('locationData') : sessionStorage.getItem('locationData')) this.updateUrlBasedStorage(isLocalStorageType ? 'local' : 'session')
-    }
+    /* ### on userinteraction navigator coordinates make call to api "/coordinates:rawCor" ### */
+    // this.fillStorage = storageType => {
+    //   const isLocalStorageType = storageType === 'local'
+    //   // update storage based on url
+    //   if (this.params.has('clat') && this.params.has('clong') && this.params.get('cname')) {
+    //     let locationData = {
+    //       clat: this.params.get('clat'),
+    //       clong: this.params.get('clong'),
+    //       cnameDecoded: decodeURIComponent(this.params.get('cname') || ''),
+    //       cnameCoded: this.params.get('cname')
+    //     }
+    //     // @ts-ignore
+    //     isLocalStorageType ? localStorage.setItem("locationData", JSON.stringify(locationData)) : sessionStorage.setItem("locationData", JSON.stringify(locationData))
+    //   } // update url based storage 
+    //   else if (isLocalStorageType ? localStorage.getItem('locationData') : sessionStorage.getItem('locationData')) this.updateUrlBasedStorage(isLocalStorageType ? 'local' : 'session')
+    // }
 
-    this.updateStorageBasedEvent = (storageType, event) => {
-      const isLocalStorageType = storageType === 'local'
-      let locationData = {
-        clat: event.detail.lat,
-        clong: event.detail.lng,
-        cnameDecoded: event.detail.description,
-        cnameCoded: encodeURIComponent(event.detail.description)
-      }
-      // @ts-ignore
-      isLocalStorageType ? localStorage.setItem("locationData", JSON.stringify(locationData)) : sessionStorage.setItem("locationData", JSON.stringify(locationData))
-    }
+    /* ### on userinteraction navigator coordinates make call to api "/coordinates:rawCor" ### */
+    // this.updateStorageBasedEvent = (storageType, event) => {
+    //   const isLocalStorageType = storageType === 'local'
+    //   let locationData = {
+    //     clat: event.detail.lat,
+    //     clong: event.detail.lng,
+    //     cnameDecoded: event.detail.description,
+    //     cnameCoded: encodeURIComponent(event.detail.description)
+    //   }
+    //   // @ts-ignore
+    //   isLocalStorageType ? localStorage.setItem("locationData", JSON.stringify(locationData)) : sessionStorage.setItem("locationData", JSON.stringify(locationData))
+    // }
 
-    this.updateUrlBasedStorage = storageType => {
-      const isLocalStorageType = storageType === 'local'
-      // @ts-ignore
-      const dataFromStorage = isLocalStorageType ? JSON.parse(localStorage.getItem('locationData')) : JSON.parse(sessionStorage.getItem('locationData'))
-      currentRequestObj.clat = dataFromStorage.clat
-      currentRequestObj.clong = dataFromStorage.clong
-      currentRequestObj.cname = dataFromStorage.cnameCoded
-      this.updateURLParam('clat', dataFromStorage.clat)
-      this.updateURLParam('clong', dataFromStorage.clong)
-      this.updateURLParam('cname', dataFromStorage.cnameCoded)
-      if (!this.params.has('sorting')) {
-        if (sessionStorage.getItem('currentSorting')) {
-          this.updateURLParam('sorting', sessionStorage.getItem('currentSorting'))
-        } else {
-          if (isSearchPage && currentRequestObj.clat) {
-            this.updateURLParam('sorting', 1)
-            sessionStorage.setItem('currentSorting', '1')
-          } else {
-            this.updateURLParam('sorting', 2)
-            sessionStorage.setItem('currentSorting', '2')
-          }
-        }
-      }
-    }
+    /* ### sorting has to be managed by api session ### */
+    /* ### on userinteraction navigator coordinates make call to api "/coordinates:rawCor" ### */
+    // this.updateUrlBasedStorage = storageType => {
+    //   const isLocalStorageType = storageType === 'local'
+    //   // @ts-ignore
+    //   const dataFromStorage = isLocalStorageType ? JSON.parse(localStorage.getItem('locationData')) : JSON.parse(sessionStorage.getItem('locationData'))
+    //   currentRequestObj.clat = dataFromStorage.clat
+    //   currentRequestObj.clong = dataFromStorage.clong
+    //   currentRequestObj.cname = dataFromStorage.cnameCoded
+    //   this.updateURLParam('clat', dataFromStorage.clat)
+    //   this.updateURLParam('clong', dataFromStorage.clong)
+    //   this.updateURLParam('cname', dataFromStorage.cnameCoded)
+    //   if (!this.params.has('sorting')) {
+    //     if (sessionStorage.getItem('currentSorting')) {
+    //       this.updateURLParam('sorting', sessionStorage.getItem('currentSorting'))
+    //     } else {
+    //       if (isSearchPage && currentRequestObj.clat) {
+    //         this.updateURLParam('sorting', 1)
+    //         sessionStorage.setItem('currentSorting', '1')
+    //       } else {
+    //         this.updateURLParam('sorting', 2)
+    //         sessionStorage.setItem('currentSorting', '2')
+    //       }
+    //     }
+    //   }
+    // }
 
     // @ts-ignore
     if (this.saveLocationDataInLocalStorage) this.fillStorage('local')
@@ -715,9 +739,9 @@ export default class WithFacet extends WebWorker() {
   }
 
   updatePpage(endpointUrl, currentPpage) {
-    const url = new URL(endpointUrl);
-    url.searchParams.set('ppage', currentPpage + 1);
-    return url.href;
+    const url = new URL(endpointUrl)
+    url.searchParams.set('ppage', currentPpage + 1)
+    return url.href
   }
 
   updateURLParam(key, value, isTree = false) {
