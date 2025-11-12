@@ -552,7 +552,7 @@ export default class CheckoutReminder extends Dialog {
     }
     // check if the page would stay inside the course checkout route. Expl.: https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/loginmethod becomes through the regex https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442 which is included in https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/registration, etc.
     if (url) {
-      if (this.hasAttribute('inside-route') && this.getAttribute('inside-route').some(str => url.origin.includes(str.trim()))) {
+      if (this.hasAttribute('inside-route') && this.getAttribute('inside-route').split(',').some(str => url.origin.includes(str.trim()))) {
         return false
       } else {
         if (url.origin.includes('login.migros')) return false
