@@ -413,6 +413,15 @@ export default class FilterCategories extends Shadow() {
 
     if (!filterItem.visible) return
     if (!isTreeFilter && !isCenterFilter) generatedNavLevelItem.subLevel.innerHTML = ''
+    // generatedNavLevelItem.subLevel.innerHTML = ''
+    // if (isTreeFilter) {
+    //   // remove <m-dialog> of previous children to avoid duplicates and hold correct order from api
+    //   Array.from(generatedNavLevelItem.subLevel.childNodes).forEach(childNode => {
+    //     if (childNode.tagName === 'M-DIALOG') {
+    //       generatedNavLevelItem.subLevel.removeChild(childNode)
+    //     }
+    //   })
+    // }
 
     // Update Count / disabled Status of nav level items after filtering
     if (level !== 0) {
@@ -449,6 +458,8 @@ export default class FilterCategories extends Shadow() {
             } else {
               generatedFilters.forEach(node => generatedNavLevelItem.subLevel.appendChild(node))
             }
+            generatedFilters.forEach(node => node.setAttribute('order', `order: ${i};`))
+            console.log(filterItem, generatedFilters)
           }
         })
       }
