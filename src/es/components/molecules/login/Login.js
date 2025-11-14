@@ -16,7 +16,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Login extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    this.mdxLoginComponent = this.root.querySelector('mdx-login')
+    this.mdxLoginComponent = this.root.querySelector('wct-mdx-login')
 
     this.selfClickListener = event => {
       const mdxLoginFlyout = this.mdxLoginComponent.root.querySelector('mdx-login-flyout')
@@ -66,7 +66,7 @@ export default class Login extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML() {
-    return !this.root.querySelector('mdx-login')
+    return !this.root.querySelector('wct-mdx-login')
   }
 
   /**
@@ -187,7 +187,7 @@ export default class Login extends Shadow() {
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/atoms/login/Login.js`,
-        name: 'mdx-login'
+        name: 'wct-mdx-login'
       }
     ])
   }
