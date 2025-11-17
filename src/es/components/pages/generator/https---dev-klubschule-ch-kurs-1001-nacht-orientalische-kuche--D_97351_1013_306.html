@@ -218,16 +218,27 @@ Veranstaltung w&#xE4;hlen                                </span>
     <m-load-template-tag style="display: block; min-height: 50vh;">
 		<template>
             <ks-m-figure>
-                <ks-a-video namespace="video-default-">
+                <ks-a-video namespace="video-default-" role="region" aria-label="Video: Orientalische Küche - Kochkurs Impression">
                     <iframe src="https://player.vimeo.com/video/1010117722?color=7a634d"
-                            title=""
+                            title="Video: Orientalische Küche - Einblicke in den Kochkurs mit orientalischen Gewürzen und Zubereitungstechniken"
                             width="560"
                             height="315"
-                            frameborder="0"
+                            style="border: none;"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>		    
+                            allowfullscreen
+                            loading="lazy"
+                            tabindex="0"
+                            aria-describedby="video-description-1010117722">
+                    </iframe>
+                    <div id="video-description-1010117722" class="sr-only">
+                        Dieses Video zeigt Impressionen aus unserem Kochkurs "1001 Nacht - Orientalische Küche", 
+                        in dem Sie die Zubereitung orientalischer Gerichte mit traditionellen Gewürzen und 
+                        Zubereitungstechniken erlernen können.
+                    </div>
                 </ks-a-video>
-
+                <figcaption class="sr-only">
+                    Kochkurs-Video: Orientalische Küche mit traditionellen Zubereitungsmethoden
+                </figcaption>
             </ks-m-figure>
         </template>
 	</m-load-template-tag>
