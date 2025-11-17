@@ -9,7 +9,7 @@ Session lifecycle and initialization
 
 - Initial request bootstrap
   - The frontend reads an invariant initialRequestObj from the component attribute initial-request (JSON).
-  - This object is sent once to the API to start or reset the session, along with the current page URL (for API-side URL awareness).
+  - This object is sent once to the API to start or reset the session, along with the current page URL (for API-side URL awareness) and other context specific attributes set by the cms.
 
 - API-managed session
   - After initialization, the API owns:
