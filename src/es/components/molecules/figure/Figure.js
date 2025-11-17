@@ -64,6 +64,7 @@ export default class KsFigure extends Shadow(HTMLElement) {
    * @return {Promise<void>}
    */
   renderCSS () {
+    this.fetchTemplate()
     this.css = /* css */ `
       :host {
         --wrapper-inner-spacing: var(--mdx-sys-spacing-fix-s);
@@ -138,6 +139,24 @@ export default class KsFigure extends Shadow(HTMLElement) {
       }
 
     `
+  }
+
+  /**
+   * fetches the template
+   *
+   * @return {Promise<void>}
+   */
+  fetchTemplate () {
+    return this.fetchCSS([
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/reset.css`, // no variables for this reason no namespace
+        namespace: false
+      },
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/css/style.css`, // apply namespace and fallback to allow overwriting on deeper level
+        namespaceFallback: true
+      }
+    ])
   }
 }
 
