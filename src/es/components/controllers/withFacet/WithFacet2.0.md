@@ -1,14 +1,15 @@
 # WithFacet 2.0
 
 Executive intent
+
 - Centralize all user interaction state (filters, coordinates, URL params, page context, refresh state) in a backend-managed session.
 - The frontend sends an initial request once to begin/reset the session; afterwards, the API is the source of truth for state, URL params, and derived behavior.
 
 Session lifecycle and initialization
+
 - Initial request bootstrap
   - The frontend reads an invariant initialRequestObj from the component attribute initial-request (JSON).
   - This object is sent once to the API to start or reset the session, along with the current page URL (for API-side URL awareness).
-  - Legacy compatibility: if initialRequestObj.filter exists (old schema), interpret it as initialRequestObj.filters and drop filter. The API should accept both, normalize server-side, and persist the normalized form in the session.
 
 - API-managed session
   - After initialization, the API owns:
@@ -20,8 +21,8 @@ Session lifecycle and initialization
     - Detection whether the current page is a search page (see Page context).
     - Page context detection
 
-
 Client responsibilities after migration
+
 - Send one initial “startSession” call with:
   - Current page URL (origin, path, query) for API-side context/param derivation.
 - For subsequent interactions, send concise deltas:
@@ -31,27 +32,44 @@ Client responsibilities after migration
 - Apply URL params returned by the API to history (write-only). Do not parse URL on the client; rely on the session.
 
 Data contracts to support on the API
+
 - Input (examples):
   - Start/reset:
+
+    ```json
     {
       initialRequest: { filters?: ..., filter?: ... , ... },
       url: { href, origin, path, query },
       pageRefreshed?: boolean
     }
+    ```
+
   - Update filters:
+
+    ```json
     {
       changes: { select?: [{ facet, value }], remove?: [{ facet, value }], clearAll?: boolean },
       actionId?: 'userInteractionId'
     }
+    ```
+
   - Update coordinates:
+
+    ```json
     {
       coordinates: { lat, lon, accuracy? }
     }
+    ```
+
   - Mode switch:
+
+    ```json
     {
       resourceType: 'course' | 'informationEvent',
       otherLocations?: boolean
     }
+    ```
+
 - Output (examples):
   - Session snapshot with:
     - canonicalUrlParams
@@ -61,6 +79,7 @@ Data contracts to support on the API
     - any warnings (e.g., “no base filter; using null filter”)
 
 Notes mapped directly from the code comments
+
 - “withfacet 2.0”: indicates a refactor where API takes ownership of interaction/session.
 - “possible flag in new api … filterOnly”: treat as a server-side session flag, default false unless a product/category mandates filter-only mode.
 - “on userinteraction navigator coordinates make call to api ‘/coordinates:rawCor’”: implement an API route to accept raw coordinates, persist in session, and drive geo-dependent behavior.
