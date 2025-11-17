@@ -382,6 +382,46 @@ export default class FilterCategories extends Shadow() {
   showSubLevels = () => this.toggleSubLevels(true)
   hideSubLevels = () => this.toggleSubLevels(false)
 
+  sortSubLevelMDialogs (subLevel, filterItem) {
+    if (!subLevel || !filterItem.children || filterItem.children.length === 0) return
+
+    const mDialogs = Array.from(subLevel.children).filter(child => child.tagName === 'M-DIALOG')
+    if (mDialogs.length <= 1) return // no need to sort
+
+    const apiOrderMap = new Map()
+    
+    filterItem.children.forEach((child, apiIndex) => {
+      const possibleIds = [
+        `filter-${filterItem.urlpara}${child.urlpara}`, // original format
+        `filter-${child.urlpara}`, // simple format  
+        `filter-${filterItem.id}${child.urlpara}`, // with filterItem.id
+        `filter-${child.id}`, // direct child id
+      ]
+      
+      possibleIds.forEach(possibleId => {
+        const matchingDialog = mDialogs.find(dialog => dialog.id === possibleId)
+        if (matchingDialog) apiOrderMap.set(matchingDialog.id, apiIndex)
+      })
+    })
+
+    const sortedDialogs = [...mDialogs].sort((a, b) => {
+      const orderA = apiOrderMap.get(a.id) ?? 999 // unknown elements go to end
+      const orderB = apiOrderMap.get(b.id) ?? 999
+      return orderA - orderB
+    })
+
+    const currentOrder = mDialogs.map(d => d.id)
+    const sortedOrder = sortedDialogs.map(d => d.id)
+    const needsReordering = currentOrder.join(',') !== sortedOrder.join(',')
+    
+    if (needsReordering) {
+      const otherElements = Array.from(subLevel.children).filter(child => child.tagName !== 'M-DIALOG')
+      subLevel.innerHTML = ''
+      otherElements.forEach(element => subLevel.appendChild(element))
+      sortedDialogs.forEach(dialog => subLevel.appendChild(dialog))
+    }
+  }
+
   generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
     level++
     const isTreeFilter = filterItem.typ === 'tree' || filterItem.id.includes('N')
@@ -428,10 +468,8 @@ export default class FilterCategories extends Shadow() {
       generatedNavLevelItem.navLevelItem.root.querySelector('ks-m-nav-level-item').root.querySelector('.additional').textContent = this.getSelectedFilters(filterItem)?.map(filter => filter.label).join(', ')
     }
     
-    if (!Array.from(mainNav.childNodes).includes(generatedNavLevelItem.navLevelItem)) {
-      mainNav.appendChild(generatedNavLevelItem.navLevelItem)
-      console.log(generatedNavLevelItem.navLevelItem)
-    }
+    if (!Array.from(mainNav.childNodes).includes(generatedNavLevelItem.navLevelItem)) mainNav.appendChild(generatedNavLevelItem.navLevelItem)
+    
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
       if (isCenterFilter) { // center filters
         const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, this.generateCenterFilter(response, filterItem)).get(level + '_' + filterItem.id)
@@ -454,6 +492,8 @@ export default class FilterCategories extends Shadow() {
             }
           }
         })
+        // sort m-dialogs in sub-level after all children are processed for tree filters
+        if (isTreeFilter) this.sortSubLevelMDialogs(generatedNavLevelItem.subLevel, filterItem)
       }
     }
   }
