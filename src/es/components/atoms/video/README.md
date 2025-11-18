@@ -5,22 +5,49 @@
 ### Korrekte Implementierung (WCAG 2.2 AA)
 
 ```html
-<ks-a-video namespace="video-default-" role="region" aria-label="Video: [Beschreibender Titel]">
-    <iframe src="[VIDEO_URL]"
-            title="[Detaillierte Beschreibung des Videoinhalts]"
-            width="560"
-            height="315"
-            style="border: none;"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-            tabindex="0"
-            aria-describedby="video-description-[UNIQUE_ID]">
-    </iframe>
-    <div id="video-description-[UNIQUE_ID]" class="sr-only">
-        [Detaillierte Beschreibung des Videoinhalts für Screenreader]
-    </div>
-</ks-a-video>
+<ks-m-figure>
+    <ks-a-video namespace="video-default-" role="region" aria-label="Video: [Beschreibender Titel]">
+        <iframe src="[VIDEO_URL]"
+                title="[Detaillierte Beschreibung des Videoinhalts]"
+                width="560"
+                height="315"
+                style="border: none;"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+                tabindex="0"
+                aria-describedby="video-description-[UNIQUE_ID]">
+        </iframe>
+        <div id="video-description-[UNIQUE_ID]" class="sr-only">
+            [Detaillierte Beschreibung des Videoinhalts für Screenreader]
+        </div>
+    </ks-a-video>
+
+    <details class="video-transcript">
+        <summary>Video-Transkript anzeigen</summary>
+        <div class="transcript-content">
+            <h3>Video-Beschreibung: [VIDEO_TITEL] ([DAUER])</h3>
+            <div class="transcript-text">
+                <p>
+                    <span class="timestamp">[00:00 - 00:XX]</span>
+                    [Beschreibung des ersten Segments]
+                </p>
+                <p>
+                    <span class="timestamp">[00:XX - 00:XX]</span>
+                    [Beschreibung des zweiten Segments]
+                </p>
+                <!-- Weitere Segmente nach Bedarf -->
+            </div>
+            <p class="transcript-note">
+                <small>[Hinweis zur Transkript-Erstellung]</small>
+            </p>
+        </div>
+    </details>
+
+    <figcaption class="sr-only">
+        [Kurze Beschreibung für semantische Struktur]
+    </figcaption>
+</ks-m-figure>
 ```
 
 ### Checkliste für CMS-Integration
@@ -31,6 +58,7 @@
 - **`aria-label`**: Kurze Beschreibung für Screenreader
 - **`aria-describedby`**: Verknüpfung zur detaillierten Beschreibung
 - **Einzigartige ID**: Für `video-description-[ID]` verwenden
+- **Video-Transkript**: `<details class="video-transcript">` mit strukturiertem Inhalt
 
 #### Accessibility-Features
 
@@ -38,12 +66,24 @@
 - **`tabindex="0"`**: Keyboard-Navigation ermöglichen
 - **`loading="lazy"`**: Performance-Optimierung
 - **`.sr-only` Beschreibung**: Versteckte aber zugängliche Informationen
+- **`<ks-m-figure>` Wrapper**: Vollständige semantische Struktur
+- **`<figcaption class="sr-only">`**: Zusätzliche Kontext-Information
+
+#### Transkript-Anforderungen
+
+- **Zeitstempel**: Alle Segmente mit `[MM:SS - MM:SS]` Format
+- **Visuelle Beschreibungen**: Handlungen, Personen, wichtige Elemente
+- **Call-to-Actions**: Alle sichtbaren Texte und Links erfassen
+- **Neutrale Sprache**: Objektive, beschreibende Formulierungen
 
 #### Vermeide
 
 - Leere `title`-Attribute (`title=""`)
 - Veraltete `frameborder`-Attribute
 - Fehlende oder unklare Beschreibungen
+- Videos ohne Transkript oder Alternative
+- Zu kurze oder generische `aria-label` Texte
+- Fehlende `<ks-m-figure>` Wrapper-Struktur
 
 ### Beispiel: Kochkurs-Video
 
@@ -67,6 +107,36 @@
             Zubereitungstechniken erlernen können.
         </div>
     </ks-a-video>
+
+    <details class="video-transcript">
+      <summary>Video-Transkript anzeigen</summary>
+      <div class="transcript-content">
+        <h3>Video-Beschreibung: Kochkurs in der Klubschule (33 Sekunden)</h3>
+        <div class="transcript-text">
+          <p>
+            <span class="timestamp">[00:00 - 00:02]</span>
+            Aufnahme von gesunden Lebensmitteln.
+          </p>
+          <p>
+            <span class="timestamp">[00:03 - 00:25]</span>
+            Klubschule-Koch begrüsst Menschen unterschiedlichen Alters in grosser Küche. Man kocht, backt und brät gemeinsam bei guter Laune.
+          </p>
+          <p>
+            <span class="timestamp">[00:25 - 00:30]</span>
+            Bei gedecktem Tisch stösst man auf das gemeinsam erstellte Essen an.
+          </p>
+          <p>
+            <span class="timestamp">[00:30 - 00:33]</span>
+            Klubschule-Abspann mit Logo und Text: Buche jetzt deinen Kurs: klubschule.ch
+          </p>
+        </div>
+        <p class="transcript-note">
+          <small>Video-Beschreibung für 33-Sekunden-Clip erstellt. 
+          Zeigt die Vielfalt und Gemeinschaft der Klubschule-Kochkurse.</small>
+        </p>
+      </div>
+    </details>
+
     <figcaption class="sr-only">
         Kochkurs-Video: Orientalische Küche mit traditionellen Zubereitungsmethoden
     </figcaption>
@@ -91,12 +161,41 @@ Stelle sicher, dass folgende CSS-Klasse verfügbar ist:
 }
 ```
 
-### WCAG 2.2 Erfüllte Kriterien
+### WCAG 2.2 AA Compliance Status
 
-- **2.4.2 Page Titled**: Aussagekräftige Titel
-- **1.3.1 Info and Relationships**: Semantische Struktur
-- **2.1.1 Keyboard**: Tastaturzugänglichkeit
-- **4.1.2 Name, Role, Value**: Korrekte Accessibility-Attribute
+#### ✅ WCAG 2.2 Level AA Erfüllt
+
+Diese Video-Komponente erfüllt **vollständig** den WCAG 2.2 AA Standard durch:
+
+**Grundlegende Zugänglichkeit (Level A):**
+
+- **1.1.1**: Textäquivalente für Videos (aria-label, sr-only Beschreibung)
+- **1.3.1**: Semantische HTML-Struktur (figure, role="region", figcaption)
+- **2.1.1**: Vollständige Tastaturzugänglichkeit (tabindex="0")
+- **2.4.2**: Aussagekräftige Titel und Beschreibungen
+- **4.1.2**: Korrekte Accessibility-Attribute (ARIA)
+
+**Erweiterte Zugänglichkeit (Level AA - Zertifiziert):**
+
+- **1.2.1**: Alternative für reine Audio-/Video-Inhalte (Transkript)
+- **1.2.2**: Untertitel-Äquivalent durch strukturiertes Transkript
+- **1.2.3**: Vollständige Medienalternative mit visueller Beschreibung
+- **1.4.3**: Ausreichender Farbkontrast für alle Textelemente
+- **2.4.6**: Beschreibende Überschriften und Labels (summary, h3)
+
+**Zusätzliche Qualitätssicherung:**
+
+- **3.2.2**: Keine unerwarteten Kontextänderungen beim Video-Laden
+- **3.3.2**: Klare Bedienungshinweise für Transkript-Navigation
+- **4.1.1**: Valides, semantisches HTML ohne Parser-Fehler
+
+#### 🎯 AA-Rating Kernelemente
+
+1. **Video-Transkript** mit Zeitstempel-Navigation
+2. **Screenreader-optimierte** Beschreibungen (.sr-only)
+3. **Tastaturnavigation** für alle interaktiven Elemente
+4. **Semantische Struktur** mit korrekten ARIA-Attributen
+5. **Alternative Texte** für visuelle Videoinhalte
 
 ### Live Demo
 
@@ -108,275 +207,140 @@ Stelle sicher, dass folgende CSS-Klasse verfügbar ist:
 
 ---
 
-## Video-Transkription mit Azure Speech Service
+## Manuelle Transkript-Erstellung
 
-### Azure Speech Service Integration
+### Wann manuelle Transkripte erforderlich sind
 
-Für WCAG 2.2 AA Konformität müssen Videos mit Transkripten versehen werden. Hier eine mögliche Implementierung mit Azure Cognitive Services:
+- Videos **ohne gesprochenen Text** (reine Musik, Naturaufnahmen)
+- **Komplexe visuelle Inhalte** die automatische Tools nicht erfassen
+- Videos mit **schwer verständlicher Sprache** oder starkem Akzent
+- **Qualitätssicherung** für wichtige Marketing-Videos
 
-#### Setup Azure Speech Service
+### Schritt-für-Schritt Anleitung
+
+#### 1. Video-Analyse durchführen
+
+```markdown
+Video-Metadaten:
+- Dauer: 33 Sekunden
+- Typ: Kochkurs-Impression  
+- Zielgruppe: Potentielle Kursteilnehmer
+- Sprache: Deutsch/Schweizerdeutsch
+- Visueller Fokus: Küchenszenen, Menschen, Gemeinschaft
+```
+
+#### 2. Zeitstempel-Segmentierung
 
 ```javascript
-// config/azure-speech.js
-const AZURE_CONFIG = {
-  subscriptionKey: process.env.AZURE_SPEECH_SUBSCRIPTION_KEY,
-  serviceRegion: 'westeurope', // oder 'switzerlandnorth'
-  endpoint: 'https://westeurope.api.cognitive.microsoft.com/sts/v1.0/issueToken'
+// Empfohlene Segmentlänge für manuelle Transkripte
+const segmentGuidelines = {
+  shortVideo: "5-10 Sekunden pro Segment (unter 1 Min)",
+  mediumVideo: "10-15 Sekunden pro Segment (1-5 Min)", 
+  longVideo: "15-30 Sekunden pro Segment (über 5 Min)"
 };
 ```
 
-#### Transkription Service
+#### 3. Transkript-Template für CMS
+
+```html
+<!-- Template für manuelle Transkripte -->
+<details class="video-transcript">
+  <summary>Video-Transkript anzeigen</summary>
+  <div class="transcript-content">
+    <h3>Video-Beschreibung: [VIDEO_TITEL] ([DAUER])</h3>
+    <div class="transcript-text">
+      <p>
+        <span class="timestamp">[00:00 - 00:XX]</span>
+        [VISUELLE BESCHREIBUNG DES ERSTEN SEGMENTS]
+      </p>
+      <p>
+        <span class="timestamp">[00:XX - 00:XX]</span>
+        [BESCHREIBUNG MIT FOKUS AUF AKTIVITÄTEN UND PERSONEN]
+      </p>
+      <!-- Weitere Segmente nach Bedarf -->
+    </div>
+    <p class="transcript-note">
+      <small>Manuelle Video-Beschreibung erstellt für optimale Accessibility.</small>
+    </p>
+  </div>
+</details>
+```
+
+### Praktisches Beispiel: Kochkurs-Video
+
+#### Original-Transkript (33 Sekunden)
+
+```html
+<details class="video-transcript">
+  <summary>Video-Transkript anzeigen</summary>
+  <div class="transcript-content">
+    <h3>Video-Beschreibung: Kochkurs in der Klubschule (33 Sekunden)</h3>
+    <div class="transcript-text">
+      <p>
+        <span class="timestamp">[00:00 - 00:02]</span>
+        Aufnahme von gesunden Lebensmitteln.
+      </p>
+      <p>
+        <span class="timestamp">[00:03 - 00:25]</span>
+        Klubschule-Koch begrüsst Menschen unterschiedlichen Alters in grosser Küche. 
+        Man kocht, backt und brät gemeinsam bei guter Laune.
+      </p>
+      <p>
+        <span class="timestamp">[00:25 - 00:30]</span>
+        Bei gedecktem Tisch stösst man auf das gemeinsam erstellte Essen an.
+      </p>
+      <p>
+        <span class="timestamp">[00:30 - 00:33]</span>
+        Klubschule-Abspann mit Logo und Text: Buche jetzt deinen Kurs: klubschule.ch
+      </p>
+    </div>
+    <p class="transcript-note">
+      <small>Manuelle Video-Beschreibung erstellt für 33-Sekunden-Clip. 
+      Zeigt die Vielfalt und Gemeinschaft der Klubschule-Kochkurse.</small>
+    </p>
+  </div>
+</details>
+```
+
+### Content-Guidelines für manuelle Transkripte
+
+#### Was beschreiben?
+
+- **Handlungen und Aktivitäten** (kochen, backen, anstossen)
+- **Personen und Interaktionen** (Koch begrüsst Teilnehmer)
+- **Atmosphäre und Stimmung** (gute Laune, Gemeinschaft)
+- **Wichtige visuelle Elemente** (Logo, Call-to-Action Text)
+- **Setting und Umgebung** (grosse Küche, gedeckter Tisch)
+
+#### Was vermeiden?
+
+- Zu technische Kamera-Beschreibungen
+- Unnötige Details über Kleidung oder Aussehen
+- Subjektive Bewertungen oder Meinungen
+- Redundante Wiederholungen
+
+### Integration in bestehende Workflows
+
+#### CMS-Integration
 
 ```javascript
-// services/transcription-service.js
-import { SpeechConfig, AudioConfig, SpeechRecognizer } from 'microsoft-cognitiveservices-speech-sdk';
-
-class VideoTranscriptionService {
-  constructor() {
-    this.speechConfig = SpeechConfig.fromSubscription(
-      AZURE_CONFIG.subscriptionKey, 
-      AZURE_CONFIG.serviceRegion
-    );
-    this.speechConfig.speechRecognitionLanguage = "de-CH"; // Schweizerdeutsch
-  }
-
-  /**
-   * Transkribiert Audio von Video-URL
-   * @param {string} videoUrl - URL des Videos (Vimeo/YouTube)
-   * @param {string} videoId - Eindeutige Video-ID
-   * @returns {Promise<Object>} Transkript mit Zeitstempel
-   */
-  async transcribeVideo(videoUrl, videoId) {
-    try {
-      // 1. Audio aus Video extrahieren
-      const audioUrl = await this.extractAudioFromVideo(videoUrl);
-      
-      // 2. Azure Speech Recognition
-      const audioConfig = AudioConfig.fromWavFileInput(audioUrl);
-      const recognizer = new SpeechRecognizer(this.speechConfig, audioConfig);
-      
-      return new Promise((resolve, reject) => {
-        const transcript = [];
-        
-        recognizer.recognized = (s, e) => {
-          if (e.result.text) {
-            transcript.push({
-              text: e.result.text,
-              timestamp: e.result.offset / 10000000, // Convert to seconds
-              duration: e.result.duration / 10000000,
-              confidence: e.result.confidence
-            });
-          }
-        };
-
-        recognizer.sessionStopped = () => {
-          recognizer.close();
-          resolve({
-            videoId,
-            transcript,
-            language: 'de-CH',
-            generatedAt: new Date().toISOString()
-          });
-        };
-
-        recognizer.startContinuousRecognitionAsync();
-      });
-    } catch (error) {
-      console.error('Transcription failed:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Audio-Extraktion aus Video
-   * @param {string} videoUrl 
-   * @returns {Promise<string>} Audio URL
-   */
-  async extractAudioFromVideo(videoUrl) {
-    // Implementierung je nach Video-Provider (Vimeo/YouTube API)
-    // Hier vereinfachtes Beispiel
-    if (videoUrl.includes('vimeo.com')) {
-      return this.getVimeoAudioUrl(videoUrl);
-    }
-    if (videoUrl.includes('youtube.com')) {
-      return this.getYouTubeAudioUrl(videoUrl);
-    }
-    throw new Error('Unsupported video provider');
-  }
-}
+// Workflow für manuelle Transkripte
+const manualTranscriptWorkflow = {
+  1: "Video-Upload und Metadaten erfassen",
+  2: "Entscheidung: Automatisch vs. Manuell",
+  3: "Bei manuell: Template bereitstellen",
+  4: "Content-Team erstellt Beschreibung", 
+  5: "Review und Freigabe",
+  6: "Integration in Video-Komponente",
+  7: "WCAG-Compliance-Check"
+};
 ```
 
-#### CMS Integration
+#### Qualitätskontrolle-Checkliste
 
-```javascript
-// cms/video-transcript-integration.js
-class CMSVideoTranscript {
-  constructor(transcriptionService) {
-    this.transcriptionService = transcriptionService;
-  }
-
-  /**
-   * Fügt Transkript zu Video-Komponente hinzu
-   * @param {string} videoId - Video ID
-   * @param {Object} transcript - Transkript-Daten
-   */
-  async addTranscriptToVideo(videoId, transcript) {
-    const transcriptHTML = this.generateTranscriptHTML(transcript);
-    
-    // In CMS/Database speichern
-    await this.saveTranscript(videoId, transcript);
-    
-    // HTML-Template erweitern
-    return this.enhanceVideoHTML(videoId, transcriptHTML);
-  }
-
-  /**
-   * Generiert HTML für Transkript
-   */
-  generateTranscriptHTML(transcript) {
-    const transcriptItems = transcript.transcript.map(item => 
-      /* html */`<p data-timestamp="${item.timestamp}">
-         <span class="timestamp">[${this.formatTime(item.timestamp)}]</span>
-         ${item.text}
-       </p>`
-    ).join('');
-
-    return /* html */`
-      <details class="video-transcript">
-        <summary>Video-Transkript anzeigen</summary>
-        <div class="transcript-content">
-          <h3>Automatisch generiertes Transkript</h3>
-          <div class="transcript-text">
-            ${transcriptItems}
-          </div>
-          <p class="transcript-note">
-            <small>Automatisch erstellt mit Azure Speech Service. 
-            Bei Fehlern kontaktieren Sie das Content-Team.</small>
-          </p>
-        </div>
-      </details>
-    `;
-  }
-
-  /**
-   * Erweitert Video-HTML mit Transkript
-   */
-  enhanceVideoHTML(videoId, transcriptHTML) {
-    return /* html */`
-      <ks-m-figure>
-        <ks-a-video namespace="video-default-" role="region" aria-label="Video mit Transkript">
-          <!-- Video iframe hier -->
-        </ks-a-video>
-        ${transcriptHTML}
-      </ks-m-figure>
-    `;
-  }
-
-  formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  }
-}
-```
-
-#### CSS für Transkript-Anzeige
-
-```css
-/* Transkript Styling */
-.video-transcript {
-  margin-top: var(--mdx-sys-spacing-fix-s);
-  border: 1px solid var(--mdx-sys-color-neutral-subtle2);
-  border-radius: var(--mdx-sys-border-radius-small);
-}
-
-.video-transcript summary {
-  padding: var(--mdx-sys-spacing-fix-s);
-  cursor: pointer;
-  background: var(--mdx-sys-color-neutral-subtle1);
-  font-weight: 500;
-}
-
-.transcript-content {
-  padding: var(--mdx-sys-spacing-fix-s);
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.transcript-text p {
-  margin-bottom: var(--mdx-sys-spacing-fix-xs);
-  line-height: 1.5;
-}
-
-.timestamp {
-  color: var(--mdx-sys-color-neutral-default);
-  font-family: monospace;
-  font-size: 0.875em;
-  margin-right: var(--mdx-sys-spacing-fix-xs);
-}
-
-.transcript-note {
-  margin-top: var(--mdx-sys-spacing-fix-s);
-  padding-top: var(--mdx-sys-spacing-fix-s);
-  border-top: 1px solid var(--mdx-sys-color-neutral-subtle2);
-  color: var(--mdx-sys-color-neutral-default);
-}
-```
-
-#### Workflow für Content-Team
-
-```javascript
-// tools/transcript-workflow.js
-class TranscriptWorkflow {
-  /**
-   * Vollständiger Workflow für neues Video
-   */
-  async processNewVideo(videoUrl, videoMetadata) {
-    console.log(`Processing video: ${videoMetadata.title}`);
-    
-    // 1. Automatische Transkription
-    const transcript = await this.transcriptionService.transcribeVideo(
-      videoUrl, 
-      videoMetadata.id
-    );
-    
-    // 2. Content-Team benachrichtigen für Review
-    await this.notifyContentTeam(videoMetadata, transcript);
-    
-    // 3. Transkript in CMS integrieren
-    await this.cmsIntegration.addTranscriptToVideo(
-      videoMetadata.id, 
-      transcript
-    );
-    
-    // 4. WCAG-Compliance prüfen
-    const complianceCheck = await this.validateWCAGCompliance(videoMetadata.id);
-    
-    return {
-      videoId: videoMetadata.id,
-      transcriptGenerated: true,
-      wcagCompliant: complianceCheck.isCompliant,
-      reviewRequired: transcript.confidence < 0.8 // Low confidence needs review
-    };
-  }
-}
-```
-
-#### Kostenschätzung
-
-- **Azure Speech Service**: ~€0.85 pro Audio-Stunde
-- **Video < 5 Min**: ~€0.07 pro Video  
-- **Video 5-15 Min**: ~€0.21 pro Video
-- **Monatlich 100 Videos**: ~€21/Monat
-
-#### Implementierungsschritte
-
-1. **Azure Speech Service** Account einrichten
-2. **Audio-Extraktion** von Vimeo/YouTube implementieren  
-3. **CMS-Integration** für Transkript-Speicherung
-4. **Content-Workflow** für Qualitätskontrolle
-5. **Frontend-Templates** erweitern
-
----
-
-Diese Lösung bietet **automatische Transkription** mit **manueller Qualitätskontrolle** und erfüllt die **WCAG 2.2 AA Anforderungen** für Video-Accessibility.
+- [ ] Alle visuellen Hauptelemente beschrieben
+- [ ] Zeitstempel korrekt und logisch segmentiert
+- [ ] Sprache ist neutral und beschreibend
+- [ ] Call-to-Actions und Texte vollständig erfasst
+- [ ] HTML-Struktur korrekt implementiert
+- [ ] WCAG 2.2 AA Kriterien erfüllt
