@@ -1,0 +1,69 @@
+<!-- 
+  WCAG 2.2 AA Conformant Video Component Example
+  
+  This example demonstrates best practices for accessible video embeds:
+  - Descriptive title attribute for the iframe (WCAG 2.4.2 - Page Titled)
+  - role="region" and aria-label for semantic structure (WCAG 1.3.1 - Info and Relationships)
+  - aria-describedby linking to detailed description (WCAG 1.3.1)
+  - tabindex="0" for keyboard accessibility (WCAG 2.1.1 - Keyboard)
+  - loading="lazy" for performance optimization
+  - Modern CSS instead of deprecated frameborder attribute
+  - Screen reader accessible descriptions using .sr-only class
+  - Semantic figcaption for proper content structure
+  
+  Demo Link: 
+  http://localhost:3000/src/es/components/web-components-toolbox/docs/TemplateMiduweb.html?rootFolder=src&css=./src/css/variablesCustomKlubschule.css&login=./src/es/components/molecules/login/default-/default-.html&logo=./src/es/components/atoms/logo/default-/default-.html&nav=./src/es/components/web-components-toolbox/src/es/components/molecules/multiLevelNavigation/default-/default-.html&footer=./src/es/components/organisms/footer/default-/default-.html&content=./src/es/components/pages/generator/https---dev-klubschule-ch-kurs-1001-nacht-orientalische-kuche--D_97351_1013_306.html
+  
+  Template Reference: ./src/es/components/pages/generator/https---dev-klubschule-ch-kurs-1001-nacht-orientalische-kuche--D_97351_1013_306.html
+-->
+<ks-a-video namespace="video-default-" role="region" aria-label="Video: Orientalische Küche - Kochkurs Impression">
+    <iframe src="https://player.vimeo.com/video/1010117722?color=7a634d"
+            title="Video: Orientalische Küche - Einblicke in den Kochkurs mit orientalischen Gewürzen und Zubereitungstechniken"
+            width="560"
+            height="315"
+            style="border: none;"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+            tabindex="0"
+            aria-describedby="video-description-1010117722">
+    </iframe>
+    <div id="video-description-1010117722" class="sr-only">
+        Dieses Video zeigt Impressionen aus unserem Kochkurs "1001 Nacht - Orientalische Küche", 
+        in dem Sie die Zubereitung orientalischer Gerichte mit traditionellen Gewürzen und 
+        Zubereitungstechniken erlernen können.
+    </div>
+</ks-a-video>
+
+<details class="video-transcript">
+  <summary>Video-Transkript anzeigen</summary>
+  <div class="transcript-content">
+    <h3>Video-Beschreibung: Kochkurs in der Klubschule (33 Sekunden)</h3>
+    <div class="transcript-text">
+      <p>
+        <span class="timestamp">[00:00 - 00:02]</span>
+        Aufnahme von gesunden Lebensmitteln.
+      </p>
+      <p>
+        <span class="timestamp">[00:03 - 00:25]</span>
+        Klubschule-Koch begrüsst Menschen unterschiedlichen Alters in grosser Küche. Man kocht, backt und brät gemeinsam bei guter Laune.
+      </p>
+      <p>
+        <span class="timestamp">[00:25 - 00:30]</span>
+        Bei gedecktem Tisch stösst man auf das gemeinsam erstellte Essen an.
+      </p>
+      <p>
+        <span class="timestamp">[00:30 - 00:33]</span>
+        Klubschule-Abspann mit Logo und Text: Buche jetzt deinen Kurs: klubschule.ch
+      </p>
+    </div>
+    <p class="transcript-note">
+      <small>Video-Beschreibung für 33-Sekunden-Clip erstellt. 
+      Zeigt die Vielfalt und Gemeinschaft der Klubschule-Kochkurse.</small>
+    </p>
+  </div>
+</details>
+
+<figcaption class="sr-only">
+    Kochkurs-Video: Orientalische Küche mit traditionellen Zubereitungsmethoden
+</figcaption>
