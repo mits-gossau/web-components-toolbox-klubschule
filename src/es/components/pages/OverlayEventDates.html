@@ -1,7 +1,7 @@
 
 
 <m-dialog 
-    namespace="dialog-left-slide-in-without-background-" 
+    namespace="dialog-left-slide-in-" 
     show-event-name="dialog-open-" 
     close-event-name="backdrop-clicked"
 >
@@ -14,12 +14,16 @@
             <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
         </a-button>
     </div>
-    <div class="dialog-content"></div>
+    <div class="container dialog-content">
+        Pilates ...
+        <ks-m-event-date-tile></ks-m-event-date-tile>
+        <ks-m-event-date-tile></ks-m-event-date-tile>
+    </div>
     <div class="container dialog-footer">
         <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">Schliessen</a-button>
         <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">Details ansehen</a-button>
     </div>
 
     <!-- attribute style="margin-top:2rem" only for demo! -->
-    <a-button id="show-modal" namespace="button-primary-" no-pointer-events style="margin-top:2rem">Öffne Veranstaltungstermine</a-button>
+    <a id="show-modal" namespace="button-primary-" no-pointer-events style="margin-top:2rem">Öffne Veranstaltungstermine</a>
 </m-dialog>
