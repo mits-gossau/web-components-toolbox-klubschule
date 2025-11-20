@@ -386,26 +386,17 @@ export default class FilterCategories extends Shadow() {
     if (!subLevel || !filterItem.children || filterItem.children.length === 0) return
 
     const mDialogs = Array.from(subLevel.children).filter(child => child.tagName === 'M-DIALOG')
-    if (mDialogs.length <= 1) return // no need to sort
+    if (mDialogs.length <= 1) return
 
     const apiOrderMap = new Map()
     
     filterItem.children.forEach((child, apiIndex) => {
-      const possibleIds = [
-        `filter-${filterItem.urlpara}${child.urlpara}`, // original format
-        `filter-${child.urlpara}`, // simple format  
-        `filter-${filterItem.id}${child.urlpara}`, // with filterItem.id
-        `filter-${child.id}`, // direct child id
-      ]
-      
-      possibleIds.forEach(possibleId => {
-        const matchingDialog = mDialogs.find(dialog => dialog.id === possibleId)
-        if (matchingDialog) apiOrderMap.set(matchingDialog.id, apiIndex)
-      })
+      const matchingDialog = mDialogs.find(dialog => dialog.id === `filter-${child.id}`)
+      if (matchingDialog) apiOrderMap.set(matchingDialog.id, apiIndex)
     })
 
     const sortedDialogs = [...mDialogs].sort((a, b) => {
-      const orderA = apiOrderMap.get(a.id) ?? 999 // unknown elements go to end
+      const orderA = apiOrderMap.get(a.id) ?? 999 
       const orderB = apiOrderMap.get(b.id) ?? 999
       return orderA - orderB
     })
@@ -415,10 +406,12 @@ export default class FilterCategories extends Shadow() {
     const needsReordering = currentOrder.join(',') !== sortedOrder.join(',')
     
     if (needsReordering) {
-      const otherElements = Array.from(subLevel.children).filter(child => child.tagName !== 'M-DIALOG')
-      subLevel.innerHTML = ''
-      otherElements.forEach(element => subLevel.appendChild(element))
-      sortedDialogs.forEach(dialog => subLevel.appendChild(dialog))
+      const fragment = document.createDocumentFragment()
+      sortedDialogs.forEach(dialog => {
+        dialog.parentNode.removeChild(dialog)
+        fragment.appendChild(dialog)
+      })
+      subLevel.appendChild(fragment)
     }
   }
 
