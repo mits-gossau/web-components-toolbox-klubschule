@@ -388,6 +388,7 @@ export default class FilterCategories extends Shadow() {
     const mDialogs = Array.from(subLevel.children).filter(child => child.tagName === 'M-DIALOG')
     if (mDialogs.length <= 1) return
 
+
     const apiOrderMap = new Map()
     
     filterItem.children.forEach((child, apiIndex) => {
@@ -406,12 +407,66 @@ export default class FilterCategories extends Shadow() {
     const needsReordering = currentOrder.join(',') !== sortedOrder.join(',')
     
     if (needsReordering) {
-      const fragment = document.createDocumentFragment()
+      console.log('needsReordering', currentOrder, sortedOrder)
+      console.log('sublevel', subLevel)
+
+      const collectDialogStates = (element, states = new Map()) => {
+        const mDialogs = element.querySelectorAll(':scope > m-dialog')
+        mDialogs.forEach(dialog => {
+          const shadowRoot = dialog.shadowRoot
+          if (shadowRoot) {
+            const nativeDialog = shadowRoot.querySelector('dialog')
+            if (nativeDialog?.open) {
+              states.set(dialog.id, {
+                open: true,
+                isModal: nativeDialog.matches(':modal')
+              })
+            }
+            
+            const subLevelsInShadow = shadowRoot.querySelectorAll('.sub-level')
+            subLevelsInShadow.forEach(subLevel => {
+              collectDialogStates(subLevel, states)
+            })
+          }
+        })
+        
+        return states
+      }
+
+      const restoreDialogStates = (element, states) => {
+        const mDialogs = element.querySelectorAll(':scope > m-dialog')
+        mDialogs.forEach(dialog => {
+          const shadowRoot = dialog.shadowRoot
+          if (shadowRoot) {
+            const state = states.get(dialog.id)
+            if (state?.open) {
+              const nativeDialog = shadowRoot.querySelector('dialog')
+              if (nativeDialog) {
+                if (nativeDialog.open) nativeDialog.close()
+                if (state.isModal) {
+                  nativeDialog.showModal()
+                } else {
+                  nativeDialog.show()
+                }
+              }
+            }
+            
+            const subLevelsInShadow = shadowRoot.querySelectorAll('.sub-level')
+            subLevelsInShadow.forEach(subLevel => {
+              restoreDialogStates(subLevel, states)
+            })
+          }
+        })
+      }
+
+      const allDialogStates = collectDialogStates(subLevel)
+      
+      subLevel.innerHTML = ''
       sortedDialogs.forEach(dialog => {
-        dialog.parentNode.removeChild(dialog)
-        fragment.appendChild(dialog)
+        subLevel.appendChild(dialog)
       })
-      subLevel.appendChild(fragment)
+
+      restoreDialogStates(subLevel, allDialogStates)
     }
   }
 
