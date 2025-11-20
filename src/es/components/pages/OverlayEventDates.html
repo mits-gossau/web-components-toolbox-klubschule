@@ -1,5 +1,3 @@
-
-
 <m-dialog 
     namespace="dialog-left-slide-in-" 
     show-event-name="dialog-open-" 
@@ -14,10 +12,12 @@
             <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
         </a-button>
     </div>
-    <div class="container dialog-content">
-        Pilates ...
-        <ks-m-event-date-tile></ks-m-event-date-tile>
-        <ks-m-event-date-tile></ks-m-event-date-tile>
+    <div class="dialog-content">
+        <div class="container" style="flex-direction: column; align-items: flex-start;">
+            <h2 style="margin: 0; font-size: 32px;">Pilates</h2>
+            <ks-m-event-date-tile></ks-m-event-date-tile>
+            <ks-m-event-date-tile></ks-m-event-date-tile>
+        </div>
     </div>
     <div class="container dialog-footer">
         <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">Schliessen</a-button>
