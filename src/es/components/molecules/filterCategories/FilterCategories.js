@@ -386,26 +386,17 @@ export default class FilterCategories extends Shadow() {
     if (!subLevel || !filterItem.children || filterItem.children.length === 0) return
 
     const mDialogs = Array.from(subLevel.children).filter(child => child.tagName === 'M-DIALOG')
-    if (mDialogs.length <= 1) return // no need to sort
+    if (mDialogs.length <= 1) return
 
     const apiOrderMap = new Map()
     
     filterItem.children.forEach((child, apiIndex) => {
-      const possibleIds = [
-        `filter-${filterItem.urlpara}${child.urlpara}`, // original format
-        `filter-${child.urlpara}`, // simple format  
-        `filter-${filterItem.id}${child.urlpara}`, // with filterItem.id
-        `filter-${child.id}`, // direct child id
-      ]
-      
-      possibleIds.forEach(possibleId => {
-        const matchingDialog = mDialogs.find(dialog => dialog.id === possibleId)
-        if (matchingDialog) apiOrderMap.set(matchingDialog.id, apiIndex)
-      })
+      const matchingDialog = mDialogs.find(dialog => dialog.id === `filter-${child.id}`)
+      if (matchingDialog) apiOrderMap.set(matchingDialog.id, apiIndex)
     })
 
     const sortedDialogs = [...mDialogs].sort((a, b) => {
-      const orderA = apiOrderMap.get(a.id) ?? 999 // unknown elements go to end
+      const orderA = apiOrderMap.get(a.id) ?? 999 
       const orderB = apiOrderMap.get(b.id) ?? 999
       return orderA - orderB
     })
@@ -415,10 +406,50 @@ export default class FilterCategories extends Shadow() {
     const needsReordering = currentOrder.join(',') !== sortedOrder.join(',')
     
     if (needsReordering) {
-      const otherElements = Array.from(subLevel.children).filter(child => child.tagName !== 'M-DIALOG')
+      const collectDialogStates = (element, states = new Map()) => {
+        const mDialogs = element.querySelectorAll(':scope > m-dialog')
+        mDialogs.forEach(dialog => {
+          const shadowRoot = dialog.shadowRoot
+          if (shadowRoot) {
+            const nativeDialog = shadowRoot.querySelector('dialog')
+            if (nativeDialog?.open) {
+              states.set(dialog.id, {
+                open: true,
+                isModal: nativeDialog.matches(':modal')
+              })
+            }
+            const subLevelsInShadow = shadowRoot.querySelectorAll('.sub-level')
+            subLevelsInShadow.forEach(subLevel => collectDialogStates(subLevel, states))
+          }
+        })
+        return states
+      }
+
+      const restoreDialogStates = (element, states) => {
+        const mDialogs = element.querySelectorAll(':scope > m-dialog')
+        mDialogs.forEach(dialog => {
+          const shadowRoot = dialog.shadowRoot
+          if (shadowRoot) {
+            const state = states.get(dialog.id)
+            if (state?.open) {
+              const nativeDialog = shadowRoot.querySelector('dialog')
+              if (nativeDialog) {
+                if (nativeDialog.open) nativeDialog.close()
+                state.isModal ? nativeDialog.showModal() : nativeDialog.show()
+              }
+            }
+            const subLevelsInShadow = shadowRoot.querySelectorAll('.sub-level')
+            subLevelsInShadow.forEach(subLevel => restoreDialogStates(subLevel, states))
+          }
+        })
+      }
+
+      const allDialogStates = collectDialogStates(subLevel)
+      
       subLevel.innerHTML = ''
-      otherElements.forEach(element => subLevel.appendChild(element))
       sortedDialogs.forEach(dialog => subLevel.appendChild(dialog))
+
+      restoreDialogStates(subLevel, allDialogStates)
     }
   }
 
