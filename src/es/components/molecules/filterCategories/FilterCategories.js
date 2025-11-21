@@ -388,7 +388,6 @@ export default class FilterCategories extends Shadow() {
     const mDialogs = Array.from(subLevel.children).filter(child => child.tagName === 'M-DIALOG')
     if (mDialogs.length <= 1) return
 
-
     const apiOrderMap = new Map()
     
     filterItem.children.forEach((child, apiIndex) => {
@@ -407,9 +406,6 @@ export default class FilterCategories extends Shadow() {
     const needsReordering = currentOrder.join(',') !== sortedOrder.join(',')
     
     if (needsReordering) {
-      console.log('needsReordering', currentOrder, sortedOrder)
-      console.log('sublevel', subLevel)
-
       const collectDialogStates = (element, states = new Map()) => {
         const mDialogs = element.querySelectorAll(':scope > m-dialog')
         mDialogs.forEach(dialog => {
@@ -422,14 +418,10 @@ export default class FilterCategories extends Shadow() {
                 isModal: nativeDialog.matches(':modal')
               })
             }
-            
             const subLevelsInShadow = shadowRoot.querySelectorAll('.sub-level')
-            subLevelsInShadow.forEach(subLevel => {
-              collectDialogStates(subLevel, states)
-            })
+            subLevelsInShadow.forEach(subLevel => collectDialogStates(subLevel, states))
           }
         })
-        
         return states
       }
 
@@ -443,18 +435,11 @@ export default class FilterCategories extends Shadow() {
               const nativeDialog = shadowRoot.querySelector('dialog')
               if (nativeDialog) {
                 if (nativeDialog.open) nativeDialog.close()
-                if (state.isModal) {
-                  nativeDialog.showModal()
-                } else {
-                  nativeDialog.show()
-                }
+                state.isModal ? nativeDialog.showModal() : nativeDialog.show()
               }
             }
-            
             const subLevelsInShadow = shadowRoot.querySelectorAll('.sub-level')
-            subLevelsInShadow.forEach(subLevel => {
-              restoreDialogStates(subLevel, states)
-            })
+            subLevelsInShadow.forEach(subLevel => restoreDialogStates(subLevel, states))
           }
         })
       }
@@ -462,9 +447,7 @@ export default class FilterCategories extends Shadow() {
       const allDialogStates = collectDialogStates(subLevel)
       
       subLevel.innerHTML = ''
-      sortedDialogs.forEach(dialog => {
-        subLevel.appendChild(dialog)
-      })
+      sortedDialogs.forEach(dialog => subLevel.appendChild(dialog))
 
       restoreDialogStates(subLevel, allDialogStates)
     }
