@@ -1,7 +1,14 @@
+<style>
+    :host {
+        --dialog-left-slide-in-max-width-custom: 100%;
+        --dialog-left-slide-in-container-max-width-custom: 100%;
+    }
+</style>
 <m-dialog 
     namespace="dialog-left-slide-in-" 
     show-event-name="dialog-open-" 
     close-event-name="backdrop-clicked"
+    open
 >
     <div class="container dialog-header" tabindex="0">
         <a-button id="close-back">
