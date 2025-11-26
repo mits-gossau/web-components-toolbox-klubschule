@@ -105,7 +105,8 @@ export default class CheckoutReminder extends Dialog {
         'button_name': 'stop_checkout',
         'logged_in': this.hasAttribute('is-logged-in')
       })
-      self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+      // business decided, that beforeunload on browser navigation forward, backward is not wanted
+      //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
       this.close()
     }
 
@@ -159,12 +160,14 @@ export default class CheckoutReminder extends Dialog {
           event.stopPropagation()
           event.preventDefault()
         } else {
-          self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+          // business decided, that beforeunload on browser navigation forward, backward is not wanted
+          //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
         }
       } 
     }
 
-    this.formSubmitEventListener = event => self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+    // business decided, that beforeunload on browser navigation forward, backward is not wanted
+    //this.formSubmitEventListener = event => self.removeEventListener('beforeunload', this.beforeunloadEventListener)
   }
 
   connectedCallback () {
@@ -192,7 +195,8 @@ export default class CheckoutReminder extends Dialog {
             <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-title') ?? `Checkout.Reminder.Any.Title${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation></h3>
             <a-icon-mdx id=checkout-reminder-any-cancel icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
             <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-text') ?? `Checkout.Reminder.Any.Text${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation></p>
-            <p>${json.message || ''}</p>
+            <p class="no-margin-bottom">${json.uncompletedOrder.bezeichnung || ''}</p>
+            <p>${json.uncompletedOrder.durchfuehrungsort || ''}</p>
             <ks-a-button id=checkout-reminder-any-return namespace="button-primary-" href="${json.uncompletedOrder?.kursUrl || ''}">
               <a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-return') ?? `Checkout.Reminder.Any.Return${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation>
             </ks-a-button>
@@ -261,7 +265,8 @@ export default class CheckoutReminder extends Dialog {
           </a>
         `))
         // NOTE: Listening to popstate does not work, since the history routes were not set by the history js functions
-        self.addEventListener('beforeunload', this.beforeunloadEventListener)
+        // business decided, that beforeunload on browser navigation forward, backward is not wanted
+        //self.addEventListener('beforeunload', this.beforeunloadEventListener)
         document.body.addEventListener('click', this.documentBodyClickEventListener)
         document.body.addEventListener('form-submit', this.formSubmitEventListener)
         // overwrite self.open, since that is used at MultiLevelNavigation to open links
@@ -269,7 +274,8 @@ export default class CheckoutReminder extends Dialog {
         // @ts-ignore
         self.open = (url, target, features) => {
           if (!this.preventDefaultNavigation(url, target)) {
-            self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+            // business decided, that beforeunload on browser navigation forward, backward is not wanted
+            //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
             this.#selfOpen(url, target, features)
           }
         }
@@ -300,7 +306,8 @@ export default class CheckoutReminder extends Dialog {
         if (this.checkoutReminderAnyReturn) this.checkoutReminderAnyReturn.removeEventListener('click', this.checkoutReminderAnyReturnEventListener)
         break
       case 'checkout':
-        self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+        // business decided, that beforeunload on browser navigation forward, backward is not wanted
+        //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
         document.body.removeEventListener('click', this.documentBodyClickEventListener)
         document.body.removeEventListener('form-submit', this.formSubmitEventListener)
         self.open = this.#selfOpen
@@ -352,6 +359,9 @@ export default class CheckoutReminder extends Dialog {
       }
       :host([page='any']) > dialog > p:empty {
         display: none;
+      }
+      :host([page='any']) > dialog > p.no-margin-bottom {
+        margin-bottom: 0;
       }
       :host([page='any']) > dialog > p:first-of-type {
         --p-margin: 0 auto 1rem;
