@@ -16,7 +16,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class Login extends Shadow() {
   constructor(options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
-    this.mdxLoginComponent = this.root.querySelector('mdx-login')
+    this.mdxLoginComponent = this.root.querySelector('wct-mdx-login')
 
     this.selfClickListener = event => {
       const mdxLoginFlyout = this.mdxLoginComponent.root.querySelector('mdx-login-flyout')
@@ -66,7 +66,7 @@ export default class Login extends Shadow() {
    * @return {boolean}
    */
   shouldRenderHTML() {
-    return !this.root.querySelector('mdx-login')
+    return !this.root.querySelector('wct-mdx-login')
   }
 
   /**
@@ -127,6 +127,17 @@ export default class Login extends Shadow() {
       :host > section > m-dialog {
         margin-left: calc(var(--content-spacing, 1em) * -1.5);
       }
+      .sr-only {
+          position: absolute !important;
+          width: 1px !important;
+          height: 1px !important;
+          padding: 0 !important;
+          margin: -1px !important;
+          overflow: hidden !important;
+          clip: rect(0, 0, 0, 0) !important;
+          white-space: nowrap !important;
+          border: 0 !important;
+      }
       @media only screen and (max-width: _max-width_) {
         :host,
         :host > section {
@@ -176,7 +187,7 @@ export default class Login extends Shadow() {
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../../../css/web-components-toolbox-migros-design-experience/src/es/components/atoms/login/Login.js`,
-        name: 'mdx-login'
+        name: 'wct-mdx-login'
       }
     ])
   }

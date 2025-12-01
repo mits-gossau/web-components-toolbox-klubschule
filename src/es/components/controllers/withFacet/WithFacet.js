@@ -260,7 +260,7 @@ export default class WithFacet extends WebWorker() {
           })
         }
         const isTree = event?.detail?.this?.attributes['filter-type']?.value === 'tree'
-        if (isTree) {
+        if (isTree && !isSearchPage) {
           currentRequestObj.filters = await this.webWorker(WithFacet.getSectorFilterWithInitialFallback, currentRequestObj.filters, initialRequestObj.filters)
           currentRequestObj.filters = await this.webWorker(WithFacet.getLastSelectedFilterItem, currentRequestObj.filters)
         }
@@ -489,12 +489,16 @@ export default class WithFacet extends WebWorker() {
             if (event?.detail?.ppage && !json.filters.length) json.filters = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : currentRequestObj.filters || initialFilter || []
             json.hasSelectedFilter = hasSelectedFilter
 
-            // sort courses by start date (ascending) 
+            // sort courses by start date (ascending) and by start time
             if (this.hasAttribute('no-search-tab') && json.courses && Array.isArray(json.courses) && !this.params.has('sorting')) {
               json.courses.sort((a, b) => {
                 const dateA = new Date(a.gueltig_ab)
                 const dateB = new Date(b.gueltig_ab)
-                return dateA - dateB
+                const dateDiff = dateA - dateB
+                if (dateDiff !== 0) return dateDiff
+                const timeA = a.start_zeit || '00:00'
+                const timeB = b.start_zeit || '00:00'
+                return timeA.localeCompare(timeB)
               })
             }
 

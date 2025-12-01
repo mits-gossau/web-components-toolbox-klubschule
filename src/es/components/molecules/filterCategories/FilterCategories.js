@@ -382,6 +382,77 @@ export default class FilterCategories extends Shadow() {
   showSubLevels = () => this.toggleSubLevels(true)
   hideSubLevels = () => this.toggleSubLevels(false)
 
+  sortSubLevelMDialogs (subLevel, filterItem) {
+    if (!subLevel || !filterItem.children || filterItem.children.length === 0) return
+
+    const mDialogs = Array.from(subLevel.children).filter(child => child.tagName === 'M-DIALOG')
+    if (mDialogs.length <= 1) return
+
+    const apiOrderMap = new Map()
+    
+    filterItem.children.forEach((child, apiIndex) => {
+      const matchingDialog = mDialogs.find(dialog => dialog.id === `filter-${child.id}`)
+      if (matchingDialog) apiOrderMap.set(matchingDialog.id, apiIndex)
+    })
+
+    const sortedDialogs = [...mDialogs].sort((a, b) => {
+      const orderA = apiOrderMap.get(a.id) ?? 999 
+      const orderB = apiOrderMap.get(b.id) ?? 999
+      return orderA - orderB
+    })
+
+    const currentOrder = mDialogs.map(d => d.id)
+    const sortedOrder = sortedDialogs.map(d => d.id)
+    const needsReordering = currentOrder.join(',') !== sortedOrder.join(',')
+    
+    if (needsReordering) {
+      const collectDialogStates = (element, states = new Map()) => {
+        const mDialogs = element.querySelectorAll(':scope > m-dialog')
+        mDialogs.forEach(dialog => {
+          const shadowRoot = dialog.shadowRoot
+          if (shadowRoot) {
+            const nativeDialog = shadowRoot.querySelector('dialog')
+            if (nativeDialog?.open) {
+              states.set(dialog.id, {
+                open: true,
+                isModal: nativeDialog.matches(':modal')
+              })
+            }
+            const subLevelsInShadow = shadowRoot.querySelectorAll('.sub-level')
+            subLevelsInShadow.forEach(subLevel => collectDialogStates(subLevel, states))
+          }
+        })
+        return states
+      }
+
+      const restoreDialogStates = (element, states) => {
+        const mDialogs = element.querySelectorAll(':scope > m-dialog')
+        mDialogs.forEach(dialog => {
+          const shadowRoot = dialog.shadowRoot
+          if (shadowRoot) {
+            const state = states.get(dialog.id)
+            if (state?.open) {
+              const nativeDialog = shadowRoot.querySelector('dialog')
+              if (nativeDialog) {
+                if (nativeDialog.open) nativeDialog.close()
+                state.isModal ? nativeDialog.showModal() : nativeDialog.show()
+              }
+            }
+            const subLevelsInShadow = shadowRoot.querySelectorAll('.sub-level')
+            subLevelsInShadow.forEach(subLevel => restoreDialogStates(subLevel, states))
+          }
+        })
+      }
+
+      const allDialogStates = collectDialogStates(subLevel)
+      
+      subLevel.innerHTML = ''
+      sortedDialogs.forEach(dialog => subLevel.appendChild(dialog))
+
+      restoreDialogStates(subLevel, allDialogStates)
+    }
+  }
+
   generateFilters (response, filterItem, mainNav = this.mainNav, parentItem = null, firstFilterItemId = null, level = -1) {
     level++
     const isTreeFilter = filterItem.typ === 'tree' || filterItem.id.includes('N')
@@ -429,6 +500,7 @@ export default class FilterCategories extends Shadow() {
     }
     
     if (!Array.from(mainNav.childNodes).includes(generatedNavLevelItem.navLevelItem)) mainNav.appendChild(generatedNavLevelItem.navLevelItem)
+    
     if (filterItem.children && filterItem.children.length > 0 && filterItem.visible) {
       if (isCenterFilter) { // center filters
         const generatedCenterFilters = this.generateCenterFilterMap.get(level + '_' + filterItem.id) || this.generateCenterFilterMap.set(level + '_' + filterItem.id, this.generateCenterFilter(response, filterItem)).get(level + '_' + filterItem.id)
@@ -451,6 +523,8 @@ export default class FilterCategories extends Shadow() {
             }
           }
         })
+        // sort m-dialogs in sub-level after all children are processed for tree filters
+        if (isTreeFilter) this.sortSubLevelMDialogs(generatedNavLevelItem.subLevel, filterItem)
       }
     }
   }
