@@ -270,7 +270,7 @@ export default class CheckoutReminder extends Dialog {
         document.body.addEventListener('click', this.documentBodyClickEventListener)
         document.body.addEventListener('form-submit', this.formSubmitEventListener)
         // overwrite self.open, since that is used at MultiLevelNavigation to open links
-        this.#selfOpen = self.open
+        this.#selfOpen = self.open.bind(self)
         // @ts-ignore
         self.open = (url, target, features) => {
           if (!this.preventDefaultNavigation(url, target)) {
