@@ -565,6 +565,7 @@ export default class CheckoutReminder extends Dialog {
       if (this.hasAttribute('inside-route') && this.getAttribute('inside-route').split(',').some(str => url.origin.includes(str.trim()))) {
         return false
       } else {
+        if (url.pathname.includes('/Login')) return false
         if (url.origin.includes('login.migros')) return false
         if (url.origin.includes('datatrans.com')) return false
       }
