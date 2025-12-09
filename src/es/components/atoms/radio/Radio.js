@@ -38,7 +38,7 @@ export default class Radio extends Shadow() {
           width: 100%;
         }
 
-        :host .wrap img {
+        :host .wrap > img {
           margin-left: var(--mdx-sys-spacing-fix-m)
         }
 
@@ -51,10 +51,6 @@ export default class Radio extends Shadow() {
 
         :host .wrap-image {
           padding-left: calc(var(--mdx-comp-radiobutton-padding-horizontal-default) + var(--mdx-comp-radiobutton-sizing-ellipse));
-        }
-        
-        :host .wrap-image > .mobile {
-          display: none;
         }
 
         :host .wrap.disabled {
