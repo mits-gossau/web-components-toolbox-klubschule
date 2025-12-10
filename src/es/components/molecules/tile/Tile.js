@@ -17,7 +17,12 @@ export default class Tile extends Shadow() {
     this.tileLink = this.tileData?.buttons?.find(button => button.link)?.link
 
     this.openLink = () => {
-      window.open(this.tileLink, '_self')
+      if (this.tileLink) {
+        const currentUrl = new URL(window.location.href)
+        const targetUrl = new URL(this.tileLink, window.location.origin)
+        currentUrl.searchParams.forEach((value, key) => { if (!targetUrl.searchParams.has(key)) targetUrl.searchParams.set(key, value) })
+        window.open(targetUrl.toString(), '_self')
+      }
     }
   }
 
