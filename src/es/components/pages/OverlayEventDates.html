@@ -1,0 +1,41 @@
+<style>
+    :host {
+        --dialog-left-slide-in-max-width-custom: 100%;
+        --dialog-left-slide-in-container-max-width-custom: 100%;
+    }
+</style>
+<m-dialog 
+    namespace="dialog-left-slide-in-" 
+    show-event-name="dialog-open-" 
+    close-event-name="backdrop-clicked"
+    open
+>
+    <div class="container dialog-header" tabindex="0">
+        <a-button id="close-back">
+            <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
+        </a-button>
+        <h3>nächste Veranstaltungstermine</h3>
+        <a-button request-event-name="backdrop-clicked" id="close">
+            <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
+        </a-button>
+    </div>
+    <div class="dialog-content">
+        <div class="container" style="flex-direction: column; align-items: flex-start;">
+            <h2 style="margin: 0; font-size: 24px;">Pilates</h2>
+            <h3 style="margin: 0; margin-bottom: 24px; font-size: 20px; display: flex; align-items: center; gap: 12px;">
+                <a-icon-mdx icon-name="location" size="1.5em"></a-icon-mdx>
+                Zürich-Altstetten
+            </h3>
+            <ks-m-event-date-tile></ks-m-event-date-tile>
+            <hr style="border: 1px solid #808080; margin: 0; width: 100%;" />
+            <ks-m-event-date-tile></ks-m-event-date-tile>
+        </div>
+    </div>
+    <div class="container dialog-footer">
+        <a-button id="close" namespace="button-tertiary-" no-pointer-events request-event-name="backdrop-clicked">Schliessen</a-button>
+        <a-button id="close" class="button-show-all-offers" namespace="button-primary-" no-pointer-events request-event-name="backdrop-clicked">Details ansehen</a-button>
+    </div>
+
+    <!-- attribute style="margin-top:2rem" only for demo! -->
+    <a id="show-modal" namespace="button-primary-" no-pointer-events style="margin-top:2rem">Öffne Veranstaltungstermine</a>
+</m-dialog>
