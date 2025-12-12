@@ -8,7 +8,7 @@
   --any-content-spacing-mobile: var(--any-content-spacing);
   --any-content-spacing: var(--mdx-sys-spacing-flex-2xs);
   --any-content-width: calc(min(100%, var(--body-max-width)) - var(--mdx-sys-spacing-flex-large-xs) * 2);
-  --a-wrapper-margin: 0;
+  --a-wrapper-margin: 4px 0;
   --body-max-width: 1920px;
   --body-margin: 0 auto;
   

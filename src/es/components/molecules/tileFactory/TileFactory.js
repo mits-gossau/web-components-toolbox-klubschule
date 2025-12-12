@@ -69,7 +69,7 @@ export default class TileFactory extends Shadow() {
   * @param {any} args
   */
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, tabindex: 'no-tabindex', ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail)
     this.hiddenMessages = this.hiddenSectionsPartnerSearch
@@ -219,7 +219,7 @@ export default class TileFactory extends Shadow() {
                 }'
               ></ks-m-event>
             ` : (
-              ((course.locations?.length > 1 || course.buttons[0]?.link === null &&  course.buttons[0].iconName === 'ChevronDown' &&  course.buttons[0].typ === 'quaternary') || this.isNearbySearch) && course.filter?.length
+              ((course.locations?.length > 1 || course.buttons[0]?.link === null &&  course.buttons[0].iconName === 'ChevronDown' &&  course.buttons[0].typ === 'quaternary') || this.isNearbySearch) && course.filter?.length && !this.isOtherLocations
                 ? /* html */`
                   <m-load-template-tag>
                     <template>
