@@ -4,7 +4,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 export default class FavoriteButton extends Shadow() {
   #isFavoured
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, tabindex: 'no-tabindex', ...options }, ...args)
 
     try {
       this.gtm_data = this.hasAttribute('event-data') ? JSON.parse(this.getAttribute('event-data')) : this.hasAttribute('course-data') ? JSON.parse(this.getAttribute('course-data')) : null
