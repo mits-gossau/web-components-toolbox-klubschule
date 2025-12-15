@@ -23,7 +23,18 @@ export default class Contact extends Shadow() {
     this.keydownEventListener = event => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault()
-        this.click()
+        if (this.hasAttribute('onclick')) {
+          const onclickCode = this.getAttribute('onclick')
+          try {
+            const func = new Function(onclickCode)
+            func.call(this)
+          } catch (error) {
+            console.error('Error executing onclick:', error)
+            this.click()
+          }
+        } else {
+          this.click()
+        }
       }
     }
   }
