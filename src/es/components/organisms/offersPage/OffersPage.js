@@ -673,18 +673,19 @@ export default class OffersPage extends Shadow() {
               <m-dialog namespace="dialog-left-slide-in-" show-event-name="dialog-open-first-level" close-event-name="backdrop-clicked" id="offers-page-filter-categories">
                 <dialog>
                   <!-- overlayer -->
-                  <div class="container dialog-header" tabindex="0">
+                  <div class="container dialog-header">
                     <a-button id="close-back">
                       &nbsp;
                     </a-button>
                     <h3>${this.getTranslation('Filter')}</h3>
-                    <a-button request-event-name="backdrop-clicked" id="close">
+                    <a-button request-event-name="backdrop-clicked" id="close" tabindex="0">
                       <a-icon-mdx icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
                     </a-button>
                   </div>
                   <div class="container dialog-content">
                     <p class="reset-link">
-                        <a-button namespace="button-transparent-" request-event-name="reset-all-filters">${this.getTranslation('Filter.ResetAllFilter')} <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
+                        <a-button namespace="button-transparent-" request-event-name="reset-all-filters" tabindex="0">
+                          ${this.getTranslation('Filter.ResetAllFilter')} <a-icon-mdx class="icon-right" icon-name="RotateLeft" size="1em"></a-icon-mdx>
                         </a-button>
                     </p>
                     <div class="sub-content">

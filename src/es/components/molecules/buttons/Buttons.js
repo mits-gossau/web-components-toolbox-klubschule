@@ -307,19 +307,19 @@ export default class Buttons extends Shadow() {
         // generate <m-dialog> - Markup
         tempWrapper.innerHTML = /* html */ `
           <m-dialog namespace="dialog-left-slide-in-checkout-" show-event-name="dialog-open-checkout-overlay-${this.dialogId}" close-event-name="backdrop-clicked-${this.dialogId}">
-            <div class="container dialog-header" tabindex="0">
+            <div class="container dialog-header">
               <div></div>
               <h3 id="overlay-title">${data.titel}</h3>
               <div id="close">
                 <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
               </div>
             </div>
-            <ks-a-spacing type="xs-flex" tabindex="0"></ks-a-spacing>
+            <ks-a-spacing type="xs-flex"></ks-a-spacing>
             <div class="container dialog-content">
               <div class="sub-content">
               ${data.texte.reduce(
                 (acc, text, index) => acc + /* html */ `
-                  ${index > 0 ? /* html */ `<ks-a-spacing type="l-flex" tabindex="0"></ks-a-spacing>` : ''}
+                  ${index > 0 ? /* html */ `<ks-a-spacing type="l-flex"></ks-a-spacing>` : ''}
                   <h3>${text.titel}</h3>
                   <p>${text.text}</p>
                 `, '')}

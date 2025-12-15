@@ -5,7 +5,7 @@
 :host > .main-level {
     list-style: none;
     overflow: hidden;
-    padding: 0;
+    padding: 0 2px; /* 2px space for outlines of dialog element */
     position: relative;
 }
 :host .menu-checkbox {

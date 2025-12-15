@@ -128,7 +128,7 @@ export default class Abonnements extends Shadow() {
   renderHTML() {
     this.html = /* html */ `
       <m-dialog namespace="dialog-left-slide-in-wide-" show-event-name="open-abonnements-dialog-${this.aboId}" id="offers-page-filter-categories" close-event-name="backdrop-clicked">
-        <div class="container dialog-header" tabindex="0">
+        <div class="container dialog-header">
           <div>
           </div>
           <h3 id="total"></h3>
