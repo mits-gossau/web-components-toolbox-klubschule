@@ -280,7 +280,7 @@ export default class WishList extends Shadow() {
       ` : ''}
       ${passedWatchListEntries?.length ? /* html */ `
         <ks-c-event-detail endpoint="${this.eventDetailURL}">
-          <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="passed-offers-section" tabindex="0" aria-label="Section">  
+          <ks-o-body-section variant="default" no-margin-y background-color="var(--mdx-sys-color-accent-6-subtle1)" id="passed-offers-section" aria-label="Section">  
             <div class="passed-tile-wrapper">  
               <h2>${isEvent ? this.getTranslation('Wishlist.Events.Title') : this.getTranslation('Wishlist.Offers.Title')}</h2>
               <div style="display: flex; flex-direction: column; gap: 1em;">

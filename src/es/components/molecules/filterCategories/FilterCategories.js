@@ -13,7 +13,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 */
 export default class FilterCategories extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, tabindex: 'no-tabindex', ...options }, ...args)
 
     this.generatedNavLevelItemMap = new Map()
     this.generateCenterFilterMap = new Map()
@@ -337,8 +337,8 @@ export default class FilterCategories extends Shadow() {
     `
 
     div.innerHTML = /* html */`
-      <m-dialog id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} filter-type="${this.firstTreeItem ? this.firstTreeItem.typ : filterItem.typ}" filter-level="level-${level}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
-        <div class="container dialog-header" tabindex="0">
+      <m-dialog keep-focusable tabindex="0" id="${filterIdPrefix + filterItem.id}" ${shouldRemainOpen ? 'open' : ''} filter-type="${this.firstTreeItem ? this.firstTreeItem.typ : filterItem.typ}" filter-level="level-${level}" namespace="dialog-left-slide-in-without-background-" show-event-name="dialog-open-${filterItem.id}" close-event-name="backdrop-clicked">
+        <div class="container dialog-header">
           <a-button id="close-back">
             <a-icon-mdx icon-name="ChevronLeft" size="2em" id="close"></a-icon-mdx>
           </a-button>
