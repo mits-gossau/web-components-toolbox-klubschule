@@ -1,4 +1,5 @@
 // @ts-check
+import { escapeHTML } from '../../web-components-toolbox/src/es/helpers/Helpers.js'
 import AutoCompleteList from '../autoCompleteList/AutoCompleteList.js'
 
 export default class HistoryCompleteList extends AutoCompleteList {
@@ -22,7 +23,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
       Promise.all(showPromises).then(() => (this.hidden = false))
     })
-
+    document.body.addEventListener('request-with-facet', this.requestWithFacetListener)
     if (this.useKeyUpNavigation) {
       this.activeListItemIndex = -2
       this.currentDialog = this.getRootNode().querySelector('dialog')
@@ -31,13 +32,17 @@ export default class HistoryCompleteList extends AutoCompleteList {
   }
 
   disconnectedCallback() {
-    if (this.useKeyUpNavigation) {
-      this.currentDialog.removeEventListener('keydown', this.navigateOnListElement)
-    }
+    document.body.removeEventListener('request-with-facet', this.requestWithFacetListener)
+    if (this.useKeyUpNavigation) this.currentDialog.removeEventListener('keydown', this.navigateOnListElement)
   }
 
   clickOnListElement = (item) => {
+    // TODO: trigger search
     //this.dataLayerPush(item)
+  }
+
+  requestWithFacetListener = event => {
+    if (event.detail?.key === 'input-search' && event.detail.value) this.storage = escapeHTML(event.detail.value)
   }
 
   renderCSS() {
@@ -59,17 +64,16 @@ export default class HistoryCompleteList extends AutoCompleteList {
    */
   renderHTML() {
     if (this.useKeyUpNavigation) this.activeListItemIndex = -2
-    this.html = /* html */ `
+    if (!this.list) this.html = /* html */ `
       <div>
         <ul></ul>
       </div>  
     `
-    const items = [{term: 'hello'}] // TODO: get from localStorage
     // render list items
-    this.list.replaceChildren(...items.map(item => {
+    this.list.replaceChildren(...this.storage.map(item => {
       const listElement = document.createElement('li')
       listElement.innerHTML = `
-        <a-icon-mdx icon-name="Clock" size="1em"></a-icon-mdx><span>${item.term || item.text}</span>
+        <a-icon-mdx icon-name="Clock" size="1em"></a-icon-mdx><span>${item}</span>
       `
       listElement.addEventListener('click', event => this.clickOnListElement(item))
       return listElement
@@ -80,52 +84,23 @@ export default class HistoryCompleteList extends AutoCompleteList {
     return this.root.querySelector('ul')
   }
 
-  navigateOnListElement = (event) => {
-    this.ulListItems = Array.from(this.list.querySelectorAll('li'))
-    if (event.key === "Enter") {
-      const currentActiveLiItem = this.ulListItems?.find((li) => li.classList.contains('active'))
-      if (currentActiveLiItem) {
-        this.ulListItems?.forEach((li) => li.classList.remove('active'))
-        currentActiveLiItem.click()
-      } else if (!currentActiveLiItem && this.ulListItems[0].getAttribute('id') !== 'user-location') {
-        this.ulListItems[0].click()
-      }
-    } else {
-      const maxLength = this.ulListItems.length - 2
-      this.ulListItems.forEach((li) => li.classList.remove('active'))
+  get storage () {
+    return JSON.parse(localStorage.getItem('history-complete-list') || '[]')
+  }
 
-      if (this.ulListItems.length > 1) {
-        switch (event.key) {
-          case "ArrowUp":
-            if (this.activeListItemIndex === -2) {
-              this.ulListItems[0].classList.add('active')
-              this.activeListItemIndex = 0
-            } else if (this.activeListItemIndex === 0) {
-              this.activeListItemIndex = maxLength + 1
-              this.ulListItems[this.activeListItemIndex].classList.add('active')
-            }
-            else {
-              this.activeListItemIndex = this.activeListItemIndex - 1
-              this.ulListItems[this.activeListItemIndex].classList.add('active')
-            }
-            break;
-          case "ArrowDown":
-            if (this.activeListItemIndex === -2) {
-              this.ulListItems[0].classList.add('active')
-              this.activeListItemIndex = 0
-            }
-            else if (this.activeListItemIndex > maxLength) {
-              this.activeListItemIndex = 0
-              this.ulListItems[this.activeListItemIndex].classList.add('active')
-            }
-            else {
-              this.activeListItemIndex = this.activeListItemIndex + 1
-              this.ulListItems[this.activeListItemIndex].classList.add('active')
-            }
-            break;
-        }
-      }
+  set storage (value) {
+    const currentStorage = this.storage
+    // this component exists at multiple (two) locations and must not do the same logic twice
+    const lowerCaseValue = value.toLowerCase()
+    let index
+    if ((index = currentStorage.findIndex(element => element.toLowerCase() === lowerCaseValue)) > 0) currentStorage.splice(index, 1)
+    if (index !== 0) {
+      const arr = [value].concat(currentStorage)
+      // maximum length of 5 items
+      arr.length = 5
+      localStorage.setItem('history-complete-list', JSON.stringify(arr))
     }
+    this.renderHTML()
   }
 
   dataLayerPush(item) {
