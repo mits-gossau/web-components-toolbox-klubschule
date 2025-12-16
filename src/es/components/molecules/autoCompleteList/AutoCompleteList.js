@@ -7,6 +7,8 @@ export default class AutoCompleteList extends Shadow() {
 
     this.useKeyUpNavigation = this.hasAttribute('use-keyup-navigation')
     this.locateMe = this.shadowRoot.querySelector('#user-location')
+    // mock some content
+    //this.autoCompleteListener = event => this.renderHTML(Promise.resolve({"contentItems":[{searchText: "peter"}, {searchText: "ruedi"}, {searchText: "sepp"}],"items":[{searchText: "peter"}, {searchText: "ruedi"}, {searchText: "sepp"}],"portalId":29,"sprachid":"d","mandantId":111,"total":0,"success":true,"searchText":"fende","total_label":""}))
     this.autoCompleteListener = event => this.renderHTML(event.detail.fetch)
   }
 
@@ -117,7 +119,7 @@ export default class AutoCompleteList extends Shadow() {
 
   renderCSS() {
     this.css = /* css */ `
-        :host {
+        :host(:not([empty])) {
           padding-top: 1em;
           padding-left: 1em;
         }
@@ -362,6 +364,7 @@ export default class AutoCompleteList extends Shadow() {
               return listElement
             })
             this.list.replaceChildren(...listItems)
+            this[this.list.children.length ? 'removeAttribute' : 'setAttribute']('empty', '')
 
             // render content items
             if (this.hasAttribute('with-auto-complete-content')) {
@@ -428,6 +431,7 @@ export default class AutoCompleteList extends Shadow() {
             if (node.tagName === 'LI') this.list.appendChild(node)
           })
         }
+        this[this.list.children.length ? 'removeAttribute' : 'setAttribute']('empty', '')
       }
     })
   }

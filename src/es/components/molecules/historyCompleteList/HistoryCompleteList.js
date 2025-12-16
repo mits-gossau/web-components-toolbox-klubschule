@@ -65,6 +65,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
   renderHTML() {
     if (this.useKeyUpNavigation) this.activeListItemIndex = -2
     this.html = /* html */ `
+      <div class="heading">${this.getTranslation('Search.History.LastSearched')}</div>
       <div>
         <ul></ul>
       </div>  
@@ -87,10 +88,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
       listElement.addEventListener('click', event => this.clickOnListElement(item))
       return listElement
     }))
-  }
-
-  get list() {
-    return this.root.querySelector('ul')
+    this[this.list.children.length ? 'removeAttribute' : 'setAttribute']('empty', '')
   }
 
   get storage () {
@@ -106,7 +104,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
     if (index !== 0) {
       const arr = [value].concat(currentStorage)
       // maximum length of 5 items
-      arr.length = 5
+      if (arr.length > 5) arr.length = 5
       localStorage.setItem('history-complete-list', JSON.stringify(arr))
     }
     this.renderList()
