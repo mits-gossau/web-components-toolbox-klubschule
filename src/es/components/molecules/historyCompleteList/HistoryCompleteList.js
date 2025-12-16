@@ -64,11 +64,20 @@ export default class HistoryCompleteList extends AutoCompleteList {
    */
   renderHTML() {
     if (this.useKeyUpNavigation) this.activeListItemIndex = -2
-    if (!this.list) this.html = /* html */ `
+    this.html = /* html */ `
       <div>
         <ul></ul>
       </div>  
     `
+    this.renderList()
+  }
+
+  /**
+   *
+   *
+   * @return {void}
+   */
+  renderList() {
     // render list items
     this.list.replaceChildren(...this.storage.map(item => {
       const listElement = document.createElement('li')
@@ -100,7 +109,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
       arr.length = 5
       localStorage.setItem('history-complete-list', JSON.stringify(arr))
     }
-    this.renderHTML()
+    this.renderList()
   }
 
   dataLayerPush(item) {
