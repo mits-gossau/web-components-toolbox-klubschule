@@ -22,8 +22,10 @@ export default class HistoryCompleteList extends AutoCompleteList {
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
       Promise.all(showPromises).then(() => (this.hidden = false))
+      this.deleteEl.addEventListener('click', this.deleteElClickEventListener)
     })
     document.body.addEventListener('request-with-facet', this.requestWithFacetListener)
+    document.body.addEventListener('history-complete-render-list', this.historyCompleteRenderList)
     if (this.useKeyUpNavigation) {
       this.activeListItemIndex = -2
       this.currentDialog = this.getRootNode().querySelector('dialog')
@@ -33,17 +35,54 @@ export default class HistoryCompleteList extends AutoCompleteList {
 
   disconnectedCallback() {
     document.body.removeEventListener('request-with-facet', this.requestWithFacetListener)
+    document.body.removeEventListener('history-complete-render-list', this.historyCompleteRenderList)
     if (this.useKeyUpNavigation) this.currentDialog.removeEventListener('keydown', this.navigateOnListElement)
+    this.deleteEl.removeEventListener('click', this.deleteElClickEventListener)
   }
 
   clickOnListElement = (item) => {
-    // TODO: trigger search
+    // @ts-ignore
+    const inputField = HistoryCompleteList.walksUpDomQueryMatches(this, 'dialog').querySelector('a-input')?.inputField
+    if (inputField) {
+      inputField.value = item
+      console.log('*********', inputField, inputField.value)
+      inputField.click()
+    }
+    const aInput = HistoryCompleteList.walksUpDomQueryMatches(this, 'dialog').querySelector('a-input')
+    if (aInput.inputField) {
+      aInput.inputField.value = item
+      console.log('*********', aInput.inputField, aInput.inputField.value)
+      aInput.clickListener({composedPath: () => [aInput.inputField]}, undefined, undefined, 'change')
+    }
+    /*
+    if (this.hasAttribute('is-main-search')) {
+      this.dispatchEvent(new CustomEvent('close-main-search', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    } else {
+      this.dispatchEvent(new CustomEvent('close-search-dialog', {
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }
+    */
     //this.dataLayerPush(item)
+  }
+
+  deleteElClickEventListener = event => {
+    event.stopPropagation()
+    event.preventDefault()
+    this.deleteStorage()
   }
 
   requestWithFacetListener = event => {
     if (event.detail?.key === 'input-search' && event.detail.value) this.storage = escapeHTML(event.detail.value)
   }
+
+  historyCompleteRenderList = event => this.renderList()
 
   renderCSS() {
     super.renderCSS()
@@ -51,7 +90,28 @@ export default class HistoryCompleteList extends AutoCompleteList {
       this.parentElement.setAttribute('style', 'flex-wrap: wrap; gap: 0;')
       this.css = /* css */`
         :host {
+          padding-right: 1em;
           width: 100%;
+        }
+        :host([empty]) {
+          display: none;
+        }
+        :host .heading {
+          align-items: end;
+          justify-content: space-between;
+        }
+        :host .heading > a {
+          color: var(--a-color);
+          font-size: var(--font-size);
+          text-decoration: underline;
+        }
+        @media only screen and (max-width: _max-width_) {
+          :host .heading {
+            flex-direction: row;
+          }
+          :host .heading > a {
+            font-size: var(--font-size-mobile);
+          }
         }
       `
     }
@@ -65,7 +125,10 @@ export default class HistoryCompleteList extends AutoCompleteList {
   renderHTML() {
     if (this.useKeyUpNavigation) this.activeListItemIndex = -2
     this.html = /* html */ `
-      <div class="heading">${this.getTranslation('Search.History.LastSearched')}</div>
+      <div class="heading">
+        <span>${this.getTranslation('Search.History.LastSearched')}</span>
+        <a href=#>${this.getTranslation('Search.History.Delete')}</a>
+      </div>
       <div>
         <ul></ul>
       </div>  
@@ -107,7 +170,20 @@ export default class HistoryCompleteList extends AutoCompleteList {
       if (arr.length > 5) arr.length = 5
       localStorage.setItem('history-complete-list', JSON.stringify(arr))
     }
-    this.renderList()
+    this.dispatchEvent(new CustomEvent('history-complete-render-list', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+  }
+
+  deleteStorage () {
+    localStorage.setItem('history-complete-list', '[]')
+    this.dispatchEvent(new CustomEvent('history-complete-render-list', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
   }
 
   dataLayerPush(item) {
@@ -126,5 +202,9 @@ export default class HistoryCompleteList extends AutoCompleteList {
         console.error('Failed to push in data layer', error)
       }
     }
+  }
+
+  get deleteEl () {
+    return this.root.querySelector('.heading > a')
   }
 }
