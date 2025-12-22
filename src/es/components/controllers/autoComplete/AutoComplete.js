@@ -117,8 +117,8 @@ export default class AutoComplete extends Shadow() {
     this.clickOnPredictionListener = event => {
       // home search input
       if (!this.hasAttribute('no-forwarding')) this.homeSearchInput(event.detail.description)
-      // close dialog
-      this.dispatchEvent(new CustomEvent('close-search-dialog', {
+      // close dialog when new search occurs but on delete x-button click
+      if (event.detail.type !== 'delete') this.dispatchEvent(new CustomEvent('close-search-dialog', {
         bubbles: true,
         cancelable: true,
         composed: true
