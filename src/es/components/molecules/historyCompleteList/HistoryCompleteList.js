@@ -155,7 +155,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
     // this component exists at multiple (two) locations and must not do the same logic twice
     const lowerCaseValue = value.toLowerCase()
     let index
-    if ((index = currentStorage.findIndex(element => element.toLowerCase() === lowerCaseValue)) > 0) currentStorage.splice(index, 1)
+    if ((index = currentStorage.findIndex(element => element.toLowerCase() === lowerCaseValue)) >= 0) currentStorage.splice(index, 1)
     if (index !== 0) {
       const arr = [value].concat(currentStorage)
       // maximum length of 5 items
