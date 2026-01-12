@@ -42,7 +42,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
     document.body.removeEventListener('request-with-facet', this.requestWithFacetListener)
     document.body.removeEventListener('search-change', this.searchChangeListener)
     document.body.removeEventListener('history-complete-render-list', this.historyCompleteRenderList)
-    this.aInput.inputFieldPromise.then(inputField => inputField.removeEventListener('keyup', this.aInputKeyupEventListener))
+    if (this.aInput) this.aInput.inputFieldPromise.then(inputField => inputField.removeEventListener('keyup', this.aInputKeyupEventListener))
     if (this.useKeyUpNavigation) this.currentDialog.removeEventListener('keydown', this.navigateOnListElement)
     this.deleteEl.removeEventListener('click', this.deleteElClickEventListener)
   }
