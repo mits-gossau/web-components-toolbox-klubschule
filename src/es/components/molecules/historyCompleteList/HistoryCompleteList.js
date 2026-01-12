@@ -22,12 +22,12 @@ export default class HistoryCompleteList extends AutoCompleteList {
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
       Promise.all(showPromises).then(() => (this.hidden = false))
-      this.deleteEl.addEventListener('click', this.deleteElClickEventListener)
+      if (this.deleteEl) this.deleteEl.addEventListener('click', this.deleteElClickEventListener)
     })
     document.body.addEventListener('request-with-facet', this.requestWithFacetListener)
     document.body.addEventListener('search-change', this.searchChangeListener)
     document.body.addEventListener('history-complete-render-list', this.historyCompleteRenderList)
-    if (this.aInput) this.aInput.inputFieldPromise.then(inputField => {
+    if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => {
       inputField.addEventListener('keyup', this.aInputKeyupEventListener)
       this.aInputKeyupEventListener()
     })
@@ -42,9 +42,9 @@ export default class HistoryCompleteList extends AutoCompleteList {
     document.body.removeEventListener('request-with-facet', this.requestWithFacetListener)
     document.body.removeEventListener('search-change', this.searchChangeListener)
     document.body.removeEventListener('history-complete-render-list', this.historyCompleteRenderList)
-    if (this.aInput) this.aInput.inputFieldPromise.then(inputField => inputField.removeEventListener('keyup', this.aInputKeyupEventListener))
+    if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => inputField.removeEventListener('keyup', this.aInputKeyupEventListener))
     if (this.useKeyUpNavigation) this.currentDialog.removeEventListener('keydown', this.navigateOnListElement)
-    this.deleteEl.removeEventListener('click', this.deleteElClickEventListener)
+    if (this.deleteEl) this.deleteEl.removeEventListener('click', this.deleteElClickEventListener)
   }
 
   clickOnListElement = (item, event) => {
