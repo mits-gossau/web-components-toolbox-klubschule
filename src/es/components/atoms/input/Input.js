@@ -73,13 +73,20 @@ export default class Input extends Shadow() {
       if (this.root.querySelector(`.${iconClass}`)) return
 
       const originalType = inputType
-      this.input.type = 'text'
       this.input.addEventListener('focus', () => { this.input.type = originalType })
       this.input.addEventListener('blur', () => { if (!this.input.value) this.input.type = 'text' })
 
       const icon = document.createElement(iconElement)
       icon.setAttribute('size', 'sm')
       icon.classList.add(iconClass)
+      
+      icon.style.pointerEvents = 'auto'
+      icon.style.cursor = 'pointer'
+      icon.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.input.focus()
+        this.input.showPicker()
+      })
 
       this.input.parentNode.insertBefore(icon, this.input.nextSibling)
     }
