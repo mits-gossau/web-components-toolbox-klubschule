@@ -30,6 +30,19 @@ export default class CheckoutColorStage extends Shadow() {
   }
 
   backLinkListener (event) {
+    const backLink = this.getAttribute('back-link')
+    
+    if (backLink && backLink.startsWith('javascript:')) {
+      event.preventDefault()
+      const code = backLink.substring(11)
+      try {
+        eval(code)
+      } catch (e) {
+        console.error('Error executing JavaScript link:', e)
+      }
+      return
+    }
+    
     // only if there is no back-link url set
     if (!this.hasAttribute('back-link')) {
       event.preventDefault()
@@ -78,6 +91,10 @@ export default class CheckoutColorStage extends Shadow() {
    * @returns Promise<void>
    */
   renderHTML () {
+    const backLink = this.getAttribute('back-link') || '#'
+    const isJavaScriptLink = backLink.startsWith('javascript:')
+    
+    console.log('CheckoutColorStage:', this.hasAttribute('back-label'), window.history.length > 1, this.hasAttribute('back-link'), backLink, `<a class="back-button" href="${isJavaScriptLink ? '#' : backLink}">`)
     this.html = /* HTML */ `
       <o-grid 
           namespace="grid-2columns-content-stage-" 
@@ -90,7 +107,7 @@ export default class CheckoutColorStage extends Shadow() {
               <p class="topline link-underline">
                   ${(this.hasAttribute('back-label') && (window.history.length > 1 || this.hasAttribute('back-link')))
                       ? /* html */`
-                          <a class="back-button" href="${this.getAttribute('back-link') || '#'}">
+                          <a class="back-button" href="${isJavaScriptLink ? '#' : backLink}">
                               <a-icon-mdx icon-name="ArrowLeft" size="1em"></a-icon-mdx>
                               <span>${this.getAttribute('back-label')}</span>
                           </a>`
