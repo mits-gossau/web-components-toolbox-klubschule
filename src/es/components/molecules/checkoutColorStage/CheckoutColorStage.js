@@ -94,7 +94,6 @@ export default class CheckoutColorStage extends Shadow() {
     const backLink = this.getAttribute('back-link') || '#'
     const isJavaScriptLink = backLink.startsWith('javascript:')
     
-    console.log('CheckoutColorStage:', this.hasAttribute('back-label'), window.history.length > 1, this.hasAttribute('back-link'), backLink, `<a class="back-button" href="${isJavaScriptLink ? '#' : backLink}">`)
     this.html = /* HTML */ `
       <o-grid 
           namespace="grid-2columns-content-stage-" 

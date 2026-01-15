@@ -47,11 +47,14 @@ export default class Contact extends Shadow() {
       this.setAttribute('tabindex', '0')
       this.addEventListener('keydown', this.keydownEventListener)
     }
+    this.linkElement = this.root.querySelector('a[href]')
+    if (this.linkElement) this.linkElement.addEventListener('click', this.linkClickListener.bind(this))
   }
 
   disconnectedCallback () {
     this.removeEventListener('click', this.clickEventListener)
     this.removeEventListener('keydown', this.keydownEventListener)
+    if (this.linkElement) this.linkElement.removeEventListener('click', this.linkClickListener)
   }
 
   /**
@@ -70,6 +73,20 @@ export default class Contact extends Shadow() {
    */
   shouldRenderHTML () {
     return !this.contactRow
+  }
+
+  linkClickListener (event) {
+    const href = this.getAttribute('href')
+    if (href && href.startsWith('javascript:')) {
+      event.preventDefault()
+      const code = href.substring(11) // remove 'javascript:'
+      try {
+        eval(code) // execute the JavaScript code
+      } catch (e) {
+        console.error('Error executing JavaScript link:', e)
+      }
+      return
+    }
   }
 
   /**
@@ -150,9 +167,10 @@ export default class Contact extends Shadow() {
     const target = this.getAttribute('target')
     const tag = this.hasAttribute('href') ? 'a' : 'div'
     const href = this.getAttribute('href')
+    const isJavaScriptLink = href && href.startsWith('javascript:')
 
     this.html = /* HTML */ `
-      <${tag} ${href ? `href="${this.getAttribute('href')}"` : ''} ${id ? `id="${id}"` : ''} ${target ? `target="${target}"` : ''} class="contact-row">
+      <${tag} ${href ? `href="${isJavaScriptLink ? '#' : href}"` : ''} ${id ? `id="${id}"` : ''} ${target ? `target="${target}"` : ''} class="contact-row">
         <a-icon-mdx 
           ${href ? 'namespace="icon-mdx-ks-"' : ''}
           size="${this.getAttribute('icon-size') || '1rem'}"
