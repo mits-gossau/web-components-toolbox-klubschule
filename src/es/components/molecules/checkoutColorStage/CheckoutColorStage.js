@@ -31,10 +31,32 @@ export default class CheckoutColorStage extends Shadow() {
 
   backLinkListener (event) {
     const backLink = this.getAttribute('back-link')
-    
     if (backLink && backLink.startsWith('javascript:')) {
       event.preventDefault()
-      const code = backLink.substring(11)
+      const code = backLink.substring(11) // remove 'javascript:'
+      if (code.includes('history.go') || code.includes('history.back')) {
+        const tempLink = document.createElement('a')
+        tempLink.href = document.referrer || '/'
+        tempLink.style.display = 'none'
+        document.body.appendChild(tempLink)
+        const clickEvent = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        })
+        const originalPreventDefault = clickEvent.preventDefault
+        clickEvent.preventDefault = function() { originalPreventDefault.call(this) }
+        tempLink.dispatchEvent(clickEvent)
+        document.body.removeChild(tempLink)
+        if (!clickEvent.defaultPrevented) {
+          try {
+            eval(code)
+          } catch (e) {
+            console.error('Error executing JavaScript link:', e)
+          }
+        }
+        return
+      }
       try {
         eval(code)
       } catch (e) {
