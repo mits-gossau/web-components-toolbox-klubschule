@@ -52,6 +52,10 @@ export default class Radio extends Shadow() {
         :host .wrap-image {
           padding-left: calc(var(--mdx-comp-radiobutton-padding-horizontal-default) + var(--mdx-comp-radiobutton-sizing-ellipse));
         }
+        
+        :host .wrap-image > .mobile {
+          display: none;
+        }
 
         :host .wrap.disabled {
           pointer-events: none;

@@ -99,3 +99,20 @@
         </m-dialog>
     </section>
 </ks-c-auto-complete>
+<h1 id="secondary">Search Field (history complete)</h1>
+  <section>
+      <m-dialog
+          namespace="dialog-top-slide-in-"
+      >
+          <div class="container">
+              <a-input inputid="location-search" autofocus placeholder="Suche" icon-name="Location" icon-size="1.5em" search submit-search="TODO:request-auto-complete" any-key-listener type="search" autofocus></a-input>
+              <div id="close">
+                  <a-icon-mdx icon-name="Plus" size="2em" ></a-icon-mdx>
+              </div>
+          </div>
+          <div class="container">
+              <ks-m-history-complete-list></ks-m-history-complete-list>
+          </div>
+          <a-input id="show-modal" inputid="show-modal" placeholder="Ihr Standort" icon-name="Location" icon-size="1.25em" search type="search">Angebote in Ihrer Nähe finden</a-input>
+      </m-dialog>
+  </section>

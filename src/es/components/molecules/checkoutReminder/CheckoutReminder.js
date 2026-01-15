@@ -270,7 +270,7 @@ export default class CheckoutReminder extends Dialog {
         document.body.addEventListener('click', this.documentBodyClickEventListener)
         document.body.addEventListener('form-submit', this.formSubmitEventListener)
         // overwrite self.open, since that is used at MultiLevelNavigation to open links
-        this.#selfOpen = self.open
+        this.#selfOpen = self.open.bind(self)
         // @ts-ignore
         self.open = (url, target, features) => {
           if (!this.preventDefaultNavigation(url, target)) {
@@ -565,6 +565,7 @@ export default class CheckoutReminder extends Dialog {
       if (this.hasAttribute('inside-route') && this.getAttribute('inside-route').split(',').some(str => url.origin.includes(str.trim()))) {
         return false
       } else {
+        if (url.pathname.includes('/Login')) return false
         if (url.origin.includes('login.migros')) return false
         if (url.origin.includes('datatrans.com')) return false
       }

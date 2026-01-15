@@ -69,7 +69,7 @@ export default class TileFactory extends Shadow() {
   * @param {any} args
   */
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, tabindex: 'no-tabindex', ...options }, ...args)
 
     this.withFacetEventNameListener = event => this.renderHTML(event.detail)
     this.hiddenMessages = this.hiddenSectionsPartnerSearch

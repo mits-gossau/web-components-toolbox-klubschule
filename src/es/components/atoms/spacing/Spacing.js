@@ -8,7 +8,7 @@ import { Shadow } from '../../web-components-toolbox/src/es/components/prototype
 */
 export default class Spacing extends Shadow() {
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super({ importMetaUrl: import.meta.url, tabindex: 'no-tabindex', ...options }, ...args)
 
     this.type = this.getAttribute('type') || '2xl-flex'
   }

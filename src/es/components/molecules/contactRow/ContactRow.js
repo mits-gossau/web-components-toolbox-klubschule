@@ -19,16 +19,39 @@ export default class Contact extends Shadow() {
     this.clickEventListener = event => {
       if (this.gtm_data) this.dataLayerPush(this.gtm_data)
     }
+
+    this.keydownEventListener = event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault()
+        if (this.hasAttribute('onclick')) {
+          const onclickCode = this.getAttribute('onclick')
+          try {
+            const func = new Function(onclickCode)
+            func.call(this)
+          } catch (error) {
+            console.error('Error executing onclick:', error)
+            this.click()
+          }
+        } else {
+          this.click()
+        }
+      }
+    }
   }
 
   connectedCallback () {
     if (this.shouldRenderCSS()) this.renderCSS()
     if (this.shouldRenderHTML()) this.renderHTML()
     this.addEventListener('click', this.clickEventListener)
+    if (this.hasAttribute('onclick')) {
+      this.setAttribute('tabindex', '0')
+      this.addEventListener('keydown', this.keydownEventListener)
+    }
   }
 
   disconnectedCallback () {
     this.removeEventListener('click', this.clickEventListener)
+    this.removeEventListener('keydown', this.keydownEventListener)
   }
 
   /**
@@ -60,6 +83,11 @@ export default class Contact extends Shadow() {
 
         display: block;
         margin-bottom: var(--mdx-sys-spacing-fix-m);
+      }
+      :host([tabindex]):focus-visible {
+        outline: var(--outline, 2px solid var(--color-focus, #005fcc));
+        outline-offset: var(--outline-offset, 2px);
+        border-radius: var(--border-radius-focus, 4px);
       }
       :host a:hover a-icon-mdx {
         --icon-mdx-ks-color: var(--a-color-hover);
