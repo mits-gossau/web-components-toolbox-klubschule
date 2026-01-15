@@ -39,7 +39,6 @@ export default class BackForward extends Shadow() {
     this.closeButton = this.root.querySelector('#close')
     if (this.closeButton) this.closeButton.addEventListener('click', this.clickEventListener)
 
-    // Handle back button with potential JavaScript links
     this.backButton = this.root.querySelector('ks-a-button[href]')
     if (this.backButton) this.backButton.addEventListener('click', this.backLinkListener.bind(this))
   }

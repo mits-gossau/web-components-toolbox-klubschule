@@ -47,8 +47,6 @@ export default class Contact extends Shadow() {
       this.setAttribute('tabindex', '0')
       this.addEventListener('keydown', this.keydownEventListener)
     }
-    
-    // Handle href with potential JavaScript links
     this.linkElement = this.root.querySelector('a[href]')
     if (this.linkElement) this.linkElement.addEventListener('click', this.linkClickListener.bind(this))
   }
