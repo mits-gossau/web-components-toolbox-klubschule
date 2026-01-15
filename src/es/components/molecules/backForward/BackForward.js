@@ -38,15 +38,64 @@ export default class BackForward extends Shadow() {
 
     this.closeButton = this.root.querySelector('#close')
     if (this.closeButton) this.closeButton.addEventListener('click', this.clickEventListener)
+
+    this.backButton = this.root.querySelector('ks-a-button[href]')
+    if (this.backButton) this.backButton.addEventListener('click', this.backLinkListener.bind(this))
   }
 
   disconnectedCallback () {
     if (this.submitButton) this.submitButton.removeEventListener('click', this.submitEventListener)
     if (this.closeButton) this.closeButton.removeEventListener('click', this.clickEventListener)
+    if (this.backButton) this.backButton.removeEventListener('click', this.backLinkListener)
   }
 
   shouldRenderHTML () {
     return !this.wrapper
+  }
+
+  backLinkListener (event) {
+    const backLink = this.getAttribute('back-link')
+    if (backLink && backLink.startsWith('javascript:')) {
+      event.preventDefault()
+      const code = backLink.substring(11)
+      
+      if (code.includes('history.go') || code.includes('history.back')) {
+        const tempLink = document.createElement('a')
+        tempLink.href = document.referrer || '/'
+        tempLink.style.display = 'none'
+        document.body.appendChild(tempLink)
+        
+        const clickEvent = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        })
+        
+        const originalPreventDefault = clickEvent.preventDefault
+        clickEvent.preventDefault = function() {
+          originalPreventDefault.call(this)
+        }
+        
+        tempLink.dispatchEvent(clickEvent)
+        document.body.removeChild(tempLink)
+        
+        if (!clickEvent.defaultPrevented) {
+          try {
+            eval(code)
+          } catch (e) {
+            console.error('Error executing JavaScript link:', e)
+          }
+        }
+        return
+      }
+      
+      try {
+        eval(code)
+      } catch (e) {
+        console.error('Error executing JavaScript link:', e)
+      }
+      return
+    }
   }
 
   shouldRenderCSS () {
@@ -99,7 +148,7 @@ export default class BackForward extends Shadow() {
           : ''
         }
         ${this.hasAttribute('back-link')
-          ? /* html */`<ks-a-button big href="${this.getAttribute('back-link')}" namespace="button-tertiary-" color="secondary">
+          ? /* html */`<ks-a-button big href="${this.getAttribute('back-link').startsWith('javascript:') ? '#' : this.getAttribute('back-link')}" namespace="button-tertiary-" color="secondary">
               <a-icon-mdx icon-name="ChevronLeft" size="1em" class="icon-left"></a-icon-mdx>
               ${this.getAttribute('back-label')}
             </ks-a-button>`
