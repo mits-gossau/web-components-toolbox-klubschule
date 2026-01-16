@@ -168,9 +168,17 @@ export default class CheckoutReminder extends Dialog {
 
     // business decided, that beforeunload on browser navigation forward, backward is not wanted
     //this.formSubmitEventListener = event => self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+
+    this.checkoutBackNavigationEventListener = event => {
+      if (event.detail?.targetUrl) {
+        this.preventDefaultNavigation(event.detail.targetUrl)
+      }
+    }
   }
 
   connectedCallback () {
+    if (this.isLoginMethodPage) return
+    
     this.hidden = true
     const showPromises = []
     if (this.shouldRenderCustomHTML()) showPromises.push(this.renderCustomHTML())
@@ -271,6 +279,7 @@ export default class CheckoutReminder extends Dialog {
         //self.addEventListener('beforeunload', this.beforeunloadEventListener)
         document.body.addEventListener('click', this.documentBodyClickEventListener)
         document.body.addEventListener('form-submit', this.formSubmitEventListener)
+        document.body.addEventListener('checkout-back-navigation', this.checkoutBackNavigationEventListener)
         // overwrite self.open, since that is used at MultiLevelNavigation to open links
         this.#selfOpen = self.open.bind(self)
         // @ts-ignore
@@ -312,6 +321,7 @@ export default class CheckoutReminder extends Dialog {
         //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
         document.body.removeEventListener('click', this.documentBodyClickEventListener)
         document.body.removeEventListener('form-submit', this.formSubmitEventListener)
+        document.body.removeEventListener('checkout-back-navigation', this.checkoutBackNavigationEventListener)
         self.open = this.#selfOpen
         if (this.checkoutReminderCheckoutContinue) this.checkoutReminderCheckoutContinue.removeEventListener('click', this.checkoutReminderCheckoutContinueEventListener)
         if (this.checkoutReminderCheckoutCancel) this.checkoutReminderCheckoutCancel.removeEventListener('click', this.checkoutReminderCheckoutCancelEventListener)
@@ -641,5 +651,9 @@ export default class CheckoutReminder extends Dialog {
           return style
         })())
     )
+  }
+
+  get isLoginMethodPage () {
+    return window.location.pathname.toLowerCase().endsWith('/loginmethod')
   }
 }
