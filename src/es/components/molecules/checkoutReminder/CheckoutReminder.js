@@ -219,7 +219,9 @@ export default class CheckoutReminder extends Dialog {
             'logged_in': this.hasAttribute('is-logged-in')
           })
           this.hidden = false
-          this.show(this.getAttribute('command-show'))
+          setTimeout(() => {
+            this.show(this.getAttribute('command-show'))
+          }, 500)
         })
         break
       case 'checkout':
@@ -579,7 +581,9 @@ export default class CheckoutReminder extends Dialog {
     })
     this.checkoutReminderCheckoutCancel.setAttribute('href', href)
     this.hidden = false
-    this.show(this.getAttribute('command-show'))
+    setTimeout(() => {
+      this.show(this.getAttribute('command-show'))
+    }, 500)
     return true
   }
 
