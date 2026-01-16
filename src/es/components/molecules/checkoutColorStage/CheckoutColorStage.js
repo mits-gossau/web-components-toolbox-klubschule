@@ -29,7 +29,49 @@ export default class CheckoutColorStage extends Shadow() {
     if (this.backButton) this.backButton.removeEventListener('click', this.backLinkListener)
   }
 
+  getCheckoutBackUrl () {
+    const currentPath = window.location.pathname.toLowerCase()
+    
+    if (currentPath.endsWith('/configuration')) {
+      return currentPath.replace(/\/configuration$/i, '')
+    }
+    
+    if (currentPath.endsWith('/loginmethod')) {
+      const basePath = currentPath.replace(/\/loginmethod$/i, '')
+      return `${basePath}/configuration`
+    }
+    
+    if (currentPath.endsWith('/registration')) {
+      const basePath = currentPath.replace(/\/registration$/i, '')
+      return `${basePath}/loginmethod`
+    }
+    
+    return null
+  }
+
+  isConfigurationPage () {
+    return window.location.pathname.toLowerCase().endsWith('/configuration')
+  }
+
   backLinkListener (event) {
+    const checkoutBackUrl = this.getCheckoutBackUrl()
+    
+    if (this.isConfigurationPage() && checkoutBackUrl) {
+      event.preventDefault()
+      document.body.dispatchEvent(new CustomEvent('checkout-back-navigation', {
+        bubbles: true,
+        composed: true,
+        detail: { targetUrl: checkoutBackUrl }
+      }))
+      return
+    }
+    
+    if (checkoutBackUrl) {
+      event.preventDefault()
+      window.location.href = checkoutBackUrl
+      return
+    }
+
     const backLink = this.getAttribute('back-link')
     if (backLink && backLink.startsWith('javascript:')) {
       event.preventDefault()
