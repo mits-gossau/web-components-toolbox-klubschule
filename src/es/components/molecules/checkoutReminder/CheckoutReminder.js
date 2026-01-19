@@ -108,6 +108,10 @@ export default class CheckoutReminder extends Dialog {
       // business decided, that beforeunload on browser navigation forward, backward is not wanted
       //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
       this.close()
+      if (this._checkoutBackTargetUrl) {
+        event.preventDefault()
+        window.location.href = this._checkoutBackTargetUrl
+      }
     }
 
     this.beforeunloadEventListener = event => {
@@ -171,14 +175,12 @@ export default class CheckoutReminder extends Dialog {
 
     this.checkoutBackNavigationEventListener = event => {
       if (event.detail?.targetUrl) {
-        this.preventDefaultNavigation(event.detail.targetUrl)
+        this.showCheckoutReminderWithTarget(event.detail.targetUrl)
       }
     }
   }
 
   connectedCallback () {
-    if (this.isLoginMethodPage) return
-    
     this.hidden = true
     const showPromises = []
     if (this.shouldRenderCustomHTML()) showPromises.push(this.renderCustomHTML())
@@ -562,6 +564,22 @@ export default class CheckoutReminder extends Dialog {
    * @param {string | undefined} target
    * @returns {boolean}
    */
+  showCheckoutReminderWithTarget (targetUrl) {
+    this.dialogPromise.then(() => {
+      this.dataLayerPush({
+        'event': 'popup_view',
+        'popup_name': 'Bestellabbruch',
+        'popup_type': 'Website',
+        'logged_in': this.hasAttribute('is-logged-in')
+      })
+      this._checkoutBackTargetUrl = targetUrl
+      this.hidden = false
+      setTimeout(() => {
+        this.show(this.getAttribute('command-show'))
+      }, 500)
+    })
+  }
+
   preventDefaultNavigation (href, target) {
     if (target  === '_blank') return false
     let url
@@ -651,9 +669,5 @@ export default class CheckoutReminder extends Dialog {
           return style
         })())
     )
-  }
-
-  get isLoginMethodPage () {
-    return window.location.pathname.toLowerCase().endsWith('/loginmethod')
   }
 }
