@@ -156,12 +156,7 @@ export default class WithFacet extends WebWorker() {
     }
 
     // intial sorting when page is refreshed
-    // For non-search category pages, always default to alphabetic (3) unless URL has sorting param
-    // This overrides CMS sorting:1 which incorrectly sets relevance on category pages
-    if (!isSearchPage && !this.params.has('sorting')) {
-      currentRequestObj.sorting = 3 // alphabetic
-      if (currentRequestObj.clat && currentRequestObj.clong && !currentRequestObj.searchText) currentRequestObj.sorting = 2 // distance
-    } else if (!currentRequestObj.sorting) {
+    if (!currentRequestObj.sorting) {
       currentRequestObj.sorting = 3 // alphabetic
       if (currentRequestObj.clat && currentRequestObj.clong && !currentRequestObj.searchText) currentRequestObj.sorting = 2 // distance
     }
@@ -183,8 +178,6 @@ export default class WithFacet extends WebWorker() {
       this.updateURLParam('sorting', 1)
       sessionStorage.setItem('currentSorting', '1')
     }
-
-    console.log('Sorting', currentRequestObj.sorting)
 
     this.requestWithFacetListener = async event => {
       // Reset PPage after filter Change / Reset
