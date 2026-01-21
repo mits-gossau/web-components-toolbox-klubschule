@@ -107,6 +107,7 @@ export default class CheckoutReminder extends Dialog {
       })
       // business decided, that beforeunload on browser navigation forward, backward is not wanted
       //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+      sessionStorage.removeItem('checkoutPath')
       this.close()
       if (this._checkoutBackTargetUrl) {
         event.preventDefault()
