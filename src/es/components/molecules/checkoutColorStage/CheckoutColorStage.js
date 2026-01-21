@@ -23,13 +23,91 @@ export default class CheckoutColorStage extends Shadow() {
         }
       })
     }
+    this.storeCheckoutPath()
   }
 
   disconnectedCallback () {
     if (this.backButton) this.backButton.removeEventListener('click', this.backLinkListener)
   }
 
+  getOfferPageUrl () {
+    const currentPath = window.location.pathname
+    return currentPath.replace(/\/(configuration|loginmethod|registration)$/i, '')
+  }
+
+  isCheckoutPage () {
+    const currentPath = window.location.pathname.toLowerCase()
+    return currentPath.endsWith('/configuration') || 
+           currentPath.endsWith('/loginmethod') || 
+           currentPath.endsWith('/registration')
+  }
+
+  storeCheckoutPath () {
+    const currentPath = window.location.pathname
+    let checkoutPath = []
+    try {
+      checkoutPath = JSON.parse(sessionStorage.getItem('checkoutPath') || '[]')
+    } catch {}
+    
+    if (!this.isCheckoutPage()) return
+    
+    const existingIndex = checkoutPath.findIndex(p => p.toLowerCase() === currentPath.toLowerCase())
+    if (existingIndex >= 0) {
+      checkoutPath = checkoutPath.slice(0, existingIndex + 1)
+    } else {
+      checkoutPath.push(currentPath)
+    }
+    sessionStorage.setItem('checkoutPath', JSON.stringify(checkoutPath))
+  }
+
+  isFirstCheckoutStep () {
+    let checkoutPath = []
+    try {
+      checkoutPath = JSON.parse(sessionStorage.getItem('checkoutPath') || '[]')
+    } catch {}
+    
+    const currentPath = window.location.pathname.toLowerCase()
+    const currentIndex = checkoutPath.findIndex(p => p.toLowerCase() === currentPath)
+    return currentIndex <= 0
+  }
+
+  getPreviousCheckoutStep () {
+    let checkoutPath = []
+    try {
+      checkoutPath = JSON.parse(sessionStorage.getItem('checkoutPath') || '[]')
+    } catch {}
+    
+    const currentPath = window.location.pathname.toLowerCase()
+    const currentIndex = checkoutPath.findIndex(p => p.toLowerCase() === currentPath)
+    
+    if (currentIndex > 0) {
+      return checkoutPath[currentIndex - 1]
+    }
+    return null
+  }
+
   backLinkListener (event) {
+    if (!this.isCheckoutPage()) return
+    
+    const offerPageUrl = this.getOfferPageUrl()
+    
+    if (this.isFirstCheckoutStep()) {
+      event.preventDefault()
+      document.body.dispatchEvent(new CustomEvent('checkout-back-navigation', {
+        bubbles: true,
+        composed: true,
+        detail: { targetUrl: offerPageUrl }
+      }))
+      return
+    }
+    
+    const previousStep = this.getPreviousCheckoutStep()
+    if (previousStep) {
+      event.preventDefault()
+      window.location.href = previousStep
+      return
+    }
+
     const backLink = this.getAttribute('back-link')
     if (backLink && backLink.startsWith('javascript:')) {
       event.preventDefault()

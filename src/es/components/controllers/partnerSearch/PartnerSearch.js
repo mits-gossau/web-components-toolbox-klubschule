@@ -71,8 +71,11 @@ export default class PartnerSearch extends HTMLElement {
         mode: 'cors',
         body: JSON.stringify(body),
         signal: this.abortController.signal
-      }).then(response => {
-        if (response.status >= 200 && response.status <= 299) return response.json()
+      }).then(async response => {
+        if (response.status >= 200 && response.status <= 299) {
+          const text = await response.text()
+          return text ? JSON.parse(text) : null
+        }
         throw new Error(response.statusText)
       })
       if (event.detail.resolve) {

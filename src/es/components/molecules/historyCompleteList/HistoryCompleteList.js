@@ -47,13 +47,13 @@ export default class HistoryCompleteList extends AutoCompleteList {
     if (this.deleteEl) this.deleteEl.removeEventListener('click', this.deleteElClickEventListener)
   }
 
-  clickOnListElement = (item, event) => {
+  clickOnListElement = (item, position, event) => {
     if (this.aInput.inputField) {
       this.aInput.inputField.value = item
       this.aInput.searchButton.click()
       this.aInputKeyupEventListener(event)
     }
-    //this.dataLayerPush(item)
+    this.dataLayerPush(item, position)
   }
 
   deleteElClickEventListener = event => {
@@ -94,6 +94,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
         :host .heading > a {
           color: var(--a-color);
           font-size: var(--font-size);
+          font-weight: 400;
           text-decoration: underline;
         }
         @media only screen and (max-width: _max-width_) {
@@ -134,12 +135,12 @@ export default class HistoryCompleteList extends AutoCompleteList {
    */
   renderList() {
     // render list items
-    this.list.replaceChildren(...this.storage.map(item => {
+    this.list.replaceChildren(...this.storage.map((item, index) => {
       const listElement = document.createElement('li')
       listElement.innerHTML = `
         <a-icon-mdx icon-name="Clock" size="1em"></a-icon-mdx><span>${item}</span>
       `
-      listElement.addEventListener('click', event => this.clickOnListElement(item, event))
+      listElement.addEventListener('click', event => this.clickOnListElement(item, index + 1, event))
       return listElement
     }))
     this[this.list.children.length ? 'removeAttribute' : 'setAttribute']('empty', '')
@@ -178,17 +179,15 @@ export default class HistoryCompleteList extends AutoCompleteList {
     }))
   }
 
-  dataLayerPush(item) {
-    // GTM Tracking of search_history
+  dataLayerPush(searchTerm, position) {
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {
       try {
         // @ts-ignore
         window.dataLayer.push({
-          'auswahl': item.term || (item.type !== 'enter' && item.type !== 'search-click' ? item.description : ''),
-          'event': 'search_history_click',
-          'suchtext': item.searchText || (item.type === 'enter' || item.type === 'search-click' ? item.description : ''),
-          'typ': item.type === 'content' ? 'Content' : 'Begriff'
+          'event': 'select_search_term',
+          'search_term': searchTerm,
+          'position': String(position)
         })
       } catch (error) {
         console.error('Failed to push in data layer', error)

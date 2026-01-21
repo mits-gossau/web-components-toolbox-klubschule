@@ -107,7 +107,12 @@ export default class CheckoutReminder extends Dialog {
       })
       // business decided, that beforeunload on browser navigation forward, backward is not wanted
       //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+      sessionStorage.removeItem('checkoutPath')
       this.close()
+      if (this._checkoutBackTargetUrl) {
+        event.preventDefault()
+        window.location.href = this._checkoutBackTargetUrl
+      }
     }
 
     this.beforeunloadEventListener = event => {
@@ -168,6 +173,12 @@ export default class CheckoutReminder extends Dialog {
 
     // business decided, that beforeunload on browser navigation forward, backward is not wanted
     //this.formSubmitEventListener = event => self.removeEventListener('beforeunload', this.beforeunloadEventListener)
+
+    this.checkoutBackNavigationEventListener = event => {
+      if (event.detail?.targetUrl) {
+        this.showCheckoutReminderWithTarget(event.detail.targetUrl)
+      }
+    }
   }
 
   connectedCallback () {
@@ -195,8 +206,8 @@ export default class CheckoutReminder extends Dialog {
             <h3 draggable=true><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-title') ?? `Checkout.Reminder.Any.Title${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation></h3>
             <a-icon-mdx id=checkout-reminder-any-cancel icon-name="Plus" size="2em" rotate="45deg" no-hover-transform></a-icon-mdx>
             <p><a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-text') ?? `Checkout.Reminder.Any.Text${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation></p>
-            <p class="no-margin-bottom">${json.uncompletedOrder.bezeichnung || ''}</p>
-            <p>${json.uncompletedOrder.durchfuehrungsort || ''}</p>
+            <p class="no-margin-bottom">${json.uncompletedOrder?.bezeichnung || ''}</p>
+            <p>${json.uncompletedOrder?.durchfuehrungsort || ''}</p>
             <ks-a-button id=checkout-reminder-any-return namespace="button-primary-" href="${json.uncompletedOrder?.kursUrl || ''}">
               <a-translation data-trans-key="${this.getAttribute('checkout-reminder-any-return') ?? `Checkout.Reminder.Any.Return${json.uncompletedOrder?.messageNumber || ''}`}"></a-translation>
             </ks-a-button>
@@ -219,7 +230,9 @@ export default class CheckoutReminder extends Dialog {
             'logged_in': this.hasAttribute('is-logged-in')
           })
           this.hidden = false
-          this.show(this.getAttribute('command-show'))
+          setTimeout(() => {
+            this.show(this.getAttribute('command-show'))
+          }, 500)
         })
         break
       case 'checkout':
@@ -269,6 +282,7 @@ export default class CheckoutReminder extends Dialog {
         //self.addEventListener('beforeunload', this.beforeunloadEventListener)
         document.body.addEventListener('click', this.documentBodyClickEventListener)
         document.body.addEventListener('form-submit', this.formSubmitEventListener)
+        document.body.addEventListener('checkout-back-navigation', this.checkoutBackNavigationEventListener)
         // overwrite self.open, since that is used at MultiLevelNavigation to open links
         this.#selfOpen = self.open.bind(self)
         // @ts-ignore
@@ -310,6 +324,7 @@ export default class CheckoutReminder extends Dialog {
         //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
         document.body.removeEventListener('click', this.documentBodyClickEventListener)
         document.body.removeEventListener('form-submit', this.formSubmitEventListener)
+        document.body.removeEventListener('checkout-back-navigation', this.checkoutBackNavigationEventListener)
         self.open = this.#selfOpen
         if (this.checkoutReminderCheckoutContinue) this.checkoutReminderCheckoutContinue.removeEventListener('click', this.checkoutReminderCheckoutContinueEventListener)
         if (this.checkoutReminderCheckoutCancel) this.checkoutReminderCheckoutCancel.removeEventListener('click', this.checkoutReminderCheckoutCancelEventListener)
@@ -546,10 +561,25 @@ export default class CheckoutReminder extends Dialog {
   /**
    * Prevent link navigation default behavior by showing the dialog
    * 
-   * @param {string | URL | undefined} href
-   * @param {string | undefined} target
-   * @returns {boolean}
+   * @param {string | undefined} targetUrl
+   * @returns {void}
    */
+  showCheckoutReminderWithTarget (targetUrl) {
+    this.dialogPromise.then(() => {
+      this.dataLayerPush({
+        'event': 'popup_view',
+        'popup_name': 'Bestellabbruch',
+        'popup_type': 'Website',
+        'logged_in': this.hasAttribute('is-logged-in')
+      })
+      this._checkoutBackTargetUrl = targetUrl
+      this.hidden = false
+      setTimeout(() => {
+        this.show(this.getAttribute('command-show'))
+      }, 500)
+    })
+  }
+
   preventDefaultNavigation (href, target) {
     if (target  === '_blank') return false
     let url
@@ -579,7 +609,9 @@ export default class CheckoutReminder extends Dialog {
     })
     this.checkoutReminderCheckoutCancel.setAttribute('href', href)
     this.hidden = false
-    this.show(this.getAttribute('command-show'))
+    setTimeout(() => {
+      this.show(this.getAttribute('command-show'))
+    }, 500)
     return true
   }
 
