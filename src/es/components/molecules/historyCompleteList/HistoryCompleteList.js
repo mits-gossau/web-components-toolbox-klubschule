@@ -94,6 +94,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
         :host .heading > a {
           color: var(--a-color);
           font-size: var(--font-size);
+          font-weight: 400;
           text-decoration: underline;
         }
         @media only screen and (max-width: _max-width_) {
