@@ -156,7 +156,11 @@ export default class WithFacet extends WebWorker() {
     }
 
     // intial sorting when page is refreshed
-    if (!currentRequestObj.sorting) {
+    // For category pages (non-search), override CMS sorting to alphabetic unless URL has sorting param
+    if (!isSearchPage && !this.params.has('sorting')) {
+      currentRequestObj.sorting = 3 // alphabetic - override CMS sorting:1
+      if (currentRequestObj.clat && currentRequestObj.clong && !currentRequestObj.searchText) currentRequestObj.sorting = 2 // distance
+    } else if (!currentRequestObj.sorting) {
       currentRequestObj.sorting = 3 // alphabetic
       if (currentRequestObj.clat && currentRequestObj.clong && !currentRequestObj.searchText) currentRequestObj.sorting = 2 // distance
     }
@@ -490,17 +494,20 @@ export default class WithFacet extends WebWorker() {
             json.hasSelectedFilter = hasSelectedFilter
 
             // sort courses by start date (ascending) and by start time
-            if (this.hasAttribute('no-search-tab') && json.courses && Array.isArray(json.courses) && !this.params.has('sorting')) {
-              json.courses.sort((a, b) => {
-                const dateA = new Date(a.gueltig_ab)
-                const dateB = new Date(b.gueltig_ab)
-                const dateDiff = dateA - dateB
-                if (dateDiff !== 0) return dateDiff
-                const timeA = a.start_zeit || '00:00'
-                const timeB = b.start_zeit || '00:00'
-                return timeA.localeCompare(timeB)
-              })
-            }
+            // Only apply client-side date sorting for specific use cases (e.g., info events), 
+            // NOT for category pages where API already returns alphabetically sorted data
+            // Note: This block was causing issues on category pages by overriding API's alphabetic sorting
+            // if (this.hasAttribute('no-search-tab') && json.courses && Array.isArray(json.courses) && !this.params.has('sorting')) {
+            //   json.courses.sort((a, b) => {
+            //     const dateA = new Date(a.gueltig_ab)
+            //     const dateB = new Date(b.gueltig_ab)
+            //     const dateDiff = dateA - dateB
+            //     if (dateDiff !== 0) return dateDiff
+            //     const timeA = a.start_zeit || '00:00'
+            //     const timeB = b.start_zeit || '00:00'
+            //     return timeA.localeCompare(timeB)
+            //   })
+            // }
 
             // update filters with api response
             currentRequestObj.filters = currentCompleteFilterObj = json.filters
