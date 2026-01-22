@@ -361,6 +361,10 @@ export default class CheckoutReminder extends Dialog {
         padding: 0;
         width: 52.6dvw;
       }
+      :host > dialog[open] {
+        display: flex;
+        flex-direction: column;
+      }
       :host([page='any'][command-show='show']) > dialog {
         bottom: var(--mdx-sys-spacing-flex-large-xs);
         left: auto;
@@ -411,6 +415,10 @@ export default class CheckoutReminder extends Dialog {
       }
       :host > dialog > *:last-child {
         padding-bottom: var(--mdx-sys-spacing-fix-l);
+      }
+      :host #checkout-reminder-checkout-cancel {
+        margin-left: auto;
+        margin-right: auto;
       }
       :host > dialog > h3 {
         --h3-text-align: center;
