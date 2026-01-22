@@ -29,6 +29,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
     document.body.addEventListener('history-complete-render-list', this.historyCompleteRenderList)
     if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => {
       inputField.addEventListener('keyup', this.aInputKeyupEventListener)
+      inputField.addEventListener('search', this.aInputKeyupEventListener)
       this.aInputKeyupEventListener()
     })
     if (this.useKeyUpNavigation) {
@@ -42,15 +43,18 @@ export default class HistoryCompleteList extends AutoCompleteList {
     document.body.removeEventListener('request-with-facet', this.requestWithFacetListener)
     document.body.removeEventListener('search-change', this.searchChangeListener)
     document.body.removeEventListener('history-complete-render-list', this.historyCompleteRenderList)
-    if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => inputField.removeEventListener('keyup', this.aInputKeyupEventListener))
+    if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => {
+      inputField.removeEventListener('keyup', this.aInputKeyupEventListener)
+      inputField.removeEventListener('search', this.aInputKeyupEventListener)
+    })
     if (this.useKeyUpNavigation) this.currentDialog.removeEventListener('keydown', this.navigateOnListElement)
     if (this.deleteEl) this.deleteEl.removeEventListener('click', this.deleteElClickEventListener)
   }
 
   clickOnListElement = (item, position, event) => {
-    if (this.aInput.inputField) {
+    if (this.aInput?.inputField) {
       this.aInput.inputField.value = item
-      this.aInput.searchButton.click()
+      this.aInput.searchButton?.click()
       this.aInputKeyupEventListener(event)
     }
     this.dataLayerPush(item, position)
@@ -62,7 +66,9 @@ export default class HistoryCompleteList extends AutoCompleteList {
     this.deleteStorage()
   }
 
-  searchChangeListener = event => this.aInputKeyupEventListener(event)
+  searchChangeListener = event => {
+    this.aInputKeyupEventListener(event)
+  }
 
   requestWithFacetListener = event => {
     if (event.detail?.key === 'input-search' && event.detail.value) this.storage = event.detail.value
@@ -71,8 +77,9 @@ export default class HistoryCompleteList extends AutoCompleteList {
   historyCompleteRenderList = event => this.renderList()
 
   aInputKeyupEventListener = event => {
+    if (!this.aInput?.inputField) return
     this[this.aInput.inputField.value ? 'setAttribute' : 'removeAttribute']('hidden', '')
-    setTimeout(() => this[this.aInput.inputField.value ? 'setAttribute' : 'removeAttribute']('hidden', ''), 50)
+    setTimeout(() => this[this.aInput?.inputField?.value ? 'setAttribute' : 'removeAttribute']('hidden', ''), 50)
   }
 
   renderCSS() {
@@ -200,7 +207,11 @@ export default class HistoryCompleteList extends AutoCompleteList {
   }
 
   get aInput () {
-    // @ts-ignore
-    return this._aInput || (this._aInput = HistoryCompleteList.walksUpDomQueryMatches(this, 'dialog').querySelector('a-input'))
+    if (this._aInput) return this._aInput
+    const dialog = HistoryCompleteList.walksUpDomQueryMatches(this, 'dialog')
+    if (dialog?.tagName !== 'DIALOG') return null
+    const aInput = dialog.querySelector('a-input')
+    if (!aInput?.getAttribute('inputid')) return null
+    return (this._aInput = aInput)
   }
 }
