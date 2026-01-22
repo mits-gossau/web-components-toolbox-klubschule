@@ -80,6 +80,14 @@ export default class HistoryCompleteList extends AutoCompleteList {
     if (!this.aInput?.inputField) return
     this[this.aInput.inputField.value ? 'setAttribute' : 'removeAttribute']('hidden', '')
     setTimeout(() => this[this.aInput?.inputField?.value ? 'setAttribute' : 'removeAttribute']('hidden', ''), 50)
+    if (event?.type === 'search' && !this.aInput.inputField.value) {
+      window.dispatchEvent(new CustomEvent('reset-filter', {
+        detail: { filterKey: 'q' },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }
   }
 
   renderCSS() {
