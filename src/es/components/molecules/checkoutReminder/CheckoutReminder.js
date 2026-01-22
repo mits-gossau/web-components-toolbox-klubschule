@@ -419,6 +419,7 @@ export default class CheckoutReminder extends Dialog {
       :host #checkout-reminder-checkout-cancel {
         margin-left: auto;
         margin-right: auto;
+        outline: none; /* for ios */
       }
       :host > dialog > h3 {
         --h3-text-align: center;
