@@ -138,16 +138,19 @@ export default class OffersPage extends Shadow() {
 
     setTimeout(() => {
       const allInputs = this.findSearchInputs(this.root)
+
       allInputs.forEach(inputEl => {
         if (inputEl.shadowRoot) {
           const nativeInput = inputEl.shadowRoot.querySelector('input')
           if (nativeInput) {
-            nativeInput.addEventListener('input', (e) => {
+            const handleEmptyInput = (e) => {
               if (e.target.value === '') {
                 const withFacet = this.root.querySelector('ks-c-with-facet')
                 if (withFacet) withFacet.dispatchEvent(new CustomEvent('reset-filter', { detail: { filterKey: 'q', this: inputEl }, bubbles: true, cancelable: true, composed: true }))
               }
-            })
+            }
+            nativeInput.addEventListener('input', handleEmptyInput)
+            nativeInput.addEventListener('search', handleEmptyInput)
           }
         }
       })
@@ -453,12 +456,13 @@ export default class OffersPage extends Shadow() {
                   icon-name="Search" 
                   icon-size="1.5em"
                   submit-search="request-auto-complete"
-                  submit-search="request-with-facet"
                   type="search"
                   answer-event-name="search-change"
                   delete-listener
                   search
                   autocomplete="off"
+                  request-event-name="reset-filter"
+                  filter-key="q"
                 >
                 </a-input>
                 <div id="close">
