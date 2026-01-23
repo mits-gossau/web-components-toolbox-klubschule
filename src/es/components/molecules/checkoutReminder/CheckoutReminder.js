@@ -376,6 +376,9 @@ export default class CheckoutReminder extends Dialog {
       :host([page='any'][command-show='show']) > dialog > h3 {
         cursor: pointer;
       }
+      :host([page='any']) > dialog > p {
+        width: 100%;
+      }
       :host([page='any']) > dialog > p:empty {
         display: none;
       }
