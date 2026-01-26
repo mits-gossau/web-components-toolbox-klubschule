@@ -371,7 +371,10 @@ export default class WithFacet extends WebWorker() {
         if (event?.detail?.value) {
           this.updateURLParam('q', event.detail.value)
           currentRequestObj.searchText = event.detail.value
-          if (currentRequestObj.clat && currentRequestObj.clong) currentRequestObj.sorting = 1
+          // always set sorting to relevance when searching with text
+          currentRequestObj.sorting = 1
+          this.updateURLParam('sorting', 1)
+          sessionStorage.setItem('currentSorting', '1')
         }
         if (event?.detail?.value === '') {
           delete currentRequestObj.searchText
@@ -383,15 +386,10 @@ export default class WithFacet extends WebWorker() {
         currentCompleteFilterObj = result[0]
         currentRequestObj.filters = result[1]
 
-        if (!this.params.has('sorting')) {
-          currentRequestObj.sorting = 1 // relevance
-          if (event?.detail?.value === '' && !currentRequestObj.clat) {
-            delete currentRequestObj.searchText
-            currentRequestObj.sorting = 3 // alphabetic
-          }
-          if (event?.detail?.value !== '' && currentRequestObj.clat) {
-            currentRequestObj.sorting = 2 // distance
-          }
+        if (event?.detail?.value === '' && !currentRequestObj.clat) {
+          currentRequestObj.sorting = 3 // alphabetic
+          this.updateURLParam('sorting', 3)
+          sessionStorage.setItem('currentSorting', '3')
         }
       } else if (event?.detail?.key === 'sorting' && !!event.detail.id) {
         // sorting
