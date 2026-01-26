@@ -49,6 +49,8 @@ export default class WithFacet extends WebWorker() {
     }
     // current request obj holds the current filter states and syncs it to the url (url params are write only, read is synced by cms to the initialRequestObj)
     let currentRequestObj = structuredClone(initialRequestObj)
+    // Track if this instance has filters (used to decide if it should listen to global reset-filter)
+    this.hasFilters = !!(initialRequestObj.filters?.length)
     // complete filter obj, holds all the filters all the time. In opposite to currentRequestObj.filters, which tree shakes not selected filter, to only send the essential to the API (Note: The API fails if all filters get sent)
     let currentCompleteFilterObj = currentRequestObj.filters || []
     // base request nullFilter
@@ -621,7 +623,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'request-locations' ? self.addEventListener('request-locations', this.requestLocations) : this.addEventListener('request-locations', this.requestLocations)
     this.addEventListener('backdrop-clicked', this.handleBackdropClicked)
     this.addEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
-    window.addEventListener('reset-filter', this.requestWithFacetListener)
+    if (this.hasFilters) window.addEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   disconnectedCallback() {
@@ -631,7 +633,7 @@ export default class WithFacet extends WebWorker() {
     this.getAttribute('expand-event-name') === 'request-locations' ? self.removeEventListener('request-locations', this.requestLocations) : this.removeEventListener('request-locations', this.requestLocations)
     this.removeEventListener('backdrop-clicked', this.handleBackdropClicked)
     this.removeEventListener('request-advisory-text-api', this.handleRequestAdvisoryTextApi)
-    window.removeEventListener('reset-filter', this.requestWithFacetListener)
+    if (this.hasFilters) window.removeEventListener('reset-filter', this.requestWithFacetListener)
   }
 
   handleBackdropClicked = () => {
