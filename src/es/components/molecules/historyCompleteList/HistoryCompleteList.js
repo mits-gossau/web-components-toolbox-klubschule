@@ -67,6 +67,17 @@ export default class HistoryCompleteList extends AutoCompleteList {
   }
 
   searchChangeListener = event => {
+    // if searchTerm is empty (e.g. from delete button), show history and reset filter
+    if (event.detail?.searchTerm === '') {
+      this.removeAttribute('hidden')
+      window.dispatchEvent(new CustomEvent('reset-filter', {
+        detail: { filterKey: 'q' },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+      return
+    }
     this.aInputKeyupEventListener(event)
   }
 
