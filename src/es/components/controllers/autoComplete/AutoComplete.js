@@ -75,8 +75,8 @@ export default class AutoComplete extends Shadow() {
     }
 
     this.requestAutoCompleteListener = event => {
-      // reset home page input search
-      if (event.detail.key === 'home-page-input-search' && event.detail.value === '') {
+      // reset input search when value is empty (e.g. from clear button / search-clear event)
+      if (event.detail.value === '' || event.detail.type === 'search-clear') {
         return this.clearAutocomplete()
       }
       const token = event.detail.value
@@ -109,6 +109,9 @@ export default class AutoComplete extends Shadow() {
     }
 
     this.requestWithFacet = event => {
+      if (event.detail.type === 'search-clear') {
+        return this.clearAutocomplete()
+      }
       if (event.detail.type === 'enter' || event.detail.type === 'search-click' || event.detail.type === 'key' || event.detail.type === 'delete') {
         return this.clickOnPredictionListener({ detail: { description: event.detail.value, type: event.detail.type } })
       }
