@@ -188,8 +188,6 @@ export default class WithFacet extends WebWorker() {
       currentRequestObj.ppage = 0
       // mdx prevent double event
       if (event?.detail?.mutationList && event.detail.mutationList[0].attributeName !== 'checked') return
-      if (this.abortController) this.abortController.abort()
-      this.abortController = new AbortController()
 
       let filterId = null
       let filterGroupName = null
@@ -449,6 +447,9 @@ export default class WithFacet extends WebWorker() {
 
       // escape quotation marks from search text
       if (currentRequestObj.searchText && !currentRequestObj.searchText.includes('\\"')) currentRequestObj.searchText = currentRequestObj.searchText.replace(/"/g, '\\"')
+
+      if (this.abortController) this.abortController.abort()
+      this.abortController = new AbortController()
 
       const LanguageEnum = {
         d: 'de',
