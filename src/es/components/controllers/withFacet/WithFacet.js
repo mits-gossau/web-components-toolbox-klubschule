@@ -62,7 +62,7 @@ export default class WithFacet extends WebWorker() {
     // this url is not changed but used for url history push stuff
     this.url = new URL(self.location.href)
     this.params = new URLSearchParams(self.location.search)
-    const isSearchPage = this.hasAttribute('search-page') || ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.startsWith(path))
+    const isSearchPage = this.hasAttribute('search-page') || ['/suche', '/recherche', '/ricerca'].some(path => window.location.pathname.includes(path))
     const isMocked = this.hasAttribute('mock')
     const isMockedInfoEvents = this.hasAttribute('mock-info-events')
     let endpoint = isMocked
@@ -176,8 +176,8 @@ export default class WithFacet extends WebWorker() {
     }
     sessionStorage.setItem('currentPathname', window.location.pathname)
     
-    // if performing a search query, always sort by relevance unless the page is refreshed
-    if (this.params.has('q') && isSearchPage && !isPageRefreshed) {
+    // if performing a search query, always sort by relevance unless sorting is already set in URL
+    if (this.params.has('q') && isSearchPage && !this.params.has('sorting')) {
       currentRequestObj.sorting = 1 // relevance
       this.updateURLParam('sorting', 1)
       sessionStorage.setItem('currentSorting', '1')
@@ -244,6 +244,8 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this?.getAttribute?.('filter-key') || event.detail.filterKey
+        // On non-search pages, ignore reset-filter for 'q' to preserve the q param in URL
+        if (filterKey === 'q' && !isSearchPage) return
         if (!currentRequestObj.filters?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         hasSelectedFilter = result[2]
