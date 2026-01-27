@@ -176,8 +176,8 @@ export default class WithFacet extends WebWorker() {
     }
     sessionStorage.setItem('currentPathname', window.location.pathname)
     
-    // if performing a search query, always sort by relevance unless the page is refreshed
-    if (this.params.has('q') && isSearchPage && !isPageRefreshed) {
+    // if performing a search query, always sort by relevance unless sorting is already set in URL
+    if (this.params.has('q') && isSearchPage && !this.params.has('sorting')) {
       currentRequestObj.sorting = 1 // relevance
       this.updateURLParam('sorting', 1)
       sessionStorage.setItem('currentSorting', '1')
