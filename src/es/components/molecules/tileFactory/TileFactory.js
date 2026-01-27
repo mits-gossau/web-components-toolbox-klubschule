@@ -270,6 +270,7 @@ export default class TileFactory extends Shadow() {
         this.lastFilterSelection = data.filter
       }, 0)
     }).catch(error => {
+      if (error.name === 'AbortError') return
       console.error(error)
       this.html = ''
       this.html = `<span class=error><a-translation data-trans-key="${this.getAttribute('error-text') ?? 'Search.Error'}"></a-translation></span>`
