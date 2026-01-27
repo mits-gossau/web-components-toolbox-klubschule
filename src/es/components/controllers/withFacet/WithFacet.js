@@ -244,6 +244,8 @@ export default class WithFacet extends WebWorker() {
       } else if (event?.type === 'reset-filter') {
         // reset particular filter, ks-a-button
         const filterKey = event.detail.this?.getAttribute?.('filter-key') || event.detail.filterKey
+        // On non-search pages, ignore reset-filter for 'q' to preserve the q param in URL
+        if (filterKey === 'q' && !isSearchPage) return
         if (!currentRequestObj.filters?.length) currentCompleteFilterObj = sessionStorage.getItem('currentFilter') ? JSON.parse(sessionStorage.getItem('currentFilter') || '[]') : initialFilter
         const result = await this.webWorker(WithFacet.updateFilters, currentCompleteFilterObj, filterKey, undefined, true)
         hasSelectedFilter = result[2]
