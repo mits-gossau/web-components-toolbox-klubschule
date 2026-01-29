@@ -253,6 +253,33 @@ export default class KsFooter extends Footer {
         left: 0,
         behavior: 'smooth'
       }))
+
+      if (location.pathname.endsWith('/Configuration') || location.pathname.endsWith('/configuration') || location.pathname.endsWith('/loginmethod')) {
+        const triggerTexts = [
+          'engagement.migros.ch',
+          'AGB', 'CGV', 'CGC',
+          'Impressum', 'Mentions légales',
+          'Datenschutz', 'Datenschutzerklärung', 'Protection de données', 'Protection des données', 'Informativa sulla protezione del dati',
+          'Rechtliches', 'Notices légales', 'Basi legali',
+          'Verhaltenskodex Migros-Gruppe', 'Verhaltenskodex und Meldestelle', 'Code de conduite Migros', 'Code de conduite et signalement', 'Codice di condotta e sportello',
+          'Cookie Einstellungen', 'Paramétrage des cookies', 'Impostazioni cookie'
+        ]
+        const links = [
+          ...this.root.querySelectorAll('ul.social-links a'),
+          ...Array.from(this.root.querySelectorAll('a')).filter(a => 
+            triggerTexts.some(text => a.textContent.includes(text))
+          )
+        ]
+        links.forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault()
+            document.body.dispatchEvent(new CustomEvent('checkout-back-navigation', {
+              detail: { targetUrl: link.href },
+              bubbles: true
+            }))
+          })
+        })
+      }
     })
   }
     
