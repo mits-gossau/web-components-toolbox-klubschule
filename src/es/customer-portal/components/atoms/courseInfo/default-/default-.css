@@ -1,5 +1,5 @@
 :host {
-    --course-info-default-alert: #F4001B;
+    --course-info-default-alert: var(--mdx-base-color-klubschule-red-600);
     --course-info-default-icon-color: var(--mdx-sys-color-primary-default);
-    --course-info-default-success: #00997F;
+    --course-info-default-success: var(--mdx-base-color-klubschule-green-600);
 }
