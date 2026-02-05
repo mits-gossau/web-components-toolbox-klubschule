@@ -5,11 +5,14 @@
 /* global CustomEvent */
 
 // Trusted Types Policy for CSP compliance - must be defined before any innerHTML usage
+// Sanitization logic from Environment.js to prevent XSS attacks
 if (self.trustedTypes?.createPolicy && !self.trustedTypes.defaultPolicy) {
   self.trustedTypes.createPolicy('default', {
-    createHTML: (s) => s,
-    createScript: (s) => s,
-    createScriptURL: (s) => s
+    // first sanitize tags eg.: <img src="xyz" onload=alert('XSS')>, <img src="xyz" onmouseover=alert('XSS')>, <image/src/onerror=alert('XSS')>, etc.
+    // second sanitize tags eg.: <a href="javascript:alert(document.location);">XSS</a>, <form action="javascript:alert(document.location);"><input type="submit" /></form>, etc.
+    createHTML: (s) => s.replace(/<[a-z]+[^>]*[\s|\/]on[a-z]{4,10}=[^>]*>/gi, '').replace(/<[a-z]+[\s|\/][^>]*javascript:[^>]*>/gi, ''),
+    createScriptURL: (s) => s,
+    createScript: (s) => s
   })
 }
 
