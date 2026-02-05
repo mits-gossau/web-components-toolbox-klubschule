@@ -177,10 +177,10 @@ export default class CourseDialog extends Shadow() {
           line-height: 110%;
         }
         .success {
-          color: var(--success-color, #00997F);
+          color: var(--success-color, #00866F);
         }
         .alert {
-          color: var(--alert-color, #F4001B);
+          color: var(--alert-color, #ED001A);
         }
         .description {
           margin-bottom: 4rem !important;
@@ -236,7 +236,7 @@ export default class CourseDialog extends Shadow() {
           margin-bottom: 1.5em;
         }
         .alert {
-          color: var(--alert-color, #F4001B);
+          color: var(--alert-color, #ED001A);
         }
       </style>
       <div id="content">
@@ -292,7 +292,7 @@ export default class CourseDialog extends Shadow() {
           line-height: 110%;
         }
         .alert {
-          color: var(--alert-color, #F4001B);
+          color: var(--alert-color, #ED001A);
         }
         .additional-subcription-info {
           padding-bottom: 0.75em;
@@ -350,10 +350,10 @@ export default class CourseDialog extends Shadow() {
           width: fit-content;
         }
         .success {
-          color: #00997F;
+          color: #00866F;
         }
         h2.success {
-          color: #00997F !important;
+          color: #00866F !important;
         }
         .downloads {
           margin: 4em 0 1.5em 0;
@@ -419,14 +419,14 @@ export default class CourseDialog extends Shadow() {
           line-height: 110%;
         }
         h2.alert{
-          color: #F4001B !important;
+          color: #ED001A !important;
           margin:0 !important;
         }
         .success {
-          color: var(--success-color, #00997F);
+          color: var(--success-color, #00866F);
         }
         .alert {
-          color: var(--alert-color, #F4001B);
+          color: var(--alert-color, #ED001A);
         }
         .additional-subcription-info {
           padding-bottom: 0.75em;
@@ -504,10 +504,10 @@ export default class CourseDialog extends Shadow() {
           width: fit-content;
         }
         .success {
-          color: #00997F;
+          color: #00866F;
         }
         h2.success {
-          color: #00997F !important;
+          color: #00866F !important;
         }
         .detail {
           display: flex;

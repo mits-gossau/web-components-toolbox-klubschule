@@ -64,8 +64,8 @@ export default class AppointmentTile extends Tile {
     super.renderCSS()
     this.css = /* css */`
       :host {
-        --success-color: #00997F;
-        --alert-color: #F4001B;
+        --success-color: #00866F;
+        --alert-color: #ED001A;
       }
       :host > div {
         display: flex;
