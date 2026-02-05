@@ -4,6 +4,15 @@
 /* global self */
 /* global CustomEvent */
 
+// Trusted Types Policy for CSP compliance - must be defined before any innerHTML usage
+if (self.trustedTypes?.createPolicy && !self.trustedTypes.defaultPolicy) {
+  self.trustedTypes.createPolicy('default', {
+    createHTML: (s) => s,
+    createScript: (s) => s,
+    createScriptURL: (s) => s
+  })
+}
+
 // bug fix version 2024-10-03 (set load-custom-elements attribute on body asap.)
 // extended version 2024-09-12 (allow hash attach for cache clearing)
 // extended version 2024-09-04 (dynamic custom element define on event trigger)
