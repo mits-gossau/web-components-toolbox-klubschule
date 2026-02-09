@@ -117,6 +117,9 @@ export default class HistoryCompleteList extends AutoCompleteList {
           align-items: end;
           justify-content: space-between;
         }
+        :host .heading > span {
+          font-size: 1rem;
+        }
         :host .heading > a {
           color: var(--a-color);
           font-size: var(--font-size);
