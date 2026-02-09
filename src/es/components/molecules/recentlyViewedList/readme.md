@@ -10,3 +10,10 @@
 <ks-m-recently-viewed-list></ks-m-recently-viewed-list>
 ```
 Place it directly below `<ks-m-history-complete-list></ks-m-history-complete-list>`
+
+## Mock
+Use the `mock` attribute to pre-populate `localStorage` with sample offers for testing:
+```
+<ks-m-recently-viewed-list mock></ks-m-recently-viewed-list>
+```
+Mock data is only written if `recently-viewed-offers` in `localStorage` is empty.
