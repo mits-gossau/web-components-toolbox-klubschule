@@ -1,18 +1,28 @@
 // @ts-check
-import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import AutoCompleteList from '../autoCompleteList/AutoCompleteList.js'
 
 /**
  * @export
  * @class RecentlyViewedList
  * @type {CustomElementConstructor}
  */
-export default class RecentlyViewedList extends Shadow() {
-  constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
-  }
-
+export default class RecentlyViewedList extends AutoCompleteList {
   connectedCallback () {
     this.hidden = true
+    const translationFallbacks = {
+      'Search.RecentlyViewed.Title': 'Zuletzt angesehen',
+      'Search.RecentlyViewed.Delete': 'Verlauf löschen'
+    }
+    const initComponent = () => {
+      if (this._initialized) return
+      this._initialized = true
+      if (!this.getTranslation) this.getTranslation = key => translationFallbacks[key] || key
+      const showPromises = []
+      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+      Promise.all(showPromises).then(() => (this.hidden = false))
+      if (this.deleteEl) this.deleteEl.addEventListener('click', this.deleteElClickEventListener)
+    }
     new Promise(resolve => {
       this.dispatchEvent(new CustomEvent('request-translations', {
         detail: { resolve },
@@ -23,12 +33,10 @@ export default class RecentlyViewedList extends Shadow() {
     }).then(async result => {
       await result.fetch
       this.getTranslation = result.getTranslationSync
-      const showPromises = []
-      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-      Promise.all(showPromises).then(() => (this.hidden = false))
-      if (this.deleteEl) this.deleteEl.addEventListener('click', this.deleteElClickEventListener)
+      initComponent()
     })
+    if (this.hasAttribute('mock')) this.initMockData()
+    setTimeout(() => initComponent(), 300)
     document.body.addEventListener('search-change', this.searchChangeListener)
     document.body.addEventListener('recently-viewed-render-list', this.recentlyViewedRenderList)
     if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => {
@@ -75,18 +83,13 @@ export default class RecentlyViewedList extends Shadow() {
     setTimeout(() => this[this.aInput?.inputField?.value ? 'setAttribute' : 'removeAttribute']('hidden', ''), 50)
   }
 
-  shouldRenderCSS () {
-    return !this.root.querySelector(`${this.cssSelector} > style[_css]`)
-  }
-
-  shouldRenderHTML () {
-    return !this.root.querySelector('ul')
-  }
-
   renderCSS () {
+    super.renderCSS()
+    if (this.parentElement?.classList.contains('container')) {
+      this.parentElement.setAttribute('style', 'flex-wrap: wrap; gap: 0;')
+    }
     this.css = /* css */`
       :host {
-        display: block;
         padding: 1em 1em 0;
         width: 100%;
       }
@@ -97,9 +100,6 @@ export default class RecentlyViewedList extends Shadow() {
         display: flex;
         align-items: end;
         justify-content: space-between;
-        color: var(--mdx-sys-color-neutral-default);
-        font: var(--mdx-sys-font-fix-label3);
-        margin-bottom: var(--mdx-sys-spacing-flex-2xs, 1em);
       }
       :host .heading > span {
         font-size: 1rem;
@@ -110,23 +110,9 @@ export default class RecentlyViewedList extends Shadow() {
         font-weight: 400;
         text-decoration: underline;
       }
-      :host ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
       :host ul li {
-        display: flex;
         flex-direction: column;
-        padding: 0.5em 0.25em;
-        border-radius: 0.25em;
-        cursor: pointer;
-      }
-      :host ul li:hover {
-        background-color: var(--m-blue-100);
-      }
-      :host ul li + li {
-        margin-top: 0.25em;
+        align-items: flex-start;
       }
       :host ul li .rv-title {
         font-size: 1em;
@@ -160,10 +146,7 @@ export default class RecentlyViewedList extends Shadow() {
         }
       }
     `
-    return this.fetchTemplate()
   }
-
-  fetchTemplate () {}
 
   renderHTML () {
     this.html = /* html */ `
@@ -205,9 +188,6 @@ export default class RecentlyViewedList extends Shadow() {
     return JSON.parse(localStorage.getItem('recently-viewed-offers') || '[]')
   }
 
-  /**
-   * @param {{ title: string, url: string, itemId: string, locationName?: string, badge?: string, price?: number, spartename?: string[], currency?: string }} value
-   */
   set storage (value) {
     if (!value || !value.itemId) return
     const currentStorage = this.storage
@@ -279,24 +259,15 @@ export default class RecentlyViewedList extends Shadow() {
     return (this._aInput = aInput)
   }
 
-  /**
-   * Static method to save a viewed offer from outside (e.g. Tile.js)
-   * @param {{ title: string, url: string, itemId: string, locationName?: string, badge?: string, price?: number, spartename?: string[], currency?: string }} offerData
-   */
-  static saveViewedOffer (offerData) {
-    if (!offerData || !offerData.itemId) return
-    const currentStorage = JSON.parse(localStorage.getItem('recently-viewed-offers') || '[]')
-    const index = currentStorage.findIndex(element => element.itemId === offerData.itemId)
-    if (index >= 0) currentStorage.splice(index, 1)
-    if (index !== 0) {
-      const arr = [offerData].concat(currentStorage)
-      if (arr.length > 5) arr.length = 5
-      localStorage.setItem('recently-viewed-offers', JSON.stringify(arr))
+  initMockData () {
+    if (!this.storage.length) {
+      localStorage.setItem('recently-viewed-offers', JSON.stringify([
+        { title: 'Pilates - Privatunterricht', url: '#', itemId: 'D_97041_1013--D_97041', locationName: 'Chur', badge: '', price: 325, spartename: ['Gesundheit', 'Pilates', 'Pilates Variationen'], currency: 'CHF' },
+        { title: 'Englisch Niveau B1', url: '#', itemId: 'D_92100_2665--D_92100', locationName: 'Zürich', badge: '', price: 690, spartename: ['Sprachen', 'Englisch'], currency: 'CHF' },
+        { title: 'Yoga für Einsteiger*innen', url: '#', itemId: 'D_95072_1016--D_95072', locationName: '', badge: 'Online', price: 180, spartename: ['Gesundheit', 'Yoga'], currency: 'CHF' },
+        { title: 'Webdesign Grundlagen', url: '#', itemId: 'D_88300_1013--D_88300', locationName: 'Bern', badge: 'Blended', price: 1200, spartename: ['Informatik', 'Webdesign'], currency: 'CHF' },
+        { title: 'Italienisch Niveau A1', url: '#', itemId: 'D_91050_2659--D_91050', locationName: 'Luzern', badge: '', price: 550, spartename: ['Sprachen', 'Italienisch'], currency: 'CHF' }
+      ]))
     }
-    document.body.dispatchEvent(new CustomEvent('recently-viewed-render-list', {
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
   }
 }
