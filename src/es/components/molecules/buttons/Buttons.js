@@ -227,6 +227,13 @@ export default class Buttons extends Shadow() {
       </div>
     ` : ''
 
+    if (this.hasAttribute('is-tile')) {
+      const linkButton = filteredDataButtons?.find(b => b.link && b.event !== 'bookmark')
+      if (linkButton) {
+        this.root.querySelector('.buttons-container')?.addEventListener('click', () => this.saveRecentlyViewedOnClick(linkButton.link), { once: true })
+      }
+    }
+
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
@@ -368,6 +375,31 @@ export default class Buttons extends Shadow() {
     const centerId = data.centerid ? `_${data.centerid}` : ''
     const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
     return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
+  }
+
+  saveRecentlyViewedOnClick (buttonLink) {
+    try {
+      const data = this.data
+      if (!data) return
+      const offerData = {
+        title: this.getAttribute('parent-title') || data.title || data.bezeichnung || '',
+        url: buttonLink,
+        itemId: this.getItemId(data),
+        locationName: data.location?.center || (data.center ? data.center.bezeichnung_internet : '') || data.location?.name || '',
+        badge: data.location?.badge || '',
+        price: data.price?.price || data.preis_total || 0,
+        spartename: data.spartename || [],
+        currency: 'CHF'
+      }
+      const currentStorage = JSON.parse(localStorage.getItem('recently-viewed-offers') || '[]')
+      const index = currentStorage.findIndex(element => element.itemId === offerData.itemId)
+      if (index >= 0) currentStorage.splice(index, 1)
+      const arr = [offerData].concat(currentStorage)
+      if (arr.length > 5) arr.length = 5
+      localStorage.setItem('recently-viewed-offers', JSON.stringify(arr))
+    } catch (error) {
+      console.error('Failed to save recently viewed offer', error)
+    }
   }
 
   dataLayerPush (value) {
