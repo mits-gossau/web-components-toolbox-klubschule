@@ -130,6 +130,19 @@ export default class RecentlyViewedList extends AutoCompleteList {
         font-weight: 500;
         color: var(--mdx-sys-color-neutral-bold4);
       }
+      :host ul li .rv-meta {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5em;
+        margin-top: 0.125em;
+      }
+      :host ul li .rv-meta .rv-location {
+        margin-top: 0;
+      }
+      :host ul li .rv-meta .rv-badge {
+        margin-top: 0;
+      }
       :host ul li .rv-location {
         font-size: 0.875em;
         line-height: 1.25em;
@@ -178,7 +191,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
       const listElement = document.createElement('li')
       let locationHtml = ''
       if (item.badge && item.locationName) {
-        locationHtml = `<span class="rv-location">${item.locationName}</span><span class="rv-badge">${item.badge}</span>`
+        locationHtml = `<div class="rv-meta"><span class="rv-location">${item.locationName}</span><span class="rv-badge">${item.badge}</span></div>`
       } else if (item.badge) {
         locationHtml = `<span class="rv-badge">${item.badge}</span>`
       } else if (item.locationName) {
