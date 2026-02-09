@@ -99,6 +99,18 @@
         </m-dialog>
     </section>
 </ks-c-auto-complete>
+<script>
+  // Mock data for recently viewed offers demo
+  if (!localStorage.getItem('recently-viewed-offers') || JSON.parse(localStorage.getItem('recently-viewed-offers')).length === 0) {
+    localStorage.setItem('recently-viewed-offers', JSON.stringify([
+      { title: 'Pilates - Privatunterricht', url: '#', itemId: 'D_97041_1013--D_97041', locationName: 'Chur', badge: '', price: 325, spartename: ['Gesundheit', 'Pilates', 'Pilates Variationen'], currency: 'CHF' },
+      { title: 'Englisch Niveau B1', url: '#', itemId: 'D_92100_2665--D_92100', locationName: 'Zürich', badge: '', price: 690, spartename: ['Sprachen', 'Englisch'], currency: 'CHF' },
+      { title: 'Yoga für Einsteiger*innen', url: '#', itemId: 'D_95072_1016--D_95072', locationName: '', badge: 'Online', price: 180, spartename: ['Gesundheit', 'Yoga'], currency: 'CHF' },
+      { title: 'Webdesign Grundlagen', url: '#', itemId: 'D_88300_1013--D_88300', locationName: 'Bern', badge: 'Blended', price: 1200, spartename: ['Informatik', 'Webdesign'], currency: 'CHF' },
+      { title: 'Italienisch Niveau A1', url: '#', itemId: 'D_91050_2659--D_91050', locationName: 'Luzern', badge: '', price: 550, spartename: ['Sprachen', 'Italienisch'], currency: 'CHF' }
+    ]))
+  }
+</script>
 <h1 id="secondary">Search Field (history complete)</h1>
   <section>
       <m-dialog
