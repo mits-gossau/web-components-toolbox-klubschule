@@ -16,7 +16,11 @@ export default class RecentlyViewedList extends AutoCompleteList {
     const initComponent = () => {
       if (this._initialized) return
       this._initialized = true
-      if (!this.getTranslation) this.getTranslation = key => translationFallbacks[key] || key
+      const originalGetTranslation = this.getTranslation
+      this.getTranslation = key => {
+        const translated = originalGetTranslation ? originalGetTranslation(key) : key
+        return (translated === key && translationFallbacks[key]) ? translationFallbacks[key] : translated
+      }
       const showPromises = []
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
       if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
@@ -39,6 +43,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
     setTimeout(() => initComponent(), 300)
     document.body.addEventListener('search-change', this.searchChangeListener)
     document.body.addEventListener('recently-viewed-render-list', this.recentlyViewedRenderList)
+    document.body.addEventListener('history-complete-render-list', this.recentlyViewedRenderList)
     if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => {
       inputField.addEventListener('keyup', this.aInputKeyupEventListener)
       inputField.addEventListener('search', this.aInputKeyupEventListener)
@@ -49,6 +54,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
   disconnectedCallback () {
     document.body.removeEventListener('search-change', this.searchChangeListener)
     document.body.removeEventListener('recently-viewed-render-list', this.recentlyViewedRenderList)
+    document.body.removeEventListener('history-complete-render-list', this.recentlyViewedRenderList)
     if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => {
       inputField.removeEventListener('keyup', this.aInputKeyupEventListener)
       inputField.removeEventListener('search', this.aInputKeyupEventListener)
@@ -92,6 +98,10 @@ export default class RecentlyViewedList extends AutoCompleteList {
       :host {
         padding: 1em 1em 0;
         width: 100%;
+      }
+      :host([has-separator]) .heading {
+        border-top: 1px solid var(--mdx-sys-color-neutral-subtle4, #ccc);
+        padding-top: 1em;
       }
       :host([empty]), :host([hidden]) {
         display: none;
@@ -182,6 +192,8 @@ export default class RecentlyViewedList extends AutoCompleteList {
       return listElement
     }))
     this[list.children.length ? 'removeAttribute' : 'setAttribute']('empty', '')
+    const hasHistory = JSON.parse(localStorage.getItem('history-complete-list') || '[]').length > 0
+    this[list.children.length && hasHistory ? 'setAttribute' : 'removeAttribute']('has-separator', '')
   }
 
   get storage () {
