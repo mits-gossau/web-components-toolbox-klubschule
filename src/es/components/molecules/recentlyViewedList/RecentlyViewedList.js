@@ -205,7 +205,8 @@ export default class RecentlyViewedList extends AutoCompleteList {
       return listElement
     }))
     this[list.children.length ? 'removeAttribute' : 'setAttribute']('empty', '')
-    const hasHistory = JSON.parse(localStorage.getItem('history-complete-list') || '[]').length > 0
+    const historyAbove = this.previousElementSibling?.tagName === 'KS-M-HISTORY-COMPLETE-LIST'
+    const hasHistory = historyAbove && JSON.parse(localStorage.getItem('history-complete-list') || '[]').length > 0
     this[list.children.length && hasHistory ? 'setAttribute' : 'removeAttribute']('has-separator', '')
   }
 
