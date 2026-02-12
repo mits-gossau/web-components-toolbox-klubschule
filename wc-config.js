@@ -4,6 +4,18 @@
 /* global self */
 /* global CustomEvent */
 
+// Trusted Types Policy for CSP compliance - must be defined before any innerHTML usage
+// Sanitization logic from Environment.js to prevent XSS attacks
+if (self.trustedTypes?.createPolicy && !self.trustedTypes.defaultPolicy) {
+  self.trustedTypes.createPolicy('default', {
+    // first sanitize tags eg.: <img src="xyz" onload=alert('XSS')>, <img src="xyz" onmouseover=alert('XSS')>, <image/src/onerror=alert('XSS')>, etc.
+    // second sanitize tags eg.: <a href="javascript:alert(document.location);">XSS</a>, <form action="javascript:alert(document.location);"><input type="submit" /></form>, etc.
+    createHTML: (s) => s.replace(/<[a-z]+[^>]*[\s|\/]on[a-z]{4,10}=[^>]*>/gi, '').replace(/<[a-z]+[\s|\/][^>]*javascript:[^>]*>/gi, ''),
+    createScriptURL: (s) => s,
+    createScript: (s) => s
+  })
+}
+
 // bug fix version 2024-10-03 (set load-custom-elements attribute on body asap.)
 // extended version 2024-09-12 (allow hash attach for cache clearing)
 // extended version 2024-09-04 (dynamic custom element define on event trigger)

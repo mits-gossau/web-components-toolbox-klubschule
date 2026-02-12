@@ -251,4 +251,15 @@
     /* checkbox */
     --mdx-comp-checkbox-checked-background-color-default: var(--mdx-comp-checkbox-checked-background-color-hover);
     --mdx-comp-checkbox-checked-label-color-default: var(--mdx-comp-button-tertiary-medium-color-hover);
+
+    /* Temporary color fixes - remove when @migros/mdx-design-tokens is updated */
+    /* Rot: #F4001B → #ED001A */
+    --mdx-base-color-klubschule-red-600: rgb(237, 0, 26);
+    /* Pink: #CC5299 → #C1498F */
+    --mdx-base-color-klubschule-mulberry-600: rgb(193, 73, 143);
+    /* Grün: #00997F → #00866F */
+    --mdx-base-color-klubschule-green-600: rgb(0, 134, 111);
+    /* Orange: bleibt bei #E06631 - keine Änderung */
+    /* Firmenblau: #2F9DCC → #007EB3 */
+    --mdx-base-color-klubschule-company-blue-600: rgb(0, 126, 179);
 }
