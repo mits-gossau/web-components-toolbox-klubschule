@@ -491,6 +491,9 @@
 
   /* ios fix */
   --button-primary-background-color-hover-mobile: var(--button-primary-background-color-custom);
+
+  /* a:vistied fix */
+  --multi-level-navigation-default-a-color-visited: var(--color);
 }
 
 @media screen and (min-width: 1441px) {
