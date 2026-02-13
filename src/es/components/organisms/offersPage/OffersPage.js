@@ -341,6 +341,10 @@ export default class OffersPage extends Shadow() {
         name: 'ks-m-history-complete-list'
       },
       {
+        path: `${this.importMetaUrl}../../molecules/recentlyViewedList/RecentlyViewedList.js`,
+        name: 'ks-m-recently-viewed-list'
+      },
+      {
         path: `${this.importMetaUrl}../../organisms/bodySection/BodySection.js`,
         name: 'ks-o-body-section'
       },
@@ -473,6 +477,7 @@ export default class OffersPage extends Shadow() {
                 <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
                 </ks-m-auto-complete-list>
                 <ks-m-history-complete-list></ks-m-history-complete-list>
+                <ks-m-recently-viewed-list></ks-m-recently-viewed-list>
               </div>
             </dialog>
             <ks-a-button 
@@ -898,6 +903,7 @@ export default class OffersPage extends Shadow() {
             >
             </ks-m-auto-complete-list>
             <ks-m-history-complete-list></ks-m-history-complete-list>
+            <ks-m-recently-viewed-list></ks-m-recently-viewed-list>
           </div>
         </dialog>
         <ks-a-button 
