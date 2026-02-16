@@ -36,6 +36,7 @@ export default class Subscriptions extends HTMLElement {
    * @param {CustomEventInit} event
    */
   requestSubscriptionsListener = async (event) => {
+    await this.waitForEnvironment()
     if (this.abortControllerSubscriptions) this.abortControllerSubscriptions.abort()
     this.abortControllerSubscriptions = new AbortController()
     const { userId } = this.dataset
@@ -64,6 +65,7 @@ export default class Subscriptions extends HTMLElement {
    * @param {CustomEventInit} event
    */
   requestSubscriptionDetailListener = async (event) => {
+    await this.waitForEnvironment()
     if (this.abortControllerSubscriptionDetail) this.abortControllerSubscriptionDetail.abort()
     this.abortControllerSubscriptionDetail = new AbortController()
     const tags = JSON.parse(event.detail.tags)
@@ -99,6 +101,7 @@ export default class Subscriptions extends HTMLElement {
    * @param {CustomEventInit} event
    */
   requestSubscriptionPdfListener = async (event) => {
+    await this.waitForEnvironment()
     if (this.abortControllerSubscriptionPdf) this.abortControllerSubscriptionPdf.abort()
     this.abortControllerSubscriptionPdf = new AbortController()
     const { subscriptionId, subscriptionKindId, subscriptionType } = JSON.parse(event.detail.subscription)
@@ -145,6 +148,19 @@ export default class Subscriptions extends HTMLElement {
 
   getLanguage () {
     // @ts-ignore
-    return self.Environment.language.substring(0, 2) || 'de'
+    return self.Environment?.language?.substring(0, 2) || 'de'
+  }
+
+  waitForEnvironment () {
+    // @ts-ignore
+    if (self.Environment) return Promise.resolve()
+    return new Promise(resolve => {
+      const check = () => {
+        // @ts-ignore
+        if (self.Environment) return resolve()
+        setTimeout(check, 10)
+      }
+      check()
+    })
   }
 }
