@@ -81,7 +81,9 @@ export default class RecentlyViewedList extends AutoCompleteList {
     this.aInputKeyupEventListener(event)
   }
 
-  recentlyViewedRenderList = event => this.renderList()
+  recentlyViewedRenderList = event => {
+    this.requestServerItems().then(() => this.renderList())
+  }
 
   aInputKeyupEventListener = event => {
     if (!this.aInput?.inputField) return
@@ -181,7 +183,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
         <ul></ul>
       </div>
     `
-    this.renderList()
+    this.requestServerItems().then(() => this.renderList())
   }
 
   renderList () {
@@ -210,7 +212,28 @@ export default class RecentlyViewedList extends AutoCompleteList {
     this[list.children.length && hasHistory ? 'setAttribute' : 'removeAttribute']('has-separator', '')
   }
 
+  requestServerItems () {
+    let resolved = false
+    return new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-recently-viewed-storage', {
+        detail: {
+          resolve: value => {
+            resolved = true
+            resolve(value)
+          }
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+      if (!resolved) resolve(null)
+    }).then(serverItems => {
+      this._serverItems = serverItems
+    })
+  }
+
   get storage () {
+    if (this._serverItems) return this._serverItems
     return JSON.parse(localStorage.getItem('recently-viewed-offers') || '[]')
   }
 
@@ -234,6 +257,11 @@ export default class RecentlyViewedList extends AutoCompleteList {
   deleteStorage () {
     localStorage.setItem('recently-viewed-offers', '[]')
     this.dispatchEvent(new CustomEvent('recently-viewed-render-list', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+    this.dispatchEvent(new CustomEvent('recently-viewed-clear', {
       bubbles: true,
       cancelable: true,
       composed: true
