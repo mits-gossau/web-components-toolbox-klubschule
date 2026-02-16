@@ -8,6 +8,11 @@ import AutoCompleteList from '../autoCompleteList/AutoCompleteList.js'
  */
 export default class RecentlyViewedList extends AutoCompleteList {
   connectedCallback () {
+    if (this._initialized) {
+      this.hidden = false
+      this.bindAInput()
+      return
+    }
     this.hidden = true
     const translationFallbacks = {
       'Search.RecentlyViewed.Title': 'Zuletzt angesehen',
@@ -44,11 +49,22 @@ export default class RecentlyViewedList extends AutoCompleteList {
     document.body.addEventListener('search-change', this.searchChangeListener)
     document.body.addEventListener('recently-viewed-render-list', this.recentlyViewedRenderList)
     document.body.addEventListener('history-complete-render-list', this.recentlyViewedRenderList)
-    if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => {
-      inputField.addEventListener('keyup', this.aInputKeyupEventListener)
-      inputField.addEventListener('search', this.aInputKeyupEventListener)
-      this.aInputKeyupEventListener()
-    })
+    this.bindAInput()
+  }
+
+  bindAInput () {
+    if (this.aInput?.inputFieldPromise) {
+      this.aInput.inputFieldPromise.then(inputField => {
+        inputField.addEventListener('keyup', this.aInputKeyupEventListener)
+        inputField.addEventListener('search', this.aInputKeyupEventListener)
+        this.aInputKeyupEventListener()
+      })
+    } else {
+      // Retry: m-dialog may not have created its <dialog> yet
+      setTimeout(() => {
+        if (!this._aInput && this.isConnected) this.bindAInput()
+      }, 100)
+    }
   }
 
   disconnectedCallback () {
@@ -81,7 +97,9 @@ export default class RecentlyViewedList extends AutoCompleteList {
     this.aInputKeyupEventListener(event)
   }
 
-  recentlyViewedRenderList = event => this.renderList()
+  recentlyViewedRenderList = event => {
+    this.requestServerItems().then(() => this.renderList())
+  }
 
   aInputKeyupEventListener = event => {
     if (!this.aInput?.inputField) return
@@ -181,7 +199,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
         <ul></ul>
       </div>
     `
-    this.renderList()
+    this.requestServerItems().then(() => this.renderList())
   }
 
   renderList () {
@@ -210,7 +228,28 @@ export default class RecentlyViewedList extends AutoCompleteList {
     this[list.children.length && hasHistory ? 'setAttribute' : 'removeAttribute']('has-separator', '')
   }
 
+  requestServerItems () {
+    let resolved = false
+    return new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-recently-viewed-storage', {
+        detail: {
+          resolve: value => {
+            resolved = true
+            resolve(value)
+          }
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+      if (!resolved) resolve(null)
+    }).then(serverItems => {
+      this._serverItems = serverItems
+    })
+  }
+
   get storage () {
+    if (this._serverItems) return this._serverItems
     return JSON.parse(localStorage.getItem('recently-viewed-offers') || '[]')
   }
 
@@ -234,6 +273,11 @@ export default class RecentlyViewedList extends AutoCompleteList {
   deleteStorage () {
     localStorage.setItem('recently-viewed-offers', '[]')
     this.dispatchEvent(new CustomEvent('recently-viewed-render-list', {
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
+    this.dispatchEvent(new CustomEvent('recently-viewed-clear', {
       bubbles: true,
       cancelable: true,
       composed: true
@@ -278,8 +322,17 @@ export default class RecentlyViewedList extends AutoCompleteList {
 
   get aInput () {
     if (this._aInput) return this._aInput
-    const dialog = RecentlyViewedList.walksUpDomQueryMatches(this, 'dialog')
-    if (dialog?.tagName !== 'DIALOG') return null
+    // Walk up the DOM to find the dialog, crossing shadow DOM boundaries
+    let el = this
+    let dialog = null
+    while (el) {
+      if (el.tagName === 'DIALOG') {
+        dialog = el
+        break
+      }
+      el = el.parentNode instanceof ShadowRoot ? el.parentNode.host : el.parentNode
+    }
+    if (!dialog) return null
     const aInput = dialog.querySelector('a-input')
     if (!aInput?.getAttribute('inputid')) return null
     return (this._aInput = aInput)
