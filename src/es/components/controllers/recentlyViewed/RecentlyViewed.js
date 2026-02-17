@@ -4,13 +4,10 @@
 /* global CustomEvent */
 
 /**
- * RecentlyViewed manages two separate lists:
- * - Client-based (localStorage 'recently-viewed-offers') for non-logged-in users
- * - Account-based (API /LastCourseViewApi) for logged-in users
+ * RecentlyViewed manages a server-based list (API /LastCourseViewApi)
+ * for all users, without checking login status.
  *
- * These two lists are never merged or migrated.
- * Pattern follows src/es/components/controllers/wishList/WishList.js
- * As a controller, this component communicates exclusively through events
+ * This component communicates exclusively through events.
  *
  * @export
  * @class RecentlyViewed
@@ -23,22 +20,9 @@ export default class RecentlyViewed extends HTMLElement {
     const endpoint = this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/api/LastCourseViewApi'
     const successCode = 0
 
-    /** @type {boolean} */
-    this._isLoggedIn = false
     /** @type {Array} */
     this._serverItems = []
 
-    this.msrcUserListener = async event => {
-      const user = event.detail?.user ? await event.detail.user : null
-      const wasLoggedIn = this._isLoggedIn
-      this._isLoggedIn = !!user
-      if (this._isLoggedIn && !wasLoggedIn) {
-        this.fetchServerList()
-      } else if (!this._isLoggedIn && wasLoggedIn) {
-        this._serverItems = []
-        this.dispatchRenderList()
-      }
-    }
 
     this.fetchServerList = () => {
       fetch(`${endpoint}/Check`, {
@@ -58,6 +42,7 @@ export default class RecentlyViewed extends HTMLElement {
           spartename: [],
           currency: 'CHF'
         }))
+        this.guid = json.lastCourseViewGroupGuid || ''
         this.dispatchRenderList()
       }).catch(error => {
         console.error('RecentlyViewed: Failed to fetch server list', error)
@@ -65,34 +50,34 @@ export default class RecentlyViewed extends HTMLElement {
     }
 
     this.clearBackendListener = () => {
-      if (this._isLoggedIn) {
-        this._serverItems = []
-        fetch(`${endpoint}/Clear`, {
-          method: 'GET'
-        }).then(response => {
-          if (response.status >= 200 && response.status <= 299) return response.json()
-          throw new Error(response.statusText)
-        }).catch(error => {
-          console.error('RecentlyViewed: Failed to clear backend list', error)
-        })
-      }
+      this._serverItems = []
+      fetch(`${endpoint}/Clear?lastCourseViewGroupGuid=${this.guid}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.status >= 200 && response.status <= 299) return response.json()
+        throw new Error(response.statusText)
+      }).catch(error => {
+        console.error('RecentlyViewed: Failed to clear backend list', error)
+      })
     }
 
     this.requestRecentlyViewedStorageListener = event => {
       if (event.detail?.resolve) {
-        event.detail.resolve(this._isLoggedIn ? this._serverItems : null)
+        event.detail.resolve(this._serverItems)
       }
     }
   }
 
   connectedCallback () {
-    document.body.addEventListener('msrc-user', this.msrcUserListener)
     this.addEventListener('recently-viewed-clear', this.clearBackendListener)
     document.body.addEventListener('request-recently-viewed-storage', this.requestRecentlyViewedStorageListener)
+    this.fetchServerList();
   }
 
   disconnectedCallback () {
-    document.body.removeEventListener('msrc-user', this.msrcUserListener)
     this.removeEventListener('recently-viewed-clear', this.clearBackendListener)
     document.body.removeEventListener('request-recently-viewed-storage', this.requestRecentlyViewedStorageListener)
   }

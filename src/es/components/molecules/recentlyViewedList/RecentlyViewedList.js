@@ -86,7 +86,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
   deleteElClickEventListener = event => {
     event.stopPropagation()
     event.preventDefault()
-    this.deleteStorage()
+    this.clearServerItems()
   }
 
   searchChangeListener = event => {
@@ -205,7 +205,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
   renderList () {
     const list = this.root.querySelector('ul')
     if (!list) return
-    list.replaceChildren(...this.storage.map(item => {
+    list.replaceChildren(...this._serverItems.map(item => {
       const listElement = document.createElement('li')
       let locationHtml = ''
       if (item.badge && item.locationName) {
@@ -244,44 +244,18 @@ export default class RecentlyViewedList extends AutoCompleteList {
       }))
       if (!resolved) resolve(null)
     }).then(serverItems => {
-      this._serverItems = serverItems
+      this._serverItems = serverItems || []
     })
   }
 
-  get storage () {
-    if (this._serverItems) return this._serverItems
-    return JSON.parse(localStorage.getItem('recently-viewed-offers') || '[]')
-  }
-
-  set storage (value) {
-    if (!value || !value.itemId) return
-    const currentStorage = this.storage
-    const index = currentStorage.findIndex(element => element.itemId === value.itemId)
-    if (index >= 0) currentStorage.splice(index, 1)
-    if (index !== 0) {
-      const arr = [value].concat(currentStorage)
-      if (arr.length > 5) arr.length = 5
-      localStorage.setItem('recently-viewed-offers', JSON.stringify(arr))
-    }
-    this.dispatchEvent(new CustomEvent('recently-viewed-render-list', {
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
-  }
-
-  deleteStorage () {
-    localStorage.setItem('recently-viewed-offers', '[]')
-    this.dispatchEvent(new CustomEvent('recently-viewed-render-list', {
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
+  clearServerItems() {
+    this._serverItems = []
     this.dispatchEvent(new CustomEvent('recently-viewed-clear', {
       bubbles: true,
       cancelable: true,
       composed: true
     }))
+    this.renderList()
   }
 
   dataLayerPush (item) {
