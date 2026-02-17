@@ -86,7 +86,6 @@ export default class RecentlyViewedList extends AutoCompleteList {
   deleteElClickEventListener = event => {
     event.stopPropagation()
     event.preventDefault()
-    // this.deleteStorage()
     this.clearServerItems()
   }
 
@@ -258,42 +257,6 @@ export default class RecentlyViewedList extends AutoCompleteList {
     }))
     this.renderList()
   }
-
-  // get storage () {
-  //   if (this._serverItems) return this._serverItems
-  //   return JSON.parse(localStorage.getItem('recently-viewed-offers') || '[]')
-  // }
-
-  // set storage (value) {
-  //   if (!value || !value.itemId) return
-  //   const currentStorage = this.storage
-  //   const index = currentStorage.findIndex(element => element.itemId === value.itemId)
-  //   if (index >= 0) currentStorage.splice(index, 1)
-  //   if (index !== 0) {
-  //     const arr = [value].concat(currentStorage)
-  //     if (arr.length > 5) arr.length = 5
-  //     localStorage.setItem('recently-viewed-offers', JSON.stringify(arr))
-  //   }
-  //   this.dispatchEvent(new CustomEvent('recently-viewed-render-list', {
-  //     bubbles: true,
-  //     cancelable: true,
-  //     composed: true
-  //   }))
-  // }
-
-  // deleteStorage () {
-  //   localStorage.setItem('recently-viewed-offers', '[]')
-  //   this.dispatchEvent(new CustomEvent('recently-viewed-render-list', {
-  //     bubbles: true,
-  //     cancelable: true,
-  //     composed: true
-  //   }))
-  //   this.dispatchEvent(new CustomEvent('recently-viewed-clear', {
-  //     bubbles: true,
-  //     cancelable: true,
-  //     composed: true
-  //   }))
-  // }
 
   dataLayerPush (item) {
     // @ts-ignore
