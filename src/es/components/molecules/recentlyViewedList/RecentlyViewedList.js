@@ -8,9 +8,13 @@ import AutoCompleteList from '../autoCompleteList/AutoCompleteList.js'
  */
 export default class RecentlyViewedList extends AutoCompleteList {
   connectedCallback () {
+    document.body.addEventListener('search-change', this.searchChangeListener)
+    document.body.addEventListener('recently-viewed-render-list', this.recentlyViewedRenderList)
+    document.body.addEventListener('history-complete-render-list', this.recentlyViewedRenderList)
     if (this._initialized) {
       this.hidden = false
       this.bindAInput()
+      this.requestServerItems().then(() => this.renderList())
       return
     }
     this.hidden = true
@@ -46,9 +50,6 @@ export default class RecentlyViewedList extends AutoCompleteList {
     })
     if (this.hasAttribute('mock')) this.initMockData()
     setTimeout(() => initComponent(), 300)
-    document.body.addEventListener('search-change', this.searchChangeListener)
-    document.body.addEventListener('recently-viewed-render-list', this.recentlyViewedRenderList)
-    document.body.addEventListener('history-complete-render-list', this.recentlyViewedRenderList)
     this.bindAInput()
   }
 
