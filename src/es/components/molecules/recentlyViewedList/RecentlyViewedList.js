@@ -231,7 +231,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
   requestServerItems () {
     let resolved = false
     return new Promise(resolve => {
-      this.dispatchEvent(new CustomEvent('request-recently-viewed-storage', {
+      document.body.dispatchEvent(new CustomEvent('request-recently-viewed-storage', {
         detail: {
           resolve: value => {
             resolved = true
