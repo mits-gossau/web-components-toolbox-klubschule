@@ -429,6 +429,7 @@ export default class CheckoutReminder extends Dialog {
         border-bottom: 1px solid #E0E0E0;
         margin-bottom: var(--mdx-sys-spacing-flex-large-xs);
         padding-bottom: var(--mdx-sys-spacing-flex-large-xs);
+        width: 100%;
       }
       :host > dialog > a-icon-mdx {
         bottom: auto;
