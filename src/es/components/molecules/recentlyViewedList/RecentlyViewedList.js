@@ -14,6 +14,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
     if (this._initialized) {
       this.hidden = false
       this.bindAInput()
+      if (this.deleteEl) this.deleteEl.addEventListener('click', this.deleteElClickEventListener)
       this.requestServerItems().then(() => this.renderList())
       return
     }
