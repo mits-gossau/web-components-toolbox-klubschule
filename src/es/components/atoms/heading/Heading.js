@@ -186,7 +186,7 @@ export default class Heading extends Shadow() {
 
       /* border top */
       :host([border-top]) [border-top]::before {
-        background-color: var(--h-border-top-color, var(--mdx-sys-color-accent-1-default));
+        background-color: var(--accessible-color-red, var(--h-border-top-color, var(--mdx-sys-color-accent-1-default)));
         content: '';
         display: block;
         margin-bottom: var(--h-border-margin-bottom, var(--mdx-sys-spacing-fix-s));
@@ -202,7 +202,7 @@ export default class Heading extends Shadow() {
         height: .5rem;
         width: 4rem;
         margin: 0 auto var(--mdx-sys-spacing-flex-xs);
-        background: var(--mdx-sys-color-accent-1-default);
+        background: var(--accessible-color-red, var(--mdx-sys-color-accent-1-default));
       }
 
       :host([brand=ksos][border-top]) [border-top]::before {
