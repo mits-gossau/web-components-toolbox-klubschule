@@ -84,7 +84,7 @@ export default class NotificationBar extends Shadow() {
       }
       :host([pro]:not([error])) > section {
         --p-font-weight: 700;
-        background-color: var(--mdx-sys-color-accent-1-default);
+        background-color: var(--accessible-color-red, var(--mdx-sys-color-accent-1-default));
       }
       :host([error]) > section {
         background-color: var(--mdx-sys-color-error-subtle3, var(--color-error));

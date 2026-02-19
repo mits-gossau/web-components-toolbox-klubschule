@@ -494,6 +494,14 @@
 
   /* a:vistied fix */
   --multi-level-navigation-default-a-color-visited: var(--color);
+
+  /* a11y colors */
+  --accessible-color-red: #ED001A;
+  --accessible-color-pink: #C1498F;
+  --accessible-color-green: #00866F;
+  --accessible-color-orange: #E06631;
+  --accessible-color-blue: #007EB3;
+
 }
 
 @media screen and (min-width: 1441px) {
