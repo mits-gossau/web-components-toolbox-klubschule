@@ -231,6 +231,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
   }
 
   requestServerItems () {
+    if (this.hasAttribute('mock')) return Promise.resolve()
     let resolved = false
     return new Promise(resolve => {
       document.body.dispatchEvent(new CustomEvent('request-recently-viewed-storage', {
@@ -315,14 +316,12 @@ export default class RecentlyViewedList extends AutoCompleteList {
   }
 
   initMockData () {
-    if (!this.storage.length) {
-      localStorage.setItem('recently-viewed-offers', JSON.stringify([
-        { title: 'Pilates - Privatunterricht', url: '#', itemId: 'D_97041_1013--D_97041', locationName: 'Chur', badge: '', price: 325, spartename: ['Gesundheit', 'Pilates', 'Pilates Variationen'], currency: 'CHF' },
-        { title: 'Englisch Niveau B1', url: '#', itemId: 'D_92100_2665--D_92100', locationName: 'Zürich', badge: '', price: 690, spartename: ['Sprachen', 'Englisch'], currency: 'CHF' },
-        { title: 'Yoga für Einsteiger*innen', url: '#', itemId: 'D_95072_1016--D_95072', locationName: '', badge: 'Online', price: 180, spartename: ['Gesundheit', 'Yoga'], currency: 'CHF' },
-        { title: 'Webdesign Grundlagen', url: '#', itemId: 'D_88300_1013--D_88300', locationName: 'Bern', badge: 'Blended', price: 1200, spartename: ['Informatik', 'Webdesign'], currency: 'CHF' },
-        { title: 'Italienisch Niveau A1', url: '#', itemId: 'D_91050_2659--D_91050', locationName: 'Luzern', badge: '', price: 550, spartename: ['Sprachen', 'Italienisch'], currency: 'CHF' }
-      ]))
-    }
+    this._serverItems = [
+      { title: 'Pilates - Privatunterricht', url: '#', itemId: 'D_97041_1013--D_97041', locationName: 'Chur', badge: '', price: 325, spartename: ['Gesundheit', 'Pilates', 'Pilates Variationen'], currency: 'CHF' },
+      { title: 'Englisch Niveau B1', url: '#', itemId: 'D_92100_2665--D_92100', locationName: 'Zürich', badge: '', price: 690, spartename: ['Sprachen', 'Englisch'], currency: 'CHF' },
+      { title: 'Yoga für Einsteiger*innen', url: '#', itemId: 'D_95072_1016--D_95072', locationName: '', badge: 'Online', price: 180, spartename: ['Gesundheit', 'Yoga'], currency: 'CHF' },
+      { title: 'Webdesign Grundlagen', url: '#', itemId: 'D_88300_1013--D_88300', locationName: 'Bern', badge: 'Blended', price: 1200, spartename: ['Informatik', 'Webdesign'], currency: 'CHF' },
+      { title: 'Italienisch Niveau A1', url: '#', itemId: 'D_91050_2659--D_91050', locationName: 'Luzern', badge: '', price: 550, spartename: ['Sprachen', 'Italienisch'], currency: 'CHF' }
+    ]
   }
 }
