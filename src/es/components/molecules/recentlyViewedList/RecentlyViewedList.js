@@ -147,8 +147,9 @@ export default class RecentlyViewedList extends AutoCompleteList {
       :host ul li .rv-title {
         font-size: 1em;
         line-height: 1.25em;
-        font-weight: 500;
+        font-weight: 400;
         color: var(--mdx-sys-color-neutral-bold4);
+        margin-bottom: 0.5em;
       }
       :host ul li .rv-meta {
         display: flex;
@@ -162,6 +163,17 @@ export default class RecentlyViewedList extends AutoCompleteList {
       }
       :host ul li .rv-meta .rv-badge {
         margin-top: 0;
+      }
+      :host ul li .rv-location-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.25em;
+        margin-top: 0.125em;
+      }
+      :host ul li .rv-location-row .rv-location {
+        margin-top: 0.25em;
+        margin-left: 0.25em;
       }
       :host ul li .rv-location {
         font-size: 0.875em;
@@ -179,6 +191,9 @@ export default class RecentlyViewedList extends AutoCompleteList {
         margin-top: 0.25em;
         color: var(--mdx-sys-color-neutral-default);
         width: fit-content;
+      }
+      :host ul li + li {
+        margin-top: 0.5em;
       }
       @media only screen and (max-width: _max-width_) {
         :host .heading {
@@ -215,7 +230,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
       } else if (item.badge) {
         locationHtml = `<span class="rv-badge">${item.badge}</span>`
       } else if (item.locationName) {
-        locationHtml = `<span class="rv-location">${item.locationName}</span>`
+        locationHtml = `<span class="rv-location-row"><a-icon-mdx icon-name="Location" size="1em"></a-icon-mdx><span class="rv-location">${item.locationName}</span></span>`
       }
       listElement.innerHTML = `
         <span class="rv-title">${item.title}</span>
