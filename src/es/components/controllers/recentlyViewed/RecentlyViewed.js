@@ -36,7 +36,7 @@ export default class RecentlyViewed extends HTMLElement {
           title: item.kursBezeichnung || '',
           url: item.link || '',
           itemId: `${item.kursTyp}_${item.kursId}_${item.centerId}--${item.kursTyp}_${item.kursId}`,
-          locationName: item.centerName || item.durchfuehrungsort || '',
+          locationName: item.durchfuehrungsort || '',
           badge: item.badge || '',
           price: 0,
           spartename: [],
