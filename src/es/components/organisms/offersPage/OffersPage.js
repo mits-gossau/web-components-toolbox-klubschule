@@ -450,7 +450,7 @@ export default class OffersPage extends Shadow() {
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
           ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
         >
-          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh">
             <dialog>
               <div class="container">
                 <a-input
@@ -543,7 +543,7 @@ export default class OffersPage extends Shadow() {
          reset-input-value-based-url="cname"
          ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}
         >
-          <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+          <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh">
             <dialog>
               <div class="container">
                 <a-input 
@@ -874,7 +874,7 @@ export default class OffersPage extends Shadow() {
       ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
       ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
     >
-      <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+      <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh">
         <dialog>
           <div class="container">
             <a-input
