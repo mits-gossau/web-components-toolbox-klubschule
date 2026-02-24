@@ -207,7 +207,7 @@
   --button-badge-border-radius: 3px;
 
   --dialog-top-slide-in-dialog-height: fit-content;
-  --dialog-top-slide-in-dialog-min-height: 480px;
+  --dialog-top-slide-in-dialog-min-height: 330px;
   --emotion-pictures-default-img-max-height: 50vh;
   --emotion-pictures-with-button-img-max-height: var(--emotion-pictures-default-img-max-height);
   --emotion-pictures-with-logo-img-max-height: var(--emotion-pictures-default-img-max-height);
