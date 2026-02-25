@@ -750,6 +750,7 @@ export default class OffersPage extends Shadow() {
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}
                 ${this.hasAttribute('error-text') ? ` error-text="${this.getAttribute('error-text')}"` : ''}
+                ${this.hasAttribute('tracking-context') ? ` tracking-context="${this.getAttribute('tracking-context')}"` : ''}
               >
                 ${this.hiddenSectionsPartnerSearch.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
                 ${this.templateTroublemaker.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
