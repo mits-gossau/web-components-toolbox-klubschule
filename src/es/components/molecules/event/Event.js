@@ -647,7 +647,7 @@ export default class Event extends Shadow() {
               <div class="controls-left">
                 ${this.isWishList && !this.isPassed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${kurs_typ}_${kurs_id}_${centerid}"></a-icon-mdx>` : ''}
                 ${!ist_abokurs_offen && !this.isPassed? /* html */ `
-                  <ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'${this.isWishList ? " is-wish-list" : ""}></ks-m-buttons>
+                  <ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'${this.isWishList ? " is-wish-list" : ""}${this.hasAttribute('tracking-context') ? ` tracking-context="${this.getAttribute('tracking-context')}"` : ''}></ks-m-buttons>
                 ` : ''}
               </div>
               <div class="controls-right">
