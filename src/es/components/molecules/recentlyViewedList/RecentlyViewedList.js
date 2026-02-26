@@ -285,7 +285,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
           item_id: item.itemId,
           price: item.price || 0,
           quantity: 1,
-          item_variant: item.locationName || '',
+          item_variant: item.centerName || '',
           currency: item.currency || 'CHF'
         }
         if (item.spartename) {
