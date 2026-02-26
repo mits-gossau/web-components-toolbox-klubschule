@@ -225,7 +225,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
     list.replaceChildren(...this._serverItems.map(item => {
       const listElement = document.createElement('li')
       let locationHtml = ''
-      if (item.badge && item.locationName) {
+      if (item.badge && item.locationName && item.badge !== item.locationName) {
         locationHtml = `<div class="rv-meta"><span class="rv-location">${item.locationName}</span><span class="rv-badge">${item.badge}</span></div>`
       } else if (item.badge) {
         locationHtml = `<span class="rv-badge">${item.badge}</span>`
@@ -277,6 +277,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
   }
 
   dataLayerPush (item) {
+    console.log('Pushing recently viewed item to data layer:', item)
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {
       try {
