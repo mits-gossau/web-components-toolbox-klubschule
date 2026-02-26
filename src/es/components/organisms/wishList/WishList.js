@@ -276,6 +276,7 @@ export default class WishList extends Shadow() {
           with-facet-target
           ${isEvent ? ` event-detail-url="${this.eventDetailURL}"` : ''}
           ${isEvent ? "" : " no-search-tab"}
+          tracking-context="wishlist_offers"
         ></ks-o-offers-page>
       ` : ''}
       ${passedWatchListEntries?.length ? /* html */ `
