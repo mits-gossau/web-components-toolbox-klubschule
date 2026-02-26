@@ -277,7 +277,6 @@ export default class RecentlyViewedList extends AutoCompleteList {
   }
 
   dataLayerPush (item) {
-    console.log('Pushing recently viewed item to data layer:', item)
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer) {
       try {
