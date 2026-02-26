@@ -213,6 +213,7 @@ export default class TileFactory extends Shadow() {
               <ks-m-event
                 ${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}
                 ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
+                ${this.hasAttribute('tracking-context') ? ` tracking-context="${this.getAttribute('tracking-context')}"` : ''}
                 data='{
                   "course": ${JSON.stringify(course).replace(/'/g, '’').replace(/"/g, '\"')},
                   "sprachid": "${data.sprachid}"
