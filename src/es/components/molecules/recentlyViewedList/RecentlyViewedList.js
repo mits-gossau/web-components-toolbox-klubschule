@@ -293,7 +293,8 @@ export default class RecentlyViewedList extends AutoCompleteList {
             ecommerceItem[i === 0 ? 'item_category' : `item_category${i + 1}`] = sparte
           })
         }
-        const categoryKey = `item_category${(item.spartename?.length || 0) + 1}`
+        const nextIndex = (item.spartename?.length || 0) + 1
+        const categoryKey = nextIndex === 1 ? 'item_category' : `item_category${nextIndex}`
         ecommerceItem[categoryKey] = 'search_overlay'
         // @ts-ignore
         window.dataLayer.push({
