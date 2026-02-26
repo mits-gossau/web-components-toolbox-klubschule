@@ -229,7 +229,7 @@ export default class TileFactory extends Shadow() {
                         "locations": ${JSON.stringify(course.locations).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                         "spartename": ${JSON.stringify(course.spartename).replace(/'/g, '’').replace(/"/g, '\"') || ''},
                         "sort": ${JSON.stringify(data.sort.sort).replace(/'/g, '’').replace(/"/g, '\"') || ''}
-                      }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}>
+                      }'${this.hasAttribute('is-wish-list') ? ' is-wish-list' : ''}${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}${this.isNearbySearch ? ' nearby-search' : ''}${this.hasAttribute('tracking-context') ? ` tracking-context="${this.getAttribute('tracking-context')}"` : ''}>
                       </ks-o-tile-list>
                     </template>
                   </m-load-template-tag>
@@ -244,6 +244,7 @@ export default class TileFactory extends Shadow() {
                         ${this.hasAttribute('is-info-events') ? ' is-info-events' : ''}
                         ${this.hasAttribute('is-other-locations') ? ` is-other-locations next-start-dates-text="${this.getAttribute('next-start-dates-text')}"` : ''}
                         ${this.isNearbySearch ? ' nearby-search' : ''}
+                        ${this.hasAttribute('tracking-context') ? ` tracking-context="${this.getAttribute('tracking-context')}"` : ''}
                       ></ks-m-tile>
                     </template>
                   </m-load-template-tag>

@@ -1,5 +1,6 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import GTMEvent from '../../controllers/gtmEvent/GtmEvent.js'
 
 /**
 * @export
@@ -788,7 +789,7 @@ export default class Event extends Shadow() {
                 {
                   'event': 'view_item',
                   'ecommerce': {    
-                    'items': [{ 
+                    'items': [GTMEvent.addTrackingContextToItem({
                       'item_name': `${data.bezeichnung}`,                
                       'item_id': `${this.getItemId(data)}`, 
                       'price': /*data.preis_kurs || */data.preis_total, // coming soon: https://jira.migros.net/browse/MIDUWEB-1687
@@ -799,7 +800,7 @@ export default class Event extends Shadow() {
                       'quantity': 1,
                       'item_variant': `${data.location?.center ? data.location.center : data?.center ? data.center.bezeichnung_internet : this.data?.course?.location?.center ? this.data.course.location.center : ''}`,
                       'currency': 'CHF',       
-                    }]
+                    })]
                   }
                 }
               )
