@@ -225,7 +225,9 @@ export default class RecentlyViewedList extends AutoCompleteList {
     list.replaceChildren(...this._serverItems.map(item => {
       const listElement = document.createElement('li')
       let locationHtml = ''
-      if (item.badge && item.locationName && item.badge !== item.locationName) {
+      const badgeOnlyValues = ['online', 'e-learning', 'en ligne']
+      const isBadgeOnly = item.badge && badgeOnlyValues.includes(item.badge.toLowerCase())
+      if (item.badge && item.locationName && !isBadgeOnly) {
         locationHtml = `<div class="rv-meta"><span class="rv-location">${item.locationName}</span><span class="rv-badge">${item.badge}</span></div>`
       } else if (item.badge) {
         locationHtml = `<span class="rv-badge">${item.badge}</span>`
