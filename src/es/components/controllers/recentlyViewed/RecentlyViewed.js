@@ -4,8 +4,8 @@
 /* global CustomEvent */
 
 /**
- * RecentlyViewed manages a server-based list (API /LastCourseViewApi)
- * for all users, without checking login status.
+ * RecentlyViewed fetches the server-based list (API /LastCourseViewApi)
+ * for all users. The backend (Umbraco) handles tracking and login state.
  *
  * This component communicates exclusively through events.
  *
