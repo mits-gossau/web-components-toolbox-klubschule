@@ -22,7 +22,6 @@ export default class Tile extends Shadow() {
         const targetUrl = new URL(this.tileLink, window.location.origin)
         currentUrl.searchParams.forEach((value, key) => { if (!targetUrl.searchParams.has(key)) targetUrl.searchParams.set(key, value) })
         const finalUrl = targetUrl.toString()
-        this.saveRecentlyViewed(finalUrl)
         window.open(finalUrl, '_self')
       }
     }
@@ -488,7 +487,4 @@ export default class Tile extends Shadow() {
     return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
   }
 
-  saveRecentlyViewed (url) {
-    // no-op: recently viewed items are tracked server-side by the backend (Umbraco)
-  }
 }

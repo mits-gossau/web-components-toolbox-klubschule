@@ -229,13 +229,6 @@ export default class Buttons extends Shadow() {
       </div>
     ` : ''
 
-    if (this.hasAttribute('is-tile')) {
-      const linkButton = filteredDataButtons?.find(b => b.link && b.event !== 'bookmark')
-      if (linkButton) {
-        this.root.querySelector('.buttons-container')?.addEventListener('click', () => this.saveRecentlyViewedOnClick(linkButton.link), { once: true })
-      }
-    }
-
     return this.fetchModules([
       {
         path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/molecules/dialog/Dialog.js`,
@@ -382,10 +375,6 @@ export default class Buttons extends Shadow() {
     const centerId = data.centerid ? `_${data.centerid}` : ''
     const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
     return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
-  }
-
-  saveRecentlyViewedOnClick (buttonLink) {
-    // no-op: recently viewed items are tracked server-side by the backend (Umbraco)
   }
 
   dataLayerPush (value) {
