@@ -10,7 +10,7 @@ self.Environment = {
   mcsBaseUrl: currentScriptUrl.searchParams.get('mcsBaseUrl') || 'https://digital-campaign-factory.migros.ch',
   mcsVersion: currentScriptUrl.searchParams.get('mcsVersion'), /* || 'v1.112.3', // the newest version gets fetched if this parameter is not set */
   msrcBaseUrl: currentScriptUrl.searchParams.get('msrcBaseUrl') || 'https://cdn.migros.ch',
-  msrcVersion: currentScriptUrl.searchParams.get('msrcVersion'), /* || '20221205123932', // the newest version gets fetched if this parameter is not set */
+  msrcVersion: currentScriptUrl.searchParams.get('msrcVersion') || '20251104054240',
   mobileBreakpoint: ({ constructor, tagName, namespace } = {}) => {
     switch (true) {
       case constructor && typeof constructor.includes === 'function' && constructor.includes('Header'):
