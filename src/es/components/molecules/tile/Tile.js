@@ -22,7 +22,6 @@ export default class Tile extends Shadow() {
         const targetUrl = new URL(this.tileLink, window.location.origin)
         currentUrl.searchParams.forEach((value, key) => { if (!targetUrl.searchParams.has(key)) targetUrl.searchParams.set(key, value) })
         const finalUrl = targetUrl.toString()
-        this.saveRecentlyViewed(finalUrl)
         window.open(finalUrl, '_self')
       }
     }
@@ -488,28 +487,4 @@ export default class Tile extends Shadow() {
     return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
   }
 
-  saveRecentlyViewed (url) {
-    const data = this.tileData
-    if (!data) return
-    try {
-      const offerData = {
-        title: data.parentTitle || data.title || data.bezeichnung || '',
-        url,
-        itemId: this.getItemId(data),
-        locationName: data.location?.center || (data.center ? data.center.bezeichnung_internet : '') || data.location?.name || '',
-        badge: data.location?.badge || '',
-        price: data.price?.price || data.preis_total || 0,
-        spartename: data.spartename || [],
-        currency: 'CHF'
-      }
-      const currentStorage = JSON.parse(localStorage.getItem('recently-viewed-offers') || '[]')
-      const index = currentStorage.findIndex(element => element.itemId === offerData.itemId)
-      if (index >= 0) currentStorage.splice(index, 1)
-      const arr = [offerData].concat(currentStorage)
-      if (arr.length > 5) arr.length = 5
-      localStorage.setItem('recently-viewed-offers', JSON.stringify(arr))
-    } catch (error) {
-      console.error('Failed to save recently viewed offer', error)
-    }
-  }
 }

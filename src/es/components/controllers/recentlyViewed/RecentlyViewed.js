@@ -4,8 +4,8 @@
 /* global CustomEvent */
 
 /**
- * RecentlyViewed manages a server-based list (API /LastCourseViewApi)
- * for all users, without checking login status.
+ * RecentlyViewed fetches the server-based list (API /LastCourseViewApi)
+ * for all users. The backend (Umbraco) handles tracking and login state.
  *
  * This component communicates exclusively through events.
  *
@@ -38,9 +38,7 @@ export default class RecentlyViewed extends HTMLElement {
           itemId: `${item.kursTyp}_${item.kursId}_${item.centerId}--${item.kursTyp}_${item.kursId}`,
           locationName: item.durchfuehrungsort || '',
           badge: item.badge || '',
-          price: 0,
-          spartename: [],
-          currency: 'CHF'
+          tagManagerEventData: item.tagManagerEventData || ''
         }))
         this.guid = json.lastCourseViewGroupGuid || ''
         this.dispatchRenderList()
