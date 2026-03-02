@@ -285,9 +285,9 @@ export default class RecentlyViewedList extends AutoCompleteList {
         const ecommerceItem = {
           item_name: item.title,
           item_id: item.itemId,
-          price: item.price || 0,
+          price: item.preisKurs || 0,
           quantity: 1,
-          item_variant: item.centerName || '',
+          item_variant: item.centerBezeichnungInternet || '',
           currency: item.currency || 'CHF'
         }
         if (item.spartename) {
