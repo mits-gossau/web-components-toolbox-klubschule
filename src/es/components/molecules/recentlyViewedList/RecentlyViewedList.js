@@ -280,31 +280,23 @@ export default class RecentlyViewedList extends AutoCompleteList {
 
   dataLayerPush (item) {
     // @ts-ignore
-    if (typeof window !== 'undefined' && window.dataLayer) {
+    if (typeof window !== 'undefined' && window.dataLayer && item.tagManagerEventData) {
       try {
-        const ecommerceItem = {
-          item_name: item.title,
-          item_id: item.itemId,
-          price: item.preisKurs || 0,
-          quantity: 1,
-          item_variant: item.centerBezeichnungInternet || '',
-          currency: item.currency || 'CHF'
-        }
-        if (item.spartename) {
-          item.spartename.forEach((sparte, i) => {
-            ecommerceItem[i === 0 ? 'item_category' : `item_category${i + 1}`] = sparte
-          })
-        }
-        const nextIndex = (item.spartename?.length || 0) + 1
-        const categoryKey = nextIndex === 1 ? 'item_category' : `item_category${nextIndex}`
-        ecommerceItem[categoryKey] = 'search_overlay'
-        // @ts-ignore
-        window.dataLayer.push({
-          event: 'select_item',
-          ecommerce: {
-            items: [ecommerceItem]
+        const eventData = JSON.parse(item.tagManagerEventData)
+        const ecommerceItem = eventData.ecommerce?.items?.[0]
+        if (ecommerceItem) {
+          let nextIndex = 1
+          while (ecommerceItem[nextIndex === 1 ? 'item_category' : `item_category${nextIndex}`]) nextIndex++
+          const categoryKey = nextIndex === 1 ? 'item_category' : `item_category${nextIndex}`
+          const sorted = {}
+          for (const [key, value] of Object.entries(ecommerceItem)) {
+            sorted[key] = value
+            if (key === `item_category${nextIndex - 1}` || (nextIndex === 1 && key === 'item_id')) sorted[categoryKey] = 'search_overlay'
           }
-        })
+          eventData.ecommerce.items[0] = sorted
+        }
+        // @ts-ignore
+        window.dataLayer.push(eventData)
       } catch (error) {
         console.error('Failed to push in data layer', error)
       }

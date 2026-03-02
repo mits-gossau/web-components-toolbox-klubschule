@@ -38,9 +38,7 @@ export default class RecentlyViewed extends HTMLElement {
           itemId: `${item.kursTyp}_${item.kursId}_${item.centerId}--${item.kursTyp}_${item.kursId}`,
           locationName: item.durchfuehrungsort || '',
           badge: item.badge || '',
-          price: 0,
-          spartename: [],
-          currency: 'CHF'
+          tagManagerEventData: item.tagManagerEventData || ''
         }))
         this.guid = json.lastCourseViewGroupGuid || ''
         this.dispatchRenderList()
