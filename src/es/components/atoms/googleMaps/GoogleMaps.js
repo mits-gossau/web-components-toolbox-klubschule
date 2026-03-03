@@ -314,32 +314,25 @@ export default class KsGoogleMaps extends GoogleMaps {
 
   /**
    * fetch dependency
-   * Uses the Dynamic Library Import API (importLibrary) instead of the legacy script tag
+   * Loads the Maps JavaScript API with the marker library via direct script tag
    *
    * @returns {Promise<google.maps>}
    */
   loadDependency () {
     if (KsGoogleMaps.gmapsPromise) return KsGoogleMaps.gmapsPromise
 
-    KsGoogleMaps.gmapsPromise = new Promise((resolve, reject) => {
-      // install the inline bootstrap loader
-      ((g) => {
-        // @ts-ignore
-        var h, a, k, p = 'The Google Maps JavaScript API', c = 'google', l = 'importLibrary', q = '__ib__', m = document, b = self; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set(), e = new URLSearchParams(), u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement('script')); e.set('libraries', [...r] + ''); for (k in g) e.set(k.replace(/[A-Z]/g, t => '_' + t[0].toLowerCase()), g[k]); e.set('callback', c + '.maps.' + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + ' could not load.')); a.nonce = m.querySelector('script[nonce]')?.nonce || ''; m.head.append(a) })); d[l] ? console.warn(p + ' only loads once. Ignoring:', g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
-      })({
-        key: this.apiKey,
-        v: 'weekly'
-      })
-
-      Promise.all([
-        // @ts-ignore
-        self.google.maps.importLibrary('maps'),
-        // @ts-ignore
-        self.google.maps.importLibrary('marker')
-      ]).then(() => {
+    KsGoogleMaps.gmapsPromise = new Promise(resolve => {
+      // @ts-ignore
+      self.initMap = () => {
         // @ts-ignore
         resolve(self.google.maps)
-      }).catch(reject)
+      }
+
+      const script = document.createElement('script')
+      script.setAttribute('type', 'text/javascript')
+      script.setAttribute('async', '')
+      script.src = `https://maps.googleapis.com/maps/api/js?v=weekly&libraries=marker&key=${this.apiKey}&loading=async&callback=initMap`
+      document.head.appendChild(script)
     })
 
     return KsGoogleMaps.gmapsPromise
