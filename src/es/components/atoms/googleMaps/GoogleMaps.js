@@ -125,9 +125,11 @@ export default class KsGoogleMaps extends GoogleMaps {
             }
           }
 
+          this.createControls(map, googleMap)
+
           // Add a marker clusterer to manage the markers.
           this.loadMarkerClustererDependency().then(markerClusterer => {
-            return new markerClusterer.MarkerClusterer({
+            new markerClusterer.MarkerClusterer({
               markers,
               map,
               renderer: clusterRenderer,
@@ -137,13 +139,11 @@ export default class KsGoogleMaps extends GoogleMaps {
                 map.setZoom(map.getZoom() + 1)
               }
             })
+
+            // set map bounds to switzerland after clusterer is ready, so the idle event triggers clustering
+            const switzerlandBounds = new googleMap.LatLngBounds({ lat: 45.817995, lng: 5.9559113 }, { lat: 47.8084648, lng: 10.4922941 })
+            map.fitBounds(switzerlandBounds)
           })
-
-          this.createControls(map, googleMap)
-
-          // set map bounds to switerland
-          const switzerlandBounds = new googleMap.LatLngBounds({ lat: 45.817995, lng: 5.9559113 }, { lat: 47.8084648, lng: 10.4922941 })
-          map.fitBounds(switzerlandBounds)
         })
         element = mapDiv
       }
@@ -323,7 +323,7 @@ export default class KsGoogleMaps extends GoogleMaps {
         // @ts-ignore
         if ('google' in self) resolve(self.markerClusterer)
       }
-      this.html = markerClustererScript
+      document.head.appendChild(markerClustererScript)
     })
   }
 
