@@ -11,6 +11,8 @@ import GoogleMaps from '../../web-components-toolbox/src/es/components/atoms/goo
  * @css {}
  */
 export default class KsGoogleMaps extends GoogleMaps {
+  static gmapsPromise = null
+
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
@@ -109,18 +111,24 @@ export default class KsGoogleMaps extends GoogleMaps {
 
           const clusterRenderer = {
             render ({ count, position }) {
-              return new googleMap.Marker({
-                label: { text: String(count), color: 'white', fontSize: '20px' },
+              const el = document.createElement('div')
+              el.style.cssText = `
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background: ${color};
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+              `
+              el.textContent = String(count)
+
+              return new googleMap.marker.AdvancedMarkerElement({
                 position,
-                icon: {
-                  path: googleMap.SymbolPath.CIRCLE,
-                  scale: 18,
-                  fillColor: color,
-                  fillOpacity: 1,
-                  strokeWeight: 0
-                },
-                // adjust zIndex to be above other markers
-                zIndex: Number(googleMap.Marker.MAX_ZINDEX) + count
+                content: el,
+                zIndex: 1000 + count
               })
             }
           }
@@ -166,18 +174,17 @@ export default class KsGoogleMaps extends GoogleMaps {
     // css vars don't seem to work directly inside the icon so I am getting the color via js
     const color = self.getComputedStyle(this.root.querySelector('*')).getPropertyValue('--color-secondary')
 
-    const marker = new googleMap.Marker({
+    const markerContent = document.createElement('div')
+    markerContent.style.cursor = 'pointer'
+    markerContent.innerHTML = `
+      <svg width="23" height="32" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.5 32C11.5 32 23 20.4803 23 11.5203V11.5197C23 8.46445 21.7885 5.53431 19.632 3.37399C17.4754 1.21368 14.5511 0 11.5006 0C8.45014 0 5.52516 1.21368 3.36805 3.37459C1.21154 5.53491 0 8.46505 0 11.5203C0 20.4797 11.5 32 11.5 32ZM14.3409 8.94203C15.7626 10.5142 15.6425 12.9427 14.0738 14.3663C12.5044 15.7905 10.0807 15.6708 8.65906 14.0986C7.2374 12.5265 7.35687 10.0986 8.92623 8.6744C10.4956 7.25022 12.9193 7.36991 14.3409 8.94203Z" fill="${color}"/>
+      </svg>
+    `
+
+    const marker = new googleMap.marker.AdvancedMarkerElement({
       position: { lat: location.lat, lng: location.lng },
-      icon: {
-        path: 'M11.5 32C11.5 32 23 20.4803 23 11.5203V11.5197C23 8.46445 21.7885 5.53431 19.632 3.37399C17.4754 1.21368 14.5511 0 11.5006 0C8.45014 0 5.52516 1.21368 3.36805 3.37459C1.21154 5.53491 0 8.46505 0 11.5203C0 20.4797 11.5 32 11.5 32ZM14.3409 8.94203C15.7626 10.5142 15.6425 12.9427 14.0738 14.3663C12.5044 15.7905 10.0807 15.6708 8.65906 14.0986C7.2374 12.5265 7.35687 10.0986 8.92623 8.6744C10.4956 7.25022 12.9193 7.36991 14.3409 8.94203Z',
-        fillColor: color,
-        fillOpacity: 1,
-        strokeWeight: 0,
-        anchor: new googleMap.Point(
-          12,
-          32
-        )
-      },
+      content: markerContent,
       map,
       title: location.title
     })
@@ -211,8 +218,8 @@ export default class KsGoogleMaps extends GoogleMaps {
     )
     popup.setMap(map)
 
-    marker.addListener('click', () => {
-      map.panTo(marker.getPosition())
+    marker.addEventListener('gmp-click', () => {
+      map.panTo(marker.position)
       if (this.currentPopup) {
         this.currentPopup.hide()
       }
@@ -307,13 +314,43 @@ export default class KsGoogleMaps extends GoogleMaps {
 
   /**
    * fetch dependency
+   * Uses the Dynamic Library Import API (importLibrary) instead of the legacy script tag
+   *
+   * @returns {Promise<google.maps>}
+   */
+  loadDependency () {
+    if (KsGoogleMaps.gmapsPromise) return KsGoogleMaps.gmapsPromise
+
+    KsGoogleMaps.gmapsPromise = new Promise((resolve, reject) => {
+      // install the inline bootstrap loader
+      ((g) => {
+        // @ts-ignore
+        var h, a, k, p = 'The Google Maps JavaScript API', c = 'google', l = 'importLibrary', q = '__ib__', m = document, b = self; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set(), e = new URLSearchParams(), u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement('script')); e.set('libraries', [...r] + ''); for (k in g) e.set(k.replace(/[A-Z]/g, t => '_' + t[0].toLowerCase()), g[k]); e.set('callback', c + '.maps.' + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + ' could not load.')); a.nonce = m.querySelector('script[nonce]')?.nonce || ''; m.head.append(a) })); d[l] ? console.warn(p + ' only loads once. Ignoring:', g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
+      })({
+        key: this.apiKey,
+        v: 'weekly'
+      })
+
+      Promise.all([
+        // @ts-ignore
+        self.google.maps.importLibrary('maps'),
+        // @ts-ignore
+        self.google.maps.importLibrary('marker')
+      ]).then(() => {
+        // @ts-ignore
+        resolve(self.google.maps)
+      }).catch(reject)
+    })
+
+    return KsGoogleMaps.gmapsPromise
+  }
+
+  /**
+   * fetch dependency
    *
    * @returns {Promise<{components: any}>}
    */
   loadMarkerClustererDependency () {
-    // @ts-ignore
-    self.initMap = () => { }
-
     return new Promise(resolve => {
       const markerClustererScript = document.createElement('script')
       markerClustererScript.setAttribute('type', 'text/javascript')
@@ -331,6 +368,7 @@ export default class KsGoogleMaps extends GoogleMaps {
     return new googleMap.Map(mapTarget, {
       center: { lat, lng },
       zoom: 15,
+      mapId: this.getAttribute('map-id') || 'DEMO_MAP_ID',
       scrollwheel: false,
       mapTypeControl: false,
       streetViewControl: false,
