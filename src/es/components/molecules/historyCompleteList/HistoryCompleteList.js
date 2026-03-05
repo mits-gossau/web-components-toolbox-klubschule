@@ -68,18 +68,14 @@ export default class HistoryCompleteList extends AutoCompleteList {
   }
 
   searchChangeListener = event => {
-    // if searchTerm is empty (e.g. from delete button), show history and reset filter
     if (event.detail?.searchTerm === '') {
-      this.removeAttribute('hidden')
       window.dispatchEvent(new CustomEvent('reset-filter', {
         detail: { filterKey: 'q' },
         bubbles: true,
         cancelable: true,
         composed: true
       }))
-      return
     }
-    this.aInputKeyupEventListener(event)
   }
 
   requestWithFacetListener = event => {
@@ -90,8 +86,6 @@ export default class HistoryCompleteList extends AutoCompleteList {
 
   aInputKeyupEventListener = event => {
     if (!this.aInput?.inputField) return
-    this[this.aInput.inputField.value ? 'setAttribute' : 'removeAttribute']('hidden', '')
-    setTimeout(() => this[this.aInput?.inputField?.value ? 'setAttribute' : 'removeAttribute']('hidden', ''), 50)
     if (event?.type === 'search' && !this.aInput.inputField.value) {
       window.dispatchEvent(new CustomEvent('reset-filter', {
         detail: { filterKey: 'q' },

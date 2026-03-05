@@ -92,11 +92,6 @@ export default class RecentlyViewedList extends AutoCompleteList {
   }
 
   searchChangeListener = event => {
-    if (event.detail?.searchTerm === '') {
-      this.removeAttribute('hidden')
-      return
-    }
-    this.aInputKeyupEventListener(event)
   }
 
   recentlyViewedRenderList = event => {
@@ -104,9 +99,6 @@ export default class RecentlyViewedList extends AutoCompleteList {
   }
 
   aInputKeyupEventListener = event => {
-    if (!this.aInput?.inputField) return
-    this[this.aInput.inputField.value ? 'setAttribute' : 'removeAttribute']('hidden', '')
-    setTimeout(() => this[this.aInput?.inputField?.value ? 'setAttribute' : 'removeAttribute']('hidden', ''), 50)
   }
 
   renderCSS () {
