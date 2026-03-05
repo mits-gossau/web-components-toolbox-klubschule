@@ -105,7 +105,8 @@ export default class KsGoogleMaps extends GoogleMaps {
               googleMap,
               map,
               location,
-              Popup
+              Popup,
+              mobilePopupContainer: this.root.querySelector('#mobile-maps-popup-container')
             })
           })
 
@@ -169,7 +170,8 @@ export default class KsGoogleMaps extends GoogleMaps {
     googleMap,
     map,
     location,
-    Popup
+    Popup,
+    mobilePopupContainer
   }) {
     // css vars don't seem to work directly inside the icon so I am getting the color via js
     const color = self.getComputedStyle(this.root.querySelector('*')).getPropertyValue('--color-secondary')
@@ -186,14 +188,11 @@ export default class KsGoogleMaps extends GoogleMaps {
       position: { lat: location.lat, lng: location.lng },
       content: markerContent,
       map,
-      title: location.title
+      title: location.title,
+      gmpClickable: true
     })
 
-    const latLng = new googleMap.LatLng(location.lat, location.lng)
-
-    const popup = new Popup(
-      latLng,
-      /* html */`<div>
+    const popupContent = /* html */`<div>
         <h4>${location.name}</h4>
         <hr />
         <ks-m-contact-row
@@ -212,17 +211,21 @@ export default class KsGoogleMaps extends GoogleMaps {
           <a-translation data-trans-key="Center.Map.GotoCenter"></a-translation>
           <a-icon-mdx icon-name="ArrowRight" size="1em" class="icon-right" icon-size="16x16"></a-icon-mdx>
         </ks-a-button>
-      </div>`,
-      false,
-      this.root.querySelector('#mobile-maps-popup-container')
-    )
-    popup.setMap(map)
+      </div>`
+
+    let popup = null
 
     marker.addEventListener('gmp-click', () => {
       map.panTo(marker.position)
       if (this.currentPopup) {
         this.currentPopup.hide()
+        this.currentPopup.setMap(null)
       }
+      if (!popup) {
+        const latLng = new googleMap.LatLng(location.lat, location.lng)
+        popup = new Popup(latLng, popupContent, false, mobilePopupContainer)
+      }
+      popup.setMap(map)
       this.currentPopup = popup
       popup.show()
     })
@@ -348,7 +351,7 @@ export default class KsGoogleMaps extends GoogleMaps {
       const markerClustererScript = document.createElement('script')
       markerClustererScript.setAttribute('type', 'text/javascript')
       markerClustererScript.setAttribute('async', '')
-      markerClustererScript.setAttribute('src', `${this.importMetaUrl}/markerclusterer-2-5-3.min.js`)
+      markerClustererScript.setAttribute('src', `${this.importMetaUrl}/markerclusterer-2-6-2.min.js`)
       markerClustererScript.onload = () => {
         // @ts-ignore
         if ('google' in self) resolve(self.markerClusterer)
