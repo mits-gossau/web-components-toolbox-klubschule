@@ -47,7 +47,15 @@ export default class RecentlyViewedList extends AutoCompleteList {
     }).then(async result => {
       await result.fetch
       this.getTranslation = result.getTranslationSync
-      initComponent()
+      if (this._initialized) {
+        const heading = this.root.querySelector('.heading')
+        if (heading) {
+          heading.querySelector('span').textContent = this.getTranslation('Search.RecentlyViewed.Title')
+          heading.querySelector('a').textContent = this.getTranslation('Search.RecentlyViewed.Delete')
+        }
+      } else {
+        initComponent()
+      }
     })
     if (this.hasAttribute('mock')) this.initMockData()
     setTimeout(() => initComponent(), 300)
