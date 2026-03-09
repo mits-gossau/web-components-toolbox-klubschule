@@ -28,15 +28,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
       }))
     }).then(async result => {
       await result.fetch
-      const translationFallbacks = {
-        'Search.RecentlyViewed.Title': 'Zuletzt angesehen',
-        'Search.RecentlyViewed.Delete': 'Verlauf löschen'
-      }
-      const apiGetTranslation = result.getTranslationSync
-      this.getTranslation = key => {
-        const translated = apiGetTranslation(key)
-        return (translated === key && translationFallbacks[key]) ? translationFallbacks[key] : translated
-      }
+      this.getTranslation = result.getTranslationSync
       this._initialized = true
       const showPromises = []
       if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
