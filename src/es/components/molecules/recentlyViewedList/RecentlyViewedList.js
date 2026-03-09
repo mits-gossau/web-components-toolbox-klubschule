@@ -19,24 +19,6 @@ export default class RecentlyViewedList extends AutoCompleteList {
       return
     }
     this.hidden = true
-    const translationFallbacks = {
-      'Search.RecentlyViewed.Title': 'Zuletzt angesehen',
-      'Search.RecentlyViewed.Delete': 'Verlauf löschen'
-    }
-    const initComponent = () => {
-      if (this._initialized) return
-      this._initialized = true
-      const originalGetTranslation = this.getTranslation
-      this.getTranslation = key => {
-        const translated = originalGetTranslation ? originalGetTranslation(key) : key
-        return (translated === key && translationFallbacks[key]) ? translationFallbacks[key] : translated
-      }
-      const showPromises = []
-      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
-      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
-      Promise.all(showPromises).then(() => (this.hidden = false))
-      if (this.deleteEl) this.deleteEl.addEventListener('click', this.deleteElClickEventListener)
-    }
     new Promise(resolve => {
       this.dispatchEvent(new CustomEvent('request-translations', {
         detail: { resolve },
@@ -46,19 +28,23 @@ export default class RecentlyViewedList extends AutoCompleteList {
       }))
     }).then(async result => {
       await result.fetch
-      this.getTranslation = result.getTranslationSync
-      if (this._initialized) {
-        const heading = this.root.querySelector('.heading')
-        if (heading) {
-          heading.querySelector('span').textContent = this.getTranslation('Search.RecentlyViewed.Title')
-          heading.querySelector('a').textContent = this.getTranslation('Search.RecentlyViewed.Delete')
-        }
-      } else {
-        initComponent()
+      const translationFallbacks = {
+        'Search.RecentlyViewed.Title': 'Zuletzt angesehen',
+        'Search.RecentlyViewed.Delete': 'Verlauf löschen'
       }
+      const apiGetTranslation = result.getTranslationSync
+      this.getTranslation = key => {
+        const translated = apiGetTranslation(key)
+        return (translated === key && translationFallbacks[key]) ? translationFallbacks[key] : translated
+      }
+      this._initialized = true
+      const showPromises = []
+      if (this.shouldRenderCSS()) showPromises.push(this.renderCSS())
+      if (this.shouldRenderHTML()) showPromises.push(this.renderHTML())
+      Promise.all(showPromises).then(() => (this.hidden = false))
+      if (this.deleteEl) this.deleteEl.addEventListener('click', this.deleteElClickEventListener)
     })
     if (this.hasAttribute('mock')) this.initMockData()
-    setTimeout(() => initComponent(), 300)
     this.bindAInput()
   }
 
