@@ -48,7 +48,11 @@ export default class RecentlyViewedList extends AutoCompleteList {
       await result.fetch
       this.getTranslation = result.getTranslationSync
       if (this._initialized) {
-        if (this.shouldRenderHTML()) this.renderHTML()
+        const heading = this.root.querySelector('.heading')
+        if (heading) {
+          heading.querySelector('span').textContent = this.getTranslation('Search.RecentlyViewed.Title')
+          heading.querySelector('a').textContent = this.getTranslation('Search.RecentlyViewed.Delete')
+        }
       } else {
         initComponent()
       }
