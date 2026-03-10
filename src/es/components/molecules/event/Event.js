@@ -37,10 +37,18 @@ export default class Event extends Shadow() {
     this.toggle = this.root.querySelector('.expand')
 
     if (this.toggle) this.toggle.addEventListener('click', this.clickEventListener)
+    if (this.hasAttribute('tracking-context')) {
+      this.addEventListener('click', this.trackingContextClickListener)
+    }
   }
 
   disconnectedCallback () {
     if (this.toggle) this.toggle.removeEventListener('click', this.clickEventListener)
+    this.removeEventListener('click', this.trackingContextClickListener)
+  }
+
+  trackingContextClickListener = () => {
+    GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
   }
 
   /**
