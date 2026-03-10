@@ -18,6 +18,7 @@ export default class RecentlyViewed extends HTMLElement {
     super()
 
     const endpoint = this.getAttribute('endpoint') || 'https://dev.klubschule.ch/Umbraco/api/LastCourseViewApi'
+    const language = this.getAttribute('language') || document.documentElement.lang || 'de'
     const successCode = 0
 
     /** @type {Array} */
@@ -25,7 +26,7 @@ export default class RecentlyViewed extends HTMLElement {
 
 
     this.fetchServerList = () => {
-      fetch(`${endpoint}/Check`, {
+      fetch(`${endpoint}/Check?language=${language}`, {
         method: 'GET'
       }).then(response => {
         if (response.status >= 200 && response.status <= 299) return response.json()
@@ -49,7 +50,7 @@ export default class RecentlyViewed extends HTMLElement {
 
     this.clearBackendListener = () => {
       this._serverItems = []
-      fetch(`${endpoint}/Clear?lastCourseViewGroupGuid=${this.guid}`, {
+      fetch(`${endpoint}/Clear?lastCourseViewGroupGuid=${this.guid}&language=${language}`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json'
