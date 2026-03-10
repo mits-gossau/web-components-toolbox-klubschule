@@ -1,5 +1,6 @@
 // @ts-check
 import AutoCompleteList from '../autoCompleteList/AutoCompleteList.js'
+import GTMEvent from '../../controllers/gtmEvent/GtmEvent.js'
 
 /**
  * @export
@@ -67,6 +68,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
   }
 
   clickOnListElement = (item, event) => {
+    GTMEvent.setTrackingContext('search_overlay')
     this.dataLayerPush(item)
     if (item.url) window.open(item.url, '_self')
   }
