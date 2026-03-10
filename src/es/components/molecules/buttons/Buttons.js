@@ -195,7 +195,7 @@ export default class Buttons extends Shadow() {
         </ks-a-button>
       `
       return acc + (
-        (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
+        (this.hasAttribute('is-tile') || this.hasAttribute('is-abo') || this.hasAttribute('tracking-context')) && !isBookMarkButton ?  /* html */ `
           <ks-c-gtm-event 
             listen-to="click"
             ${this.hasAttribute('tracking-context') ? `tracking-context="${this.getAttribute('tracking-context')}"` : ''}
@@ -263,9 +263,7 @@ export default class Buttons extends Shadow() {
 
   openDialogOverlay(button) {
     // Set tracking context before add_to_cart
-    if (this.hasAttribute('tracking-context')) {
-      GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
-    }
+    if (this.hasAttribute('tracking-context')) GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
     // GTM Tracking of Click Register now
     const addToCartItem = GTMEvent.addTrackingContextToItem({
       // @ts-ignore
