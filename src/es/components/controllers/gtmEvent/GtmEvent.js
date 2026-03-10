@@ -78,8 +78,8 @@ export default class GTMEvent extends Shadow() {
   sendEvent(event) {
     this.eventData = JSON.parse(this.getAttribute('event-data'))
 
-    // Set tracking context for select_item events
-    if (this.eventData.event === 'select_item' && this.hasAttribute('tracking-context')) {
+    // Set tracking context for select_item and add_to_cart events
+    if ((this.eventData.event === 'select_item' || this.eventData.event === 'add_to_cart') && this.hasAttribute('tracking-context')) {
       GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
     }
 

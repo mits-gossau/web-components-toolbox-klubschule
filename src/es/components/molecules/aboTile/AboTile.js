@@ -104,7 +104,7 @@ export default class AboTile extends Shadow() {
       >
       </ks-m-event-detail>
       <div>
-        <ks-m-buttons course-data='${JSON.stringify(aboDetail).replace(/'/g, '’')}' is-abo></ks-m-buttons>
+        <ks-m-buttons course-data='${JSON.stringify(aboDetail).replace(/'/g, '’')}' is-abo tracking-context="${this.getAttribute('tracking-context') || 'subscription_courses_overview'}"></ks-m-buttons>
       <div>
     `
     return this.fetchModules([
