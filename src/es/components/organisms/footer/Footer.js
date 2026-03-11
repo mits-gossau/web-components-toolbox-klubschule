@@ -254,7 +254,7 @@ export default class KsFooter extends Footer {
         behavior: 'smooth'
       }))
 
-      if (location.pathname.endsWith('/Configuration') || location.pathname.endsWith('/configuration') || location.pathname.endsWith('/loginmethod')) {
+      if (/\/(configuration|loginmethod|registration|payment|confirm)$/i.test(location.pathname)) {
         const triggerTexts = [
           'engagement.migros.ch',
           'AGB', 'CGV', 'CGC',
