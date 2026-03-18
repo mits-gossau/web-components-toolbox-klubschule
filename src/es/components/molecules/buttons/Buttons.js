@@ -1,5 +1,6 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import GTMEvent from '../../controllers/gtmEvent/GtmEvent.js'
 
 /**
 * @export
@@ -194,9 +195,10 @@ export default class Buttons extends Shadow() {
         </ks-a-button>
       `
       return acc + (
-        (this.hasAttribute('is-tile') || this.hasAttribute('is-abo')) && !isBookMarkButton ?  /* html */ `
+        (this.hasAttribute('is-tile') || this.hasAttribute('is-abo') || this.hasAttribute('tracking-context')) && !isBookMarkButton ?  /* html */ `
           <ks-c-gtm-event 
             listen-to="click"
+            ${this.hasAttribute('tracking-context') ? `tracking-context="${this.getAttribute('tracking-context')}"` : ''}
             event-data='{
               "event": "${this.hasAttribute('is-abo') ? 'add_to_cart' : 'select_item'}",
               "ecommerce": {    
@@ -260,25 +262,28 @@ export default class Buttons extends Shadow() {
   }
 
   openDialogOverlay(button) {
+    // Set tracking context before add_to_cart
+    if (this.hasAttribute('tracking-context')) GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
     // GTM Tracking of Click Register now
+    const addToCartItem = GTMEvent.addTrackingContextToItem({
+      // @ts-ignore
+      'item_name': `${this.data.bezeichnung}`,                
+      // @ts-ignore
+      'item_id': `${this.getItemId(this.data)}`, 
+      // @ts-ignore
+      'price': this.data.price.oprice || this.data.price.price,
+      'item_category': `${this.data.spartename?.[0] || ''}`,
+      'item_category2': `${this.data.spartename?.[1] || ''}`,
+      'item_category3': `${this.data.spartename?.[2] || ''}`,
+      'item_category4': `${this.data.spartename?.[3] || ''}`,
+      'quantity': 1,
+      'item_variant':`${this.data.location?.center ? this.data.location.center : this.data.center ? this.data.center.bezeichnung_internet : ''}`,
+      'currency': 'CHF'
+    })
     this.dataLayerPush({
       'event': 'add_to_cart',
       'ecommerce': {    
-        'items': [{ 
-          // @ts-ignore
-          'item_name': `${this.data.bezeichnung}`,                
-          // @ts-ignore
-          'item_id': `${this.getItemId(this.data)}`, 
-          // @ts-ignore
-          'price': this.data.price.oprice || this.data.price.price,
-          'item_category': `${this.data.spartename?.[0] || ''}`,
-          'item_category2': `${this.data.spartename?.[1] || ''}`,
-          'item_category3': `${this.data.spartename?.[2] || ''}`,
-          'item_category4': `${this.data.spartename?.[3] || ''}`,
-          'quantity': 1,
-          'item_variant':`${this.data.location?.center ? this.data.location.center : this.data.center ? this.data.center.bezeichnung_internet : ''}`,
-          'currency': 'CHF'
-        }]
+        'items': [addToCartItem]
       }
     })
     // for local testing add `https://dev.klubschule.ch${button.event}` to the checkoutOverlayAPI

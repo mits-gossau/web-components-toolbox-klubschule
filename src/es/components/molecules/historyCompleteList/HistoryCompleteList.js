@@ -24,6 +24,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
       Promise.all(showPromises).then(() => (this.hidden = false))
       if (this.deleteEl) this.deleteEl.addEventListener('click', this.deleteElClickEventListener)
     })
+    if (this.hasAttribute('mock')) this.initMockData()
     document.body.addEventListener('request-with-facet', this.requestWithFacetListener)
     document.body.addEventListener('search-change', this.searchChangeListener)
     document.body.addEventListener('history-complete-render-list', this.historyCompleteRenderList)
@@ -67,18 +68,14 @@ export default class HistoryCompleteList extends AutoCompleteList {
   }
 
   searchChangeListener = event => {
-    // if searchTerm is empty (e.g. from delete button), show history and reset filter
     if (event.detail?.searchTerm === '') {
-      this.removeAttribute('hidden')
       window.dispatchEvent(new CustomEvent('reset-filter', {
         detail: { filterKey: 'q' },
         bubbles: true,
         cancelable: true,
         composed: true
       }))
-      return
     }
-    this.aInputKeyupEventListener(event)
   }
 
   requestWithFacetListener = event => {
@@ -89,8 +86,6 @@ export default class HistoryCompleteList extends AutoCompleteList {
 
   aInputKeyupEventListener = event => {
     if (!this.aInput?.inputField) return
-    this[this.aInput.inputField.value ? 'setAttribute' : 'removeAttribute']('hidden', '')
-    setTimeout(() => this[this.aInput?.inputField?.value ? 'setAttribute' : 'removeAttribute']('hidden', ''), 50)
     if (event?.type === 'search' && !this.aInput.inputField.value) {
       window.dispatchEvent(new CustomEvent('reset-filter', {
         detail: { filterKey: 'q' },
@@ -116,6 +111,9 @@ export default class HistoryCompleteList extends AutoCompleteList {
         :host .heading {
           align-items: end;
           justify-content: space-between;
+        }
+        :host .heading > span {
+          font-size: 1rem;
         }
         :host .heading > a {
           color: var(--a-color);
@@ -223,6 +221,18 @@ export default class HistoryCompleteList extends AutoCompleteList {
 
   get deleteEl () {
     return this.root.querySelector('.heading > a')
+  }
+
+  initMockData () {
+    if (!this.storage.length) {
+      localStorage.setItem('history-complete-list', JSON.stringify([
+        'Pilates',
+        'Englisch B1',
+        'Yoga Anfänger',
+        'Webdesign',
+        'Italienisch A1'
+      ]))
+    }
   }
 
   get aInput () {

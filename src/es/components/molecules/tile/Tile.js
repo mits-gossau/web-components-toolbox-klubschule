@@ -21,7 +21,8 @@ export default class Tile extends Shadow() {
         const currentUrl = new URL(window.location.href)
         const targetUrl = new URL(this.tileLink, window.location.origin)
         currentUrl.searchParams.forEach((value, key) => { if (!targetUrl.searchParams.has(key)) targetUrl.searchParams.set(key, value) })
-        window.open(targetUrl.toString(), '_self')
+        const finalUrl = targetUrl.toString()
+        window.open(finalUrl, '_self')
       }
     }
   }
@@ -355,6 +356,7 @@ export default class Tile extends Shadow() {
           <ks-c-gtm-event
             mode="false" 
             listen-to="click"
+            ${this.hasAttribute('tracking-context') ? `tracking-context="${this.getAttribute('tracking-context')}"` : ''}
             event-data='{
               "event": "select_item",
               "ecommerce": {    
@@ -414,7 +416,7 @@ export default class Tile extends Shadow() {
         <div class="m-tile__foot">
           <div class="m-tile__foot-left">
             ${this.hasAttribute('is-wish-list') && !this.isPassed && !this.hasAttribute('is-info-events') ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${data.parentkey ? `${data.parentkey}${data.centerid ? `_${data.centerid}` : ''}` : `${data.kurs_typ}_${data.kurs_id}_${data.centerid}`}"></a-icon-mdx>` : ''}
-            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ? '' : /* html */ `<ks-m-buttons ${this.hasAttribute('is-info-events') ? 'is-info-events' : ''} ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' ${this.getAttribute('namespace') === 'tile-appointment-' ? '' : 'small'} ${this.hasAttribute('no-url-params') || this.hasAttribute('is-other-locations') ? '' : 'keep-url-params="' + data.centerid + '"'} is-tile></ks-m-buttons>`}
+            ${this.isPassed && this.hasAttribute('is-wish-list') && !data.buttons.length ? '' : /* html */ `<ks-m-buttons ${this.hasAttribute('is-info-events') ? 'is-info-events' : ''} ${this.hasAttribute('sort-nearby') ? 'sort-nearby' : ''} ${this.hasAttribute('tracking-context') ? `tracking-context="${this.getAttribute('tracking-context')}"` : ''} parent-title='${data.parentTitle || data.title || data.bezeichnung || 'No Title'}' course-data='${JSON.stringify(data).replace(/'/g, '’')}' ${this.getAttribute('namespace') === 'tile-appointment-' ? '' : 'small'} ${this.hasAttribute('no-url-params') || this.hasAttribute('is-other-locations') ? '' : 'keep-url-params="' + data.centerid + '"'} is-tile></ks-m-buttons>`}
           </div>
           <div class="m-tile__foot-right">
             <div class="m-tile__icons">
@@ -484,4 +486,5 @@ export default class Tile extends Shadow() {
     const parentId = data.parentkey ? data.parentkey.includes(data.centerid) ? data.parentkey : data.parentkey + centerId : data.parent_kurs_id && data.parent_kurs_typ ? `${data.parent_kurs_typ}_${data.parent_kurs_id}${centerId}` : ''
     return parentId ? `${parentId}--${itemId}` : `${itemId}${centerId}--${itemId}`
   }
+
 }

@@ -341,6 +341,10 @@ export default class OffersPage extends Shadow() {
         name: 'ks-m-history-complete-list'
       },
       {
+        path: `${this.importMetaUrl}../../molecules/recentlyViewedList/RecentlyViewedList.js`,
+        name: 'ks-m-recently-viewed-list'
+      },
+      {
         path: `${this.importMetaUrl}../../organisms/bodySection/BodySection.js`,
         name: 'ks-o-body-section'
       },
@@ -446,7 +450,7 @@ export default class OffersPage extends Shadow() {
           ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
           ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
         >
-          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+          <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh">
             <dialog>
               <div class="container">
                 <a-input
@@ -473,6 +477,7 @@ export default class OffersPage extends Shadow() {
                 <ks-m-auto-complete-list auto-complete-selection="auto-complete-selection">
                 </ks-m-auto-complete-list>
                 <ks-m-history-complete-list></ks-m-history-complete-list>
+                <ks-m-recently-viewed-list></ks-m-recently-viewed-list>
               </div>
             </dialog>
             <ks-a-button 
@@ -538,7 +543,7 @@ export default class OffersPage extends Shadow() {
          reset-input-value-based-url="cname"
          ${this.hasAttribute('google-api-key') ? `google-api-key="${this.getAttribute('google-api-key')}"` : 'google-api-key="AIzaSyC9diW31HSjs3QbLEbso7UJzeK7IpH9c2s"'}
         >
-          <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+          <m-dialog namespace="dialog-top-slide-in-" show-event-name="show-location-search-dialog" id="location-search" close-event-name="close-location-dialog" dialog-mobile-height="100vh">
             <dialog>
               <div class="container">
                 <a-input 
@@ -745,6 +750,7 @@ export default class OffersPage extends Shadow() {
                 ${this.hasAttribute('with-facet-target') ? ' with-facet-target' : ''}
                 ${this.hasAttribute('no-partner-search') ? ' no-partner-search' : ''}
                 ${this.hasAttribute('error-text') ? ` error-text="${this.getAttribute('error-text')}"` : ''}
+                ${this.eventDetailURL && !this.isWishList && !this.hasAttribute('is-info-events') && !this.hasAttribute('is-other-locations') ? '' : `tracking-context="${this.getAttribute('tracking-context') || (this.hasAttribute('is-info-events') ? 'info_session' : this.hasAttribute('is-other-locations') ? 'other_locations' : this.isWishList ? 'wishlist_offers' : 'offers_list')}"`}
               >
                 ${this.hiddenSectionsPartnerSearch.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
                 ${this.templateTroublemaker.reduce((acc, hiddenSection) => (acc + hiddenSection.outerHTML), '')}
@@ -869,7 +875,7 @@ export default class OffersPage extends Shadow() {
       ${this.hasAttribute('mock-auto-complete') ? ' mock' : ''} 
       ${this.hasAttribute('with-auto-complete') ? '' : ' disabled'} 
     >
-      <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh" dialog-desktop-height="40%">
+      <m-dialog namespace="dialog-top-slide-in-" id="keyword-search" show-event-name="show-search-dialog" close-event-name="close-search-dialog" dialog-mobile-height="100vh">
         <dialog>
           <div class="container">
             <a-input
@@ -898,6 +904,7 @@ export default class OffersPage extends Shadow() {
             >
             </ks-m-auto-complete-list>
             <ks-m-history-complete-list></ks-m-history-complete-list>
+            <ks-m-recently-viewed-list></ks-m-recently-viewed-list>
           </div>
         </dialog>
         <ks-a-button 

@@ -464,6 +464,7 @@ export default class EventDetail extends Shadow() {
                     abonnements-api="${this.data.abo_typen_link}" 
                     link-label="${this.data.abo_typen_link_label}" 
                     button-close-label="${this.closeButton || `${this.getTranslation('Common.Close')}`}"
+                    tracking-context="${this.hasAttribute('is-abo') ? 'subscription_courses' : 'matching_subscriptions'}"
                   >
                   </ks-m-abonnements>
                   ${this.hasAttribute("is-abo") ? /* html */`</ks-c-with-facet>` : ''}

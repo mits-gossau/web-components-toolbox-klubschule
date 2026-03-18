@@ -32,14 +32,16 @@ export default class CheckoutColorStage extends Shadow() {
 
   getOfferPageUrl () {
     const currentPath = window.location.pathname
-    return currentPath.replace(/\/(configuration|loginmethod|registration)$/i, '')
+    return currentPath.replace(/\/(configuration|loginmethod|registration|payment|confirm)$/i, '')
   }
 
   isCheckoutPage () {
     const currentPath = window.location.pathname.toLowerCase()
     return currentPath.endsWith('/configuration') || 
            currentPath.endsWith('/loginmethod') || 
-           currentPath.endsWith('/registration')
+           currentPath.endsWith('/registration') ||
+           currentPath.endsWith('/payment') ||
+           currentPath.endsWith('/confirm')
   }
 
   storeCheckoutPath () {

@@ -1,5 +1,6 @@
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
+import GTMEvent from '../../controllers/gtmEvent/GtmEvent.js'
 
 /**
 * @export
@@ -36,10 +37,18 @@ export default class Event extends Shadow() {
     this.toggle = this.root.querySelector('.expand')
 
     if (this.toggle) this.toggle.addEventListener('click', this.clickEventListener)
+    if (this.hasAttribute('tracking-context')) {
+      this.addEventListener('click', this.trackingContextClickListener)
+    }
   }
 
   disconnectedCallback () {
     if (this.toggle) this.toggle.removeEventListener('click', this.clickEventListener)
+    this.removeEventListener('click', this.trackingContextClickListener)
+  }
+
+  trackingContextClickListener = () => {
+    GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
   }
 
   /**
@@ -646,7 +655,7 @@ export default class Event extends Shadow() {
               <div class="controls-left">
                 ${this.isWishList && !this.isPassed ? /* html */`<a-icon-mdx namespace="icon-mdx-ks-" icon-name="Trash" size="1em" request-event-name="remove-from-wish-list" course="${kurs_typ}_${kurs_id}_${centerid}"></a-icon-mdx>` : ''}
                 ${!ist_abokurs_offen && !this.isPassed? /* html */ `
-                  <ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'${this.isWishList ? " is-wish-list" : ""}></ks-m-buttons>
+                  <ks-m-buttons dialog-id="${kurs_id}" status="${status}" course-data='${JSON.stringify(this.data.course).replace(/'/g, '’')}'${this.isWishList ? " is-wish-list" : ""}${this.hasAttribute('tracking-context') ? ` tracking-context="${this.getAttribute('tracking-context')}"` : ''}></ks-m-buttons>
                 ` : ''}
               </div>
               <div class="controls-right">
@@ -788,7 +797,7 @@ export default class Event extends Shadow() {
                 {
                   'event': 'view_item',
                   'ecommerce': {    
-                    'items': [{ 
+                    'items': [GTMEvent.addTrackingContextToItem({
                       'item_name': `${data.bezeichnung}`,                
                       'item_id': `${this.getItemId(data)}`, 
                       'price': /*data.preis_kurs || */data.preis_total, // coming soon: https://jira.migros.net/browse/MIDUWEB-1687
@@ -799,7 +808,7 @@ export default class Event extends Shadow() {
                       'quantity': 1,
                       'item_variant': `${data.location?.center ? data.location.center : data?.center ? data.center.bezeichnung_internet : this.data?.course?.location?.center ? this.data.course.location.center : ''}`,
                       'currency': 'CHF',       
-                    }]
+                    })]
                   }
                 }
               )

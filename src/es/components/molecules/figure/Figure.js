@@ -68,7 +68,7 @@ export default class KsFigure extends Shadow(HTMLElement) {
     this.css = /* css */ `
       :host {
         --wrapper-inner-spacing: var(--mdx-sys-spacing-fix-s);
-        --divider-color: var(--mdx-sys-color-accent-1-default);
+        --divider-color: var(--accessible-color-red, var(--mdx-sys-color-accent-1-default));
         --divider-width: var(--mdx-sys-sizing-fix-3xl);
         --divider-height: var(--mdx-sys-sizing-fix-2xs);
         --copy-typography: var(--mdx-sys-font-flex-large-custom1);
