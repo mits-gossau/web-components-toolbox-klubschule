@@ -220,6 +220,25 @@ export default class KsFooter extends Footer {
     return result
   }
   
+  connectedCallback () {
+    super.connectedCallback()
+    new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-translations',
+        {
+          detail: {
+            resolve
+          },
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        }))
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
+      this.setToTopButtonAriaLabel()
+    })
+  }
+
   /**
   * renders the html
   *
@@ -248,6 +267,7 @@ export default class KsFooter extends Footer {
           <a-icon-mdx icon-name=ArrowUp size="1rem"></a-icon-mdx>
         </ks-a-button>
       `
+      this.setToTopButtonAriaLabel()
       this.root.querySelector('#to-the-top-button')?.addEventListener('click', () => window.scrollTo({
         top: 0,
         left: 0,
@@ -313,6 +333,17 @@ export default class KsFooter extends Footer {
     return wrappers
   }
   
+  setToTopButtonAriaLabel () {
+    const toTopButton = this.root.querySelector('#to-the-top-button')
+    if (!toTopButton) return
+    const label = this.getTranslation
+      ? this.getTranslation('Footer.ScrollToTop')
+      : 'Nach oben scrollen'
+    toTopButton.setAttribute('aria-label', label)
+    const innerButton = toTopButton.root?.querySelector('button')
+    if (innerButton) innerButton.setAttribute('aria-label', label)
+  }
+
   injectCssIntoWrapperAndDetails () {
     return /* css */ `
     ${super.injectCssIntoWrapperAndDetails()}
