@@ -225,9 +225,7 @@ export default class KsFooter extends Footer {
     new Promise(resolve => {
       this.dispatchEvent(new CustomEvent('request-translations',
         {
-          detail: {
-            resolve
-          },
+          detail: { resolve },
           bubbles: true,
           cancelable: true,
           composed: true
@@ -336,9 +334,9 @@ export default class KsFooter extends Footer {
   setToTopButtonAriaLabel () {
     const toTopButton = this.root.querySelector('#to-the-top-button')
     if (!toTopButton) return
-    const label = this.getTranslation
-      ? this.getTranslation('Footer.ScrollToTop')
-      : 'Nach oben scrollen'
+    const key = 'Footer.ScrollToTop'
+    const translated = this.getTranslation ? this.getTranslation(key) : key
+    const label = translated !== key ? translated : 'Nach oben scrollen'
     toTopButton.setAttribute('aria-label', label)
     const innerButton = toTopButton.root?.querySelector('button')
     if (innerButton) innerButton.setAttribute('aria-label', label)
