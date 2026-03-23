@@ -334,7 +334,7 @@ export default class KsFooter extends Footer {
   setToTopButtonAriaLabel () {
     const toTopButton = this.root.querySelector('#to-the-top-button')
     if (!toTopButton) return
-    const key = 'Footer.ScrollToTop'
+    const key = 'Accessibility.Footer.ScrollToTop'
     const translated = this.getTranslation ? this.getTranslation(key) : key
     const label = translated !== key ? translated : 'Nach oben scrollen'
     toTopButton.setAttribute('aria-label', label)
