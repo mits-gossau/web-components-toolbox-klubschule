@@ -78,9 +78,13 @@ export default class GTMEvent extends Shadow() {
   sendEvent(event) {
     this.eventData = JSON.parse(this.getAttribute('event-data'))
 
-    // Set tracking context for select_item and add_to_cart events
-    if ((this.eventData.event === 'select_item' || this.eventData.event === 'add_to_cart') && this.hasAttribute('tracking-context')) {
-      GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
+    // Set tracking context: select_item always overwrites, add_to_cart only if not yet set by a list page
+    if (this.hasAttribute('tracking-context')) {
+      if (this.eventData.event === 'select_item') {
+        GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
+      } else if (this.eventData.event === 'add_to_cart' && GTMEvent.getTrackingContext() === 'default') {
+        GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
+      }
     }
 
     // Add tracking context to ecommerce items
