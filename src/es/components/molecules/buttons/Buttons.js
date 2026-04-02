@@ -262,9 +262,9 @@ export default class Buttons extends Shadow() {
   }
 
   openDialogOverlay(button) {
-    // Set tracking context before add_to_cart, but only if not yet set by a list page
-    if (this.hasAttribute('tracking-context') && GTMEvent.getTrackingContext() === 'default') {
-      GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
+    // Ensure tracking context is persisted: keep existing value, or set 'default'
+    if (GTMEvent.getTrackingContext() === 'default') {
+      GTMEvent.setTrackingContext('default')
     }
     // GTM Tracking of Click Register now
     const addToCartItem = GTMEvent.addTrackingContextToItem({
