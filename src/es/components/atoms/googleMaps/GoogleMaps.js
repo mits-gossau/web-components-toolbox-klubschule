@@ -17,6 +17,17 @@ export default class KsGoogleMaps extends GoogleMaps {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
 
     this.currentPopup = null
+    this.translationsPromise = new Promise(resolve => {
+      this.dispatchEvent(new CustomEvent('request-translations', {
+        detail: { resolve },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+    }).then(async result => {
+      await result.fetch
+      this.getTranslation = result.getTranslationSync
+    })
   }
 
   renderCSS () {
@@ -49,6 +60,10 @@ export default class KsGoogleMaps extends GoogleMaps {
   }
 
   renderHTML () {
+    this.translationsPromise.then(() => this.renderGoogleMapsHTML())
+  }
+
+  renderGoogleMapsHTML () {
     this.fetchModules([
       {
         path: `${this.importMetaUrl}../../molecules/popUpWindow/PopUpWindow.js`,
@@ -87,6 +102,7 @@ export default class KsGoogleMaps extends GoogleMaps {
         const iframe = document.createElement('iframe')
         iframe.src = this.iframeUrl
         iframe.name = 'map'
+        iframe.title = this.translateKey('Accessibility.GoogleMaps.IframeTitle', 'Google Maps Kartenansicht')
         element = iframe
         htmlContent += element.outerHTML // Add the iframe to the HTML content
       } else {
@@ -94,6 +110,8 @@ export default class KsGoogleMaps extends GoogleMaps {
 
         const mapDiv = document.createElement('div')
         mapDiv.setAttribute('id', 'map')
+        mapDiv.setAttribute('role', 'application')
+        mapDiv.setAttribute('aria-label', this.translateKey('Accessibility.GoogleMaps.MapLabel', 'Interaktive Google Maps Karte'))
         this.loadDependency().then(googleMap => {
           const map = this.createMap(googleMap, mapDiv, this.lat, this.lng)
           const locations = JSON.parse(this.getAttribute('locations'))
@@ -178,8 +196,10 @@ export default class KsGoogleMaps extends GoogleMaps {
 
     const markerContent = document.createElement('div')
     markerContent.style.cursor = 'pointer'
+    markerContent.setAttribute('role', 'button')
+    markerContent.setAttribute('aria-label', location.title || location.name)
     markerContent.innerHTML = `
-      <svg width="23" height="32" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="23" height="32" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
         <path d="M11.5 32C11.5 32 23 20.4803 23 11.5203V11.5197C23 8.46445 21.7885 5.53431 19.632 3.37399C17.4754 1.21368 14.5511 0 11.5006 0C8.45014 0 5.52516 1.21368 3.36805 3.37459C1.21154 5.53491 0 8.46505 0 11.5203C0 20.4797 11.5 32 11.5 32ZM14.3409 8.94203C15.7626 10.5142 15.6425 12.9427 14.0738 14.3663C12.5044 15.7905 10.0807 15.6708 8.65906 14.0986C7.2374 12.5265 7.35687 10.0986 8.92623 8.6744C10.4956 7.25022 12.9193 7.36991 14.3409 8.94203Z" fill="${color}"/>
       </svg>
     `
@@ -375,9 +395,9 @@ export default class KsGoogleMaps extends GoogleMaps {
 
   createControls (map, googleMapsLibrary) {
     const buttons = /* html */`
-    <ks-a-button icon namespace="button-primary-" color="secondary" id="gm-btn-center"><a-icon-mdx icon-name="Navigation" size="1em"></a-icon-mdx></ks-a-button>
-    <ks-a-button icon namespace="button-primary-" color="secondary" id="gm-btn-zoom-in"><a-icon-mdx icon-name="Plus" size="1em"></a-icon-mdx></ks-a-button>
-    <ks-a-button icon namespace="button-primary-" color="secondary" id="gm-btn-zoom-out"><a-icon-mdx icon-name="Minus" size="1em"></a-icon-mdx></ks-a-button>
+    <ks-a-button icon namespace="button-primary-" color="secondary" id="gm-btn-center" aria-label="${this.translateKey('Accessibility.GoogleMaps.Center', 'Auf meinen Standort zentrieren')}"><a-icon-mdx icon-name="Navigation" size="1em"></a-icon-mdx></ks-a-button>
+    <ks-a-button icon namespace="button-primary-" color="secondary" id="gm-btn-zoom-in" aria-label="${this.translateKey('Accessibility.GoogleMaps.ZoomIn', 'Vergrössern')}"><a-icon-mdx icon-name="Plus" size="1em"></a-icon-mdx></ks-a-button>
+    <ks-a-button icon namespace="button-primary-" color="secondary" id="gm-btn-zoom-out" aria-label="${this.translateKey('Accessibility.GoogleMaps.ZoomOut', 'Verkleinern')}"><a-icon-mdx icon-name="Minus" size="1em"></a-icon-mdx></ks-a-button>
     `
     const container = document.createElement('div')
     container.style.margin = '1rem'
@@ -411,5 +431,10 @@ export default class KsGoogleMaps extends GoogleMaps {
     })
 
     map.controls[googleMapsLibrary.ControlPosition.RIGHT_BOTTOM].push(container)
+  }
+
+  translateKey (key, fallback) {
+    const translated = this.getTranslation ? this.getTranslation(key) : null
+    return translated && translated !== key ? translated : fallback
   }
 }
