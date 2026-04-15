@@ -70,13 +70,14 @@ export default class WishtlistIcon extends Shadow() {
   renderHTML () {
     this.html = ''
     this.html = /* html */ `
-      <a>
+      <a aria-label="${this.getAttribute('aria-label') || 'Merkliste'}" role="button">
         <a-icon-mdx 
           icon-name="Heart"
           size="1.5rem"
           mobile-size="1.3rem"
           color="#3d3d3d"
           rotate="0"
+          aria-hidden="true"
           ${this.entriesCount > 0 ? ` custom-notification="
             {
               'height':'.4rem',
