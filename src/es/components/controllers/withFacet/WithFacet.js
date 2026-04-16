@@ -576,7 +576,7 @@ export default class WithFacet extends WebWorker() {
 
       const searchText = isAboList ? null : currentRequestObj.searchText || initialRequestObj.searchText
 
-      let mandantId = this.getAttribute('mandant-id') || initialRequestObj.MandantId || 111
+      let mandantId = this.getAttribute('mandant-id') || initialRequestObj.MandantId || initialRequestObj.mandantId || 111
       if (isInfoEvents) {
         const endpointInfoEventsUrl = new URL(endpointInfoEvents)
         if (endpointInfoEventsUrl.searchParams.has('mandant_id')) mandantId = endpointInfoEventsUrl.searchParams.get('mandant_id')
@@ -585,7 +585,7 @@ export default class WithFacet extends WebWorker() {
       let body = `{
         "filters": ${JSON.stringify(subLevelFilter)},
         "MandantId": ${mandantId},
-        "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || currentRequestObj.PortalId || 29},
+        "PortalId": ${this.getAttribute('portal-id') || initialRequestObj.PortalId || initialRequestObj.portalId || currentRequestObj.PortalId || currentRequestObj.portalId || 29},
         "sprachid": "${this.getAttribute('sprach-id') || initialRequestObj.sprachid || 'd'}",
         "psize": ${this.getAttribute('p-size') || initialRequestObj.psize || 12},
         "sorting": 2
