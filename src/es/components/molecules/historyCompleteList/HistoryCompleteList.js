@@ -115,6 +115,9 @@ export default class HistoryCompleteList extends AutoCompleteList {
         :host .heading > span {
           font-size: 1rem;
         }
+        :host a-icon-mdx {
+          --color: var(--mdx-base-color-grey-950, #777);
+        }
         :host .heading > a {
           color: var(--a-color);
           font-size: var(--font-size);
