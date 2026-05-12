@@ -28,6 +28,13 @@ export default class HistoryCompleteList extends AutoCompleteList {
     document.body.addEventListener('request-with-facet', this.requestWithFacetListener)
     document.body.addEventListener('search-change', this.searchChangeListener)
     document.body.addEventListener('history-complete-render-list', this.historyCompleteRenderList)
+    const dialog = this.closest('dialog') || this.getRootNode()?.querySelector?.('dialog')
+    if (dialog) {
+      this.dialogObserver = new MutationObserver(() => {
+        if (dialog.hasAttribute('open') && this.list) this.renderList()
+      })
+      this.dialogObserver.observe(dialog, { attributes: true, attributeFilter: ['open'] })
+    }
     if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => {
       inputField.addEventListener('keyup', this.aInputKeyupEventListener)
       inputField.addEventListener('search', this.aInputKeyupEventListener)
@@ -48,6 +55,7 @@ export default class HistoryCompleteList extends AutoCompleteList {
       inputField.removeEventListener('keyup', this.aInputKeyupEventListener)
       inputField.removeEventListener('search', this.aInputKeyupEventListener)
     })
+    if (this.dialogObserver) this.dialogObserver.disconnect()
     if (this.useKeyUpNavigation) this.currentDialog.removeEventListener('keydown', this.navigateOnListElement)
     if (this.deleteEl) this.deleteEl.removeEventListener('click', this.deleteElClickEventListener)
   }
@@ -114,6 +122,9 @@ export default class HistoryCompleteList extends AutoCompleteList {
         }
         :host .heading > span {
           font-size: 1rem;
+        }
+        :host a-icon-mdx {
+          --color: var(--mdx-base-color-grey-950, #777);
         }
         :host .heading > a {
           color: var(--a-color);
