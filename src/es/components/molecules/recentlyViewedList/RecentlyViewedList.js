@@ -12,6 +12,13 @@ export default class RecentlyViewedList extends AutoCompleteList {
     document.body.addEventListener('search-change', this.searchChangeListener)
     document.body.addEventListener('recently-viewed-render-list', this.recentlyViewedRenderList)
     document.body.addEventListener('history-complete-render-list', this.recentlyViewedRenderList)
+    const dialog = this.closest('dialog') || this.getRootNode()?.querySelector?.('dialog')
+    if (dialog) {
+      this.dialogObserver = new MutationObserver(() => {
+        if (dialog.hasAttribute('open') && this.list) this.renderList()
+      })
+      this.dialogObserver.observe(dialog, { attributes: true, attributeFilter: ['open'] })
+    }
     if (this._initialized) {
       this.hidden = false
       this.bindAInput()
@@ -60,6 +67,7 @@ export default class RecentlyViewedList extends AutoCompleteList {
     document.body.removeEventListener('search-change', this.searchChangeListener)
     document.body.removeEventListener('recently-viewed-render-list', this.recentlyViewedRenderList)
     document.body.removeEventListener('history-complete-render-list', this.recentlyViewedRenderList)
+    if (this.dialogObserver) this.dialogObserver.disconnect()
     if (this.aInput?.inputFieldPromise) this.aInput.inputFieldPromise.then(inputField => {
       inputField.removeEventListener('keyup', this.aInputKeyupEventListener)
       inputField.removeEventListener('search', this.aInputKeyupEventListener)
@@ -113,6 +121,9 @@ export default class RecentlyViewedList extends AutoCompleteList {
       }
       :host .heading > span {
         font-size: 1rem;
+      }
+      :host a-icon-mdx {
+        --color: var(--mdx-base-color-grey-950, #777);
       }
       :host .heading > a {
         color: var(--a-color);
@@ -196,19 +207,12 @@ export default class RecentlyViewedList extends AutoCompleteList {
         <ul></ul>
       </div>
     `
-    this._iconModulePromise = this.fetchModules([
-      {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
-        name: 'a-icon-mdx'
-      }
-    ])
     this.requestServerItems().then(() => this.renderList())
   }
 
-  async renderList () {
+  renderList () {
     const list = this.root.querySelector('ul')
     if (!list) return
-    if (this._iconModulePromise) await this._iconModulePromise
     list.replaceChildren(...this._serverItems.map(item => {
       const listElement = document.createElement('li')
       let locationHtml = ''
