@@ -196,12 +196,19 @@ export default class RecentlyViewedList extends AutoCompleteList {
         <ul></ul>
       </div>
     `
+    this._iconModulePromise = this.fetchModules([
+      {
+        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        name: 'a-icon-mdx'
+      }
+    ])
     this.requestServerItems().then(() => this.renderList())
   }
 
-  renderList () {
+  async renderList () {
     const list = this.root.querySelector('ul')
     if (!list) return
+    if (this._iconModulePromise) await this._iconModulePromise
     list.replaceChildren(...this._serverItems.map(item => {
       const listElement = document.createElement('li')
       let locationHtml = ''
