@@ -212,11 +212,15 @@ export default class CheckoutStepper extends Shadow() {
 
       this.dispatchEvent(new CustomEvent(this.getAttribute('request-translations') || 'request-translations', {
         detail: {
-          resolve: ({ getTranslationSync }) => resolveOnce(Object.entries(keys).reduce((acc, [name, key]) => {
-            const translation = getTranslationSync(key)
-            acc[name] = translation === key ? fallbacks[name] : translation
-            return acc
-          }, {}))
+          resolve: async result => {
+            if (result?.fetch) await result.fetch
+            const { getTranslationSync } = result
+            resolveOnce(Object.entries(keys).reduce((acc, [name, key]) => {
+              const translation = getTranslationSync(key)
+              acc[name] = translation === key ? fallbacks[name] : translation
+              return acc
+            }, {}))
+          }
         },
         bubbles: true,
         cancelable: true,
