@@ -194,6 +194,8 @@ export default class CheckoutStepper extends Shadow() {
   }
 
   getTranslations (fallbacks) {
+    if (this._translations) return Promise.resolve(this._translations)
+
     const keys = {
       progressLabel: 'Accessibility.Checkout.Stepper.AriaLabel',
       step: 'Accessibility.Checkout.Stepper.Step',
@@ -202,32 +204,27 @@ export default class CheckoutStepper extends Shadow() {
       done: 'Accessibility.Checkout.Stepper.Done'
     }
 
-    return new Promise(resolve => {
-      let resolved = false
-      const resolveOnce = translations => {
-        if (resolved) return
-        resolved = true
-        resolve(translations)
-      }
+    this.dispatchEvent(new CustomEvent(this.getAttribute('request-translations') || 'request-translations', {
+      detail: {
+        resolve: async result => {
+          if (result?.fetch) await result.fetch
+          const { getTranslationSync } = result
+          const translations = Object.entries(keys).reduce((acc, [name, key]) => {
+            const translation = getTranslationSync(key)
+            acc[name] = translation === key ? fallbacks[name] : translation
+            return acc
+          }, {})
+          this._translations = translations
+          this.html = ''
+          this.renderHTML()
+        }
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: true
+    }))
 
-      this.dispatchEvent(new CustomEvent(this.getAttribute('request-translations') || 'request-translations', {
-        detail: {
-          resolve: async result => {
-            if (result?.fetch) await result.fetch
-            const { getTranslationSync } = result
-            resolveOnce(Object.entries(keys).reduce((acc, [name, key]) => {
-              const translation = getTranslationSync(key)
-              acc[name] = translation === key ? fallbacks[name] : translation
-              return acc
-            }, {}))
-          }
-        },
-        bubbles: true,
-        cancelable: true,
-        composed: true
-      }))
-      window.setTimeout(() => resolveOnce(fallbacks), 50)
-    })
+    return Promise.resolve(fallbacks)
   }
 
   get div () {
