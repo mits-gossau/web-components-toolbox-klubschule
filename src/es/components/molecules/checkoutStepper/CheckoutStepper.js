@@ -2,6 +2,7 @@
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
 /* global CustomEvent */
+/* global window */
 
 export default class CheckoutStepper extends Shadow() {
   constructor (options = {}, ...args) {
@@ -197,27 +198,41 @@ export default class CheckoutStepper extends Shadow() {
       done: 'Accessibility.Checkout.Stepper.Done'
     }
 
-    this.dispatchEvent(new CustomEvent(this.getAttribute('request-translations') || 'request-translations', {
-      detail: {
-        resolve: async result => {
-          if (result?.fetch) await result.fetch
-          const { getTranslationSync } = result
-          const translations = Object.entries(keys).reduce((acc, [name, key]) => {
-            const translation = getTranslationSync(key)
-            acc[name] = translation === key ? fallbacks[name] : translation
-            return acc
-          }, {})
-          this._translations = translations
-          this.html = ''
-          this.renderHTML()
-        }
-      },
-      bubbles: true,
-      cancelable: true,
-      composed: true
-    }))
+    return new Promise(resolve => {
+      let resolved = false
+      let hasTranslationProvider = false
+      const resolveOnce = translations => {
+        if (resolved) return
+        resolved = true
+        this._translations = translations
+        resolve(translations)
+      }
 
-    return Promise.resolve(fallbacks)
+      this.dispatchEvent(new CustomEvent(this.getAttribute('request-translations') || 'request-translations', {
+        detail: {
+          resolve: async result => {
+            hasTranslationProvider = true
+            try {
+              if (result?.fetch) await result.fetch
+              resolveOnce(Object.fromEntries(await Promise.all(Object.entries(keys).map(async ([name, key]) => {
+                const translation = result?.getTranslation
+                  ? await result.getTranslation(key)
+                  : result?.getTranslationSync?.(key)
+                return [name, !translation || translation === key ? fallbacks[name] : translation]
+              }))))
+            } catch {
+              resolveOnce(fallbacks)
+            }
+          }
+        },
+        bubbles: true,
+        cancelable: true,
+        composed: true
+      }))
+      window.setTimeout(() => {
+        if (!hasTranslationProvider) resolveOnce(fallbacks)
+      }, 150)
+    })
   }
 
   get div () {
