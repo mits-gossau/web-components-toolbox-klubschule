@@ -160,21 +160,14 @@ export default class CheckoutStepper extends Shadow() {
             const tag = step.status === 'done' ? 'a' : 'span'
             const href = step.status === 'done' ? `href="${step.link}"` : ''
             const ariaCurrent = step.status === 'current' ? 'aria-current="step"' : ''
-            const statusText = step.status === 'current'
-              ? `, ${translations.current}`
-              : step.status === 'done'
-                ? `, ${translations.done}`
-                : ''
             const stepPrefix = `${translations.step} ${index + 1} ${translations.of} ${steps.length}:`
-            const ariaLabel = `${stepPrefix} ${step.label}${statusText}`
-
             return /* html */`
             <li class="stepper__step">
               ${step.status === 'done'
                   ? /* html */`
-                      <a-icon-mdx class="stepper__step-check" icon-name="Check" size="1rem" aria-hidden="true"></a-icon-mdx>`
+                       <a-icon-mdx class="stepper__step-check" icon-name="Check" size="1rem" aria-hidden="true"></a-icon-mdx>`
                   : ''}
-              <${tag} class="${labelClassNameMap[step.status]}" ${href} ${ariaCurrent} aria-label="${ariaLabel}">
+              <${tag} class="${labelClassNameMap[step.status]}" ${href} ${ariaCurrent}>
                 <span class="stepper__visually-hidden">${stepPrefix} </span>${step.label}${step.status === 'current' ? `<span class="stepper__visually-hidden">, ${translations.current}</span>` : ''}${step.status === 'done' ? `<span class="stepper__visually-hidden">, ${translations.done}</span>` : ''}
               </${tag}>
             </li>
