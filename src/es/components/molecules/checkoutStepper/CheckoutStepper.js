@@ -71,7 +71,7 @@ export default class CheckoutStepper extends Shadow() {
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        max-width: 18.75rem;
+        max-width: 30rem;
 
         font-family: var(--mdx-sys-font-fix-body2-font-family);
         font-size: var(--mdx-sys-font-fix-body2-font-size);
