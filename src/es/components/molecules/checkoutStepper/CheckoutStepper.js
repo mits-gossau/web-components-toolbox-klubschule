@@ -231,7 +231,7 @@ export default class CheckoutStepper extends Shadow() {
       }))
       window.setTimeout(() => {
         if (!hasTranslationProvider) resolveOnce(fallbacks)
-      }, 150)
+      }, 300)
     })
   }
 
