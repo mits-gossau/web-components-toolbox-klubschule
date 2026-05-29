@@ -178,8 +178,9 @@ export default class AutoComplete extends Shadow() {
     if (searchUrl && searchText !== '') {
       // create url object to check if searchUrl has query params
       const url = new URL(searchUrl)
-      url.searchParams.set('q', searchText)
-      window.location.href = url.toString()
+      url.searchParams.delete('q')
+      const separator = url.search ? '&' : '?'
+      window.location.href = `${url.toString()}${separator}q=${encodeURIComponent(searchText)}`
     }
   }
 
