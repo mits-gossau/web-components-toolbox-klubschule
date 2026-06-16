@@ -10,13 +10,13 @@ import Dialog from '../../web-components-toolbox/src/es/components/molecules/dia
  *  1. MIDUWEB-2127 - Cancellation Checkout Dialog
  *  2. MIDUWEB-2128 - Cancellation Checkout Confirm "pop-up"
  *  3. MIDUWEB-2129 - Continue Checkout Dialog
- * 
+ *
  * TODO: readme and comments
  * TODO: linter
- * 
+ *
  * Status:
  *  @attribute {page} [page='any'] possible values: 'any' | 'checkout'
- * 
+ *
  * @export
  * @class CheckoutReminder
  * @type {CustomElementConstructor}
@@ -168,7 +168,7 @@ export default class CheckoutReminder extends Dialog {
           // business decided, that beforeunload on browser navigation forward, backward is not wanted
           //self.removeEventListener('beforeunload', this.beforeunloadEventListener)
         }
-      } 
+      }
     }
 
     // business decided, that beforeunload on browser navigation forward, backward is not wanted
@@ -193,10 +193,10 @@ export default class CheckoutReminder extends Dialog {
           /*
             STATUS Message
             ---- Veranstaltung ----
-            – 10=Verfügbar (E/1K noch vorhanden) 
-            – 11=Alternativkurs an gleichem Standort (anderes E/1K) 
+            – 10=Verfügbar (E/1K noch vorhanden)
+            – 11=Alternativkurs an gleichem Standort (anderes E/1K)
             – 12=Auf Anfrage (nur D/0K vorhanden)
-            – 13=Alternativkurs wieder verfügbar (D/0K hat wieder Veranstaltungen) 
+            – 13=Alternativkurs wieder verfügbar (D/0K hat wieder Veranstaltungen)
             ---- Angebot ----
             – 20=Verfügbar (D/0K)
             ---- Abonnement ----
@@ -573,7 +573,7 @@ export default class CheckoutReminder extends Dialog {
 
   /**
    * Prevent link navigation default behavior by showing the dialog
-   * 
+   *
    * @param {string | undefined} targetUrl
    * @returns {void}
    */
@@ -600,11 +600,12 @@ export default class CheckoutReminder extends Dialog {
       url = href
     } else if(typeof href === 'string') {
       try {
-        url = new URL(href, location.origin)
+        url = new URL(href, location.href)
       } catch (error) {}
     }
     // check if the page would stay inside the course checkout route. Expl.: https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/loginmethod becomes through the regex https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442 which is included in https://www.klubschule.ch/kurs/yin-yoga-online--E_1818455_2687_1442/registration, etc.
     if (url) {
+      if (url.origin === location.origin && url.pathname === location.pathname && url.hash) return false
       if (this.hasAttribute('inside-route') && this.getAttribute('inside-route').split(',').some(str => url.origin.includes(str.trim()))) {
         return false
       } else {
