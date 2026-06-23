@@ -56,4 +56,6 @@
   --font-family-bold: "Graphik", Helvetica, Arial, sans-serif;
   --font-family-secondary: "Graphik", Helvetica, Arial, sans-serif;
   --font-family: "Graphik", Helvetica, Arial, sans-serif;
+  /* "Im Spotlight" CarouselTwo (carousel-two-3-column-): remove left padding on first slide so the horizontal scroll is visually discoverable on mobile [Klubschule only, mobile only] */
+  --carousel-two-3-column-section-child-padding-left-mobile-custom: 0;
 }
