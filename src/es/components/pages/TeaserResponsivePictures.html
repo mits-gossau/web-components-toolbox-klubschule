@@ -183,7 +183,8 @@
                     requestedWidth = 'invalid URL'
                 }
 
-                lines.push(`${picture.dataset.demoLabel} | ${sources.length} | ${requestedWidth}px | ${currentSrc}`)
+                const requestedWidthLabel = requestedWidth === '-' || requestedWidth === 'invalid URL' ? requestedWidth : `${requestedWidth}px`
+                lines.push(`${picture.dataset.demoLabel} | ${sources.length} | ${requestedWidthLabel} | ${currentSrc}`)
             })
 
             diagnostics.textContent = lines.join('\n')
