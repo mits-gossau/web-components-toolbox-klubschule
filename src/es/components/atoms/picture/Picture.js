@@ -7,7 +7,7 @@ import Picture from '../../web-components-toolbox/src/es/components/atoms/pictur
 */
 export default class KsPicture extends Picture {
   static get responsiveSourceWidths () {
-    return '320,480,767,1024,1440,1600,1920'
+    return '320,400,480,767,1024,1440,1600,1920'
   }
 
   constructor (options = {}, ...args) {
