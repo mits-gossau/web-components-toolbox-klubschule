@@ -6,6 +6,10 @@ import Picture from '../../web-components-toolbox/src/es/components/atoms/pictur
 * @type {CustomElementConstructor}
 */
 export default class KsPicture extends Picture {
+  static get responsiveSourceWidths () {
+    return '320,480,767,1024,1440,1600,1920'
+  }
+
   constructor (options = {}, ...args) {
     super({ importMetaUrl: import.meta.url, ...options }, ...args)
   }
@@ -16,6 +20,13 @@ export default class KsPicture extends Picture {
    * @return {void}
    */
   renderHTML () {
+    // Supplying sizes explicitly opts this implementation into the core
+    // component's width-descriptor srcset generation. Pictures without sizes
+    // retain the legacy source generation for backwards compatibility.
+    if (this.hasAttribute('sizes') && !this.hasAttribute('sources-widths')) {
+      this.setAttribute('sources-widths', KsPicture.responsiveSourceWidths)
+    }
+
     super.renderHTML()
 
     if (this.hasAttribute('open-modal')) {
