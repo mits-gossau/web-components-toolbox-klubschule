@@ -1,0 +1,200 @@
+<style>
+    .responsive-picture-demo__instructions,
+    .responsive-picture-demo__diagnostics {
+        background: var(--mdx-sys-color-neutral-1, #f5f5f5);
+        box-sizing: border-box;
+        margin-bottom: 2rem;
+        padding: 1rem;
+    }
+
+    .responsive-picture-demo__diagnostics output {
+        display: block;
+        font-family: monospace;
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+    }
+</style>
+
+<ks-o-body-section variant="default">
+    <h1>Teaser – responsive Picture Opt-in</h1>
+
+    <div class="responsive-picture-demo__instructions">
+        <p>
+            DevTools öffnen, Cache im Network-Tab deaktivieren und nach <code>width=</code> filtern.
+            Beim Ändern der Viewport-Breite sollte der Browser einen passenden Kandidaten aus dem
+            <code>srcset</code> wählen.
+        </p>
+        <p>
+            Erwartung: Bilder mit <code>sizes</code> erzeugen genau eine Source mit Width-Deskriptoren.
+            Das Legacy-Beispiel ohne <code>sizes</code> behält die bisherige Source-Erzeugung.
+        </p>
+    </div>
+
+    <div class="responsive-picture-demo__diagnostics">
+        <strong>Live-Diagnose</strong>
+        <output id="responsive-picture-diagnostics">Initialisierung…</output>
+    </div>
+
+    <ks-a-heading border-top>
+        <h2>Drei Spalten – 400px Desktop-Slot</h2>
+    </ks-a-heading>
+
+    <o-grid namespace="grid-12er-">
+        <section>
+            <div col-sm="12" col-lg="4">
+                <ks-m-teaser namespace="teaser-tile-content-" color="secondary" href="#">
+                    <figure>
+                        <figcaption>
+                            <strong>Responsive Opt-in</strong>
+                            <h3>Abonnemente</h3>
+                            <p>Drei-Spalten-sizes wie im Miduca Content Teaser.</p>
+                            <span>Mehr erfahren <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                        </figcaption>
+                        <a-picture
+                            data-demo-label="3-column-1"
+                            namespace="picture-teaser-"
+                            picture-load
+                            defaultSource="https://www.klubschule.ch/media/qooplylf/k-abonnemente-02.jpeg?cc=0,0.0785918586218052,0,0.07840814137819474&amp;width=2500&amp;height=1405&amp;format=webp&amp;quality=80&amp;mode=crop&amp;v=1dad6b06dcd2500"
+                            alt="Abonnemente"
+                            aspect-ratio="0.562"
+                            sources-keep-query-aspect-ratio
+                            sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1020px) calc(50vw - 1.5rem), 400px">
+                        </a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </div>
+
+            <div col-sm="12" col-lg="4">
+                <ks-m-teaser namespace="teaser-tile-content-" color="ks-blue" href="#">
+                    <figure>
+                        <figcaption>
+                            <strong>Responsive Opt-in</strong>
+                            <h3>Sprachkurs für die Reise</h3>
+                            <p>Gleiche Slot-Grösse, anderes Ausgangsbild.</p>
+                            <span>Mehr erfahren <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                        </figcaption>
+                        <a-picture
+                            data-demo-label="3-column-2"
+                            namespace="picture-teaser-"
+                            picture-load
+                            defaultSource="https://www.klubschule.ch/media/boalmjoy/adobestock-178862105.jpeg?width=2500&amp;height=1405&amp;format=webp&amp;quality=80&amp;mode=crop&amp;v=1dad4546ee69ec0"
+                            alt="Sprachkurs für die Reise"
+                            aspect-ratio="0.562"
+                            sources-keep-query-aspect-ratio
+                            sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1020px) calc(50vw - 1.5rem), 400px">
+                        </a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </div>
+
+            <div col-sm="12" col-lg="4">
+                <ks-m-teaser namespace="teaser-tile-content-" color="ks-orange" href="#">
+                    <figure>
+                        <figcaption>
+                            <strong>Responsive Opt-in</strong>
+                            <h3>Geschenkkarte</h3>
+                            <p>Bei DPR 2 darf ein grösserer Kandidat gewählt werden.</p>
+                            <span>Mehr erfahren <a-icon-mdx icon-name="ArrowRight" size="1em" no-hover></a-icon-mdx></span>
+                        </figcaption>
+                        <a-picture
+                            data-demo-label="3-column-3"
+                            namespace="picture-teaser-"
+                            picture-load
+                            defaultSource="https://www.klubschule.ch/media/1zqgxv4k/wissen-schenken.jpeg?width=2500&amp;height=1405&amp;format=webp&amp;quality=80&amp;mode=crop&amp;v=1dad459037184c0"
+                            alt="Geschenkkarte"
+                            aspect-ratio="0.562"
+                            sources-keep-query-aspect-ratio
+                            sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1020px) calc(50vw - 1.5rem), 400px">
+                        </a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </div>
+        </section>
+    </o-grid>
+
+    <ks-a-heading border-top>
+        <h2>Text/Bild – 43vw Desktop-Slot</h2>
+    </ks-a-heading>
+
+    <ks-m-teaser namespace="teaser-text-image-" color="secondary" text-position="right">
+        <a-picture
+            data-demo-label="text-image"
+            namespace="picture-teaser-"
+            picture-load
+            defaultSource="https://www.klubschule.ch/media/oxeieind/k-zeichnen-und-malen-02.jpeg?width=2500&amp;height=1875&amp;format=webp&amp;quality=80&amp;mode=crop"
+            alt="Zeichnen und Malen"
+            aspect-ratio="0.75"
+            sources-keep-query-aspect-ratio
+            sizes="(max-width: 767px) calc(100vw - 1rem), 43vw">
+        </a-picture>
+        <div>
+            <h3>Responsive Text/Bild-Teaser</h3>
+            <p>Auf Mobile nutzt das Bild fast die Viewport-Breite, auf Desktop ungefähr 43 Prozent.</p>
+        </div>
+    </ks-m-teaser>
+
+    <ks-a-heading border-top>
+        <h2>Legacy-Vergleich ohne Opt-in</h2>
+    </ks-a-heading>
+
+    <o-grid namespace="grid-12er-">
+        <section>
+            <div col-sm="12" col-lg="4">
+                <ks-m-teaser namespace="teaser-story-" color="quaternary">
+                    <figure>
+                        <figcaption>
+                            <strong>Legacy</strong>
+                            <h3>Ohne sizes</h3>
+                            <span>Source-Anzahl vergleichen</span>
+                        </figcaption>
+                        <a-picture
+                            data-demo-label="legacy-without-sizes"
+                            namespace="picture-teaser-"
+                            picture-load
+                            defaultSource="https://www.klubschule.ch/media/qooplylf/k-abonnemente-02.jpeg?width=2500&amp;height=1405&amp;format=webp&amp;quality=80&amp;mode=crop&amp;v=1dad6b06dcd2500"
+                            alt="Legacy-Bild ohne sizes"
+                            aspect-ratio="0.562"
+                            sources-keep-query-aspect-ratio>
+                        </a-picture>
+                    </figure>
+                </ks-m-teaser>
+            </div>
+        </section>
+    </o-grid>
+</ks-o-body-section>
+
+<script class="template-script" type="text/javascript">
+    (() => {
+        const diagnostics = document.querySelector('#responsive-picture-diagnostics')
+        const pictures = [...document.querySelectorAll('a-picture[data-demo-label]')]
+
+        const updateDiagnostics = () => {
+            const lines = ['label | sources | requested width | currentSrc']
+
+            pictures.forEach(picture => {
+                const sources = picture.shadowRoot?.querySelectorAll('source') || []
+                const image = picture.shadowRoot?.querySelector('img')
+                const currentSrc = image?.currentSrc || image?.src || 'not loaded'
+                let requestedWidth = '-'
+
+                try {
+                    requestedWidth = new URL(currentSrc).searchParams.get('width') || '-'
+                } catch {
+                    requestedWidth = 'invalid URL'
+                }
+
+                const requestedWidthLabel = requestedWidth === '-' || requestedWidth === 'invalid URL' ? requestedWidth : `${requestedWidth}px`
+                lines.push(`${picture.dataset.demoLabel} | ${sources.length} | ${requestedWidthLabel} | ${currentSrc}`)
+            })
+
+            diagnostics.textContent = lines.join('\n')
+        }
+
+        Promise.all(['a-picture', 'ks-m-teaser', 'o-grid'].map(tagName => customElements.whenDefined(tagName)))
+            .then(() => {
+                window.addEventListener('resize', updateDiagnostics)
+                document.addEventListener('picture-load', updateDiagnostics)
+                setTimeout(updateDiagnostics, 1000)
+            })
+    })()
+</script>

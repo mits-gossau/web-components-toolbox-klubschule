@@ -208,6 +208,10 @@ if (self.trustedTypes?.createPolicy && !self.trustedTypes.defaultPolicy) {
   './src/es/components/', // baseUrl
   [
     {
+      selector: 'a-picture',
+      url: 'atoms/picture/Picture.js'
+    },
+    {
       selector: 'ks-a-',
       url: 'atoms/',
       separateFolder: true

@@ -6,8 +6,14 @@ import Picture from '../../web-components-toolbox/src/es/components/atoms/pictur
 * @type {CustomElementConstructor}
 */
 export default class KsPicture extends Picture {
+  static get responsiveSourceWidths () {
+    return '320,400,480,767,1024,1440,1600,1920'
+  }
+
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    // Let the core Picture constructor use its own importMetaUrl. Wrapper-specific assets resolve through ksImportMetaUrl below.
+    super(options, ...args)
+    this.ksImportMetaUrl = new URL('./', import.meta.url).href
   }
 
   /**
@@ -16,6 +22,13 @@ export default class KsPicture extends Picture {
    * @return {void}
    */
   renderHTML () {
+    // Supplying sizes explicitly opts this implementation into the core
+    // component's width-descriptor srcset generation. Pictures without sizes
+    // retain the legacy source generation for backwards compatibility.
+    if (this.hasAttribute('sizes') && !this.hasAttribute('sources-widths')) {
+      this.setAttribute('sources-widths', KsPicture.responsiveSourceWidths)
+    }
+
     super.renderHTML()
 
     if (this.hasAttribute('open-modal')) {
@@ -27,7 +40,7 @@ export default class KsPicture extends Picture {
 
     return this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        path: `${this.ksImportMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
       }
     ])
@@ -42,7 +55,7 @@ export default class KsPicture extends Picture {
     switch (this.getAttribute('namespace')) {
       case 'picture-default-':
         return this.fetchCSS([{
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+          path: `${this.ksImportMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }], false)
       default:
