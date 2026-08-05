@@ -11,6 +11,7 @@ export default class KsPicture extends Picture {
   }
 
   constructor (options = {}, ...args) {
+    // Let the core Picture constructor use its own importMetaUrl. Wrapper-specific assets resolve through ksImportMetaUrl below.
     super(options, ...args)
     this.ksImportMetaUrl = new URL('./', import.meta.url).href
   }
