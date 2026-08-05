@@ -11,7 +11,8 @@ export default class KsPicture extends Picture {
   }
 
   constructor (options = {}, ...args) {
-    super({ importMetaUrl: import.meta.url, ...options }, ...args)
+    super(options, ...args)
+    this.ksImportMetaUrl = new URL('./', import.meta.url).href
   }
 
   /**
@@ -38,7 +39,7 @@ export default class KsPicture extends Picture {
 
     return this.fetchModules([
       {
-        path: `${this.importMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
+        path: `${this.ksImportMetaUrl}../../web-components-toolbox/src/es/components/atoms/iconMdx/IconMdx.js`,
         name: 'a-icon-mdx'
       }
     ])
@@ -53,7 +54,7 @@ export default class KsPicture extends Picture {
     switch (this.getAttribute('namespace')) {
       case 'picture-default-':
         return this.fetchCSS([{
-          path: `${this.importMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
+          path: `${this.ksImportMetaUrl}./default-/default-.css`, // apply namespace since it is specific and no fallback
           namespace: false
         }], false)
       default:
