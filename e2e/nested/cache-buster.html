@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Cache buster</title>
+  </head>
+  <body>
+    <x-cache-buster url="./src/es/components/web-components-toolbox/e2e/cache-buster/CacheBuster.js?variant=test&amp;hash=old"></x-cache-buster>
+    <script>
+      document.body.addEventListener('wc-config-load', event => {
+        event.detail.imports[0].then(importEl => {
+          globalThis.cacheBusterImportPath = importEl[3]
+        })
+      })
+    </script>
+    <script src="/wc-config.js?triggerImmediately=true&hash=20260813120000&useDefaultDirectories=false"></script>
+  </body>
+</html>
