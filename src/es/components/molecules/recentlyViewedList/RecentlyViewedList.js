@@ -76,7 +76,6 @@ export default class RecentlyViewedList extends AutoCompleteList {
   }
 
   clickOnListElement = (item, event) => {
-    GTMEvent.setTrackingContext('search_overlay')
     this.dataLayerPush(item)
     if (item.url) window.open(item.url, '_self')
   }
@@ -273,19 +272,11 @@ export default class RecentlyViewedList extends AutoCompleteList {
     // @ts-ignore
     if (typeof window !== 'undefined' && window.dataLayer && item.tagManagerEventData) {
       try {
-        const eventData = JSON.parse(item.tagManagerEventData)
-        const ecommerceItem = eventData.ecommerce?.items?.[0]
-        if (ecommerceItem) {
-          let nextIndex = 1
-          while (ecommerceItem[nextIndex === 1 ? 'item_category' : `item_category${nextIndex}`]) nextIndex++
-          const categoryKey = nextIndex === 1 ? 'item_category' : `item_category${nextIndex}`
-          const sorted = {}
-          for (const [key, value] of Object.entries(ecommerceItem)) {
-            sorted[key] = value
-            if (key === `item_category${nextIndex - 1}` || (nextIndex === 1 && key === 'item_id')) sorted[categoryKey] = 'search_overlay'
-          }
-          eventData.ecommerce.items[0] = sorted
-        }
+        const eventData = GTMEvent.addTrackingContextToEvent(
+          JSON.parse(item.tagManagerEventData),
+          'search_overlay',
+          GTMEvent.getPageType()
+        )
         // @ts-ignore
         window.dataLayer.push(eventData)
       } catch (error) {
