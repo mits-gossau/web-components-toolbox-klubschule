@@ -1,3 +1,4 @@
+/* global sessionStorage */
 // @ts-check
 import { Shadow } from '../../web-components-toolbox/src/es/components/prototypes/Shadow.js'
 
@@ -78,19 +79,11 @@ export default class GTMEvent extends Shadow() {
   sendEvent(event) {
     this.eventData = JSON.parse(this.getAttribute('event-data'))
 
-    // Set tracking context: select_item always overwrites, add_to_cart persists 'default' if not yet set
-    if (this.eventData.event === 'select_item' && this.hasAttribute('tracking-context')) {
-      GTMEvent.setTrackingContext(this.getAttribute('tracking-context'))
-    } else if (this.eventData.event === 'add_to_cart' && GTMEvent.getTrackingContext() === 'default') {
-      GTMEvent.setTrackingContext('default')
-    }
-
-    // Add tracking context to ecommerce items
-    if (this.eventData.ecommerce?.items) {
-      this.eventData.ecommerce.items = this.eventData.ecommerce.items.map(
-        item => GTMEvent.addTrackingContextToItem(item)
-      )
-    }
+    this.eventData = GTMEvent.addTrackingContextToEvent(
+      this.eventData,
+      this.getAttribute('tracking-context')?.trim() || undefined,
+      this.eventData.event === 'select_item' ? GTMEvent.getPageType() : undefined
+    )
 
     if (event?.target?.name) {
       this.eventData[event.target.name] = event.target.value
@@ -124,13 +117,75 @@ export default class GTMEvent extends Shadow() {
     }
   }
 
-  static addTrackingContextToItem (item) {
-    const context = GTMEvent.getTrackingContext()
-    let nextIndex = 1
-    while (item[nextIndex === 1 ? 'item_category' : `item_category${nextIndex}`]) {
-      nextIndex++
+  static getTrackingItemListName () {
+    try {
+      return sessionStorage.getItem('ks_tracking_item_list_name')
+    } catch (e) {
+      return null
     }
-    const key = nextIndex === 1 ? 'item_category' : `item_category${nextIndex}`
-    return { ...item, [key]: context }
+  }
+
+  static setTrackingItemListName (itemListName) {
+    try {
+      if (itemListName) {
+        sessionStorage.setItem('ks_tracking_item_list_name', itemListName)
+      } else {
+        sessionStorage.removeItem('ks_tracking_item_list_name')
+      }
+    } catch (e) {
+      console.error('Failed to set tracking item list name:', e)
+    }
+  }
+
+  static getPageType () {
+    if (typeof window === 'undefined' || !Array.isArray(window.dataLayer)) return null
+    for (let i = window.dataLayer.length - 1; i >= 0; i--) {
+      if (window.dataLayer[i]?.pageType) return window.dataLayer[i].pageType
+    }
+    return null
+  }
+
+  static addTrackingContextToEvent (eventData, trackingContext, trackingItemListName) {
+    const isSelectItem = eventData.event === 'select_item'
+    if (isSelectItem) {
+      const normalizedTrackingContext = trackingContext?.trim()
+      if (normalizedTrackingContext) GTMEvent.setTrackingContext(normalizedTrackingContext)
+      if (trackingItemListName !== undefined) GTMEvent.setTrackingItemListName(trackingItemListName)
+    }
+    if (!eventData.ecommerce?.items) return eventData
+
+    const itemCurrency = eventData.ecommerce.items.find(item => item.currency)?.currency
+    if (!eventData.ecommerce.currency && itemCurrency) eventData.ecommerce.currency = itemCurrency
+    eventData.ecommerce.items = eventData.ecommerce.items.map(item => {
+      const normalizedItem = { ...item }
+      delete normalizedItem.currency
+      delete normalizedItem.item_list_id
+      delete normalizedItem.item_list_name
+      return isSelectItem ? normalizedItem : GTMEvent.addTrackingContextToItem(normalizedItem)
+    })
+    if (eventData.ecommerce.value === undefined && eventData.ecommerce.items[0]?.price !== undefined) {
+      eventData.ecommerce.value = eventData.ecommerce.items[0].price
+    }
+
+    if (isSelectItem) {
+      eventData.ecommerce.item_list_id = GTMEvent.getTrackingContext()
+      const itemListName = GTMEvent.getTrackingItemListName()
+      if (itemListName) eventData.ecommerce.item_list_name = itemListName
+      else delete eventData.ecommerce.item_list_name
+    } else {
+      delete eventData.ecommerce.item_list_id
+      delete eventData.ecommerce.item_list_name
+    }
+
+    return eventData
+  }
+
+  static addTrackingContextToItem (item) {
+    const itemListName = GTMEvent.getTrackingItemListName()
+    return {
+      ...item,
+      item_list_id: GTMEvent.getTrackingContext(),
+      ...(itemListName ? { item_list_name: itemListName } : {})
+    }
   }
 }
