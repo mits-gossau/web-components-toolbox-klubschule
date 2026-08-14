@@ -74,3 +74,27 @@ test('select_item clears an inherited item_list_name when page type is unavailab
   expect(eventData.ecommerce).not.toHaveProperty('item_list_name')
   expect(await page.evaluate(() => sessionStorage.getItem('ks_tracking_item_list_name'))).toBeNull()
 })
+
+test('select_item persists list data without ecommerce items', async ({ page }) => {
+  await page.evaluate(() => globalThis.GTMEvent.addTrackingContextToEvent({
+    event: 'select_item',
+    ecommerce: {}
+  }, 'search_overlay', 'subcategory page'))
+
+  expect(await page.evaluate(() => ({
+    id: sessionStorage.getItem('ks_tracking_context'),
+    name: sessionStorage.getItem('ks_tracking_item_list_name')
+  }))).toEqual({ id: 'search_overlay', name: 'subcategory page' })
+})
+
+test('select_item ignores a blank tracking context', async ({ page }) => {
+  await page.evaluate(() => {
+    sessionStorage.setItem('ks_tracking_context', 'offers_list')
+    return globalThis.GTMEvent.addTrackingContextToEvent({
+      event: 'select_item',
+      ecommerce: { items: [{ item_id: 'D_88896_2661--D_88896', price: 199.5 }] }
+    }, '   ', 'subcategory page')
+  })
+
+  expect(await page.evaluate(() => sessionStorage.getItem('ks_tracking_context'))).toBe('offers_list')
+})

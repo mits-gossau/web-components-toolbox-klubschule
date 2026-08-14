@@ -81,7 +81,7 @@ export default class GTMEvent extends Shadow() {
 
     this.eventData = GTMEvent.addTrackingContextToEvent(
       this.eventData,
-      this.hasAttribute('tracking-context') ? this.getAttribute('tracking-context') : undefined,
+      this.getAttribute('tracking-context')?.trim() || undefined,
       this.eventData.event === 'select_item' ? GTMEvent.getPageType() : undefined
     )
 
@@ -139,17 +139,20 @@ export default class GTMEvent extends Shadow() {
 
   static getPageType () {
     if (typeof window === 'undefined' || !Array.isArray(window.dataLayer)) return null
-    return [...window.dataLayer].reverse().find(entry => entry?.pageType)?.pageType || null
+    for (let i = window.dataLayer.length - 1; i >= 0; i--) {
+      if (window.dataLayer[i]?.pageType) return window.dataLayer[i].pageType
+    }
+    return null
   }
 
   static addTrackingContextToEvent (eventData, trackingContext, trackingItemListName) {
-    if (!eventData.ecommerce?.items) return eventData
-
     const isSelectItem = eventData.event === 'select_item'
     if (isSelectItem) {
-      if (trackingContext !== undefined) GTMEvent.setTrackingContext(trackingContext)
+      const normalizedTrackingContext = trackingContext?.trim()
+      if (normalizedTrackingContext) GTMEvent.setTrackingContext(normalizedTrackingContext)
       if (trackingItemListName !== undefined) GTMEvent.setTrackingItemListName(trackingItemListName)
     }
+    if (!eventData.ecommerce?.items) return eventData
 
     const itemCurrency = eventData.ecommerce.items.find(item => item.currency)?.currency
     if (!eventData.ecommerce.currency && itemCurrency) eventData.ecommerce.currency = itemCurrency
