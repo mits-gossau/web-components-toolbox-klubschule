@@ -211,6 +211,10 @@ if (self.trustedTypes?.createPolicy && !self.trustedTypes.defaultPolicy) {
   './src/es/components/', // baseUrl
   [
     {
+      selector: 'a-breadcrumb',
+      url: 'atoms/breadcrumb/Breadcrumb.js'
+    },
+    {
       selector: 'a-picture',
       url: 'atoms/picture/Picture.js'
     },
