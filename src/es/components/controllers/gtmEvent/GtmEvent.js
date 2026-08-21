@@ -159,9 +159,10 @@ export default class GTMEvent extends Shadow() {
     eventData.ecommerce.items = eventData.ecommerce.items.map(item => {
       const normalizedItem = { ...item }
       delete normalizedItem.currency
+      if (!isSelectItem) return GTMEvent.addTrackingContextToItem(normalizedItem)
       delete normalizedItem.item_list_id
       delete normalizedItem.item_list_name
-      return isSelectItem ? normalizedItem : GTMEvent.addTrackingContextToItem(normalizedItem)
+      return normalizedItem
     })
     if (eventData.ecommerce.value === undefined && eventData.ecommerce.items[0]?.price !== undefined) {
       eventData.ecommerce.value = eventData.ecommerce.items[0].price
@@ -172,9 +173,6 @@ export default class GTMEvent extends Shadow() {
       const itemListName = GTMEvent.getTrackingItemListName()
       if (itemListName) eventData.ecommerce.item_list_name = itemListName
       else delete eventData.ecommerce.item_list_name
-    } else {
-      delete eventData.ecommerce.item_list_id
-      delete eventData.ecommerce.item_list_name
     }
 
     return eventData
@@ -183,9 +181,9 @@ export default class GTMEvent extends Shadow() {
   static addTrackingContextToItem (item) {
     const itemListName = GTMEvent.getTrackingItemListName()
     return {
-      ...item,
       item_list_id: GTMEvent.getTrackingContext(),
-      ...(itemListName ? { item_list_name: itemListName } : {})
+      ...(itemListName ? { item_list_name: itemListName } : {}),
+      ...item
     }
   }
 }
