@@ -421,7 +421,7 @@
   --details-default-icon-right-icon-width-mobile-custom: var(--details-default-icon-right-icon-width-mobile);
 
   /* content stage */
-  --grid-2columns-content-stage-stage-content-margin-custom: 3rem 6rem 2rem 1.5rem; 
+  --grid-2columns-content-stage-stage-content-margin-custom: 2rem 6rem 2rem 1.5rem;
   --grid-2columns-content-stage-stage-content-margin-mobile-custom: 1rem 1rem 3rem 1rem; 
   --grid-2columns-content-stage-text-color-custom: var(--mdx-base-color-grey-975);
   --grid-2columns-content-stage-a-color: white;
