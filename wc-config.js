@@ -216,7 +216,7 @@ if (self.trustedTypes?.createPolicy && !self.trustedTypes.defaultPolicy) {
     },
     {
       selector: 'a-picture',
-      url: 'atoms/picture/Picture.js'
+      url: 'atoms/picture/APicture.js'
     },
     {
       selector: 'ks-a-',

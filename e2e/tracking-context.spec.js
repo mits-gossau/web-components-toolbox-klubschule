@@ -62,6 +62,55 @@ test('following ecommerce events inherit list data inside items', async ({ page 
   })
 })
 
+test('following ecommerce events preserve explicitly provided item list data', async ({ page }) => {
+  const eventData = await page.evaluate(() => {
+    sessionStorage.setItem('ks_tracking_context', 'search_overlay')
+    sessionStorage.setItem('ks_tracking_item_list_name', 'subcategory page')
+    return globalThis.GTMEvent.addTrackingContextToEvent({
+      event: 'view_item_list',
+      ecommerce: {
+        item_list_id: 'featured_courses',
+        item_list_name: 'Featured courses',
+        items: [{
+          item_id: 'D_88896_2661--D_88896',
+          item_list_id: 'recommended_courses',
+          item_list_name: 'Recommended courses'
+        }]
+      }
+    })
+  })
+
+  expect(eventData.ecommerce).toMatchObject({
+    item_list_id: 'featured_courses',
+    item_list_name: 'Featured courses'
+  })
+  expect(eventData.ecommerce.items[0]).toMatchObject({
+    item_list_id: 'recommended_courses',
+    item_list_name: 'Recommended courses'
+  })
+})
+
+test('following ecommerce events only inherit missing item list data', async ({ page }) => {
+  const eventData = await page.evaluate(() => {
+    sessionStorage.setItem('ks_tracking_context', 'search_overlay')
+    sessionStorage.setItem('ks_tracking_item_list_name', 'subcategory page')
+    return globalThis.GTMEvent.addTrackingContextToEvent({
+      event: 'begin_checkout',
+      ecommerce: {
+        items: [{
+          item_id: 'D_88896_2661--D_88896',
+          item_list_id: 'recommended_courses'
+        }]
+      }
+    })
+  })
+
+  expect(eventData.ecommerce.items[0]).toMatchObject({
+    item_list_id: 'recommended_courses',
+    item_list_name: 'subcategory page'
+  })
+})
+
 test('select_item clears an inherited item_list_name when page type is unavailable', async ({ page }) => {
   const eventData = await page.evaluate(() => {
     sessionStorage.setItem('ks_tracking_item_list_name', 'old page')
