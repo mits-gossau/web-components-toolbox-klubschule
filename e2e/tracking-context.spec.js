@@ -111,6 +111,45 @@ test('following ecommerce events only inherit missing item list data', async ({ 
   })
 })
 
+test('checkout events prefer the stored item list name over a provided fallback', async ({ page }) => {
+  const eventData = await page.evaluate(() => {
+    sessionStorage.setItem('ks_tracking_context', 'search item')
+    sessionStorage.setItem('ks_tracking_item_list_name', 'search page')
+    return ['begin_checkout', 'add_shipping_info', 'add_payment_info', 'purchase'].map(event => (
+      globalThis.GTMEvent.addTrackingContextToEvent({
+        event,
+        ecommerce: {
+          items: [{
+            item_id: 'D_1001',
+            item_list_name: 'product page'
+          }]
+        }
+      })
+    ))
+  })
+
+  eventData.forEach(data => {
+    expect(data.ecommerce.items[0]).toMatchObject({
+      item_list_id: 'search item',
+      item_list_name: 'search page'
+    })
+  })
+})
+
+test('checkout events retain the provided item list name without a stored value', async ({ page }) => {
+  const eventData = await page.evaluate(() => globalThis.GTMEvent.addTrackingContextToEvent({
+    event: 'begin_checkout',
+    ecommerce: {
+      items: [{
+        item_id: 'D_1001',
+        item_list_name: 'product page'
+      }]
+    }
+  }))
+
+  expect(eventData.ecommerce.items[0].item_list_name).toBe('product page')
+})
+
 test('select_item clears an inherited item_list_name when page type is unavailable', async ({ page }) => {
   const eventData = await page.evaluate(() => {
     sessionStorage.setItem('ks_tracking_item_list_name', 'old page')

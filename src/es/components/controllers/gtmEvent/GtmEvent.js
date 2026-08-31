@@ -156,10 +156,16 @@ export default class GTMEvent extends Shadow() {
 
     const itemCurrency = eventData.ecommerce.items.find(item => item.currency)?.currency
     if (!eventData.ecommerce.currency && itemCurrency) eventData.ecommerce.currency = itemCurrency
+    const prefersStoredItemListName = [
+      'begin_checkout',
+      'add_shipping_info',
+      'add_payment_info',
+      'purchase'
+    ].includes(eventData.event)
     eventData.ecommerce.items = eventData.ecommerce.items.map(item => {
       const normalizedItem = { ...item }
       delete normalizedItem.currency
-      if (!isSelectItem) return GTMEvent.addTrackingContextToItem(normalizedItem)
+      if (!isSelectItem) return GTMEvent.addTrackingContextToItem(normalizedItem, prefersStoredItemListName)
       delete normalizedItem.item_list_id
       delete normalizedItem.item_list_name
       return normalizedItem
@@ -178,12 +184,14 @@ export default class GTMEvent extends Shadow() {
     return eventData
   }
 
-  static addTrackingContextToItem (item) {
+  static addTrackingContextToItem (item, preferStoredItemListName = false) {
     const itemListName = GTMEvent.getTrackingItemListName()
-    return {
+    const enrichedItem = {
       item_list_id: GTMEvent.getTrackingContext(),
       ...(itemListName ? { item_list_name: itemListName } : {}),
       ...item
     }
+    if (preferStoredItemListName && itemListName) enrichedItem.item_list_name = itemListName
+    return enrichedItem
   }
 }
