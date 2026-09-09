@@ -159,7 +159,11 @@ function assertSingleOccurrence (value, search) {
   const firstIndex = value.indexOf(search)
   const lastIndex = value.lastIndexOf(search)
 
-  if (firstIndex === -1 || firstIndex !== lastIndex) {
-    throw new Error(`Expected exactly one occurrence of "${search}", found it at indexes ${firstIndex} and ${lastIndex}.`)
+  if (firstIndex === -1) {
+    throw new Error(`Expected exactly one occurrence of "${search}", but it was not found.`)
+  }
+
+  if (firstIndex !== lastIndex) {
+    throw new Error(`Expected exactly one occurrence of "${search}", but it was found multiple times (first at ${firstIndex}, last at ${lastIndex}).`)
   }
 }
