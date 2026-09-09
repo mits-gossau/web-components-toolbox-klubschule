@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Shared stylesheet test</title>
+  </head>
+  <body>
+    <script type="module">
+      import FetchCss from '../src/es/components/web-components-toolbox/src/es/components/controllers/fetchCss/FetchCss.js'
+      import { Shadow } from '../src/es/components/web-components-toolbox/src/es/components/prototypes/Shadow.js'
+
+      if (new URLSearchParams(location.search).has('reject-constructable-stylesheet')) {
+        CSSStyleSheet.prototype.replace = () => Promise.reject(new Error('Constructable stylesheet rejected for test'))
+      }
+
+      class TestSharedStyle extends Shadow() {
+        constructor () {
+          super({ importMetaUrl: import.meta.url })
+        }
+
+        connectedCallback () {
+          this.ready = this.fetchCSS([{
+            path: '../src/es/components/web-components-toolbox/src/css/style.css',
+            namespace: false
+          }])
+        }
+      }
+
+      class TestStyleFallback extends Shadow() {
+        constructor () {
+          super({ mode: 'false', importMetaUrl: import.meta.url })
+        }
+
+        connectedCallback () {
+          this.ready = this.fetchCSS([{
+            path: '../src/es/components/web-components-toolbox/src/css/style.css',
+            namespace: false
+          }])
+        }
+      }
+
+      class TestStyleOrder extends Shadow() {
+        constructor () {
+          super({ importMetaUrl: import.meta.url })
+        }
+
+        connectedCallback () {
+          this.ready = this.fetchCSS([
+            {
+              path: '../src/es/components/web-components-toolbox/src/css/style.css',
+              namespace: false
+            },
+            {
+              path: '../src/es/components/web-components-toolbox/src/css/reset.css',
+              namespace: false
+            }
+          ])
+        }
+      }
+
+      customElements.define('test-fetch-css', FetchCss)
+      customElements.define('test-shared-style', TestSharedStyle)
+      customElements.define('test-style-fallback', TestStyleFallback)
+      customElements.define('test-style-order', TestStyleOrder)
+
+      const controller = new FetchCss()
+      const first = new TestSharedStyle()
+      const second = new TestSharedStyle()
+      second.importMetaUrlHash = 'test-hash'
+      const fallback = new TestStyleFallback()
+      const ordered = new TestStyleOrder()
+      controller.append(first, second, fallback, ordered)
+      document.body.append(controller)
+      await Promise.all([first.ready, second.ready, fallback.ready, ordered.ready])
+
+      const heading = document.createElement('h1')
+      first.shadowRoot.append(heading)
+      globalThis.sharedStyleResult = {
+        firstSheets: first.shadowRoot.adoptedStyleSheets.length,
+        secondSheets: second.shadowRoot.adoptedStyleSheets.length,
+        sharedInstance: first.shadowRoot.adoptedStyleSheets[0] === second.shadowRoot.adoptedStyleSheets[0],
+        cacheSize: controller.styleSheetCache.size,
+        firstMarkerText: first.shadowRoot.querySelector('style[_css]').textContent.length,
+        fallbackStyleText: fallback.querySelector('style[_css]').textContent.length,
+        orderedSheets: ordered.shadowRoot.adoptedStyleSheets.length,
+        orderedStyleText: ordered.shadowRoot.querySelector('style[_css]').textContent.length,
+        headingDisplay: getComputedStyle(heading).display
+      }
+    </script>
+  </body>
+</html>
