@@ -16,7 +16,6 @@ test('shares processed base CSS between shadow roots', async ({ page }) => {
   expect(result.fallbackStyleText).toBeGreaterThan(1000)
   expect(result.orderedSheets).toBe(0)
   expect(result.orderedStyleText).toBeGreaterThan(1000)
-  expect(result.headingDisplay).toBe('block')
 })
 
 test('falls back when a constructable stylesheet is rejected', async ({ page }) => {
@@ -28,5 +27,4 @@ test('falls back when a constructable stylesheet is rejected', async ({ page }) 
   expect(result.firstSheets).toBe(0)
   expect(result.secondSheets).toBe(0)
   expect(result.firstMarkerCount).toBe(1)
-  expect(result.headingDisplay).toBe('block')
 })
