@@ -80,18 +80,15 @@
         }])
       }
 
-      const heading = document.createElement('h1')
-      first.shadowRoot.append(heading)
       globalThis.sharedStyleResult = {
         firstSheets: first.shadowRoot.adoptedStyleSheets.length,
         secondSheets: second.shadowRoot.adoptedStyleSheets.length,
         sharedInstance: first.shadowRoot.adoptedStyleSheets[0] === second.shadowRoot.adoptedStyleSheets[0],
         cacheSize: controller.styleSheetCache.size,
         firstMarkerCount: first.shadowRoot.querySelectorAll('style[_css]').length,
-        fallbackStyleText: fallback.querySelector('style[_css]').textContent.length,
+        fallbackStyleText: fallback.querySelector('style[_css]')?.textContent.length ?? -1,
         orderedSheets: ordered.shadowRoot.adoptedStyleSheets.length,
-        orderedStyleText: ordered.shadowRoot.querySelector('style[_css]').textContent.length,
-        headingDisplay: getComputedStyle(heading).display
+        orderedStyleText: ordered.shadowRoot.querySelector('style[_css]')?.textContent.length ?? -1
       }
     </script>
   </body>
