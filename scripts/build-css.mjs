@@ -35,7 +35,13 @@ if (!existsSync(lightningCss)) {
   throw new Error('lightningcss is missing. Run npm install before building CSS.')
 }
 
-const migrosComponentCss = readFileSync(join(tokenDirectory, 'migros', 'light-rem.css'), 'utf8')
+const migrosComponentPath = join(tokenDirectory, 'migros', 'light-rem.css')
+
+if (!existsSync(migrosComponentPath)) {
+  throw new Error(`MDX design-token CSS not found at ${migrosComponentPath}. Ensure the MDX submodule/dependencies are available before building CSS.`)
+}
+
+const migrosComponentCss = readFileSync(migrosComponentPath, 'utf8')
 extractPropertyNames(migrosComponentCss, 'Migros component tokens')
 assertRootScopedProperties(migrosComponentCss, 'Migros component tokens')
 
