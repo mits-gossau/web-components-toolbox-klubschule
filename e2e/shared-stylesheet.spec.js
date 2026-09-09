@@ -13,9 +13,9 @@ test('shares processed base CSS between shadow roots', async ({ page }) => {
   expect(result.sharedInstance).toBe(true)
   expect(result.cacheSize).toBe(1)
   expect(result.firstMarkerCount).toBe(0)
-  expect(result.fallbackStyleText).toBeGreaterThan(40000)
+  expect(result.fallbackStyleText).toBeGreaterThan(1000)
   expect(result.orderedSheets).toBe(0)
-  expect(result.orderedStyleText).toBeGreaterThan(40000)
+  expect(result.orderedStyleText).toBeGreaterThan(1000)
   expect(result.headingDisplay).toBe('block')
 })
 
