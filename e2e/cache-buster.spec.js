@@ -6,7 +6,7 @@ test('named hash is propagated through a statically imported component', async (
   const assetRequests = []
 
   page.on('request', request => {
-    if (/CacheBuster(?:Child|Dependency)?\.js/.test(request.url())) assetRequests.push(request.url())
+    if (/CacheBuster(?:Child|Dependency|OptOutChild|OptOutDependency)?\.js/.test(request.url())) assetRequests.push(request.url())
   })
 
   await page.goto('e2e/nested/cache-buster.html')
@@ -24,6 +24,12 @@ test('named hash is propagated through a statically imported component', async (
   const dependencyRequest = assetRequests
     .map(url => new URL(url))
     .find(url => url.pathname === '/src/es/components/web-components-toolbox/e2e/cache-buster/CacheBusterDependency.js')
+  const optOutChildRequest = assetRequests
+    .map(url => new URL(url))
+    .find(url => url.pathname === '/src/es/components/web-components-toolbox/e2e/cache-buster/CacheBusterOptOutChild.js')
+  const optOutDependencyRequest = assetRequests
+    .map(url => new URL(url))
+    .find(url => url.pathname === '/src/es/components/web-components-toolbox/e2e/cache-buster/CacheBusterOptOutDependency.js')
 
   expect(componentRequest).toBeDefined()
   expect(componentRequest.searchParams.get('variant')).toBe('test')
@@ -34,6 +40,11 @@ test('named hash is propagated through a statically imported component', async (
   expect(dependencyRequest).toBeDefined()
   expect(dependencyRequest.searchParams.get('variant')).toBe('test')
   expect(dependencyRequest.searchParams.getAll('hash')).toEqual([hash])
+  expect(optOutChildRequest).toBeDefined()
+  expect(optOutChildRequest.searchParams.getAll('hash')).toEqual([''])
+  expect(optOutDependencyRequest).toBeDefined()
+  expect(optOutDependencyRequest.searchParams.get('variant')).toBe('test')
+  expect(optOutDependencyRequest.searchParams.getAll('hash')).toEqual([])
 })
 
 test('component assets remain unchanged without a configured hash', async ({ page }) => {
