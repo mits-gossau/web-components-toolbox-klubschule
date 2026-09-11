@@ -6,6 +6,8 @@
   </head>
   <body>
     <x-cache-buster url="./src/es/components/web-components-toolbox/e2e/cache-buster/CacheBuster.js?variant=test&amp;hash=old"></x-cache-buster>
+    <x-cache-buster-child></x-cache-buster-child>
+    <x-cache-buster-opt-out-child></x-cache-buster-opt-out-child>
     <script>
       document.body.addEventListener('wc-config-load', event => {
         event.detail.imports[0].then(importEl => {
