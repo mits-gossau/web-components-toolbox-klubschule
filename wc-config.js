@@ -68,6 +68,7 @@ if (self.trustedTypes?.createPolicy && !self.trustedTypes.defaultPolicy) {
    * @type {string}
    */
   const hash = src.searchParams.get('hash') || ''
+  document.documentElement.dataset.wcConfigHash = hash
   /**
    * the event and console.info name used to signal when imports are done
    * @type {string}
